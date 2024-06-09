@@ -1,0 +1,13 @@
+- **Bonnet LE Z-position**
+- **Upper intake Z-extension**
+- **Lower intake Z-extension**
+- **Ramp angle**
+- **Windscreen angle**
+- **Ride height - Pitch angle (Y-rotation)**
+- **Ride height - Ground clearance (Z-translation)**
+- **Battery pack Z-position**
+- **Rear window angle**
+- **Rear window length**
+- **Trunk lid angle**
+- **Trunk length**
+- **Diffuser angle**
