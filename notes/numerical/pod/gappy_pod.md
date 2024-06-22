@@ -6,8 +6,10 @@
 - **Difference from Traditional POD**: Focuses on identifying important structures rather than reducing numerical effort in simulations.
 
 ## Plain Database Method
-- **Non-Gappy Function Approximation**: 
-  - Approximating an arbitrary function $y \in L^2 (\Omega)$ using the POD basis:
+
+I. **Non-Gappy Function Approximation**: 
+
+- Approximating an arbitrary function $y \in L^2 (\Omega)$ using the POD basis:
     
 $$
 a_j^{(y)} \min_{a_1^{(y)}, \ldots, a_L^{(y)} \in \mathbb{R}} \frac{1}{2} \| y(x) - \sum_{j=1}^L a_j^{(y)} \psi_j (x) \|_{L^2 (\Omega)}^2
@@ -27,7 +29,8 @@ $$
 
 - Projection of $y(x)$ onto subspace $\mathcal{Y}^L \subset \mathcal{M} \subset L^2 (\Omega)$.
 
-- **Gappy Data Approximation**: 
+II. **Gappy Data Approximation**: 
+
 - Data pairs of evaluations:
 
 $$
@@ -39,7 +42,6 @@ $$
 $$
 a_j^{(y)} \min_{a_1^{(y)}, \ldots, a_L^{(y)} \in \mathbb{R}} \frac{1}{2} \sum_{i=1}^N \left( y(x^{(i)}) - \sum_{j=1}^L a_j^{(y)} \psi_j (x^{(i)}) \right)^2
 $$
-
 
 - **Design Matrix $\Psi$**:
 
@@ -53,8 +55,7 @@ $$
 \Psi \Gamma_{a}^{(y)} = \Psi^T Y
 $$
 
-
-- **Avoiding Redundant Evaluations**:
+III. **Avoiding Redundant Evaluations**:
 
 $$
 \Phi := \left[ \phi_j (x^{(i)}) \right]_{i=1, \ldots, N}^{j=1, \ldots, M} \in \mathbb{R}^{N \times M}
@@ -66,35 +67,32 @@ $$
 \Psi = \Phi V_L W_L^{-1}
 $$
 
-
-- **Approximating Function**:
+IV. **Approximating Function**:
 
 $$
 \hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j (x)
 $$
 
-
 $$
 = \psi (x) \Gamma_{a}^{(y)}
 $$
-
 
 $$
 = \phi (x) V_L W_L^{-1} a^{(y)}
 $$
 
-
 $$
 = \phi (x) \Gamma_{a}^{(\phi)}
 $$
 
-
 ## Aligned Database Method
-- **Transforming Database Elements**:
+
+I. **Transforming Database Elements**:
+
 - Database elements transformed by solving the correspondence problem.
 - Transformation applied to approximating function $\hat{y}(x)$.
 
-- **Cross-Validation Error**:
+II. **Cross-Validation Error**:
 
 $$
 \bar{\phi}(p) := \begin{pmatrix} \bar{\phi}_1 (q^i)(1 + p_1) + p_2 \\ \bar{\phi}_2 (q^i)(1 + p_3) + p_4 \end{pmatrix}
@@ -105,8 +103,7 @@ $$
 = \begin{pmatrix} x_1 (1 + q_1^i) (1 + p_1) + p_2 \\ x_2 (1 + q_3^i) (1 + p_3) + p_4 \end{pmatrix}
 $$
 
-
-- **Approximating Function with Transformation**:
+III. **Approximating Function with Transformation**:
 
 $$
 \bar{y} (\bar{\phi}(p), p, a^{(y)}) := \bar{y} (\bar{\phi}(p), a^{(y)}) + p_5
@@ -118,10 +115,10 @@ $$
 $$
 
 
-- **Regularization Term**:
+IV. **Regularization Term**:
   
 $$
-a^{(y)} \min_{\mathbb{R}^{K+5}} \left\{ \frac{1}{2} \sum_{i=1}^N ( y(x^{(i)}) - \bar{y} (\bar{\phi}(p), p, a^{(y)}) )^2 + \frac{\delta}{2} p^T p \right\}.
+a^{(y)} \min_{\mathbb{R}^{K+5}} \{ \frac{1}{2} \sum_{i=1}^N ( y(x^{(i)}) - \bar{y} (\bar{\phi}(p), p, a^{(y)}) )^2 + \frac{\delta}{2} p^T p \}.
 $$
 
 
