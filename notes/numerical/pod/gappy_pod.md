@@ -10,119 +10,119 @@
   - Approximating an arbitrary function $y \in L^2 (\Omega)$ using the POD basis:
     
 $$
-    a_j^{(y)} \min_{a_1^{(y)}, \ldots, a_L^{(y)} \in \mathbb{R}} \frac{1}{2} \left\| y(x) - \sum_{j=1}^L a_j^{(y)} \psi_j (x) \right\|_{L^2 (\Omega)}^2
-    $$
-
-  - Solution:
-    
+a_j^{(y)} \min_{a_1^{(y)}, \ldots, a_L^{(y)} \in \mathbb{R}} \frac{1}{2} \| y(x) - \sum_{j=1}^L a_j^{(y)} \psi_j (x) \|_{L^2 (\Omega)}^2
 $$
-    a_j^{(y)} = \langle y, \psi_j \rangle_{L^2 (\Omega)} \quad (j = 1, \ldots, L)
-    $$
 
-  - Approximating function:
-    
+- Solution:
+
 $$
-    \hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j (x)
-    $$
+a_j^{(y)} = \langle y, \psi_j \rangle_{L^2 (\Omega)} \quad (j = 1, \ldots, L)
+$$
 
-  - Projection of $y(x)$ onto subspace $\mathcal{Y}^L \subset \mathcal{M} \subset L^2 (\Omega)$.
+- Approximating function:
+
+$$
+\hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j (x)
+$$
+
+- Projection of $y(x)$ onto subspace $\mathcal{Y}^L \subset \mathcal{M} \subset L^2 (\Omega)$.
 
 - **Gappy Data Approximation**: 
-  - Data pairs of evaluations:
-    
-$$
-    \left\{ \left( x^{(i)}, y(x^{(i)}) \right) \right\}_{i=1}^N, \quad x^{(i)} \in \Omega \subset \mathbb{R}^d, \quad y(x^{(i)}) \in \mathbb{R}
-    $$
+- Data pairs of evaluations:
 
-  - Optimization problem:
-    
 $$
-    a_j^{(y)} \min_{a_1^{(y)}, \ldots, a_L^{(y)} \in \mathbb{R}} \frac{1}{2} \sum_{i=1}^N \left( y(x^{(i)}) - \sum_{j=1}^L a_j^{(y)} \psi_j (x^{(i)}) \right)^2
-    $$
+\{ ( x^{(i)}, y(x^{(i)}) ) \}_{i=1}^N, \quad x^{(i)} \in \Omega \subset \mathbb{R}^d, \quad y(x^{(i)}) \in \mathbb{R}
+$$
+
+- Optimization problem:
+
+$$
+a_j^{(y)} \min_{a_1^{(y)}, \ldots, a_L^{(y)} \in \mathbb{R}} \frac{1}{2} \sum_{i=1}^N \left( y(x^{(i)}) - \sum_{j=1}^L a_j^{(y)} \psi_j (x^{(i)}) \right)^2
+$$
 
 
 - **Design Matrix $\Psi$**:
-  
-$$
-  \Psi := \left[ \psi_j (x^{(i)}) \right]_{j=1, \ldots, L}^{i=1, \ldots, N} \in \mathbb{R}^{N \times L}, \quad N \geq L, \quad \text{rank} \Psi = L.
-  $$
 
-  - Solution:
-    
 $$
-    \Psi \Gamma_{a}^{(y)} = \Psi^T Y
-    $$
+\Psi := \left[ \psi_j (x^{(i)}) \right]_{j=1, \ldots, L}^{i=1, \ldots, N} \in \mathbb{R}^{N \times L}, \quad N \geq L, \quad \text{rank} \Psi = L.
+$$
+
+- Solution:
+
+$$
+\Psi \Gamma_{a}^{(y)} = \Psi^T Y
+$$
 
 
 - **Avoiding Redundant Evaluations**:
-  
-$$
-  \Phi := \left[ \phi_j (x^{(i)}) \right]_{i=1, \ldots, N}^{j=1, \ldots, M} \in \mathbb{R}^{N \times M}
-  $$
 
-  - Relation:
-    
 $$
-    \Psi = \Phi V_L W_L^{-1}
-    $$
+\Phi := \left[ \phi_j (x^{(i)}) \right]_{i=1, \ldots, N}^{j=1, \ldots, M} \in \mathbb{R}^{N \times M}
+$$
+
+- Relation:
+
+$$
+\Psi = \Phi V_L W_L^{-1}
+$$
 
 
 - **Approximating Function**:
-  
-$$
-  \hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j (x)
-  $$
 
-  
 $$
-  = \psi (x) \Gamma_{a}^{(y)}
-  $$
+\hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j (x)
+$$
 
-  
-$$
-  = \phi (x) V_L W_L^{-1} a^{(y)}
-  $$
 
-  
 $$
-  = \phi (x) \Gamma_{a}^{(\phi)}
-  $$
+= \psi (x) \Gamma_{a}^{(y)}
+$$
+
+
+$$
+= \phi (x) V_L W_L^{-1} a^{(y)}
+$$
+
+
+$$
+= \phi (x) \Gamma_{a}^{(\phi)}
+$$
 
 
 ## Aligned Database Method
 - **Transforming Database Elements**:
-  - Database elements transformed by solving the correspondence problem.
-  - Transformation applied to approximating function $\hat{y}(x)$.
+- Database elements transformed by solving the correspondence problem.
+- Transformation applied to approximating function $\hat{y}(x)$.
 
 - **Cross-Validation Error**:
-  
-$$
-  \bar{\phi}(p) := \begin{pmatrix} \bar{\phi}_1 (q^i)(1 + p_1) + p_2 \\ \bar{\phi}_2 (q^i)(1 + p_3) + p_4 \end{pmatrix}
-  $$
 
-  
 $$
-  = \begin{pmatrix} x_1 (1 + q_1^i) (1 + p_1) + p_2 \\ x_2 (1 + q_3^i) (1 + p_3) + p_4 \end{pmatrix}
-  $$
+\bar{\phi}(p) := \begin{pmatrix} \bar{\phi}_1 (q^i)(1 + p_1) + p_2 \\ \bar{\phi}_2 (q^i)(1 + p_3) + p_4 \end{pmatrix}
+$$
+
+
+$$
+= \begin{pmatrix} x_1 (1 + q_1^i) (1 + p_1) + p_2 \\ x_2 (1 + q_3^i) (1 + p_3) + p_4 \end{pmatrix}
+$$
 
 
 - **Approximating Function with Transformation**:
-  
-$$
-  \bar{y} (\bar{\phi}(p), p, a^{(y)}) := \bar{y} (\bar{\phi}(p), a^{(y)}) + p_5
-  $$
 
-  
 $$
-  = \bar{\phi} (\bar{\phi}(p), q) V_L W_L^{-1} a^{(y)} + p_5
-  $$
+\bar{y} (\bar{\phi}(p), p, a^{(y)}) := \bar{y} (\bar{\phi}(p), a^{(y)}) + p_5
+$$
+
+
+$$
+= \bar{\phi} (\bar{\phi}(p), q) V_L W_L^{-1} a^{(y)} + p_5
+$$
 
 
 - **Regularization Term**:
   
 $$
-  a^{(y)} \min_{\mathbb{R}^{K+5}} \left\{ \frac{1}{2} \sum_{i=1}^N \left( y(x^{(i)}) - \bar{y} (\bar{\phi}(p), p, a^{(y)}) \right)^2 + \frac{\delta}{2} p^T p \right\}.
-  $$
+a^{(y)} \min_{\mathbb{R}^{K+5}} \left\{ \frac{1}{2} \sum_{i=1}^N ( y(x^{(i)}) - \bar{y} (\bar{\phi}(p), p, a^{(y)}) )^2 + \frac{\delta}{2} p^T p \right\}.
+$$
 
 
 ## Application and Differences from Traditional POD
