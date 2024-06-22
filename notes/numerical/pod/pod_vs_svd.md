@@ -9,26 +9,26 @@
   - SVD factorizes a real $m \times n$ matrix $\mathbf{U}$ into three matrices:
     
 $$
-    \mathbf{U} = \mathbf{L} \mathbf{\Sigma} \mathbf{R}^T,
-    $$
+\mathbf{U} = \mathbf{L} \mathbf{\Sigma} \mathbf{R}^T,
+$$
 
-    where:
-    - $\mathbf{L}$ is an $m \times m$ orthogonal matrix.
-    - $\mathbf{\Sigma}$ is an $m \times n$ diagonal matrix containing the singular values.
-    - $\mathbf{R}$ is an $n \times n$ orthogonal matrix.
+where:
+- $\mathbf{L}$ is an $m \times m$ orthogonal matrix.
+- $\mathbf{\Sigma}$ is an $m \times n$ diagonal matrix containing the singular values.
+- $\mathbf{R}$ is an $n \times n$ orthogonal matrix.
 
 ### SVD and POD Connection
 - **Covariance Matrices**:
   - From SVD, two important covariance matrices can be derived:
     
 $$
-    \mathbf{C} = \frac{1}{m-1} (\mathbf{U}^T \mathbf{U}) = \frac{1}{m-1} (\mathbf{R} (\mathbf{\Sigma}^T \mathbf{\Sigma}) \mathbf{R}^T),
-    $$
+\mathbf{C} = \frac{1}{m-1} (\mathbf{U}^T \mathbf{U}) = \frac{1}{m-1} (\mathbf{R} (\mathbf{\Sigma}^T \mathbf{\Sigma}) \mathbf{R}^T),
+$$
 
     
 $$
-    \mathbf{C}_s = \frac{1}{m-1} (\mathbf{U} \mathbf{U}^T) = \frac{1}{m-1} (\mathbf{L} (\mathbf{\Sigma} \mathbf{\Sigma}^T) \mathbf{L}^T).
-    $$
+\mathbf{C}_s = \frac{1}{m-1} (\mathbf{U} \mathbf{U}^T) = \frac{1}{m-1} (\mathbf{L} (\mathbf{\Sigma} \mathbf{\Sigma}^T) \mathbf{L}^T).
+$$
 
   - $\mathbf{C}$ is the $n \times n$ covariance matrix of the transposed snapshot matrix $\mathbf{U}^T$.
   - $\mathbf{C}_s$ is the $m \times m$ covariance matrix of the snapshot matrix $\mathbf{U}$.
