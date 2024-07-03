@@ -1,52 +1,63 @@
-### Problem Being Solved
+# Lid-Driven Cavity Flow Simulation
 
-The code simulates fluid flow over a flat plate using the 2D incompressible Navier-Stokes equations. This is a common problem in fluid dynamics, known as the lid-driven cavity problem. The problem involves computing the velocity and pressure fields within a cavity, where the top boundary (lid) is moved with a constant horizontal velocity while the other boundaries remain stationary. This setup creates complex flow patterns that are interesting to study for understanding fluid behavior in confined spaces.
+This project simulates fluid flow over a flat plate using the 2D incompressible Navier-Stokes equations, known as the lid-driven cavity problem.
 
-### Approach Taken
+## Demonstration
 
-1. **Discretization**:
-   - The 2D domain is discretized into a grid of `N_POINTS x N_POINTS` (128x128 points in this case).
-   - Each grid cell has a specified size (`element_length`) based on the `DOMAIN_SIZE`.
+Watch the Lid-Driven Cavity Flow Simulation in action:
 
-2. **Initialization**:
-   - Velocity fields (`u` and `v`) and pressure field (`p`) are initialized.
-   - A small perturbation is added to the velocity field `u` to start the flow.
+[![Lid-Driven Cavity Flow Simulation](https://i9.ytimg.com/vi/mOMWcGnXtFQ/mqdefault.jpg?sqp=CJyclrQG-oaymwEoCMACELQB8quKqQMcGADwAQH4AbYIgAK2CYoCDAgAEAEYMyA_KH8wDw==&rs=AOn4CLCqf8J8ybMPnO9IPgo_ARAmoiQ68g)](https://youtube.com/shorts/mOMWcGnXtFQ)
 
-3. **Time Integration**:
-   - The time-stepping method is used to evolve the velocity and pressure fields over `N_ITERATIONS` time steps.
-   - A smaller `TIME_STEP` ensures stability in the numerical solution.
+## Overview
 
-4. **Central Differences**:
-   - Functions `central_difference_x` and `central_difference_y` compute the spatial derivatives of the velocity fields using central difference schemes.
-   - The `laplace` function computes the Laplacian of a field, which is essential for diffusion terms in the Navier-Stokes equations.
+- **Lid-Driven Cavity Problem**: Simulates fluid flow in a confined space with a moving top boundary.
+- **2D Incompressible Navier-Stokes Equations**: Computes velocity and pressure fields within the cavity.
+- **Complex Flow Patterns**: Creates interesting flow patterns for studying fluid behavior.
 
-5. **Boundary Conditions**:
-   - The function `apply_boundary_conditions` sets the velocity on the boundaries, enforcing the lid velocity on the top and zero velocities on the other boundaries.
+## Approach Taken
 
-6. **Pressure Poisson Equation**:
-   - The function `solve_pressure_poisson` iteratively solves the Poisson equation for pressure, which ensures that the velocity field remains divergence-free (incompressible).
+### Discretization
 
-7. **Velocity Update**:
-   - Tentative velocities are computed using the Navier-Stokes equations without the pressure gradient.
-   - Pressure gradients are then used to correct the velocities to enforce incompressibility.
+- **Grid**: The 2D domain is discretized into a grid of `N_POINTS x N_POINTS` (128x128 points).
+- **Cell Size**: Each grid cell has a specified size (`element_length`) based on the `DOMAIN_SIZE`.
 
-8. **Visualization**:
-   - Matplotlib is used to create animated contour plots of the velocity fields (`u` and `v`) at each time step.
-   - The `FuncAnimation` class updates these plots dynamically to show the evolution of the flow.
+### Initialization
 
-### Output
+- **Velocity and Pressure Fields**: Initializes the velocity fields (`u` and `v`) and pressure field (`p`).
+- **Perturbation**: Adds a small perturbation to the velocity field `u` to initiate the flow.
 
-The output is an animation showing the evolution of the velocity fields `u` (horizontal component) and `v` (vertical component) over time. The animation provides insights into how the flow develops within the cavity:
+### Time Integration
 
-- **Velocity Field Contours**: 
-  - The contour plots display the distribution and magnitude of the velocity components `u` and `v`.
-  - Initially, the flow starts with small perturbations, and as time progresses, the flow patterns become more pronounced.
+- **Time-Stepping**: Evolves the velocity and pressure fields over `N_ITERATIONS` time steps.
+- **Stability**: Uses a small `TIME_STEP` to ensure numerical stability.
 
-- **Boundary Effects**:
-  - The lid-driven boundary condition creates a shear layer at the top, which influences the entire flow within the cavity.
-  - Recirculating vortices form near the stationary boundaries.
+### Central Differences
 
-- **Iterative Convergence**:
-  - The animation shows the iterative process over `N_ITERATIONS`, illustrating how the solution gradually approaches a steady-state or dynamically stable condition.
+- **Spatial Derivatives**: Functions `central_difference_x` and `central_difference_y` compute the spatial derivatives of the velocity fields using central difference schemes.
+- **Laplacian**: The `laplace` function computes the Laplacian of a field, essential for diffusion terms in the Navier-Stokes equations.
 
-This simulation is a classic example of computational fluid dynamics (CFD) techniques applied to study fluid behavior in a confined geometry. It demonstrates key concepts such as discretization, numerical stability, boundary conditions, and visualization of fluid flow.
+### Boundary Conditions
+
+- **Velocity on Boundaries**: The `apply_boundary_conditions` function sets the velocity on the boundaries, enforcing the lid velocity on the top and zero velocities on the other boundaries.
+
+### Pressure Poisson Equation
+
+- **Pressure Solver**: The `solve_pressure_poisson` function iteratively solves the Poisson equation for pressure, ensuring the velocity field remains divergence-free (incompressible).
+
+### Velocity Update
+
+- **Tentative Velocities**: Computes tentative velocities using the Navier-Stokes equations without the pressure gradient.
+- **Pressure Correction**: Uses pressure gradients to correct the velocities, enforcing incompressibility.
+
+### Visualization
+
+- **Animated Contour Plots**: Uses Matplotlib to create animated contour plots of the velocity fields (`u` and `v`) at each time step.
+- **Dynamic Updates**: The `FuncAnimation` class dynamically updates these plots to show the flow evolution.
+
+## Output
+
+The output is an animation showing the evolution of the velocity fields `u` (horizontal component) and `v` (vertical component) over time, providing insights into flow development within the cavity:
+
+- **Velocity Field Contours**: Displays the distribution and magnitude of the velocity components `u` and `v`. Initially, the flow starts with small perturbations, becoming more pronounced over time.
+- **Boundary Effects**: The lid-driven boundary condition creates a shear layer at the top, influencing the entire flow within the cavity and forming recirculating vortices near the stationary boundaries.
+- **Iterative Convergence**: The animation illustrates the iterative process over `N_ITERATIONS`, showing how the solution gradually approaches a steady-state or dynamically stable condition.
