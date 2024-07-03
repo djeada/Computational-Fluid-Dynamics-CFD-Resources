@@ -1,30 +1,50 @@
-The FluidSimulation class as a whole can be described as a solver that approximates fluid dynamics in a 2D environment using an Eulerian grid-based approach. It likely simulates aspects of the Navier-Stokes equations through diffusion, advection, and projection steps, albeit in a simplified form suitable for real-time simulations and visualizations.
+# FluidSimulation Class Documentation
 
-Eulerian Approach
+The `FluidSimulation` class is a solver that approximates fluid dynamics in a 2D environment using an Eulerian grid-based approach. This class simulates aspects of the Navier-Stokes equations through diffusion, advection, and projection steps, providing a simplified yet effective solution for real-time simulations and visualizations.
 
-    The simulation uses an Eulerian framework. In Eulerian fluid simulations, the fluid's properties (such as velocity, pressure, and density) are tracked at fixed points in space (the grid cells), rather than following individual fluid particles. This is evident from how the properties like Vx, Vy, and density are associated with grid locations.
+## Features
 
-Navier-Stokes Equations
+- **Eulerian Approach**: Properties like velocity, pressure, and density are tracked at fixed grid points in space, rather than following individual fluid particles.
+- **Navier-Stokes Approximation**: The simulation approximates the Navier-Stokes equations, fundamental for describing the motion of viscous fluids.
+- **Diffusion and Viscosity**: Simulates the spreading of fluid properties and incorporates viscosity to influence the momentum transfer within the fluid.
+- **Advection**: Transports properties such as density and velocity through the fluid over time.
+- **Projection and Pressure**: Ensures incompressibility by solving a Poisson equation for pressure, maintaining realism in the simulation.
+- **Discretization and Time Stepping**: Utilizes a discretized grid and discrete time steps for computational simulation.
+- **Boundary Conditions**: Manages fluid behavior at the simulation domain's edges for realistic interactions.
 
-    While the full Navier-Stokes equations are not explicitly defined in your provided code, the simulation likely approximates aspects of these equations. The Navier-Stokes equations describe the motion of viscous fluid substances and are fundamental in fluid dynamics. They account for forces like pressure, viscosity, and external forces, influencing fluid motion.
+## Demonstration
 
-Diffusion and Viscosity
+Watch the FluidSimulation in action:
 
-    Diffusion: This process, controlled by the diffuse method, simulates the spreading of fluid properties (like a dye in water). The algorithm used appears to be a form of iterative solver, likely a variant of the Jacobi method, to approximate the diffusion process over time.
-    Viscosity: The simulation includes viscosity, a measure of a fluid's resistance to flow. Viscosity affects how momentum is transferred within the fluid, and in your code, it influences how velocity is diffused across the grid.
+[![FluidSimulation Demo](https://i9.ytimg.com/vi/auwaTfkpIXo/mqdefault.jpg?sqp=CJSOlrQG-oaymwEoCMACELQB8quKqQMcGADwAQH4Ac4FgALgBooCDAgAEAEYEyATKH8wDw==&rs=AOn4CLChKgMqQVZxbnU9eZTsG9NQICo7Wg)](https://youtube.com/shorts/auwaTfkpIXo?si=IFB4hQwzT5ynHGuM)
 
-Advection
+## Detailed Explanation
 
-    The advect method in your class describes how properties like density and velocity are transported (carried) through the fluid over time. Advection is a core part of fluid simulations, representing the movement of fluid elements in space.
+### Eulerian Approach
 
-Projection and Pressure
+In an Eulerian fluid simulation, the fluid's properties are tracked at fixed grid points. This method associates properties like velocity components (Vx, Vy) and density with specific grid locations, making it suitable for grid-based simulations.
 
-    The project method aims to enforce incompressibility, ensuring that the velocity field respects the mass conservation principle. This step involves solving a Poisson equation for pressure. It's a crucial step to maintain realism in the simulation, preventing the fluid from unnaturally compressing or expanding.
+### Navier-Stokes Equations
 
-Discretization and Time Stepping
+The class approximates the Navier-Stokes equations, which describe the motion of viscous fluid substances. These equations account for forces such as pressure, viscosity, and external influences on fluid motion.
 
-    The simulation uses a discretized grid (a 2D array), with discrete time steps (dt). This approach is typical in computational simulations where continuous phenomena are approximated using discrete values.
+### Diffusion and Viscosity
 
-Boundary Conditions
+- **Diffusion**: The `diffuse` method simulates the spreading of fluid properties, using an iterative solver (likely a variant of the Jacobi method) to approximate this process over time.
+- **Viscosity**: Viscosity, a measure of a fluid's resistance to flow, is included in the simulation. It affects how velocity is diffused across the grid, impacting the overall fluid dynamics.
 
-    The set_bnd function handles boundary conditions, which define how the fluid behaves at the edges of the simulation domain (the "box"). These conditions are important for realistically simulating how the fluid interacts with the walls of the container.
+### Advection
+
+The `advect` method describes how properties like density and velocity are transported through the fluid over time. Advection is crucial for representing the movement of fluid elements in space.
+
+### Projection and Pressure
+
+The `project` method enforces incompressibility, ensuring the velocity field respects the mass conservation principle. This involves solving a Poisson equation for pressure, which is essential to prevent unrealistic compression or expansion of the fluid.
+
+### Discretization and Time Stepping
+
+The simulation operates on a discretized grid (a 2D array) with discrete time steps (`dt`). This approach is common in computational simulations to approximate continuous phenomena using discrete values.
+
+### Boundary Conditions
+
+The `set_bnd` function manages boundary conditions, defining how the fluid behaves at the simulation domain's edges. These conditions are vital for accurately simulating interactions with the container walls.
