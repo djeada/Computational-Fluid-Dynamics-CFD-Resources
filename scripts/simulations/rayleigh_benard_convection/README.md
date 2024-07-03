@@ -2,11 +2,17 @@
 
 This project simulates the Rayleigh-Bénard convection using a simplified thermal convection model and visualizes it using Pygame.
 
-## Steps
+## Demonstration
 
-1. Initialize the grid with a temperature gradient.
-2. Update the temperature and velocity fields.
-3. Visualize the temperature distribution.
+Watch the Rayleigh-Bénard Convection Simulation in action:
+
+[![Rayleigh-Bénard Convection Simulation](https://i9.ytimg.com/vi/E_N-ld6Vfwo/mqdefault.jpg?sqp=CJiVlrQG-oaymwEoCMACELQB8quKqQMcGADwAQH4AbYIgAK-CIoCDAgAEAEYEyAiKH8wDw==&rs=AOn4CLAVlKO8E4MPwP5jiYMMJgc0MW4Aig)](https://youtube.com/shorts/E_N-ld6Vfwo)
+
+## Features
+
+- **Grid Initialization**: The grid is initialized with a linear temperature gradient from 1.0 (bottom) to 0.0 (top).
+- **Temperature and Velocity Updates**: Updates the temperature and velocity fields to simulate convection.
+- **Visualization**: Uses Pygame to visualize the temperature distribution.
 
 ## Simulation Parameters
 
@@ -16,39 +22,47 @@ This project simulates the Rayleigh-Bénard convection using a simplified therma
 - **Cell Size**: Computed as `WINDOW_SIZE // GRID_SIZE`
 - **Temperature Range**: [0.0, 1.0]
 
-## Explanation of the Script
+## Detailed Explanation
 
-1. **Initialization**:
-    - Import necessary libraries (Pygame, NumPy, multiprocessing).
-    - Set up simulation parameters.
-    - Initialize Pygame for visualization.
+### Initialization
 
-2. **Temperature to Color Conversion**:
-    - Define a function to map temperature values to colors for visualization.
+- **Libraries**: Imports necessary libraries (Pygame, NumPy, multiprocessing).
+- **Simulation Parameters**: Sets up the grid size, window size, frame rate, and other simulation parameters.
+- **Pygame Setup**: Initializes Pygame for visualization.
 
-3. **Grid Initialization**:
-    - Initialize the grid with a linear temperature gradient from 1.0 (bottom) to 0.0 (top).
+### Temperature to Color Conversion
 
-4. **Cell Update Function**:
-    - Define a function to update the temperature of a cell based on its neighbors and velocity field.
-    - Use multiprocessing for efficient computation.
+- **Function**: Defines a function to map temperature values to colors for visual representation.
 
-5. **Grid Update**:
-    - Define a function to update the entire grid using multiprocessing to parallelize cell updates.
+### Grid Initialization
 
-6. **Velocity Update**:
-    - Define a function to update the velocity fields based on the temperature gradient.
+- **Temperature Gradient**: Initializes the grid with a temperature gradient, with higher temperatures at the bottom and lower temperatures at the top.
 
-7. **Grid Drawing**:
-    - Define a function to draw the grid on the Pygame window using the color mapping.
+### Cell Update Function
 
-8. **Main Loop**:
-    - Initialize the grid and velocity fields.
-    - Run the main loop to continuously update and draw the grid.
-    - Handle Pygame events for quitting the simulation.
+- **Temperature Update**: Defines a function to update the temperature of a cell based on its neighbors and velocity field.
+- **Multiprocessing**: Utilizes multiprocessing for efficient computation of temperature updates.
+
+### Grid Update
+
+- **Parallel Updates**: Defines a function to update the entire grid using multiprocessing to parallelize cell updates.
+
+### Velocity Update
+
+- **Gradient-Based Update**: Defines a function to update the velocity fields based on the temperature gradient.
+
+### Grid Drawing
+
+- **Visualization**: Defines a function to draw the grid on the Pygame window using the color mapping function.
+
+### Main Loop
+
+- **Initialization**: Initializes the grid and velocity fields.
+- **Continuous Update**: Runs the main loop to continuously update and draw the grid.
+- **Event Handling**: Handles Pygame events to allow quitting the simulation.
 
 ## Running the Script
 
-1. Ensure you have Pygame and NumPy installed.
-2. Run the script to start the simulation.
-3. The simulation window will display the evolving temperature field with colors indicating different temperatures.
+1. **Dependencies**: Ensure you have Pygame and NumPy installed.
+2. **Execution**: Run the script to start the simulation.
+3. **Visualization**: The simulation window will display the evolving temperature field, with colors indicating different temperatures.
