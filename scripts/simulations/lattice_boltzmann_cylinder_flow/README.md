@@ -1,30 +1,36 @@
-# Notes on Lattice Boltzmann Method
+# Lattice Boltzmann Cylinder Flow Simulation
+
+This project simulates the flow around a cylinder using the Lattice Boltzmann method, a powerful approach in computational fluid dynamics.
+
+## Demonstration
+
+Watch the Lattice Boltzmann Cylinder Flow Simulation in action:
+
+[![Lattice Boltzmann Cylinder Flow Simulation](https://i9.ytimg.com/vi/Jzsxy2BsQRM/mqdefault.jpg?sqp=CMSXlrQG-oaymwEoCMACELQB8quKqQMcGADwAQH4AbYIgAL6DYoCDAgAEAEYYCATKH8wDw==&rs=AOn4CLDbqZndaVyMLoKIe0VMTCGB6TlvrQ)](https://youtube.com/shorts/mOMWcGnXtFQ)
 
 ## Overview
-- Lattice Boltzmann method: A computational fluid dynamics approach.
-- Used to numerically solve incompressible, time-dependent Navier-Stokes equations.
-- Easily represents complex physical phenomena (e.g., multiphase flows, chemical interactions).
-- Originates from molecular description of a fluid, can incorporate physical terms from molecular interaction knowledge.
-- Valuable in fundamental research and industrial problems due to efficiency and convenience.
+
+- **Lattice Boltzmann Method**: A computational fluid dynamics approach used to numerically solve incompressible, time-dependent Navier-Stokes equations.
+- **Complex Phenomena**: Represents complex physical phenomena such as multiphase flows and chemical interactions.
+- **Molecular Origin**: Originates from the molecular description of fluids and incorporates physical terms from molecular interactions.
+- **Efficiency and Convenience**: Highly valuable in both fundamental research and industrial applications due to its efficiency and ease of use.
 
 ## Origin of the Method
-- Lattice Boltzmann seen as numerical solver of Boltzmann equation.
-- Boltzmann equation describes space-time dynamics of probability distribution function, defined in 6-dimensional phase space.
-- Covers more physical phenomena than Navier-Stokes equation, not subject to time scales separation, describes fluids in non-hydrodynamic regimes.
-- Captures transport phenomena like friction, diffusion, and temperature transport, deriving corresponding transport coefficients.
-- Lattice Boltzmann evolved from Cellular Automata models, describing the evolution of discrete states.
-- Cellular Automata represents position and velocity of "mesoscopic" particles.
-- Lattice Boltzmann models simulate dynamics of corresponding discrete Boltzmann equation.
+
+- **Boltzmann Equation**: Lattice Boltzmann method is seen as a numerical solver of the Boltzmann equation, which describes the space-time dynamics of probability distribution functions in a 6-dimensional phase space.
+- **Physical Phenomena**: Captures more physical phenomena than the Navier-Stokes equation, including non-hydrodynamic regimes and various transport phenomena like friction, diffusion, and temperature transport.
+- **Cellular Automata**: Evolved from Cellular Automata models that describe the evolution of discrete states representing the position and velocity of "mesoscopic" particles.
+- **Discrete Boltzmann Equation**: Lattice Boltzmann models simulate the dynamics of the corresponding discrete Boltzmann equation.
 
 ## Why Lattice Boltzmann?
-- Different from classical CFD in theory, code implementation, and application.
-- Advantage: efficiency. Designed to run on high performance hardware and accommodate complex physics or sophisticated algorithms.
-- Lattice Boltzmann allows solving previously unapproachable problems or problems with insufficient accuracy.
-- Typical achievements: data pre-processing and mesh generation, parallel data analysis, post-processing and evaluation, fully resolved multi-phase flow, flow through complex geometries and porous media, complex coupled flow with heat transfer and chemical reactions.
-- Hybrid modeling approach: mesh based but also inherits aspects of a particle based method. Can be coupled with embedded particle methods.
+
+- **Theoretical and Practical Differences**: Differs from classical CFD in theory, code implementation, and application.
+- **Efficiency**: Designed for high-performance hardware, accommodating complex physics and sophisticated algorithms.
+- **Complex Problem Solving**: Allows solving previously unapproachable problems or those with insufficient accuracy.
+- **Achievements**: Includes data pre-processing, mesh generation, parallel data analysis, post-processing, fully resolved multi-phase flow, flow through complex geometries, and coupled flow with heat transfer and chemical reactions.
+- **Hybrid Approach**: Combines mesh-based and particle-based methods, allowing coupling with embedded particle methods.
 
 ## Lattice Boltzmann and High Performance Computing
-- Lattice Boltzmann seems resource consuming compared to classical CFD as it requires more memory for the discrete probability distribution functions.
-- This is compensated by outstanding computational efficiency, thanks to explicit formulation and exact advection operator.
-- Well suited for computations on a parallel architecture, even with slow interconnection network.
-- Works well with other types of high performance hardware like General Purpose Graphics Processing Units (GPGPUs).
+
+- **Resource Consumption**: Requires more memory for the discrete probability distribution functions compared to classical CFD.
+- **Computational Efficiency**: Compensated by explicit formulation and exact advection operator, making it well-suited for parallel architectures and high-performance hardware like General Purpose Graphics Processing Units (GPGPUs).
