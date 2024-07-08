@@ -1,4 +1,4 @@
-# FluidSimulation Class Documentation
+# Simplified Real Time Fluid Dynamics Simulator
 
 The `FluidSimulation` class is a solver that approximates fluid dynamics in a 2D environment using an Eulerian grid-based approach. This class simulates aspects of the Navier-Stokes equations through diffusion, advection, and projection steps, providing a simplified yet effective solution for real-time simulations and visualizations.
 
