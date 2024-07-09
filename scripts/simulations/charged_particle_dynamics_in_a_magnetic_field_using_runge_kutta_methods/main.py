@@ -49,16 +49,20 @@ for i in range(1, num_steps):
     v_vals[i] = y[3:]
 
 # Initialize the plot
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+fig = plt.figure(facecolor='black')
+ax = fig.add_subplot(111, projection='3d', facecolor='black')
 
 # Set plot limits
 ax.set_xlim(-2, 2)
 ax.set_ylim(-2, 2)
 ax.set_zlim(-2, 60)
-ax.set_xlabel('X')
-ax.set_ylabel('Y')
-ax.set_zlabel('Z')
+ax.set_xlabel('X (meters)', color='white')
+ax.set_ylabel('Y (meters)', color='white')
+ax.set_zlabel('Z (meters)', color='white')
+ax.tick_params(colors='white')
+
+# Add title
+ax.set_title('Helical Motion of a Charged Particle in a Magnetic Field', color='white')
 
 # Initialize the line and point objects
 line, = ax.plot([], [], [], 'b-')
