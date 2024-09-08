@@ -56,6 +56,7 @@ This project is licensed under the [MIT License](LICENSE) - see the LICENSE file
 - [David Penner's Interesting Projects](https://davidpenner74.wixsite.com/davidpenner/projects)
 
 ### Video Tutorials
+- [MIT Lecture on CFD](https://www.youtube.com/@AeroCFD)
 - [Numerical Methods by Hand on YouTube](https://youtube.com/playlist?list=PL5_Bm_WH1i3fAQP6G2_SaazjNIy3m8QbH&si=QrtwsLAQpWKeQKA8)
 - [Computational Fluid Dynamics (CFD) - ME615 IIT Mandi](https://youtube.com/playlist?list=PLOUcBDsCNnMweTuft1qq25CQbyyKqZKvI&si=prjJr4J0GVZFWgLa)
 - [Data-driven Methods for Science and Engineering Seminar](https://youtube.com/playlist?list=PLWL3MaEZQ5I0x5SoN-whc6wfxvZr4E5v9&si=sj8mXSdq_FynCsUz)
