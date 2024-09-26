@@ -4,9 +4,9 @@ This repository is a comprehensive collection of advanced resources for Computat
 
 ## Features
 
-- **In-depth Notes**: Detailed explanations of complex CFD topics, including turbulence modeling, mesh generation, and solver algorithms.
-- **Advanced Scripts**: Custom scripts to streamline CFD workflows, including pre-processing, simulation, and post-processing tasks.
-- **Detailed Tutorials**: Step-by-step guides on using ParaView for data visualization, Gmsh for mesh generation, and other CFD tools.
+- Detailed explanations of complex CFD topics, including turbulence modeling, mesh generation, and solver algorithms.
+- Custom scripts to streamline CFD workflows, including pre-processing, simulation, and post-processing tasks.
+- Step-by-step guides on using ParaView for data visualization, Gmsh for mesh generation, and other CFD tools.
 
 Navigate to the respective folders for detailed READMEs on how to use the materials.
 
