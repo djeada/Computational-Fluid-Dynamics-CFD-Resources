@@ -1,6 +1,7 @@
 
 Here are some fascinating projects that caught my attention on YouTube:
 
+- **[The Secret of Flight](https://youtube.com/playlist?list=PLwr4eb5N5Dr6qqVuHy__GMl9ORfcA9YP1&si=gjSWG_4zi8OAxj_C):** This educational series, hosted by German aeronautical engineer Dr. Alexander Lippisch, explains the mysteries of flight and the science behind it.
 - **[Car Aerodynamics](https://youtube.com/playlist?list=PL52-wxMBN-Egg8v8X6ixIacFtq3Cw5fDz&si=vbRJVkkPc9Idm9R4):** A playlist exploring the principles and applications of car aerodynamics.
 - **[Amateur Rocketry](https://youtu.be/sEzRzkGRpDQ?si=S6ATfBD3qYsMdAlC):** Software and software tools, designing rockets, with both academic and practical approaches.
 - **[How Radar Works](https://youtu.be/igrN_wd_g74?si=X_nQd0mfVi0NMbUo):** A detailed explanation of radar technology, its working principles, and applications.
