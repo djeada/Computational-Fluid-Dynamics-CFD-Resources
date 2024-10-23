@@ -35,6 +35,7 @@ This project is licensed under the [MIT License](LICENSE) - see the LICENSE file
 - [CFD General Principles by CFD Direct](https://doc.cfd.direct/notes/cfd-general-principles/)
 - [Turbulence Modeling Resource](https://turbmodels.larc.nasa.gov/)  
 - [Wall-Modeled Large Eddy Simulation Resource](https://wmles.umd.edu/)  
+- [NACA 5-Digit Airfoil Design and Data Tool](http://www.airfoiltools.com/airfoil/naca5digit)  
 
 ### Books
 - [Data-Driven Science and Engineering: Machine Learning, Dynamical Systems, and Control](https://www.amazon.com/Data-Driven-Science-Engineering-Learning-Dynamical/dp/1108422098)  
