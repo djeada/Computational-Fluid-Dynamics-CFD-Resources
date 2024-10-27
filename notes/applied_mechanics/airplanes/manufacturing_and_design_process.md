@@ -18,26 +18,23 @@ With objectives in hand, the preliminary design begins. Designers brainstorm dif
 
 At this stage, initial aerodynamic calculations are performed. Using principles like the lift equation:
 
-\[
-L = \frac{1}{2} \rho V^2 S C_L
-\]
+$$L = \frac{1}{2} \rho V^2 S C_L$$
 
 where:
-- \( L \) is the lift force,
-- \( \rho \) is the air density,
-- \( V \) is the velocity of the aircraft relative to the air,
-- \( S \) is the wing area,
-- \( C_L \) is the lift coefficient,
+
+- $L$ is the lift force,
+- $\rho$ is the air density,
+- $V$ is the velocity of the aircraft relative to the air,
+- $S$ is the wing area,
+- $C_L$ is the lift coefficient,
 
 designers estimate how different wing shapes and sizes will affect the aircraft's ability to generate sufficient lift.
 
 Similarly, they consider the drag equation:
 
-\[
-D = \frac{1}{2} \rho V^2 S C_D
-\]
+$$D = \frac{1}{2} \rho V^2 S C_D$$
 
-where \( D \) is the drag force and \( C_D \) is the drag coefficient.
+where $D$ is the drag force and $C_D$ is the drag coefficient.
 
 By estimating these forces, designers can assess the feasibility of their concepts and make informed decisions about which configurations to develop further.
 
@@ -49,28 +46,26 @@ Once a promising concept is selected, the detailed design phase dives deeper int
 
 Aerodynamics plays a crucial role in aircraft performance. Engineers use Computational Fluid Dynamics (CFD) to simulate airflow around the aircraft's surfaces. CFD solves the Navier-Stokes equations, which describe fluid motion:
 
-\[
-\rho \left( \frac{\partial \mathbf{V}}{\partial t} + (\mathbf{V} \cdot \nabla) \mathbf{V} \right) = -\nabla p + \mu \nabla^2 \mathbf{V} + \mathbf{F}
-\]
+$$\rho \left( \frac{\partial \mathbf{V}}{\partial t} + (\mathbf{V} \cdot \nabla) \mathbf{V} \right) = -\nabla p + \mu \nabla^2 \mathbf{V} + \mathbf{F}$$
 
 where:
-- \( \mathbf{V} \) is the velocity field,
-- \( p \) is the pressure,
-- \( \mu \) is the dynamic viscosity,
-- \( \mathbf{F} \) represents body forces.
+
+- $\mathbf{V}$ is the velocity field,
+- $p$ is the pressure,
+- $\mu$ is the dynamic viscosity,
+- $\mathbf{F}$ represents body forces.
 
 These equations help predict how air will flow over the wings and fuselage, allowing engineers to optimize shapes for minimal drag and maximum lift. For example, tweaking the wing's camber or angle of attack can improve lift-to-drag ratios, enhancing fuel efficiency.
 
 Structural analysis ensures the aircraft can withstand various loads during operation. Engineers use Finite Element Analysis (FEA) to model the stresses and strains on different components. They apply equations from material mechanics, such as Hooke's Law for elastic materials:
 
-\[
-\sigma = E \epsilon
-\]
+$$\sigma = E \epsilon$$
 
 where:
-- \( \sigma \) is the stress,
-- \( E \) is the Young's modulus,
-- \( \epsilon \) is the strain.
+
+- $\sigma$ is the stress,
+- $E$ is the Young's modulus,
+- $\epsilon$ is the strain.
 
 By understanding how materials deform under load, engineers can design structures that are strong yet lightweight.
 
@@ -78,13 +73,12 @@ By understanding how materials deform under load, engineers can design structure
 
 Integrating the aircraft's systems is like orchestrating a symphony. Electrical, hydraulic, propulsion, and control systems must work seamlessly together. For example, the design of the fuel system requires calculations to ensure adequate fuel flow rates to the engines under various conditions, using principles like Bernoulli's equation:
 
-\[
-P + \frac{1}{2} \rho V^2 + \rho g h = \text{constant}
-\]
+$$P + \frac{1}{2} \rho V^2 + \rho g h = \text{constant}$$
 
 where:
-- \( P \) is the pressure,
-- \( \rho g h \) accounts for gravitational potential energy per unit volume.
+
+- $P$ is the pressure,
+- $\rho g h$ accounts for gravitational potential energy per unit volume.
 
 Avionics systems involve complex electronics and software that must be reliable and fault-tolerant. Control systems use feedback loops, modeled by differential equations, to maintain stability and respond to pilot inputs.
 
@@ -94,16 +88,14 @@ Choosing the right materials is critical. The goal is to find materials that off
 
 Engineers consider factors like the material's tensile strength, fatigue life, and resistance to corrosion. They might use the S-N curve (stress vs. number of cycles) to predict fatigue life:
 
-\[
-S = \sigma_\text{max} \left( \frac{N}{N_f} \right)^b
-
-\]
+$$S = \sigma_\text{max} \left( \frac{N}{N_f} \right)^b$$
 
 where:
-- \( S \) is the stress amplitude,
-- \( N \) is the number of cycles,
-- \( N_f \) is the number of cycles to failure,
-- \( b \) is the material's fatigue exponent.
+
+- $S$ is the stress amplitude,
+- $N$ is the number of cycles,
+- $N_f$ is the number of cycles to failure,
+- $b$ is the material's fatigue exponent.
 
 By selecting appropriate materials, the aircraft can be both safe and efficient.
 
@@ -199,24 +191,20 @@ For aerodynamics students, it's essential to see how theoretical concepts are ap
 
 Designing the wing involves balancing lift, drag, and structural considerations. Engineers use airfoil theory to select the wing's cross-sectional shape. They might employ the thin airfoil theory, which simplifies the analysis by assuming small angles of attack.
 
-The lift coefficient \( C_L \) can be approximated for thin airfoils using:
+The lift coefficient $C_L$ can be approximated for thin airfoils using:
 
-\[
-C_L = 2 \pi \alpha
-\]
+$$C_L = 2 \pi \alpha$$
 
-where \( \alpha \) is the angle of attack in radians.
+where $\alpha$ is the angle of attack in radians.
 
-However, real-world wings are finite and experience induced drag due to wingtip vortices. The induced drag coefficient \( C_{D_i} \) is given by:
+However, real-world wings are finite and experience induced drag due to wingtip vortices. The induced drag coefficient $C_{D_i}$ is given by:
 
-\[
-C_{D_i} = \frac{C_L^2}{\pi e A}
-
-\]
+$$C_{D_i} = \frac{C_L^2}{\pi e A}$$
 
 where:
-- \( e \) is the Oswald efficiency number,
-- \( A \) is the aspect ratio of the wing.
+
+- $e$ is the Oswald efficiency number,
+- $A$ is the aspect ratio of the wing.
 
 By optimizing the aspect ratio and wing planform, engineers reduce induced drag, improving fuel efficiency.
 
@@ -224,17 +212,15 @@ By optimizing the aspect ratio and wing planform, engineers reduce induced drag,
 
 Ensuring the aircraft is stable and controllable involves analyzing its response to disturbances. The longitudinal stability, for instance, depends on the location of the center of gravity (CG) relative to the aerodynamic center.
 
-The static margin \( SM \) is a measure of stability:
+The static margin $SM$ is a measure of stability:
 
-\[
-SM = \frac{x_{NP} - x_{CG}}{c}
-
-\]
+$$SM = \frac{x_{NP} - x_{CG}}{c}$$
 
 where:
-- \( x_{NP} \) is the neutral point (aerodynamic center),
-- \( x_{CG} \) is the center of gravity location,
-- \( c \) is the mean aerodynamic chord.
+
+- $x_{NP}$ is the neutral point (aerodynamic center),
+- $x_{CG}$ is the center of gravity location,
+- $c$ is the mean aerodynamic chord.
 
 A positive static margin indicates stability. Designers adjust the aircraft's geometry and weight distribution to achieve the desired stability characteristics.
 
@@ -242,17 +228,14 @@ A positive static margin indicates stability. Designers adjust the aircraft's ge
 
 Integrating engines affects both performance and aerodynamics. The placement of engines influences airflow around the wings and fuselage. Thrust calculations involve understanding engine performance parameters, such as specific fuel consumption (SFC) and thrust output under different conditions.
 
-Engineers use thermodynamic cycles, like the Brayton cycle for jet engines, to model engine efficiency. They apply equations for thrust \( T \):
+Engineers use thermodynamic cycles, like the Brayton cycle for jet engines, to model engine efficiency. They apply equations for thrust $T$:
 
-\[
-T = \dot{m} (V_e - V_0)
-
-\]
+$$T = \dot{m} (V_e - V_0)$$
 
 where:
-- \( \dot{m} \) is the mass flow rate through the engine,
-- \( V_e \) is the exhaust velocity,
-- \( V_0 \) is the free stream velocity.
+- $\dot{m}$ is the mass flow rate through the engine,
+- $V_e$ is the exhaust velocity,
+- $V_0$ is the free stream velocity.
 
 Optimizing engine performance contributes to overall aircraft efficiency.
 
