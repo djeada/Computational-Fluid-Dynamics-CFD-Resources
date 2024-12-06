@@ -1,107 +1,138 @@
 ## Pressure and Compressibility
 
+Understanding how pressure behaves in fluids that can be compressed is important for accurately describing and predicting the flow of gases at different speeds and conditions. When fluid velocities approach the speed of sound, changes in density and pressure waves become significant, leading to what is known as compressible flow. At lower speeds, where these pressure waves have little effect, the flow can be approximated as incompressible. This distinction matters greatly in fields like aeronautics, where an aircraft’s Mach number (its speed relative to the speed of sound) determines whether compressibility needs to be accounted for.
+
+  
+```
+ Visualizing Compressible Flow:
+ 
+ Imagine air moving through a nozzle:
+ 
+    Narrowing nozzle (increasing speed)
+    ----------------->   --->   -> 
+   (Low Ma)                     (Higher Ma)
+        |                        |
+        v                        v
+     incompressible         compressible
+         flow                 flow region
+
+ As the air accelerates to speeds closer 
+ to the speed of sound, density changes and 
+ pressure waves must be considered.
+```
+
+  
+The governing equations for compressible flow include the continuity equation, momentum equations (Navier-Stokes), the equation of state, and any relevant boundary conditions. Pressure waves traveling at the local speed of sound influence how the fluid responds to changes. At speeds much lower than the speed of sound, these waves do not strongly affect the flow, allowing one to treat density as nearly constant and ignore compressibility effects.
+
+  
 ### Governing Equations
-* The system is defined by the governing equations, the equation of state, constitutive relations, and boundary conditions.
-* These equations describe compressible flow.
-* Pressure waves are part of the solution and travel at the speed of sound (approximately 347 m/s at 1 atm and 300 K).
 
+These equations define the system and characterize compressible behavior:
+
+• The equations of motion and state describe how pressure, density, and velocity interact in compressible conditions.  
+• Pressure waves travel at the speed of sound, about **347 m/s at 1 atm and 300 K**, carrying information about changes in the flow.  
+• Compressible flow models must handle these traveling waves, whereas incompressible flow approximations can ignore them.
+
+  
 ### Compressible vs. Incompressible Flow
-* At low speeds relative to the speed of sound (low Mach numbers), the flow is largely unaffected by these waves and is termed incompressible.
-* From Bernoulli's equation (ignoring gravity), we have:
 
-$$
+Considering how close the flow speed is to the speed of sound helps determine whether compressibility matters. At low Mach numbers, defined as **Ma = v/c** where **v** is the flow velocity and **c** is the speed of sound, density changes are small enough to be neglected. Bernoulli’s equation for incompressible flow states:
+
+\[
 \Delta P = \frac{\rho \Delta v^2}{2}.
-$$
+\]
 
-* Taking pressures relative to stagnation and using $\Delta v = v$, we get:
+Taking pressures relative to stagnation and substituting \(\Delta v = v\):
 
-$$
+\[
 \frac{\Delta P}{P} = \frac{\gamma}{2} \text{Ma}^2,
-$$
+\]
 
-where $\gamma = c_p/c_v$ and Ma is the Mach number ($v/c$).
+where **\(\gamma = c_p/c_v\)** is the ratio of specific heats. As speed increases, the Mach number grows, and so does the relative change in pressure. For example:
 
-### Examples
-* For $v = 100$ m/s, $\Delta P/P_{\text{atm}}$ is 6% (Ma = 0.288 at 1 atm).
-* For $v = 347$ m/s, $\Delta P/P_{\text{atm}}$ is 70% (Ma = 1 at 1 atm).
-* Flows are considered incompressible for $\text{Ma} < 0.3$.
+• At **v = 100 m/s**, Ma ≈ 0.288 at 1 atm, giving \(\Delta P/P_{\text{atm}}\) ≈ 6%. This small percentage shows that density changes remain modest.  
+• At **v = 347 m/s**, Ma = 1 at 1 atm, giving \(\Delta P/P_{\text{atm}}\) ≈ 70%, indicating substantial compressibility effects.
 
-### Low-Mach Flows
-* At low speeds, acoustic waves do not significantly alter the thermodynamic state or velocity fields.
-* However, unsteady, explicit flow solvers must take timesteps based on the smallest timescales, corresponding to acoustic waves ( $v + c$).
-* This creates a numerically *stiff* problem, requiring many small timesteps for stability.
-* The ratio of timesteps needed for stability to those needed for accuracy is $(v + c) / v = 1 + 1/\text{Ma}$.
+When **Ma < 0.3**, compressibility effects are usually negligible, allowing the flow to be considered incompressible. This threshold is widely used as a practical guideline in engineering calculations.
 
-### Example of Stiffness
-* At Ma = 0.1 (34.7 m/s in air at 1 atm), 11 times more steps are needed for stability than for accuracy.
+  
+### Low-Mach Flows and Numerical Stiffness
 
+Even at low Mach numbers, if the flow is considered compressible in a numerical simulation, one must account for the presence of acoustic waves (sound waves), which are very fast compared to the flow velocity. Unsteady flow solvers must take very small timesteps to resolve these fast-moving waves. The required ratio of timesteps increases as Mach number decreases, because the speed of sound dominates the timescale:
+
+• The ratio of stability-driven timesteps to accuracy-driven timesteps is \(1 + 1/\text{Ma}\).  
+• At **Ma = 0.1**, this ratio is 11, meaning 11 times more steps are needed for stability than would be required for accuracy alone. This situation makes the problem numerically **stiff**, prompting methods to reduce this computational burden.
+
+  
 ## Incompressible Flow
 
+In cases where the Mach number is low and compressibility is negligible, assuming **incompressible flow** simplifies the equations dramatically. Density is taken as constant, and the energy equation can often be ignored. Removing density changes also removes the need to handle acoustic waves, eliminating the numerical stiffness associated with them. With incompressibility, the pressure field adapts itself to satisfy mass conservation constraints, effectively decoupling pressure from density changes.
+
+  
+```
+ Incompressible Flow Visualization:
+ 
+ Consider a pipe with water:
+ 
+     --> --> -->  (constant density)
+ 
+  Pressure adjusts to ensure 
+  mass conservation. Density 
+  remains constant, removing 
+  the compressibility complexity.
+```
+
+  
 ### Numerical Stiffness Removal
-* Numerical stiffness can be removed by assuming the flow is incompressible and using a pressure projection method.
-* Density is assumed constant, and the energy equation is not required.
-* The resulting equations, ignoring gravity and using $\hat{\tau} = \tau/\rho$ and $\hat{P} = P/\rho$, are:
 
-#### Mass Conservation
+Assuming incompressibility allows using methods like the pressure projection technique:
 
-$$
-\int_A \vec{v} \cdot \vec{n} \, dA = 0
-$$
+• Density stays constant, \(\rho = \text{const}\).  
+• The energy equation can be ignored, simplifying the math.  
+• Equations reduce to mass conservation and momentum conservation.
 
-#### Momentum Conservation
+The nondimensionalized forms of the mass and momentum equations, ignoring gravity, are:
 
-$$
-\frac{d}{dt} \int_V \vec{v} \, dV + \int_A \vec{v} \vec{v} \cdot \vec{n} \, dA = -\int_A \hat{\boldsymbol{\tau}} \cdot \vec{n} \, dA - \int_A \hat{P} \boldsymbol{\delta} \cdot \vec{n} \, dA
-$$
+Mass Conservation:
 
-### Pressure and Velocity
-* These are two equations in $\vec{v}$ and $P$.
-* The momentum equation provides $\vec{v}$, but there is no explicit pressure equation.
-* The mass equation (continuity) constrains the velocities.
-* Pressure acts as a scalar field that adjusts velocity components to satisfy continuity.
-* A pressure equation is derived by taking the divergence of the momentum equation.
+\[
+\int_A \vec{v} \cdot \vec{n} \, dA = 0,
+\]
 
-### Pressure Equation
-* Consider the differential form of the mass and momentum equations (dropping vector arrows for simplicity):
+ensuring that there is no net flux of fluid out of any closed surface.
 
-\begin{align}
-\text{mass:} & \quad 
-abla \cdot v = 0 \\
-\text{momentum:} & \quad \frac{dv}{dt} = -
-abla \cdot vv - 
-abla \cdot \hat{\boldsymbol{\tau}} - 
-abla \hat{P}
-\end{align}
+Momentum Conservation:
 
-* Apply a simple Explicit Euler integration over one timestep $h = \Delta t$:
+\[
+\frac{d}{dt} \int_V \vec{v} \, dV + \int_A \vec{v}(\vec{v}\cdot\vec{n}) \, dA = -\int_A \hat{\boldsymbol{\tau}}\cdot\vec{n} \, dA - \int_A \hat{P}\boldsymbol{\delta}\cdot\vec{n} \, dA,
+\]
 
-$$
-v^{n+1} = \underbrace{v^n + h\left(-
-abla \cdot vv - 
-abla \cdot \hat{\boldsymbol{\tau}}\right)^n}_{H^n} - h 
-abla \hat{P}^{n+1}.
-$$
+where \(\hat{\tau} = \tau/\rho\) and \(\hat{P} = P/\rho\). The momentum equation determines velocity given a pressure field, but there is no standalone pressure equation. Instead, pressure must be found by ensuring that the velocity field remains divergence-free.
 
-* Here, $\hat{P}$ is taken at step $n+1$.
+  
+### Deriving the Pressure Equation
 
-* Using $
-abla \cdot v = 0$ applied to this $v^{n+1}$ equation, we get an equation for $\hat{P}^{n+1}$:
+Combining the mass and momentum equations leads to a scalar pressure Poisson equation. Starting from the momentum update:
 
-$$
+\[
+v^{n+1} = v^n + h(-\nabla \cdot vv - \nabla \cdot \hat{\boldsymbol{\tau}})^n - h\nabla \hat{P}^{n+1},
+\]
 
-abla^2 \hat{P}^{n+1} = \frac{1}{h} 
-abla \cdot H^n.
-$$
+where \(h = \Delta t\). Applying \(\nabla \cdot\) and using \(\nabla \cdot v=0\):
 
-* **To advance a step, solve this equation for $\hat{P}$, then use it in the momentum advancement equation for $v^{n+1}$:
+\[
+\nabla^2 \hat{P}^{n+1} = \frac{1}{h}\nabla \cdot (v^n + h(-\nabla \cdot vv - \nabla \cdot \hat{\boldsymbol{\tau}})^n).
+\]
 
-$$
-v^{n+1} = H^n - h 
-abla \hat{P}^{n+1}.
-$$
+Once \(\hat{P}^{n+1}\) is found, the corrected velocity satisfies continuity:
 
-* This velocity satisfies continuity by construction.
+\[
+v^{n+1} = H^n - h\nabla \hat{P}^{n+1},
+\]
 
-### Boundary Conditions
-* The pressure equation requires boundary conditions, which are best determined from the momentum equations evaluated on the boundary.
-* Pressure boundary conditions are inherently built-in by the insertion of velocities into the continuity equation, considering boundary velocities.
+with \(H^n = v^n + h(-\nabla \cdot vv - \nabla \cdot \hat{\boldsymbol{\tau}})^n\).
+
+  
+### Boundary Conditions and Pressure Fields
+
+Pressure boundary conditions emerge naturally from applying the momentum equation at boundaries. The result is a velocity field that inherently satisfies incompressibility. Pressure acts as the force that adjusts velocities so that no net fluid accumulates or disappears, effectively enforcing the mass conservation constraint.
