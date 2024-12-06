@@ -89,22 +89,3 @@ Deciding whether to use an Eulerian or Lagrangian perspective depends on the pro
 | Equations    | Continuity, Navier-Stokes                | Material derivative, particle dynamics  |
 | Applications | Flow field analysis, CFD simulations     | Particle tracking, pollutant dispersion |
 
-
-  
-## Example Commands and Tools
-
-Sometimes, a computational tool might allow switching between Eulerian and Lagrangian analyses. Suppose there is a hypothetical command-line tool named **flowcalc**. The following table outlines some options you might use:
-
-| Option | Description                          | Example                   |
-|--------|--------------------------------------|---------------------------|
-| -E     | Use Eulerian mode                    | flowcalc -E               |
-| -L     | Use Lagrangian mode                  | flowcalc -L               |
-| -g     | Define grid parameters for Eulerian  | flowcalc -E -g "10x10x10" |
-| -p     | Set particle initial positions (Lag) | flowcalc -L -p "0,0,0"    |
-| -h     | Help and usage information           | flowcalc -h               |
-
-  
-Running a command like `flowcalc -E -g "10x10x10"` might set the tool to analyze a cubic domain of 10x10x10 points in Eulerian mode. If the output displays a velocity field such as “Max velocity: 2.5 m/s at (x=5, y=5, z=5),” interpreting that result involves realizing that at the center of the domain, the flow is fastest. On the other hand, switching to Lagrangian mode with `flowcalc -L -p "2,3,1"` could track a particle starting at coordinates (2,3,1). If the output indicates “Particle at t=5s: (4.2,3.5,1.8), velocity=2.0 m/s,” it means that after 5 seconds, the particle has moved to that new position and is currently traveling at 2.0 m/s. Observing these differences helps clarify how each method provides distinct insights.
-
-  
-Ultimately, both the Eulerian and Lagrangian approaches are powerful tools for understanding fluid flows. The Eulerian viewpoint shines when mapping out entire flow fields, making it easier to identify patterns and structures. The Lagrangian perspective excels in showing how individual particles navigate through the fluid, revealing detailed trajectories and histories. Gaining familiarity with both frameworks opens up a deeper understanding of fluid behavior, whether studying the global patterns of atmospheric circulation or the fate of a single droplet in a complex spray.
