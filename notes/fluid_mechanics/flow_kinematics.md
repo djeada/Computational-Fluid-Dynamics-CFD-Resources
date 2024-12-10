@@ -111,13 +111,11 @@ Vorticity \(\vec{\omega} = \nabla \times \vec{v}\) measures the fluid’s local 
 
 Flow kinematics offers different concepts for visualizing fluid motion:
 
-• Streamlines: Curves that are everywhere tangent to the velocity field at a given instant. They provide a snapshot of the flow pattern at one moment in time.
+• **Streamlines** are the curves that are everywhere tangent to the velocity field at a given instant. They provide a snapshot of the flow pattern at one moment in time.
+• **Pathlines** are the actual trajectories followed by individual fluid particles. They show the history of a single particle’s journey through the flow field.
+• **Streaklines** are the lines formed by all particles that have passed through a particular point in space. Imagine continuously injecting dye at one point; the streakline is the pattern that emerges from that injection point over time.
 
-• Pathlines: Actual trajectories followed by individual fluid particles. They show the history of a single particle’s journey through the flow field.
-
-• Streaklines: Lines formed by all particles that have passed through a particular point in space. Imagine continuously injecting dye at one point; the streakline is the pattern that emerges from that injection point over time.
-
-These concepts often coincide in steady flows, where the flow pattern does not change with time. In unsteady flows, streamlines, pathlines, and streaklines can differ, providing rich insights into how the flow evolves and how particles navigate through it.
+These concepts often coincide in steady flows, where the flow pattern does not change with time. In unsteady flows, streamlines, pathlines, and streaklines can differ, providing insights into how the flow evolves and how particles navigate through it.
 
   
 ```
@@ -135,3 +133,8 @@ These concepts often coincide in steady flows, where the flow pattern does not c
    and streaklines (pattern from continuous 
    injection of dye) may differ again.
 ```
+
+![image](https://github.com/user-attachments/assets/10e6d8fa-2f8b-4a24-97fa-63ae9ac01f14)
+
+
+
