@@ -2,7 +2,6 @@
 
 Flow kinematics focuses on describing the motion of fluids without directly considering the forces that cause that motion. It is a geometric and mathematical viewpoint, centered on how fluid particles move, deform, and change position over time. By examining velocity fields, acceleration, deformation rates, and vorticity, flow kinematics provides the language and tools to describe fluid motion in space and time. It is the foundation on which more complex fluid dynamics concepts are built, as it helps establish a clear picture of the fluid’s movement before considering the detailed balance of forces and energy.
 
-  
 Kinematics in fluid mechanics is somewhat analogous to describing the paths and patterns of dancers on a stage without worrying about why they are dancing that way. The focus remains on identifying trajectories, understanding how shapes within the fluid change, and clarifying how fluid elements translate, rotate, and stretch. Once these geometric descriptions are in place, one can add in forces, pressure gradients, viscosity, and other factors to get the full story.
 
   
@@ -34,23 +33,18 @@ The Lagrangian viewpoint helps understand particle paths, whereas the Eulerian v
   
 ## Velocity and Acceleration Fields
 
-The fundamental starting point in flow kinematics is the velocity field \(\vec{v}(x,y,z,t)\), which tells how fast and in which direction fluid moves at any point and time. Once velocity is known, it is possible to find acceleration by taking the substantial (or material) derivative of the velocity field.
+The fundamental starting point in flow kinematics is the velocity field $\vec{v}(x,y,z,t)$, which tells how fast and in which direction fluid moves at any point and time. Once velocity is known, it is possible to find acceleration by taking the substantial (or material) derivative of the velocity field.
 
-The material derivative links Eulerian and Lagrangian views. For any property \(\phi\) (such as velocity), its material derivative \(D\phi/Dt\) represents the rate of change experienced by a fluid particle moving with the flow. If \(\vec{v} = (u,v,w)\) in Cartesian coordinates:
+The material derivative links Eulerian and Lagrangian views. For any property $\phi$ (such as velocity), its material derivative $D\phi/Dt$ represents the rate of change experienced by a fluid particle moving with the flow. If $\vec{v} = (u,v,w)$ in Cartesian coordinates:
 
-\[
-\frac{D\phi}{Dt} = \frac{\partial \phi}{\partial t} + u \frac{\partial \phi}{\partial x} + v \frac{\partial \phi}{\partial y} + w \frac{\partial \phi}{\partial z}.
-\]
+$$\frac{D\phi}{Dt} = \frac{\partial \phi}{\partial t} + u \frac{\partial \phi}{\partial x} + v \frac{\partial \phi}{\partial y} + w \frac{\partial \phi}{\partial z}.$$
 
 For velocity itself, the material derivative gives the particle acceleration:
 
-\[
-\frac{D\vec{v}}{Dt} = \frac{\partial \vec{v}}{\partial t} + (\vec{v}\cdot\nabla)\vec{v}.
-\]
+$$\frac{D\vec{v}}{Dt} = \frac{\partial \vec{v}}{\partial t} + (\vec{v}\cdot\nabla)\vec{v}.$$
 
 This expression shows how fluid particles accelerate both because of local changes in velocity over time and because they move to regions with different velocities.
 
-  
 ```
  Material Derivative Concept:
  ----------------------------
@@ -77,9 +71,9 @@ Flow kinematics also characterizes how fluid elements deform. Consider a small f
 2. Rotation: The fluid element spins as it moves, like a tiny gear in the flow.  
 3. Deformation or Straining: The fluid element’s shape changes, possibly stretching or compressing in different directions.
 
-The velocity gradients \(\partial u/\partial x\), \(\partial v/\partial y\), etc., determine these deformation characteristics. By examining the velocity gradient tensor \(\nabla \vec{v}\), one can split it into symmetric and antisymmetric parts. The antisymmetric part relates to rotation (vorticity), while the symmetric part relates to strain rates.
+The velocity gradients $\partial u/\partial x$, $\partial v/\partial y$, etc., determine these deformation characteristics. By examining the velocity gradient tensor $\nabla \vec{v}$, one can split it into symmetric and antisymmetric parts. The antisymmetric part relates to rotation (vorticity), while the symmetric part relates to strain rates.
 
-Vorticity \(\vec{\omega} = \nabla \times \vec{v}\) measures the fluid’s local spinning motion. Regions of high vorticity often correspond to vortices, which are common flow structures. The strain rate tensor measures how fluid elements stretch or compress. For instance, a flow accelerating in the x-direction and decelerating in the y-direction would stretch fluid elements in one direction and compress them in another.
+Vorticity $\vec{\omega} = \nabla \times \vec{v}$ measures the fluid’s local spinning motion. Regions of high vorticity often correspond to vortices, which are common flow structures. The strain rate tensor measures how fluid elements stretch or compress. For instance, a flow accelerating in the x-direction and decelerating in the y-direction would stretch fluid elements in one direction and compress them in another.
 
   
 ```
@@ -111,9 +105,9 @@ Vorticity \(\vec{\omega} = \nabla \times \vec{v}\) measures the fluid’s local 
 
 Flow kinematics offers different concepts for visualizing fluid motion:
 
-• **Streamlines** are the curves that are everywhere tangent to the velocity field at a given instant. They provide a snapshot of the flow pattern at one moment in time.
-• **Pathlines** are the actual trajectories followed by individual fluid particles. They show the history of a single particle’s journey through the flow field.
-• **Streaklines** are the lines formed by all particles that have passed through a particular point in space. Imagine continuously injecting dye at one point; the streakline is the pattern that emerges from that injection point over time.
+- **Streamlines** are the curves that are everywhere tangent to the velocity field at a given instant. They provide a snapshot of the flow pattern at one moment in time.
+- **Pathlines** are the actual trajectories followed by individual fluid particles. They show the history of a single particle’s journey through the flow field.
+- **Streaklines** are the lines formed by all particles that have passed through a particular point in space. Imagine continuously injecting dye at one point; the streakline is the pattern that emerges from that injection point over time.
 
 These concepts often coincide in steady flows, where the flow pattern does not change with time. In unsteady flows, streamlines, pathlines, and streaklines can differ, providing insights into how the flow evolves and how particles navigate through it.
 
@@ -135,6 +129,3 @@ These concepts often coincide in steady flows, where the flow pattern does not c
 ```
 
 ![image](https://github.com/user-attachments/assets/10e6d8fa-2f8b-4a24-97fa-63ae9ac01f14)
-
-
-
