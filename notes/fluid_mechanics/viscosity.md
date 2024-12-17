@@ -32,34 +32,28 @@ In simple terms, when layers of fluid slide past each other at different speeds,
 
 Viscosity can behave differently depending on the fluid. The simplest fluids are Newtonian, meaning their viscosity remains constant regardless of the applied shear rate. Water and air are common examples. More complex fluids are Non-Newtonian, with viscosities that change depending on the rate of shear deformation. For example, some paints become less viscous when stirred, making them easier to spread, and then thicken again when still.
 
-  
-If \(\tau\) represents shear stress and \(\dot{\gamma}\) represents shear rate (rate of strain), a Newtonian fluid satisfies:
+If $\tau$ represents shear stress and $\dot{\gamma}$ represents shear rate (rate of strain), a Newtonian fluid satisfies:
 
-\[
-\tau = \mu \dot{\gamma},
-\]
+$$\tau = \mu \dot{\gamma},$$
 
-where \(\mu\) is the dynamic viscosity. For Newtonian fluids, \(\mu\) is a constant under given conditions. Non-Newtonian fluids might follow more complicated relationships, with \(\mu\) effectively changing as the shear rate changes.
+where $\mu$ is the dynamic viscosity. For Newtonian fluids, $\mu$ is a constant under given conditions. Non-Newtonian fluids might follow more complicated relationships, with $\mu$ effectively changing as the shear rate changes.
 
-  
 ## Temperature and Pressure Dependence
 
 Viscosity often depends on temperature and pressure. For liquids, viscosity generally decreases as temperature rises because molecules can move past each other more easily. For gases, viscosity typically increases with temperature, since faster-moving molecules collide more often and transfer momentum more effectively between layers.
 
 Pressure can also have an effect, though it is often less pronounced than temperature. Increasing pressure may force molecules closer together, potentially increasing viscosity, but this effect is usually weaker than the temperature dependence for most common fluids.
 
-  
 ## Laminar and Turbulent Flow
 
 Viscosity plays a crucial role in determining whether a flow is laminar or turbulent. In laminar flow, fluid moves in smooth layers or laminae, with little mixing between them. This type of flow is common at lower velocities or in highly viscous fluids. Turbulent flow, on the other hand, occurs at higher velocities or with lower viscosity. Here, fluid motion is chaotic, with swirling eddies and vortices that greatly increase mixing and momentum transfer.
 
 The Reynolds number, a dimensionless quantity defined as:
 
-\[
-Re = \frac{\rho U L}{\mu},
-\]
+$$Re = \frac{\rho U L}{\mu},$$
 
-where \(\rho\) is fluid density, \(U\) a characteristic velocity, and \(L\) a characteristic length scale, helps predict the flow regime. Low Reynolds numbers (small, slow flows or very viscous fluids) tend to be laminar, while high Reynolds numbers (fast flows or less viscous fluids) tend to be turbulent.
+where $\rho$ is fluid density, $U$ a characteristic velocity, and $L$ a characteristic length scale, helps predict the flow regime. Low Reynolds numbers (small, slow flows or very viscous fluids) tend to be laminar, while high Reynolds numbers (fast flows or less viscous fluids) tend to be turbulent.
+
 
   
 ```
