@@ -1,5 +1,3 @@
-Below is a more detailed and comprehensive version of the provided text, including how these discretization techniques and the high-fidelity (truth) model relate to Reduced Order Modeling (ROM) and the Proper Orthogonal Decomposition (POD) method. The aim is to clarify not only the discretization process and associated error estimates but also how these foundations enable a subsequent ROM approach that significantly reduces computational complexity while maintaining accuracy.
-
 ## Discretization Techniques
 
 In the previous sections, we established a parameterized variational problem and introduced a suitable function space $V$ for the solution field. To solve this problem numerically, we must discretize the continuous setting. This involves replacing the infinite-dimensional space $V$ with a finite-dimensional approximation space $V_h$. By doing so, we obtain a system of algebraic equations that can be solved by standard numerical linear algebra methods.
