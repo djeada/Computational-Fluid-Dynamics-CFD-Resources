@@ -1,234 +1,92 @@
-### Adaptive Designs
+## Introduction to Adaptive Designs
 
-Adaptive sampling strategies have emerged as a viable alternative to one-stage approaches and have gained significant attention over the past decade. Unlike a-priori designs, in a-posteriori sampling (also called sequential, adaptive, or output-based designs), the design $X$ and the surrogate model $\hat{y}(x)$ are built incrementally. 
+Adaptive sampling strategies have been developed as an effective alternative to one-stage design methods, and they have gained considerable attention over the past decade. Unlike a-priori methods, which fix all sample locations before constructing the surrogate model, adaptive or a-posteriori sampling dynamically updates both the sample set $X$ and the surrogate model $\hat{y}(x)$. These updates occur in stages and incorporate information from the currently available data and model predictions to guide the selection of new sample points. By incrementally refining the design, adaptive approaches aim to place samples more intelligently, resulting in models that achieve a desired accuracy with fewer evaluations of the expensive response function $y(x)$.
 
-#### Initial Design and Model Construction
+## Initial Design and Incremental Model Construction
 
-- **Initial Design**: Start with a small initial design $X(N_0)$ of size $N_0$, often determined by a one-stage approach.
-- **Initial Surrogate Model**: Evaluate the response $y(x)$ at all samples $x \in X(N_0)$ and build the initial surrogate model $\hat{y}^{(N_0)}(x)$ based on $X(N_0)$ and $Y(N_0) \in \mathbb{R}^{N_0}$.
-  - For Kriging and gradient-enhanced Kriging, this involves hyperparameter estimation and solving the linear Kriging system.
+Adaptive approaches typically start with a small initial design $X(N_0)$ of size $N_0$. This initial set of sample points often results from a one-stage method, which may be something as simple as a space-filling design over $\Omega \subset \mathbb{R}^d$. After evaluating the response $y(x)$ at these initial samples, one constructs the initial surrogate model $\hat{y}^{(N_0)}(x)$ based on the data $X(N_0)$ and $Y(N_0) \in \mathbb{R}^{N_0}$.
 
-#### Adaptive Sampling Process
+When using Kriging or gradient-enhanced Kriging, this initial step involves estimating hyperparameters and solving the linear Kriging system. Once the initial model is built, one can proceed to the adaptive sampling stages. At each subsequent stage, new samples are added based on criteria derived from the current surrogate model, and the model is then updated to incorporate the newly acquired data. This iterative process continues until a stopping condition is reached, such as a maximum budget of evaluations $N_{\text{max}}$ or a convergence criterion on the surrogate model error.
 
-- **Stage-wise Update**:
-  - At each stage $N_i$, select one or more new samples $x \in \Omega$ using a selection criterion based on the current surrogate model $\hat{y}^{(N_i)}(x)$.
-  - Add the new samples to the current design, evaluate the response, and build a new surrogate model $\hat{y}^{(N_{i+1})}(x)$ based on the augmented data $X(N_{i+1})$ and $Y(N_{i+1}) \in \mathbb{R}^{N_{i+1}}$, including a new hyperparameter estimation.
+## Adaptive Sampling Process and Termination Criteria
 
-#### Iteration and Termination
+Adaptive sampling follows a stage-wise update process. Suppose one currently has $N_i$ samples and a surrogate $\hat{y}^{(N_i)}(x)$. The approach selects a new point $x^{(N+1)}$ according to a selection criterion that reflects the current knowledge encoded in $\hat{y}^{(N_i)}(x)$. After evaluating $y(x^{(N+1)})$, the design and data sets become $X(N_{i+1}) = X(N_i) \cup \{x^{(N+1)}\}$ and $Y(N_{i+1}) = Y(N_i) \cup \{y(x^{(N+1)})\}$. A new surrogate $\hat{y}^{(N_{i+1})}(x)$ is constructed, often with updated hyperparameters. This process of adding new samples, evaluating responses, and rebuilding surrogates continues until either the maximum number of samples $N_{\text{max}}$ is used or until an error estimator indicates that the model meets accuracy targets.
 
-- **Iteration**: Continue this process until a predefined maximum number of samples $N_{\text{max}}$ is reached or until an error estimator falls below a certain threshold.
-- **Flexibility**: Adaptive strategies are more flexible than one-stage approaches as the total number of samples does not need to be known in advance.
+Adaptive strategies do not require knowing $N_{\text{max}}$ in advance. Instead, the process adapts to the complexity of the underlying response. This flexibility leads to more efficient exploration of $\Omega$.
 
-#### Optimal Design and Intelligent Sampling
+## Exploitation, Exploration, and Balanced Strategies
 
-- **Adaptation to True Response**: Information about the true response $y(x)$ is directly included in the process of finding an optimal design $X$.
-- **Problem-Adapted Design**: The design adapts to the specific test case and the research goal, resulting in a more intelligent distribution of samples in the input parameter domain $\Omega \subset \mathbb{R}^d$.
-  - Higher concentration of samples in critical regions of $\Omega$ is pursued, reducing the total number of samples $N_{\text{max}}$ compared to space-filling designs.
+Adaptive designs often balance two opposing tendencies: exploitation and exploration. Exploitation focuses on regions where the surrogate currently predicts good performance (for example, areas near a predicted optimum), aiming to refine local accuracy. Exploration targets regions where the surrogate is uncertain or where insufficient sampling density exists, ensuring the model does not miss important behaviors elsewhere.
 
-#### Exploitation and Exploration
+Relying solely on exploitation can lead to local optima, since the model might fail to discover distant but potentially better parts of the domain. Pure exploration can be expensive, as it may require too many samples to fully guarantee global discovery of important features. A mixed strategy that balances exploration and exploitation tends to be more robust. Such an approach places more samples in critical regions, while still maintaining sufficient global coverage to uncover all essential features of the response.
 
-- **Exploitation**: Focuses on areas where the current surrogate model predicts the response is optimal.
-  - Risk: May converge to a local optimum if the surrogates are not suitable global approximations.
-- **Exploration**: Focuses on areas where the approximation error is assumed highest or where a space-filling criterion can be improved.
-  - Risk: May require a large number of samples to ensure the global optimum is reached.
+## Adaptive Designs for Global Optimization
 
-#### Balanced Strategy
+A seminal algorithm in this field is the Efficient Global Optimization (EGO) method, which uses the expected improvement criterion to select new samples. This approach has inspired many enhancements and variants that improve performance or adapt to different problem contexts.
 
-- **Mixed Strategy**: Combines exploitation and exploration to ensure efficient convergence to the global optimum.
-  - Ensures accuracy of the surrogate model and efficient use of expensive response evaluations.
-  - Samples are distributed densely in critical regions while maintaining a global coverage.
+Other criteria for adaptively selecting new samples include integrated mean squared error (IMSE) or related measures. These adapt the design to the shape of the true response $y(x)$, ensuring that regions of high complexity or importance are sampled more densely. By doing this, adaptive strategies often yield a more intelligent distribution of samples in $\Omega$ and can outperform traditional space-filling designs that spread samples uniformly without considering the response itself.
 
-### Algorithm for Efficient Global Optimization (EGO)
+## MSE-based Strategies and their Limitations
 
-- **Expected Improvement Criterion**: An algorithm based on this criterion was presented receiving significant attention and subsequent enhancements.
-- **Surveys and Applications**: Detailed surveys on adaptive sampling strategies for optimization and recent applications in various fields are available.
+A common approach to adaptive sampling is based on the mean squared error (MSE) of the current surrogate model $\hat{y}(x)$. Because Kriging provides not only a prediction $\hat{y}(x)$ but also an uncertainty measure in terms of MSE, one can select new samples where the predicted MSE is largest. This naturally leads to a strategy that fills gaps in the design, reducing global uncertainty in the surrogate.
 
-### Notable Approaches and Studies
+For a Kriging surrogate,
 
-- **IMSE Criterion**: Used for adaptive refinement in global approximation methods.
-- **Model-Based Criteria**: Used for updating Kriging surrogates adaptively.
-- **Cross-Validation Approaches**: Introduced to measure local errors and compared to model-based and distance-based adaptive designs.
-- **Adaptive Maximum Entropy Designs**: Adjust entries of the correlation matrix based on observed irregularities.
-- **Adaptive Gridding and Voronoi Tessellation**: Used for regular partitioning of the input parameter domain.
-- **Active Learning**: Discussed for designs based on nonstationary Gaussian processes.
-- **Optimal Design Extraction**: Investigated for designs based on dense validation sets and their distribution relative to local complexity and error estimators.
+$$\text{MSE}[\hat{y}(x)] = \sigma^2 \left\{ 1 - 
 
-#### MSE-based Strategies
+\begin{pmatrix} r(x)^T & f(x)^T \end{pmatrix} 
 
-The Mean Squared Error (MSE) $\hat{y}(x)$ is a measure of the uncertainty in prediction, making it an intuitive selection criterion for adaptive sampling. The MSE is zero at each $x^{(i)} \in X$ and increases with distance from the existing samples. The expanded expression for MSE is:
+\begin{pmatrix} R & F \\ F^T & 0 \end{pmatrix}^{-1}
 
+\begin{pmatrix} r(x) \\ f(x) \end{pmatrix}
 
-$$ \text{MSE} [\hat{y}(x)] = \sigma^2 \left\{ 1 - \begin{pmatrix} r(x)^T & f(x)^T \end{pmatrix} \begin{pmatrix} R & F \\ F^T & 0 \end{pmatrix}^{-1} \begin{pmatrix} r(x) \\ f(x) \end{pmatrix} \right\} $$
+\right\},$$
+where $r(x)$ is the correlation vector between $x$ and the sample points, and $F$ is the regression matrix for the trend. The MSE vanishes at existing samples and grows with increasing distance from known data points. As $\|x - X\|$ becomes large, $r(x)$ approaches zero, and the MSE approaches a finite limit related to $\sigma^2$ and the chosen trend.
 
+Selecting new points $x^{(N+1)}$ based on maximum MSE leads to what is essentially a space-filling approach informed by the current surrogate. Such MSE-based selection aims to reduce global uncertainty, benefiting exploration. However, the MSE does not incorporate the actual response values $y_i$, focusing solely on distance-based measures and hyperparameters. This can make MSE a poor local error indicator if the function is highly nonlinear or if certain regions require finer sampling due to complexity rather than just distance from known samples.
 
+## Minimizing Global Error Measures
 
-$$ = \sigma^2 \left\{ 1 - \begin{pmatrix} r(x)^T & f(x)^T \end{pmatrix} \begin{pmatrix} \Lambda(x) \\ \mu(x) \end{pmatrix} \right\} $$
+To refine MSE-based methods, some adaptive strategies minimize integrated or maximum MSE over $\Omega$. For example, the next sample point can be chosen as:
 
+$$x^{(N+1)} = \arg \min_{x \in \Omega} \left\{ \int_\Omega \text{MSE}[\hat{y}^{(N+1)}(x')] dx' \right\}.$$
 
+This integrated MSE (IMSE) approach considers the entire domain and seeks a point that will globally reduce uncertainty most effectively.
 
-$$ = \sigma^2 \left\{ 1 - r(x)^T \Lambda(x) - f(x)^T (F^T R^{-1} F)^{-1} (F^T R^{-1} r(x) - f(x)) \right\}, $$
+Alternatively, a simpler approach is to just pick the point where the MSE is currently highest:
 
+$$x^{(N+1)} = \arg \max_{x \in \Omega} \left\{ \text{MSE}[\hat{y}^{(N)}(x)] \right\}.$$
 
-As the distance to existing samples increases ($\text{dist}(x, X) \rightarrow \infty$), $r(x)$ approaches zero and the MSE approaches $\sigma^2 (1 + f(x)^T (F^T R^{-1} F)^{-1} f(x))$. Notably, its computation does not directly involve $y$.
+While easy to implement, this maximum MSE criterion focuses purely on exploration. It places new samples in locations where the model is most uncertain, gradually filling the domain. Although this generally improves global coverage, it can still miss regions where the true response is complex or yields a high approximation error unrelated to sample spacing.
 
-Model-based criteria such as MMSE and IMSE can be applied in adaptive sampling:
+## Cross-Validation for Improved Adaptive Selection
 
-- **MMSE-based Sampling**: The new sample is chosen to minimize the maximum MSE of the new surrogate:
+To incorporate information about actual response values, cross-validation (CV) can be employed as an exploitation-based criterion. CV involves temporarily removing a data point $(x^{(i)}, y_i)$ and reconstructing the surrogate $\hat{y}_{-i}(x)$ without it. The difference $|\hat{y}_{-i}(x^{(i)}) - y_i|$ measures how crucial this sample is for modeling the local response. When $|\hat{y}_{-i}(x^{(i)}) - y_i|$ is small, the sample $(x^{(i)}, y_i)$ is somewhat redundant. When it is large, the sample exerts a strong influence on the surrogate in that region.
 
-  
-$$ x^{(N+1)} = \arg \min_{x \in \Omega} \left\{ \max_{x' \in \Omega} \text{MSE} [\hat{y}^{(N+1)} (x')] \right\}.  $$
+A local CV-based error estimator can be extended to any point $x \in \Omega$:
 
+$$e(x) = \frac{1}{N} \sum_{i=1}^{N} |\hat{y}_{-i}(x) - \hat{y}(x)|.$$
 
-- **IMSE-based Sampling**: The new sample is chosen to minimize the integrated MSE of the new surrogate:
+This measures how sensitive the prediction at $x$ is to the removal of individual samples. Regions where $e(x)$ is large signal that the current surrogate is fragile and overly dependent on certain points, potentially missing critical information about $y(x)$.
 
-  
-$$ x^{(N+1)} = \arg \min_{x \in \Omega} \left\{ \int_{\Omega} \text{MSE} [\hat{y}^{(N+1)} (x')] dx' \right\}. \tag{3.15} $$
+However, $e(x)$ often peaks near existing samples. To avoid selecting samples too close to existing ones, the criterion can be modified by multiplying $e(x)$ by the distance to the nearest existing sample:
 
+$$x^{(N+1)} = \arg \max_{x \in \Omega} \{e(x) \cdot \text{dist}(x, X)\}.$$
 
-A simpler approach for selecting a new sample is to choose the point with the maximum predicted MSE of the current surrogate:
+Alternatively, one can multiply $e(x)$ by the MSE, merging exploration (through MSE) and exploitation (through CV):
 
+$$x^{(N+1)} = \arg \max_{x \in \Omega} \{e(x) \cdot \text{RMSE}[\hat{y}(x)]\}.$$
 
-$$ x^{(N+1)} = \arg \max_{x \in \Omega} \left\{ \text{MSE} [\hat{y}^{(N)} (x)] \right\}.  $$
+This combined metric zeroes out at existing sample points and shifts the focus to regions that are both uncertain and underrepresented.
 
+## Practical Challenges and Adaptive Gridding Methods
 
-Given that MSE($y^{(N+1)} | y(x^{(N+1)}) = 0$), choosing $x^{(N+1)}$ where MSE($\hat{y}^{(N)} (x)$) is largest will likely decrease both MMSE and IMSE scores of $\hat{y}^{(N+1)}$. This approach is related to maximum entropy designs, where the objective is to maximize the entropy of the dataset $X^{(N+1)} = X^{(N)} \cup \{ x^{(N+1)} \}$.
+While the adaptive approach is conceptually appealing, it can be computationally challenging, especially in higher dimensions. Evaluating the MSE or CV-based error indicators at many candidate points $x \in \Omega$ can be costly. The complexity grows with the number of samples $N$ and the dimension $d$. For large $d$, searching through a dense grid of candidate points quickly becomes infeasible.
 
-### Limitations of MSE-based Sampling
+One practical solution is to apply domain decomposition and adaptive gridding. By splitting $\Omega$ into smaller cells (e.g., forming a regular grid or using adaptive partitioning aligned with the correlation length scales $\frac{1}{\theta_j}$), one can assign a representative error measure $\eta_\zeta$ to each cell $\zeta$. The next samples are then chosen in the cells with the largest error. This reduces the complexity of the search by focusing on a smaller number of cells rather than searching the entire domain continuously.
 
-- **Poor Local Error Indicator**: The MSE does not include the response $y$ directly, making it a poor local error indicator. It provides a global measure of uncertainty via hyperparameters $\theta$.
-- **Example Illustration**: Kriging interpolation $\hat{y}(x)$ of the Branin function shows that RMSE[$\hat{y}(x)$] fails to identify regions of high real error. The RMSE is primarily a distance-based measure weighted by the correlation function $R(||x - x^{(i)}||, \theta)$.
+This adaptive gridding method can be combined with local optimal design criteria, like maximum entropy or local MSE minimization, within each selected cell. The idea is that one first identifies problematic regions on a coarse scale and then refines the sample placement within those regions using a local design criterion.
 
-Selecting a new sample based on the highest predicted RMSE aims at a space-filling design. However, in each stage of the sequential process, the distance measure is based on the current surrogate model and hyperparameters $\theta$, making it a pure exploration method.
+## Parallelization and Multi-Sample Additions
 
-#### Cross-Validation-Based Strategies
-
-Cross-validation is introduced as an exploitation criterion for adaptive sampling, allowing for a mixed strategy between exploration and exploitation. Kriging and gradient-enhanced Kriging are used as interpolators of the data $Y \in \mathbb{R}^N$. However, the assessment of approximation error in $\Omega \setminus X$ based on RMSE performs poorly, as discussed in Section 3.2.1. Cross-validation provides a method of estimating error by comparing predictions based on a reduced dataset to the existing data $Y$.
-
-### Leave-One-Out Cross-Validation Error
-
-- **Kriging Predictor**: Let $\hat{y}_{-i}(x)$ denote the Kriging predictor based on $X \setminus \{ x^{(i)} \}$.
-- **Fixed Hyperparameters**: Keeping the hyperparameters $\theta$ of $g$ fixed, $\hat{y}_{-i}(x)$ can be computed by deleting the i-th column and row of the system matrix and the i-th entries of the vectors in the Kriging equation.
-- **Gradient-Enhanced Kriging**: All $(kd + i)$-columns and rows of the system matrix and all $(kd + i)$-th vector entries are deleted.
-- **Error Definition**: The leave-one-out cross-validation error for sample $x^{(i)}$ is defined by:
-
-  
-$$ e_i = \left| \hat{y}_{-i} (x^{(i)}) - y_i \right| \tag{3.17} $$
-
-
-- **Error Estimator**: An error estimator can be evaluated by:
-
-  
-$$ \hat{e} = \frac{1}{N} \sum_{i=1}^N e_i \quad \text{or} \quad \hat{e} = \frac{1}{N} \sum_{i=1}^N e_i^2 $$
-
-
-### Local Error Estimator for Adaptive Sampling
-
-For adaptive sampling, a local error estimator is needed, which can be evaluated at arbitrary candidates $x \in \Omega$. The cross-validation error $e_i$ measures the influence of the data pair $(x^{(i)}, y_i)$ on the prediction $\hat{y}(x)$.
-
-- **Low $e_i$**: $(x^{(i)}, y_i)$ is redundant; no additional samples are needed near $x^{(i)}$.
-- **High $e_i$**: $(x^{(i)}, y_i)$ is crucial for $\hat{y}(x)$; indicates critical regions with large gradients or high curvature in $y(x)$.
-
-### Extension to the Entire Domain
-
-The concept of cross-validation is extended to $\Omega$:
-
-
-$$ e(x) := \frac{1}{N} \sum_{i=1}^N \left| \hat{y}_{-i} (x) - \hat{y}(x) \right|.  $$
-
-
-### Practical Selection Criterion
-
-Choosing $x^{(N+1)}$ where the predicted error $e(x)$ is highest can be impractical because it tends to be highest near existing samples $x^{(i)}$. To address this, $e(x)$ can be multiplied by a minimum distance function $\text{dist}(x, X)$, ensuring the product is zero at every $x^{(i)} \in X$:
-
-
-$$ x^{(N+1)} = \arg \max_{x \in \Omega} \left\{ e(x) \text{dist}(x, X) \right\}  $$
-
-
-Another approach multiplies $e(x)$ with the root mean square error RMSE[$\hat{y}(x)$] and is called a mixed sample sensitivity error strategy:
-
-
-$$ x^{(N+1)} = \arg \max_{x \in \Omega} \left\{ e(x) \text{RMSE} [\hat{y}(x)] \right\} $$
-
-
-### Illustration and Application
-
-- **Example**: Using the Kriging interpolation of the Branin function, the cross-validation error $e(x)$ indicates regions of high error but is maximal at existing samples.
-- **Mixed Strategy**: Multiplying $e(x)$ with RMSE sets the error indicator to zero at existing samples, correctly identifying regions with the highest real error.
-
-#### Adaptive Gridding
-
-The methods from previous sections have limitations regarding efficiency, especially when dealing with a high number of input parameters $d$. Even though the evaluation of the computer experiment $y(x)$ dominates the cost of surrogate model generation, finding a new sample $x^{(N+1)} \in \Omega \subset \mathbb{R}^d$ can be a bottleneck if $d$ is large. Both MSE-based and cross-validation-based methods require global optimization of a target function over $\Omega$.
-
-### Computational Complexity
-
-- **MSE Evaluation**: After inverting the system matrices once, the numerical effort for computing MSE[$\hat{y}(x)$] is $O(N^2 d)$.
-- **Cross-Validation Error**: For $e(x)$, the complexity is $O(N^2)$.
-- **Gradient-Enhanced Kriging**: The complexity increases to $O(N^2 d^2)$ for MSE and $O(N^2 d)$ for cross-validation error.
-
-### Challenges with High Dimensionality
-
-For example, in an application with $d = 6$ variables, and candidates for $x^{(N+1)}$ located on a $50^6$-tensor grid, there would be $1.5625 \times 10^{10}$ evaluations required, making the process computationally infeasible.
-
-### Parallelization for Efficiency
-
-Practitioners might want to add more than one new sample per stage. Adding $m$ new samples $x^{(N+1)}, \ldots, x^{(N+m)}$ can be parallelized, reducing total wall-clock time. This is beneficial if the parallelization of $y(x)$ scales poorly with the number of available processors.
-
-### Adaptive Gridding Method
-
-a new method combining domain decomposition with local optimal design was introduced to overcome these limitations. The method involves:
-
-1. **Domain Decomposition**: Decompose $\Omega$ into equal-sized cells $\zeta$.
-   - Assume $\Omega$ is a hypercuboid, e.g., $\Omega = [0, 1]^d$.
-   - Decompose into cells via equidistant partitioning of intervals $I_j = [0, 1]$ along the $x_j$-axis.
-   - Define cells:
-
-     
-$$ \zeta_{i_1, \ldots, i_d} := I_{i_1}^1 \times \cdots \times I_{i_d}^d $$
-
-
-     
-$$ \Omega = \bigcup_{i_1 = 1}^{n_1} \cdots \bigcup_{i_d = 1}^{n_d} \zeta_{i_1, \ldots, i_d}$$
-
-
-   - Lengths of intervals are $|I_j^i| = \frac{1}{n_j}$ for each $j$.
-
-2. **Adaptive Gridding**: Make the gridding adaptive by choosing cell edge lengths proportional to the correlation length $\frac{1}{\theta_j}$ along the $x_j$-axis:
-
-   
-$$ |I_j^i| \approx \frac{1}{\theta_j} $$
-
-
-   
-$$ n_j \approx \theta_j |I_j| $$
-
-
-   
-$$ n_j = \left\lceil c \theta_j |I_j| \right\rceil  $$
-
-
-3. **Assign Cell Prediction Error**: Assign a prediction error $\eta_\zeta$ to each cell using cross-validation:
-
-   
-$$ \eta_\zeta = \max_{x \in \Omega_\zeta} \left| \hat{y}_{-i} (x^{(i)}) - y_i \right|  $$
-
-
-   - If $X_\zeta = \emptyset$, set $\eta_\zeta = \eta_{max}$.
-
-### Adding New Samples
-
-- Define a target accuracy $\eta^* < \eta_{max}$.
-- Add one new sample in each cell $\zeta$ with $\eta_\zeta > \eta^*$.
-- Alternatively, sort cells by $\eta_\zeta$ and add new samples in the $m$ worst cells.
-- Use a local optimal design criterion to select new samples, e.g., maximum entropy criterion:
-
-  
-$$ x^{(N+1)} = \arg \max_{x \in \zeta_i} \left[ \text{MSE} [\hat{y}(x)] \right] \quad (i = 1, \ldots, m)  $$
-
-
-### Mixed Strategy
-
-The adaptive gridding method combines exploration and exploitation:
-
-- **Exploration**: Domain decomposition adds an exploration component.
-- **Exploitation**: Cross-validation-based error estimators add an exploitation component.
-
+Adaptive sampling can be parallelized by evaluating multiple new points simultaneously, especially if the expensive response evaluation $y(x)$ can be performed on multiple processors. If parallelization of the expensive computations is limited, adding several new points at once and evaluating them in parallel still reduces overall wall-clock time.
