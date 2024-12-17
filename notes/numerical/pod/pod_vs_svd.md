@@ -1,72 +1,102 @@
 ## The Singular Value Decomposition (SVD) and POD
 
-### Equivalence of Direct POD and Snapshot POD
-- **Overview**:
-  - Both Direct POD and Snapshot POD are fundamentally related to the Singular Value Decomposition (SVD) of the snapshot matrix $\mathbf{U}$.
-  - SVD provides a mathematical framework to decompose $\mathbf{U}$, revealing the intrinsic properties of the dataset.
+The Proper Orthogonal Decomposition (POD) is closely intertwined with the Singular Value Decomposition (SVD). In essence, POD can be viewed as extracting the principal directions of maximum variance (or energy) from a dataset, which are precisely what the SVD reveals. Both Direct POD and Snapshot POD can be reformulated in terms of SVD. This connection provides important insights and simplifies conceptual understanding, computational implementations, and algorithmic efficiency.
 
-- **SVD Decomposition**:
-  - SVD factorizes a real $m \times n$ matrix $\mathbf{U}$ into three matrices:
-    
-$$
-\mathbf{U} = \mathbf{L} \mathbf{\Sigma} \mathbf{R}^T,
-$$
+### Snapshot Matrix Setup
+
+Consider a dataset represented as a matrix $\mathbf{U} \in \mathbb{R}^{m \times n}$:
+
+- Each column of $\mathbf{U}$ (an $m$-vector) represents a single "snapshot" of the state of a system (e.g., a flow field at a given time).
+- There are $n$ snapshots, and each snapshot is an $m$-dimensional vector. Typically, $m$ might be very large if it represents high-dimensional spatial data (e.g., velocity fields on a fine mesh), and $n$ is the number of snapshots in time or parameter variations.
+
+POD aims to find an orthonormal basis (set of modes) that best represents the data in a least-squares sense. To do so, one may compute a covariance matrix from $\mathbf{U}$:
+
+I. **Centered Data**: Usually, one first subtracts the mean from each snapshot to focus on fluctuations. For simplicity, assume $\mathbf{U}$ is already mean-subtracted.
+
+II. **Covariance Matrices**:
+- The covariance matrix in "snapshot space": $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T \mathbf{U}$ is an $n \times n$ matrix.
+- The covariance matrix in "state space": $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$ is an $m \times m$ matrix.
+
+Eigen-decomposition of either $\mathbf{C}$ or $\mathbf{C}_s$ yields the POD modes and eigenvalues. However, computing eigen-decomposition directly on these large matrices can be expensive.
+
+### Singular Value Decomposition (SVD)
+
+SVD provides a factorization of the snapshot matrix $\mathbf{U}$ itself:
+
+$$\mathbf{U} = \mathbf{L} \mathbf{\Sigma} \mathbf{R}^T,$$
 
 where:
-- $\mathbf{L}$ is an $m \times m$ orthogonal matrix.
-- $\mathbf{\Sigma}$ is an $m \times n$ diagonal matrix containing the singular values.
-- $\mathbf{R}$ is an $n \times n$ orthogonal matrix.
 
-### SVD and POD Connection
-- **Covariance Matrices**:
-  - From SVD, two important covariance matrices can be derived:
-    
-$$
-\mathbf{C} = \frac{1}{m-1} (\mathbf{U}^T \mathbf{U}) = \frac{1}{m-1} (\mathbf{R} (\mathbf{\Sigma}^T \mathbf{\Sigma}) \mathbf{R}^T),
-$$
+- $\mathbf{L} \in \mathbb{R}^{m \times m}$ is an orthonormal matrix whose columns $\ell_i$ are called left singular vectors.
+- $\mathbf{R} \in \mathbb{R}^{n \times n}$ is an orthonormal matrix whose columns $r_i$ are called right singular vectors.
+- $\mathbf{\Sigma} \in \mathbb{R}^{m \times n}$ is a rectangular diagonal matrix with nonnegative real numbers $\sigma_1 \geq \sigma_2 \geq \cdots \geq 0$ on the diagonal. These $\sigma_i$ are the singular values of $\mathbf{U}$.
 
-    
-$$
-\mathbf{C}_s = \frac{1}{m-1} (\mathbf{U} \mathbf{U}^T) = \frac{1}{m-1} (\mathbf{L} (\mathbf{\Sigma} \mathbf{\Sigma}^T) \mathbf{L}^T).
-$$
+The rank of $\mathbf{U}$ and the number of nonzero singular values match. The singular values squared ($\sigma_i^2$) represent the energy associated with each mode in a similar way that eigenvalues do for the POD covariance matrices.
 
-  - $\mathbf{C}$ is the $n \times n$ covariance matrix of the transposed snapshot matrix $\mathbf{U}^T$.
-  - $\mathbf{C}_s$ is the $m \times m$ covariance matrix of the snapshot matrix $\mathbf{U}$.
+### Connection Between SVD and POD
 
-### Key Observations
-- **Diagonal Elements**:
-  - $\mathbf{\Sigma}^T \mathbf{\Sigma}$ is an $n \times n$ diagonal matrix.
-  - $\mathbf{\Sigma} \mathbf{\Sigma}^T$ is an $m \times m$ diagonal matrix.
-  - The non-zero diagonal elements of $\mathbf{\Sigma}^T \mathbf{\Sigma}$ and $\mathbf{\Sigma} \mathbf{\Sigma}^T$ are the squares of the singular values of $\mathbf{U}$.
+**Key Insight**: The eigenvalue decompositions for the POD covariance matrices $\mathbf{C}$ and $\mathbf{C}_s$ are inherently related to the SVD of $\mathbf{U}$.
 
-- **Relations**:
-  - $\mathbf{\Lambda} = \mathbf{\Sigma}^T \mathbf{\Sigma}/(m-1)$: Eigenvalues of $\mathbf{C}$.
-  - $\mathbf{\Phi} = \mathbf{R}$: Right singular vectors, spatial modes for Direct POD.
-  - $\mathbf{A}_s = \mathbf{\Sigma} \mathbf{\Sigma}^T/(m-1)$: Eigenvalues of $\mathbf{C}_s$.
-  - $\mathbf{\Phi}_s = \mathbf{L}$: Left singular vectors, temporal modes for Snapshot POD.
-  - The eigenvalues $\lambda_i$ of $\mathbf{C}$ and $\mathbf{C}_s$ correspond to $\sigma_i^2/(m-1)$.
+I. **From SVD to Covariance**:
 
-### POD Algorithms
-- **Equivalence to SVD**:
-  - Both Direct POD and Snapshot POD algorithms are equivalent to performing SVD on the scaled snapshot matrix $\mathbf{U}/\sqrt{m-1}$.
-  - **Direct POD**:
-    - Spatial modes (right singular vectors) are given by $\mathbf{R}$.
-  - **Snapshot POD**:
-    - Temporal modes (left singular vectors) are given by $\mathbf{L}$.
-  - **Eigenvalues**:
-    - The eigenvalues from POD are the squares of the singular values from the SVD of $\mathbf{U}$.
+Consider $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T \mathbf{U}$:
 
-## Comparison
+$$\mathbf{C} = \frac{1}{m-1} (\mathbf{R}(\mathbf{\Sigma}^T\mathbf{\Sigma})\mathbf{R}^T).$$
 
-| **Method**       | **Procedure**                                                                                                                                                 | **Advantages**                                                                                                           | **Disadvantages**                                                                                                            |
-|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| **POD**          | - Compute the covariance matrix $\mathbf{C} = \frac{1}{m-1} (\mathbf{U}^T \mathbf{U})$                                                                     | - Direct method                                                                                                          | - Computationally expensive for large datasets                                                                              |
-|                  | - Perform eigenvalue decomposition on $\mathbf{C}$                                                                                                          | - Provides both spatial and temporal modes                                                                               | - Requires inverting large matrices                                                                                          |
-|                  | - Eigenvalues are the variance in each direction                                                                                                              |                                                                                                                          |                                                                                                                              |
-| **Snapshot POD** | - Compute the covariance matrix $\mathbf{C}_s = \frac{1}{m-1} (\mathbf{U} \mathbf{U}^T)$                                                                   | - Faster for $n > m$ (common in fluid dynamics)                                                                        | - Indirect method                                                                                                            |
-|                  | - Perform eigenvalue decomposition on $\mathbf{C}_s$                                                                                                        | - Specifically developed for speeding up the process in large datasets                                                   |                                                                                                                              |
-|                  | - Eigenvalues correspond to the temporal correlation of the snapshots                                                                                         | - More efficient in handling large matrices                                                                              |                                                                                                                              |
-| **SVD**          | - Factorize $\mathbf{U}$ into $\mathbf{U} = \mathbf{L} \mathbf{\Sigma} \mathbf{R}^T$                                                                     | - Most economical in terms of lines of code                                                                              | - Requires normalization for consistency with POD                                                                            |
-|                  | - Singular values $\sigma_i$ provide the same information as eigenvalues in POD                                                                             | - Provides both spatial and temporal modes                                                                               | - Computational cost still high for very large matrices                                                                      |
-|                  | - Spatial modes are the right singular vectors ($\mathbf{R}$) and temporal modes are the left singular vectors ($\mathbf{L}$)                            | - Direct link to both POD methods                                                                                        | - May still require large matrix inversions depending on dataset size                                                        |
-|                  | - Eigenvalues of $\mathbf{C}$ and $\mathbf{C}_s$ are given by $\sigma_i^2/(m-1)$                                                                        | - Singular values indicate energy content                                                                                |                                                                                                                              |
+Since $\mathbf{R}$ is orthonormal and $\mathbf{\Sigma}^T\mathbf{\Sigma}$ is diagonal with $\sigma_i^2$ on the diagonal, the eigen-decomposition of $\mathbf{C}$ gives eigenvalues $\frac{\sigma_i^2}{m-1}$ and eigenvectors $\mathbf{R}$.
+
+Similarly, $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$:
+
+$$\mathbf{C}_s = \frac{1}{m-1} (\mathbf{L}(\mathbf{\Sigma}\mathbf{\Sigma}^T)\mathbf{L}^T).$$
+
+Its eigenvalues are also $\frac{\sigma_i^2}{m-1}$, and eigenvectors are the columns of $\mathbf{L}$.
+
+II. **Eigenvalues and Modes**:
+- The singular values $\sigma_i$ of $\mathbf{U}$ determine the energy content of the modes.
+- The columns of $\mathbf{R}$ (right singular vectors) correspond to eigenvectors of $\mathbf{C}$ and represent spatial modes in Direct POD.
+- The columns of $\mathbf{L}$ (left singular vectors) correspond to eigenvectors of $\mathbf{C}_s$ and represent temporal modes in Snapshot POD.
+
+### Equivalence of Direct POD and Snapshot POD
+
+- **Direct POD**:
+
+Direct POD involves forming $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$ (an $m \times m$ matrix), and then performing eigenvalue decomposition. This is suitable if $m$ is not too large.
+
+- **Snapshot POD**:
+
+Snapshot POD was introduced for the scenario where $m \gg n$. Instead of working with the huge $m \times m$ covariance matrix $\mathbf{C}_s$, one computes $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$ (an $n \times n$ matrix) and performs eigenvalue decomposition there. The resulting eigenvectors correspond to temporal modes, and one can recover spatial modes by subsequent multiplications.
+
+- **SVD Link**:
+
+Both Direct POD and Snapshot POD computations reduce to performing SVD on $\frac{\mathbf{U}}{\sqrt{m-1}}$. The singular vectors and singular values from the SVD provide the same information as the eigenvectors and eigenvalues from the POD covariance matrices.
+
+Thus, whether one uses Direct POD or Snapshot POD, the underlying mathematics is the same. The choice is motivated by computational efficiency: Snapshot POD is typically more efficient when there are fewer snapshots $n$ than the dimension $m$ of each snapshot.
+
+### Summary of Relationships
+
+- The eigenvalues from POD equal $\frac{\sigma_i^2}{m-1}$, where $\sigma_i$ are the singular values of $\mathbf{U}$.
+- Spatial modes from Direct POD correspond to the right singular vectors $\mathbf{R}$.
+- Temporal modes from Snapshot POD correspond to the left singular vectors $\mathbf{L}$.
+
+## Comparison of Methods
+
+Below is a structured comparison of POD, Snapshot POD, and SVD-based methods for extracting modes.
+
+| **Method**       | **Procedure**                                                                                                                                         | **Advantages**                                                                | **Disadvantages**                                                                    |
+|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| **POD (Direct)** | - Form $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$ and compute eigen-decomposition.<br>- Suitable if $m$ is moderate.                  | - Direct method aligns well with theoretical definitions of POD.               | - Infeasible for very large $m$ due to storing and factorizing $m \times m$ matrix |
+|                  | - Extract spatial modes as eigenvectors of $\mathbf{C}_s$.                                                   | - Provides direct access to spatial modes.                                    |                                                                                      |
+| **Snapshot POD** | - Form $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$ and compute eigen-decomposition.<br>- Favored when $n < m$.                        | - Much less computationally expensive for $m \gg n$.                        | - Indirect: Must map back to spatial modes after finding temporal modes.              |
+|                  | - Extract temporal modes first, then spatial modes via $\mathbf{U}\mathbf{R}$.                                | - Ideal for large-dimensional problems with relatively few snapshots.          |                                                                                      |
+| **SVD**          | - Perform $\mathbf{U} = \mathbf{L}\mathbf{\Sigma}\mathbf{R}^T$.<br>- SVD provides both sets of modes directly. | - Unified approach, no separate covariance needed.                            | - Similar computational cost to snapshot method, still large SVD computations.        |
+|                  | - Spatial modes: columns of $\mathbf{R}$.<br>Temporal modes: columns of $\mathbf{L}$.                        | - Gives a direct link between both POD approaches.                            | - Scaling by $\sqrt{m-1}$ needed to relate to POD eigenvalues.                     |
+
+## Practical Considerations
+
+- **Choosing a Method**:
+- If $m$ is small-to-moderate and $n$ is large, Direct POD is manageable.
+- If $m$ is very large (common in CFD or large-scale scientific computing) and $n$ is relatively small, Snapshot POD is the standard approach.
+- SVD is conceptually the cleanest but may require careful implementation and scaling for very large matrices.
+- **Interpreting Results**:
+
+The singular values $\sigma_i$ inform the significance of each mode. Modes corresponding to larger $\sigma_i$ (or eigenvalues $\sigma_i^2/(m-1)$) represent directions in which the data vary most. Truncating small $\sigma_i$ yields a reduced model retaining the dominant dynamics.
