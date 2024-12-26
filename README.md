@@ -67,3 +67,4 @@ This project is licensed under the [MIT License](LICENSE) - see the LICENSE file
 - [More Problems Solved by Hand by Postcard Professor](https://www.youtube.com/c/PostcardProfessor/playlists)
 - [Other Problems Solved by Hand](https://www.youtube.com/watch?v=PPt_FfoUqBQ&list=PLD45F0FD958B864AD)
 - [Various Topics from Theoretical Mechanics and Numerical Methods](https://www.youtube.com/channel/UCcqQi9LT0ETkRoUu8eYaEkg)
+- [The Perić Lectures on CFD](https://youtu.be/8a0j2DQiTVQ?si=UX6ThBBVHhmAX6qD)
