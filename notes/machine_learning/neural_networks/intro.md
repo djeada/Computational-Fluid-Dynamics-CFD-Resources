@@ -1,380 +1,252 @@
-# Neural Networks in CFD
-
-- **Advances in Neural Networks (NN):**
-  - Mimic physics problems (e.g., vehicle aerodynamics, structural analysis).
-  - Accelerate computation times while maintaining accuracy.
-  - Broader applications compared to traditional CAE processes.
-
-- **Strategies Leveraging NN:**
-  - Physics Informed Neural Networks (PINN).
-  - Data-driven neural solvers.
-  - NN supplemented solvers.
-  - Creative integration of NN into traditional CAE processes.
-
-- **Challenges in NN Deployment:**
-  - Programming new algorithms.
-  - Collecting necessary training data.
-  - Evaluating predicted results for accuracy and efficiency.
-
-- **UPSCALE Research Project:**
-  - EU Commission-funded (2018).
-  - Goal: Integrate ML into traditional CAE processes.
-  - Strategies for computing vehicle aerodynamic forces:
-    - Parametrized geometrical deformations.
-    - Convolutional Neural Networks (CNN) using autoencoders (AE).
-
-### Parametrized Geometrical Deformations:
-  - Define vehicle geometries through parameterized deformations.
-  - Example: Vehicle section defined by 15 deformation parameters.
-
-### Convolutional Neural Networks (CNN) Approach:
-  - Autoencoders reduce 3D design dimensionality to a limited number of parameters (latent space).
-  - Universal parameterization method for any 3D design.
-
-### Regression Methods for Aerodynamic Prediction:
-  - Reduce vehicle design to manageable parameters.
-  - Apply regression methods (NN, Random Forest, K-Nearest Neighbor, Kriging).
-  - Predict aerodynamic drag coefficient ($C_d$) with acceptable accuracy.
-
-### Data Generation and Training Costs:
-  - Generated 1,000 geometry variants of a baseline vehicle using CFD simulation.
-  - Combined shape parameters from parametrized morphing or AE for NN training.
-  - Achieved acceptable accuracy and training costs.
-  - High data generation costs due to the necessity of 1,000 CFD simulations.
-
-### Limitations of Current Methods:
-  - Geometrical parametrization limited to morphing method-generated models.
-  - Fail to capture key design features (e.g., sharp edges).
-  - AE filters miss details below voxel size.
-  - Morphing methods do not characterize sharp edges.
-  - ML models based on geometrical parametrization or AE discarded for aerodynamic predictions.
-
-### Search for Alternative Methods:
-  - Identify new methods to overcome current approaches' drawbacks.
-
-## Brief Literature Review
-
-### Traditional Computational Fluid Dynamics (CFD):
-  - Involves large data sets solved numerically or processed offline.
-  - Topics: flow prediction, shape optimization, flow control, physics understanding, reduced order modeling.
-
-### Caution in Implementing ML Methods:
-  - Academic experts advise caution in replacing traditional methods with ML methods.
-  - Traditional methods have decades of validation, despite ML methods' potential.
-
-### Geometric Deep Learning in CFD:
-  - Recent ML methods in Geometric Deep Learning handle 3D-based inputs.
-  - Notable methods: Cloud NN, Graph NN, Geodesic NN, Neural Radiance Fields.
-  - Graph Neural Networks (GNN) chosen for learning from 3D inputs and predicting aerodynamic forces and CFD results.
-
-#### Advantages of GNN:
-  - Finds local and global dependencies between connected items.
-  - Uses meshes with point variables directly as training datasets.
-  - Enables inference on new, resultless meshes for new car geometries.
-
-### Recent Advances in GNN:
-  - GNN as a surrogate model for predicting 3D flow fields in external aerodynamics.
-  - Issues: generalizability, hardware memory limitations, need for shorter training times, scalable model development.
-
-## Example Work
-
-- **Extend GNN Applications for CFD:**
-  - Broaden the scope of GNN usage to cover a wider range of CFD applications.
-  - Explore novel approaches and methodologies within the realm of GNN to enhance CFD predictions.
-
-- **Utilize Open-Source Software:**
-  - Implement open-source tools and libraries for the prediction of aerodynamic forces.
-  - Generate 3D results such as pressure and shear stress maps using these tools.
-  - Leverage the flexibility and adaptability of open-source software to tailor the solutions to specific needs.
-
-- **Experiment with Various Training Datasets:**
-  - Collect and curate diverse datasets to train the GNN models.
-  - Include datasets with different vehicle geometries, design variations, and flow conditions.
-  - Evaluate the impact of dataset diversity on model performance and generalization capabilities.
-
-- **GNN Configurations and Setups:**
-  - Test different GNN architectures and hyperparameter settings to optimize performance.
-  - Investigate the effect of network depth, width, and other architectural parameters on prediction accuracy.
-  - Implement and compare various GNN setups to identify the most effective configurations for CFD applications.
-
-- **Efficiency and Accuracy Assessment:**
-  - Develop metrics and benchmarks to systematically evaluate the performance of GNN models.
-  - Compare GNN predictions against traditional CFD results to assess accuracy.
-  - Analyze computational efficiency in terms of training time, inference time, and resource utilization.
-  - Conduct thorough testing and validation to ensure reliability and robustness of GNN predictions.
-
-## Methodology
-
-### CFD Methods Used in Data Generation
-
-- **Software:**
-  - Various CFD software can be used, such as Star-CCM+, OpenFOAM, ANSYS Fluent, etc.
-  - Choice of software depends on specific project requirements and available resources.
-
-- **Grid Count:**
-  - The grid count can vary widely depending on the complexity of the simulation.
-  - Typically, high-resolution simulations may use around 50 to 100 million cells.
-
-- **Turbulence Model:**
-  - Commonly used models include K-omega SST, Spalart-Allmaras, and LES (Large Eddy Simulation).
-  - Selection of the turbulence model should be based on the specific aerodynamic features and accuracy requirements.
-
-### Mesh Details:
-- **Low y+ Mesh:**
-  - Suitable for capturing detailed flow features near vehicle surfaces.
-  - Ensures accurate boundary layer representation.
-
-- **High y+ Mesh:**
-  - Can be used for regions where detailed boundary layer resolution is less critical.
-  - Useful for underhood areas and some wind tunnel boundaries to reduce computational load.
-
-### Mesh Types:
-- **Hexahedral Mesh:**
-  - Provides high accuracy and is suitable for structured regions of the flow domain.
-  - Often used for the main domain in simpler geometries.
-
-- **Polyhedral Mesh:**
-  - More flexible and can conform to complex geometries.
-  - Useful for capturing intricate details in MRF/Rotating regions and around complex vehicle shapes.
-
-- **Trimmer Mesh:**
-  - Combines the advantages of structured and unstructured meshing.
-  - Balances accuracy and computational efficiency for large, complex domains.
-
-### Datasets Description
-
-- **Scope:** Defines the applicability of the trained model.
-- **Vehicle Types:** Multiple electric vehicles considered.
-
-#### Design of Experiments (DoE):
-- **Variants:** 
-  - Addition of new parts.
-  - Modification of existing parts' dimensions.
-  - Geometry changes involving parts and dimensions.
-  - Novel design approaches.
-
-#### Dataset Details:
-- Multiple RANS CFD datasets for each vehicle type.
-- **Data Split:** 90:10% split for training and test phases.
-
-#### Legacy Data:
-- Datasets generated from various in-house concept car development programs.
-- Additional datasets generated specifically for this research.
-
-### Dataset Overview:
-
-| Dataset ID | Vehicle Model | Variant Description                | Geometry Changes                         | Simulation Conditions                   |
-|------------|---------------|------------------------------------|------------------------------------------|-----------------------------------------|
-| 1          | Vehicle A     | Baseline Model                     | None                                     | Standard atmospheric conditions         |
-| 2          | Vehicle A     | Modified Front Bumper              | Front bumper altered                     | Standard atmospheric conditions         |
-| 3          | Vehicle A     | Additional Rear Spoiler            | Rear spoiler added                       | Standard atmospheric conditions         |
-| 4          | Vehicle A     | Altered Side Mirrors               | Side mirrors changed                     | Standard atmospheric conditions         |
-| 5          | Vehicle A     | Changes in Underbody Design        | Underbody design altered                 | Standard atmospheric conditions         |
-| 6          | Vehicle A     | Different Tire Profiles            | Tire profiles changed                    | Standard atmospheric conditions         |
-| 7          | Vehicle A     | Roof Rack Added                    | Roof rack added                          | Standard atmospheric conditions         |
-| ...        | ...           | ...                                | ...                                      | ...                                     |
-
-### Decimation Workflow
-
-- **Pre-Processing Flexibility:**
-  - Use of full or half-symmetry geometries.
-  - Independent of the Cartesian frame of reference.
-  - Inclusion of surface or volume data.
-  - Choice of flow fields for training.
-
-- **Decimation Process:**
-  - Utilizes CFD simulation surface data.
-  - Coarsens the mesh representation to a ‘decimated geometry’ (approximately 1/10th of the original mesh size).
-  - Ensures uniform distribution of points over the geometry.
-  - Balances decimation level to include finer geometric features while staying within GPU V-RAM limits (24 GB memory).
-
-- **Flow Field Variables:**
-  - Interpolated to decimated point locations from original finer CFD results.
-
-- **Impact on Accuracy:**
-  - The accuracy of the trained model relies on the decimated mesh density.
-  - Higher mesh point number increases accuracy, analogous to mesh dependence in CFD.
-  - Balance required between decimated geometry points, dataset numbers, flow field variables, and GPU hardware capabilities.
-
-### Model Training Methodology
-
-- **Objective:** 
-  - Demonstrate early generalization capabilities of the proposed workflow.
-  - Evaluate the scope of trained models using two different Design of Experiments (DoE) scenarios in automotive external aerodynamics.
-
-- **Experimental Setup:**
-  - **Scenario 1:** Specific to a single car model.
-    - **Model A:** Trained on datasets from Vehicle A.
-    - **Model B:** Trained on datasets from Vehicle B.
-  - **Scenario 2:** Mixed DoE.
-    - **Model C:** Trained on datasets from both Vehicle A and Vehicle B.
-  - **Purpose:**
-    - **Scenario 1:** Expected to provide accurate predictions for specific models.
-    - **Scenario 2:** Investigates the generalization capability of the trained model.
-
-#### Models and Datasets:
-  - **Vehicle A:** Dataset from an in-house concept car development program.
-  - **Vehicle B:** Client-developed model with different design aesthetics.
-  - **Dataset Details:**
-    - Multiple simulation datasets for each vehicle type.
-  - **Outcome:** Three trained models based on dataset splits.
-
-#### Hyperparameter Optimization:
-  - Crucial first step for all models.
-  - **Key Hyperparameters:**
-    - Network width.
-    - Edge embedding dimension.
-    - Number of message passes, etc.
-  - **Impact:**
-    - Governs the network’s learning capability.
-    - Affects GPU memory requirements and training time.
-  - Tuning included in the workflow for all models.
-
-### Model Training:
-  - Based on optimized hyperparameters.
-  - Utilizes conventional choices for optimizer, scheduler, and loss metrics.
-  - **Training Statistics:**
-    - Flow field prediction time: Less than a minute.
-    - Traditional CFD calculation: 6-8 hours on a 300-core CPU cluster.
-    - Hyperparameter optimization: Typically requires 100-150 GPU hours (example requirement, actual needs may vary).
-    - Training completion: Typically requires 24 GPU hours or less (example requirement, actual needs may vary).
-    - Example GPUs: Quadro RTX 6000, A10 G GPU (latest GPUs can significantly speed up the process; other models can be used based on availability).
-    - 
-#### Training Data Overview
-
-|                  | Model A | Model B | Model C     |
-|------------------|---------|---------|-------------|
-| Training data    | 50-70X  | 20-40Y  | 50-70X + 20-40Y |
-| Test data (unseen)| 10-20X  | 5-15Y   | 10-20X + 5-15Y  |
-
-Training Data:
-
-- **Model A (50-70X):** Could use 50 to 70 datasets from Vehicle A for training.
-- **Model B (20-40Y):** Could use 20 to 40 datasets from Vehicle B for training.
-- **Model C (50-70X + 20-40Y):** Could use 50 to 70 datasets from Vehicle A and 20 to 40 datasets from Vehicle B for training.
-
-Test Data (Unseen):
-
-- **Model A (10-20X):** Could use 10 to 20 datasets from Vehicle A for testing, which the model has not seen during training.
-- **Model B (5-15Y):** Could use 5 to 15 datasets from Vehicle B for testing, which the model has not seen during training.
-- **Model C (10-20X + 5-15Y):** Could use 10 to 20 datasets from Vehicle A and 5 to 15 datasets from Vehicle B for testing, which the model has not seen during training.
-
-## Results
-
-The methodology described previously is used to validate the industrial applicability of Geometric Deep Learning (GDL), specifically Graph Neural Networks (GNN), as a design tool for automotive external aerodynamics.
-
-### Evaluation Parameters
-
-- **R² Score (Coefficient of Determination):** 
-  - Measures prediction accuracy of the GNN model compared to the reference (CFD) data.
-  - A value close to 1 indicates high prediction accuracy.
-- **Mean Absolute Error (MAE):**
-  - Arithmetic average of the absolute differences between GNN-predicted and CFD-computed $C_d$ values.
-- **Standard Deviation of Prediction Errors:**
-  - Standard deviation of $C_d$ prediction errors, providing a measure familiar to engineers.
-- **Relative Mean Absolute Error:**
-  - Used for industry-relevant representation.
-
-### Comparison of Models A, B, and C
-
-- **Models Evaluated:**
-  - **Model A:** Trained on datasets from Vehicle A.
-  - **Model B:** Trained on datasets from Vehicle B.
-  - **Model C:** Trained on a mixed DoE of datasets from both Vehicle A and Vehicle B.
-- **Performance Metrics:** 
-  - R² score, MAE, standard deviation of errors, and relative MAE are computed for both training and test datasets.
-
-### Summary of Performance Metrics:
-
-| Model     | Training R² Score | Test R² Score | Training MAE | Test MAE | Training Std Dev | Test Std Dev | Training Relative MAE (%) | Test Relative MAE (%) |
-|-----------|--------------------|---------------|--------------|----------|------------------|--------------|---------------------------|------------------------|
-| Model A   | 0.930              | 0.610         | 0.0053       | 0.0110   | 0.0058           | 0.0115       | 2.5                       | 4.8                    |
-| Model B   | 0.925              | 0.620         | 0.0051       | 0.0108   | 0.0056           | 0.0112       | 2.4                       | 4.7                    |
-| Model C   | 0.940              | 0.630         | 0.0050       | 0.0105   | 0.0055           | 0.0110       | 2.3                       | 4.5                    |
-
-### Quality of Field Variable Predictions
-
-- **Sample Surface Data:**
-  - Presented for datasets with the best and worst $C_d$ predictions.
-  - Direct assessment statistics for GNN flow field data predictions are being developed.
-
-#### Model A (Vehicle A)
-
-Model A is trained on datasets representing variants of Vehicle A.
-
-- **Performance on Test Datasets:**
-  - **MAE and Standard Deviation:** Approximately two-fold increase compared to training datasets but still within acceptable limits for $C_d$.
-  - **Field Variables:** Static pressure and wall shear stresses show close similarities to CFD simulations.
-
-|                                 | Test  | Train |
-|---------------------------------|-------|-------|
-| R² Score                        | 0.610 | 0.930 |
-| $C_d$ Mean Absolute Error (MAE) | 0.0110 | 0.0053 |
-| $C_d$ Standard Deviation of Errors | 0.0115 | 0.0058 |
-| $C_d$ Relative MAE (%)      | 4.8   | 2.5   |
-
-#### Model B (Vehicle B)
-
-Model B is trained on datasets representing variants of Vehicle B.
-
-- **Performance on Test Datasets:**
-  - **MAE and Standard Deviation:** Similar trends as Model A, maintaining acceptable prediction accuracy.
-  - **Field Variables:** Similar fidelity to CFD simulations as seen with Model A.
-
-|                                 | Test  | Train |
-|---------------------------------|-------|-------|
-| R² Score                        | 0.620 | 0.925 |
-| $C_d$ Mean Absolute Error (MAE) | 0.0108 | 0.0051 |
-| $C_d$ Standard Deviation of Errors | 0.0112 | 0.0056 |
-| $C_d$ Relative MAE (%)      | 4.7   | 2.4   |
-
-#### Model C (Mixed DoE)
-
-Model C is trained on a combination of datasets from both Vehicle A and Vehicle B.
-
-- **Performance on Test Datasets:**
-  - **MAE and Standard Deviation:** Shows improved generalization capabilities over Models A and B.
-  - **Field Variables:** Maintains high fidelity across mixed dataset predictions.
-
-|                                 | Test  | Train |
-|---------------------------------|-------|-------|
-| R² Score                        | 0.630 | 0.940 |
-| $C_d$ Mean Absolute Error (MAE) | 0.0105 | 0.0050 |
-| $C_d$ Standard Deviation of Errors | 0.0110 | 0.0055 |
-| $C_d$ Relative MAE (%)      | 4.5   | 2.3   |
-
-## Conclusion
-
-Several key observations can be made:
-
-1. **Hardware Efficiency:**
-   - The GDL-GNN methodology demonstrates reasonable generalizability even with modest hardware (24 GB GPUs).
-   - Effective performance is achieved with fewer than fifty datasets.
-
-2. **Dataset Quantity and Generalizability:**
-   - Generalizability improves with an increasing number of datasets.
-   - Larger datasets contribute to better prediction accuracy.
-
-3. **Decimated Geometry:**
-   - A sufficient number of points in the decimated geometry is crucial for good prediction accuracy.
-   - The density of the decimated mesh significantly impacts the model's performance.
-
-4. **Hyperparameter Optimization:**
-   - Optimization of GNN hyperparameters is a critical but computationally expensive step.
-   - This step's computational costs are approximately an order of magnitude higher than GNN training.
-
-5. **Training Efficiency:**
-   - Typically, it is possible to train a GNN overnight on about 100 datasets using a single GPU.
-   - Efficient training processes are achievable within a reasonable time frame.
-
-6. **Single Car Dataset Performance:**
-   - Satisfactory predictions were achieved for datasets from individual car models.
-   - The models demonstrated effective performance for specific car designs.
-
-7. **Combined Dataset Performance:**
-   - Promising results were obtained for a combined dataset covering two different car designs.
-   - The methodology showed potential for handling diverse design variations.
-
-8. **GPU Memory Requirements:**
-   - GPU memory requirements scale linearly with the increasing number of points in the decimated geometry and the number of datasets.
-   - Current limitations restrict the applicability of the GNN methodology to modest-size datasets.
+## Neural Networks in Aerodynamics  
+
+Neural networks in computational fluid dynamics (CFD) blend powerful machine-learning algorithms with physics-based simulation methods. This fusion paves the way for faster and more efficient aerodynamic calculations, unveiling new flow phenomena, accelerating shape optimization, and handling large-scale design tasks. While traditional CFD remains indispensable for high-fidelity simulations in industry, neural networks are reshaping the landscape by offering novel capabilities: reduced computational cost, rapid prototyping, and near real-time flow predictions for complex geometries and operating conditions.
+
+### Advances in Neural Networks for CFD  
+
+Classical CFD relies on discretizing the Navier–Stokes equations and solving for velocity $\mathbf{u}(\mathbf{x},t)$, pressure $p(\mathbf{x},t)$, and other fields over a computational mesh. High-Reynolds-number and transient flows typically demand fine spatial and temporal resolutions, which can translate to extensive simulation times on large-scale HPC resources.
+
+Neural networks introduce an alternative route: by approximating the mapping from geometry and boundary conditions to flow quantities, they can offer rapid surrogates for full simulations. For instance, a neural network might learn a function
+
+$$F : (\text{geometry parameters}, \text{operating conditions}) \mapsto \left\{\text{flow field}, \; C_d, \; C_l,\dots\right\},$$
+where $C_d$ and $C_l$ are the drag and lift coefficients, respectively. Once trained, such models can instantly deliver aerodynamic properties for new inputs, drastically reducing the cost and time compared to a full CFD solve. Although these methods do not universally replace physics-based solvers, they are immensely valuable in contexts such as:
+
+I. **Preliminary Shape Optimization**: Exploring large design spaces quickly to identify promising candidates.  
+
+II. **Real-Time Flow Analysis**: Enabling on-the-fly feedback loops for active flow control.  
+
+III. **Hybrid Approaches**: Providing intermediate or sub-grid scale corrections to partial CFD solutions.
+
+Mathematically, neural networks in CFD leverage powerful approximation theorems in high-dimensional function spaces. Modern architectures, such as convolutional neural networks (CNNs) or graph neural networks (GNNs), handle structured and unstructured grid data in ways that were impractical only a few years ago.
+
+### Strategies Leveraging Neural Networks  
+
+Researchers have taken several paths to integrate neural networks within CFD workflows:
+
+I. **Physics-Informed Neural Networks (PINNs)**  
+
+   PINNs embed the underlying governing equations, such as continuity and momentum conservation, into the neural network’s loss function. For instance, one might minimize  
+
+   $$\mathcal{L} = \lambda_1 \|\nabla \cdot \mathbf{u}\|^2 + \lambda_2 \left\| \rho(\mathbf{u}\cdot\nabla)\mathbf{u} + \nabla p - \mu \Delta \mathbf{u}\right\|^2$$
+   along with boundary and initial conditions. Enforcing these PDE constraints during training encourages physically consistent solutions, even with comparatively small datasets.
+
+II. **Pure Data-Driven Neural Solvers**  
+
+   Another approach learns a direct mapping from shape and flow conditions to the desired outputs using purely data-driven techniques. The network might learn
+
+   $$(\text{shape encoding}, \text{Reynolds number}, \dots) \;\mapsto\; (p(\mathbf{x}), \mathbf{u}(\mathbf{x}), C_d, \dots),$$
+   without explicitly embedding the PDEs. This requires extensive, high-fidelity data—typically a large set of CFD solutions or experimental measurements.
+
+III. **Hybrid Methods**  
+
+   Some workflows combine partial CFD solvers with neural networks to handle the most time-consuming aspects of a simulation. A network might provide turbulence modeling corrections (replacing, for instance, certain RANS or LES closures) or predict boundary-layer behavior where meshing is expensive. 
+
+IV. **Supplementary Tools**  
+
+   Neural networks can also assist in supporting tasks, such as adaptive mesh refinement (predicting where to refine), domain decomposition for parallelization, or uncertainty quantification. By identifying high-error regions or critical flow features, ML can make classical CFD processes more efficient.
+
+### Challenges in NN Deployment  
+
+Deploying neural networks in industrial CFD or academic research settings faces both technical and organizational hurdles:
+
+- **Generalization to New Shapes and Flow Regimes**  
+
+  Networks trained on limited shape families (e.g., sedan-like vehicles) may fail on drastically different geometries (e.g., SUVs or trucks). High Reynolds numbers, transient phenomena, or novel boundary conditions can also confuse the model if they deviate from the training distribution.
+
+- **Data Quality and Quantity**  
+
+  Large training sets of CFD solutions require considerable HPC resources; each simulation might take hours. Noise, turbulence modeling assumptions, and numerical errors can propagate through the dataset, affecting the learning process.
+
+- **Architecture Complexity and Overfitting**  
+
+  Modern deep networks with millions of parameters can suffer from overfitting. Specialized 3D architectures or regularization strategies are needed to handle high-dimensional data effectively.
+
+- **Regulatory Constraints and Safety**  
+
+  In aerospace or automotive industries, each design must meet strict safety standards. Verifying the reliability of black-box neural predictions remains an active area of research, often necessitating thorough validation or hybrid methods.
+
+- **Computational Overheads in Training**  
+
+  Although inference may be fast, the initial training phase can be expensive, sometimes requiring iterative HPC resources comparable to standard CFD runs. Ensuring that this cost is justified by subsequent speedups is crucial.
+
+### Example Research Project  
+
+Consider a hypothetical large-scale initiative that aims to seamlessly integrate machine learning techniques into conventional computer-aided engineering (CAE) workflows. The overarching objective is to accelerate the computation of aerodynamic forces—namely drag and lift coefficients—for a variety of automotive shapes or similarly streamlined bodies.
+
+#### Goals of the Hypothetical Project  
+
+I. **Faster Aerodynamic Evaluations**: Use neural networks to estimate drag coefficients $C_d$, reducing the reliance on full CFD runs for each design variant.  
+
+II. **Comprehensive Shape Exploration**: Investigate how small geometric tweaks (e.g., hood angle, windshield curvature) impact global aerodynamic performance.  
+
+III. **Data-Driven Surrogate Modeling**: Develop surrogate models that predict flow fields or force coefficients across a large design space, enabling near real-time feedback.
+
+Although the project is theoretical, it mirrors many current research efforts, illustrating both the promise (enabling quick design turnarounds) and the obstacles (costly data generation, potential loss of fidelity) associated with merging ML and CFD.
+
+### Parametrized Geometrical Deformations  
+
+A widely used approach in such initiatives is to parametrize the geometry of interest. For example, one might define:
+
+- Hood slope angle.
+- Rear windshield curvature.
+- Front bumper extension length.
+- $\dots$
+
+A vector $\mathbf{p} = (p_1, p_2, \dots, p_n)$ then describes a family of geometries. By sampling various $\mathbf{p}$-combinations, running CFD, and recording outputs like $C_d$ and $C_l$, one obtains a dataset
+
+$$\{\mathbf{p}^{(i)}, C_d^{(i)}, \dots\}_{i=1}^N.$$
+
+A neural network can be trained to approximate
+
+$$\hat{C_d}(\mathbf{p}) \approx C_d(\mathbf{p}).$$
+
+This reduces shape variations to a manageable parameter set, although capturing complex, localized deformations (e.g., sharp edges, small aerodynamic add-ons) may exceed the scope of simple morphing parameters.
+
+Mathematically, one could also treat partial differential constraints in a reduced space, but typically the parametric approach focuses on the forward mapping from geometry parameters to integral quantities (drag, lift), ignoring finer details of the flow field.
+
+### Convolutional Neural Networks with Autoencoders  
+
+Where geometry is too complex for simple morphing, a common solution is to use 3D autoencoders or other dimensionality-reduction techniques:
+
+I. **Encoding Step**  
+
+   A CNN-based encoder reduces the geometry (often in voxelized or point-cloud form) to a latent vector $\mathbf{z}$, which can be much smaller than the full resolution. Mathematically, 
+
+   $$\mathbf{z} = E(\text{Geometry}),$$
+   where $E$ is the encoder network, yielding a compressed representation $\mathbf{z} \in \mathbb{R}^m$.
+
+II. **Decoding or Reconstruction**  
+
+   A decoder $D$ reconstructs the geometry from $\mathbf{z}$. Although some fidelity is lost, the dimensionality reduction allows the network to discover an efficient global parameterization of shape variation:
+
+   $$\widehat{\text{Geometry}} = D(\mathbf{z}).$$
+
+III. **Regression for Aerodynamic Outputs**  
+
+   A separate network (or an appended layer) can learn a mapping $\mathbf{z} \mapsto C_d$. This approach sidesteps explicit geometric parameters and can handle a wider variety of shapes, albeit at the risk of blurring small but critical geometric details.
+
+Mathematically, autoencoders approximate a manifold in a high-dimensional shape space. Ensuring that aerodynamic relevant features (e.g., edges, curvature changes) are preserved in the latent representation remains a key research topic.
+
+### Regression Methods for Aerodynamic Prediction  
+
+After choosing a parameterization—either through explicit morphing or learned latent vectors—the next step is to train a regression model to estimate aerodynamic metrics. While neural networks often dominate in deep learning contexts, other methods also appear:
+
+- Nonlinear, nonparametric models that can handle tabular parameter data effectively.
+- A more simplistic, instance-based approach.
+- Favored in some engineering contexts for its built-in uncertainty quantification.
+
+In each case, one aims to map geometric or latent space parameters to aerodynamic outputs. Symbolically:
+
+$$\hat{C_d}(\mathbf{z}) = M(\mathbf{z}), \quad
+
+\hat{C_l}(\mathbf{z}) = M'(\mathbf{z}),$$
+where $M$ and $M'$ could be neural networks or alternative regressors. The choice often depends on dataset size, desired interpretability, and computational constraints.
+
+### Data Generation and Training Costs  
+
+No matter the modeling approach, acquiring high-fidelity data typically involves running many CFD simulations or gathering experimental measurements:
+
+I. **CFD-based Datasets**  
+
+   Thousands of geometry variants must be simulated to cover the space of interest. Each 3D simulation might require many hours on HPC clusters, so the data generation phase can be extremely expensive.
+
+II. **Experimental Data**  
+
+   Physical measurements (e.g., wind tunnel tests) are more accurate for certain parameters but are limited by cost, availability, and scheduling. Data scarcity can significantly reduce the scope of feasible ML models.
+
+III. **Efficient Sampling and Design of Experiments**  
+
+   Techniques like Latin hypercube sampling, active learning, or Bayesian optimization can reduce the number of required samples by focusing on the most informative geometry points or boundary conditions. Mathematically, these methods aim to minimize a global error metric with as few data points as possible:
+
+   $$\min_{ \{\mathbf{p}^{(i)}\} } \; \mathbb{E}\left[ \| C_d(\mathbf{p}) - \hat{C_d}(\mathbf{p}) \|^2 \right].$$
+
+### Limitations of Current Methods  
+
+Despite their potential, neural-network-based surrogates for aerodynamics face several notable limitations:
+
+- **Inability to Capture Extreme Geometric Variations**  
+  Parametric deformers or latent encodings can fail if the new shape is far from the training set.  
+- **Loss of Fine Detail**  
+  Autoencoders or coarse voxelizations can smooth out small but crucial features, like minute spoilers or sharp edges.  
+- **Uncertainty and Reliability**  
+  A prediction might look reasonable in tested regions but become unphysical in extrapolation regimes. Unlike traditional CFD with established error estimates, deep neural nets rarely offer guaranteed bounds on error unless carefully designed (e.g., Bayesian NNs, Gaussian processes).  
+- **Discarded ML Models**  
+
+  In some cases, models simply do not meet the accuracy or reliability thresholds needed for production. They may be used for preliminary design screening but are set aside when high-fidelity data is required.
+
+### Search for Alternative Approaches  
+
+With these limitations in mind, ongoing research seeks to improve the speed-accuracy tradeoff and expand generalization:
+
+- **Hybrid Parametric + Local Refinement**  
+  Combine broad global parameterization with local, high-resolution patches for critical regions.  
+- **Physics-Based Constraints**  
+  Further incorporation of PDE constraints (PINNs and variants) to ensure physically plausible outputs.  
+- **Higher-Resolution Encodings**  
+  Use advanced meshing or point-cloud techniques to capture more geometric detail without exploding the data dimensionality.  
+- **Active Learning and Transfer Learning**  
+
+  Dynamically select new shapes to simulate based on model uncertainty, or transfer knowledge from one geometry class to another.
+
+### Brief Literature Review and Traditional CFD  
+
+Traditional CFD remains the gold standard for aerodynamic analysis. Common tactics include:
+
+- Widely used in industry, capable of stable and relatively quick solutions for steady-state problems.
+- More accurate for transient and separated flows, but much more computationally expensive.
+- Attempt to bridge the gap, modeling near-wall regions with RANS while resolving large-scale eddies in free shear flows.
+
+Reduced-order modeling has been explored for decades to accelerate these computations, often projecting the flow onto a lower-dimensional subspace (e.g., using Proper Orthogonal Decomposition). Neural networks build upon these ideas but benefit from more flexible functional approximations and large training datasets. Nonetheless, the rigorous validation and trust in classical CFD mean it is far from being replaced.
+
+### Geometric Deep Learning in CFD  
+
+A particularly promising branch of research is geometric deep learning (GDL). Instead of using uniform grids or voxelized shapes, GDL methods can directly operate on unstructured meshes, point clouds, or graphs:
+
+- **Graph Neural Networks (GNNs)**  
+
+  Represent the geometry or flow domain as a graph $G = (V, E)$, where nodes $v \in V$ correspond to mesh cells or points and edges $e \in E$ encode adjacency. A GNN can approximate the flow solution or aerodynamic coefficients by iteratively aggregating information over this graph structure.  
+
+- **Point-Cloud Networks**  
+
+  Treat geometry as a collection of points in $\mathbb{R}^3$. Neural networks designed for point sets (e.g., PointNet, PointNet++) can then learn local and global features relevant to fluid flow.
+
+The advantage of these methods is their ability to preserve topological and geometric information without forcing the data into a regular grid. One might write the GNN update as:
+
+$$h_v^{(k+1)} = \phi\Bigl(h_v^{(k)}, \bigl\{h_u^{(k)} : u \in \mathcal{N}(v)\bigr\}\Bigr),$$
+where $h_v^{(k)}$ is the hidden state of node $v$ at layer $k$, and $\phi$ is a learned update function.
+
+### Advantages and Challenges of GNN  
+
+GNNs in CFD promise better handling of arbitrary geometries and unstructured meshes, which are ubiquitous in industrial and academic aerodynamic analysis. Key advantages include:
+
+I. **Mesh-Based Learning**  
+
+   Directly incorporate the connectivity of CFD meshes into the network, preserving boundary-layer resolution or complex topologies.  
+
+II. **Local-to-Global Aggregation**  
+
+   Each node aggregates features from its neighbors, enabling capture of localized flow phenomena and global influences.  
+
+Nonetheless, challenges persist:
+
+- **Memory Footprint**  
+  3D meshes can contain millions of cells, making GNN training memory-intensive.  
+- **Complex Network Design**  
+  Selecting suitable graph architectures and message-passing schemes is non-trivial.  
+- **Long Training Times**  
+  Each iteration may involve expensive neighbor lookups; large-scale parallelization strategies remain active research topics.  
+- **Extrapolation**  
+
+  GNNs, like other deep nets, struggle when the test geometry is far outside the training distribution.
+
+### Recent Advances and Example Work  
+
+Proof-of-concept studies have shown GNN surrogates predicting near-wall pressure distributions or drag coefficients for simpler automotive shapes. While these surrogates can be orders of magnitude faster to evaluate, their accuracy often lags behind full CFD, especially on complex shapes or flow regimes. Ongoing research addresses multi-scale approaches, coupling coarse and fine graph representations, or using domain decomposition to make training more tractable.
+
+Mathematically, multi-scale GNNs construct a hierarchy of graphs $G_0, G_1, \dots, G_L$, each representing the domain at a different resolution. The network then learns to pass information across scales, combining the local detail of fine meshes with the global context of coarser meshes.
+
+### Looking Forward  
+
+Neural networks, particularly those informed by physics and geometry, are gradually taking root in aerodynamic design workflows. From parametric morphing strategies to advanced GNNs, there is a clear trajectory toward faster, data-driven surrogates that preserve essential fluid physics. Challenges remain, including the cost of data generation, the risk of losing fine geometric details, and ensuring robust out-of-distribution performance.
+
+In the near future, hybrid solvers may become more common—part neural net, part traditional CFD—where neural corrections accelerate or refine parts of the domain. Incorporating real sensor data could also help networks adapt to real-world conditions. For the moment, neural networks serve as a powerful companion to classical CFD, enabling engineers and researchers to explore broader design spaces, investigate novel concepts, and expedite the quest for aerodynamic efficiency. As mathematical techniques and computational resources advance, the synergy between machine learning and fluid dynamics will continue to shape the next generation of aerodynamic optimization and analysis.
