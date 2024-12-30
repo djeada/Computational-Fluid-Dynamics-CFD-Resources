@@ -1,124 +1,144 @@
-## Hydrostatics
+# 1. Introduction to Hydrostatics
 
-Hydrostatics deals with fluids at rest and helps explain how pressure and force distribute in still fluids. When there is no flow, no shear, and no net movement, the fluid settles into a configuration where the pressure at each point supports the weight of the fluid above it. This aspect of fluid mechanics is vital for understanding everyday phenomena, like why pressure increases with depth in a swimming pool or how atmospheric pressure changes with altitude. It also lays the groundwork for designing structures such as dams, submarines, and hydraulic systems, where resisting fluid forces is essential for safety and performance.
-  
-In a static fluid, there are no velocity fields to track and no acceleration of fluid parcels. Instead, the fluid is at equilibrium. This simplification means that the dominant force balance in hydrostatics often involves gravity acting downward and pressure gradients acting to resist that weight. The result is that pressure typically increases with depth. By understanding this pressure-depth relationship, one can predict buoyant forces, determine forces on submerged surfaces, and analyze how containers or tanks behave under static fluid loads.
+**Hydrostatics** concerns itself with fluids at rest, focusing on how **pressure** and **forces** distribute in a fluid that is stationary (no flow, no shear). This foundational part of fluid mechanics explains everyday observations—like the fact that **pressure increases with depth** in a pool—and underpins the design of dams, submarines, and hydraulic systems.
 
-  
+### Equilibrium in a Static Fluid
+When a fluid is at rest:
+- There is **no velocity** field to track.
+- All fluid parcels experience **no net acceleration**.  
+- Gravitational forces are balanced by **pressure gradients** (and possibly other body forces, if present).
+
+# 2. Pressure Variation with Depth
+
+Consider a fluid of **constant density** $\rho$ at rest under gravity $g$. Let $z$ be the vertical coordinate (positive upward). The fluid is taken to have a **free surface** at $z = 0$ with pressure $p_0$ (often atmospheric).
+
+## 2.1 Governing Equation
+
+From static equilibrium, the **hydrostatic equation** arises:
+
+$$\frac{dp}{dz} = -\rho g.$$
+
+Integrating from $z=0$ (where $p = p_0$) down to depth $z = -h$, we get:
+
+$$p = p_0 + \rho g h.$$
+
+Thus, at depth $h$ below the free surface, the pressure exceeds the surface pressure by $\rho g h$.
+
+### ASCII Diagram: Pressure in a Tank
+
 ```
- Visualizing Pressure in a Static Fluid:
- ---------------------------------------
- 
-   Free surface (e.g., water surface in a tank)
-    ~~~~~~~~~~~~~ p = p_0 (atmospheric pressure)
-     |
-     | Increasing depth (z decreasing)
-     V
-    At depth h:
+  Free surface (z=0)
+    ~~~~~~~~~~~~~ p = p_0
+         |
+         |  (increasing depth -> h)
+         V
     p = p_0 + ρ g h
-    
- The pressure at depth h is higher 
- than at the surface by an amount ρ g h.
 ```
 
-  
-## Pressure Variation with Depth
+- As depth **increases**, pressure **increases** linearly.
+* Each **10 m** depth of water adds roughly **1 atmosphere** of pressure ($\approx 101,325 \text{ Pa}$).
 
-Hydrostatics simplifies to understanding how pressure changes with depth. Consider a fluid at rest under the influence of gravity, taking the vertical coordinate \(z\) positive upward. If the fluid is incompressible and has constant density \(\rho\), the pressure distribution can be derived from equilibrium conditions. At any point within the fluid:
+# 3. Forces on Submerged Surfaces
 
-\[
-\frac{dp}{dz} = -\rho g,
-\]
+When a surface (like a dam wall or plate) is submerged, the fluid pressure **pushes** on it. Because **pressure acts normal** to surfaces in static fluids, we sum or integrate this pressure over the entire area to find the total force.
 
-where \(g\) is the acceleration due to gravity. Integrating this equation from the free surface (where pressure is often known, such as atmospheric pressure \(p_0\)) down to a depth \(h\):
+## 3.1 Vertical or Horizontal Plates
 
-\[
-p = p_0 + \rho g h.
-\]
 
-This result indicates that the pressure at depth \(h\) below the free surface is greater than surface pressure by the amount \(\rho g h\). For water at standard conditions, pressure increases roughly by one atmosphere for every 10 meters of depth. This relationship explains why divers feel greater pressure on their bodies as they go deeper and why submarine hulls must withstand large compressive forces.
+  The pressure is the **same** across it (assuming negligible fluid density changes), simplifying force calculations to $F = p \times A$.
 
-  
-## Forces on Submerged Surfaces
 
-The pressure distribution in a static fluid also helps determine the force exerted on submerged surfaces. Because pressure acts perpendicular to any surface, the force on a flat plate submerged at some angle can be computed by integrating the pressure over the area. If the plate is horizontal and located at a certain depth, the pressure is uniform across it, making the force calculation straightforward. For vertical or inclined surfaces, pressure varies with depth, and the average pressure must be found to determine the resultant force.
+  Pressure **varies with depth**, so the force must be found via integration:
 
-  
+  $$F = \int_{A} p \, dA.$$
+
+### 3.2 Example: Vertical Rectangular Plate
+
 ```
- Force on a Submerged Surface:
- -----------------------------
- 
- Consider a vertical plate submerged 
- in water. Pressure at top is p_top,
- pressure at bottom is p_bottom:
- 
- p_top = p_0 + ρ g h_top
- p_bottom = p_0 + ρ g h_bottom
- 
- Pressure increases linearly with depth:
- 
-     Higher depth (h_bottom)
-     |        +---------+
-     |        |         |
-     |        |  Plate  |
-     |        |         |
-     |        +---------+
-     | Lower depth (h_top)
- 
- The resultant force acts at the center 
- of pressure, which is deeper than the 
- centroid because pressure grows with depth.
+ Water
+  ~~~~~~ free surface
+   | 
+   | depth h1
+   | ------ top of plate
+   | |    |
+   | |    |
+   | ------ bottom of plate
+   | depth h2
+   V
 ```
 
-  
-To find the force on a vertical submerged surface of uniform width \(b\) and extending from \(z = z_1\) to \(z = z_2\), one might integrate:
+- Width of plate = $b$ (into the page).  
+- Extends from depth $h_1$ to $h_2$.  
+- Pressure at any depth $h$ = $p(h) = p_0 + \rho g h$.  
+- $dF = (p_0 + \rho g h) \cdot b \, dh$.
 
-\[
-F = \int_{A} p \, dA.
-\]
+$$F = \int_{h_1}^{h_2} \rho g h \, b \, dh 
 
-If the surface is rectangular and vertical, and the fluid density and gravity are constant, the pressure distribution is linear in depth. For a plate starting at depth \(h_1\) and ending at depth \(h_2\), the force becomes:
+= \rho g b \left[\frac{h^2}{2}\right]_{h_1}^{h_2}
 
-\[
-F = \rho g b \int_{h_1}^{h_2} h \, dh = \rho g b \frac{h_2^2 - h_1^2}{2}.
-\]
+= \rho g b \frac{(h_2^2 - h_1^2)}{2}.$$
 
-The line of action of this resultant force, known as the center of pressure, is located below the centroid of the area because pressure increases with depth.
+### 3.3 Center of Pressure
 
-  
-## Buoyancy and Archimedes’ Principle
+Since the fluid pressure **increases with depth**, the resultant force is not at the geometric center of the plate, but at a point **deeper**, known as the **center of pressure**. Locating this point requires moment balance about a reference axis.
 
-Hydrostatics also introduces buoyancy, the net upward force experienced by an object submerged in a fluid. Archimedes’ principle states that the buoyant force on an object is equal to the weight of the fluid it displaces. If an object is submerged in a fluid, the pressure on its bottom is slightly higher than the pressure on its top, producing a net upward force. This explains why objects float or sink depending on whether their density is less than or greater than that of the fluid.
+# 4. Buoyancy and Archimedes’ Principle
 
-For a fully submerged object of volume \(V\):
+**Buoyancy** is the net **upward** force a fluid exerts on a submerged (or partially submerged) object, arising because **pressure at the bottom** of the object is higher than **pressure at the top**.
 
-\[
-F_b = \rho_{\text{fluid}} g V.
-\]
+## 4.1 Archimedes’ Principle
 
-If the object’s weight is \(W = \rho_{\text{object}} g V\), and if \(\rho_{\text{object}} < \rho_{\text{fluid}}\), the buoyant force exceeds the object’s weight, causing it to rise or float. Conversely, if \(\rho_{\text{object}} > \rho_{\text{fluid}}\), the object sinks. For objects that exactly match the fluid’s density, they remain neutrally buoyant, neither rising nor sinking.
+> *The buoyant force on a body is equal to the weight of the fluid it displaces.*
 
-  
+
+$$F_b = \rho_{\text{fluid}} \, g \, V.$$
+
+- Compare with the object’s weight $W = \rho_{\text{object}} \, g \, V$.  
+  - If $\rho_{\text{object}} < \rho_{\text{fluid}}$, it **floats**.  
+  - If $\rho_{\text{object}} > \rho_{\text{fluid}}$, it **sinks**.  
+  - If densities match, it is **neutrally buoyant**.
+
+### ASCII Diagram: Buoyancy
+
 ```
- Buoyancy:
- ---------
- 
- Consider a cube submerged in water:
- The pressure underneath is slightly higher 
- than the pressure on top:
- 
-  Top surface at depth h:
-    p_top = p_0 + ρ g h
-  Bottom surface at depth h + Δh:
-    p_bottom = p_0 + ρ g (h+Δh)
- 
- Net upward force (buoyancy) = difference 
- in pressure * area = ρ g (Δh) A.
- If this equals the cube’s weight, it floats.
+  Object submerged
+    +---------+
+    |         |
+   p_top    p_bottom
+    |         |
+  h_top     h_bottom
+
+ Net upward force = (p_bottom - p_top)*Area
+                = ρ_fluid * g * V
 ```
 
-## Stability of Submerged and Floating Bodies
+# 5. Stability of Floating Bodies
 
-Hydrostatics is not only about calculating forces but also about assessing stability. When a body floats, its stability depends on how the buoyant force aligns with its center of gravity. If a small tilt causes the buoyant force to realign in a way that returns the body to its original position, the floating body is stable. If not, it might capsize. Designing stable ships, submarines, and other floating structures involves ensuring that their centers of buoyancy and gravity are properly arranged.
+Beyond buoyancy, **stability** addresses whether a floating body will **return** to equilibrium when tilted or disturbed.
 
-In many cases, stability can be analyzed by comparing the location of the center of gravity (G) and the center of buoyancy (B). For a floating object, the center of buoyancy moves as it tilts, and if this movement leads to a restoring moment, the craft remains stable. Otherwise, additional modifications to shape, ballast, or distributed mass might be necessary.
+- Where an object’s mass is concentrated.
+- The centroid of the displaced fluid volume.
+
+When the body tilts, **B** may shift. If **B** moves in such a way that a **restoring moment** forms (i.e., tries to push the body upright), the body is stable.
+
+### 5.1 Metacentric Height
+
+For many ship-like objects, we analyze stability via the **metacentric height (GM)**:
+- A large positive $GM$ implies strong stability.  
+- A small or negative $GM$ means the object can easily tip or capsize.
+
+# 6. Hydrostatics Applications
+
+I. **Dams & Retaining Walls**  
+   - Must handle large lateral forces from water.  
+   - Structural design relies on the integrated force distribution and center of pressure.
+II. **Submarines & ROVs**  
+   - Operate by adjusting **buoyancy** to dive or surface.  
+   - Hulls must withstand high external pressures at depth.
+III. **Ships & Floating Vessels**  
+   - Must maintain suitable **stability** and **draft**.  
+   - Designers ensure that under loading conditions, the vessel floats safely without capsizing.
+IV. **Hydraulic Systems**  
+   - Static fluid columns transmit force (e.g., car brakes, lifts).  
+   - Pressure differences $\Delta p = \rho g \Delta h$ are used to create mechanical advantages.
+
