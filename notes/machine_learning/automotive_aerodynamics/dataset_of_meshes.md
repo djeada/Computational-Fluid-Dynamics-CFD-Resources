@@ -2,7 +2,7 @@
 
 Choosing and Validating a Dataset of Meshes can feel like orchestrating an elaborate dance between computational power, engineering insights, and statistical rigor. A well-chosen dataset ensures that aerodynamic simulations faithfully capture critical phenomena, while a thorough validation process confirms that every mesh in the collection meets the necessary standards for accuracy and reliability. The following notes walk through each step, highlighting how to define the design space, select a sampling strategy, assure mesh quality, and validate the final collection of geometries. Examples and ASCII diagrams appear throughout, making it easier to connect abstract concepts with practical actions.
 
-Defining the Design Space  
+### Defining the Design Space  
 
 Engineers usually begin by identifying the geometric and flow parameters that have the largest impact on aerodynamic performance. Realistic car shapes might vary in approach angle, decklid height, or overall vehicle width. Setting the range for these parameters calls for both practical constraints (such as regulations or manufacturing limits) and engineering knowledge of what significantly shifts the flow. For instance, approach angle might span from 0° to 10° if it is used to simulate slight upward or downward tilts of the front end. Decklid height could range from a typical sedan profile to a more elevated configuration, while vehicle width might fluctuate within limits that reflect different body styles.
 
