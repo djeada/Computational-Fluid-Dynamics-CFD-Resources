@@ -1,12 +1,12 @@
-# How Airplanes Work
+## How Airplanes Work
 
 Airplanes are remarkable machines that harness the principles of physics to soar through the sky. The complexity of flight, though impressive, can be broken down into a few fundamental concepts. To understand how airplanes fly, it’s important to explore the forces and components involved.
 
-## Basic Principles of Flight
+### Basic Principles of Flight
 
 At the heart of every flight are four fundamental forces: lift, weight, thrust, and drag. These forces interact in a delicate balance that determines whether an airplane will rise, stay aloft, or descend.
 
-### The Four Forces
+#### The Four Forces
 
 Flight is governed by four primary forces: lift, weight, thrust, and drag. Each of these forces can be described mathematically, and understanding their relationships is key to predicting an airplane’s behavior in flight.
 
@@ -49,7 +49,7 @@ $$D = \frac{1}{2} \rho v^2 C_D A$$
 - $D$ is the drag force (N),
 - $C_D$ is the drag coefficient, which depends on the shape of the airplane and its orientation relative to the airflow.
 
-### Bernoulli's Principle and the Continuity Equation
+#### Bernoulli's Principle and the Continuity Equation
 
 The generation of lift on an airplane wing can also be described using Bernoulli’s principle, which relates the pressure and velocity of a fluid. For a wing, air moves faster over the curved top surface than underneath, causing a pressure difference that generates lift.
 
@@ -69,9 +69,9 @@ $$A_1 v_1 = A_2 v_2$$
 
 This explains how narrowing airflow over the top of the wing increases its velocity, contributing to Bernoulli’s effect.
 
-## Aircraft Performance and Power
+### Aircraft Performance and Power
 
-### Power and Energy Considerations
+#### Power and Energy Considerations
 
 Aircraft performance can also be explored through energy and power equations. The total mechanical power required to overcome drag and maintain steady flight is:
 
@@ -85,7 +85,7 @@ $$\eta = \frac{T \cdot v}{P_{\text{input}}}$$
 
 where $\eta$ is the efficiency of the engine.
 
-### Climbing and Descent Performance
+#### Climbing and Descent Performance
 
 To climb, the airplane must generate more lift than weight. The rate of climb is related to the excess power available from the engines after overcoming drag. The vertical component of velocity during a climb, called the rate of climb ($R_c$), can be approximated as:
 
@@ -95,9 +95,9 @@ where $P_{\text{excess}}$ is the difference between the engine power and the pow
 
 Conversely, during descent, the airplane can use gravity to its advantage, reducing the power needed from the engines. The descent rate depends on the lift-to-drag ratio ($L/D$), which is a measure of how efficiently an airplane converts lift into forward motion relative to the drag it encounters. A higher lift-to-drag ratio means the airplane can glide longer distances with minimal engine power.
 
-## Stability and Control
+### Stability and Control
 
-### Equilibrium and Stability
+#### Equilibrium and Stability
 
 In steady, level flight, an airplane is in equilibrium, meaning that the sum of forces and the sum of moments (torques) acting on it are zero. Mathematically, this is expressed as:
 
@@ -111,7 +111,7 @@ $$M_{\alpha} = \frac{\partial M}{\partial \alpha}$$
 
 where $\alpha$ is the angle of attack. If $M_{\alpha}$ is negative, the airplane tends to return to its original pitch angle after being disturbed, indicating positive static stability.
 
-## Angle of Attack, Stall, and Lift Curves
+### Angle of Attack, Stall, and Lift Curves
 
 The **angle of attack** ($\alpha$) is the angle between the oncoming airflow and the chord line of the wing. Lift increases with angle of attack up to a certain point, beyond which a stall occurs. The relationship between lift and angle of attack is captured in lift curves, where:
 
@@ -123,7 +123,7 @@ $$v_{\text{stall}} = \sqrt{\frac{2 W}{\rho C_{L_{\text{max}}} A}}$$
 
 where $C_{L_{\text{max}}}$ is the maximum lift coefficient before stall.
 
-## Airplane Components
+### Airplane Components
 
 To appreciate how an airplane flies, it’s helpful to look at its various parts, each contributing to different aspects of flight.
 
@@ -135,7 +135,7 @@ At the back of the airplane is the empennage, or tail section, which provides st
 
 Engines play a pivotal role in providing the thrust necessary to move the airplane forward. There are two main types of engines used in airplanes: jet engines and propeller engines. Jet engines generate thrust by expelling high-speed exhaust gases, while propeller engines use rotating blades to push air backward, moving the airplane forward.
 
-## Control Surfaces
+### Control Surfaces
 
 Airplanes are equipped with various control surfaces that pilots use to manipulate the aircraft’s orientation and path through the air. These surfaces can be divided into primary and secondary controls.
 
@@ -143,7 +143,7 @@ Primary control surfaces include ailerons, elevators, and the rudder. Ailerons c
 
 In addition to these, secondary control surfaces, such as flaps, slats, and spoilers, assist in specific flight conditions. Flaps extend downward from the wing to increase both lift and drag, enabling smoother takeoffs and landings at lower speeds. Slats, which are similar to flaps but located at the leading edge of the wing, increase lift at slow speeds by improving airflow over the wing. Spoilers, on the other hand, are deployed to disrupt the airflow over the wing, reducing lift and increasing drag, which helps the airplane descend and slow down more efficiently.
 
-## Flight Dynamics
+### Flight Dynamics
 
 The motion of an airplane in the air can be described in terms of three basic types of movement: pitch, roll, and yaw. Each movement is controlled by different parts of the airplane, and understanding them is key to grasping how a plane maneuvers.
 
@@ -153,7 +153,7 @@ Roll, on the other hand, is the tilting of the airplane to the left or right. Th
 
 Yaw describes the left or right movement of the airplane's nose, controlled by the rudder on the vertical stabilizer. This motion allows the airplane to align properly during turns and to correct for crosswinds when landing.
 
-## Aerodynamics
+### Aerodynamics
 
 Flight is governed by the principles of aerodynamics, with two key concepts being the angle of attack and the lift coefficient. The angle of attack is the angle between the wing's chord line (an imaginary straight line from the leading to the trailing edge) and the direction of the oncoming air. This angle is important because, up to a certain point, increasing the angle of attack increases the lift generated by the wings. However, if the angle becomes too steep, the airflow will separate from the wing’s surface, causing a loss of lift, a condition known as stall.
 
