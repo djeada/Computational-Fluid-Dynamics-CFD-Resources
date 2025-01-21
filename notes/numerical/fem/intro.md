@@ -48,23 +48,33 @@ for all test functions $w$ in a suitable function space, sometimes with addition
 ### STEPS IN THE FINITE ELEMENT METHOD
 
 1) Derive the Weak Form. Consider a boundary value problem like
+
 $$- \frac{d}{dx} \Big( p(x) \frac{du}{dx} \Big) = f(x), \quad x \in [0,L]$$
+
 with boundary conditions on $u$. The weak form is obtained by multiplying by a test function $w(x)$ and integrating over $[0,L]$:
+
 $$\int_0^L w(x) \Big( - \frac{d}{dx}\big( p(x)\,u'(x) \big) \Big) \dx = \int_0^L w(x)\, f(x)\dx$$
+
 By applying integration by parts, one obtains
+
 $$\int_0^L p(x)\,w'(x)\,u'(x)\dx - \Big[\underbrace{p(x)\,w(x)\,u'(x)}_{\text{boundary term}} \Big]_0^L = \int_0^L w(x)\, f(x)\dx$$
+
 and boundary conditions help determine how to handle the boundary term.
 
 2) Discretize the Domain. Partition $[0,L]$ into elements of size $h_i$. Suppose there are $N$ elements, each with (at least) two nodes.
 
 3) Choose Shape Functions. Let each element have local shape functions $\phi_j^e(x)$, defined only within element $e$. Over the entire domain, the approximate solution $u_h$ is
+
 $$u_h(x) = \sum_{i=1}^{\text{TotalNodes}} U_i\,\Phi_i(x)$$
+
 where each global basis function $\Phi_i$ is built from the local shape functions. The coefficient $U_i$ represents the unknown value at node $i$.
 
 4) Form Local Stiffness Matrices and Load Vectors. For each element $e$, define
+
 $$K^e_{ij} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} p(x)\,\phi_i^e{}'(x)\,\phi_j^e{}'(x)\, dx, 
 \quad 
 F^e_{i} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} \phi_i^e(x)\,f(x)\dx$$
+
 These integrals capture how each pair of shape functions interacts under the problem’s differential operator and forcing term.
 
 5) Assemble the Global System. The local element stiffness matrices $K^e$ and load vectors $F^e$ are added into global matrices $K$ and global vectors $F$. This leads to a large system of equations
