@@ -2,7 +2,7 @@
 
 The **Lattice-Boltzmann method (LBM)** is a computational approach for simulating fluid flows at a mesoscopic scale. It provides a bridge between microscopic kinetic theories and macroscopic continuum models like the Navier-Stokes equations. Over the past decades, LBM has become increasingly popular in computational fluid dynamics (CFD) due to its simplicity, efficiency, and natural handling of complex boundary conditions.
 
-## Key Principles of LBM
+## Principles of LBM
 
 I. **Kinetic Origin**:  
 
