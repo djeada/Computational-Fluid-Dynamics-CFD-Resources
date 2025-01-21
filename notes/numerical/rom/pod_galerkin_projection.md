@@ -125,35 +125,37 @@ Such products yield **bilinear** or higher-order combinations in the coefficient
 
 To derive the final **reduced** system of ODEs in time, we perform an additional projection (or inner product) with each POD mode, typically the same discrete $L^2$-type product used in the POD generation. Formally, for each mode $\phi_m$,
 
-$$\int_{V_p} 
-\phi_m^\top \,\frac{\partial \mathbf{u}}{\partial t}\, dV
+$$
+\int_{V_p} 
+\phi_m^\top \frac{\partial \mathbf{u}}{\partial t} \, dV
 +
 \int_{V_p} 
-\phi_m^\top \,\nabla \cdot (\mathbf{u}\otimes \mathbf{u})\, dV
+\phi_m^\top \nabla \cdot (\mathbf{u} \otimes \mathbf{u}) \, dV
 =
--\,
-\int_{V_p} 
-\phi_m^\top \,\nabla p\, dV
+- \int_{V_p} 
+\phi_m^\top \nabla p \, dV
 +
-\nu
-\int_{V_p} 
-\phi_m^\top \,\nabla \cdot (\nabla \mathbf{u})\, dV$$
+\nu \int_{V_p} 
+\phi_m^\top \nabla \cdot (\nabla \mathbf{u}) \, dV
+$$
+
 summing over all cells in practice. Numerically, we replace volume integrals by discrete cell-based sums and face-based flux computations:
 
-$$\sum_{p=1}^{n} 
-\phi_m^\top(p)\,\Delta V_p \,\frac{\partial \mathbf{u}(p,t)}{\partial t}
+$$
+\sum_{p=1}^{n} 
+\phi_m^\top(p) \, \Delta V_p \, \frac{\partial \mathbf{u}(p,t)}{\partial t}
 +
-\sum_{faces} \cdots
+\sum_{\text{faces}} \cdots
 =
-\ldots$$
+\ldots
+$$
 
 After collecting terms in $\{a_i(t)\}$, we obtain a **nonlinear ODE system** for the time evolution of the modal coefficients $a_i(t)$:
 
-$$\frac{d a_j(t)}{dt}
-=
-F_j\bigl(\{a_i(t)\}\bigr),
-\quad
-j = 1,\ldots,N$$
+$$
+\frac{d a_j(t)}{dt} = F_j\bigl(\{a_i(t)\}\bigr), \quad j = 1, \ldots, N
+$$
+
 where $F_j(\cdot)$ represents the combination of **convective**, **diffusive**, and **pressure** effects (and turbulence if RANS). The result is a system of dimension $N \ll n$, allowing faster simulations once it has been assembled.
 
 ## Handling Pressure and Boundary Conditions
@@ -174,9 +176,12 @@ where $F_j(\cdot)$ represents the combination of **convective**, **diffusive**, 
 
 In an FVM code, the nonlinear convection term is typically computed as a flux:
 
-$$\int_{V_p} (\mathbf{u} \cdot \nabla)\mathbf{u} \, dV
+$$
+\int_{V_p} (\mathbf{u} \cdot \nabla)\mathbf{u} \, dV
 =
-\sum_{faces \in \partial V_p} \mathbf{F}_{face}$$
+\sum_{\text{faces} \in \partial V_p} \mathbf{F}_{\text{face}}
+$$
+
 where $\mathbf{F}_{face}$ is evaluated using an **upwind**, **central differencing**, or another flux-limiting scheme. For the reduced model:
 
 I. **Flux Approximation**: Each $\mathbf{F}_{face}$ must be approximated in terms of the POD coefficients $\{a_i\}$.  
@@ -190,15 +195,16 @@ III. **Pre-Computed Operators**: Often, one pre-computes certain integrals or fl
 In the **RANS** context, a major complication is the additional **turbulent viscosity** $\nu_t$:
 
 $$\nabla \cdot [(\nu + \nu_t) \nabla \mathbf{u}]$$
+
 One may generate snapshots of $\nu_t(x,t)$ from the high-fidelity simulations (e.g., from a $k\text{-}\epsilon$ solver) and then compute POD modes for $\nu_t$ similarly. The final reduced model might look like:
 
-$$\frac{d a_j(t)}{dt}
+$$
+\frac{d a_j(t)}{dt}
 =
--\,(\text{nonlinear convection in } \{a_i\})
-+
-(\text{diffusion with } \nu + \nu_t(\{a_i\}))
-+
-\ldots$$
+- (\text{nonlinear convection in } \{a_i\})
++ (\text{diffusion with } \nu + \nu_t(\{a_i\}))
++ \ldots
+$$
 
 Because $\nu_t$ depends on the same or an additional set of modes, the resulting system may exhibit **higher-order nonlinearities**, requiring careful treatment (e.g., **empirical interpolation** or other hyper-reduction strategies) for computational efficiency.
 
