@@ -116,13 +116,9 @@ Under these assumptions, the **Lax-Milgram lemma** implies that for each $\mu\in
 
 In many PDE problems, the **bilinear form** $a(\cdot;\cdot;\mu)$ can be used to define an **inner product** and **norm** on $V$. For a fixed $\mu$, we might write:
 
-$$(u,v)_a 
-= 
-a(u,v;\mu),
-\quad
-\|v\|_a 
-= 
-\sqrt{\,a(v,v;\mu)\,}$$
+$$
+(u,v)_a = a(u,v;\mu), \quad \|v\|_a = \sqrt{a(v,v;\mu)}.
+$$
 
 - If $\alpha(\mu)$ and $\gamma(\mu)$ are **bounded away from zero and infinity** respectively, $\|\cdot\|_a$ is **equivalent** to the original $\|\cdot\|_V$ norm.  
 - This equivalence is necessary for **stability analyses** and for deriving **error estimates** in both classical finite element methods and **reduced order models**.
