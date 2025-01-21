@@ -1,158 +1,220 @@
 ## POD-Galerkin Projection with Finite Volume
 
-Reduced-order modeling (ROM) has become an invaluable technique for accelerating computational fluid dynamics (CFD) simulations without sacrificing too much accuracy. Among ROM techniques, the Proper Orthogonal Decomposition (POD) coupled with a Galerkin projection approach is well-established. However, most classical POD-Galerkin frameworks assume finite element (FE) formulations because the weak variational form and associated inner products emerge naturally from FE theory.
+Reduced-order modeling (ROM) has become a important tool in computational fluid dynamics (CFD) to accelerate simulations while retaining acceptable accuracy. Among ROM techniques, the **Proper Orthogonal Decomposition (POD)** combined with **Galerkin projection** is well-set up. In classical treatments, these methods often assume a finite element (FE) formulation because the weak variational form and associated inner products naturally emerge from FE theory.
 
-In contrast, finite volume discretizations (FVD) form the backbone of many industry and academic CFD solvers, such as OpenFOAM. FVD directly enforce integral conservation laws over discrete volumes (cells), making the derivation of a consistent POD-Galerkin-ROM less straightforward. The aim here is to extend the POD-Galerkin approach to an FVD framework, enabling us to construct reduced-order models for both laminar and turbulent (RANS) Navier-Stokes equations using data from a finite volume solver.
+However, many industrial and academic CFD solvers (e.g., OpenFOAM) use **finite volume discretizations (FVD)**. FVD enforces integral conservation laws on discrete control volumes, directly handling fluxes at cell interfaces. This integral viewpoint does not directly produce a “weak form” amenable to standard POD-Galerkin derivations. Consequently, extending the **POD-Galerkin** framework to a finite volume context requires additional care—particularly in how fluxes, pressure fields, boundary conditions, and nonlinear terms are projected onto the reduced basis. Below, we outline the necessary steps for constructing a POD-Galerkin ROM from a finite volume solver, focusing on both **laminar** and **turbulent (RANS)** Navier–Stokes equations.
 
-### Equations and Problem Setting
+## Equations and Problem Setting
 
-#### Governing Equations
+### Governing Equations
 
-For simplicity, consider the incompressible Navier-Stokes equations:
+We consider the **incompressible** Navier–Stokes equations, which, in their important form, read:
 
-I. **Incompressible Navier-Stokes (Laminar):**
+I. **Laminar (Viscous Incompressible)**
 
-$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot 
-abla)\mathbf{u} = - 
-abla p + 
-u \Delta \mathbf{u},$$
+$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} 
+= -\,\nabla p + \nu \,\Delta \mathbf{u}$$
+$$\nabla \cdot \mathbf{u} = 0$$
+where $\mathbf{u}(x,t)$ is the velocity field, $p(x,t)$ is the (kinematic) pressure (often normalized by density), and $\nu$ is the kinematic viscosity.
 
-$$abla \cdot \mathbf{u} = 0,$$
-where $\mathbf{u}(x,t)$ is the velocity field, $p(x,t)$ is the normalized pressure, and $
-u$ is the kinematic viscosity.
+II. **RANS Equations (Turbulent Flow)**
 
-II. **RANS Equations (Turbulent):**
+For turbulent, time-averaged flows, the Reynolds-Averaged Navier–Stokes (RANS) equations introduce a **turbulent viscosity** $\nu_{t}$ to model the Reynolds stresses:
 
-For turbulent flows, the Reynolds-Averaged Navier-Stokes (RANS) equations introduce a turbulent viscosity $
-u_t$ that augments the laminar viscosity:
+$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} 
+= -\,\nabla p + \nabla \cdot \Bigl[\bigl(\nu + \nu_t\bigr)\,\nabla \mathbf{u}\Bigr]$$
+$$\nabla \cdot \mathbf{u} = 0$$
+where $\nu_t = \nu_t(x,t)$ is determined by a turbulence model (e.g., $k\text{-}\epsilon$, $k\text{-}\omega$), adding spatially and temporally varying eddy viscosity to the laminar component $\nu$.
 
-$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot 
-abla)\mathbf{u} = - 
-abla p + 
-abla \cdot (( 
-u + 
-u_t)
-abla \mathbf{u}),$$
-along with appropriate turbulence modeling (e.g., $k-\epsilon$ or $k-\omega$) to determine $
-u_t(x,t)$.
+**Remark**: Although we present the equations in continuous form, **finite volume** implementations discretize these equations by integrating over control volumes and approximating fluxes at cell faces.
 
-### Reduced-Order Modeling via POD
+## Reduced-Order Modeling via POD
 
-**Proper Orthogonal Decomposition (POD)** extracts a low-dimensional subspace capturing the dominant flow dynamics. Suppose we have:
+The **Proper Orthogonal Decomposition (POD)** is a data-driven strategy to identify the most energetic “modes” (or spatial patterns) in a set of high-fidelity solutions. It proceeds as follows:
 
-- A computational domain $\Omega$ discretized into $n$ cells (control volumes) by the finite volume method.
-- A set of $N_s$ snapshots of the velocity field $\mathbf{u}(x,t_n)$ obtained from a high-fidelity solver like OpenFOAM. Each snapshot is a vector in $\mathbb{R}^n$ representing the velocity (or velocity components) at each cell center or node.
+I. **Finite Volume Discretization**  
 
-We want to represent the flow field in a reduced form:
+   - Suppose the domain $\Omega$ is partitioned into $n$ cells $\{V_1, V_2, \ldots, V_n\}$.  
+   - The **finite volume solver** (e.g., OpenFOAM) outputs velocity fields (and possibly pressure fields or other quantities) at cell centers or nodes for discrete times $t_1, t_2, \ldots, t_{N_s}$.
 
-$$\mathbf{u}(x,t) \approx u_{N}(x,t) = \sum_{i=1}^N a_i(t)\phi_i(x),$$
-where $\{\phi_i(x)\}_{i=1}^N$ are the POD modes obtained from the snapshot data, and $a_i(t)$ are time-dependent coefficients.
+II. **Snapshot Collection**  
 
-#### POD Space Construction
+   - Let $\mathbf{u}(x,t_k)$ for $k=1, \ldots, N_s$ be the **snapshots** of the velocity solution, typically stored in a vector form $\mathbf{u}_k \in \mathbb{R}^n$.  
+   - Collect these snapshots into a matrix $\mathbf{U} \in \mathbb{R}^{n \times N_s}$, where each column corresponds to a snapshot.
 
-I. **Snapshots:**
+III. **Correlation Matrix and Eigenvalue Problem**  
 
-Collect velocity snapshots $\mathbf{u}(x,t_n)$, $n=1,\ldots,N_s$. Each snapshot is a high-fidelity solution from OpenFOAM or a similar solver. These snapshots form a snapshot matrix $\mathbf{U}$ of size $n \times N_s$.
+   - Define the correlation matrix 
+     $$C_{ij} = \frac{1}{N_s}\,(\mathbf{u}_i,\,\mathbf{u}_j)_{L^2}, 
+       \quad i,j = 1,\ldots,N_s$$
 
-II. **Correlation Matrix and Eigenvalue Problem:**
+   - The inner product $(\cdot,\cdot)_{L^2}$ is approximated in the **finite volume** sense:
+     $$(\mathbf{u},\,\mathbf{v})_{L^2}
+       \approx 
+       \sum_{\ell=1}^{n} \mathbf{u}_{\ell}\,\mathbf{v}_{\ell}\,\Delta V_{\ell}$$
+     where $\Delta V_{\ell}$ is the volume of cell $\ell$, and $\mathbf{u}_\ell \cdot \mathbf{v}_\ell$ is the dot product of velocity components.  
 
-Construct the correlation matrix:
+   - Solve the eigenvalue problem $C\,g_i = \lambda_i \,g_i$. The eigenvalues $\lambda_i$ measure the “energy” captured by the corresponding eigenvectors $g_i$.
 
-$$C_{ij} = \frac{1}{N_s} (\mathbf{u}(x,t_i), \mathbf{u}(x,t_j))_{L^2}, \quad i,j = 1,\ldots,N_s,$$
-where the inner product can be approximated by a discrete $L^2$-inner product over the domain:
+IV. **POD Modes**  
 
-$$(\mathbf{u}, \mathbf{v})_{L^2} \approx \sum_{cell} \mathbf{u}_{cell} \cdot \mathbf{v}_{cell} \Delta V_{cell}.$$
+   - For each eigenvector $g_i$, the **POD mode** $\phi_i \in \mathbb{R}^n$ (in discrete form) is typically obtained by:
+     $$\phi_i 
+       = 
+       \frac{1}{\sqrt{\lambda_i}}
+       \sum_{k=1}^{N_s} g_{ik}\,\mathbf{u}_k$$
 
-Solve the eigenvalue problem:
+   - Choose the first $N$ modes $\{\phi_1, \ldots, \phi_N\}$ with the largest eigenvalues, ensuring $\sum_{i=1}^{N}\lambda_i$ retains a high percentage (e.g., 90-99%) of the total energy $\sum_{i=1}^{N_s}\lambda_i$.  
+   - The velocity field is then approximated by
+     $$\mathbf{u}(x,t) 
+       \approx 
+       \sum_{i=1}^{N} a_i(t)\,\phi_i(x)$$
+     where $\phi_i(x)$ is the continuous counterpart of the discrete mode $\phi_i$, and $a_i(t)$ are **time-dependent** modal coefficients.
 
-$$C g_i = \lambda_i g_i,$$
-yielding eigenvalues $\lambda_i$ and eigenvectors $g_i$. The eigenvalues reflect the energy content of each mode. Sorting them in descending order ensures that the first few modes capture most of the flow's kinetic energy.
+## Galerkin Projection in a Finite Volume Context
 
-III. **POD Modes:**
+In a classical **finite element** framework, one would take the weak form of the Navier–Stokes equations and directly project it onto POD modes. **Finite volume**, however, operates on the **integral form** of the PDEs and computes fluxes across cell faces. Extending the Galerkin projection idea to FVM involves the following steps:
 
-The POD modes are given by:
+### I. Integral (Cell-Based) Formulation
 
-$$\phi_i(x) = \frac{1}{\sqrt{\lambda_i}}\sum_{n=1}^{N_s} g_{in}\mathbf{u}(x,t_n).$$
+For a single cell $V_p$ with boundary $\partial V_p$, the integral form of the laminar Navier–Stokes equations reads:
 
-The dimension $N < N_s$ is chosen to retain only the most energetic modes, greatly reducing the state dimension.
+$$\int_{V_p} \frac{\partial \mathbf{u}}{\partial t}\, dV
++
+\int_{\partial V_p} (\mathbf{u}\cdot \mathbf{n})\,\mathbf{u}\, dS
+=
+-\,\int_{V_p} \nabla p\, dV
++
+\nu \int_{\partial V_p} \nabla \mathbf{u}\cdot \mathbf{n}\, dS$$
+where $\mathbf{n}$ is the outward unit normal on $\partial V_p$. For a RANS model, the term $\nu$ becomes $\nu + \nu_t$, and there may be additional modeled stress terms.
 
-### Galerkin Projection in a Finite Volume Context
+### II. POD Expansions for All Fields
 
-Classical POD-Galerkin methods are often introduced in a finite element setting, where the weak form of Navier-Stokes equations naturally emerges, and projecting onto POD modes is straightforward. However, finite volume methods (FVM) differ: the equations are integrated over control volumes, and fluxes are computed at cell faces. This direct flux-based approach does not immediately yield a weak form suitable for standard POD-Galerkin.
+To apply POD-Galerkin, we typically expand not only $\mathbf{u}$ but also any additional fields that appear in the equations:
 
-To perform a Galerkin projection in FVD:
+- **Velocity**:
+  $$\mathbf{u}(x,t) 
+    \approx 
+    \sum_{i=1}^N a_i(t)\,\phi_i(x)$$
 
-I. Start from the integral form of the Navier-Stokes equations on each cell $V_p$:
+- **Pressure** (if needed for strong coupling):
+  $$p(x,t) 
+    \approx 
+    \sum_{i=1}^N a_i(t)\,\chi_i(x)$$
 
-$$\int_{V_p}\frac{\partial \mathbf{u}}{\partial t} dV + \int_{\partial V_p} (\mathbf{u} \cdot 
-abla)\mathbf{u} dS = -\int_{V_p} 
-abla p dV + 
-u \int_{\partial V_p} 
-abla \mathbf{u} dS.$$
+- **Turbulent viscosity** $\nu_t$ (RANS case):
+  $$\nu_t(x,t) 
+    \approx 
+    \sum_{i=1}^N a_i(t)\,\xi_i(x)$$
 
-II. Use the POD expansion $\mathbf{u}(x,t) \approx \sum_{i=1}^N a_i(t)\phi_i(x)$. You must represent not only $\mathbf{u}$ but also other needed fields (e.g., fluxes, turbulence quantities, and pressure) with similar expansions:
+Here, $\phi_i(x)$, $\chi_i(x)$, and $\xi_i(x)$ are the POD modes for velocity, pressure, and turbulent viscosity, respectively. Each additional field may require a separate snapshot set and POD procedure if it must be dynamically approximated.
 
-$$F(x,t) \approx \sum_{i=1}^N a_i(t)\psi_i(x), \quad p(x,t) \approx \sum_{i=1}^N a_i(t)\chi_i(x).$$
+### III. Inserting the Reduced Expansions
 
-III. Insert these expansions into the FVD integral form. Each integral, originally computed numerically by summing contributions from cell faces, must now be projected onto the POD basis. This is where complexity arises:
-- The convective and diffusive flux terms must be expressed in terms of the modal expansions.
-- The pressure gradient term and other non-linear terms must also be approximated in the reduced space.
-- The divergence-free condition $
-abla \cdot \mathbf{u}=0$ in a discrete sense requires careful handling since FVM ensures divergence-freeness via flux consistency at cell faces, not pointwise.
+Substitute the expansions into the finite volume integral equations. Each term—convective flux, diffusive flux, and pressure gradient—becomes a function of $\{a_i(t)\}$. For instance, the **nonlinear convection** term in cell $V_p$ can be written as:
 
-IV. After substitution, integrate against each POD mode $\phi_j$ using the $L^2$-inner product. This yields a system of ODEs in the coefficients $a_i(t)$:
+$$\int_{\partial V_p} (\mathbf{u}\cdot \mathbf{n})\,\mathbf{u}\, dS
+\approx
+\int_{\partial V_p} 
+\Bigl(\sum_{i=1}^N a_i(t)\,\phi_i\Bigr)\,\cdot \mathbf{n}
+\Bigl(\sum_{j=1}^N a_j(t)\,\phi_j\Bigr)\, dS$$
 
-$$\frac{da_j(t)}{dt} = 
-u \sum_{i=1}^N B_{ji} a_i(t) - \sum_{k,l} C_{jkl} a_k(t) a_l(t) + \sum_{i=1}^N A_{ji} a_i(t) + \cdots$$
+Such products yield **bilinear** or higher-order combinations in the coefficients $a_i(t)$. In practice, one often assembles these flux integrals offline using the known POD modes to create “projection” tensors or matrices.
 
-The matrices $B, C, A$ represent the projections of diffusive, convective, and pressure terms, respectively. Additional terms may appear for RANS turbulence modeling and pressure corrections.
+### IV. Projection onto the POD Modes
 
-### Handling Pressure and Boundary Conditions
+To derive the final **reduced** system of ODEs in time, we perform an additional projection (or inner product) with each POD mode, typically the same discrete $L^2$-type product used in the POD generation. Formally, for each mode $\phi_m$,
 
-**Pressure Term:**
+$$\int_{V_p} 
+\phi_m^\top \,\frac{\partial \mathbf{u}}{\partial t}\, dV
++
+\int_{V_p} 
+\phi_m^\top \,\nabla \cdot (\mathbf{u}\otimes \mathbf{u})\, dV
+=
+-\,
+\int_{V_p} 
+\phi_m^\top \,\nabla p\, dV
++
+\nu
+\int_{V_p} 
+\phi_m^\top \,\nabla \cdot (\nabla \mathbf{u})\, dV$$
+summing over all cells in practice. Numerically, we replace volume integrals by discrete cell-based sums and face-based flux computations:
 
-A key assumption often used in FE-based POD-Galerkin is that POD modes are divergence-free. If strictly divergence-free modes are chosen, the pressure term may vanish upon projection. However, in FVM-based solutions, the velocity field may not be globally divergence-free at each cell center—divergence-free conditions are enforced in an integral sense on cell faces.
+$$\sum_{p=1}^{n} 
+\phi_m^\top(p)\,\Delta V_p \,\frac{\partial \mathbf{u}(p,t)}{\partial t}
++
+\sum_{faces} \cdots
+=
+\ldots$$
 
-To handle pressure:
-- Compute pressure modes as well, or incorporate a pressure correction step.
-- If the domain is enclosed and the modes are nearly divergence-free, the pressure term may become negligible under certain conditions, but this must be checked case by case.
-**Boundary Conditions:**
-In FVM, boundary conditions significantly affect flux computations. POD modes might not inherently satisfy boundary conditions. To address this:
-- Use a penalty method: Add terms in the Galerkin projection that enforce boundary conditions weakly.
-- Ensure that at the POD stage, the chosen snapshots come from solutions that satisfy the physical BCs, improving the chance that truncated modes still respect boundaries.
+After collecting terms in $\{a_i(t)\}$, we obtain a **nonlinear ODE system** for the time evolution of the modal coefficients $a_i(t)$:
 
-### Discretization of Nonlinear Terms
+$$\frac{d a_j(t)}{dt}
+=
+F_j\bigl(\{a_i(t)\}\bigr),
+\quad
+j = 1,\ldots,N$$
+where $F_j(\cdot)$ represents the combination of **convective**, **diffusive**, and **pressure** effects (and turbulence if RANS). The result is a system of dimension $N \ll n$, allowing faster simulations once it has been assembled.
 
-In FVM, the nonlinear convection term is computed using fluxes at cell faces:
+## Handling Pressure and Boundary Conditions
 
-$$\int_{V_p} (\mathbf{u} \cdot 
-abla)\mathbf{u} dV = \sum_{faces} \mathbf{F}_{face}(\mathbf{u}),$$
-where $\mathbf{F}_{face}$ is evaluated using, e.g., an upwind or central differencing scheme.
+### Pressure Treatment
 
-For POD-Galerkin:
-- The flux $\mathbf{F}(x,t)$ itself must be projected onto the POD modes or approximated using expansions of $\mathbf{u}$.
-- A careful approximation is needed: If $\mathbf{u}$ is expanded in modes, the flux, a nonlinear function of $\mathbf{u}$, requires mixing terms (e.g., a quadratic form in coefficients $a_i(t)$).
+- **Divergence-Free Modes**: In some FE-based POD-Galerkin approaches, the velocity modes are chosen to be **divergence-free**, which can simplify the pressure term. However, in an FVM approach, velocity fields often only satisfy $\nabla \cdot \mathbf{u} = 0$ in an integral sense across faces.  
+- **Pressure Modes**: One approach is to include **pressure** in the reduced basis. Then we expand $p$ in its own set of POD modes $\{\chi_i\}$. This can be important for open domains or strongly varying pressure fields.  
+- **Pressure Correction Step**: Some implementations adopt a fractional-step or pressure-correction scheme in the high-fidelity code. Adapting these steps in the reduced model can be tricky but sometimes necessary for stability and consistency.
 
-### Turbulence Modeling for RANS
+### Boundary Conditions
 
-For RANS, an additional complexity is the turbulent viscosity field $
-u_t(x,t)$:
+- **Physical Boundaries**: In FVM, boundary conditions are enforced through face-based flux definitions. The POD modes themselves might not strictly enforce boundary conditions if the snapshots did not revolve around the same BC setting.  
+- **Data-Consistent Snapshots**: A practical strategy is to make sure all high-fidelity snapshots **respect** the intended boundary conditions so that the resulting POD modes naturally reflect them.  
+- **Penalization or Correction**: If boundary conditions vary or are only partially enforced by the modes, a separate **penalty term** or correction approach in the reduced system might be required.
 
-$$u_t(x,t) \approx \sum_{i=1}^N a_i(t) \xi_i(x),$$
-where $\xi_i(x)$ are the turbulent viscosity modes computed from turbulent viscosity snapshots. Insert this into the RANS equations to handle the extra terms involving $( 
-u + 
-u_t)
-abla \mathbf{u}$.
+## Discretization of Nonlinear Terms
 
-This yields extra coupling terms in the reduced ODE system, typically introducing a polynomial nonlinearity in the coefficients $a_i(t)$.
+In an FVM code, the nonlinear convection term is typically computed as a flux:
 
-### Final Reduced System
+$$\int_{V_p} (\mathbf{u} \cdot \nabla)\mathbf{u} \, dV
+=
+\sum_{faces \in \partial V_p} \mathbf{F}_{face}$$
+where $\mathbf{F}_{face}$ is evaluated using an **upwind**, **central differencing**, or another flux-limiting scheme. For the reduced model:
 
-After handling all terms (convective, diffusive, pressure, turbulence, BCs), one arrives at an autonomous or semi-autonomous nonlinear ODE system:
+I. **Flux Approximation**: Each $\mathbf{F}_{face}$ must be approximated in terms of the POD coefficients $\{a_i\}$.  
 
-$$\dot{a}(t) = 
-u B a(t) - a(t)^T C a(t) - A a(t) + (\text{turbulence terms}) + (\text{boundary terms}),$$
-defining a low-dimensional dynamical system for the coefficients $a(t)$.
+II. **Quadratic Terms**: Because $\mathbf{F}_{face}$ depends on $\mathbf{u}^2$ (schematically) through $(\mathbf{u}\cdot \mathbf{n})\mathbf{u}$, the resulting expression will have **quadratic** dependence on $\{a_i\}$.  
+
+III. **Pre-Computed Operators**: Often, one pre-computes certain integrals or flux evaluations offline using the known POD modes, then assembles them into a smaller operator or tensor to expedite the online solution phase.
+
+## Turbulence Modeling for RANS
+
+In the **RANS** context, a major complication is the additional **turbulent viscosity** $\nu_t$:
+
+$$\nabla \cdot [(\nu + \nu_t) \nabla \mathbf{u}]$$
+One may generate snapshots of $\nu_t(x,t)$ from the high-fidelity simulations (e.g., from a $k\text{-}\epsilon$ solver) and then compute POD modes for $\nu_t$ similarly. The final reduced model might look like:
+
+$$\frac{d a_j(t)}{dt}
+=
+-\,(\text{nonlinear convection in } \{a_i\})
++
+(\text{diffusion with } \nu + \nu_t(\{a_i\}))
++
+\ldots$$
+
+Because $\nu_t$ depends on the same or an additional set of modes, the resulting system may exhibit **higher-order nonlinearities**, requiring careful treatment (e.g., **empirical interpolation** or other hyper-reduction strategies) for computational efficiency.
+
+## Final Reduced System
+
+After including all relevant terms—convective, diffusive, pressure, turbulence, boundary corrections—the reduced system emerges as:
+
+$$\dot{a}(t)
+=
+\mathbf{F}\bigl(a(t)\bigr)$$
+
+where $a(t) = (a_1(t),\ldots,a_N(t))^\top$, and $\mathbf{F}$ encodes the integrals and fluxes in the reduced basis. This system can be:
+
+- **Nonlinear ODE** of dimension $N$.  
+- **Stiff** if the original CFD problem is stiff, often tackled with appropriate time-stepping or implicit methods.  
+- **Significantly cheaper** than the full FVM model (dimension $n$), provided $N \ll n$.
 
 ### Computational Considerations
 
@@ -164,7 +226,7 @@ Integrals needed for $B, C, A$ (and turbulence matrices) can be computed via num
 
 By reducing from a large-scale CFD problem (millions of cells) to a handful of ODEs in terms of $a_i(t)$, significant computational speedups are possible during repeated simulations, sensitivity analyses, or real-time control.
 
-### Key Challenges and Ongoing Research
+### Challenges and Ongoing Research
 
 I. **Ensuring Divergence-Free Modes**:
 
