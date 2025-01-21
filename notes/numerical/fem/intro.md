@@ -17,6 +17,24 @@ If the domain is [0, L], each element might have length h, so:
 
 In this example, each element is a line segment, and shape functions are typically polynomials of degree 1 (linear), 2 (quadratic), or higher. Linear shape functions in element $e$ will be zero outside that element and will vary linearly between the nodes inside that element.
 
+For a two-dimensional domain, elements might be triangles or quadrilaterals:
+
+```
+Example of a triangular mesh:
+
+  *-------*-------* 
+  |\      |\      |
+  | \     | \     |
+  |  \    |  \    |
+  *---\---*---\---*
+  |\  |   |\  |   
+  | \ |   | \ |   
+  *---*---*---*  
+```
+
+- Nodes are at intersections of lines (the asterisks).
+- Each triangle is a finite element, and shape functions are defined locally.
+ 
 ### OVERVIEW AND PHILOSOPHY
 
 Finite element analysis focuses on approximating a solution by combining local shape functions that live on small subdomains, or elements, of the overall problem domain. Each element is typically associated with a set of nodes at which the unknown quantities are explicitly stored. The method often starts by writing the problem in its variational or weak form, which allows one to consider integrals of products involving the unknown function and specified test functions. These integrals make it possible to capture the behavior of the solution without requiring explicit finite-difference-style approximations of derivatives. Instead, integration by parts and standard function space arguments are used to make sure that the solution respects the underlying physics.
@@ -85,25 +103,9 @@ where $U$ is the vector of unknown nodal values.
 
 7) Solve the System. Use direct solvers (e.g., LU decomposition) for small or moderate problems. Use iterative solvers (e.g., Conjugate Gradient, GMRES) with suitable preconditioners for larger systems.
 
-ASCII DIAGRAM ILLUSTRATING A 2D MESH
 
-For a two-dimensional domain, elements might be triangles or quadrilaterals:
 
-```
-  Example of a triangular mesh:
 
-    *-------*-------* 
-    |\      |\      |
-    | \     | \     |
-    |  \    |  \    |
-    *---\---*---\---*
-    |\  |   |\  |   
-    | \ |   | \ |   
-    *---*---*---*  
-
- Nodes are at intersections of lines (the asterisks).
- Each triangle is a finite element, and shape functions are defined locally.
-```
 
 ### EXAMPLE: 1D POISSON EQUATION
 
