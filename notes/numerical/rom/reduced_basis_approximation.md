@@ -143,9 +143,9 @@ $$
 
 where $\mathbf{Z}$ is the matrix whose columns are the **discrete** reduced basis vectors. In an **affine** parameter dependence scenario,
 
-$$\mathbf{A}(\mu) 
-=
-\sum_{q=1}^{Q} \Theta_q(\mu)\,\mathbf{A}_q$$
+$$
+\mathbf{A}(\mu) = \sum_{q=1}^{Q} \Theta_q(\mu) \, \mathbf{A}_q
+$$
 
 these can be stored and combined quickly for each new $\mu$ to yield $\mathbf{A}_r(\mu)$. This strategy is key to achieving fast online solves.
 
