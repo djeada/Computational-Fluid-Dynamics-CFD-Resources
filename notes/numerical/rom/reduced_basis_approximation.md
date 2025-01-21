@@ -153,15 +153,15 @@ these can be stored and combined quickly for each new $\mu$ to yield $\mathbf{A}
 
 Often, we do not just need the entire field $u(\mu)$ but specific “outputs”:
 
-$$s(\mu) 
-=
-l\bigl(u(\mu);\mu\bigr)$$
+$$
+s(\mu) = l\bigl(u(\mu); \mu\bigr)
+$$
 
 which might represent integrated stresses, fluxes, or design functionals. In the reduced setting,
 
-$$s_{N_h}(\mu)
-=
-l\bigl(u_{N_h}(\mu);\mu\bigr)$$
+$$
+s_{N_h}(\mu) = l\bigl(u_{N_h}(\mu); \mu\bigr)
+$$
 
 and evaluating $s_{N_h}(\mu)$ is typically very cheap once $u_{N_h}(\mu)$ is known. Moreover, one can precompute certain vector or matrix forms of $l$ for fast online evaluation, similar to how $\mathbf{A}_r$ and $\mathbf{F}_r$ are precomputed.
 
