@@ -1,38 +1,58 @@
-## Datasets Description  
+## Datasets Description
 
-When deploying neural networks in aerodynamic applications, assembling high-quality datasets is crucial for both model training and validation. In most cases, these datasets must encompass a range of geometrical variations and flow conditions so that the trained model can generalize to new or modified configurations. Although the overarching goal varies by project, a common objective is to predict aerodynamic properties such as the drag coefficient $C_d$, lift coefficient $C_l$, or full flow fields in response to changes in the vehicle (or other aerodynamic body) geometry.
+When deploying neural networks in aerodynamic applications, assembling high-quality datasets is important for both model training and validation. In these applications, datasets must capture a wide range of geometrical variations and flow conditions so that the trained model can generalize to new or modified configurations reliably. The overarching objective of these datasets is often to predict aerodynamic properties—such as the drag coefficient $C_d$, lift coefficient $C_l$, or even full flow fields—based on changes in vehicle or aerodynamic body geometry. Making sure that the dataset spans a sufficiently broad design space is important for strong performance and improved predictive accuracy.
 
-### Design of Experiments (DoE)  
+A well-curated dataset not only helps in building more accurate models but also aids in uncovering underlying physical relationships between geometry and aerodynamic performance. The quality, diversity, and consistency of the data are key factors that influence the success of subsequent machine learning applications in CFD.
 
-A typical dataset for aerodynamic neural networks arises from systematic variation of certain geometry features. This might include adding new parts (e.g., spoilers, roof racks), altering existing parts’ dimensions (e.g., bumper shape, underbody configuration), changing entire sections of the body (e.g., hood and windshield angles), and testing experimental concepts that deviate substantially from baseline designs. These variations ensure coverage of a broad design space:
+### Design of Experiments (DoE)
 
-I. **Geometry-Driven Changes**  
-   - Front bumper modifications  
-   - Side mirror relocations or shape changes  
-   - Tire profile alterations  
-   - Rear spoiler installations  
-   - Roof racks and other external accessories  
-II. **Flow-Driven Changes**  
-   - Variation in Reynolds number  
-   - Variation in inlet velocity profiles  
-   - Different turbulence intensities or swirl ratios  
+A typical dataset for aerodynamic neural networks arises from a systematic variation of key geometry features and flow parameters. This process—known as the Design of Experiments (DoE)—is structured to make sure that the dataset adequately covers the design space of interest. The goal is to create controlled variations that help the network learn the relationships between geometric modifications and aerodynamic responses.
 
-By combining these perturbations, the resultant dataset spans a wide spectrum of aerodynamic configurations. This is essential for training robust models that can predict flow behavior under many design modifications and operating conditions.
+DoE strategies in aerodynamic studies often include:
 
-### Typical CFD Foundations  
+I. Geometry-Driven Changes  
 
-Each dataset entry generally comes from Reynolds-Averaged Navier–Stokes (RANS) simulations or another CFD approach (e.g., LES for certain complex flow features). These CFD runs are performed on either in-house or cloud-based high-performance computing (HPC) clusters. In many industrial or research contexts:
+- Front Bumper Modifications: Altering the curvature, angle, or profile to study its effect on flow separation and pressure distribution.  
+- Side Mirror Relocations or Shape Changes: Changing the position or contour of side mirrors to analyze their impact on drag and potential interference effects with adjacent flow structures.  
+- Tire Profile Alterations: Modifying tire shapes to assess how underbody flows and ground effects influence overall vehicle aerodynamics.  
+- Rear Spoiler Installations: Adding or modifying spoilers to study their role in generating downforce or reducing lift.  
+- Roof Racks and External Accessories: Evaluating how additional components disturb the airflow, impacting both drag and lift characteristics.
 
-$$\mathbf{u}(\mathbf{x}), \quad p(\mathbf{x}), \quad \dots$$
-are solved for on a mesh that discretizes the domain around the geometry, subject to specific boundary conditions (often approximating standard atmospheric or wind-tunnel conditions). Once a target number of simulation cases (e.g., a few hundred or thousand) has been generated, the data typically undergoes a train/test (and sometimes validation) split, such as 90% of the samples used for training and 10% for testing.
+II. Flow-Driven Changes  
 
-### Legacy vs. Newly Generated Data  
+- Variation in Reynolds Number: Adjusting the Reynolds number to simulate different flow regimes, from laminar to turbulent, thereby capturing the effects of scale and velocity variations.  
+- Variation in Inlet Velocity Profiles: Testing different inlet conditions to mimic real-world scenarios such as gusts or variable wind conditions.  
+- Different Turbulence Intensities or Swirl Ratios: Altering turbulence parameters to examine their impact on flow separation, mixing, and wake formation.
+By combining these geometric and flow-driven perturbations, the resultant dataset spans a wide spectrum of aerodynamic configurations. This diversity is necessary for training strong models that are capable of predicting flow behavior across a range of design modifications and operating conditions.
 
-Researchers or engineers often merge legacy data—previously obtained for other design studies—with newly generated CFD cases in order to expand the coverage of the geometry and flow parameter space. This approach can expedite dataset creation, but it also raises questions about data consistency (different grid resolutions, turbulence models, or slightly different boundary conditions). Proper data preprocessing and normalization are therefore critical steps to ensure a coherent dataset.
+### Typical CFD Foundations
 
-## Dataset Overview  
+Each dataset entry generally originates from high-fidelity simulations based on methods such as Reynolds-Averaged Navier–Stokes (RANS) or, for more complicated phenomena, Large Eddy Simulation (LES). In practice, these CFD simulations are performed on either in-house or cloud-based high-performance computing (HPC) clusters.
 
-Below is an illustrative example of how datasets might be organized in a tabular form. Each row corresponds to a set of simulations performed on a particular baseline model, detailing which geometry features were changed and the associated operating conditions.
+Key elements of CFD foundations include:
+
+- Governing Equations: The simulations solve for quantities such as the velocity field $\mathbf{u}(\mathbf{x})$, pressure $p(\mathbf{x})$, and possibly additional variables like turbulence relating to motion energy $k$ or dissipation $\epsilon$.  
+- Mesh Discretization: The flow domain around the geometry is discretized using a computational mesh, which can vary in resolution depending on the simulation objectives and available resources.  
+- Boundary Conditions: Standard atmospheric or wind-tunnel conditions are typically applied, making sure that the simulations reflect realistic operational environments.
+- Data Partitioning: After generating a target number of simulation cases (e.g., several hundred or thousand), the data is usually split into training, testing, and sometimes validation sets. A common split might allocate 90% of the samples for training and 10% for testing, making sure that the model’s performance is evaluated on unseen cases.
+This rigorous CFD foundation makes sure that the resulting dataset is both reliable and rich in physical detail, providing a solid basis for subsequent machine learning model development.
+
+### Legacy vs. Newly Generated Data
+
+In practice, researchers and engineers often merge legacy data—collected from previous design studies—with newly generated CFD cases to broaden the coverage of both geometry and flow parameter spaces. While legacy data can expedite dataset creation and offer historical insights, it may also introduce inconsistencies due to differences in grid resolutions, turbulence models, or boundary conditions used in earlier studies.
+
+Key challenges in merging legacy with new data include:
+
+- Data Consistency: Making sure that all data points adhere to a consistent set of standards requires careful preprocessing, normalization, and, if necessary, recalibration of legacy cases.
+- Quality Control: Verification steps are necessary to confirm that older data meets the current simulation fidelity and can be integrated meaningfully with new cases.
+- Coverage Balance: Combining legacy and new data can help achieve a more comprehensive exploration of the design space, but it is necessary to maintain a balance so that the model does not become biased toward the characteristics of one subset.
+Proper data preprocessing—including normalization, grid refinement adjustments, and consistent boundary condition application—is important to harmonize the dataset and enhance the robustness of the training process.
+
+## Dataset Overview
+
+An effective dataset for aerodynamic neural networks is often organized in a tabular format that documents key information about each simulation case. Each row corresponds to a set of simulations performed on a particular baseline model, with columns detailing the geometry changes and operating conditions.
+
+Below is an illustrative example of how such datasets might be structured:
 
 | Dataset ID | Vehicle Model | Variant Description             | Geometry Changes                              | Simulation Conditions                    |
 |------------|---------------|---------------------------------|-----------------------------------------------|------------------------------------------|
@@ -45,48 +65,62 @@ Below is an illustrative example of how datasets might be organized in a tabular
 | 7          | Vehicle A     | Roof Rack Added                 | Roof rack added                               | Standard atmospheric conditions          |
 | ...        | ...           | ...                             | ...                                           | ...                                      |
 
-This table can be extended to include additional columns for parameters such as Reynolds number, inlet velocity magnitude, or yaw angle if the study focuses on crosswind scenarios. Each “Variant Description” tag serves as a shorthand reference to more detailed geometry and flow specification notes.
+This table can be extended to include additional columns for specific parameters such as Reynolds number, inlet velocity magnitude, yaw angle, or turbulence intensity if the study focuses on particular flow phenomena. The “Variant Description” column provides a concise reference to more detailed notes on geometry and flow specifications, making the dataset easier to find your way through and interpret.
 
-## Decimation Workflow  
+## Decimation Workflow
 
-Once the high-resolution CFD data has been collected, it is common to reduce (or “decimate”) both the geometry and flow field representations to suit the memory and computational constraints of neural-network training. The goals here are:
+Once high-resolution CFD data has been collected, it is common to reduce (or “decimate”) both the geometry and flow field representations to meet the memory and computational constraints of neural network training. The decimation process is a important preprocessing step that seeks to balance fidelity with efficiency.
 
-I. **Maintain Critical Features**  
+The decimation workflow addresses several key objectives:
 
-   Ensure that key aerodynamic features—such as leading edges, separation points, and high-curvature regions—remain adequately represented.
+I. Maintain Important Features  
 
-II. **Reduce Data Density**  
+- It is necessary to preserve key aerodynamic features such as leading edges, separation points, and regions of high curvature, as these areas often have a disproportionate impact on aerodynamic performance.
 
-   Large meshes (with millions of cells or more) must be coarsened to a manageable level for GPU-based neural network training. A balance between retaining fidelity and limiting memory footprint is essential.
+II. Reduce Data Density  
 
-### Geometry Decimation  
-- **Mesh Reduction**  
-  Suppose the original surface mesh contains $N$ points. A decimation algorithm might reduce this to $\alpha N$ points (commonly $\alpha \approx 0.1$ or another fraction).  
-- **Uniform Spacing**  
+- High-resolution meshes that contain millions of cells must be coarsened to a manageable level suitable for GPU-based neural network training. The goal is to reduce the data volume while retaining enough detail to capture the necessary flow physics.
 
-  The routine typically ensures that the remaining points are uniformly distributed, attempting to preserve important geometric features. This can be done via edge collapse methods, clustering, or other mesh-simplification algorithms. Mathematically, one might formulate a minimization of the local error metric:
+### Geometry Decimation
 
-  $$\min_{\text{decimated mesh}} \sum_{\text{original points}} \|\mathbf{x}_{\text{original}} - \mathbf{x}_{\text{decimated}}\|^2,$$
-  subject to constraints that maintain geometry topology.
+Mesh Reduction:  
 
-### Flow Field Interpolation  
-- **Variable Mapping**  
-  Pressure $p$, velocity components $\mathbf{u} = (u, v, w)$, and potentially other quantities (e.g., turbulence kinetic energy $k$) are interpolated onto the new, coarser set of mesh points.  
-- **Preservation of Essential Flow Structures**  
-  To minimize loss in fidelity, one might use higher-order interpolation schemes or special handling near boundary layers and separation regions.  
-- **Tradeoff**  
+- The original surface mesh, which may contain a very high number $N$ of points, is reduced to a fraction of these points, denoted by $\alpha N$ (commonly $\alpha \approx 0.1$ or another fraction).  
+- Uniform Spacing:  
+The decimation algorithm strives to make sure that the remaining points are uniformly distributed over the geometry. This is important for preserving the overall shape and significant features. Methods such as edge collapse, clustering, or quadric error metrics (QEM) are often used to achieve this.
 
-  A finer decimated mesh leads to better flow-field resolution but larger memory usage. Conversely, an excessively coarse mesh may exclude crucial aerodynamic details, degrading the neural network’s learning capability.
+Mathematically, one might express the decimation as a minimization problem:
 
-### Practical Considerations  
-- **Symmetry**  
-  In many vehicle or wing cases, flow may be symmetric about a central plane. Consequently, one can use a half-model to halve the data volume.  
-- **Reference Frames**  
-  Geometries might be aligned in a consistent coordinate system (e.g., $x$-axis in the longitudinal direction, $y$-axis in the lateral direction, $z$-axis vertically). Standardizing these frames simplifies subsequent data processing.  
-- **Number of Samples vs. Mesh Resolution**  
+$$\min_{\text{decimated mesh}} \sum_{\text{original points}} \|\mathbf{x}_{\text{original}} - \mathbf{x}_{\text{decimated}}\|^2$$
 
-  Engineers must balance the number of distinct geometries (dataset size) against the resolution per geometry. A rough rule of thumb might be:
+subject to constraints that preserve the topology and key geometric features.
 
-  $$\text{Total memory usage} \;\approx\; (\text{# of samples}) \times (\text{points per sample}) \times (\text{variables}).$$
+### Flow Field Interpolation
 
-  Ensuring this total is feasible on available hardware is critical to a successful decimation strategy.
+After geometry decimation, the flow field data must be interpolated onto the new, coarser mesh. This involves several considerations:
+
+- Variable Mapping:  
+Key flow variables such as pressure $p$, velocity components $\mathbf{u} = (u, v, w)$, and other quantities (e.g., turbulence relating to motion energy $k$) are mapped from the high-resolution CFD mesh onto the decimated mesh.
+
+- Preservation of Necessary Flow Structures:  
+Higher-order interpolation schemes may be used, particularly near regions with steep gradients, such as boundary layers and separation zones. Special techniques, like adaptive interpolation near important areas, help maintain the fidelity of the flow features.
+
+- Tradeoff Considerations:  
+A finer decimated mesh retains more of the original flow-field resolution but requires greater memory usage. Conversely, a too-coarse mesh might result in the loss of important aerodynamic details, degrading the performance of the neural network.
+
+### Practical Considerations
+
+When designing the decimation workflow, several practical aspects must be considered:
+
+- Symmetry:  
+Many aerodynamic bodies (e.g., vehicles or wings) exhibit symmetry about a central plane. Exploiting this symmetry—by, for instance, using a half-model—can significantly reduce the data volume without sacrificing information.
+
+- Reference Frames:  
+Consistent alignment of geometries is necessary. Standardizing the coordinate system (e.g., $x$-axis along the longitudinal direction, $y$-axis laterally, $z$-axis vertically) simplifies both the decimation process and subsequent neural network training.
+
+- Balancing Samples and Resolution:  
+A key tradeoff exists between the number of distinct geometries (i.e., dataset size) and the resolution per geometry. A rough guideline is given by:
+
+$$\text{Total memory usage} \approx (\text{number of samples}) \times (\text{points per sample}) \times (\text{number of variables})$$
+
+This balance must be carefully managed to make sure that the entire dataset can be effectively processed within the available hardware constraints.
