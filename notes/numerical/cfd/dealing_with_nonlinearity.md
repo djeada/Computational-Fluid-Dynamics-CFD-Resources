@@ -1,106 +1,139 @@
 # Dealing with Nonlinearity
 
-The highly nonlinear nature of the governing equations for fluid flow makes obtaining accurate numerical solutions for complex flows challenging. Understanding and handling nonlinearity is crucial in Computational Fluid Dynamics (CFD).
+The highly nonlinear nature of the governing equations for fluid flow makes obtaining accurate numerical solutions for complicated flows challenging. In Computational Fluid Dynamics (CFD), the nonlinearities often arise from convective terms, turbulence models, or nonlinear source terms. Understanding and handling nonlinearity is important because it directly affects the stability, accuracy, and convergence of numerical solvers. This section explains how nonlinearity can be managed via linearization and iterative solution techniques.
 
 ## Demonstrating the Effect of Nonlinearity
 
-Consider the equation with $m = 2$ in a simple 1D example:
+Consider a simple one-dimensional (1D) example with a nonlinear term. The governing differential equation is given by:
 
-$$
-\frac{du}{dx} + u^2 = 0; \quad 0 \le x \le 1; \quad u(0) = 1
-$$
+$$\frac{du}{dx} + u^2 = 0; \quad 0 \le x \le 1; \quad u(0) = 1$$
 
-A first-order finite-difference approximation to this equation is:
+This equation is nonlinear due to the $u^2$ term. When discretizing the problem using a finite-difference method, we approximate the derivative at a grid point $x_i$ by
 
-$$
-\frac{u_i - u_{i-1}}{\Delta x} + u_i^2 = 0
-$$
+$$\frac{u_i - u_{i-1}}{\Delta x}$$
 
-Here, the term $u_i^2$ introduces nonlinearity, resulting in a nonlinear algebraic equation.
+resulting in the discrete equation
+
+$$\frac{u_i - u_{i-1}}{\Delta x} + u_i^2 = 0$$
+
+The presence of $u_i^2$ makes this a nonlinear algebraic equation at each grid point, meaning that standard linear solution techniques cannot be applied directly. Instead, we must handle the nonlinearity—typically via linearization—before proceeding with an iterative solution.
 
 ## Linearization Strategy
 
-To handle nonlinearity, we linearize the equations around an initial guess value of the solution and iterate until the guess aligns with the solution within a specified tolerance level.
+A common approach for dealing with nonlinear equations in CFD is to linearize them about an initial guess and then solve the resulting linear equations iteratively until convergence. This strategy is central to methods like the Newton–Raphson algorithm and many of its variants.
 
 ### Steps for Linearization
 
-1. **Initial Guess**:
-   - Let $u_{ig}$ be the initial guess for $u_i$.
+I. Initial Guess:
 
-2. **Define the Perturbation**:
-   - Define the perturbation as $\Delta u_i = u_i - u_{ig}$.
+- Assume an initial guess for the solution at the grid point, denoted as $u_{ig}$ (the subscript “g” stands for "guess"). The choice of $u_{ig}$ can be based on physical intuition, previous solutions, or even a simple constant value.
 
-3. **Expand and Approximate**:
-   - Squaring the perturbation expression:
-   
-$$
-u_i^2 = u_{ig}^2 + 2u_{ig} \Delta u_i + (\Delta u_i)^2
-$$
-   
-   - Assuming $\Delta u_i \ll u_{ig}$, the term $(\Delta u_i)^2$ is small and can be neglected, yielding:
-   
-$$
-u_i^2 \simeq u_{ig}^2 + 2u_{ig} \Delta u_i = u_{ig}^2 + 2u_{ig} (u_i - u_{ig})
-$$
+II. Define the Perturbation:
 
-4. **Simplify the Expression**:
-   - Simplify to get:
-   
-$$
-u_i^2 \simeq 2u_{ig} u_i - u_{ig}^2
-$$
+- Define the difference between the true solution $u_i$ and the guess $u_{ig}$ as:
+ $$\Delta u_i = u_i - u_{ig}$$
 
-5. **Linearized Finite-Difference Approximation**:
-   - Substitute back into the finite-difference approximation (11):
-   
-$$
-\frac{u_i - u_{i-1}}{\Delta x} + 2u_{ig} u_i - u_{ig}^2 = 0
-$$
+III. Expand and Approximate:
+
+- Substitute $u_i = u_{ig} + \Delta u_i$ into the nonlinear term. Squaring the expression yields:
+ $$u_i^2 = (u_{ig} + \Delta u_i)^2 = u_{ig}^2 + 2u_{ig}\Delta u_i + (\Delta u_i)^2$$
+
+- If the perturbation $\Delta u_i$ is small compared to $u_{ig}$, then $(\Delta u_i)^2$ is insignificant. This is a standard assumption in linearization procedures, which leads to:
+ $$u_i^2 \approx u_{ig}^2 + 2u_{ig}\Delta u_i$$
+
+- Expressing $\Delta u_i$ in terms of $u_i$ and $u_{ig}$ gives:
+ $$u_i^2 \approx u_{ig}^2 + 2u_{ig}(u_i - u_{ig})$$
+
+IV. Simplify the Expression:
+
+- Simplify the expression further to obtain a linear form in $u_i$:
+ $$u_i^2 \approx 2u_{ig} u_i - u_{ig}^2$$
+
+V. Linearized Finite-Difference Approximation:
+
+- Substitute the linearized expression for $u_i^2$ back into the finite-difference approximation:
+ $$\frac{u_i - u_{i-1}}{\Delta x} + 2u_{ig} u_i - u_{ig}^2 = 0$$
+
+This linearization transforms the originally nonlinear finite-difference equation into a linear equation in terms of $u_i$, which can then be solved using standard linear solvers.
 
 ### Error Analysis
 
-- The error due to linearization is $O(\Delta u_i^2)$, which becomes negligible as $u_{ig}$ converges to $u$.
+- The error introduced by neglecting the $(\Delta u_i)^2$ term is of order $O((\Delta u_i)^2)$. As the iterative process proceeds and $u_{ig}$ converges to the true solution $u_i$, the perturbation $\Delta u_i$ decreases, rendering the linearization error insignificant. This error analysis justifies the iterative refinement process.
 
 ## Iterative Solution Process
 
-To calculate the finite-difference approximation, we need guess values $u_{ig}$ at the grid points. The process is iterative:
+Since the linearization is based on an initial guess, the solution must be refined iteratively. The overall approach is to repeatedly update the guess and solve the linearized equations until the solution converges to within a prescribed tolerance.
 
-1. **Iteration 1:** $u_i^{(1)} = \text{Initial guess}$
-2. **Iteration 2:** $u_i^{(2)} = u_i^{(1)}$
-3. **Iteration 3:** $u_i^{(3)} = u_i^{(2)}$
-4. **...**
-5. **Iteration $n$:** $u_i^{(n)} = u_i^{(n-1)}$
+### Iterative Scheme
 
-The superscript indicates the iteration level. We continue the iterations until they converge within a specified tolerance.
+I. Iteration 1:  
+
+- Start with an initial guess $u_i^{(1)}$ for each grid point.
+
+II. Iteration 2:  
+
+- Use the solution from the previous iteration as the new guess: $u_i^{(2)} = u_i^{(1)}$.
+
+III. Iteration 3 and Beyond:  
+
+- Continue updating using:
+ $$u_i^{(n)} = u_i^{(n-1)}$$
+
+ while re-linearizing the nonlinear term around the latest guess at each iteration.
+
+IV. Convergence Check:  
+
+- After each iteration, compare the new solution $u_i^{(n)}$ with the previous one $u_i^{(n-1)}$. If the difference (measured by an appropriate norm) is less than a specified tolerance, the solution is considered converged.
+The iterative process makes sure that the approximation gradually improves, reducing the error introduced by the initial linearization and finally providing a solution that satisfies the nonlinear equation.
 
 ## Convergence
 
-The iterations are repeated until the solution converges within a specified tolerance. This process of linearizing the nonlinear terms and iterating until convergence is commonly used in Computational Fluid Dynamics (CFD) codes. The key points are:
+Convergence is a important aspect of the iterative solution process. It makes sure that the numerical solution becomes both stable and accurate as the iterations progress.
 
-- **Linearization**: Performed about a guess value to handle nonlinearity.
-- **Convergence Check**: Ensuring the solution has converged within the specified tolerance is crucial.
+- Convergence Check:  
+A common practice is to compute the residual (the difference between the left- and right-hand sides of the equation) or the difference between successive iterates. When these quantities fall below a predefined threshold, the solution is deemed converged.
+
+- Criteria for Convergence:  
+Convergence is typically assessed using norms (e.g., the $L_2$ norm) of the error:
+
+$$\|u^{(n)} - u^{(n-1)}\| < \epsilon$$
+
+where $\epsilon$ is the tolerance level.
+
+- Importance of Convergence:  
+- Accuracy: Convergence guarantees that the computed solution accurately represents the physical problem and satisfies the governing equations.
+- Efficiency: Setting up a clear convergence criterion prevents unnecessary iterations, saving computational resources.
+- Stability: A well-converged solution is generally more stable and reliable, reducing the risk of numerical instabilities in further calculations or coupled simulations.
 
 ### Steps in the Iterative Solution Process
 
-1. **Initial Guess**:
-   - Start with an initial guess $u_i^{(1)}$.
+I. Initial Guess:  
 
-2. **Linearization**:
-   - Linearize the governing equations around the guess value.
+- Begin with an initial guess $u_i^{(1)}$ that is as close as possible to the expected solution. A good initial guess can greatly reduce the number of iterations needed.
 
-3. **Update Solution**:
-   - Compute the new values $u_i^{(m)}$ using the updated guess values from the previous iteration.
+II. Linearization:  
 
-4. **Check Convergence**:
-   - Compare the new solution with the previous iteration.
-   - If the difference is within the specified tolerance, the solution has converged.
+- Linearize the nonlinear term around the current guess $u_{ig}$ using the steps outlined above.
 
-5. **Iterate**:
-   - If the solution has not converged, use the new values as the guess for the next iteration and repeat the process.
+III. Update the Solution:  
+
+- Solve the resulting linear equation to obtain an updated solution $u_i^{(n)}$.
+
+IV. Check Convergence:  
+
+- Compare the new solution with the previous iteration. If the difference is below the specified tolerance, the solution has converged.
+
+V. Iterate:  
+
+- If convergence is not achieved, use $u_i^{(n)}$ as the new guess and repeat the linearization and solution process.
 
 ### Importance of Convergence
 
-- **Accuracy**: Ensures the solution accurately represents the physical problem.
-- **Efficiency**: Reduces computational resources by avoiding unnecessary iterations.
-- **Stability**: A well-converged solution is typically more stable and reliable.
+- Accuracy:  
+A converged solution means that the linearization error is minimized and the numerical solution accurately reflects the underlying physical phenomena.
 
+- Efficiency:  
+By setting up strong convergence criteria, the iterative process avoids unnecessary computations, thereby optimizing the use of computational resources.
+
+- Stability:  
+Convergence is often associated with numerical stability. A solution that has converged within a tight tolerance is less likely to exhibit erratic behavior, making sure that the results are both reliable and reproducible.
