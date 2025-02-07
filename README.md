@@ -54,6 +54,7 @@ This project is licensed under the [MIT License](LICENSE) - see the LICENSE file
 - [Scientific Computing by Chasnov: Computational Fluid Dynamics](https://math.libretexts.org/Bookshelves/Scientific_Computing_Simulations_and_Modeling/Scientific_Computing_(Chasnov)/III%3A_Computational_Fluid_Dynamics/14%3A_The_Governing_Equations)
 - [Machine Learning and Simulation by Ceyron](https://github.com/Ceyron/machine-learning-and-simulation)
 - [Introductory Finite Elements - FEM Notes and Code](https://github.com/AppliedMechanics-EAFIT/Introductory-Finite-Elements)
+- [Dolfin X FEM Tutorial](https://jsdokken.com/dolfinx-tutorial/fem.html)
 - [David Penner's Interesting Projects](https://davidpenner74.wixsite.com/davidpenner/projects)
 
 ### Video Tutorials
