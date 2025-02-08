@@ -26,7 +26,7 @@ $$p = p_0 + \rho g h.$$
 
 Thus, at depth $h$ below the free surface, the pressure exceeds the surface pressure by $\rho g h$.
 
-ASCII Diagram: Pressure in a Tank
+Pressure in a Tank:
 
 ```
 Free surface (z=0)
@@ -95,12 +95,14 @@ Since the fluid pressure **increases with depth**, the resultant force is not at
 
 $$F_b = \rho_{\text{fluid}} g V$$
 
+![archimedes_principle](https://github.com/user-attachments/assets/e776665c-a2c8-4220-9f31-dcfc4d3bae12)
+
 - Compare with the object’s weight $W = \rho_{\text{object}} \, g \, V$.  
 - If $\rho_{\text{object}} < \rho_{\text{fluid}}$, it **floats**.  
 - If $\rho_{\text{object}} > \rho_{\text{fluid}}$, it **sinks**.  
 - If densities match, it is **neutrally buoyant**.
 
-ASCII Diagram: Buoyancy
+Buoyancy:
 
 ```
 Object submerged
