@@ -1,6 +1,6 @@
 ### Airfoil Design
 
-![output(3)](https://github.com/user-attachments/assets/1bfe71cf-eeec-45c9-ba34-a9a142074655)
+![airfoil_profile](https://github.com/user-attachments/assets/1bfe71cf-eeec-45c9-ba34-a9a142074655)
 
 When examining a typical airfoil, such as a wing viewed from the side, several design features stand out that play a significant role in the aircraft's aerodynamics and performance.
 
