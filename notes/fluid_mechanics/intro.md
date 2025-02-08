@@ -4,22 +4,25 @@ Fluids form a broad class of materials that respond to applied forces by continu
 
 Exploring fluid behavior can start from a microscopic viewpoint, thinking about the countless molecules darting around and colliding with one another. However, directly analyzing fluid motion by tracking each individual molecule quickly becomes impossibly complex. Instead, fluid mechanics takes a more practical route, zooming out to focus on the bulk or macroscopic behavior of fluids. This approach simplifies the problem and reveals patterns and principles that guide everything from designing airplane wings to predicting weather patterns.
 
-```
-Microscopic vs. Macroscopic:
+**Microscopic vs. Macroscopic**:
 
-Microscopic (Molecular) View:
+![microscopic_view](https://github.com/user-attachments/assets/dae1b6b6-6215-413b-b285-4aa1495d8be7)
+
+
+I. Microscopic (Molecular) View:
+
+```
 ●   ●    ●  ● ●    ●
  ●   ●  ●    ●   ●
+```
+
 Molecules in constant random motion.
 
-Macroscopic (Continuum) View:
-Represent fluid as a continuous medium 
-with defined properties at each point:
-density, pressure, velocity, etc.
+II. Macroscopic (Continuum) View:
 
-By stepping back from individual molecules, 
-fluid properties become smoothly varying fields.
-```
+Represent fluid as a continuous medium  with defined properties at each point: density, pressure, velocity, etc.
+
+By stepping back from individual molecules, fluid properties become smoothly varying fields.
 
 ### From Molecules to Macroscopic Fluids
 
@@ -51,22 +54,7 @@ $$\frac{dp}{dz} = -\rho g,$$
 
 where $g$ is the acceleration due to gravity. This equation shows that going deeper into a fluid increases the pressure. It underlies familiar phenomena like ears popping when diving deeper into a swimming pool or the pressure differences that influence submarine design.
 
-```
-Pressure Variation with Depth:
-
-Surface (z=0):
-p = p_0 (atmospheric)
-~~~~~~~~~~~~~~~
-|             |
-v             v
-Deeper        Even deeper
-Water         Water
-Increasing    Increasing
-pressure      pressure
-
-Weight of fluid above increases 
-pressure at lower depths.
-```
+![pressure_variation_with_depth](https://github.com/user-attachments/assets/c105544c-c44f-4792-a580-75ac685d8097)
 
 In more dynamic settings, pressure interacts with fluid velocity and density through the governing equations. One such simplified relationship for incompressible, inviscid flow is given by Bernoulli’s equation. If a fluid moves faster at some point, its pressure often decreases, illustrating how pressure, velocity, and density connect in fluid motion.
 
