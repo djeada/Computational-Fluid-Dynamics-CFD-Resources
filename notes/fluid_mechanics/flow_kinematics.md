@@ -6,32 +6,32 @@ Kinematics in fluid mechanics is somewhat analogous to describing the paths and 
 
   
 ```
- Visualizing Flow Kinematics:
- ----------------------------
+Visualizing Flow Kinematics
+---------------------------
  
- Consider a fluid moving past a stationary object:
+   Consider a fluid flowing past a stationary object:
  
-    Velocity field lines:
-      --->  -->  --->   ---->
-         --->    --->  ---->
-      ----> --->   --->   ---->
+       Velocity Field Lines (Streamlines):
  
- Each arrow represents the velocity 
- of the fluid at a specific point.
- Flow kinematics involves describing 
- how these velocity vectors vary 
- in space and time.
+             --->   --->   --->   --->   --->
+         --->   --->   --->   --->   --->   --->
+      --->   --->  [  Object  ]  --->   --->  --->
+         --->   --->   --->   --->   --->   --->
+             --->   --->   --->   --->   --->
+ 
+   Each arrow represents the fluid’s velocity at a point.
+   Flow kinematics involves describing how these velocity 
+   vectors change in space and time.
+
 ```
 
-  
-## Lagrangian and Eulerian Descriptions
+### Lagrangian and Eulerian Descriptions
 
 In kinematics, there are two primary ways to describe fluid motion: the Lagrangian and Eulerian perspectives. The Lagrangian approach follows individual fluid particles as they move, much like tracking a single floating leaf down a river. The Eulerian approach focuses on specific points in space and observes how the fluid passes through them, more like installing sensors at fixed locations along the river bank.
 
 The Lagrangian viewpoint helps understand particle paths, whereas the Eulerian viewpoint is convenient for describing flow fields and working with field equations. In practice, most theoretical and computational fluid mechanics is done in the Eulerian framework, but switching between the two can offer insights into complex flows.
 
-  
-## Velocity and Acceleration Fields
+### Velocity and Acceleration Fields
 
 The fundamental starting point in flow kinematics is the velocity field $\vec{v}(x,y,z,t)$, which tells how fast and in which direction fluid moves at any point and time. Once velocity is known, it is possible to find acceleration by taking the substantial (or material) derivative of the velocity field.
 
@@ -46,24 +46,23 @@ $$\frac{D\vec{v}}{Dt} = \frac{\partial \vec{v}}{\partial t} + (\vec{v}\cdot\nabl
 This expression shows how fluid particles accelerate both because of local changes in velocity over time and because they move to regions with different velocities.
 
 ```
- Material Derivative Concept:
- ----------------------------
- 
- Think of a small fluid parcel:
- 
-   At time t0: Parcel at (x0,y0)
-   Moves to (x1,y1) at time t1.
- 
-   Property φ may vary in space and time.
-   As parcel moves, it "feels" changes in φ.
- 
- The material derivative tracks changes 
- that the parcel itself experiences, 
- combining local and convective effects.
+Material Derivative Concept:
+----------------------------
+
+Think of a small fluid parcel:
+
+ At time t0: Parcel at (x0,y0)
+ Moves to (x1,y1) at time t1.
+
+ Property φ may vary in space and time.
+ As parcel moves, it "feels" changes in φ.
+
+The material derivative tracks changes 
+that the parcel itself experiences, 
+combining local and convective effects.
 ```
 
-  
-## Deformation, Rotation, and Strain Rates
+### Deformation, Rotation, and Strain Rates
 
 Flow kinematics also characterizes how fluid elements deform. Consider a small fluid element initially shaped like a cube. As it moves through the flow, it may change shape due to velocity gradients. Deformation can be broken down into three categories:
 
@@ -77,31 +76,30 @@ Vorticity $\vec{\omega} = \nabla \times \vec{v}$ measures the fluid’s local sp
 
   
 ```
- Deformation of a Fluid Element:
- --------------------------------
- 
- Initial fluid element:
-   +-----+
-   |     |
-   |     |
-   +-----+
- 
- After passing through a region with velocity gradients:
-   Shear might tilt the element:
-     +------\
-     |       \
-     |        \
-     +---------\
- 
- Rotation might make it spin,
- stretching might elongate one side.
- 
- Analysis of these changes 
- quantifies strain rates and vorticity.
+Deformation of a Fluid Element:
+--------------------------------
+
+Initial fluid element:
+ +-----+
+ |     |
+ |     |
+ +-----+
+
+After passing through a region with velocity gradients:
+ Shear might tilt the element:
+   +------\
+   |       \
+   |        \
+   +---------\
+
+Rotation might make it spin,
+stretching might elongate one side.
+
+Analysis of these changes 
+quantifies strain rates and vorticity.
 ```
 
-  
-## Streamlines, Pathlines, and Streaklines
+### Streamlines, Pathlines, and Streaklines
 
 Flow kinematics offers different concepts for visualizing fluid motion:
 
@@ -111,21 +109,4 @@ Flow kinematics offers different concepts for visualizing fluid motion:
 
 These concepts often coincide in steady flows, where the flow pattern does not change with time. In unsteady flows, streamlines, pathlines, and streaklines can differ, providing insights into how the flow evolves and how particles navigate through it.
 
-  
-```
- Comparing Visualization Methods:
- --------------------------------
- 
- Imagine a steady flow in a pipe:
-   Streamlines = Pathlines = Streaklines
-   Because the flow pattern is constant,
-   all visualizations coincide.
- 
- In unsteady flow (e.g., a pulsating jet):
-   Streamlines at one instant may differ 
-   from pathlines (actual particle paths),
-   and streaklines (pattern from continuous 
-   injection of dye) may differ again.
-```
-
-![image](https://github.com/user-attachments/assets/10e6d8fa-2f8b-4a24-97fa-63ae9ac01f14)
+![steady_vs_unsteady_flow](https://github.com/user-attachments/assets/10e6d8fa-2f8b-4a24-97fa-63ae9ac01f14)
