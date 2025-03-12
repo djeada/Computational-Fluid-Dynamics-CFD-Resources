@@ -2,6 +2,8 @@
 
 In fluid dynamics, the behavior of fluid flows can be analyzed from two different viewpoints, known as the Eulerian and Lagrangian approaches. Each perspective offers a unique way to describe and understand fluid motion. Appreciating both methods can lead to a more comprehensive understanding of how fluids behave, whether you are studying airflow over a wing, predicting ocean currents, or tracking individual particles through complex fluid environments.
 
+![eulerian_lagrangian_flows](https://github.com/user-attachments/assets/5c8dbbd4-a00a-4f14-8d0e-058d84de7fe1)
+
 ## Eulerian Flow Description
 
 The Eulerian approach centers on observing what happens at fixed points in space as the fluid flows past. Instead of following any single parcel of fluid, the Eulerian view focuses on how properties such as **velocity**, **pressure**, and **density** change over time at specific locations. If you imagine a grid of sensors placed throughout a wind tunnel, the Eulerian method is like reading the data from each sensor as air moves across it. This perspective helps reveal patterns and structures in the flow field, making it easier to identify features like vortices, regions of high pressure, or turbulent wakes.
