@@ -5,15 +5,38 @@ Applying machine learning (ML) to computational fluid dynamics (CFD) offers new 
 Traditionally, generating an optimal computational mesh demands expert knowledge, iterative adjustments, and significant computational resources. Engineers rely on their intuition and years of experience to decide where to refine the mesh. Although goal-oriented adaptive refinement techniques exist, their complexity and computational cost often preclude their routine use in industrial settings. By integrating ML-based approaches, CFD workflows can be streamlined, enabling faster setup times and reducing the need for deep specialized knowledge—making high-fidelity simulations more accessible.
 
 ```
-ASCII Diagram: From Manual to ML-Driven Mesh Generation
+Traditional Process (Manual Mesh Generation)
+  ┌────────────────────┐      ┌────────────────────┐      ┌────────────────────┐
+  │  Expert Knowledge  │─────►│   Trial & Error    │─────►│    Refine Mesh     │
+  └────────────────────┘      └────────────────────┘      └────────────────────┘
+                                                    │
+                                                    ▼
+                                            ┌────────────────────┐
+                                            │     Validate       │
+                                            └────────────────────┘
+                                                    │
+                                                    ▼
+                                            ┌────────────────────┐
+                                            │      Repeat        │
+                                            └────────────────────┘
 
-  Traditional Process:
-    Expert Knowledge -> Trial & Error -> Refine Mesh -> Validate -> Repeat
-                  (Time-consuming, skill-intensive)
+---------------------------------------------------------
 
-  ML-Driven Approach:
-    Precomputed Optimal Meshes -> Train ML Model -> Predict Mesh Density -> Direct Use in CFD
-                  (Faster start, less trial & error)
+ML-Driven Approach (Mesh Generation with Machine Learning)
+  ┌─────────────────────────────┐      ┌─────────────────────────────┐
+  │ Precomputed Optimal Meshes  │─────►│     Train ML Model          │
+  └─────────────────────────────┘      └─────────────────────────────┘
+                                                    │
+                                                    ▼
+                                          ┌─────────────────────────────┐
+                                          │    Predict Mesh Density     │
+                                          └─────────────────────────────┘
+                                                    │
+                                                    ▼
+                                          ┌─────────────────────────────┐
+                                          │   Direct Use in CFD         │
+                                          └─────────────────────────────┘
+
 ```
 
 In this context, ML acts as a surrogate for the expensive and iterative procedures traditionally used to refine meshes. By learning from a database of high-quality meshes, the ML model can quickly predict a good starting point for new simulations. This predictive capability is particularly beneficial in industries where time-to-solution is important, and the availability of domain experts may be limited.
