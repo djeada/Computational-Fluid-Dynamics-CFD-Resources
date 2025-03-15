@@ -3,15 +3,43 @@
 Interacting with **Computer-Aided Design (CAD)** models through machine learning can open doors to faster, more flexible design workflows. While direct simulation remains computationally costly, machine learning models can create **compressed representations** of CAD objects, speeding up tasks like shape classification, similarity searches, and even geometry generation. Achieving this, however, demands extensive training data, often requiring simulation software and large-scale data processing to ensure models capture the full complexity of engineered shapes.
 
 ```
-ASCII Diagram: Traditional vs. ML-Driven CAD Workflows
+Traditional CAD Workflow
+        ┌─────────────┐      ┌────────────────┐
+        │   Design    │─────►│  Manual Edits  │
+        └─────────────┘      └────────────────┘
+                                   │
+                                   ▼
+                            ┌────────────────┐
+                            │  Simulation    │
+                            └────────────────┘
+                                   │
+                                   ▼
+                            ┌────────────────┐
+                            │    Refine      │
+                            └────────────────┘
+                                   │
+                                   ▼
+                            ┌────────────────┐
+                            │  Final Model   │
+                            └────────────────┘
 
-   Traditional CAD Workflow:
-       Design -> Manual Edits -> Simulation -> Refine -> Final Model
-          (Time-consuming, expertise-dependent)
+------------------------------------------------
 
-   ML-Augmented Workflow:
-       Text/Parameters -> ML Model -> Suggested CAD Geometry -> Validate/Refine
-          (Faster iteration, knowledge reuse)
+ML-Augmented CAD Workflow
+        ┌─────────────────────┐      ┌──────────────┐
+        │ Text / Parameters   │─────►│   ML Model   │
+        └─────────────────────┘      └──────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────────┐
+                         │ Suggested CAD Geometry     │
+                         └────────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────────┐
+                         │ Validate / Refine Model    │
+                         └────────────────────────────┘
+
 ```
 
 ## Practical Application: CAD Data Generation from Text
