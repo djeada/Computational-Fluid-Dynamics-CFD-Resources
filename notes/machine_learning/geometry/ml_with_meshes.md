@@ -1,6 +1,6 @@
 ## Machine Learning on Meshes
 
-Applying machine learning (ML) to computational fluid dynamics (CFD) offers new opportunities to optimize meshes, reducing both the time and expertise needed to achieve suitable accuracy. In the function by Huang, Krügener, Brown, Menhorn, Bungartz, and Hartmann (2021), ML is used to predict mesh densities that lead to improved simulation outcomes. This approach bridges the gap between traditional, human experience-driven mesh generation and modern, data-driven automation.
+Applying machine learning (ML) to computational fluid dynamics (CFD) offers new opportunities to optimize meshes, reducing both the time and expertise needed to achieve suitable accuracy.
 
 Traditionally, generating an optimal computational mesh demands expert knowledge, iterative adjustments, and significant computational resources. Engineers rely on their intuition and years of experience to decide where to refine the mesh. Although goal-oriented adaptive refinement techniques exist, their complexity and computational cost often preclude their routine use in industrial settings. By integrating ML-based approaches, CFD workflows can be streamlined, enabling faster setup times and reducing the need for deep specialized knowledge—making high-fidelity simulations more accessible.
 
@@ -146,3 +146,40 @@ An important aspect of the pre-processing step is the use of masking. Regions co
 The training phase involves thousands of mesh-image pairs, allowing the network to learn the complicated relationship between geometric features and optimal mesh density distributions. A masked loss function is used during training to make sure that errors in regions outside the fluid domain do not adversely affect the learning process. 
 
 A variety of hyperparameters are carefully tuned—ranging from the choice of optimizer (such as the Adam optimizer) to the configuration of skip connections and learning rates. Extensive experimentation shows that networks capable of capturing both large-scale patterns and minute details tend to perform best. The resulting model demonstrates high prediction accuracy, providing a reliable starting point for CFD simulations and, if necessary, further refinement using traditional methods.
+
+### Further Reading
+
+- **Machine Learning‑Based Optimal Mesh Generation in Computational Fluid Dynamics**  
+  *Keefe Huang, Moritz Krügener, Alistair Brown, Friedrich Menhorn, Hans‑Joachim Bungartz, Dirk Hartmann (2021)*  
+  Introduces a machine learning approach using convolutional neural networks to predict optimal mesh densities for efficient CFD simulations.  
+  [arXiv:2102.12923](https://arxiv.org/abs/2102.12923)
+
+- **MeshDQN: A Deep Reinforcement Learning Framework for Improving Meshes in Computational Fluid Dynamics**  
+  *Cooper Lorsung, Amir Barati Farimani (2023)*  
+  Proposes a reinforcement learning framework that iteratively coarsens meshes while maintaining accuracy in key CFD quantities such as lift and drag.  
+  [DOI:10.1063/5.0138039](https://doi.org/10.1063/5.0138039)
+
+- **MeshingNet: A New Mesh Generation Method based on Deep Learning**  
+  *Zheyan Zhang, Yongxing Wang, Peter K. Jimack, He Wang (2020)*  
+  Describes a novel deep learning–guided strategy that predicts local mesh density to drive automatic finite element mesh generation for various PDEs.  
+  [arXiv:2004.07016](https://arxiv.org/abs/2004.07016) 
+
+- **SpaceMesh: A Continuous Representation for Learning Manifold Surface Meshes**  
+  *Tianchang Shen, Zhaoshuo Li, Marc Law, Matan Atzmon, Sanja Fidler, James Lucas, Jun Gao, Nicholas Sharp (2024)*  
+  Presents an innovative neural network framework that directly generates manifold polygonal meshes through a continuous latent connectivity space, useful for mesh repair and other geometry processing tasks.  
+  [arXiv:2409.20562](https://arxiv.org/abs/2409.20562)
+
+- **Mesh Generation for Flow Analysis by Using Deep Reinforcement Learning**  
+  *Keunoh Lim, Sanga Lee, Kyungjae Lee, Kwanjung Yee (2024)*  
+  Demonstrates an approach in which a reinforcement learning agent optimally propagates surface mesh points, ensuring high-quality mesh generation for CFD analysis.  
+  [AIAA 2024-0382](https://doi.org/10.2514/6.2024-0382)
+
+- **A Survey of Deep Learning‑Based Mesh Processing**  
+  *He Wang & Juyong Zhang (2022)*  
+  Provides a comprehensive review of geometric deep learning methods applied to mesh processing, covering both graph‑based and structure‑based techniques.  
+  [Springer Link](https://link.springer.com/article/10.1007/s40304-021-00246-7)
+
+- **Autonomous Geometry Processing Using Machine Learning and Forge**  
+  *Autodesk University Article (2024)*  
+  Explores how machine learning techniques can be applied to extract, segment, and process mesh data from CAD models, with implications for reverse engineering and automated design.  
+  [Autodesk University](https://www.autodesk.com/autodesk-university/article/Autonomous-Geometry-Processing-Using-Machine-Learning-and-Forge) 
