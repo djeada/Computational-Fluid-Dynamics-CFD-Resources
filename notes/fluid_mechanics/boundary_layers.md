@@ -28,6 +28,7 @@ I. **No-Slip Condition**
 - This demands a large velocity gradient near the wall if free-stream velocity $U_\infty$ is significant.
 
 II. **Thin Region**  
+
 - Because viscosity is typically small, the layer where viscous stresses matter is thin compared to the overall flow domain (e.g., a small fraction of an aircraft wing chord).
 
 III. **Transition from Wall to Free Stream**  
@@ -39,16 +40,21 @@ III. **Transition from Wall to Free Stream**
 
 Because velocity changes continuously, there is no single abrupt boundary. Engineers define various **thicknesses** to quantify the boundary layer:
 
-I. **$\delta$ (Boundary-Layer Thickness)**  
-   - Commonly the distance from the wall to where the local velocity is about $0.99U_\infty$.  
+I. **$\delta$ (Boundary-Layer Thickness)**
+
+Commonly the distance from the wall to where the local velocity is about $0.99U_\infty$.  
+
 II. **$\delta^*$ (Displacement Thickness)**  
-   - A measure of how much the external inviscid flow is “displaced” by the presence of the boundary layer.  
 
-   $$\delta^* = \int_0^\delta \left(1 - \frac{u(y)}{U_\infty}\right) \, dy.$$
+A measure of how much the external inviscid flow is “displaced” by the presence of the boundary layer.  
+
+$$\delta^* = \int_0^\delta \left(1 - \frac{u(y)}{U_\infty}\right) \, dy.$$
+
 III. **$\theta$ (Momentum Thickness)**  
-   - Relates to the lost momentum flux due to the boundary layer.  
 
-   $$\theta = \int_0^\delta \frac{u(y)}{U_\infty}\left(1 - \frac{u(y)}{U_\infty}\right)\, dy.$$
+Relates to the lost momentum flux due to the boundary layer.  
+
+$$\theta = \int_0^\delta \frac{u(y)}{U_\infty}\left(1 - \frac{u(y)}{U_\infty}\right)\, dy.$$
 
 Velocity Profile & Thicknesses
 
@@ -58,8 +64,7 @@ Velocity Profile & Thicknesses
 
 ![laminar_vs_turbulent_boundary_layer](https://github.com/user-attachments/assets/f3c4d10c-e5c9-46c6-a51e-654283177761)
 
-
-* As Reynolds number (based on distance, $\Re_x = \frac{U_\infty x}{\nu}$) grows, the laminar layer can become unstable and transition to turbulence.
+> As Reynolds number (based on distance, $\Re_x = \frac{U_\infty x}{\nu}$) grows, the laminar layer can become unstable and transition to turbulence.
 
 #### Laminar Boundary Layer
 
