@@ -2,7 +2,7 @@
 
 A **boundary layer** is a thin region adjacent to a solid surface where viscous effects are significant. Outside this layer, the flow is often approximated as inviscid (or nearly so), but near the boundary, the fluid velocity transitions from zero at the wall (the **no-slip condition**) to the free-stream velocity away from the wall.
 
-* Ludwig Prandtl introduced the concept of boundary layers in 1904, revolutionizing fluid mechanics by explaining how viscosity, though small, remains critical in a thin layer near surfaces.
+> Ludwig Prandtl introduced the concept of boundary layers in 1904, revolutionizing fluid mechanics by explaining how viscosity, though small, remains critical in a thin layer near surfaces.
 
 ```
       Free Stream Velocity, U∞
@@ -23,13 +23,17 @@ A **boundary layer** is a thin region adjacent to a solid surface where viscous 
 ### Formation and Features
 
 I. **No-Slip Condition**  
-   - At a solid boundary, the fluid velocity exactly matches the wall velocity (zero if the wall is stationary).  
-   - This demands a large velocity gradient near the wall if free-stream velocity $U_\infty$ is significant.
+
+- At a solid boundary, the fluid velocity exactly matches the wall velocity (zero if the wall is stationary).  
+- This demands a large velocity gradient near the wall if free-stream velocity $U_\infty$ is significant.
+
 II. **Thin Region**  
-   - Because viscosity is typically small, the layer where viscous stresses matter is thin compared to the overall flow domain (e.g., a small fraction of an aircraft wing chord).
+- Because viscosity is typically small, the layer where viscous stresses matter is thin compared to the overall flow domain (e.g., a small fraction of an aircraft wing chord).
+
 III. **Transition from Wall to Free Stream**  
-   - Within the boundary layer, the velocity gradually increases from $0$ at the wall to $U_\infty$ in the outer region.  
-   - This gradient sets up shear stresses that dominate flow friction (skin friction drag).
+
+- Within the boundary layer, the velocity gradually increases from $0$ at the wall to $U_\infty$ in the outer region.  
+- This gradient sets up shear stresses that dominate flow friction (skin friction drag).
 
 ### Boundary-Layer Thickness Definitions
 
@@ -59,11 +63,11 @@ Velocity Profile & Thicknesses
 
 #### Laminar Boundary Layer
 
-- **Smooth, orderly** flow near the wall.  
-- Velocity profile is described by solutions like the **Blasius solution** (flat plate) or other exact solutions for simple geometries.  
-- Shear stresses are driven by molecular viscosity alone.  
-- Typically thinner, with less mixing than turbulent layers.  
-- More prone to **boundary-layer separation** under adverse pressure gradients.
+- The laminar flow exhibits a *smooth, orderly* motion near the wall.
+- The velocity profile is described by solutions such as the *Blasius solution* for a flat plate or other exact solutions for simple geometries.
+- Shear stresses in laminar flow are driven solely by molecular viscosity.
+- The boundary layer in laminar flow is typically thinner and experiences less mixing compared to turbulent layers.
+- Under adverse pressure gradients, laminar flow is more prone to *boundary-layer separation*.
 
 #### Example: Blasius (Flat Plate) Boundary Layer Growth
 
@@ -74,20 +78,18 @@ $$\delta \sim \sqrt{\frac{\nu x}{U_\infty}}$$
 
 #### Turbulent Boundary Layer
 
-- **Chaotic, swirling** flow near the wall.  
-- High mixing leads to a **fuller velocity profile** (larger velocity near the wall vs. laminar).  
-- Higher friction drag due to intense momentum transfer by turbulent eddies.  
-- More resistant to separation because turbulent mixing can supply momentum from outer flow to near-wall regions.
+- The turbulent flow near the wall is characterized by *chaotic, swirling* movement that defines its overall behavior.
+- High mixing in turbulent conditions produces a *fuller velocity profile* with higher velocities near the wall compared to laminar flow.
+- Intense momentum transfer by turbulent eddies results in increased *friction drag* on the surface.
+- The effective turbulent mixing supplies momentum from the outer flow to near-wall regions, offering improved *resistance to separation*.
 
 ### Boundary-Layer Equations
 
 Prandtl devised simplified **boundary-layer equations** under assumptions of:
 
-I. Small boundary-layer thickness $\delta$ compared to length scale $L$.
-
-II. Predominantly one-directional flow (streamwise) within the layer.
-
-III. Negligible pressure variation across the thin boundary layer (pressure taken from outer inviscid flow).
+- The boundary layer exhibits a *small boundary-layer thickness* $\delta$ when compared to the overall length scale $L$.
+- Within the layer, the flow is predominantly in one direction, indicating a strong *streamwise* component.
+- The pressure remains nearly constant across the thin boundary layer, reflecting a *negligible pressure variation* that is taken from the outer inviscid flow.
 
 #### Form of the 2D Boundary-Layer Equations
 
@@ -111,12 +113,11 @@ $$\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} = 0.$$
 
 When the pressure gradient becomes **adverse** (increasing pressure in the flow direction), the boundary layer can **separate** from the surface:
 
-- Near the wall, fluid lacks enough kinetic energy to overcome the rising pressure.
-- Flow **reverses** locally, forming a **separation bubble** or large separated region.
-* 
-- Dramatic increase in drag (pressure drag).  
-- Loss of lift on airfoils.  
-- Possible flow oscillations or unsteady vortex shedding.
+- Near the wall, the fluid lacks sufficient kinetic energy to overcome the increasing pressure, which leads to the *boundary layer* separating from the surface.
+- The local flow may reverse its direction, forming a *separation bubble* that defines the beginning of a separated region.
+- The separated flow contributes to an increase in pressure drag, resulting in a higher *pressure drag* on the surface.
+- Airfoils experience a reduction in lift as the disrupted flow alters the pressure distribution and diminishes the overall *lift*.
+- Unsteady flow behavior can occur, where the separated region develops a pattern of *vortex shedding* that produces flow oscillations.
 
 Flow Separation
 
