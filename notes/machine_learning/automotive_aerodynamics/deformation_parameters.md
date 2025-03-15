@@ -4,6 +4,31 @@ In the search for improved vehicle efficiency and performance, engineers commonl
 
 Parametric approaches often integrate with **computer-aided design (CAD)** software and **automatic meshing routines**, ensuring consistency from shape generation to CFD (computational fluid dynamics) analysis. Yet, implementing large deformations requires caution: overly aggressive parameter values risk geometry self-intersections or unphysical mesh distortions. Therefore, robust design-of-experiments (DoE) frameworks typically confine parameter ranges to maintain realistic configurations and reliable simulation quality.
 
+```
+                Original CAD Model
+                  +-----------+
+                  |           |
+                  |  Baseline |
+                  |  Geometry |
+                  +-----+-----+
+                        |
+                        | Apply Deformation Parameters
+                        v
+  +------------------------------------------------+
+  | Deformation Engine (Parameter-based Adjustments)|
+  |                                                |
+  |   - Bonnet LE Z-pos       - Ride Height (Pitch)|
+  |   - Ramp Angle            - Windscreen Angle    |
+  |   - Intakes Z-extension   - etc.               |
+  +------------------------------------------------+
+                        |
+                        v
+                Updated Geometry
+                 (Ready for Meshing)
+```
+
+Each parameter triggers a local (e.g., bonnet LE only) or global (e.g., entire body pitch) transformation. Afterward, the updated shape goes through **mesh generation**, followed by **CFD** or wind tunnel evaluations.
+
 ### Modern Parametric Workflow  
 
 I. **Parametric Definitions**: Assign numerical bounds and increments (or continuous ranges) for each deformation parameter, e.g. $\pm 20\%$ around the baseline.  
@@ -16,7 +41,7 @@ IV. **CFD Simulation**: Solve the Reynolds-averaged Navier–Stokes (RANS), larg
 
 V. **Data Storage and Analysis**: Record integral quantities (e.g., $C_d$, $C_l$) and field data for each geometry. This dataset can populate machine learning models, shape optimizers, or design trade-off studies.
 
-### Key Deformation Parameters  
+### Deformation Parameters  
 
 Automotive geometry is typically segmented into distinct zones (front fascia, cabin, underbody, rear deck, etc.). The parameters below represent common modifications, though the full list can vary with vehicle category and design goals.
 
@@ -86,45 +111,21 @@ Automotive geometry is typically segmented into distinct zones (front fascia, ca
   - Overly steep angles prompt flow separation, undermining the diffuser’s benefits.  
   - Too shallow yields limited pressure recovery, underutilizing underbody aerodynamics.
 
-### ASCII Diagram for Parametric Deformation  
-
-A conceptual ASCII workflow appears below, illustrating how these deformation parameters integrate into geometry shaping tools:
-
-```
-                Original CAD Model
-                  +-----------+
-                  |           |
-                  |  Baseline |
-                  |  Geometry |
-                  +-----+-----+
-                        |
-                        | Apply Deformation Parameters
-                        v
-  +------------------------------------------------+
-  | Deformation Engine (Parameter-based Adjustments)|
-  |                                                |
-  |   - Bonnet LE Z-pos       - Ride Height (Pitch)|
-  |   - Ramp Angle            - Windscreen Angle    |
-  |   - Intakes Z-extension   - etc.               |
-  +------------------------------------------------+
-                        |
-                        v
-                Updated Geometry
-                 (Ready for Meshing)
-```
-
-Each parameter triggers a local (e.g., bonnet LE only) or global (e.g., entire body pitch) transformation. Afterward, the updated shape goes through **mesh generation**, followed by **CFD** or wind tunnel evaluations.
-
 ### Validation and Optimization  
 
 After each deformation:
 
-I. **CFD Simulation**  
-   - RANS or LES calculations estimate the aerodynamic response ($C_d$, $C_l$, wake patterns, etc.).  
-   - Data is stored in a parametric database for correlation with deformation settings.
-II. **Wind Tunnel or Road Tests**  
-   - When available, physical prototyping or scaled models validate the parametric results.  
-   - Discrepancies highlight potential modeling gaps (e.g., turbulence assumptions, neglected thermal effects).
+I. **CFD Simulation**
+
+- RANS or LES calculations estimate the aerodynamic response ($C_d$, $C_l$, wake patterns, etc.).  
+- Data is stored in a parametric database for correlation with deformation settings.
+
+II. **Wind Tunnel or Road Tests**
+
+- When available, physical prototyping or scaled models validate the parametric results.  
+- Discrepancies highlight potential modeling gaps (e.g., turbulence assumptions, neglected thermal effects).
+
 III. **Optimization Loop**  
-   - **Gradient-based or heuristic** (e.g., genetic algorithms) methods search for parameter combinations yielding minimal drag, suitable downforce, or balanced performance.  
+
+- **Gradient-based or heuristic** (e.g., genetic algorithms) methods search for parameter combinations yielding minimal drag, suitable downforce, or balanced performance.  
 - Regression or graph-based neural networks learn from the parametric dataset, predicting aerodynamics without re-running full CFD.
