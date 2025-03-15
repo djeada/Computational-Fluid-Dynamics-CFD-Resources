@@ -114,31 +114,20 @@ GANs pit a generator (producing shapes) against a discriminator (judging plausib
 **Supervised Learning**:  
 Initial mapping from text descriptions to geometric descriptors often involves supervised learning, where models learn from pairs of (text, known geometry). Regression or classification techniques can predict continuous shape parameters (e.g., dimensions) or discrete labels (e.g., presence of certain features).
 
-## Literature and Resources
+### Further Reading
 
-Exploring foundational resources enriches understanding:
+Deepen your understanding of how machine learning transforms CAD and geometric modeling through a range of foundational texts, seminal papers, and practical resources:
 
-**Key Books**:  
-"**Deep Learning**" by Goodfellow, Bengio, and Courville provides a comprehensive introduction to neural network fundamentals. "**Pattern Recognition and Machine Learning**" by Bishop covers essential statistical and ML methods.
+**Books**  
+- **Deep Learning** by Ian Goodfellow, Yoshua Bengio, and Aaron Courville  
+  A comprehensive introduction covering neural network fundamentals and deep learning architectures, forming the theoretical backbone for ML applications in CAD.  
+- **Pattern Recognition and Machine Learning** by Christopher Bishop  
+  An essential resource for statistical methods and machine learning techniques that underpin many modern approaches to shape analysis and 3D modeling.
 
-**Research Papers**:  
-Wu et al. have explored 3D shape generation with GANs, while Han et al. surveyed deep learning methods for geometric shape understanding. These offer insights into state-of-the-art techniques and their applications in shape generation.
-
-**Online Tutorials and Courses**:  
-Digital learning platforms (e.g., Coursera, edX) present ML basics. Public GitHub repositories often share code for CAD-related ML projects, enabling practical, hands-on experimentation.
-
-```
-ASCII Diagram: Learning and Evolving the System
-
-   Initial Setup:
-     Collect Data -> Train Model -> Evaluate
-        |
-        v
-   Refine:
-     Add More Data, Tune Hyperparameters, Improve NLP Embeddings
-        |
-        v
-   Evolved System:
-     More Accurate, Generalizable Model
-     Produces CAD Shapes Closer to Intended Descriptions
-```
+**Research Papers**  
+- **MeshCNN: A Network with an Edge** by Hanocka et al. (2019)  
+  Explores novel architectures for learning directly on mesh data, which is crucial for processing and optimizing CAD models.  
+- **Pixel2Mesh: Generating 3D Mesh Models from Single RGB Images** by Wang et al. (2018)  
+  Demonstrates how deep learning can reconstruct 3D CAD models from 2D images, bridging computer vision with CAD model generation.  
+- **Deep Learning for Geometric Shape Understanding** by Han et al.  
+  Provides a thorough survey of deep learning techniques applied to the interpretation and processing of geometric data, offering valuable insights into state-of-the-art methods for CAD applications.
