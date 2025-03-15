@@ -120,6 +120,7 @@ depends on Fr = U / sqrt(gL).
 $$We = \frac{\rho \, U^2 \, L}{\sigma},$$
 
 where:
+
 - $\sigma$ is surface tension,
 - $\rho$ fluid density,
 - $U$ velocity,
@@ -248,9 +249,9 @@ This dimensionless group represents the ratio of inertial forces to viscous forc
 
 Each $\pi$-group carries physical significance, encapsulating the relationships between different forces, timescales, and energy balances within the system. For example:
 
-- **Reynolds Number ($Re$)**: Indicates the relative importance of inertial versus viscous forces. High $Re$ suggests turbulent flow, while low $Re$ indicates laminar flow.
-- **Mach Number ($Ma$)**: Represents the ratio of the object's speed to the speed of sound, indicating the significance of compressibility effects.
-- **Strouhal Number ($St$)**: Relates oscillatory flow phenomena to the flow velocity and characteristic length, useful in studying vortex shedding and oscillations.
+- The *Reynolds Number (Re)* indicates the relative importance of inertial versus viscous forces, with high values suggesting turbulent flow and low values pointing to laminar flow.
+- The *Mach Number (Ma)* represents the ratio of an object's speed to the speed of sound, providing insight into the effects of compressibility in the flow.
+- The *Strouhal Number (St)* relates oscillatory flow phenomena to the flow velocity and a characteristic length, making it useful for studying vortex shedding and oscillations.
 
 Understanding these interpretations allows engineers to predict and control aerodynamic behaviors effectively.
 
