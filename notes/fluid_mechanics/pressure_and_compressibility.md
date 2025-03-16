@@ -1,12 +1,18 @@
 ## Pressure and Compressibility
 
-Understanding how pressure behaves in fluids that can be compressed is important for accurately describing and predicting the flow of gases at different speeds and conditions. When fluid velocities approach the speed of sound, changes in density and pressure waves become significant, leading to what is known as compressible flow. At lower speeds, where these pressure waves have little effect, the flow can be approximated as incompressible. This distinction matters greatly in fields like aeronautics, where an aircraft’s Mach number (its speed relative to the speed of sound) determines whether compressibility needs to be accounted for.
+Accurately describing how **pressure** behaves in compressible fluids is important for predicting flows where **density** changes and **pressure waves** are significant. When fluid speeds approach or exceed the speed of sound, such density variations strongly affect the flow field, characterizing the regime as **compressible flow**. At lower speeds, density changes are often insignificant, allowing an **incompressible flow** approximation.
+
+This distinction is important in many applications:
+
+- **Aeronautics:** Aircraft speeds relative to the speed of sound (Mach number) dictate whether compressibility effects (like shocks) must be accounted for.  
+- **Industrial flows and pipelines:** Gases moving at high speed can generate shock waves, influencing safety and efficiency.  
+- **Acoustics and noise control:** The propagation of pressure waves in gases depends on the speed of sound and compressibility.
+
+### Visualizing Compressible Flow
 
 ```
- Visualizing Compressible Flow:
- 
- Imagine air moving through a nozzle:
- 
+Imagine air moving through a nozzle:
+
     Narrowing nozzle (increasing speed)
     ----------------->   --->   -> 
    (Low Ma)                     (Higher Ma)
@@ -15,106 +21,165 @@ Understanding how pressure behaves in fluids that can be compressed is important
      incompressible         compressible
          flow                 flow region
 
- As the air accelerates to speeds closer 
- to the speed of sound, density changes and 
- pressure waves must be considered.
+As the air accelerates to speeds closer 
+to the speed of sound, density changes and 
+pressure waves must be considered.
 ```
 
-The governing equations for compressible flow include the continuity equation, momentum equations (Navier-Stokes), the equation of state, and any relevant boundary conditions. Pressure waves traveling at the local speed of sound influence how the fluid responds to changes. At speeds much lower than the speed of sound, these waves do not strongly affect the flow, allowing one to treat density as nearly constant and ignore compressibility effects.
+At **low Mach numbers**, acoustic waves have minimal influence on bulk flow properties, so density can be approximated as constant. At **high Mach numbers**, these pressure waves (traveling at or near the local speed of sound) strongly impact the flow, making compressibility effects unavoidable.
 
 ### Governing Equations
 
-These equations define the system and characterize compressible behavior:
+When modeling a **compressible** fluid (such as air at higher speeds), **density** $\rho$, **pressure** $p$, and **temperature** $T$ can all vary. The primary equations include:
 
-• The equations of motion and state describe how pressure, density, and velocity interact in compressible conditions.  
+I. **Continuity (Mass Conservation)**  
 
-• Pressure waves travel at the speed of sound, about **347 m/s at 1 atm and 300 K**, carrying information about changes in the flow.  
+$$\frac{\partial \rho}{\partial t} + \nabla \cdot \bigl(\rho,\mathbf{u}\bigr) = 0$$  
 
-• Compressible flow models must handle these traveling waves, whereas incompressible flow approximations can ignore them.
+where $\mathbf{u} = (u, v, w)$ is the velocity vector. This equation enforces overall mass conservation.
+
+II. **Momentum (Navier–Stokes)**  
+
+$$\frac{\partial (\rho,\mathbf{u})}{\partial t}
++ \nabla \cdot \bigl(\rho,\mathbf{u},\mathbf{u} + p,\mathbf{I} - \boldsymbol{\tau}\bigr)
+= \rho,\mathbf{f}$$  
+
+- $\mathbf{u}\mathbf{u}$ is the outer product of the velocity vector with itself.  
+- $p,\mathbf{I}$ is the isotropic pressure term ($\mathbf{I}$ = identity tensor).  
+- $\boldsymbol{\tau}$ is the viscous stress tensor.  
+- $\mathbf{f}$ is a body force per unit volume, such as $\rho,\mathbf{g}$ for gravity.
+
+III. **Energy Equation**  
+
+A common form for the total energy $E$ (internal + relating to motion) is:
+
+$$\frac{\partial (\rho,E)}{\partial t}
++ \nabla \cdot \Bigl[\mathbf{u},(\rho,E + p) - \mathbf{q}\Bigr]
+= \rho,\mathbf{f},\cdot,\mathbf{u}$$  
+
+- $E = e + \tfrac{1}{2}|\mathbf{u}|^2$, with $e$ the internal energy per unit mass.  
+- $\mathbf{q}$ is the heat flux (e.g., $\mathbf{q} = -k,\nabla T$).  
+- The right-hand side represents function done by body forces.
+
+IV. **Equation of State**  
+
+For an ideal gas,
+
+$$p = \rho,R,T$$
+
+linking pressure, density, and temperature. The gas constant $R$ is specific to the fluid in question (e.g., for air, $R \approx 287,\text{J/(kg·K)}$).
+
+### Speed of Sound and Pressure Waves
+
+A key hallmark of **compressible** flow is the presence of **acoustic waves**, traveling at the local speed of sound $a$. For an ideal gas:
+
+$$a = \sqrt{\gamma,\frac{p}{\rho}} = \sqrt{\gamma,R,T}$$
+
+where $\gamma = \tfrac{C_p}{C_v}$ is the ratio of specific heats. At standard atmospheric conditions ($1\text{ atm}$ and $300\text{ K}$), the speed of sound in air is about **347 m/s**.
+
+- In **compressible** flow, these pressure waves strongly influence how the fluid responds to changes.  
+- In **incompressible** flow, we effectively set $a \to \infty$, ignoring acoustic wave propagation since density is (nearly) constant.
 
 ### Compressible vs. Incompressible Flow
 
-Considering how close the flow speed is to the speed of sound helps determine whether compressibility matters. At low Mach numbers, defined as **Ma = v/c** where **v** is the flow velocity and **c** is the speed of sound, density changes are small enough to be neglected. Bernoulli’s equation for incompressible flow states:
+Whether a flow is treated as compressible or incompressible often depends on the **Mach number**:
 
-$$\Delta P = \frac{\rho \Delta v^2}{2}.$$
+$$\mathrm{Ma} = \frac{\|\mathbf{u}\|}{a}$$
 
-Taking pressures relative to stagnation and substituting $\Delta v = v$:
+where $\|\mathbf{u}\|$ is the flow velocity magnitude and $a$ is the local speed of sound.
 
-$$\frac{\Delta P}{P} = \frac{\gamma}{2} \text{Ma}^2,$$
+- **Incompressible Flow ($\mathrm{Ma} \ll 1$)**  
+  - Density $\rho$ is nearly constant.  
+  - Simplifies to $\nabla \cdot \mathbf{u} = 0$.  
+  - Pressure adjusts to enforce mass conservation rather than carrying significant compressibility effects.
+- **Compressible Flow ($\mathrm{Ma} \approx 1$ or higher)**  
+  - Density varies with changes in pressure and temperature.  
+  - Must account for shocks, expansion waves, and other high-speed phenomena.  
+  - Requires specialized numerical schemes (finite-volume, Riemann solvers, etc.).
+A practical **rule of thumb** in engineering is that if $\mathrm{Ma} < 0.3$, compressibility effects are insignificant, and an incompressible approximation is usually valid.
 
-where **$\gamma = c_p/c_v$** is the ratio of specific heats. As speed increases, the Mach number grows, and so does the relative change in pressure. For example:
+#### Quantifying Pressure Changes with Mach Number
 
-• At **v = 100 m/s**, Ma ≈ 0.288 at 1 atm, giving $\Delta P/P_{\text{atm}}$ ≈ 6%. This small percentage shows that density changes remain modest.  
+A simplified Bernoulli-like relation suggests:
 
-• At **v = 347 m/s**, Ma = 1 at 1 atm, giving $\Delta P/P_{\text{atm}}$ ≈ 70%, indicating substantial compressibility effects.
+$$\frac{\Delta P}{P} \approx \frac{\gamma}{2},\mathrm{Ma}^2$$
 
-When **Ma < 0.3**, compressibility effects are usually negligible, allowing the flow to be considered incompressible. This threshold is widely used as a practical guideline in engineering calculations.
+- At $\mathrm{Ma} = 0.1$: $\Delta P / P$ is around 0.5%, often considered insignificant.  
+- At $\mathrm{Ma} = 0.3$: $\Delta P / P$ grows to a few percent—still small but not always trivial.  
+- Approaching $\mathrm{Ma} = 1$: $\Delta P$ becomes a significant fraction of $P$.
+When speeds reach a substantial fraction of the speed of sound, treating the flow as incompressible can yield large errors; **density changes matter** and must be included.
+
+#### Example: Air Moving Through a Pipe
+
+Below is a schematic illustrating how **incompressible** vs. **compressible** flow assumptions matter. At lower speeds, density remains nearly constant; at higher speeds, density variations and pressure waves dominate.
+
+![compressible_vs_incompressible](https://github.com/user-attachments/assets/73f166dd-d6da-45aa-91b2-16f0cdd52d8e)
+
+**Incompressible Flow (Low Speed):**  
+
+- Pressure primarily adapts to satisfy $\nabla \cdot \mathbf{u} = 0$.  
+- No need to model fast acoustic waves; density changes are ignored.
+
+**Compressible Flow (High Speed):**  
+
+- Density and pressure are closely coupled.  
+- Speed of sound governs the propagation of waves and shocks.  
+- Numerical modeling grows more complicated, requiring explicit treatment of compressibility.
 
 ### Low-Mach Flows and Numerical Stiffness
 
-Even at low Mach numbers, if the flow is considered compressible in a numerical simulation, one must account for the presence of acoustic waves (sound waves), which are very fast compared to the flow velocity. Unsteady flow solvers must take very small timesteps to resolve these fast-moving waves. The required ratio of timesteps increases as Mach number decreases, because the speed of sound dominates the timescale:
+When $\mathrm{Ma}$ is small, a **fully compressible** solver must still resolve **acoustic waves**, which travel at speed $a \gg \|\mathbf{u}\|$. For explicit time-integration methods, the **timestep** $\Delta t$ is limited by the highest wave speed present (the **Courant–Friedrichs–Lewy (CFL)** condition). Consequently:
 
-• The ratio of stability-driven timesteps to accuracy-driven timesteps is $1 + 1/\text{Ma}$.  
+- **Stability Constraint:** $\Delta t$ must be small enough to capture acoustic waves.  
+- **Accuracy Constraint:** $\Delta t$ also must resolve the slower convective flow speed $\|\mathbf{u}\|$.  
 
-• At **Ma = 0.1**, this ratio is 11, meaning 11 times more steps are needed for stability than would be required for accuracy alone. This situation makes the problem numerically **stiff**, prompting methods to reduce this computational burden.
 
-## Incompressible Flow
+Because $\|\mathbf{u}\| / a = \mathrm{Ma} \ll 1$, **acoustic waves** can force **very small** $\Delta t$. This introduces **numerical stiffness**, drastically increasing computational cost.
 
-In cases where the Mach number is low and compressibility is negligible, assuming **incompressible flow** simplifies the equations dramatically. Density is taken as constant, and the energy equation can often be ignored. Removing density changes also removes the need to handle acoustic waves, eliminating the numerical stiffness associated with them. With incompressibility, the pressure field adapts itself to satisfy mass conservation constraints, effectively decoupling pressure from density changes.
+#### Removing Stiffness via Incompressible Approximation
 
-```
- Incompressible Flow Visualization:
- 
- Consider a pipe with water:
- 
-     --> --> -->  (constant density)
- 
-  Pressure adjusts to ensure 
-  mass conservation. Density 
-  remains constant, removing 
-  the compressibility complexity.
-```
+To avoid solving for extremely fast acoustic waves at small Mach numbers, many simulations use an **incompressible** flow model:
 
-### Numerical Stiffness Removal
+I. **Assume $\rho \approx \text{constant}$** throughout the domain.  
 
-Assuming incompressibility allows using methods like the pressure projection technique:
+II. **Drop the equation of state** for $\rho$.  
 
-• Density stays constant, $\rho = \text{const}$.  
+III. **Continuity equation** becomes $\nabla \cdot \mathbf{u} = 0$.  
 
-• The energy equation can be ignored, simplifying the math.  
+IV. **Pressure** enforces $\nabla \cdot \mathbf{u} = 0$, rather than evolving from acoustic considerations.
 
-• Equations reduce to mass conservation and momentum conservation.
+This removes the large disparity in wave speeds and allows larger timesteps, **greatly reducing** the computational burden for $\mathrm{Ma} \ll 1$ flows.
 
-The nondimensionalized forms of the mass and momentum equations, ignoring gravity, are:
+### Deriving the Pressure Equation (Incompressible Flow)
 
-Mass Conservation:
+In an **incompressible** flow solver, one typically uses a **pressure projection** or **pressure correction** approach:
 
-$$\int_A \vec{v} \cdot \vec{n} \, dA = 0,$$
+I. **Predictor Step (Momentum Update):**  
 
-ensuring that there is no net flux of fluid out of any closed surface.
+$$\mathbf{u}^* = \mathbf{u}^n
++ \Delta t \Bigl[-\nabla \cdot (\mathbf{u}\mathbf{u}) - \nabla \cdot \hat{\boldsymbol{\tau}}\Bigr]^n$$
 
-Momentum Conservation:
+ignoring the new-time pressure term (or using an old-time guess).
 
-$$\frac{d}{dt} \int_V \vec{v} \, dV + \int_A \vec{v}(\vec{v}\cdot\vec{n}) \, dA = -\int_A \hat{\boldsymbol{\tau}}\cdot\vec{n} \, dA - \int_A \hat{P}\boldsymbol{\delta}\cdot\vec{n} \, dA,$$
+II. **Enforce Continuity:**  
 
-where $\hat{\tau} = \tau/\rho$ and $\hat{P} = P/\rho$. The momentum equation determines velocity given a pressure field, but there is no standalone pressure equation. Instead, pressure must be found by ensuring that the velocity field remains divergence-free.
+$\nabla \cdot \mathbf{u}^{n+1} = 0$  
 
-### Deriving the Pressure Equation
+Since $\mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t ,\nabla \hat{P}^{,n+1}$,
 
-Combining the mass and momentum equations leads to a scalar pressure Poisson equation. Starting from the momentum update:
+applying $\nabla \cdot$ to both sides yields:
 
-$$v^{n+1} = v^n + h(-\nabla \cdot vv - \nabla \cdot \hat{\boldsymbol{\tau}})^n - h\nabla \hat{P}^{n+1},$$
+$$\nabla^2 \hat{P}^{,n+1}
+= \frac{1}{\Delta t},\nabla \cdot \mathbf{u}^*$$
 
-where $h = \Delta t$. Applying $\nabla \cdot$ and using $\nabla \cdot v=0$:
+III. **Corrector Step (Pressure Update):**  
 
-$$\nabla^2 \hat{P}^{n+1} = \frac{1}{h}\nabla \cdot (v^n + h(-\nabla \cdot vv - \nabla \cdot \hat{\boldsymbol{\tau}})^n).$$
+Solve this **Poisson equation** for $\hat{P}^{,n+1} = P^{n+1}/\rho$. Then update  
 
-Once $\hat{P}^{n+1}$ is found, the corrected velocity satisfies continuity:
+$$\mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t,\nabla \hat{P}^{,n+1}$$
 
-$$v^{n+1} = H^n - h\nabla \hat{P}^{n+1},$$
+The result is a divergence-free velocity field.
 
-with $H^n = v^n + h(-\nabla \cdot vv - \nabla \cdot \hat{\boldsymbol{\tau}})^n$.
+#### Boundary Conditions and Pressure Fields
 
-### Boundary Conditions and Pressure Fields
-
-Pressure boundary conditions emerge naturally from applying the momentum equation at boundaries. The result is a velocity field that inherently satisfies incompressibility. Pressure acts as the force that adjusts velocities so that no net fluid accumulates or disappears, effectively enforcing the mass conservation constraint.
+For **incompressible** flow, the pressure boundary conditions arise from the momentum equation plus the requirement of zero normal velocity flux at solid walls (or specified inflow/outflow conditions). The resulting Poisson equation for pressure makes sure mass conservation ($\nabla \cdot \mathbf{u}^{n+1} = 0$). Thus, **pressure** acts as a **Lagrange multiplier**, enforcing incompressibility by adjusting velocities so that fluid neither compresses nor dilates within the domain.
