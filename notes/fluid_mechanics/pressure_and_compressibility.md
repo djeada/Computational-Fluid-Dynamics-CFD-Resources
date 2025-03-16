@@ -10,21 +10,11 @@ This distinction is important in many applications:
 
 ### Visualizing Compressible Flow
 
-```
 Imagine air moving through a nozzle:
 
-    Narrowing nozzle (increasing speed)
-    ----------------->   --->   -> 
-   (Low Ma)                     (Higher Ma)
-        |                        |
-        v                        v
-     incompressible         compressible
-         flow                 flow region
+![nozzle_flow](https://github.com/user-attachments/assets/59f30e4b-664a-4e9b-a438-a305eac2f131)
 
-As the air accelerates to speeds closer 
-to the speed of sound, density changes and 
-pressure waves must be considered.
-```
+As the air accelerates to speeds closer to the speed of sound, density changes and pressure waves must be considered.
 
 At **low Mach numbers**, acoustic waves have minimal influence on bulk flow properties, so density can be approximated as constant. At **high Mach numbers**, these pressure waves (traveling at or near the local speed of sound) strongly impact the flow, making compressibility effects unavoidable.
 
