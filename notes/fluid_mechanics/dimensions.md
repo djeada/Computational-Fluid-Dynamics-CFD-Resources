@@ -25,10 +25,9 @@ This approach helps engineers and scientists design experiments and interpret da
 
 ### Benefits of Dimensional Analysis
 
-I. **Reduced Experimentation**: Instead of testing every combination of fluid velocity, fluid density, viscosity, etc., we can test dimensionless combinations (like **Reynolds number**) that collapse multiple variables into fewer groups.  
-II. **Similarity & Scale Models**: We can build smaller-scale models (in wind tunnels, water channels, etc.) that reproduce dimensionless parameters. If these match the full-scale condition, the smaller model can accurately predict real-world performance.  
-
-III. **Generalization**: Once a dimensionless correlation (e.g., drag coefficient vs. Reynolds number) is found, it applies broadly across different scales, fluids, or velocities, as long as those dimensionless numbers match.
+- We can reduce experimentation by testing fewer variable combinations when using *Reynolds number* to collapse fluid velocity, density, viscosity, and similar factors into dimensionless groups.  
+- We can accurately predict full-scale performance by constructing *scale models* in wind tunnels or water channels that replicate the necessary dimensionless parameters.  
+- We can apply a found *dimensionless correlation* broadly across various scales, fluids, or velocities as long as the corresponding dimensionless numbers are matched.
 
 ### Common Dimensionless Numbers
 
