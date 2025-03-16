@@ -142,8 +142,7 @@ In an **incompressible** flow solver, one typically uses a **pressure projection
 
 I. **Predictor Step (Momentum Update):**  
 
-$$\mathbf{u}^* = \mathbf{u}^n
-+ \Delta t \Bigl[-\nabla \cdot (\mathbf{u}\mathbf{u}) - \nabla \cdot \hat{\boldsymbol{\tau}}\Bigr]^n$$
+$$\mathbf{u}^* = \mathbf{u}^n + \Delta t \Bigl[-\nabla \cdot (\mathbf{u}\mathbf{u}) - \nabla \cdot \hat{\boldsymbol{\tau}}\Bigr]^n$$
 
 ignoring the new-time pressure term (or using an old-time guess).
 
