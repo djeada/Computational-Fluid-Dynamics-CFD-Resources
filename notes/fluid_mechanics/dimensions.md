@@ -43,8 +43,6 @@ $$Re = \frac{\rho \, U \, L}{\mu} \quad \text{or} \quad \frac{V \, D}{\nu}$$
 - High $Re$ $\rightarrow$ turbulent flow.  
 - Pipe flow (see Moody diagram), flow over wings, atmospheric boundary layers, etc.
 
-ASCII Diagram: 
-
 ```
 Inertial forces     ~ ρ U^2
 Viscous forces      ~ μ (dU/dy) 
@@ -69,23 +67,6 @@ where:
 - $Ma \gg 1$ $\rightarrow$ hypersonic flow.  
 - Aeronautics, rockets, high-speed turbines, nozzle design, shock waves, compressibility effects.
 
-ASCII Diagram
-
-```
-Subsonic (Ma < 1): Disturbances travel 
-ahead of body easily. Streamlines smooth. 
-
-Transonic (Ma ~ 1): Mixed flow. Shock waves 
-can form locally. 
-
-Supersonic (Ma > 1): Shock waves form. 
-Large compressibility effects.
-
-Hypersonic (Ma >> 1): Severe heating, 
-real gas effects, shock boundary-layer 
-interactions more extreme.
-```
-
 #### Froude Number $(Fr)$
 
 $$Fr = \frac{U}{\sqrt{g L}}$$
@@ -101,19 +82,14 @@ where:
 - High $Fr$ $\rightarrow$ planing hull regime, strong wave formation.  
 - Ship hydrodynamics, open-channel flows, wave basins for maritime design.
 
-ASCII Diagram:
-
-```
 Ship hull in water:
 
-     ~~~~~~~~~~~~~~~~~~~~~ free surface
-          |\  Water flows around hull
-Speed U ->|  \ 
-          |____\  
-Waves form along hull. The 
-severity of wave drag 
-depends on Fr = U / sqrt(gL).
-```
+![ship_hull_in_water](https://github.com/user-attachments/assets/f1265bd2-3b3c-4860-87a2-7a90a9fdc064)
+
+
+Waves form along hull. The severity of wave drag depends on $Fr = \frac{U}{\sqrt{g L}}$.
+
+![froude_number](https://github.com/user-attachments/assets/ddb113c5-865b-41ff-a3cf-d9146d8d5204)
 
 #### Weber Number $(We)$
 
@@ -157,17 +133,13 @@ where:
 - To replicate **aerodynamic** phenomena in a wind tunnel, match **Re**, possibly **Ma** if compressibility is relevant.
 - To replicate **ship hydrodynamics**, match **Fr** so wave behavior is consistent between model and full-sized vessel.
 
-ASCII Diagram:
+| **Scale Model (smaller)**                                   | **Real Object (full-scale)**                                      |
+|-------------------------------------------------------------|-------------------------------------------------------------------|
+| $\mathrm{Re}_{model} = \mathrm{Re}_{full}$                  | $\displaystyle \frac{\rho\, U\, L_{model}}{\mu} = \frac{\rho\, U\, L_{full}}{\mu}$  |
+| $\mathrm{Ma}_{model} = \mathrm{Ma}_{full}$                  | $\displaystyle \frac{U_{model}}{c_{model}} = \frac{U_{full}}{c_{full}}$                |
+| ...                                                         | ...                                                               |
 
-```
-Scale Model (smaller)  |  Real Object (full-scale)
-Re_model = Re_full    =>  (ρ U L_model)/μ = (ρ U L_full)/μ
-Ma_model = Ma_full    =>  U_model / c_model = U_full / c_full
-...
-
-If these dimensionless #s match => Flow physics 
-in the model should mimic the real system.
-```
+If these dimensionless #s match => Flow physics in the model should mimic the real system.
 
 ### Example: A Wind Tunnel Test
 
@@ -203,14 +175,16 @@ Dimensional analysis is a systematic method used to understand the relationships
 
 The first step in dimensional analysis is to identify all the relevant physical quantities that influence the phenomenon under study. For a wind tunnel test of an airplane wing, variables might include:
 
-- **Velocity ($U$)**: The speed of the airflow relative to the wing.
-- **Density ($\rho$)**: The mass per unit volume of the air.
-- **Viscosity ($\mu$)**: A measure of the fluid's resistance to deformation.
-- **Length Scale ($L$)**: Characteristic dimensions of the wing, such as chord length or wingspan.
-- **Force ($F$)**: Lift and drag forces acting on the wing.
-- **Pressure ($P$)**: Air pressure acting on the wing surfaces.
-- **Temperature ($T$)**: Ambient temperature affecting air properties.
-- **Speed of Sound ($c$)**: Relevant for calculating Mach number.
+| **Parameter** | **Definition**                                                                              |
+|---------------|---------------------------------------------------------------------------------------------|
+| $U$         | Velocity: The speed of the airflow relative to the wing.                                    |
+| $\rho$      | Density: The mass per unit volume of the air.                                               |
+| $\mu$       | Viscosity: A measure of the fluid's resistance to deformation.                              |
+| $L$         | Length Scale: Characteristic dimensions of the wing, such as chord length or wingspan.      |
+| $F$         | Force: Lift and drag forces acting on the wing.                                             |
+| $P$         | Pressure: Air pressure acting on the wing surfaces.                                         |
+| $T$         | Temperature: Ambient temperature affecting air properties.                                  |
+| $c$         | Speed of Sound: Relevant for calculating Mach number.                                       |
 
 Identifying these variables is crucial as it lays the groundwork for determining the fundamental dimensionless groups that govern the system's behavior.
 
@@ -218,11 +192,13 @@ Identifying these variables is crucial as it lays the groundwork for determining
 
 Each physical quantity can be expressed in terms of fundamental dimensions, typically length $[L]$, mass $[M]$, and time $[T]$. For fluid mechanics problems, these three dimensions usually suffice. For example:
 
-- **Velocity ($U$)**: $[L T^{-1}]$
-- **Density ($\rho$)**: $[M L^{-3}]$
-- **Viscosity ($\mu$)**: $[M L^{-1} T^{-1}]$
-- **Force ($F$)**: $[M L T^{-2}]$
-- **Pressure ($P$)**: $[M L^{-1} T^{-2}]$
+| **Parameter** | **Dimension**          |
+|---------------|------------------------|
+| $U$         | $[L, T^{-1}]$       |
+| $\rho$      | $[M, L^{-3}]$       |
+| $\mu$       | $[M, L^{-1}, T^{-1}]$|
+| $F$         | $[M, L, T^{-2}]$    |
+| $P$         | $[M, L^{-1}, T^{-2}]$|
 
 Counting and categorizing the dimensions of each variable is essential for applying the Buckingham $\pi$-Theorem effectively.
 
