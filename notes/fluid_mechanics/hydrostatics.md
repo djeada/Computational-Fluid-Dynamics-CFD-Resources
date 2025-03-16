@@ -97,24 +97,10 @@ $$F_b = \rho_{\text{fluid}} g V$$
 
 ![archimedes_principle](https://github.com/user-attachments/assets/e776665c-a2c8-4220-9f31-dcfc4d3bae12)
 
-- Compare with the object’s weight $W = \rho_{\text{object}} \, g \, V$.  
+- Compare with the object’s weight $W = \rho_{\text{object}} , g , V$.  
 - If $\rho_{\text{object}} < \rho_{\text{fluid}}$, it **floats**.  
 - If $\rho_{\text{object}} > \rho_{\text{fluid}}$, it **sinks**.  
 - If densities match, it is **neutrally buoyant**.
-
-Buoyancy:
-
-```
-Object submerged
-  +---------+
-  |         |
- p_top    p_bottom
-  |         |
-h_top     h_bottom
-
-Net upward force = (p_bottom - p_top)*Area
-              = ρ_fluid * g * V
-```
 
 ### Stability of Floating Bodies
 
