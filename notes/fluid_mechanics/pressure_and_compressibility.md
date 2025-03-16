@@ -30,9 +30,7 @@ where $\mathbf{u} = (u, v, w)$ is the velocity vector. This equation enforces ov
 
 II. **Momentum (Navier–Stokes)**  
 
-$$\frac{\partial (\rho,\mathbf{u})}{\partial t}
-+ \nabla \cdot \bigl(\rho,\mathbf{u},\mathbf{u} + p,\mathbf{I} - \boldsymbol{\tau}\bigr)
-= \rho,\mathbf{f}$$  
+$$\frac{\partial (\rho,\mathbf{u})}{\partial t} + \nabla \cdot \bigl(\rho,\mathbf{u},\mathbf{u} + p,\mathbf{I} - \boldsymbol{\tau}\bigr) = \rho,\mathbf{f}$$  
 
 - $\mathbf{u}\mathbf{u}$ is the outer product of the velocity vector with itself.  
 - $p,\mathbf{I}$ is the isotropic pressure term ($\mathbf{I}$ = identity tensor).  
