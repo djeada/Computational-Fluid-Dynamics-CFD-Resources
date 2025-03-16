@@ -97,7 +97,7 @@ $$F_b = \rho_{\text{fluid}} g V$$
 
 ![archimedes_principle](https://github.com/user-attachments/assets/e776665c-a2c8-4220-9f31-dcfc4d3bae12)
 
-- Compare with the object’s weight $W = \rho_{\text{object}} , g , V$.  
+- Compare with the object’s weight $W = \rho_{\text{object}} \cdot g \cdot V$.  
 - If $\rho_{\text{object}} < \rho_{\text{fluid}}$, it **floats**.  
 - If $\rho_{\text{object}} > \rho_{\text{fluid}}$, it **sinks**.  
 - If densities match, it is **neutrally buoyant**.
