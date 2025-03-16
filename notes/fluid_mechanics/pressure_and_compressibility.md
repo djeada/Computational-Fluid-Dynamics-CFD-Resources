@@ -41,9 +41,7 @@ III. **Energy Equation**
 
 A common form for the total energy $E$ (internal + relating to motion) is:
 
-$$\frac{\partial (\rho,E)}{\partial t}
-+ \nabla \cdot \Bigl[\mathbf{u},(\rho,E + p) - \mathbf{q}\Bigr]
-= \rho,\mathbf{f},\cdot,\mathbf{u}$$  
+$$\frac{\partial (\rho,E)}{\partial t} + \nabla \cdot \Bigl[\mathbf{u},(\rho,E + p) - \mathbf{q}\Bigr] = \rho,\mathbf{f},\cdot,\mathbf{u}$$  
 
 - $E = e + \tfrac{1}{2}|\mathbf{u}|^2$, with $e$ the internal energy per unit mass.  
 - $\mathbf{q}$ is the heat flux (e.g., $\mathbf{q} = -k,\nabla T$).  
