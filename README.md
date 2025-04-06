@@ -1,6 +1,6 @@
 # Computational Fluid Dynamics (CFD) Resources
 
-This repository is a comprehensive collection of advanced resources for Computational Fluid Dynamics (CFD). It includes in-depth notes, specialized scripts, and detailed tutorials covering various CFD tools like ParaView, Gmsh, and more. Aimed at both beginners and experienced practitioners, it serves as a platform for learning, exploration, and collaboration in the field of CFD.
+This repo is a work in progress aimed at gathering useful open-source resources for CFD engineers in one place. It includes notes, scripts, and tutorials for tools like ParaView, Gmsh, and more. The idea is to make it easier to find and use solid, practical materials without digging through scattered sources.
 
 ## Features
 
@@ -12,13 +12,17 @@ Navigate to the respective folders for detailed READMEs on how to use the materi
 
 ## How to Contribute
 
-We encourage contributions that enhance the repository's value. To contribute:
+Got something useful to share? Found a mistake or a better way to do something? Contributions of all kinds are welcome—whether it’s fixing a typo, adding a script, or sharing your own CFD tips.
 
-1. Fork the repository.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+Here’s how to get started:
+
+1. Fork this repo.
+2. Create a new branch (`git checkout -b feature/YourAwesomeThing`).
+3. Make your changes and commit them (`git commit -m 'Add YourAwesomeThing'`).
+4. Push to your fork (`git push origin feature/YourAwesomeThing`).
+5. Open a Pull Request—we'll take it from there.
+
+Thanks for helping make this a better resource for the CFD community!
 
 ## License
 
