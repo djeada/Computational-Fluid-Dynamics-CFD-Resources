@@ -42,10 +42,41 @@ This project is licensed under the [MIT License](LICENSE) - see the LICENSE file
 - [Airfoil Tools - Airfoil Design Database and Analysis Tool](http://www.airfoiltools.com/)  
 
 ### Books
-- [Data-Driven Science and Engineering: Machine Learning, Dynamical Systems, and Control](https://www.amazon.com/Data-Driven-Science-Engineering-Learning-Dynamical/dp/1108422098)  
-- [Machine Learning Control - Taming Nonlinear Dynamics and Turbulence](https://www.amazon.com/Machine-Learning-Control-Nonlinear-Turbulence/dp/3319406248)  
-- [Machine Learning for Fluid Dynamics](https://arxiv.org/abs/1905.11075)  
-- [Machine Learning-Based CFD Simulations: A Review, Models, Open Threats, and Future Tactics](https://link.springer.com/article/10.1007/s00521-022-07838-6)  
+- **Anderson, John D.**  
+  *Computational Fluid Dynamics: The Basics with Applications*  
+  [Amazon Link](https://amzn.to/42iuJNV)
+
+- **Versteeg, H. K.; Malalasekera, W.**  
+  *An Introduction to Computational Fluid Dynamics: The Finite Volume Method*  
+  [Amazon Link](https://amzn.to/3EbEMfG)
+
+- **Ferziger, Joel H.; Peric, Milovan; Street, Robert L.**  
+  *Computational Methods for Fluid Dynamics*  
+  [Amazon Link](https://amzn.to/3FSZ9iq)
+
+- **Patankar, Suhas V.**  
+  *Numerical Heat Transfer and Fluid Flow*  
+  [Amazon Link](https://amzn.to/42qd0o1)
+
+- **Blazek, J.**  
+  *Computational Fluid Dynamics: Principles and Applications*  
+  [Amazon Link](https://amzn.to/4j7adqY)
+
+- **Kutz, J. Nathan**  
+  *Data-Driven Science and Engineering: Machine Learning, Dynamical Systems, and Control*  
+  [Amazon Link](https://amzn.to/3RHJncw)
+
+- **Brunton, Steven L.; Noack, Bernd R.**  
+  *Machine Learning Control – Taming Nonlinear Dynamics and Turbulence*  
+  [Amazon Link](https://amzn.to/4jeggJC)
+
+- **Machine Learning for Fluid Dynamics**  
+  *An overview of applying machine learning techniques to fluid dynamics*  
+  [View Paper](https://arxiv.org/abs/1905.11075)
+
+- **Machine Learning-Based CFD Simulations: A Review, Models, Open Threats, and Future Tactics**  
+  *A comprehensive review of machine learning approaches in CFD simulations*  
+  [View Article](https://link.springer.com/article/10.1007/s00521-022-07838-6)
 
 ### Academic Papers
 - [Physics-Informed Neural Networks: A Deep Learning Framework for Solving Forward and Inverse Problems Involving Nonlinear Partial Differential Equations](https://www.brown.edu/research/projects/crunch/sites/brown.edu.research.projects.crunch/files/uploads/Physics-informed%20neural%20networks_A%20deep%20learning%20framwork%20fir%20solving%20forward%20and%20inverse%20probelms%20involving%20nonlinear%20partial%20differential%20equations.pdf)
