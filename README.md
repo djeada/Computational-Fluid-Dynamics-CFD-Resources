@@ -2,6 +2,8 @@
 
 This repo is a work in progress aimed at gathering useful open-source resources for CFD engineers in one place. It includes notes, scripts, and tutorials for tools like ParaView, Gmsh, and more. The idea is to make it easier to find and use solid, practical materials without digging through scattered sources.
 
+![cfd_resources](https://github.com/user-attachments/assets/ac0cec05-abb0-4f8e-ae68-3df6bbb53308)
+
 ## Features
 
 - Detailed explanations of complex CFD topics, including turbulence modeling, mesh generation, and solver algorithms.
