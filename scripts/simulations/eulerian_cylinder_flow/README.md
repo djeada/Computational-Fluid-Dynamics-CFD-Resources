@@ -2,6 +2,8 @@
 
 The `FluidSimulator` class is a tool designed to simulate fluid dynamics in a 2D environment using a grid-based approach. This class implements the fundamentals of fluid motion, including advection, incompressibility, and the interaction with obstacles, providing an engaging platform for real-time visualization and educational purposes.
 
+[![Watch the Short on YouTube](https://img.youtube.com/vi/GYtn9u0awsE/maxresdefault.jpg)](https://youtube.com/shorts/GYtn9u0awsE?si=qlHDFdepFfnIFg8W)
+
 ## Features
 
 - **Grid-Based Simulation**: Tracks fluid properties on a fixed grid, ensuring efficient computation and easy visualization.
@@ -9,12 +11,6 @@ The `FluidSimulator` class is a tool designed to simulate fluid dynamics in a 2D
 - **Advection**: Simulates the transport of fluid properties through the domain over time.
 - **Obstacle Interaction**: Includes the ability to place obstacles within the simulation domain, affecting fluid flow.
 - **Real-Time Visualization**: Utilizes Pygame for real-time rendering of the simulation, allowing for interactive exploration.
-
-## Demonstration
-
-Watch the FluidSimulator in action:
-
-[![FluidSimulator Demo](https://i9.ytimg.com/vi/GYtn9u0awsE/mqdefault.jpg?sqp=CJSOlrQG-oaymwEoCMACELQB8quKqQMcGADwAQH4Ac4FgALgBooCDAgAEAEYEyATKH8wDw==&rs=AOn4CLChKgMqQVZxbnU9eZTsG9NQICo7Wg)](https://youtube.com/shorts/GYtn9u0awsE?si=IFB4hQwzT5ynHGuM)
 
 ## Detailed Explanation
 
