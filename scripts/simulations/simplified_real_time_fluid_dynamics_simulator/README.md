@@ -2,6 +2,8 @@
 
 The `FluidSimulation` class is a solver that approximates fluid dynamics in a 2D environment using an Eulerian grid-based approach. This class simulates aspects of the Navier-Stokes equations through diffusion, advection, and projection steps, providing a simplified yet effective solution for real-time simulations and visualizations.
 
+[![Watch the Short on YouTube](https://img.youtube.com/vi/auwaTfkpIXo/maxresdefault.jpg)](https://youtube.com/shorts/auwaTfkpIXo)
+
 ## Features
 
 - **Eulerian Approach**: Properties like velocity, pressure, and density are tracked at fixed grid points in space, rather than following individual fluid particles.
@@ -11,12 +13,6 @@ The `FluidSimulation` class is a solver that approximates fluid dynamics in a 2D
 - **Projection and Pressure**: Ensures incompressibility by solving a Poisson equation for pressure, maintaining realism in the simulation.
 - **Discretization and Time Stepping**: Utilizes a discretized grid and discrete time steps for computational simulation.
 - **Boundary Conditions**: Manages fluid behavior at the simulation domain's edges for realistic interactions.
-
-## Demonstration
-
-Watch the FluidSimulation in action:
-
-[![FluidSimulation Demo](https://i9.ytimg.com/vi/auwaTfkpIXo/mqdefault.jpg?sqp=CJSOlrQG-oaymwEoCMACELQB8quKqQMcGADwAQH4Ac4FgALgBooCDAgAEAEYEyATKH8wDw==&rs=AOn4CLChKgMqQVZxbnU9eZTsG9NQICo7Wg)](https://youtube.com/shorts/auwaTfkpIXo?si=IFB4hQwzT5ynHGuM)
 
 ## Detailed Explanation
 
