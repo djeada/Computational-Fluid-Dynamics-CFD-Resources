@@ -1,6 +1,8 @@
 ## Schrödinger Equation Simulation
 
-#### Schrödinger Equation
+[![Watch the Demo on YouTube](https://img.youtube.com/vi/Za9TGx75ElI/maxresdefault.jpg)](https://youtu.be/Za9TGx75ElI?si=ikGQMCyG8am8Qyz-)
+
+### Schrödinger Equation
 
 The Schrödinger equation is a fundamental equation in quantum mechanics that describes how the quantum state of a physical system changes over time. In this example, we're dealing with the time-dependent Schrödinger equation in two dimensions for a free particle (i.e., no potential).
 
@@ -9,6 +11,7 @@ The time-dependent Schrödinger equation in two dimensions is given by:
 $$i\hbar \frac{\partial \psi(x, y, t)}{\partial t} = \left( -\frac{\hbar^2}{2m} \nabla^2 + V(x, y) \right) \psi(x, y, t)$$
 
 where:
+
 - $\psi(x, y, t)$ is the wave function.
 - $\hbar$ is the reduced Planck's constant.
 - $m$ is the mass of the particle.
@@ -68,4 +71,4 @@ $$
 
 ### Visualization
 
-The evolving wavefunction is visualized using matplotlib's 3D plotting capabilities. The wavefunction's magnitude squared $|\psi|^2$, which represents the probability density, is plotted over time to show the dynamic evolution of the quantum system. 
+The wavefunction's magnitude squared $|\psi|^2$, which represents the probability density, is plotted over time to show the dynamic evolution of the quantum system. 
