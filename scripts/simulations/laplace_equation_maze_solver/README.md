@@ -2,6 +2,8 @@
 
 This simulation generates a random maze, computes a steady-state potential field via the Laplace equation, and then traces a path by following the potential gradient.
 
+[![Interactive Maze Solver](https://img.youtube.com/vi/kyYcME2sBws/maxresdefault.jpg)](https://youtu.be/kyYcME2sBws)
+
 ## Maze Generation
 
 A perfect maze on an $N\times N$ grid is created using a depth-first “recursive backtracker”:
