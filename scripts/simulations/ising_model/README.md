@@ -2,6 +2,8 @@
 
 This script simulates a two-dimensional Ising model using the Metropolis algorithm. The Ising model is a fundamental statistical physics model for understanding phase transitions, such as the transition between ferromagnetic and paramagnetic states.
 
+[![Watch the Short on YouTube](https://img.youtube.com/vi/aIUKwLx_Kj8/maxresdefault.jpg)](https://youtube.com/shorts/aIUKwLx_Kj8?feature=share)
+
 ## Mathematical Foundation
 
 The Ising model describes a system of interacting spins on a lattice, where each spin $s_i$ can take one of two values: $+1$ (spin-up) or $-1$ (spin-down).
