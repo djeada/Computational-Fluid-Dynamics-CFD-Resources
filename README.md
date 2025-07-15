@@ -80,8 +80,9 @@ This project is licensed under the [MIT License](LICENSE) - see the LICENSE file
   *A comprehensive review of machine learning approaches in CFD simulations*  
   [View Article](https://link.springer.com/article/10.1007/s00521-022-07838-6)
 
-Pratt & Whitney The Aircraft Engine and Its Operation - Rev1949 
-https://www.scribd.com/document/307072703/Pratt-Whitney-The-Aircraft-Engine-and-Its-Operation-Rev1949-BZ
+- **Pratt & Whitney**  
+  *The Aircraft Engine and Its Operation - Rev1949*  
+  [View Document](https://www.scribd.com/document/307072703/Pratt-Whitney-The-Aircraft-Engine-and-Its-Operation-Rev1949-BZ)
 
 ### Academic Papers
 - [Physics-Informed Neural Networks: A Deep Learning Framework for Solving Forward and Inverse Problems Involving Nonlinear Partial Differential Equations](https://www.brown.edu/research/projects/crunch/sites/brown.edu.research.projects.crunch/files/uploads/Physics-informed%20neural%20networks_A%20deep%20learning%20framwork%20fir%20solving%20forward%20and%20inverse%20probelms%20involving%20nonlinear%20partial%20differential%20equations.pdf)
