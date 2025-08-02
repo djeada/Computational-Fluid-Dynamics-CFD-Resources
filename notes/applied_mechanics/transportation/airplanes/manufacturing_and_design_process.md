@@ -44,18 +44,21 @@ Once a promising concept is selected, the detailed design phase dives deeper int
 
 #### Aerodynamics and Structures
 
-Aerodynamics plays a crucial role in aircraft performance. Engineers use Computational Fluid Dynamics (CFD) to simulate airflow around the aircraft's surfaces. CFD solves the Navier-Stokes equations, which describe fluid motion:
+Aerodynamics plays a crucial role in aircraft performance. Engineers use Computational Fluid Dynamics (CFD) to simulate airflow around the aircraft's surfaces, applying the fundamental fluid mechanics equations (see [Fluid Mechanics Theory](../../../fluid_mechanics/) for detailed mathematical treatment).
 
-$$\rho \left( \frac{\partial \mathbf{V}}{\partial t} + (\mathbf{V} \cdot \nabla) \mathbf{V} \right) = -\nabla p + \mu \nabla^2 \mathbf{V} + \mathbf{F}$$
+**Applied CFD Analysis:**
+- **Lift optimization**: Wing shape design for maximum lift-to-drag ratio
+- **Drag reduction**: Surface optimization to minimize parasitic drag
+- **Control surface design**: Aileron, elevator, and rudder effectiveness
+- **Engine integration**: Nacelle positioning and inlet design
 
-where:
+**Practical Design Considerations:**
+- Wing camber and twist distribution
+- Angle of attack optimization for different flight phases
+- Surface roughness effects on boundary layer transition
+- Pressure distribution analysis for structural loading
 
-- $\mathbf{V}$ is the velocity field,
-- $p$ is the pressure,
-- $\mu$ is the dynamic viscosity,
-- $\mathbf{F}$ represents body forces.
-
-These equations help predict how air will flow over the wings and fuselage, allowing engineers to optimize shapes for minimal drag and maximum lift. For example, tweaking the wing's camber or angle of attack can improve lift-to-drag ratios, enhancing fuel efficiency.
+For example, tweaking the wing's camber or angle of attack can improve lift-to-drag ratios, enhancing fuel efficiency. CFD results provide pressure and velocity distributions that inform both aerodynamic performance and structural load requirements.
 
 Structural analysis ensures the aircraft can withstand various loads during operation. Engineers use Finite Element Analysis (FEA) to model the stresses and strains on different components. They apply equations from material mechanics, such as Hooke's Law for elastic materials:
 
