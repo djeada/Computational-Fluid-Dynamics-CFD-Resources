@@ -230,7 +230,7 @@ This project is licensed under the [MIT License](LICENSE) - see the LICENSE file
 - [NASA Turbulence Modeling Resource](https://turbmodels.larc.nasa.gov/) - Validation cases and methods
 - [Wall-Modeled Large Eddy Simulation Resource](https://wmles.umd.edu/) - Advanced turbulence modeling
 - [Airfoil Tools Database](http://www.airfoiltools.com/) - Comprehensive airfoil analysis
-- https://www.nwtf.ac.uk/dataset/2687/  The Airbus Wind Tunnel Dataset on the RAE2822 transonic aerofoil is now publicly available on the NWTF Experimental Database.
+- [NWTF Experimental Database](https://www.nwtf.ac.uk/dataset/2687/) - Airbus Wind Tunnel Dataset on the RAE2822 transonic aerofoil
 
 
 ### 📖 Essential Textbooks
