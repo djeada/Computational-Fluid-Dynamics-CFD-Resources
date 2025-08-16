@@ -15,6 +15,7 @@ PATH_COLOR: Tuple[int, int, int] = (255, 215, 0)
 START_COLOR: Tuple[int, int, int] = (255, 0, 0)
 END_COLOR: Tuple[int, int, int] = (0, 255, 0)
 
+
 def generate_maze(size: int) -> np.ndarray:
     print("Generating maze...")
     maze = np.ones((size, size), dtype=int)
@@ -27,8 +28,11 @@ def generate_maze(size: int) -> np.ndarray:
     while stack:
         current = stack[-1]
         x, y = current
-        neighbors = [(x + dx, y + dy) for dx, dy in directions if
-                     0 <= x + dx < size and 0 <= y + dy < size and maze[x + dx, y + dy] == 1]
+        neighbors = [
+            (x + dx, y + dy)
+            for dx, dy in directions
+            if 0 <= x + dx < size and 0 <= y + dy < size and maze[x + dx, y + dy] == 1
+        ]
         if neighbors:
             next_cell = random.choice(neighbors)
             nx, ny = next_cell
@@ -41,7 +45,9 @@ def generate_maze(size: int) -> np.ndarray:
     return maze
 
 
-def set_boundary_conditions(maze: np.ndarray, start: Tuple[int, int], end: Tuple[int, int]) -> np.ndarray:
+def set_boundary_conditions(
+    maze: np.ndarray, start: Tuple[int, int], end: Tuple[int, int]
+) -> np.ndarray:
     print(f"Setting boundary conditions. Start: {start}, End: {end}")
     phi = np.full_like(maze, 0, dtype=float)
     phi[maze == 1] = -1  # Walls have -1 potential
@@ -51,12 +57,16 @@ def set_boundary_conditions(maze: np.ndarray, start: Tuple[int, int], end: Tuple
     return phi
 
 
-def solve_laplace_step(phi: np.ndarray, maze: np.ndarray, dt: float = DT) -> Tuple[np.ndarray, float]:
+def solve_laplace_step(
+    phi: np.ndarray, maze: np.ndarray, dt: float = DT
+) -> Tuple[np.ndarray, float]:
     laplace_update = (
-        np.roll(a=phi, shift=1, axis=0) + np.roll(a=phi, shift=-1, axis=0) +
-        np.roll(a=phi, shift=1, axis=1) + np.roll(a=phi, shift=-1, axis=1)
+        np.roll(a=phi, shift=1, axis=0)
+        + np.roll(a=phi, shift=-1, axis=0)
+        + np.roll(a=phi, shift=1, axis=1)
+        + np.roll(a=phi, shift=-1, axis=1)
     ) / 4
-    mask = (maze == 0)
+    mask = maze == 0
     phi_new = np.where(mask, phi + dt * (laplace_update - phi), phi)
     phi_new = np.clip(phi_new, -1, 1)  # Enforce bounds to prevent overflow or underflow
     max_change = np.abs(phi_new - phi).max()
@@ -64,7 +74,9 @@ def solve_laplace_step(phi: np.ndarray, maze: np.ndarray, dt: float = DT) -> Tup
     return phi, max_change
 
 
-def follow_gradient(phi: np.ndarray, start: Tuple[int, int], end: Tuple[int, int]) -> List[Tuple[int, int]]:
+def follow_gradient(
+    phi: np.ndarray, start: Tuple[int, int], end: Tuple[int, int]
+) -> List[Tuple[int, int]]:
     print("Following gradient to find path...")
     path: List[Tuple[int, int]] = [start]
     stack: List[Tuple[int, int]] = [start]
@@ -77,8 +89,13 @@ def follow_gradient(phi: np.ndarray, start: Tuple[int, int], end: Tuple[int, int
         x, y = current
         visited.add(current)
 
-        neighbors = [(x + dx, y + dy) for dx, dy in directions if
-                     0 <= x + dx < phi.shape[0] and 0 <= y + dy < phi.shape[1] and (x + dx, y + dy) not in visited]
+        neighbors = [
+            (x + dx, y + dy)
+            for dx, dy in directions
+            if 0 <= x + dx < phi.shape[0]
+            and 0 <= y + dy < phi.shape[1]
+            and (x + dx, y + dy) not in visited
+        ]
 
         neighbors = [(nx, ny) for nx, ny in neighbors if phi[nx, ny] > -1]
 
@@ -97,8 +114,16 @@ def follow_gradient(phi: np.ndarray, start: Tuple[int, int], end: Tuple[int, int
     return path
 
 
-def draw_maze(screen: pygame.Surface, maze: np.ndarray, phi: np.ndarray, path: List[Tuple[int, int]],
-              cell_size: int, start: Tuple[int, int], end: Tuple[int, int], visible_path_length: int) -> None:
+def draw_maze(
+    screen: pygame.Surface,
+    maze: np.ndarray,
+    phi: np.ndarray,
+    path: List[Tuple[int, int]],
+    cell_size: int,
+    start: Tuple[int, int],
+    end: Tuple[int, int],
+    visible_path_length: int,
+) -> None:
     for i in range(maze.shape[0]):
         for j in range(maze.shape[1]):
             if maze[i, j] == 1:
@@ -106,17 +131,35 @@ def draw_maze(screen: pygame.Surface, maze: np.ndarray, phi: np.ndarray, path: L
             else:
                 potential = (phi[i, j] + 1) / 2  # Normalize phi to [0, 1]
                 b = int(255 * (1 - potential))  # Blue for low potential
-                g = int(255 * potential)        # Green for high potential
-                color = (0, g, b)               # Smooth transition from blue to green
-            pygame.draw.rect(screen, color, pygame.Rect(j * cell_size, i * cell_size, cell_size, cell_size))
+                g = int(255 * potential)  # Green for high potential
+                color = (0, g, b)  # Smooth transition from blue to green
+            pygame.draw.rect(
+                screen,
+                color,
+                pygame.Rect(j * cell_size, i * cell_size, cell_size, cell_size),
+            )
 
     # Draw only the visible portion of the path
     visible_path = path[:visible_path_length]
     for point in visible_path:
-        pygame.draw.rect(screen, PATH_COLOR, pygame.Rect(point[1] * cell_size, point[0] * cell_size, cell_size, cell_size))
+        pygame.draw.rect(
+            screen,
+            PATH_COLOR,
+            pygame.Rect(
+                point[1] * cell_size, point[0] * cell_size, cell_size, cell_size
+            ),
+        )
 
-    pygame.draw.rect(screen, START_COLOR, pygame.Rect(start[1] * cell_size, start[0] * cell_size, cell_size, cell_size))
-    pygame.draw.rect(screen, END_COLOR, pygame.Rect(end[1] * cell_size, end[0] * cell_size, cell_size, cell_size))
+    pygame.draw.rect(
+        screen,
+        START_COLOR,
+        pygame.Rect(start[1] * cell_size, start[0] * cell_size, cell_size, cell_size),
+    )
+    pygame.draw.rect(
+        screen,
+        END_COLOR,
+        pygame.Rect(end[1] * cell_size, end[0] * cell_size, cell_size, cell_size),
+    )
 
 
 def main() -> None:
@@ -152,8 +195,16 @@ def main() -> None:
         visible_path_length = min(visible_path_length + 1, len(path))
 
         screen.fill(SCREEN_COLOR)
-        draw_maze(screen=screen, maze=maze, phi=phi, path=path, cell_size=CELL_SIZE, start=start, end=end,
-                  visible_path_length=visible_path_length)
+        draw_maze(
+            screen=screen,
+            maze=maze,
+            phi=phi,
+            path=path,
+            cell_size=CELL_SIZE,
+            start=start,
+            end=end,
+            visible_path_length=visible_path_length,
+        )
         pygame.display.flip()
         clock.tick(30)
 

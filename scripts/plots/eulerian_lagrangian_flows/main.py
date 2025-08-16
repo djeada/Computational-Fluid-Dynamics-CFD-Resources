@@ -25,7 +25,7 @@ def double_gyre_velocity(x, y, t, A=0.25, epsilon=0.25, omega=2 * np.pi):
         The velocity components at each input point.
     """
     # f(x, t)
-    f = epsilon * np.sin(omega * t) * x ** 2 + (1 - 2 * epsilon * np.sin(omega * t)) * x
+    f = epsilon * np.sin(omega * t) * x**2 + (1 - 2 * epsilon * np.sin(omega * t)) * x
 
     # df/dx
     dfdx = 2 * epsilon * np.sin(omega * t) * x + (1 - 2 * epsilon * np.sin(omega * t))
@@ -117,8 +117,7 @@ def compute_lagrangian_trajectories(num_particles=20, num_steps=500, dt=0.01):
         y_current = trajectories[:, n, 1]
 
         x_next, y_next = rk4_step(
-            x_current, y_current, t, dt,
-            velocity_func=double_gyre_velocity
+            x_current, y_current, t, dt, velocity_func=double_gyre_velocity
         )
 
         trajectories[:, n + 1, 0] = x_next
@@ -149,27 +148,23 @@ def main():
     ax_euler.set_title("Eulerian View at t=0\n(Double Gyre Snapshot)")
     ax_euler.set_xlabel("X")
     ax_euler.set_ylabel("Y")
-    ax_euler.set_aspect('equal')
+    ax_euler.set_aspect("equal")
     ax_euler.grid(True)
 
     # Plot Lagrangian trajectories
     num_particles = trajectories.shape[0]
     for i in range(num_particles):
         ax_lagrange.plot(
-            trajectories[i, :, 0],
-            trajectories[i, :, 1],
-            label=f"Particle {i + 1}"
+            trajectories[i, :, 0], trajectories[i, :, 1], label=f"Particle {i + 1}"
         )
         # Mark initial position
         ax_lagrange.plot(
-            trajectories[i, 0, 0],
-            trajectories[i, 0, 1],
-            'ko', markersize=3
+            trajectories[i, 0, 0], trajectories[i, 0, 1], "ko", markersize=3
         )
     ax_lagrange.set_title("Lagrangian View\n(Double Gyre Trajectories)")
     ax_lagrange.set_xlabel("X")
     ax_lagrange.set_ylabel("Y")
-    ax_lagrange.set_aspect('equal')
+    ax_lagrange.set_aspect("equal")
     ax_lagrange.grid(True)
 
     plt.tight_layout()

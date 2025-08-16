@@ -20,7 +20,7 @@ def nozzle_top(x_array):
     top = np.zeros_like(x_array)
 
     # Mask for x <= 1.0
-    left_mask = (x_array <= 1.0)
+    left_mask = x_array <= 1.0
     # Mask for x > 1.0
     right_mask = ~left_mask  # the complement
 
@@ -37,7 +37,7 @@ def nozzle_top(x_array):
 Ytop = nozzle_top(X)
 
 # --- Mask inside the nozzle ---
-mask = (Y <= Ytop)
+mask = Y <= Ytop
 
 # Example: define a flow velocity that depends on cross-sectional area
 Q = 0.2
@@ -52,19 +52,14 @@ M = u / speed_of_sound
 # --- Plotting ---
 fig, ax = plt.subplots(figsize=(9, 3))
 
-ax.plot(x, nozzle_top(x), 'k', lw=2, label='Nozzle top boundary')
-ax.plot(x, np.zeros_like(x), 'k', lw=2, label='Nozzle bottom boundary')
+ax.plot(x, nozzle_top(x), "k", lw=2, label="Nozzle top boundary")
+ax.plot(x, np.zeros_like(x), "k", lw=2, label="Nozzle bottom boundary")
 
-strm = ax.streamplot(
-    X, Y, u, v,
-    color=M, cmap='jet',
-    density=1.4,
-    linewidth=1.2
-)
+strm = ax.streamplot(X, Y, u, v, color=M, cmap="jet", density=1.4, linewidth=1.2)
 
-cb = plt.colorbar(strm.lines, ax=ax, label='Mach Number')
+cb = plt.colorbar(strm.lines, ax=ax, label="Mach Number")
 
-ax.set_aspect('equal', 'box')
+ax.set_aspect("equal", "box")
 ax.set_xlim(xmin, xmax)
 ax.set_ylim(ymin, ymax)
 ax.set_xlabel("x (arbitrary units)")

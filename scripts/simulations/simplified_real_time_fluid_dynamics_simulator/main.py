@@ -28,7 +28,10 @@ class FluidSimulation:
     def diffuse(self, b, x, x0, diff):
         a = self.dt * diff * (self.size[1] - 2) * (self.size[0] - 2)
         for _ in range(20):
-            x[1:-1, 1:-1] = (x0[1:-1, 1:-1] + a * (x[:-2, 1:-1] + x[2:, 1:-1] + x[1:-1, :-2] + x[1:-1, 2:])) / (1 + 4 * a)
+            x[1:-1, 1:-1] = (
+                x0[1:-1, 1:-1]
+                + a * (x[:-2, 1:-1] + x[2:, 1:-1] + x[1:-1, :-2] + x[1:-1, 2:])
+            ) / (1 + 4 * a)
             self.set_bnd(b, x)
 
     def advect(self, b, d, d0, Vx, Vy):
@@ -51,20 +54,29 @@ class FluidSimulation:
         t1 = y - j0
         t0 = 1 - t1
 
-        d[1:-1, 1:-1] = (s0 * (t0 * d0[j0, i0] + t1 * d0[j1, i0]) +
-                         s1 * (t0 * d0[j0, i1] + t1 * d0[j1, i1]))
+        d[1:-1, 1:-1] = s0 * (t0 * d0[j0, i0] + t1 * d0[j1, i0]) + s1 * (
+            t0 * d0[j0, i1] + t1 * d0[j1, i1]
+        )
 
         self.set_bnd(b, d)
 
     def project(self, Vx, Vy, p, div):
         h = 1.0 / self.size[1]
-        div[1:-1, 1:-1] = -0.5 * h * (Vx[1:-1, 2:] - Vx[1:-1, :-2] + Vy[2:, 1:-1] - Vy[:-2, 1:-1])
+        div[1:-1, 1:-1] = (
+            -0.5 * h * (Vx[1:-1, 2:] - Vx[1:-1, :-2] + Vy[2:, 1:-1] - Vy[:-2, 1:-1])
+        )
         p[1:-1, 1:-1] = 0
         self.set_bnd(0, div)
         self.set_bnd(0, p)
 
         for _ in range(20):
-            p[1:-1, 1:-1] = (div[1:-1, 1:-1] + p[:-2, 1:-1] + p[2:, 1:-1] + p[1:-1, :-2] + p[1:-1, 2:]) / 4
+            p[1:-1, 1:-1] = (
+                div[1:-1, 1:-1]
+                + p[:-2, 1:-1]
+                + p[2:, 1:-1]
+                + p[1:-1, :-2]
+                + p[1:-1, 2:]
+            ) / 4
             self.set_bnd(0, p)
 
         Vx[1:-1, 1:-1] -= 0.5 * (p[1:-1, 2:] - p[1:-1, :-2]) / h
@@ -90,13 +102,12 @@ class FluidSimulation:
                 x[self.size[0] - 1, j] = x[self.size[0] - 2, j]
 
         x[0, 0] = 0.5 * (x[1, 0] + x[0, 1])
-        x[0, self.size[1] - 1] = 0.5 * (
-                    x[1, self.size[1] - 1] + x[0, self.size[1] - 2])
-        x[self.size[0] - 1, 0] = 0.5 * (
-                    x[self.size[0] - 2, 0] + x[self.size[0] - 1, 1])
+        x[0, self.size[1] - 1] = 0.5 * (x[1, self.size[1] - 1] + x[0, self.size[1] - 2])
+        x[self.size[0] - 1, 0] = 0.5 * (x[self.size[0] - 2, 0] + x[self.size[0] - 1, 1])
         x[self.size[0] - 1, self.size[1] - 1] = 0.5 * (
-                    x[self.size[0] - 2, self.size[1] - 1] + x[
-                self.size[0] - 1, self.size[1] - 2])
+            x[self.size[0] - 2, self.size[1] - 1]
+            + x[self.size[0] - 1, self.size[1] - 2]
+        )
 
     def dens_step(self):
         self.diffuse(0, self.s, self.density, self.diff)
@@ -121,8 +132,9 @@ class FluidSimulation:
 def initialize_pygame(screen_size):
     pygame.init()
     screen = pygame.display.set_mode(screen_size)
-    pygame.display.set_caption('Fluid Simulation')
+    pygame.display.set_caption("Fluid Simulation")
     return screen
+
 
 def handle_events(fluid_sim, cell_size, grid_width, grid_height, screen_size):
     for event in pygame.event.get():
@@ -131,10 +143,17 @@ def handle_events(fluid_sim, cell_size, grid_width, grid_height, screen_size):
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left click
             mouse_x, mouse_y = event.pos
             grid_x, grid_y = mouse_x // cell_size, mouse_y // cell_size
-            print(f"Mouse Clicked at: ({mouse_x}, {mouse_y}), Grid Coords: ({grid_x}, {grid_y})")
+            print(
+                f"Mouse Clicked at: ({mouse_x}, {mouse_y}), Grid Coords: ({grid_x}, {grid_y})"
+            )
             if 0 <= grid_x < grid_width and 0 <= grid_y < grid_height:
                 fluid_sim.add_density(grid_x, grid_y, 1000)
-                fluid_sim.add_velocity(grid_x, grid_y, np.random.uniform(-200, 200), np.random.uniform(-200, 200))
+                fluid_sim.add_velocity(
+                    grid_x,
+                    grid_y,
+                    np.random.uniform(-200, 200),
+                    np.random.uniform(-200, 200),
+                )
     return False
 
 
@@ -157,7 +176,9 @@ def main():
     screen_size = (800, 600)
     cell_size = 4
     grid_width, grid_height = screen_size[0] // cell_size, screen_size[1] // cell_size
-    fluid_sim = FluidSimulation(width=grid_width, height=grid_height, diffusion=0.0001, viscosity=0.0001, dt=0.1)
+    fluid_sim = FluidSimulation(
+        width=grid_width, height=grid_height, diffusion=0.0001, viscosity=0.0001, dt=0.1
+    )
 
     screen = initialize_pygame(screen_size)
     clock = pygame.time.Clock()
@@ -170,6 +191,7 @@ def main():
         clock.tick(60)
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()

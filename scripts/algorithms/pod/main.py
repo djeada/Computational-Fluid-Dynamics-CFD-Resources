@@ -2,7 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import Tuple
 
-def generate_synthetic_data(n_samples: int, n_x: int, n_y: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+
+def generate_synthetic_data(
+    n_samples: int, n_x: int, n_y: int
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Generate synthetic spatio-temporal flow data.
     """
@@ -11,9 +14,10 @@ def generate_synthetic_data(n_samples: int, n_x: int, n_y: int) -> Tuple[np.ndar
     y = np.linspace(0, 100, n_y)
     t = np.linspace(0, 4, n_samples)
 
-    X, Y, T = np.meshgrid(x, y, t, indexing='ij')
+    X, Y, T = np.meshgrid(x, y, t, indexing="ij")
     data = np.sin(0.02 * X) * np.cos(0.05 * Y) * np.sin(0.5 * T)
     return data, x, y, t
+
 
 def preprocess_data(data: np.ndarray) -> np.ndarray:
     """
@@ -21,11 +25,13 @@ def preprocess_data(data: np.ndarray) -> np.ndarray:
     """
     return data - np.mean(data, axis=1, keepdims=True)
 
+
 def create_snapshot_matrix(data: np.ndarray) -> np.ndarray:
     """
     Reshape data into a snapshot matrix.
     """
     return data.reshape(data.shape[0] * data.shape[1], data.shape[2])
+
 
 class POD:
     def __init__(self, snapshot_matrix: np.ndarray):
@@ -42,7 +48,10 @@ class POD:
         self.modes = U_svd
         self.time_coeffs = Vt
 
-def plot_modes_and_time_coeffs(pod: POD, x: np.ndarray, y: np.ndarray, t: np.ndarray, num_modes: int = 3) -> None:
+
+def plot_modes_and_time_coeffs(
+    pod: POD, x: np.ndarray, y: np.ndarray, t: np.ndarray, num_modes: int = 3
+) -> None:
     """
     Plot the spatial modes and their corresponding time coefficients.
     """
@@ -53,26 +62,27 @@ def plot_modes_and_time_coeffs(pod: POD, x: np.ndarray, y: np.ndarray, t: np.nda
 
     for i in range(num_modes):
         ax = fig.add_subplot(gs[i, 0])
-        c = ax.contourf(x, y, modes_reshaped[:, :, i].T, cmap='jet', levels=50)
+        c = ax.contourf(x, y, modes_reshaped[:, :, i].T, cmap="jet", levels=50)
         fig.colorbar(c, ax=ax)
-        ax.set_title(f'Mode {i+1}')
-        ax.set_xlabel('x (mm)')
-        ax.set_ylabel('y (mm)')
+        ax.set_title(f"Mode {i+1}")
+        ax.set_xlabel("x (mm)")
+        ax.set_ylabel("y (mm)")
 
     for i in range(num_modes):
         ax = fig.add_subplot(gs[i, 1])
         ax.plot(t, pod.time_coeffs[i, :])
-        ax.set_title(f'Mode {i+1}')
-        ax.set_xlabel('t (s)')
-        ax.set_ylabel(f'$a_{i+1}$')
+        ax.set_title(f"Mode {i+1}")
+        ax.set_xlabel("t (s)")
+        ax.set_ylabel(f"$a_{i+1}$")
 
     plt.tight_layout()
     plt.show()
 
+
 # Example Usage
 n_samples = 100  # Number of time snapshots
-n_x = 50         # Number of spatial points in x-direction
-n_y = 30         # Number of spatial points in y-direction
+n_x = 50  # Number of spatial points in x-direction
+n_y = 30  # Number of spatial points in y-direction
 
 # Generate synthetic data
 data, x, y, t = generate_synthetic_data(n_samples, n_x, n_y)

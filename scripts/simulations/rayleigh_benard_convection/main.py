@@ -13,8 +13,9 @@ MIN_TEMP = 0.0
 # Initialize Pygame
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
-pygame.display.set_caption('Rayleigh Bénard Convection')
+pygame.display.set_caption("Rayleigh Bénard Convection")
 clock = pygame.time.Clock()
+
 
 # Function to convert a value to a color
 def value_to_color(value):
@@ -45,6 +46,7 @@ def value_to_color(value):
 
     return (r, g, b)
 
+
 # Initialize the grid with a temperature gradient
 def initialize_grid():
     grid = np.zeros((GRID_SIZE, GRID_SIZE))
@@ -52,30 +54,40 @@ def initialize_grid():
         grid[i, :] = 1 - (i / GRID_SIZE)
     return grid
 
+
 # Update function to be used by multiprocessing
 def update_cell(args):
     grid, vel_x, vel_y, i, j = args
     if 1 <= i < GRID_SIZE - 1 and 1 <= j < GRID_SIZE - 1:
         # Simplified thermal convection model
         temp_change = (
-            grid[i-1, j] + grid[i+1, j] + grid[i, j-1] + grid[i, j+1]
+            grid[i - 1, j]
+            + grid[i + 1, j]
+            + grid[i, j - 1]
+            + grid[i, j + 1]
             - 4 * grid[i, j]
         ) * 0.1  # Simplified thermal diffusion
         # Add velocity influence
-        temp_change += -vel_x[i, j] * (grid[i, j] - grid[i, j-1]) - vel_y[i, j] * (grid[i, j] - grid[i-1, j])
+        temp_change += -vel_x[i, j] * (grid[i, j] - grid[i, j - 1]) - vel_y[i, j] * (
+            grid[i, j] - grid[i - 1, j]
+        )
         new_temp = grid[i, j] + temp_change + (np.random.rand() - 0.5) * 0.01
         # Clamp temperature values to prevent overflow
         new_temp = max(MIN_TEMP, min(MAX_TEMP, new_temp))
         return new_temp
     return grid[i, j]
 
+
 # Update the grid using multiprocessing
 def update_grid(grid, vel_x, vel_y):
-    args = [(grid, vel_x, vel_y, i, j) for i in range(GRID_SIZE) for j in range(GRID_SIZE)]
+    args = [
+        (grid, vel_x, vel_y, i, j) for i in range(GRID_SIZE) for j in range(GRID_SIZE)
+    ]
     with Pool(cpu_count()) as pool:
         results = pool.map(update_cell, args)
     new_grid = np.array(results).reshape(GRID_SIZE, GRID_SIZE)
     return new_grid
+
 
 # Update velocity fields based on temperature gradient
 def update_velocity(grid, vel_x, vel_y):
@@ -83,9 +95,10 @@ def update_velocity(grid, vel_x, vel_y):
     new_vel_y = vel_y.copy()
     for i in range(1, GRID_SIZE - 1):
         for j in range(1, GRID_SIZE - 1):
-            new_vel_x[i, j] = vel_x[i, j] + (grid[i, j] - grid[i, j-1]) * 0.01
-            new_vel_y[i, j] = vel_y[i, j] + (grid[i, j] - grid[i-1, j]) * 0.01
+            new_vel_x[i, j] = vel_x[i, j] + (grid[i, j] - grid[i, j - 1]) * 0.01
+            new_vel_y[i, j] = vel_y[i, j] + (grid[i, j] - grid[i - 1, j]) * 0.01
     return new_vel_x, new_vel_y
+
 
 # Draw the grid on the screen
 def draw_grid(screen, grid):
@@ -93,7 +106,12 @@ def draw_grid(screen, grid):
         for j in range(GRID_SIZE):
             color_value = grid[i, j]
             color = value_to_color(color_value)
-            pygame.draw.rect(screen, color, pygame.Rect(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            pygame.draw.rect(
+                screen,
+                color,
+                pygame.Rect(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE),
+            )
+
 
 # Main loop
 def main():
@@ -116,5 +134,6 @@ def main():
 
     pygame.quit()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

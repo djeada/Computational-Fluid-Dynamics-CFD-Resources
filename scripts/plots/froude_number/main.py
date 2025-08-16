@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def froude_number(velocity, g, length):
     """
     Compute the Froude number.

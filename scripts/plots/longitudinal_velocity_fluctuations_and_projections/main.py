@@ -18,9 +18,9 @@ u_proj = np.dot(np.vstack((u_prime_a, u_prime_b)).T, phi)
 
 # Plot for Figure 3
 plt.figure(figsize=(8, 6))
-plt.plot(t, u_a, label=r"$u'_a$", color='blue')
-plt.plot(t, u_b, label=r"$u'_b$", color='red')
-plt.xlabel(r'$t\ (s)$')
+plt.plot(t, u_a, label=r"$u'_a$", color="blue")
+plt.plot(t, u_b, label=r"$u'_b$", color="red")
+plt.xlabel(r"$t\ (s)$")
 plt.ylabel(r"$u'\ (m/s)$")
 plt.title("Longitudinal velocity fluctuations $u'(t)$ at positions (a) and (b).")
 plt.legend()
@@ -36,9 +36,14 @@ plt.show()
 
 # Plot for Figure 5
 plt.figure(figsize=(8, 6))
-plt.scatter(u_prime_a, u_prime_b, s=10, alpha=0.5, label='Data')
-plt.scatter(u_prime_a, u_proj, s=10, alpha=0.5, color='red', label='Proj on $\Phi$')
-plt.plot(u_prime_a, phi[1] / phi[0] * u_prime_a, color='black', label=r'$\Phi=(0.894, 0.447)$')
+plt.scatter(u_prime_a, u_prime_b, s=10, alpha=0.5, label="Data")
+plt.scatter(u_prime_a, u_proj, s=10, alpha=0.5, color="red", label="Proj on $\Phi$")
+plt.plot(
+    u_prime_a,
+    phi[1] / phi[0] * u_prime_a,
+    color="black",
+    label=r"$\Phi=(0.894, 0.447)$",
+)
 plt.xlabel(r"$u'_a\ (m/s)$")
 plt.ylabel(r"$u'_b\ (m/s)$")
 plt.title("Raw data projected on unit vector $\Phi$.")

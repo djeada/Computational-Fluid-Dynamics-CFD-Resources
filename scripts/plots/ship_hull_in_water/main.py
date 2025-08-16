@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def draw_ship_hull_and_waves():
     """
     Draws a simple representation of a ship hull and waves at the free surface.
@@ -41,10 +42,10 @@ def draw_ship_hull_and_waves():
     # Annotations
     # -----------------------------
     # Show the waterline level (y=0) as a reference
-    plt.axhline(0, linestyle='--', label="Still Water Level")
+    plt.axhline(0, linestyle="--", label="Still Water Level")
 
     # Add the Froude number formula as a reminder
-    plt.text(5, 0.7, r"$Fr = \frac{U}{\sqrt{g \, L}}$", fontsize=12, ha='center')
+    plt.text(5, 0.7, r"$Fr = \frac{U}{\sqrt{g \, L}}$", fontsize=12, ha="center")
 
     # -----------------------------
     # Plot settings
@@ -52,10 +53,11 @@ def draw_ship_hull_and_waves():
     plt.title("Ship Hull and Wave Pattern – Froude Number Concept")
     plt.xlabel("x (m)")
     plt.ylabel("y (m)")
-    plt.axis('equal')  # Same scale for x and y
+    plt.axis("equal")  # Same scale for x and y
     plt.grid(True)
     plt.legend(loc="upper right")
     plt.show()
+
 
 if __name__ == "__main__":
     draw_ship_hull_and_waves()

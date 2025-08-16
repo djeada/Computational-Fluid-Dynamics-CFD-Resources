@@ -7,8 +7,16 @@ import matplotlib.pyplot as plt
 t = np.linspace(0.9, 1.1, 1000)
 
 # Generate synthetic velocity data with clear periodic components
-U = np.sin(2 * np.pi * t * 10) + 0.5 * np.sin(4 * np.pi * t * 10) + np.random.randn(len(t)) * 0.1
-V = np.cos(2 * np.pi * t * 10) + 0.5 * np.cos(4 * np.pi * t * 10) + np.random.randn(len(t)) * 0.1
+U = (
+    np.sin(2 * np.pi * t * 10)
+    + 0.5 * np.sin(4 * np.pi * t * 10)
+    + np.random.randn(len(t)) * 0.1
+)
+V = (
+    np.cos(2 * np.pi * t * 10)
+    + 0.5 * np.cos(4 * np.pi * t * 10)
+    + np.random.randn(len(t)) * 0.1
+)
 
 # Stack velocity data
 velocity_data = np.vstack((U, V)).T
@@ -36,8 +44,12 @@ A_truncated = A[:num_modes, :]
 # Step 3: Correctly Calculate Mode Contributions
 
 # Calculate contributions over the entire time series
-mode1_contribution = np.dot(Phi_truncated[:, 0].reshape(-1, 1), A_truncated[0, :].reshape(1, -1))
-mode2_contribution = np.dot(Phi_truncated[:, 1].reshape(-1, 1), A_truncated[1, :].reshape(1, -1))
+mode1_contribution = np.dot(
+    Phi_truncated[:, 0].reshape(-1, 1), A_truncated[0, :].reshape(1, -1)
+)
+mode2_contribution = np.dot(
+    Phi_truncated[:, 1].reshape(-1, 1), A_truncated[1, :].reshape(1, -1)
+)
 
 # Sum contributions for combined effect
 combined_contribution = mode1_contribution + mode2_contribution
@@ -51,18 +63,28 @@ t_aligned = t
 plt.figure(figsize=(12, 8))
 
 plt.subplot(2, 1, 1)
-plt.plot(t_aligned, mode1_contribution[:, 0], 'r', label='$\\overline{U}_1$')
-plt.plot(t_aligned, mode2_contribution[:, 0], 'b', label='$\\overline{U}_2$')
-plt.plot(t_aligned, combined_contribution[:, 0], 'k--', label='$U=\\overline{U}_1+\\overline{U}_2$')
-plt.xlabel('t (s)')
+plt.plot(t_aligned, mode1_contribution[:, 0], "r", label="$\\overline{U}_1$")
+plt.plot(t_aligned, mode2_contribution[:, 0], "b", label="$\\overline{U}_2$")
+plt.plot(
+    t_aligned,
+    combined_contribution[:, 0],
+    "k--",
+    label="$U=\\overline{U}_1+\\overline{U}_2$",
+)
+plt.xlabel("t (s)")
 plt.ylabel("$u'_a$ (m/s)")
 plt.legend()
 
 plt.subplot(2, 1, 2)
-plt.plot(t_aligned, mode1_contribution[:, 0], 'r', label='$\\overline{U}_1$')
-plt.plot(t_aligned, mode2_contribution[:, 0], 'b', label='$\\overline{U}_2$')
-plt.plot(t_aligned, combined_contribution[:, 0], 'k--', label='$U=\\overline{U}_1+\\overline{U}_2$')
-plt.xlabel('t (s)')
+plt.plot(t_aligned, mode1_contribution[:, 0], "r", label="$\\overline{U}_1$")
+plt.plot(t_aligned, mode2_contribution[:, 0], "b", label="$\\overline{U}_2$")
+plt.plot(
+    t_aligned,
+    combined_contribution[:, 0],
+    "k--",
+    label="$U=\\overline{U}_1+\\overline{U}_2$",
+)
+plt.xlabel("t (s)")
 plt.ylabel("$u'_b$ (m/s)")
 plt.legend()
 

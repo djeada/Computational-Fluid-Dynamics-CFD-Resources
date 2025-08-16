@@ -22,25 +22,32 @@ u = u0.copy()
 
 # Set up the figure and axis
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-fig.patch.set_facecolor('black')
-ax.set_facecolor('black')
+ax = fig.add_subplot(111, projection="3d")
+fig.patch.set_facecolor("black")
+ax.set_facecolor("black")
 
 # Initial plot
-surf = ax.plot_surface(X, Y, u0, cmap='viridis')
+surf = ax.plot_surface(X, Y, u0, cmap="viridis")
 ax.set_zlim(-scale_factor, scale_factor)
-color_bar = fig.colorbar(surf, ax=ax, shrink=0.5, aspect=5, pad=0.1, location='left')
-color_bar.set_label('Wave Amplitude', color='white')
-color_bar.ax.yaxis.set_tick_params(color='white')
-plt.setp(plt.getp(color_bar.ax.axes, 'yticklabels'), color='white')
+color_bar = fig.colorbar(surf, ax=ax, shrink=0.5, aspect=5, pad=0.1, location="left")
+color_bar.set_label("Wave Amplitude", color="white")
+color_bar.ax.yaxis.set_tick_params(color="white")
+plt.setp(plt.getp(color_bar.ax.axes, "yticklabels"), color="white")
+
 
 # Function to update the plot
 def update(frame):
     global u, u1, surf
     u_new = np.zeros_like(u)
-    u_new[1:-1, 1:-1] = (2 * u[1:-1, 1:-1] - u1[1:-1, 1:-1] +
-                         (dt * c)**2 * ((u[2:, 1:-1] - 2 * u[1:-1, 1:-1] + u[:-2, 1:-1]) / dx**2 +
-                                        (u[1:-1, 2:] - 2 * u[1:-1, 1:-1] + u[1:-1, :-2]) / dy**2))
+    u_new[1:-1, 1:-1] = (
+        2 * u[1:-1, 1:-1]
+        - u1[1:-1, 1:-1]
+        + (dt * c) ** 2
+        * (
+            (u[2:, 1:-1] - 2 * u[1:-1, 1:-1] + u[:-2, 1:-1]) / dx**2
+            + (u[1:-1, 2:] - 2 * u[1:-1, 1:-1] + u[1:-1, :-2]) / dy**2
+        )
+    )
 
     # Apply Dirichlet boundary conditions (u = 0 on the boundary)
     u_new[0, :] = 0
@@ -54,16 +61,17 @@ def update(frame):
 
     # Update the surface plot
     surf.remove()
-    surf = ax.plot_surface(X, Y, u, cmap='viridis')
+    surf = ax.plot_surface(X, Y, u, cmap="viridis")
     ax.set_zlim(-scale_factor, scale_factor)
-    ax.set_title('2D Wave Equation Simulation Using Finite Differences', color='white')
-    ax.set_xlabel('X', color='white')
-    ax.set_ylabel('Y', color='white')
-    ax.set_zlabel('U', color='white')
-    ax.tick_params(axis='x', colors='white')
-    ax.tick_params(axis='y', colors='white')
-    ax.tick_params(axis='z', colors='white')
-    return surf,
+    ax.set_title("2D Wave Equation Simulation Using Finite Differences", color="white")
+    ax.set_xlabel("X", color="white")
+    ax.set_ylabel("Y", color="white")
+    ax.set_zlabel("U", color="white")
+    ax.tick_params(axis="x", colors="white")
+    ax.tick_params(axis="y", colors="white")
+    ax.tick_params(axis="z", colors="white")
+    return (surf,)
+
 
 # Create animation
 anim = FuncAnimation(fig, update, frames=int(40 / dt), blit=False)
