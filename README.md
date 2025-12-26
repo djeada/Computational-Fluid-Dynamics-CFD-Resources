@@ -4,6 +4,20 @@ A comprehensive, open-source repository of educational materials, theoretical fo
 
 ![cfd_resources](https://github.com/user-attachments/assets/ac0cec05-abb0-4f8e-ae68-3df6bbb53308)
 
+## 📑 Table of Contents
+
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [🌟 Acknowledgments](#-acknowledgments)
+- [🎯 Repository Overview](#-repository-overview)
+- [📖 Content Organization](#-content-organization)
+  - [📝 Notes](#-notes)
+  - [🛠️ Practice](#️-practice)
+  - [📜 Scripts](#-scripts)
+- [🚀 Getting Started](#-getting-started)
+- [✨ Key Features](#-key-features)
+- [📚 References and Further Reading](#-references-and-further-reading)
+
 ## 🤝 Contributing
 
 We welcome contributions from the CFD community! Whether you're fixing documentation, adding new content, improving algorithms, or sharing insights, your contributions help make this a better resource for everyone.
