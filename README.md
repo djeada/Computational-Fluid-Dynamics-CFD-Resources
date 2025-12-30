@@ -11,7 +11,6 @@
 
 ### *Mastering the Art and Science of Fluid Flow Simulation*
 
-**A living, breathing ecosystem of knowledge for computational fluid dynamics**  
 *From fundamental theory to cutting-edge research, from classroom learning to industrial application*
 
 [🚀 Quick Start](#-getting-started) • [📚 Documentation](#-content-organization) • [🔬 Research](#-advanced-research-topics) • [💻 Code](#-scripts) • [🤝 Contribute](#-contributing)
@@ -22,11 +21,11 @@
 
 ## 🎯 Vision & Mission
 
-Welcome to the most comprehensive, community-driven repository for Computational Fluid Dynamics education and research. This isn't just a collection of notes and scripts—it's a **complete learning ecosystem** designed to transform curious minds into expert practitioners of fluid flow simulation.
+Welcome to the community-driven repository for Computational Fluid Dynamics education and research. It's a **complete learning ecosystem** designed to transform curious minds into expert practitioners of fluid flow simulation.
 
 ### 🌟 What Makes This Repository Groundbreaking
 
-In the vast ocean of CFD resources, this repository stands as a **lighthouse of structured, validated, and accessible knowledge**. We've distilled decades of research, thousands of papers, and countless hours of practical experience into a coherent, progressive learning system that adapts to your needs—whether you're:
+We've distilled decades of research, thousands of papers, and countless hours of practical experience into a coherent, progressive learning system that adapts to your needs—whether you're:
 
 - **🎓 A student** taking your first steps into fluid mechanics
 - **🔬 A researcher** pushing the boundaries of computational methods
