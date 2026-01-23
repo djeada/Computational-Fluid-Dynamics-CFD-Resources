@@ -1,178 +1,180 @@
-## Volume Mesh Generation with Gmsh
+Volume meshing is one of those things that sounds simple (“fill the inside”) until you try it on a real STL and the mesher starts complaining. The core idea is straightforward though: an STL is only triangles on the boundary, while most solvers (FEA, CFD, heat, etc.) need elements *inside* the domain so they can represent fields throughout the volume, not just on the skin.
 
-Volume mesh generation is critical in computational sciences and engineering. While a surface (or “shell”) mesh in formats like STL is perfect for rapid prototyping or visual demonstrations, many numerical simulations—be they structural, thermal, or fluid dynamic—require a **volume mesh** that discretizes the interior domain. This guide explains how Gmsh can convert a surface mesh into a fully 3D volume mesh using both the graphical user interface (GUI) and Gmsh’s scripting capabilities.
+Gmsh is a nice fit for this because it can sit in the middle between “I have a surface mesh” and “I need a usable 3D mesh”, and you can drive it either interactively (GUI) or reproducibly (scripts / CLI). Current stable Gmsh as of late 2025 is 4.15.0. ([gmsh.info][1])
 
-### Why Generate a Volume Mesh?
+### What “volume meshing from STL” really means
 
-I. **Finite Element Analysis (FEA)**  
-- To study stresses, strains, and deformations inside a 3D object, you need volumetric elements (e.g., tetrahedrons or hexahedrons) rather than just the outer shell.
-- Internal temperature distribution and conduction paths require interior nodes and elements to solve the governing equations accurately.
-II. **Computational Fluid Dynamics (CFD)**  
-- For external or internal flow analyses, the fluid domain itself must be volume meshed so solvers (e.g., finite volume or finite element methods) can resolve velocity, pressure, and turbulence quantities within the domain.
-III. **Design and Optimization**  
-- Solid (volumetric) domains can be parameterized and analyzed for a range of operational conditions.
-- Volume meshes support heterogeneous material properties or graded structures in advanced manufacturing simulations.
+An STL is a *discrete surface mesh*. For volume meshing, Gmsh needs a *closed* surface that it can treat as the boundary of a region. In practice, you usually end up doing three steps:
 
-### Gmsh: A Quick Overview
+1. **Make the surface usable as geometry**
+   STL triangles don’t come with nice topological structure (edges, curves, “this set of triangles is one face”, etc.). Gmsh typically “classifies” the triangles into surface patches based on feature angles, then builds a parametric representation for those patches. This is exactly what the official tutorial for remeshing STL does. ([gmsh.info][2])
 
-[Gmsh](http://gmsh.info/) is a robust, open-source mesh generator featuring:
+2. **Define a volume from the closed surface**
+   Once Gmsh has surface entities, you wrap them into a “surface loop” and then create a volume from that loop.
 
-- 1D (lines), 2D (surfaces), 3D (volumes).
-- Geometric primitives and Boolean operations for geometry construction.
-- A user-friendly graphical interface alongside a powerful *.geo* scripting language that automates complex tasks.
-- Control over meshing algorithms, element size fields, boundary-layer meshing, etc.
+3. **Generate the 3D mesh + check quality**
+   Tetrahedral meshing is usually one command, but quality control is where you decide whether the result is solver-ready.
 
-#### Typical GUI Steps for Volume Meshing
+If you *also* have the original CAD (STEP/IGES), it’s usually better to import that instead of going through STL reparametrization—CAD surfaces tend to be smoother and mesh more cleanly. ([gmsh.info][2])
 
-I. **File $\rightarrow$ Open**: Import your surface mesh file (e.g., an STL or an existing Gmsh .msh file).  
+### Quick GUI workflow (good for one-offs)
 
-II. **Define a Volume**: Under the Physical Groups menu, select “Add $\rightarrow$ Volume” and pick the enclosed surface(s).  
+If your STL is clean and you just want to get moving:
 
-III. **Generate 3D Mesh**: Go to Mesh $\rightarrow$ 3D.  
+* **File → Merge** to load the STL.
+* If the model is a single “blob” of triangles, you’ll often want to **classify/reparametrize** first so Gmsh can treat it as surfaces instead of a raw triangle soup. (In the CLI this is `-reclassify` / `-reparam`; more on that below.)
+* Create a volume (in scripting terms this is “Surface Loop → Volume”), then **Mesh → 3D**.
+* Use **Tools → Statistics → Quality** to see if you have nasty elements before exporting.
 
-IV. **Adjust Mesh Settings**: Under Tools $\rightarrow$ Options $\rightarrow$ Mesh, you can configure element size factors or other mesh controls.
+This is fine for small models. For bigger STLs or anything you want to repeat, it’s worth switching to scripts.
 
-* For large or highly detailed surface meshes, the GUI approach may become slow or impractical. This is where Gmsh scripting shines.
+### A minimal `.geo` that actually works on typical STLs
 
-### Volume Mesh Generation via Scripting
+A lot of “minimal examples” online skip the important part: turning the STL into something Gmsh can build a volume from. The Gmsh tutorial `t13` shows the robust version: merge STL, classify surfaces, create geometry, then define the volume. ([gmsh.info][2])
 
-Scripting automates and accelerates the volume meshing process, especially for large or intricate geometries. Below is a minimal script demonstrating how to generate a 3D volume mesh from an STL surface mesh.
+Here’s a starter file you can drop in as `mesh_from_stl.geo`:
 
-#### Minimal Script
+```geo
+// Load the STL surface mesh
+Merge "part.stl";
 
-```plaintext
-Merge "mesh_file.stl";
-Surface Loop(1) = {1};
+// Split the triangle soup into surface patches based on feature angle
+angle = 40;                    // degrees; tweak if you get too many/few patches
+includeBoundary = 1;
+forceParametrizablePatches = 0;
+curveAngle = 180;
+
+ClassifySurfaces{angle * Pi/180, includeBoundary, forceParametrizablePatches,
+                 curveAngle * Pi/180};
+
+// Build a geometry (parametrization) for the classified discrete surfaces
+CreateGeometry;
+
+// If the STL is a closed shell, this grabs all surfaces and makes one volume
+Surface Loop(1) = Surface{:};
 Volume(1) = {1};
-```
-I. **Merge**:  
-   - `Merge "mesh_file.stl";` imports the external surface mesh (in STL format) into the current Gmsh model.  
-   - If you have multiple surfaces or a multi-part geometry, you might see multiple surfaces (Surface(1), Surface(2), etc.). Adjust indices accordingly.
-II. **Surface Loop**:  
-- e.g., `{1,2,3,4}`.
-III. **Volume**:  
-   - `Volume(1) = {1};` declares a volume entity from the Surface Loop(1). Once declared, Gmsh knows it should fill this region with 3D elements (e.g., tetrahedra).
-#### Running the Script
 
-Save the script in a file named `meshing.geo`. Then run from a terminal or command prompt:
+// Optional: set a simple global target size (you can replace this with Fields later)
+Mesh.CharacteristicLengthMin = 1.0;
+Mesh.CharacteristicLengthMax = 1.0;
+```
+
+Then run:
 
 ```bash
-gmsh meshing.geo -3 -o output.mesh
+gmsh mesh_from_stl.geo -3 -o part.msh
 ```
 
-- Tells Gmsh to perform a full 3D mesh generation.
-- Specifies the filename for the generated volume mesh. Gmsh supports a variety of output formats such as `.msh`, `.mesh`, `.unv`, etc.
+A couple of useful flags you’ll likely reach for:
 
-#### Additional Scripting Options
+* `-optimize` or `-optimize_netgen` to smooth/improve tetrahedra quality after generation. ([gmsh.info][2])
+* `-format msh2` / `-format msh` etc. to control output format. ([gmsh.info][2])
 
-- **Global Element Size**  
-
-    ```plaintext
-    Mesh.ElementSizeFactor = 0.5;
-    ```
-  - This helps control mesh granularity if you need finer or coarser elements overall.
-- **Refinement Fields**  
-    ```plaintext
-    Field[1] = Distance;
-    Field[1].NodesList = {1}; // Node 1, for example
-    ...
-    Background Field = 1;
-    ```
-  - This advanced topic is useful for controlling mesh size based on geometry proximity or curvature.
-- **Multiple Surfaces**  
-
-    ```plaintext
-    Merge "complex_geometry.stl";
-    // Suppose Gmsh enumerates them as Surfaces 1,2,3
-    Surface Loop(1) = {1, 2, 3};
-    Volume(1) = {1};
-    ```
-- **Saving in Different Formats**  
-  - The `-o output.msh` syntax writes in the default Gmsh format if `.msh` is used. You can specify other extensions depending on your solver requirements (e.g., `.vtu` for VTK-based solvers).
-
-### Best Practices
-
-To go from a “just-good-enough-for-visualisation” STL to a solver-ready 3-D volume mesh you can treat the process as a short production pipeline—clean → close → fill → mesh → check → export—and automate almost every step with Gmsh’s Python API or its non-interactive command line.
-Below I walk through that pipeline in prose form, then give you complete code fragments you can paste into a job script or a notebook. The examples assume the current stable Gmsh 4.13.1 released on 24 May 2024 ([Gmsh][1]).
-
-If the STL contains gaps, inverted facets or self-intersections the very first call to `gmsh.model.mesh.importStl()` raises an error, so before meshing you let OpenCASCADE patch things up for you.  The kernel ships with several auto-healing switches—`Geometry.OCCAutoFix`, `Geometry.OCCMakeSolids`, `Geometry.OCCFixDegenerated`—that are enabled by default, but it is wise to toggle the verbose terminal output (`General.Terminal=1`) so you actually see which faces get sewn or flipped.  After import, call `gmsh.model.occ.synchronize()` and use the graphical path *Tools → Statistics → Surface mesh* to convince yourself that the surface is now watertight; the same information is available head-less through `gmsh.model.mesh.getDuplicateNodes()` and friends, which return empty arrays when the shell is manifold.
-
-Once the shell is closed you still need a volume to seed the tetrahedral algorithm.  In the GUI you press *Add → Volume*; in a script you collect all surface IDs in one line (`surf_loop = gmsh.model.occ.addSurfaceLoop(all_surfaces)`) and wrap them into a volume (`vol = gmsh.model.occ.addVolume([surf_loop])`).  Another `synchronize()` call propagates the topology to the mesh module.  Generation itself is a single command: `gmsh.model.mesh.generate(3)`.  If you prefer a one-liner in batch mode you can accomplish the same with
+Example:
 
 ```bash
-gmsh part.stl -3 -optimize_netgen -format msh40 -o part.msh
+gmsh mesh_from_stl.geo -3 -optimize_netgen -format msh2 -o part.msh
 ```
 
-the `-3` switch starts the 3-D generator, while `-optimize_netgen` launches the built-in Netgen smoother for an immediate quality lift.
+(If you’re feeding OpenFOAM or other tools that prefer older MSH variants, forcing `msh2` is common.)
 
-Quality control is not negotiable when the mesh is destined for a nonlinear Navier-Stokes or structural solver.  In the GUI choose *Tools → Statistics → Quality* and colour the elements by, say, *skewness*; anything red is a candidate for local refinement.  In a batch workflow you query the same metric directly:
+### About “watertight” and other STL reality checks
 
-```python
-quals = gmsh.model.mesh.getElementQualities()
-print("min = %.3g,  mean = %.3g" % (min(quals), sum(quals)/len(quals)))
-```
+Most failures come down to the boundary not defining a clean region. Typical issues:
 
-`getElementQualities()` is part of the public API .  If the minimum plunges below 0.1 you usually re-run `gmsh.model.mesh.optimize("Netgen")` or apply the high-order optimizer for curved elements.
+* **Holes / gaps**: even a tiny gap means there’s no well-defined inside.
+* **Self-intersections**: triangles crossing each other confuse region detection.
+* **Non-manifold edges**: edges shared by more than two triangles are common in messy exports.
+* **Scale surprises**: STL has no units; a “1” could be 1 mm or 1 m. If your mesh size feels wrong by 1000×, this is why.
 
-For meshes that barely fit in memory you gain far more by scripting than by clicking.  Gmsh is fundamentally single-core during topology creation, but you can split and write the mesh into *N* partitions in one pass (`-part N` at the command line ([Manpagez][2]) or the Python call `gmsh.model.mesh.partition(N)` ).  On a cluster you then mesh once on the login node, copy the *N* `.msh` chunks to the working directory and launch the solver in parallel; the mesher’s RAM footprint never grows above a single partition.
+If the surface isn’t closed, Gmsh can still remesh the surface, but volume meshing won’t do what you expect because there is no enclosed volume to fill.
 
-When your STL actually holds several independent cavities—think fuel + oxidiser manifolds—you repeat the *surface loop → volume* pattern for each region.  The GUI names them *Volume 1*, *Volume 2*…; in a script you tag each with a physical label so that the downstream solver can assign materials:
+One workflow that helps in practice is: first reparametrize/remesh the STL surface (to clean it up), save that, then volume mesh from the cleaned surface. Gmsh even mentions doing the classify+reparam steps in batch mode with `-reparam`. ([gmsh.info][2])
 
-```python
-gmsh.model.addPhysicalGroup(3, [vol1], tag=1)  # aluminium wall
-gmsh.model.setPhysicalName(3, 1, "Solid")
-gmsh.model.addPhysicalGroup(3, [vol2], tag=2)  # internal fluid
-gmsh.model.setPhysicalName(3, 2, "Fluid")
-```
+### Mesh sizing without going down a rabbit hole
 
-Finally, export uses exactly the format your solver likes.  OpenFOAM expects the binary flavour of *MSH 2*; so call
+A single global size is fine for first attempts, but you’ll often want smaller elements near curvature, sharp features, or thin passages.
+
+Gmsh “Fields” are the usual way to do this. The tutorial example uses a MathEval field just to demonstrate the mechanism. ([gmsh.info][2]) In real work, common patterns are:
+
+* distance-to-surface fields (refine near boundaries),
+* curvature-based sizing,
+* boundary layers (especially for CFD).
+
+You don’t need to add all of that on day one—just know that if your mesh either explodes in element count or misses details, sizing control is the lever you pull next.
+
+### Quality checks that are worth doing every time
+
+Before exporting to a solver, do at least a quick sanity pass:
+
+* **Look at a cut plane / clipped view** to see if the interior is filled the way you think.
+* **Check element quality metrics** (skewness, Jacobian, etc.). In CLI workflows, post-optimization is often the difference between “imports fine” and “solver dies immediately”.
+
+Gmsh exposes tetra optimization thresholds and Netgen-based optimization as options (and as CLI switches). ([gmsh.info][2])
+
+### Partitioning for big meshes (when you outgrow “one file”)
+
+If you’re running parallel solvers or you simply need the mesh split, Gmsh can partition after batch mesh generation using `-part`, and can write separate files with `-part_split`. ([gmsh.info][2])
+
+Example:
 
 ```bash
-gmshToFoam part.msh
+gmsh mesh_from_stl.geo -3 -part 8 -part_split -o part.msh
 ```
 
-or, if you wish to stay in Python, rely on `meshio` to re-encode the mesh.  Elmer reads `.msh` directly, SU2 prefers `.cgns`, and most commercial CFD codes can digest the ASCII *UNV* produced by `gmsh -o part.unv -format unv`.
+This won’t magically fix a bad mesh, but it’s handy once the mesh is already good and you need it packaged for downstream tooling.
 
-### Complete self-contained Python example
+### A corrected “complete” Python API example (STL → volume mesh)
+
+One important fix from your draft: `gmsh.model.mesh.importStl()` is *not* a “load this STL file” function—it imports an STL representation *from the current model* and takes no filename. ([gmsh.info][2])
+For loading an STL file in the API, the common approach is to merge it, then classify/create geometry (same logic as the `.geo` script).
+
+Here’s a self-contained example that mirrors the tutorial flow:
 
 ```python
-import gmsh, sys, meshio
+import gmsh
 
 gmsh.initialize()
 gmsh.option.setNumber("General.Terminal", 1)
 
-gmsh.model.mesh.importStl("part.stl")       # read + heal
-gmsh.model.occ.synchronize()
+gmsh.model.add("stl_volume")
 
-surfs = gmsh.model.getEntities(2)           # collect STL facets
-loop  = gmsh.model.occ.addSurfaceLoop([s[1] for s in surfs])
-vol   = gmsh.model.occ.addVolume([loop])
-gmsh.model.occ.synchronize()
+# Load STL triangles
+gmsh.merge("part.stl")
 
-gmsh.model.addPhysicalGroup(3, [vol], 1)
-gmsh.model.setPhysicalName(3, 1, "Domain")
+# Classify triangles into patches and build a parametric geometry
+angle_deg = 40
+gmsh.model.mesh.classifySurfaces(angle_deg * 3.1415926535 / 180.0,
+                                 includeBoundary=True,
+                                 forceParametrizablePatches=False,
+                                 curveAngle=3.1415926535)
+gmsh.model.mesh.createGeometry()
 
-gmsh.model.mesh.generate(3)                 # tetrahedral mesh
-gmsh.model.mesh.optimize("Netgen")          # smoothing pass
+# Collect all surface entities and create a volume in the built-in CAD kernel
+surfs = gmsh.model.getEntities(2)
+sl = gmsh.model.geo.addSurfaceLoop([s[1] for s in surfs])
+vol = gmsh.model.geo.addVolume([sl])
+gmsh.model.geo.synchronize()
 
-print("Worst quality :", min(gmsh.model.mesh.getElementQualities()))
+# Physical group (helps most solvers)
+pg = gmsh.model.addPhysicalGroup(3, [vol])
+gmsh.model.setPhysicalName(3, pg, "Domain")
 
-gmsh.write("part.msh")                      # native output
+# Mesh size (simple global size to start)
+gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 1.0)
+gmsh.option.setNumber("Mesh.CharacteristicLengthMax", 1.0)
+
+# Generate and optionally optimize
+gmsh.model.mesh.generate(3)
+gmsh.model.mesh.optimize("Netgen")  # similar idea to -optimize_netgen
+
+gmsh.write("part.msh")
 gmsh.finalize()
-
-# optional: convert to CGNS for SU2
-mesh = meshio.read("part.msh")
-meshio.write("part.cgns", mesh)
 ```
 
-Save the file as `mesh.py`, then run on four cluster cores:
+If you run into “too many tiny surfaces” or “one giant surface that won’t parametrize well”, the first knob to touch is `angle_deg`. Lower angles create more patches (more splitting on features); higher angles keep patches larger.
 
-```bash
-srun -n4 --mem=4G python mesh.py
-```
+---
 
-The script never opens a window, finishes in minutes for tens of millions of tets and leaves you with `part.msh` plus any derivative formats you need.
-
-That’s the whole workflow in practice: an STL goes in, a clean, partitioned, quality-checked volume mesh comes out, ready for OpenFOAM, Elmer, SU2 or your in-house code—with every operation scripted so tomorrow’s bigger model can reuse today’s pipeline unchanged.
-
-
+[1]: https://gmsh.info/ "Gmsh: a three-dimensional finite element mesh generator with built-in pre- and post-processing facilities"
+[2]: https://gmsh.info/doc/texinfo/gmsh.html "Gmsh 4.15.0"
