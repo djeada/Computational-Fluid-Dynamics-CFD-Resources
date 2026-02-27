@@ -204,13 +204,12 @@ $$M_A = -10 \times 3 = -30 \text{ kN·m (clockwise)}$$
 ## Example 3: Truss Joint Analysis
 
 **Given**:
-- A truss joint $C$ where three members meet
+- A truss joint $C$ where two members meet
 - External load at joint $C$: $P = 50$ kN downward
-- Member $CA$ is inclined at $45°$ to the horizontal
-- Member $CB$ is horizontal
-- Member $CD$ is vertical
+- Member $CA$ is inclined at $45°$ to the horizontal (upward to the left)
+- Member $CB$ is horizontal (to the right)
 
-**Find**: Forces in members $CA$, $CB$, and $CD$
+**Find**: Forces in members $CA$ and $CB$
 
 **Solution**:
 
@@ -218,23 +217,17 @@ Isolate joint $C$ and draw its FBD showing all member forces as tensions (pullin
 
 Vertical equilibrium:
 
-$$\sum F_y = 0: \quad F_{CA}\sin 45° + F_{CD} - P = 0$$
+$$\sum F_y = 0: \quad F_{CA}\sin 45° - P = 0$$
+
+$$F_{CA} = \frac{P}{\sin 45°} = \frac{50}{0.707} = 70.71 \text{ kN (tension)}$$
 
 Horizontal equilibrium:
 
-$$\sum F_x = 0: \quad F_{CA}\cos 45° + F_{CB} = 0$$
+$$\sum F_x = 0: \quad -F_{CA}\cos 45° + F_{CB} = 0$$
 
-From the geometry and loading, solving simultaneously:
+$$F_{CB} = F_{CA}\cos 45° = 70.71 \times 0.707 = 50 \text{ kN (tension)}$$
 
-$$F_{CA}\sin 45° + F_{CD} = 50$$
-
-If $F_{CD} = 0$ (two-force member condition not applicable here, additional information needed), with an assumed $F_{CD} = 20$ kN (tension):
-
-$$F_{CA} = \frac{50 - 20}{\sin 45°} = \frac{30}{0.707} = 42.43 \text{ kN (tension)}$$
-
-$$F_{CB} = -42.43\cos 45° = -30 \text{ kN (compression)}$$
-
-The negative sign indicates that member $CB$ is in compression, opposite to the assumed tension direction.
+Both results are positive, confirming the assumed tension directions are correct. Member $CA$ carries a tension of $70.71$ kN and member $CB$ carries a tension of $50$ kN.
 
 ## Common Mistakes
 

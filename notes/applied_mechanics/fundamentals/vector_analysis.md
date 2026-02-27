@@ -194,7 +194,7 @@ $$\mathbf{r}_{AB} = (5-1)\mathbf{i} + (6-0)\mathbf{j} + (0-3)\mathbf{k} = 4\math
 
 Magnitude:
 
-$$|\mathbf{r}_{AB}| = \sqrt{4^2 + 6^2 + 3^2} = \sqrt{16 + 36 + 9} = \sqrt{61} = 7.81 \text{ m}$$
+$$|\mathbf{r}_{AB}| = \sqrt{4^2 + 6^2 + (-3)^2} = \sqrt{16 + 36 + 9} = \sqrt{61} = 7.81 \text{ m}$$
 
 Unit vector:
 
