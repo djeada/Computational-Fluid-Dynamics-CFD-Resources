@@ -6,7 +6,7 @@ This script compares the normalised velocity profiles of laminar and turbulent b
 
 - Computes laminar profile using the quadratic Blasius-like approximation
 - Computes turbulent profile using the 1/7 power law
-- Plots both normalised velocity profiles against the normalised wall distance η = y/δ
+- Plots both normalised velocity profiles against the normalised wall distance $\eta = y/\delta$
 - Annotates each curve with descriptive labels (thin/smooth vs. thicker/fuller)
 - Highlights the higher near-wall gradient of the turbulent profile
 
@@ -41,4 +41,4 @@ The steeper near-wall gradient of the turbulent profile yields a larger $\tau_w$
 
 ## Output
 
-The script displays a single figure with two normalised velocity profiles plotted against η. The turbulent curve sits noticeably to the right of the laminar curve, illustrating its fuller shape and higher near-wall momentum. Annotations on the plot identify each profile and note the physical implications for wall shear stress.
+The script displays a single figure with two normalised velocity profiles plotted against $\eta$. The turbulent curve sits noticeably to the right of the laminar curve, illustrating its fuller shape and higher near-wall momentum. Annotations on the plot identify each profile and note the physical implications for wall shear stress.

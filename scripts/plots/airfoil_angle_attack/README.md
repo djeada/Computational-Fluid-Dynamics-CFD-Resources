@@ -1,13 +1,13 @@
 # Airfoil Angle of Attack
 
-This script plots a NACA 4-digit airfoil (m = 0.02, p = 0.4, t = 0.12, chord c = 2.0) at two angles of attack — 10° and 60° — to contrast attached and fully separated flow regimes. The airfoil geometry is constructed from the standard NACA thickness distribution, then rotated using a 2D rotation matrix. Dashed chord-line arrows indicate the direction of each angle of attack, and a free-stream arrow marks the oncoming flow direction.
+This script plots a NACA 4-digit airfoil (m = 0.02, p = 0.4, t = 0.12, chord c = 2.0) at two angles of attack — $10^\circ$ and $60^\circ$ — to contrast attached and fully separated flow regimes. The airfoil geometry is constructed from the standard NACA thickness distribution, then rotated using a 2D rotation matrix. Dashed chord-line arrows indicate the direction of each angle of attack, and a free-stream arrow marks the oncoming flow direction.
 
 ![angle_of_attack](https://github.com/user-attachments/assets/ec38fb22-8c04-4947-a911-e17eaec8e178)
 
 ## Overview
 
 - NACA 4-digit airfoil geometry (m=0.02, p=0.4, t=0.12, c=2.0)
-- Two overlaid airfoil outlines at α = 10° (attached) and α = 60° (stalled)
+- Two overlaid airfoil outlines at $\alpha = 10^\circ$ (attached) and $\alpha = 60^\circ$ (stalled)
 - 2D rotation matrix applied to transform airfoil coordinates
 - Chord-line arrows and free-stream direction annotation
 
@@ -33,7 +33,7 @@ Thin-airfoil theory predicts the lift coefficient as a linear function of angle 
 
 $$C_L = 2\pi\sin\alpha$$
 
-This relationship breaks down near the critical stall angle (~15° for typical airfoils), beyond which flow separates and lift drops sharply.
+This relationship breaks down near the critical stall angle (${\sim}15^\circ$ for typical airfoils), beyond which flow separates and lift drops sharply.
 
 ## Implementation
 
@@ -45,5 +45,5 @@ This relationship breaks down near the critical stall angle (~15° for typical a
 
 ## Output
 
-The script displays and saves `airfoil_angle_attack.png`: two NACA airfoil outlines rotated to 10° and 60° angles of attack, with chord-line dashed arrows and a free-stream indicator, illustrating attached versus post-stall configurations.
+The script displays and saves `airfoil_angle_attack.png`: two NACA airfoil outlines rotated to $10^\circ$ and $60^\circ$ angles of attack, with chord-line dashed arrows and a free-stream indicator, illustrating attached versus post-stall configurations.
 

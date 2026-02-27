@@ -1,14 +1,14 @@
 
 # Meniscus Behavior
 
-This script visualizes the formation of menisci in glass tubes by plotting two side-by-side panels: (a) water in glass, exhibiting an upward concave meniscus due to adhesive forces exceeding cohesive forces, and (b) mercury in glass, exhibiting a downward convex meniscus where cohesion dominates. Each meniscus is approximated as a parabolic curve of the form ±0.5x², illustrating how contact angle determines the curvature direction and the resulting capillary rise or depression.
+This script visualizes the formation of menisci in glass tubes by plotting two side-by-side panels: (a) water in glass, exhibiting an upward concave meniscus due to adhesive forces exceeding cohesive forces, and (b) mercury in glass, exhibiting a downward convex meniscus where cohesion dominates. Each meniscus is approximated as a parabolic curve of the form $\pm 0.5x^2$, illustrating how contact angle determines the curvature direction and the resulting capillary rise or depression.
 
 ![meniscus_behavior](https://github.com/user-attachments/assets/9d3eee1d-b9f8-4ed2-b7cb-e95a23bec953)
 
 ## Overview
 
 - Two-panel figure comparing concave (water) and convex (mercury) menisci
-- Parabolic curve approximation ±0.5x² for each meniscus shape
+- Parabolic curve approximation $\pm 0.5x^2$ for each meniscus shape
 - Annotations for contact angle, liquid type, and wetting behavior
 - Illustrates the link between surface energy and capillary action
 

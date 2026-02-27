@@ -21,6 +21,7 @@ $$f(x, t) = \varepsilon \sin(\omega t)\, x^2 + \bigl(1 - 2\varepsilon \sin(\omeg
 The velocity components are:
 
 $$u = -\pi A \sin(\pi f)\cos(\pi y)$$
+
 $$v = \pi A \cos(\pi f)\sin(\pi y)\,\frac{\partial f}{\partial x}$$
 
 ### Eulerian Description

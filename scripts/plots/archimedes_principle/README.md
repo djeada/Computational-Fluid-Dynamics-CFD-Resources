@@ -4,7 +4,7 @@ This script provides an interactive visualisation of Archimedes' principle by co
 
 ## Overview
 
-- Accepts object density, fluid density (default 1000 kg/m³), and object volume (default 1 m³) as inputs
+- Accepts object density, fluid density (default 1000 kg/m$^3$), and object volume (default 1 m$^3$) as inputs
 - Computes gravitational weight $W$ and buoyant force $F_b$ from first principles
 - Determines whether the object floats or sinks based on the density ratio
 - Renders labeled force arrows for both weight and buoyancy on a fluid diagram
@@ -18,7 +18,7 @@ The downward gravitational force on the object is:
 
 $$W = \rho_{\text{obj}}\, V\, g$$
 
-where $\rho_{\text{obj}}$ is the object density (kg/m³), $V$ is the object volume (m³), and $g = 9.81$ m/s² is gravitational acceleration.
+where $\rho_{\text{obj}}$ is the object density (kg/m$^3$), $V$ is the object volume (m$^3$), and $g = 9.81$ m/s$^2$ is gravitational acceleration.
 
 ### Buoyant Force
 
