@@ -71,7 +71,7 @@ Each subdirectory contains detailed README files and tutorials. For beginners, w
 
 1. `gmsh/intro.md` - Understanding mesh generation basics
 2. `paraview/intro.md` - Learning visualization fundamentals
-3. `openfoam/getting_sta I'm left-leaning, and was a student of Professor Mearsheimer years ago. My dad is right-leaning, and has been a fan of Tucker for years. I note that because seeing these two worlds converge is mind-blowing on just about every level. rted.md` - First CFD simulation
+3. `openfoam/getting_started.md` - First CFD simulation
 
 ## Tools Covered
 

@@ -5,7 +5,7 @@ Gmsh is a versatile 3D finite element mesh generator that combines a built-in CA
 ### Key Features
 
 I. **CAD Integration**  
-- points, lines, curves, surfaces, and volumes.
+   - Supports points, lines, curves, surfaces, and volumes.
    - Users can directly define or import geometry, and then apply transformations, extrusions, or Boolean operations.
 II. **Meshing Capabilities**  
    - Supports **1D**, **2D**, and **3D** meshing with robust algorithms (e.g., Delaunay, frontal, etc.) for high-quality triangulations and tetrahedral meshes.  
@@ -17,19 +17,19 @@ IV. **Scripting Language**
    - A built-in *.geo* scripting language automates geometry creation, meshing parameters, and repetitive tasks.  
    - Gmsh can also be controlled via an API (e.g., Python, C++, Julia) for seamless integration into larger workflows.
 V. **User Interface**  
-- Intuitive menu-driven environment, enabling direct manipulation of geometry, meshing parameters, and post-processing settings.
-- Ideal for batch processing, large parametric studies, or remote HPC clusters.
+   - Intuitive menu-driven environment, enabling direct manipulation of geometry, meshing parameters, and post-processing settings.
+   - Ideal for batch processing, large parametric studies, or remote HPC clusters.
 
 ### Installation
 
 Gmsh runs on **Windows**, **macOS**, and **Linux**. Below are common installation paths:
 
 I. **Download**  
-- //gmsh.info).
+   - Visit [gmsh.info](http://gmsh.info) to download the latest release.
 II. **Installation Steps**  
-- Run the executable (.exe) installer and follow prompts.
-- Mount the disk image (.dmg) and drag Gmsh into your Applications folder.
-- Many distributions include Gmsh in their repositories (`sudo apt-get install gmsh` on Ubuntu/Debian), or compile from source for maximum flexibility.
+   - Run the executable (.exe) installer and follow prompts.
+   - Mount the disk image (.dmg) and drag Gmsh into your Applications folder.
+   - Many distributions include Gmsh in their repositories (`sudo apt-get install gmsh` on Ubuntu/Debian), or compile from source for maximum flexibility.
 III. **Verification**  
    - Open a terminal or command prompt and type `gmsh --version` to confirm a successful installation.
 
@@ -138,14 +138,14 @@ I. **Geometry Import/Export**
    - Once imported, the geometry can be re-meshed or processed further.
 II. **Extrusions & 3D Lofting**  
    - Gmsh supports sweeping or extruding 2D surfaces into 3D volumes.  
-- `Extrude {0,0,1} { Surface{1}; }` to create a prismatic volume.
+   - For example, `Extrude {0,0,1} { Surface{1}; }` creates a prismatic volume.
 III. **Boundary Layers**  
    - Vital for CFD analyses. Gmsh can create anisotropic boundary layers near walls to capture flow gradients.
 IV. **Custom Fields & Meshing Constraints**  
    - Define local size fields that adapt the mesh based on geometry proximity or curvature.  
    - This is useful for refining around complex edges or capturing boundary layer transitions.
 V. **Scripting Extensions**  
-- //gmsh.info/doc/texinfo/gmsh.html#The-Gmsh-API).
+   - The [Gmsh API](http://gmsh.info/doc/texinfo/gmsh.html#The-Gmsh-API) provides bindings for Python, C++, and Julia.
    - This is valuable for large optimization loops or parameter sweeps.
 
 ### Resources
@@ -156,8 +156,8 @@ V. **Scripting Extensions**
   (Covers commands, APIs, and example scripts in detail.)  
 - [Gmsh Tutorial Page](http://gmsh.info/#Tutorials)
   (Step-by-step guides that provide deeper insight into geometry creation and meshing techniques.)  
-- //gmsh.info/#Mailing_list)
-- //onelab.info/pipermail/gmsh/)
+- [Gmsh Mailing List](http://gmsh.info/#Mailing_list)
+- [Gmsh Mailing List Archive](http://onelab.info/pipermail/gmsh/)
   (Good places for user questions, development discussions, and troubleshooting.)  
 - [Gmsh GitLab Repository](https://gitlab.onelab.info/gmsh/gmsh)
 - [Gmsh Examples Page](http://gmsh.info/#Example_files)

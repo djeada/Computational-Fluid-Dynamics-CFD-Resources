@@ -81,7 +81,7 @@ Visualization complete. Image saved as elbow_pressure.png.
 
 ### Exploring the Pipeline Browser
 
-The **Pipeline Browser** is a important component of ParaView, serving as the backbone for all visualization tasks. It manages the sequence of data processing steps, known as filters, applied to the dataset.
+The **Pipeline Browser** is an important component of ParaView, serving as the backbone for all visualization tasks. It manages the sequence of data processing steps, known as filters, applied to the dataset.
 
 All visualizations originate from the Pipeline Browser, beginning with reading the data (the initial filter) and progressively adding more filters to refine the visualization. Each filter has associated properties that can be adjusted to achieve the desired output.
 
@@ -95,7 +95,7 @@ To demonstrate the functionality of ParaView, let's go through an example of vis
 
 I. **Choose a Source**
 
-- Find your way through to the top menu and select `Sources`.
+- Navigate to the top menu and select `Sources`.
 - From the dropdown, choose `Sphere`.
 
 The sphere will appear in the central widget area, ready for further modifications.
@@ -117,7 +117,7 @@ Enhance the visualization by adjusting various properties of the sphere:
 
 ParaView comes equipped with example datasets that help learning and experimentation. These datasets are typically located in the `examples` folder within the ParaView installation directory.
 
-For instance, to load the `disk_out_ref2` dataset, find your way through to the following path:
+For instance, to load the `disk_out_ref2` dataset, navigate to the following path:
 
 ```sh
 /opt/ParaView-5.10.1/share/paraview-5.10/examples/disk_out_ref.ex2
@@ -149,7 +149,7 @@ Apply the `Clip` filter to remove unwanted sections of the object, isolating a s
 
 ### Utilizing Filters in ParaView
 
-Filters are necessary tools within ParaView that process and transform data, enabling the extraction of meaningful insights and the creation of informative visualizations.
+Filters are essential tools within ParaView that process and transform data, enabling the extraction of meaningful insights and the creation of informative visualizations.
 
 #### Adding Filters
 
@@ -220,7 +220,7 @@ ParaView offers strong options for saving your visualization setup, ensuring tha
 
 Saving your filter pipeline as a Python script allows for automation and modification:
 
-I. Find your way through to `File > Save State`.
+I. Navigate to `File > Save State`.
 II. Choose the Python file format for saving.
 
 *Example Command:*
@@ -243,7 +243,7 @@ Visualization state saved as visualization_setup.py.
 
 To recreate a saved visualization setup:
 
-I. Find your way through to `File > Load State`.
+I. Navigate to `File > Load State`.
 
 II. Select the previously saved Python script.
 
@@ -272,20 +272,14 @@ While ParaView provides comprehensive graphical capabilities, ASCII diagrams can
 
 ```
 Original Data
-
- |
-
- V
+     |
+     V
 Filter 1 (e.g., Clip)
-
- |
-
- V
+     |
+     V
 Filter 2 (e.g., Contour)
-
- |
-
- V
+     |
+     V
 Visualization Output
 ```
 

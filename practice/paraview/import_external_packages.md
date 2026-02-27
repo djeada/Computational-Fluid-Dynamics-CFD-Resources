@@ -87,7 +87,9 @@ from paraview.simple import *
 
 # ... rest of your ParaView automation code ...
 ```
-* 
+
+The script works as follows:
+
 I. We look for a command-line argument `--virtual-env <path_to_env>`.  
 II. We build the path to `activate_this.py`, which is an internal script that sets up `sys.path` and environment variables to include packages from your `venv`.  
 III. We call `exec(open(virtualEnv).read(), ...)` (or `execfile` for Python 2) to dynamically run the activation script before importing external packages.
