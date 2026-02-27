@@ -63,11 +63,11 @@ Applied mechanics integrates fundamental principles of physics with engineering 
 - [PID Controllers](./control_systems/pid_controllers.md)
 
 ### 7. [Transportation Systems](./transportation/)
-- **[Airplanes](./airplanes/)** - Aircraft design, aerodynamics, and flight mechanics
-- **[Cars](./cars/)** - Automotive engineering, vehicle dynamics, and design
-- [Ships and Marine Vehicles](./ships/)
-- [Railways](./railways/)
-- [Spacecraft](./spacecraft/)
+- **[Airplanes](./transportation/airplanes/)** - Aircraft design, aerodynamics, and flight mechanics
+- **[Cars](./transportation/cars/)** - Automotive engineering, vehicle dynamics, and design
+- [Ships and Marine Vehicles](./transportation/ships/)
+- [Railways](./transportation/railways/)
+- [Spacecraft](./transportation/spacecraft/)
 
 ### 8. [Mechanical Systems](./mechanical_systems/)
 - [Mechanisms and Linkages](./mechanical_systems/mechanisms.md)
