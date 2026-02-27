@@ -101,3 +101,20 @@ Visual Representation
 ![RBF Interpolation](https://github.com/djeada/Computational-Fluid-Dynamics-CFD-Resources/assets/37275728/fcd47b3f-f1f7-48d0-8406-559e46f120cc)
 
 The figure shows an RBF interpolation using polyharmonic splines on a set of data. The resulting curve smoothly interpolates all sample points, highlighting how RBFs adapt to nonlinearity without requiring explicit knowledge of the underlying function form. In contrast to ordinary least squares approximations that might impose a fixed polynomial degree and fail to capture complex behaviors, RBF interpolation flexibly conforms to the data’s shape, providing accurate and smooth interpolations.
+
+## Purpose in CFD
+
+RBF interpolation provides a flexible, mesh-free surrogate that can handle scattered sample points in high-dimensional design spaces. This note defines the RBF model $\hat{y}(x) = \sum w_i R(\|x - x^{(i)}\|)$, catalogs common basis functions (Gaussian, multiquadric, inverse multiquadric, polyharmonic splines), discusses the scaling parameter and its effect, and explains how to solve for the weights. RBF surrogates are widely used for aerodynamic shape optimization and response-surface modeling in CFD.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Sample points $\{x^{(i)}\}_{i=1}^N$, observations $Y$, choice of radial function $R(\cdot)$, scaling parameter $c$ |
+| **Outputs** | Weight vector $w = R^{-1}Y$, surrogate prediction $\hat{y}(x)$ at new points, interpolation system matrix $R$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/radial_basis_functions/main.py` | Performs 1-D RBF interpolation using the multiquadric basis function, demonstrating weight computation and prediction. |

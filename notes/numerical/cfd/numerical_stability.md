@@ -130,3 +130,21 @@ $$
    - **Implicit Schemes:**
      - More complex and computationally intensive.
      - Greater stability and larger allowable time-steps.
+
+## Purpose in CFD
+
+Choosing a time step that is too large can cause exponential error growth and solver divergence. This note explains stability analysis for explicit and implicit time-stepping schemes using the wave equation as a model problem. It introduces the Courant–Friedrichs–Lewy (CFL) condition $C = c\Delta t / \Delta x \le 1$ for explicit schemes and discusses practical strategies for setting the Courant number during a CFD simulation.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Wave speed $c$, grid spacing $\Delta x$, time step $\Delta t$, choice of explicit or implicit scheme |
+| **Outputs** | Maximum allowable time step $\Delta t_{\max}$, Courant number $C$, stable or unstable solution behavior |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/1d_heat_and_wave_equations/main.py` | Solves the 1-D heat and wave equations with explicit time-stepping, demonstrating CFL stability constraints in practice. |
+| `scripts/simulations/2d_wave_simulation/main.py` | 2-D wave equation solver whose time step must respect the CFL condition to remain stable. |

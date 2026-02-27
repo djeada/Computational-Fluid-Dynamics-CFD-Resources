@@ -250,3 +250,21 @@ IV. **Non-Orthogonality of Grids and Flux Formulations**:
 
 FVM often deals with complex, non-orthogonal grids. Incorporating geometric complexities into POD-Galerkin integrals is more complicated than in structured FE meshes. Care is needed in computing scalar products and flux projections.
 
+## Purpose in CFD
+
+This note specializes POD-Galerkin projection to the finite-volume discretization of the Navier–Stokes equations (both laminar and RANS). It shows how velocity, pressure, and eddy-viscosity fields are expanded in POD modes, how the integral momentum equation is projected, and how nonlinear convective terms are handled. This is the key step that converts a full CFD model into a computationally cheap ROM.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | POD modes for velocity $\boldsymbol{\Phi}_i$, pressure $\chi_i$, and eddy viscosity $\varsigma_i$; FVM-discretized Navier–Stokes operators; number of retained modes |
+| **Outputs** | Reduced ODE system for temporal coefficients $a_i(t)$, reduced matrices encoding convection, diffusion, and pressure terms |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | Computes the velocity-field POD modes used as input to the Galerkin projection procedure. |
+| `scripts/algorithms/snapshot_pod/main.py` | Builds the snapshot-based POD basis from FVM simulation data. |
+

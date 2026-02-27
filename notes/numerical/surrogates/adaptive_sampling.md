@@ -90,3 +90,21 @@ This adaptive gridding method can be combined with local optimal design criteria
 ## Parallelization and Multi-Sample Additions
 
 Adaptive sampling can be parallelized by evaluating multiple new points simultaneously, especially if the expensive response evaluation $y(x)$ can be performed on multiple processors. If parallelization of the expensive computations is limited, adding several new points at once and evaluating them in parallel still reduces overall wall-clock time.
+
+## Purpose in CFD
+
+When computational budgets are tight, it is more efficient to add sample points where the surrogate is least accurate rather than following a fixed plan. This note covers adaptive (sequential) sampling strategies: MSE-based infill criteria, cross-validation error indicators, and the balance between exploitation (improving accuracy near existing points) and exploration (sampling in unexplored regions). Adaptive sampling is the engine behind Bayesian optimization loops commonly used in CFD shape optimization.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Current surrogate model $\hat{y}(x)$, existing sample set, infill criterion (max MSE, max cross-validation error), budget for new samples |
+| **Outputs** | Next sample location(s) $x_{\text{new}}$, updated surrogate after evaluating the CFD solver at $x_{\text{new}}$, convergence metric |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/kriging_interpolation/main.py` | The Kriging model whose MSE estimate drives the adaptive infill criteria described in this note. |
+| `scripts/plots/design_space_distribution/main.py` | Visualizes initial space-filling designs that serve as starting points before adaptive refinement. |

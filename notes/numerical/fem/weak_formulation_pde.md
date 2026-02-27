@@ -226,3 +226,18 @@ The weak formulation derived above:
 - **Accommodates lower regularity:** The solution $u$ is only required to be in $\mathcal{H}^1(\Omega)$ instead of being twice differentiable.
 - **Incorporates boundary conditions naturally:** The no-flux boundary condition appears as a vanishing surface term.
 - **Prepares the PDE for FEM discretization:** The integral form can be approximated using finite-dimensional basis functions, leading to a system of algebraic equations that can be solved using standard numerical techniques.
+
+## Purpose in CFD
+
+Deriving the weak form is the first step in any FEM-based CFD solver. This note walks through the complete derivation for a reaction-diffusion PDE: multiply by a test function, integrate over the domain, apply integration by parts, handle boundary terms, and discretize in time with backward Euler. The result is a bilinear form ready for spatial discretization with finite elements. These techniques apply directly to the energy equation and scalar transport in CFD.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Strong-form PDE ($\partial u/\partial t = \nabla\cdot(D\nabla u) - su$), diffusion coefficient $D$, reaction coefficient $s$, domain $\Omega$, Neumann boundary condition, time step $\Delta t$, previous solution $u^n$ |
+| **Outputs** | Weak-form bilinear problem: find $u^{n+1} \in \mathcal{S}_t$ such that the integral equation holds for all $v \in \mathcal{V}$; after FEM discretization this becomes $K U^{n+1} = F$ |
+
+## Related Python Scripts
+
+There are no dedicated FEM weak-formulation scripts in this repository. For a practical implementation, the [FEniCS tutorial](https://fenicsproject.org/tutorial/) shows how to translate weak forms like the one derived here directly into Python code.

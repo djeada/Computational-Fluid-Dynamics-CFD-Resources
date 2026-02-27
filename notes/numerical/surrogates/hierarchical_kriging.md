@@ -134,3 +134,21 @@ I. **Accurate Low-Fidelity Model**: Suppose $\bar{y}(x)$ is a near-perfect appro
 II. **Coarse Low-Fidelity Model**: If $\bar{y}(x)$ is only a rough approximation, the correlation corrections $r(x)^T R^{-1}(Y - F \beta)$ will dominate, refining the surrogate especially near known samples and gradually bending $\bar{y}(x)$ towards the observed data $Y$.
 
 In either scenario, Hierarchical Kriging ensures that the final model honors the data points exactly, overcoming the limitations of pure least squares approximations and benefiting from the global trend captured by the low-fidelity model.
+
+## Purpose in CFD
+
+High-fidelity CFD is expensive, but cheaper low-fidelity models (coarser meshes, simpler physics) are often available. Hierarchical Kriging fuses low-fidelity and high-fidelity data into a single surrogate, improving prediction accuracy without requiring many expensive runs. This note formulates the hierarchical Kriging predictor, shows how the low-fidelity trend replaces the polynomial regression term, and discusses practical implementation.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Low-fidelity model $\hat{y}_c(x)$, high-fidelity samples $\{(x^{(i)}, y^{(i)})\}$, correlation function $R(\cdot)$, hyperparameters |
+| **Outputs** | Hierarchical Kriging predictor $\hat{y}(x)$ combining low- and high-fidelity information, mean squared error, optimized hyperparameters |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/kriging_interpolation/main.py` | Standard Kriging implementation that can be extended to hierarchical Kriging by substituting the trend model. |
+| `scripts/algorithms/correlation_functions/main.py` | Correlation function library used in both standard and hierarchical Kriging. |

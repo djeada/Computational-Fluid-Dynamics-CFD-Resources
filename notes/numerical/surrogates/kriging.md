@@ -187,3 +187,22 @@ With the chosen $\theta^*=2.5$, the surrogate matches the data well in the dense
 If we picked too small a $\theta$, say $\theta=1.75$, the correlation decays too slowly and each sample influences a large portion of the domain, potentially causing unwanted oscillations. Conversely, a very large $\theta$, say $\theta=5.0$, makes the correlation vanish too quickly, leaving each sample point influence very localized and possibly failing to capture the global structure in data-poor regions.
 
 As $\theta \to \infty$, the correlation matrix $R(\theta)$ becomes closer to an identity matrix. This reduces the Kriging predictor to the simple regression model $f(x)^T\beta$ without meaningful interpolation of the sample variations. Thus, the parameter $\theta$ fundamentally controls how “local” or “global” the influence of each sample point is.
+
+## Purpose in CFD
+
+Kriging (Gaussian-process regression) is the most widely used surrogate in simulation-based engineering design. This note derives the Kriging predictor as the Best Linear Unbiased Predictor (BLUP), defines the mean squared error and confidence intervals, explains correlation function selection and hyperparameter estimation via maximum likelihood, and works through a 1-D example. Kriging's built-in uncertainty estimate makes it especially valuable for adaptive sampling and Bayesian optimization in CFD.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Sample points $\{x^{(i)}\}_{i=1}^N$, observations $Y = (y_1,\dots,y_N)^T$, correlation function $R(\cdot)$, hyperparameters $\theta$ |
+| **Outputs** | Kriging predictor $\hat{y}(x)$, mean squared error $\hat{s}^2(x)$, confidence interval, optimized hyperparameters $\hat{\theta}$ via MLE |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/kriging_interpolation/main.py` | Implements Kriging interpolation with cubic-spline correlation functions and visualizes predictions for varying hyperparameters. |
+| `scripts/algorithms/correlation_functions/main.py` | Plots the correlation functions (linear, exponential, Gaussian, cubic spline) discussed in the hyperparameter selection section. |
+| `scripts/algorithms/condition_number_of_the_correlation_matrix/main.py` | Analyzes how the condition number of the Kriging correlation matrix varies with hyperparameters, illustrating numerical stability. |

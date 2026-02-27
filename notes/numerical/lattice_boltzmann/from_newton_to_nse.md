@@ -146,3 +146,20 @@ Thus, macroscopic properties are obtained as **moments** of the mesoscopic distr
 
 
 
+
+## Purpose in CFD
+
+This note traces the path from microscopic Newton's laws through the mesoscopic Boltzmann equation to the macroscopic Navier–Stokes equations. It explains why LBM operates at the mesoscopic level, how the probability distribution function $f(\xi, x, t)$ encodes all necessary physics, and how its moments recover density, velocity, and pressure. This conceptual bridge justifies using kinetic methods for CFD.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Probability distribution function $f(\xi, x, t)$, averaging volume $\ell_{\text{av}}$, mean free path $\ell_{\text{mfp}}$ |
+| **Outputs** | Zeroth moment → density $\rho$, first moment → momentum $\rho\mathbf{u}$, second moment → pressure/stress tensor |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lattice_boltzmann_cylinder_flow/main.py` | Demonstrates the mesoscopic-to-macroscopic link by computing density and velocity from discrete distribution functions. |

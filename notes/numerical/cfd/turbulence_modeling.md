@@ -203,3 +203,22 @@ Resolves the larger turbulent scales while modeling only the smallest scales, pr
 
 Turbulence modeling remains an active area of research, with ongoing efforts to improve the accuracy of models and reduce the reliance on empirical closure approximations. The integration of data-driven approaches and advanced computational methods continues to push the boundaries of what is achievable in turbulent flow simulations.
 
+## Purpose in CFD
+
+Most engineering flows are turbulent. Because resolving every eddy (DNS) is prohibitively expensive, CFD relies on turbulence models. This note explains laminar vs. turbulent regimes, Reynolds decomposition ($u = \overline{u} + u'$), the RANS closure problem, key turbulence parameters ($k$, $\epsilon$), and widely used model families (k-ε, k-ω, RSM, LES). Selecting and tuning a turbulence model is one of the most impactful decisions in a CFD simulation.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Mean velocity field $\overline{u}$, Reynolds number, turbulence model choice (k-ε, k-ω, etc.), wall treatment, boundary values for $k$ and $\epsilon$ |
+| **Outputs** | Reynolds stress tensor $\overline{u'_i u'_j}$, turbulent kinetic energy $k$, dissipation rate $\epsilon$, eddy viscosity $\nu_t$, mean velocity profile |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/plots/turbulent_flow/main.py` | Decomposes a turbulent velocity signal into mean, fluctuation $u'$, and $u'^2$, illustrating Reynolds decomposition. |
+| `scripts/plots/laminar_vs_turbulent_pipe/main.py` | Compares parabolic (laminar) and 1/7-power-law (turbulent) velocity profiles in a pipe. |
+| `scripts/plots/laminar_vs_turbulent_boundary_layer/main.py` | Plots laminar and turbulent boundary-layer velocity profiles side by side. |
+

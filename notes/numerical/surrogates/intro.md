@@ -185,3 +185,23 @@ III. **Software and Implementations**:
 - Python libraries: `scikit-learn` for GPR, SVR, and NNs; `GPy` for Gaussian Processes; specialized ROM libraries.
 - R packages: `DiceKriging` for Kriging, `mlegp` for Gaussian processes.
 - Custom scripts integrating CFD solvers (like OpenFOAM) with surrogate model toolboxes.
+
+## Purpose in CFD
+
+Surrogate models replace expensive CFD evaluations with fast-to-evaluate approximations, enabling design optimization, uncertainty quantification, and sensitivity analysis that would be infeasible with full simulations. This note surveys the most common surrogate types (polynomials, Kriging, RBF, neural networks, SVR), their training/validation workflow, and typical CFD applications such as airfoil shape optimization and heat-exchanger design.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Design parameter vector $x \in \mathbb{R}^d$ (e.g., geometric shape, inflow velocity), sampled CFD results $\{(x^{(i)}, y^{(i)})\}_{i=1}^N$, surrogate model type and hyperparameters |
+| **Outputs** | Surrogate prediction $\hat{y}(x)$ (e.g., drag coefficient, pressure drop), prediction uncertainty (for Kriging), validation metrics (RMSE, $R^2$) |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/kriging_interpolation/main.py` | Builds a Kriging surrogate using cubic-spline RBF correlation functions with varying hyperparameters. |
+| `scripts/algorithms/radial_basis_functions/main.py` | Performs 1-D function interpolation using multiquadric RBF, demonstrating the RBF surrogate concept. |
+| `scripts/algorithms/correlation_functions/main.py` | Plots several correlation function families (linear, exponential, Gaussian, cubic spline) used in Kriging and RBF models. |
+| `scripts/plots/design_space_distribution/main.py` | Visualizes a 2-D Sobol-sequence design space, illustrating the sampling step before surrogate construction. |

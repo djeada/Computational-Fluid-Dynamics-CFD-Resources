@@ -158,3 +158,22 @@ III. **Software and Tutorials**:
 - OpenFOAM and related user communities discussing ROM interfaces.
 - RBmatlab and other research codes for reduced basis methods.
 - Online video lectures and MOOC content from universities and institutes focusing on ROM.
+
+## Purpose in CFD
+
+ROM replaces expensive full-order CFD solves with low-dimensional approximations. This note gives a complete overview of the ROM workflow: collect high-fidelity snapshots, build a POD basis, project the governing equations (Galerkin projection), and evaluate the resulting ODE system online for new parameters. ROM is essential for design optimization, uncertainty quantification, and real-time control of fluid systems.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | High-fidelity CFD solver, parameter set $\mathcal{P}$, snapshots $\{u_h(\mu_i)\}$, reduction method (POD/greedy), error tolerance |
+| **Outputs** | Reduced basis $\{\zeta_n\}_{n=1}^N$, reduced system matrices, fast online evaluation $u_N(\mu)$ for new parameters, a posteriori error estimates |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | Computes the POD basis from snapshots, which is the offline step of the ROM workflow described here. |
+| `scripts/algorithms/snapshot_pod/main.py` | Snapshot POD variant for efficiently building the reduced basis when the spatial dimension is large. |
+| `scripts/plots/pod_analysis_for_flow_fields/main.py` | Visualizes eigenvalue spectra to guide the choice of how many modes to retain in the reduced basis. |

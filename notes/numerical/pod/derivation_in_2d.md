@@ -512,3 +512,21 @@ $$
 ## Refrences
 
 These notes are inspired by Julien Weiss's "A Tutorial on the Proper Orthogonal Decomposition," presented at the 2019 AIAA Aviation Forum in Dallas, Texas.
+
+## Purpose in CFD
+
+This note derives POD step by step in two dimensions using a Turbulent Separation Bubble (TSB) example. It shows how to compute the covariance matrix from snapshot data, solve the eigenvalue problem, identify principal axes (modes), and quantify the kinetic energy captured by each mode. The 2-D derivation builds intuition before generalizing to N dimensions.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Fluctuating velocity snapshots $\mathbf{u}'(\mathbf{x}, t_k)$, number of snapshots $m$, spatial points |
+| **Outputs** | Covariance matrix $C$, eigenvalues $\lambda_k$ (sorted), eigenvectors (POD modes) $\boldsymbol{\Phi}_k$, energy fractions, reconstructed velocity field |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | Performs POD via SVD, directly implementing the eigenvalue decomposition described in this derivation. |
+| `scripts/plots/eigenvector_projection/main.py` | Projects 2-D data onto eigenvectors of the covariance matrix, visualizing the principal directions derived here. |

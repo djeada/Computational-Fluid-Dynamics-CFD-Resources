@@ -110,3 +110,23 @@ There are many textbooks, journals, and online materials for deeper study:
 2) Introduction to Computational Fluid Dynamics: The Finite Volume Method by Henk Versteeg and Weeratunge Malalasekera. This text offers a step-by-step explanation of one of the most widely used approaches in CFD.
 
 3) Numerical Heat Transfer and Fluid Flow by Suhas V. Patankar. A pioneering book on finite volume techniques and one of the core references for commercial CFD codes.
+
+## Purpose in CFD
+
+This note introduces the foundations of Computational Fluid Dynamics. It explains the governing equations (continuity, Navier–Stokes, energy), the main simulation workflow (geometry → mesh → boundary conditions → discretize → solve → post-process), and the principal discretization frameworks (FDM, FVM, FEM, spectral methods). Understanding these topics is prerequisite for every other numerical method discussed in these notes.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Typical Inputs** | Geometry definition, mesh/grid, fluid properties ($\rho$, $\mu$, $k$, $c_p$), boundary conditions (velocity, pressure, temperature), initial conditions |
+| **Typical Outputs** | Velocity field $\mathbf{v}(x,t)$, pressure field $p(x,t)$, temperature field $T(x,t)$, derived quantities (drag, lift, heat flux) |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lid_driven_cavity/main.py` | Solves the incompressible Navier–Stokes equations for the classic lid-driven cavity benchmark using a pressure-based method. |
+| `scripts/simulations/backward_facing_step_simple/main.py` | Implements the SIMPLE algorithm for a 2-D backward-facing step, demonstrating the full CFD workflow from grid setup to convergence monitoring. |
+| `scripts/simulations/eulerian_cylinder_flow/main.py` | Eulerian CFD solver for 2-D flow around a cylinder with velocity and pressure field visualization. |
+| `scripts/plots/comparing_grid_convergence/main.py` | Plots how numerical solutions converge as the grid is refined, illustrating the verification step discussed above. |

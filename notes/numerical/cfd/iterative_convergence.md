@@ -86,3 +86,21 @@ Choosing Convergence Criteria:
 Scaling and Normalization:
 - Proper scaling of the residual makes sure that it is a relative measure, making it meaningful across different problems and solution magnitudes.
 - Normalizing the residual helps in setting appropriate convergence thresholds that are neither too strict nor too lenient.
+
+## Purpose in CFD
+
+Monitoring convergence is essential in every iterative CFD solver. This note defines the residual $R$ (RMS difference between successive iterates), explains why scaling the residual is important, walks through the iteration loop, and gives guidance on choosing convergence thresholds. Plots of residual versus iteration number are a standard diagnostic in CFD practice.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Initial guess $u_g$, grid points $N$, update formula, convergence threshold (e.g., $10^{-9}$) |
+| **Outputs** | Converged solution $u$, residual history $R$ vs. iteration number, comparison with exact solution $u_{\text{exact}}$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/plots/variation_of_residual/main.py` | Generates a log-scale plot of residual versus iteration number, directly illustrating the convergence behavior described in this note. |
+| `scripts/simulations/backward_facing_step_simple/main.py` | Monitors and plots residuals during the SIMPLE iteration loop for a backward-facing step flow. |

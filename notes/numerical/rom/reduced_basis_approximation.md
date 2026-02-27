@@ -183,3 +183,21 @@ II. **ROM Truncation Error**: The difference $\|u_h(\mu) - u_{N_h}(\mu)\|_V$ dep
 
 **Goal**: Choose $N$ large enough to meet accuracy requirements but small enough to yield significant computational gains.
 
+## Purpose in CFD
+
+This note explains how the solution manifold $\mathcal{M} = \{u_h(\mu) : \mu \in \mathcal{P}\}$ is approximated by a low-dimensional reduced basis. It covers offline/online decomposition, POD-based basis selection, the reduced system $A_N c = f_N$, and error decomposition into projection and ROM components. The offline/online split is what makes ROM practical: expensive basis construction is done once, and each new parameter evaluation is cheap.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | High-fidelity snapshots $\{u_h(\mu_i)\}$, desired basis size $N$, error tolerance |
+| **Outputs** | Reduced basis $\{\zeta_1, \dots, \zeta_N\}$, reduced system matrices, approximate solution $u_N(\mu) = \sum c_j \zeta_j$, error estimates |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | Extracts the POD basis from snapshots, implementing the offline phase of reduced-basis approximation. |
+| `scripts/algorithms/snapshot_pod/main.py` | Efficient snapshot-based basis extraction for high-dimensional CFD data. |
+

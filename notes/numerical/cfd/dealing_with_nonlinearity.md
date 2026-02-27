@@ -137,3 +137,21 @@ By setting up strong convergence criteria, the iterative process avoids unnecess
 
 - Stability:  
 Convergence is often associated with numerical stability. A solution that has converged within a tight tolerance is less likely to exhibit erratic behavior, making sure that the results are both reliable and reproducible.
+
+## Purpose in CFD
+
+The convective term $(\mathbf{v} \cdot \nabla)\mathbf{v}$ in the Navier–Stokes equations makes them nonlinear, so the discretized system is also nonlinear. This note explains how to linearize these terms (e.g., Newton–Raphson), iteratively update the solution, and combine nonlinear-term handling with matrix inversion. The time-marching strategy for reaching a steady state is also covered.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Nonlinear discrete system $A(u_g)u = b(u_g)$, initial guess $u_g$, grid spacing $\Delta x$, convergence tolerance |
+| **Outputs** | Converged solution vector $u$, iteration count, residual history |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/backward_facing_step_simple/main.py` | Iteratively solves the nonlinear coupled Navier–Stokes system using the SIMPLE pressure-correction algorithm. |
+| `scripts/simulations/lid_driven_cavity/main.py` | Handles the nonlinear convective terms through successive iteration until convergence of the cavity flow solution. |
