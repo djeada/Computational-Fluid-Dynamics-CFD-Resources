@@ -60,13 +60,13 @@ $$
   - Example scheme: 
 
 $$
-\frac{u_i^n - u_i^{n-1}}{\Delta t} + c \frac{u_i^n - u_{i-1}^n}{\Delta x} = O(\Delta t, \Delta x)
+\frac{u_i^n - u_i^{n-1}}{\Delta t} + c \frac{u_i^{n-1} - u_{i-1}^{n-1}}{\Delta x} = O(\Delta t, \Delta x)
 $$
 
   - Solving for $u_i^n$:
 
 $$
-u_i^n = \left[1 - \left(\frac{c \Delta t}{\Delta x}\right)\right] u_i^{n-1} + \left(\frac{c \Delta t}{\Delta x}\right) u_{i-1}^n
+u_i^n = \left[1 - \left(\frac{c \Delta t}{\Delta x}\right)\right] u_i^{n-1} + \left(\frac{c \Delta t}{\Delta x}\right) u_{i-1}^{n-1}
 $$
 
 - **Advantages:**

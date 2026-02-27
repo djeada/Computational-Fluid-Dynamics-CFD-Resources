@@ -316,7 +316,7 @@ $$
   - In matrix terms:
     
 $$
-    \mathbf{U} \sigeq \tilde{\mathbf{U}} = \sum_{k=k_1}^{k_2} \tilde{\mathbf{U}}^k
+    \mathbf{U} \approx \tilde{\mathbf{U}} = \sum_{k=k_1}^{k_2} \tilde{\mathbf{U}}^k
     $$
 
 
@@ -324,7 +324,7 @@ $$
 - Model reduction can generate a set of ordinary differential equations (finite-dimensional dynamical system) simplifying partial differential equations in fluid mechanics (Galerkin projection).
 
 
-## Refrences
+## References
 
 These notes are inspired by Julien Weiss's "A Tutorial on the Proper Orthogonal Decomposition," presented at the 2019 AIAA Aviation Forum in Dallas, Texas.
 

@@ -118,7 +118,7 @@ The most time-consuming part of a CFD simulation is finding the solution to the 
 For example, the Laplace operator of a scalar function can be represented using a five-point discrete scheme:
 
 ```
-   ∇²f ≈  1/Δx² (4 * f[i,j] - f[i-1,j] - f[i+1,j] - f[i,j-1] - f[i,j+1])
+   ∇²f ≈  1/Δx² (-4 * f[i,j] + f[i-1,j] + f[i+1,j] + f[i,j-1] + f[i,j+1])
        
     PDE                        Discretized Form
     ∇²f    ----------------->  +--------------------+

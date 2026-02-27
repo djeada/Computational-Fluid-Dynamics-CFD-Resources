@@ -151,7 +151,7 @@ These microscopic properties underlie the **continuum assumption**, where macros
 | **Equations** | Newton's Laws (MD)  | Boltzmann Equation            | Navier–Stokes Equations         |
 | **Methods** | Molecular Dynamics     | Direct Simulation Monte Carlo | CFD (FDM, FVM, FEM, etc.)      |
 
-This table highlights the hierarchy of modeling approaches. The **lattice Boltzmann method (LBM)** occupies a mesoscopic niche. It models fluid at a relating to motion level using distribution functions, bridging microscopic molecular interactions and macroscopic flow fields.
+This table highlights the hierarchy of modeling approaches. The **lattice Boltzmann method (LBM)** occupies a mesoscopic niche. It models fluid at a kinetic level using distribution functions, bridging microscopic molecular interactions and macroscopic flow fields.
 
 # Numerical Modelling Process
 

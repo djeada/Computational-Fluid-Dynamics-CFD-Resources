@@ -88,7 +88,7 @@ A diagram summarizing this workflow is provided below.
 
 Consider the following reaction-diffusion equation defined on a spatial domain $\Omega$ and over time $t > 0$:
 
-$$\frac{\partial u}{\partial t} = \nabla \cdot \big( D, \nabla u \big) - s, u$$
+$$\frac{\partial u}{\partial t} = \nabla \cdot \big( D\,\nabla u \big) - s\,u$$
 
 where:
 
@@ -107,7 +107,7 @@ Before deriving the weak formulation, we need to define the function spaces for 
 
 We assume that the solution $u(\mathbf{x}, t)$ belongs to the space
 
-$$\mathcal{S}_{t} := \Big\{ u(\mathbf{x}, t) ,\Big|, u \in \mathcal{H}^{1}(\Omega) \text{ for } t>0,  \frac{\partial u}{\partial n} = 0 \text{ on } \Gamma \Big\}$$
+$$\mathcal{S}_{t} := \Big\{ u(\mathbf{x}, t) \;\Big|\; u \in \mathcal{H}^{1}(\Omega) \text{ for } t>0,  \frac{\partial u}{\partial n} = 0 \text{ on } \Gamma \Big\}$$
 
 where:
 
@@ -119,7 +119,7 @@ where:
 
 The test functions are chosen from the space
 
-$$\mathcal{V} := \Big\{ v(\mathbf{x}) ,\Big|, v \in \mathcal{H}^{1}(\Omega),  v = 0 \text{ on } \Gamma \Big\}$$
+$$\mathcal{V} := \Big\{ v(\mathbf{x}) \;\Big|\; v \in \mathcal{H}^{1}(\Omega),  v = 0 \text{ on } \Gamma \Big\}$$
 
 *Note:* The homogeneous condition $v = 0$ on $\Gamma$ is often imposed to make sure that the boundary contributions vanish when integration by parts is applied.
 
@@ -131,13 +131,13 @@ We now derive the weak formulation step by step.
 
 Multiply the strong form of the PDE by an arbitrary test function $v \in \mathcal{V}$:
 
-$$\frac{\partial u}{\partial t} , v = \nabla \cdot \big( D, \nabla u \big) , v - s, u, v$$
+$$\frac{\partial u}{\partial t} \, v = \nabla \cdot \big( D\,\nabla u \big) \, v - s\,u\,v$$
 
 ### Integrating Over the Domain
 
 Integrate the above equation over the spatial domain $\Omega$:
 
-$$\int_{\Omega} \frac{\partial u}{\partial t}, v , d\omega = \int_{\Omega} \nabla \cdot \big( D, \nabla u \big) , v , d\omega - \int_{\Omega} s, u, v , d\omega$$
+$$\int_{\Omega} \frac{\partial u}{\partial t}\, v \, d\omega = \int_{\Omega} \nabla \cdot \big( D\,\nabla u \big) \, v \, d\omega - \int_{\Omega} s\,u\,v \, d\omega$$
 
 where $d\omega$ represents the volume element.
 
@@ -145,19 +145,19 @@ where $d\omega$ represents the volume element.
 
 Focus on the diffusion term. Applying the divergence theorem (integration by parts), we have:
 
-$$\int_{\Omega} \nabla \cdot \big( D, \nabla u \big) , v , d\omega = \underbrace{\int_{\Omega} \nabla \cdot \Big( v, (D, \nabla u) \Big) , d\omega}_{\text{Surface term}} - \int_{\Omega} \nabla v \cdot \big( D, \nabla u \big) , d\omega$$
+$$\int_{\Omega} \nabla \cdot \big( D\,\nabla u \big) \, v \, d\omega = \underbrace{\int_{\Omega} \nabla \cdot \Big( v\,(D\,\nabla u) \Big) \, d\omega}_{\text{Surface term}} - \int_{\Omega} \nabla v \cdot \big( D\,\nabla u \big) \, d\omega$$
 
 The surface term becomes a boundary integral:
 
-$$\int_{\Omega} \nabla \cdot \Big( v, (D, \nabla u) \Big) , d\omega = \int_{\Gamma} v, D, \frac{\partial u}{\partial n}, d\gamma$$
+$$\int_{\Omega} \nabla \cdot \Big( v\,(D\,\nabla u) \Big) , d\omega = \int_{\Gamma} v\, D\, \frac{\partial u}{\partial n}\, d\gamma$$
 
 with $d\gamma$ being the measure on $\Gamma$ and $\frac{\partial u}{\partial n}$ the outward normal derivative. With the imposed Neumann condition $\frac{\partial u}{\partial n} = 0$ on $\Gamma$, the boundary term vanishes:
 
-$$\int_{\Gamma} v, D, \frac{\partial u}{\partial n}, d\gamma = 0$$
+$$\int_{\Gamma} v\, D\, \frac{\partial u}{\partial n}\, d\gamma = 0$$
 
 Thus, the diffusion term simplifies to:
 
-$$\int_{\Omega} \nabla \cdot \big( D, \nabla u \big) , v , d\omega = - \int_{\Omega} \nabla v \cdot \big( D, \nabla u \big) , d\omega$$
+$$\int_{\Omega} \nabla \cdot \big( D\,\nabla u \big) \, v \, d\omega = - \int_{\Omega} \nabla v \cdot \big( D\,\nabla u \big) \, d\omega$$
 
 ### Temporal Discretization
 
@@ -173,17 +173,17 @@ where:
 
 Substitute this approximation into the integrated equation:
 
-$$\int_{\Omega} \frac{u^{n+1} - u^{n}}{\Delta t}, v , d\omega = - \int_{\Omega} \nabla v \cdot \big( D, \nabla u^{n+1} \big) , d\omega - \int_{\Omega} s, u^{n+1}, v , d\omega$$
+$$\int_{\Omega} \frac{u^{n+1} - u^{n}}{\Delta t}\, v \, d\omega = - \int_{\Omega} \nabla v \cdot \big( D\,\nabla u^{n+1} \big) \, d\omega - \int_{\Omega} s\,u^{n+1}\,v \, d\omega$$
 
 ### Rearranging into the Final Weak Form
 
 Rearrange the terms to isolate those involving the unknown $u^{n+1}$:
 
-$$\int_{\Omega} \frac{u^{n+1}}{\Delta t}, v, d\omega + \int_{\Omega} \nabla v \cdot \big( D, \nabla u^{n+1} \big) , d\omega + \int_{\Omega} s, u^{n+1}, v, d\omega = \int_{\Omega} \frac{u^{n}}{\Delta t}, v, d\omega$$
+$$\int_{\Omega} \frac{u^{n+1}}{\Delta t}\, v\, d\omega + \int_{\Omega} \nabla v \cdot \big( D\,\nabla u^{n+1} \big) \, d\omega + \int_{\Omega} s\,u^{n+1}\,v\, d\omega = \int_{\Omega} \frac{u^{n}}{\Delta t}\, v\, d\omega$$
 
 It is common practice to multiply the entire equation by $\Delta t$ to simplify the appearance of the time-stepping term:
 
-$$\int_{\Omega} u^{n+1}, v, d\omega + \Delta t, \int_{\Omega} D, \nabla u^{n+1} \cdot \nabla v, d\omega + \Delta t, \int_{\Omega} s, u^{n+1}, v, d\omega = \int_{\Omega} u^{n}, v, d\omega$$
+$$\int_{\Omega} u^{n+1}\, v\, d\omega + \Delta t \int_{\Omega} D\,\nabla u^{n+1} \cdot \nabla v\, d\omega + \Delta t \int_{\Omega} s\,u^{n+1}\,v\, d\omega = \int_{\Omega} u^{n}\, v\, d\omega$$
 
 This is the **final weak formulation** of the reaction-diffusion equation, ready for spatial discretization using finite element spaces.
 

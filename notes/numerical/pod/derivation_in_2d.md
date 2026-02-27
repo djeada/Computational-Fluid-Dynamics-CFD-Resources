@@ -509,7 +509,7 @@ $$
   - In higher dimensions ($n$), this feature becomes extremely useful.
   - Simplifies analysis by reducing the number of modes considered while retaining most of the important information.
 
-## Refrences
+## References
 
 These notes are inspired by Julien Weiss's "A Tutorial on the Proper Orthogonal Decomposition," presented at the 2019 AIAA Aviation Forum in Dallas, Texas.
 
