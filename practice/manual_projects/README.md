@@ -77,9 +77,9 @@ project_name/
 ## 📊 Difficulty Levels
 
 ### Beginner Projects (🟢)
+- [Lid-Driven Cavity](lid_driven_cavity.md) — complete benchmark tutorial with validation ⭐
+- [Flow Over Cylinder](flow_over_cylinder.md) — vortex shedding and Strouhal number analysis ⭐
 - Simple pipe flow
-- Lid-driven cavity
-- Flow over cylinder
 - Natural convection
 
 ### Intermediate Projects (🟡)

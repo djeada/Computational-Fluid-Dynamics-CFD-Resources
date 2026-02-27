@@ -424,4 +424,69 @@ Compare your results with benchmark data:
 - Stream function contours
 - Vorticity distributions
 
+### Ghia et al. (1982) Reference Data
+
+The standard benchmark for the lid-driven cavity is Ghia, Ghia, and Shin (1982). Here are the reference values for Re = 10 (ν = 0.01 m²/s, U = 1 m/s, L = 0.1 m):
+
+#### u-velocity along vertical centerline (x = 0.05 m)
+
+| y/L | u/U |
+|-----|-----|
+| 1.0000 | 1.00000 |
+| 0.9688 | 0.84713 |
+| 0.9609 | 0.80140 |
+| 0.9531 | 0.75563 |
+| 0.8516 | 0.31665 |
+| 0.7344 | 0.04547 |
+| 0.6172 | -0.08797 |
+| 0.5000 | -0.15887 |
+| 0.2813 | -0.12413 |
+| 0.1016 | -0.04517 |
+| 0.0000 | 0.00000 |
+
+#### Validation Script
+
+After running the cavity tutorial, extract centerline data and compare:
+
+```bash
+# Create a sampling dictionary (system/sampleDict)
+# Then run:
+sample -latestTime
+```
+
+```python
+#!/usr/bin/env python3
+"""Compare cavity results with Ghia et al. (1982) benchmark."""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Ghia et al. Re=100 data (u along vertical centerline)
+ghia_y = np.array([1.0, 0.9766, 0.9688, 0.9609, 0.9531, 0.8516, 0.7344,
+                    0.6172, 0.5000, 0.4531, 0.2813, 0.1719, 0.1016, 0.0703,
+                    0.0625, 0.0547, 0.0])
+ghia_u = np.array([1.0, 0.84123, 0.78871, 0.73722, 0.68717, 0.23151, 0.00332,
+                   -0.13641, -0.20581, -0.21090, -0.15662, -0.10150, -0.06434,
+                   -0.04775, -0.04192, -0.03717, 0.0])
+
+# Load your OpenFOAM results
+# data = np.loadtxt("postProcessing/sets/0.5/lineX1_U.xy")
+# y_sim = data[:, 0] / 0.1   # normalize by cavity length
+# u_sim = data[:, 1]          # u-velocity component
+
+plt.figure(figsize=(6, 8))
+plt.plot(ghia_u, ghia_y, 'ro', markersize=6, label='Ghia et al. (1982)')
+# plt.plot(u_sim, y_sim, 'b-', linewidth=1.5, label='OpenFOAM')
+plt.xlabel('u / U')
+plt.ylabel('y / L')
+plt.title('Cavity: u-velocity along vertical centerline')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.savefig('cavity_validation.png', dpi=150)
+plt.show()
+```
+
+For a complete benchmark tutorial with multiple Reynolds numbers, see [Lid-Driven Cavity](../manual_projects/lid_driven_cavity.md).
+
 This tutorial provides a solid foundation for OpenFOAM usage and can be extended to more complex cases.

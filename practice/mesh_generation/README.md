@@ -12,6 +12,11 @@ This guide covers various tools and methodologies for generating high-quality 3D
 - [Boundary Layer Meshing](#boundary-layer-meshing)
 - [Mesh Adaptation](#mesh-adaptation)
 
+### Related Guides
+
+- [Boundary Layer Meshing](boundary_layers.md) — y+ calculations, first cell height, and layer generation
+- [Mesh Quality Assessment](mesh_quality.md) — metrics, checkMesh interpretation, and automated reporting
+
 ## Mesh Types
 
 ### Structured Meshes

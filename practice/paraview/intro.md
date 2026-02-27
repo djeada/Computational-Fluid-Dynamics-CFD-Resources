@@ -2,6 +2,20 @@
 
 ParaView and OpenFOAM are powerful tools widely used in computational fluid dynamics (CFD) and visualization. This guide provides an in-depth exploration of both software, their integration, workflows, and necessary features. With clear explanations, practical examples, and illustrative diagrams, you'll gain a solid understanding of how to use these tools effectively.
 
+### Table of Contents
+
+- [Introduction to ParaView](#introduction-to-paraview)
+- [Integrating ParaView with OpenFOAM](#integrating-paraview-with-openfoam)
+- [Workflow Example: Displaying the Pressure Field](#workflow-example-displaying-the-pressure-field-of-the-elbow-tutorial)
+- [Exploring the Pipeline Browser](#exploring-the-pipeline-browser)
+- [Step-by-Step Example: Visualizing a Sphere](#step-by-step-example-visualizing-a-sphere)
+- [Basic Principles of ParaView](#basic-principles-of-paraview)
+- [Utilizing Filters in ParaView](#utilizing-filters-in-paraview)
+- [Visualizing Vector Fields with Glyphs](#visualizing-vector-fields-with-glyphs)
+- [Saving and Reusing Visualization Models](#saving-and-reusing-visualization-models)
+- [Python Scripting for Automation](#python-scripting-for-automation)
+- [Practical Tips for Effective Visualization](#practical-tips-for-effective-visualization)
+
 ### Introduction to ParaView
 
 **ParaView** is a strong open-source software developed since 2002 by Kitware Inc. and Los Alamos National Laboratory. It excels in parallel visualization of large datasets, handling meshes exceeding a billion cells. Beyond basic plotting, ParaView supports advanced features like meshing, probing, vector analysis, and volumetric visualization. Its Python scriptability enhances versatility, allowing for automation and customization of tasks.
@@ -293,3 +307,62 @@ Visualization Output
 - Automate repetitive **tasks** by using Python scripting to streamline frequent visualization processes, saving time and ensuring consistency.
 - Customize visuals **thoughtfully** by adjusting properties like opacity, scaling, and coloring to enhance clarity without introducing unnecessary complexity.
 - Validate **results** by cross-checking visualizations with underlying data to ensure the accuracy and reliability of the insights derived.
+
+### Python Scripting for Automation
+
+ParaView's Python interface is one of its most powerful features. Every action in the GUI can be scripted, allowing for reproducible visualizations and batch processing.
+
+#### Recording Actions with Trace
+
+The easiest way to learn ParaView scripting is to record your GUI actions:
+
+1. Navigate to `Tools > Start Trace`.
+2. Perform your visualization steps in the GUI.
+3. Navigate to `Tools > Stop Trace`.
+4. ParaView generates a Python script of everything you did.
+
+This is an excellent starting point — you can then edit the generated script for automation.
+
+#### Basic Script Structure
+
+```python
+from paraview.simple import *
+
+# Load data
+reader = OpenFOAMReader(FileName="case.foam")
+reader.CellArrays = ["p", "U"]
+
+# Navigate to a time step
+scene = GetAnimationScene()
+scene.GoToLast()
+
+# Create a visualization
+slice1 = Slice(Input=reader)
+slice1.SliceType.Normal = [0, 0, 1]
+
+# Display and configure
+display = Show(slice1)
+ColorBy(display, ("CELLS", "p"))
+display.RescaleTransferFunctionToDataRange()
+
+# Configure the view
+view = GetActiveViewOrCreate("RenderView")
+view.ViewSize = [1920, 1080]
+view.Background = [1, 1, 1]
+ResetCamera()
+
+# Save output
+SaveScreenshot("result.png", magnification=2)
+```
+
+#### Running Scripts
+
+```bash
+# Run with ParaView's Python interpreter
+pvpython my_script.py
+
+# Or in batch mode (no GUI, no display required)
+pvbatch my_script.py
+```
+
+`pvbatch` is particularly useful for running on remote HPC clusters where no display is available. See [Batch Visualization](batch_visualization.md) for detailed recipes and advanced automation examples.
