@@ -182,3 +182,20 @@ III. **Offline/Online Efficiency**
    - While the offline phase can be expensive (because it involves generating snapshots via high-fidelity solves), the cost is paid only once.  
    - In the online phase, the **reduced** system is solved for each new $\mu$ with very low computational effort, making real-time or rapid parameter sweeps feasible.
 
+## Purpose in CFD
+
+Before building a ROM one must have a high-fidelity discrete model. This note explains how parameterized variational problems are discretized into finite-dimensional systems, derives Galerkin orthogonality and Céa's lemma for error control, and motivates the need for ROM by highlighting the cost of repeatedly solving large discrete systems across a parameter space.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Parameterized bilinear form $a(u,v;\mu)$, linear form $f(v;\mu)$, finite-element space $V_h$ of dimension $N_h$, parameter $\mu \in \mathcal{P}$ |
+| **Outputs** | High-fidelity solution $u_h(\mu) \in V_h$, stiffness matrix $A_h \in \mathbb{R}^{N_h \times N_h}$, error estimate via Céa's lemma |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | The POD step that follows high-fidelity discretization to build the reduced basis. |
+

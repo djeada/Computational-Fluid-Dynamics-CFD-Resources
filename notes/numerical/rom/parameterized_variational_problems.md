@@ -122,3 +122,20 @@ $$
 
 - If $\alpha(\mu)$ and $\gamma(\mu)$ are **bounded away from zero and infinity** respectively, $\|\cdot\|_a$ is **equivalent** to the original $\|\cdot\|_V$ norm.  
 - This equivalence is necessary for **stability analyses** and for deriving **error estimates** in both classical finite element methods and **reduced order models**.
+
+## Purpose in CFD
+
+Many CFD problems depend on parameters such as Reynolds number, geometry, or boundary conditions. This note formulates these problems as parameterized variational equations, defines the function spaces, and establishes well-posedness via the Lax–Milgram theorem (coercivity, continuity, boundedness). This mathematical framework is the starting point for any rigorous ROM construction.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Parameter domain $\mathcal{P}$, bilinear form $a(\cdot,\cdot;\mu)$, linear form $f(\cdot;\mu)$, trial space $X$, test space $X$ |
+| **Outputs** | Well-posed variational problem: find $u(\mu) \in X$ such that $a(u,v;\mu) = f(v;\mu)$ for all $v \in X$; coercivity and continuity constants |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | The offline snapshot generation and basis extraction that build on the variational framework defined here. |
