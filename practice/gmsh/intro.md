@@ -208,7 +208,8 @@ def create_naca0012(num_points=100, chord=1.0, lc=0.02):
     gmsh.model.add("naca0012")
 
     # Generate airfoil points using NACA 0012 thickness formula
-    points = []
+    upper_pts = []
+    lower_pts = []
     for i in range(num_points + 1):
         x = chord * (1 - math.cos(math.pi * i / num_points)) / 2
         t = 0.12
@@ -219,19 +220,15 @@ def create_naca0012(num_points=100, chord=1.0, lc=0.02):
                        - 0.1015 * (x/chord)**4)
 
         if i == 0 or i == num_points:
-            # Leading and trailing edge (single point)
+            # Leading and trailing edge share a single point
             p = gmsh.model.occ.addPoint(x, 0, 0, lc)
-            points.append(p)
+            upper_pts.append(p)
+            lower_pts.append(p)
         else:
-            # Upper and lower surface
-            p_upper = gmsh.model.occ.addPoint(x, yt, 0, lc)
-            p_lower = gmsh.model.occ.addPoint(x, -yt, 0, lc)
-            points.append((p_upper, p_lower))
+            upper_pts.append(gmsh.model.occ.addPoint(x, yt, 0, lc))
+            lower_pts.append(gmsh.model.occ.addPoint(x, -yt, 0, lc))
 
     # Create splines for upper and lower surfaces
-    upper_pts = [points[0]] + [p[0] for p in points[1:-1]] + [points[-1]]
-    lower_pts = [points[0]] + [p[1] for p in points[1:-1]] + [points[-1]]
-
     upper_spline = gmsh.model.occ.addSpline(upper_pts)
     lower_spline = gmsh.model.occ.addSpline(lower_pts)
 

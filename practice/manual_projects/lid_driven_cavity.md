@@ -458,8 +458,9 @@ This creates files in `postProcessing/sets/<latestTime>/`:
 
 ```bash
 paraFoam
-# Or
-foamToVTK && paraview
+# Or convert to VTK and open manually
+foamToVTK
+paraview VTK/
 ```
 
 Key visualizations to create:

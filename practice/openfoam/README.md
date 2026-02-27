@@ -466,7 +466,7 @@ functions
         libs            ("libutilityFunctionObjects.so");
         writeControl    timeStep;
         writeInterval   1;
-        fields          (p U k omega);
+        fields          (p U k omega);  // Adjust to match your solved fields
     }
 }
 ```

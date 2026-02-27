@@ -129,6 +129,7 @@ view.Background = [1, 1, 1]  # white background
 ResetCamera()
 
 SaveScreenshot("pressure_slice.png", magnification=2)
+# magnification=2 doubles ViewSize, so 1920x1080 becomes 3840x2160 output
 ```
 
 ### Velocity Streamlines
