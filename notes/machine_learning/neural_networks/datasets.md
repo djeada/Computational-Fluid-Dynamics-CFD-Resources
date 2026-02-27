@@ -1,5 +1,7 @@
 ## Datasets Description
 
+The quality and diversity of training datasets directly determine how well a neural network can generalize to new aerodynamic configurations. Assembling such datasets requires systematic variation of geometric and flow parameters through a Design of Experiments framework, combined with consistent CFD methodology. The core challenge is to cover the design space broadly enough to train robust models while keeping dataset generation computationally affordable and ensuring that legacy and new data can be harmonized.
+
 When deploying neural networks in aerodynamic applications, assembling high-quality datasets is important for both model training and validation. In these applications, datasets must capture a wide range of geometrical variations and flow conditions so that the trained model can generalize to new or modified configurations reliably. The overarching objective of these datasets is often to predict aerodynamic properties—such as the drag coefficient $C_d$, lift coefficient $C_l$, or even full flow fields—based on changes in vehicle or aerodynamic body geometry. Making sure that the dataset spans a sufficiently broad design space is important for strong performance and improved predictive accuracy.
 
 A well-curated dataset not only helps in building more accurate models but also aids in uncovering underlying physical relationships between geometry and aerodynamic performance. The quality, diversity, and consistency of the data are key factors that influence the success of subsequent machine learning applications in CFD.
@@ -124,3 +126,22 @@ A key tradeoff exists between the number of distinct geometries (i.e., dataset s
 $$\text{Total memory usage} \approx (\text{number of samples}) \times (\text{points per sample}) \times (\text{number of variables})$$
 
 This balance must be carefully managed to make sure that the entire dataset can be effectively processed within the available hardware constraints.
+
+### Setting Up the Problem
+
+1. **Define the geometry family** – Identify the baseline shape (e.g., a specific vehicle body or airfoil class) and list every geometric parameter that can be meaningfully varied (bumper curvature, spoiler angle, mirror position, etc.).
+2. **Select flow parameters** – Choose the operating conditions to sweep, such as Reynolds number range, yaw angles, and turbulence intensity levels, based on the target application envelope.
+3. **Design the DoE matrix** – Use a space-filling strategy (Latin Hypercube Sampling or Sobol sequences) to distribute sample points across the combined geometry–flow parameter space while keeping the total case count within your computational budget.
+4. **Standardize CFD setup** – Fix the solver, turbulence model, mesh topology rules, convergence criteria, and boundary conditions across all cases so that differences in results reflect only geometry and flow changes, not methodology drift.
+5. **Harmonize legacy data** – When incorporating older simulations, verify grid independence, re-normalize quantities to common reference values, and flag cases that used different turbulence closures or boundary treatments for potential recalibration.
+6. **Run the decimation pipeline** – Reduce each surface mesh to the target point count $\alpha N$ using a consistent algorithm (e.g., QEM-based edge collapse), then interpolate flow variables onto the coarsened mesh while preserving gradients near critical features.
+7. **Partition the dataset** – Split the final collection into training, validation, and test sets (e.g., 80/10/10). Stratify the split so that each subset spans the full range of geometric and flow parameters rather than clustering around a narrow region of the design space.
+
+### Key Takeaways
+
+- A well-designed DoE ensures broad, unbiased coverage of the geometry–flow parameter space and prevents the neural network from overfitting to a narrow subset of configurations.
+- Consistent CFD methodology (solver settings, mesh standards, boundary conditions) across all cases is essential for producing a coherent dataset free of systematic bias.
+- Legacy data can accelerate dataset creation but must be carefully audited and re-normalized to match the quality and conventions of newly generated simulations.
+- Geometry decimation and flow-field interpolation should preserve critical aerodynamic features (separation lines, high-curvature edges) while reducing data to a size compatible with GPU memory constraints.
+- Exploiting geometric symmetry (e.g., half-models) effectively doubles the usable data density for a given memory budget.
+- Stratified partitioning of training, validation, and test sets guarantees that model performance metrics reflect true generalization across the entire design space.
