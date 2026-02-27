@@ -9,7 +9,10 @@ OpenFOAM (Open Field Operation and Manipulation) is a powerful, open-source CFD 
 - [Case Structure](#case-structure)
 - [Solvers Overview](#solvers-overview)
 - [Meshing with blockMesh](#meshing-with-blockmesh)
+- [Meshing with snappyHexMesh](#meshing-with-snappyhexmesh)
 - [Boundary Conditions](#boundary-conditions)
+- [Turbulence Models](#turbulence-models)
+- [Function Objects](#function-objects)
 - [Post-Processing](#post-processing)
 - [Advanced Topics](#advanced-topics)
 
@@ -256,6 +259,228 @@ inlet
 - **Smagorinsky**: Classic SGS model
 - **Dynamic models**: Dynamic Smagorinsky
 - **Wall-adapting**: WALE model
+
+For detailed turbulence model setup, inlet conditions, wall treatment, and worked examples, see [Turbulence Modeling Guide](turbulence_modeling.md).
+
+## Meshing with snappyHexMesh
+
+`snappyHexMesh` is OpenFOAM's utility for generating complex 3D meshes around arbitrary geometries defined by STL surfaces. It works by starting from a background hex mesh (from `blockMesh`) and iteratively refining, snapping to surfaces, and adding boundary layers.
+
+### Workflow
+
+```bash
+# 1. Create background hex mesh
+blockMesh
+
+# 2. Place STL files in constant/triSurface/
+cp geometry.stl constant/triSurface/
+
+# 3. Run snappyHexMesh
+snappyHexMesh
+
+# 4. Check final mesh quality
+checkMesh -latestTime
+```
+
+### Minimal snappyHexMeshDict
+
+```cpp
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+castellatedMesh true;
+snap            true;
+addLayers       true;
+
+geometry
+{
+    body.stl
+    {
+        type triSurfaceMesh;
+        name body;
+    }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells   100000;
+    maxGlobalCells  2000000;
+    minRefinementCells 10;
+    nCellsBetweenLevels 3;
+
+    features
+    (
+        { file "body.eMesh"; level 2; }
+    );
+
+    refinementSurfaces
+    {
+        body
+        {
+            level (2 3);
+        }
+    }
+
+    refinementRegions
+    {
+        // Optional: add volume refinement
+    }
+
+    locationInMesh (0 0 0);    // Point inside the fluid domain
+    allowFreeStandingZoneFaces true;
+}
+
+snapControls
+{
+    nSmoothPatch    3;
+    tolerance       2.0;
+    nSolveIter      100;
+    nRelaxIter      5;
+}
+
+addLayersControls
+{
+    relativeSizes   true;
+    layers
+    {
+        "body.*"
+        {
+            nSurfaceLayers 3;
+        }
+    }
+    expansionRatio      1.2;
+    finalLayerThickness 0.5;
+    minThickness        0.1;
+}
+
+meshQualityControls
+{
+    maxNonOrtho     65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave      80;
+    minVol          1e-13;
+    minTetQuality   1e-15;
+    minArea         -1;
+    minTwist        0.05;
+    minDeterminant  0.001;
+    minFaceWeight   0.05;
+    minVolRatio     0.01;
+    minTriangleTwist -1;
+}
+```
+
+### Feature Edge Extraction
+
+Before running snappyHexMesh, extract feature edges for better refinement:
+
+```bash
+surfaceFeatureExtract
+```
+
+This requires a `system/surfaceFeatureExtractDict`:
+
+```cpp
+body.stl
+{
+    extractionMethod    extractFromSurface;
+    extractFromSurfaceCoeffs
+    {
+        includedAngle   150;
+    }
+}
+```
+
+## Function Objects
+
+Function objects allow you to compute and write additional quantities during or after a simulation without modifying the solver.
+
+### Common Function Objects
+
+Add these to the `functions` block in `system/controlDict`:
+
+```cpp
+functions
+{
+    // Calculate and write y+ values
+    yPlus
+    {
+        type            yPlus;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    writeTime;
+    }
+
+    // Calculate force coefficients on a patch
+    forceCoeffs
+    {
+        type            forceCoeffs;
+        libs            ("libforces.so");
+        writeControl    timeStep;
+        writeInterval   1;
+
+        patches         (body);
+        rho             rhoInf;
+        rhoInf          1.225;
+        CofR            (0 0 0);
+        liftDir         (0 1 0);
+        dragDir         (1 0 0);
+        pitchAxis       (0 0 1);
+        magUInf         10.0;
+        lRef            1.0;
+        Aref            1.0;
+    }
+
+    // Monitor a field at specific points
+    probes
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    timeStep;
+        writeInterval   1;
+
+        fields          (p U);
+        probeLocations
+        (
+            (1.0 0.0 0.0)
+            (2.0 0.0 0.0)
+        );
+    }
+
+    // Calculate vorticity field
+    vorticity
+    {
+        type            vorticity;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    writeTime;
+    }
+
+    // Write residuals
+    residuals
+    {
+        type            residuals;
+        libs            ("libutilityFunctionObjects.so");
+        writeControl    timeStep;
+        writeInterval   1;
+        fields          (p U k omega);  // Adjust to match your solved fields
+    }
+}
+```
+
+### Running Function Objects Post-Simulation
+
+```bash
+# Run all function objects on existing results
+simpleFoam -postProcess
+
+# Run a specific function object
+simpleFoam -postProcess -func yPlus
+simpleFoam -postProcess -func "forceCoeffs"
+```
 
 ## Best Practices
 

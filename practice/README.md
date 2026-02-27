@@ -2,48 +2,47 @@
 
 This directory contains practical tutorials, guides, and resources for computational fluid dynamics (CFD) tools, mesh generation, and open-source software. Each subdirectory focuses on specific tools and workflows commonly used in CFD practice.
 
+## Table of Contents
+
+- [Directory Structure](#directory-structure)
+- [Recommended Learning Path](#recommended-learning-path)
+- [Useful YouTube Resources](#useful-youtube-resources)
+- [Getting Started](#getting-started)
+- [Tools Covered](#tools-covered)
+
 ## Directory Structure
 
 ### 📐 [gmsh/](./gmsh/)
 Comprehensive guides for Gmsh mesh generation
-- Introduction to Gmsh fundamentals
-- Volume mesh generation techniques
-- Advanced meshing strategies
-- Scripting and automation
+- [Introduction to Gmsh](gmsh/intro.md) — fundamentals, workflow, and scripting
+- [Volume Mesh Generation](gmsh/generate_volume_mesh.md) — STL to volume mesh workflow
+- [Boolean Operations](gmsh/boolean_operations.md) — union, cut, intersect, and fragment geometries
 
 ### 📊 [paraview/](./paraview/)
 ParaView visualization and post-processing
-- ParaView basics and interface
-- OpenFOAM integration
-- Advanced visualization techniques
-- Custom filters and scripting
+- [Introduction to ParaView](paraview/intro.md) — GUI basics, filters, and OpenFOAM integration
+- [Importing External Packages](paraview/import_external_packages.md) — using pandas/numpy with pvpython
+- [Batch Visualization](paraview/batch_visualization.md) — automated screenshots, animations, and data extraction
 
 ### 🔧 [openfoam/](./openfoam/)
 OpenFOAM CFD solver tutorials and workflows
-- Installation and setup
-- Basic tutorials and cases
-- Solver configuration
-- Boundary conditions and meshing
+- [Getting Started](openfoam/getting_started.md) — lid-driven cavity tutorial with validation
+- [Turbulence Modeling](openfoam/turbulence_modeling.md) — RANS/LES setup, wall treatment, and worked examples
 
 ### 🌊 [mesh_generation/](./mesh_generation/)
 3D mesh generation tools and techniques
-- Structured vs unstructured meshes
-- Boundary layer meshing
-- Mesh quality assessment
-- Tool comparisons
+- [Boundary Layer Meshing](mesh_generation/boundary_layers.md) — y+ calculations and layer generation
+- [Mesh Quality Assessment](mesh_generation/mesh_quality.md) — metrics, tools, and automated reporting
 
 ### 🚀 [cfd_tools/](./cfd_tools/)
 Collection of open-source CFD tools
-- Solver comparisons
-- Pre/post-processing tools
-- Workflow automation
-- Best practices
+- [Solver Comparison](cfd_tools/solver_comparison.md) — decision guide for choosing a CFD solver
+- [Workflow Automation](cfd_tools/automation.md) — Python/Bash frameworks for parametric studies
 
 ### 🎯 [manual_projects/](./manual_projects/)
 Hands-on CFD projects and case studies
-- Real-world applications
-- Step-by-step tutorials
-- Industry examples
+- [Lid-Driven Cavity](manual_projects/lid_driven_cavity.md) — benchmark tutorial with Ghia et al. validation
+- [Flow Over Cylinder](manual_projects/flow_over_cylinder.md) — vortex shedding analysis at Re=100
 
 ## Recommended Learning Path
 
@@ -71,7 +70,7 @@ Each subdirectory contains detailed README files and tutorials. For beginners, w
 
 1. `gmsh/intro.md` - Understanding mesh generation basics
 2. `paraview/intro.md` - Learning visualization fundamentals
-3. `openfoam/getting_sta I'm left-leaning, and was a student of Professor Mearsheimer years ago. My dad is right-leaning, and has been a fan of Tucker for years. I note that because seeing these two worlds converge is mind-blowing on just about every level. rted.md` - First CFD simulation
+3. `openfoam/getting_started.md` - First CFD simulation
 
 ## Tools Covered
 
