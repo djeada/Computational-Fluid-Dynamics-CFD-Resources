@@ -1,5 +1,7 @@
 # Machine Learning on CAD
 
+Creating and modifying CAD models for engineering applications is traditionally a manual, time-intensive process requiring specialized expertise. As design spaces grow larger and more complex, manually exploring geometric variations becomes impractical. Machine learning offers the ability to automate CAD generation, create compressed representations of shapes, and even generate new geometries from textual descriptions, dramatically accelerating the early stages of the design pipeline.
+
 Interacting with **Computer-Aided Design (CAD)** models through machine learning can open doors to faster, more flexible design workflows. While direct simulation remains computationally costly, machine learning models can create **compressed representations** of CAD objects, speeding up tasks like shape classification, similarity searches, and even geometry generation. Achieving this, however, demands extensive training data, often requiring simulation software and large-scale data processing to ensure models capture the full complexity of engineered shapes.
 
 ```
@@ -131,3 +133,23 @@ Deepen your understanding of how machine learning transforms CAD and geometric m
   Demonstrates how deep learning can reconstruct 3D CAD models from 2D images, bridging computer vision with CAD model generation.  
 - **Deep Learning for Geometric Shape Understanding** by Han et al.  
   Provides a thorough survey of deep learning techniques applied to the interpretation and processing of geometric data, offering valuable insights into state-of-the-art methods for CAD applications.
+
+## Setting Up the Problem
+
+Building a text-to-CAD pipeline requires careful preparation at each stage:
+
+1. **Collect and annotate CAD models**: Assemble a diverse library spanning simple primitives to complex assemblies. Store models in standard formats (STEP, IGES) and tag each with descriptive keywords, intended application, and geometric metadata.
+2. **Extract geometric and topological features**: Compute surface area, volume, curvature distributions, and edge-face connectivity graphs. Normalize features so models of different scales are comparable.
+3. **Choose NLP models for text-to-geometry mapping**: Use pretrained embeddings (Word2Vec, BERT) to encode design descriptions. Fine-tune on domain-specific vocabulary (e.g., "fillet," "chamfer," "draft angle") to improve semantic alignment.
+4. **Select a generative architecture**: GANs produce sharp, realistic geometries but can be unstable to train. VAEs offer smoother latent spaces and easier interpolation between shapes. Evaluate both on your dataset before committing.
+5. **Set up training pipelines**: Define loss functions that combine reconstruction accuracy (Chamfer distance, Earth Mover's distance) with text-alignment terms. Use learning rate schedules, gradient clipping, and checkpoint saving to stabilize long training runs.
+6. **Validate generated geometries**: Check outputs against engineering constraints such as watertight meshes, minimum wall thickness, and manufacturability rules. Automate validation with scripted checks before passing models downstream.
+
+## Key Takeaways
+
+- Machine learning can dramatically reduce the time required to go from a design concept to an initial CAD geometry.
+- High-quality, well-annotated training data is the single most important factor for model performance.
+- Combining NLP embeddings with generative models (GANs, VAEs) enables text-driven CAD generation.
+- Feature extraction must capture both geometric properties (volume, curvature) and topological relationships (face connectivity).
+- Loss functions should balance geometric fidelity with adherence to textual intent and engineering constraints.
+- Automated validation against manufacturability rules is essential before generated models enter production workflows.
