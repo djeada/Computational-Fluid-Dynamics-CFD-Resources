@@ -98,3 +98,21 @@ $$
   Use the previously calculated $u_3$ to solve for $u_4$.
 
 By following these steps, we obtain a numerical solution for $u$ at each grid point, providing an approximate solution to the original differential equation.
+
+## Purpose in CFD
+
+This note demonstrates the core FDM discretization workflow on a minimal 1-D example: define the continuous ODE, lay out a grid, approximate derivatives via Taylor series, assemble the resulting algebraic equations, and solve step by step. It introduces the concept of truncation error and first-order accuracy, which are central to evaluating any numerical scheme in CFD.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | ODE $du/dx + u^m = 0$ with $u(0) = 1$, grid points $x_1, \dots, x_4$, spacing $\Delta x = 1/3$, exponent $m$ |
+| **Outputs** | Discrete solution values $u_1, u_2, u_3, u_4$, truncation error order $O(\Delta x)$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/1d_heat_and_wave_equations/main.py` | Applies the same discretization ideas to the 1-D heat and wave equations with time-stepping. |
+| `scripts/plots/numerical_vs_exact_solution/main.py` | Plots the discrete solution against the exact solution, visualizing the truncation error discussed here. |

@@ -149,3 +149,21 @@ The accuracy and stability of the solution are enhanced by the conservation prop
 - Differential Approach: FDM approximates the derivatives in the governing equations using Taylor series expansions, which results in pointwise approximations of the differential equations.
 - Grid Restrictions: FDM is typically more straightforward on structured grids and may face challenges with irregular geometries.
 - Conservation: While FDM can be conservative with careful formulation, conservation is not inherently built into the method as it is in FVM.
+
+## Purpose in CFD
+
+This note shows how to discretize the integral conservation equations (continuity, momentum, energy) on rectangular finite-volume cells. It derives the discrete continuity equation by summing normal velocity contributions at each cell face, extends the approach to momentum and energy, and discusses face-value interpolation and system assembly. These steps are the core of every FVM-based CFD code.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Rectangular cell dimensions $\Delta x$, $\Delta y$, face velocity components $(u_f, v_f)$, outward normals $\hat{n}$, cell-centered primary variables |
+| **Outputs** | Discrete continuity equation $(-u_1)\Delta y + (v_2)\Delta x + (u_3)\Delta y + (-v_4)\Delta x = 0$, momentum and energy algebraic equations, global matrix system |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/backward_facing_step_simple/main.py` | Assembles and solves the FVM-discretized Navier–Stokes system for a backward-facing step geometry. |
+| `scripts/simulations/lid_driven_cavity/main.py` | Demonstrates FVM-style discretization for the lid-driven cavity, including face flux evaluation. |

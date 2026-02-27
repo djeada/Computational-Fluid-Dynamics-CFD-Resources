@@ -110,3 +110,22 @@ Finite difference methods are typically easy to code. One starts with arrays rep
 ### COMMON PITFALLS
 
 Finite difference solutions can exhibit instability or inaccuracy if the grid spacing or time step is chosen poorly. Convection-dominated problems may require special “upwinding” or artificial diffusion to avoid nonphysical oscillations. Non-uniform grids can make the approach more flexible, but also more challenging, since difference formulas must be modified to account for varying spacing. Handling complicated or curved boundaries with a purely structured grid can introduce errors or require coordinate transformations that complicate the implementation.
+
+## Purpose in CFD
+
+The Finite Difference Method (FDM) is one of the earliest and most intuitive discretization techniques. By replacing continuous derivatives with difference quotients on a structured grid, FDM converts PDEs such as the heat equation or wave equation into systems of algebraic equations. This note covers forward, backward, and central difference approximations, Taylor-series error analysis, the CFL stability condition, and extensions to 2-D/3-D grids. FDM is well-suited for problems on regular geometries and serves as the conceptual foundation for understanding other discretization methods.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Structured grid ($x_0, \dots, x_N$), mesh spacing $h$, time step $\Delta t$, thermal diffusivity $\alpha$, boundary conditions ($u_L$, $u_R$), initial condition $u(x,0)$ |
+| **Outputs** | Nodal solution values $u_i^n$ at each grid point and time level, error estimates (truncation error order), stability limit $\Delta t \le h^2/(2\alpha)$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/1d_heat_and_wave_equations/main.py` | Solves the 1-D heat and wave equations using explicit finite-difference time-stepping with stability analysis. |
+| `scripts/simulations/2d_wave_simulation/main.py` | Extends the finite-difference approach to the 2-D wave equation with animated visualization. |
+| `scripts/plots/numerical_vs_exact_solution/main.py` | Compares an FDM numerical solution with the exact exponential solution, showing convergence. |

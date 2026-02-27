@@ -104,3 +104,21 @@ The method works well in complicated flow scenarios, including compressible flow
 ### POTENTIAL PITFALLS
 
 Numerical instabilities can arise if the chosen interpolation and time-stepping schemes are not appropriate for the type of flow or the grid spacing. High-speed flows often benefit from upwind and flux-limiter schemes that avoid spurious oscillations near shocks. Diffusion-dominated problems can be relatively forgiving, but convection-dominated scenarios may demand careful scheme selection to maintain stability and accuracy. Boundary conditions also play a key role in determining the quality of the final solution, so implementing them consistently is important.
+
+## Purpose in CFD
+
+The Finite Volume Method (FVM) is the dominant discretization technique in industrial CFD codes (OpenFOAM, ANSYS Fluent). It integrates conservation laws over small control volumes and computes fluxes at cell faces, guaranteeing local and global conservation of mass, momentum, and energy. This note explains control-volume concepts, the divergence theorem link, flux approximation, and the resulting algebraic system, using the 1-D convection-diffusion equation as an example.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Control-volume mesh (structured or unstructured), conservation law $\partial\phi/\partial t + \nabla\cdot\mathbf{F}=0$, flux interpolation scheme, boundary conditions, diffusion coefficient $D$, velocity $v$ |
+| **Outputs** | Cell-averaged values $\phi_i$, face fluxes $F_{i\pm 1/2}$, assembled algebraic system, converged field solution |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/backward_facing_step_simple/main.py` | Implements the SIMPLE algorithm on a finite-volume grid for a 2-D backward-facing step, demonstrating flux computation and pressure correction. |
+| `scripts/simulations/lid_driven_cavity/main.py` | Pressure-based Navier–Stokes solver using control-volume ideas consistent with FVM principles. |

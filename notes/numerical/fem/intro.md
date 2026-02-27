@@ -134,3 +134,18 @@ Many commercial and open-source software packages rely on finite element techniq
 ### POTENTIAL PITFALLS
 
 FEM can become computationally expensive when the mesh is refined or the polynomial order is increased, though adaptive mesh refinement strategies can selectively refine only the regions where the solution has large gradients or singularities. Numerical instabilities may arise if the problem is poorly posed or if the discretization scheme does not capture key features, especially in convection-dominated flows where specialized stabilization methods might be needed. Implementing boundary conditions requires careful consideration of the problem’s physical meaning. Also, ensuring that the chosen polynomial order and element shape align with the desired accuracy is necessary.
+
+## Purpose in CFD
+
+The Finite Element Method (FEM) divides the domain into elements (triangles, quadrilaterals, tetrahedra, etc.) and approximates the solution with piecewise polynomial shape functions. By formulating the problem in its weak (variational) form, FEM naturally handles complex geometries, curved boundaries, and mixed boundary conditions. This note explains the core concepts—elements, nodes, shape functions, weak form, global assembly, and boundary condition application—and walks through a 1-D Poisson equation example.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Domain $\Omega$, element mesh, polynomial degree, forcing function $f(x)$, boundary conditions (Dirichlet, Neumann), material properties $p(x)$ |
+| **Outputs** | Nodal solution vector $U$, global stiffness matrix $K$, load vector $F$, approximate solution $u_h(x)$ |
+
+## Related Python Scripts
+
+There are no dedicated FEM simulation scripts in this repository. For hands-on FEM implementations, consider open-source packages such as [FEniCS](https://fenicsproject.org/) or [deal.II](https://www.dealii.org/). The POD and ROM scripts listed under those notes use solution snapshots that could originate from an FEM solver.
