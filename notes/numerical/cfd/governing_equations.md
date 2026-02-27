@@ -99,7 +99,7 @@ Where:
 
 
 
-## UNDEFINED
+## Reynolds Transport Theorem
 
 * defined trough reynold transport theorem
 * RTT relates lagrangian system to eulerian control volume
@@ -186,3 +186,22 @@ abla \cdot (P \mathbf{v}) \text{ (PV work)} + \rho \mathbf{g} \cdot \mathbf{v} \
 
 * The terms on the left hand side (LHS) of the equation are the accumulation and in/out transport through the control volume.
 * The terms on the right hand side (RHS) are as noted. In the energy equation, field work will convert potential energy to kinetic energy (which is part of $e$).
+
+## Purpose in CFD
+
+This note presents the three governing equations of fluid dynamics—continuity, Navier–Stokes (momentum), and energy—in both integral and differential forms. The integral forms are derived via the Reynolds Transport Theorem (RTT) and are the starting point for Finite Volume discretization. The differential forms underpin Finite Difference and Finite Element methods. Every CFD solver is ultimately an approximate solution to these equations.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Fluid density $\rho$, velocity $\vec{v}$, pressure $p$, viscosity $\mu$, thermal conductivity $k$, specific heat $c_p$, body forces $\vec{f}$, heat sources $S$ |
+| **Outputs** | Velocity field $\vec{v}(x,t)$, pressure field $p(x,t)$, temperature field $T(x,t)$, stress tensor $\boldsymbol{\tau}$, heat flux $\vec{q}$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lid_driven_cavity/main.py` | Solves the incompressible continuity and Navier–Stokes equations numerically for a 2-D cavity. |
+| `scripts/simulations/eulerian_cylinder_flow/main.py` | Eulerian solver for the momentum equations around a cylinder, computing velocity and pressure fields. |
+| `scripts/simulations/rayleigh_benard_convection/main.py` | Solves the coupled momentum and energy equations to simulate buoyancy-driven convection. |
