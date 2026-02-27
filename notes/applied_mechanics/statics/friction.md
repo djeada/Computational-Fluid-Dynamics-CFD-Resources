@@ -86,7 +86,7 @@ A wedge is **self-locking** (will not slip out on its own) when:
 
 $$\alpha \leq 2\phi_s$$
 
-where $\phi_s = \tan^{-1}(\mu_s)$. This is a critical design criterion for wedge-based clamping and lifting devices.
+where $\phi_s = \tan^{-1}(\mu_s)$. Physically, there are two friction surfaces acting on the wedge, each capable of resisting slip up to the friction angle $\phi_s$. When the wedge half-angle exceeds $\phi_s$ on both contact faces, the component of the applied load pushing the wedge out overcomes the combined friction resistance, and the wedge slips. The factor of two arises because both the top and bottom surfaces contribute one friction angle each. This is a critical design criterion for wedge-based clamping and lifting devices.
 
 ## Belt Friction (Capstan Equation)
 
