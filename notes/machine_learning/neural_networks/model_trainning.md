@@ -1,5 +1,7 @@
 ## Model Training Methodology  
 
+Training a geometric deep learning model for aerodynamic prediction requires careful experimental design to assess both single-geometry accuracy and cross-geometry generalization. The fundamental question is whether a model trained on one family of shapes can make reliable predictions for an entirely different geometry, or whether a combined model trained on diverse shapes offers better generalization. Answering this requires structured experiments with separate and merged datasets, rigorous hyperparameter optimization, and standardized evaluation metrics.
+
 A core objective in applying geometric deep learning (GDL) to external aerodynamics is to train neural networks—often based on graph or mesh-based architectures—that can handle different vehicle or body shapes. One way to test generalization capabilities is to design two distinct “Design of Experiments” (DoE) scenarios. In the first scenario, separate GDL models are trained on individual shapes (e.g., Design 1 and Design 2), each model specializing in a single geometry family. In the second scenario, the datasets for both shapes are merged, and a single “universal” model is trained to see if it can maintain adequate performance when encountering unfamiliar geometrical features.
 
 I. **Scenario 1**: Each model is dedicated to one particular geometry. For instance, **Model 1** only uses data from Design 1, while **Model 2** only uses data from Design 2.  
@@ -94,3 +96,21 @@ Together, these metrics give engineers a comprehensive picture of how each model
 ### Quality of Field Variable Predictions  
 
 For more nuanced validation, predicted flow fields (e.g., surface pressure, velocity contours, turbulent kinetic energy) can be compared against CFD references. Visual inspections often confirm whether the GDL model reproduces key flow features like stagnation regions, vortical structures, and trailing wake patterns. While minor discrepancies may arise—especially in regions of high curvature or strong flow separation—the overall accuracy often proves sufficient for early-stage design exploration or parametric studies.
+
+### Setting Up the Problem
+
+1. **Define geometry families and simulation budgets.** Identify distinct shape families (e.g., Design 1 and Design 2) and allocate a fixed number of CFD simulations to each, balancing cost against data diversity.
+2. **Choose a training strategy.** Decide whether to train separate single-geometry models (one per family) or a combined model on merged data. Running both approaches enables a direct comparison of specialist vs. generalist performance.
+3. **Configure hyperparameter search.** Use grid search for small parameter spaces or Bayesian optimization (e.g., Optuna) for larger ones. Key hyperparameters include network depth, message-passing iterations, learning rate, and embedding dimension.
+4. **Select evaluation metrics.** Report $R^2$ for overall correlation, MAE for absolute accuracy, standard deviation for error spread, and relative MAE (%) for engineering interpretability. Consistent metrics across all models ensure fair comparison.
+5. **Reserve unseen test geometries.** Hold out complete configurations—not just random samples—from training so that test performance reflects true generalization to new shapes rather than interpolation within known ones.
+6. **Compare field-level vs. global predictions.** Evaluate both integrated quantities (e.g., $C_d$, $C_l$) and spatially resolved fields (e.g., surface $C_p$). A model may predict accurate global forces yet miss local flow features, so both levels of fidelity matter.
+
+### Key Takeaways
+
+- Structured DoE with separate and merged datasets is essential for quantifying single-geometry accuracy versus cross-geometry generalization.
+- Hyperparameter optimization (grid search or Bayesian) has an outsized impact on final model quality and should not be skipped.
+- A combined model trained on diverse geometries typically achieves better generalization than single-geometry specialists, as reflected by higher test-set $R^2$ and lower MAE.
+- Reserving entire unseen geometries—not random splits—for testing provides the most realistic estimate of deployment performance.
+- Both global aerodynamic coefficients and local field variables should be evaluated, since aggregate metrics can mask localized prediction errors.
+- Early-stage design exploration benefits most from GDL surrogates, where modest accuracy trade-offs are acceptable in exchange for orders-of-magnitude speedup over full CFD.
