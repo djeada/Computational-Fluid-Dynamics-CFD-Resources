@@ -1,46 +1,44 @@
 # Generating Synthetic Data for Boundary Layer Simulation
 
-This project generates velocity data for a boundary layer over a flat plate using a simplified model.
+This script generates synthetic velocity data for a laminar boundary layer over a flat plate using a simplified power-law profile. It adds Gaussian noise to simulate realistic measurement scatter, saves the resulting dataset to a CSV file, and produces plots of the streamwise velocity component against wall-normal distance.
 
-## Steps
+## Overview
 
-1. Define the Y-coordinates (distance from the wall).
-2. Calculate the corresponding U-velocity components based on a typical boundary layer profile.
-3. Generate plots for U versus Y.
+- Computes the wall-normal velocity profile using a square-root (power-law) approximation
+- Adds Gaussian noise to all velocity components to mimic experimental data
+- Saves the generated dataset (Y, U0, U1, U2) to a CSV file
+- Produces a plot of U0 vs Y and a combined plot of all velocity components
 
-## Simplified Boundary Layer Velocity Profile
+## Mathematical Background
 
-The Blasius solution for a laminar boundary layer over a flat plate provides an approximate velocity profile. For simplicity, we use a parabolic profile:
+### Boundary Layer Velocity Profile
 
-\[ U(y) = U_\infty \left(\frac{y}{\delta}\right)^{0.5} \]
+The streamwise velocity component across the boundary layer is approximated by:
 
-Where:
-- \( U(y) \) is the velocity at distance \( y \) from the plate.
-- \( U_\infty \) is the free-stream velocity.
-- \( \delta \) is the boundary layer thickness.
+$$U(y) = U_\infty \sqrt{\frac{y}{\delta}}$$
 
-## Explanation of the Script
+where:
+- $U(y)$ is the velocity at wall-normal distance $y$
+- $U_\infty$ is the free-stream velocity
+- $\delta$ is the boundary layer thickness
 
-1. **Parameters**: 
-    - Define the free-stream velocity (\( U_\infty \)).
-    - Define the boundary layer thickness (\( \delta \)).
+### Noise Model
 
-2. **Generate Y-coordinates**: 
-    - Generate an array of Y-coordinates from 0 to twice the boundary layer thickness to capture the velocity profile.
+Gaussian noise $\mathcal{N}(0, \sigma^2)$ is added to each velocity component to simulate measurement uncertainty:
 
-3. **Calculate U-velocity components**: 
-    - Use a simplified parabolic profile to calculate the U-velocity component.
-    - Assume U1 and U2 components are zero.
+$$U_i^{\text{noisy}} = U_i + \epsilon, \quad \epsilon \sim \mathcal{N}(0, \sigma^2)$$
 
-4. **Add Noise**: 
-    - Add some noise to simulate realistic data.
+## Implementation
 
-5. **Save Data**: 
-    - Save the data to a CSV file.
+1. Define parameters: free-stream velocity $U_\infty$ and boundary layer thickness $\delta$
+2. Generate Y-coordinates from $0$ to $2\delta$ to capture the full profile and free-stream region
+3. Compute $U_0 = U_\infty\sqrt{y/\delta}$; set lateral components $U_1 = U_2 = 0$
+4. Add Gaussian noise to all three velocity components
+5. Save the data array $(Y, U_0, U_1, U_2)$ to a CSV file
+6. Plot $U_0$ vs $Y$ and all components vs $Y$; save figures to disk
 
-6. **Plotting**: 
-    - Generate and save plots of U0 versus Y and all velocity components versus Y.
+## Output
 
-## Running the Script
-
-Executing this script will produce a dataset and corresponding plots demonstrating the boundary layer velocity profile. This can be adapted to other scenarios like channel flow or pipe flow by modifying the velocity profile and spatial coordinates accordingly.
+- **CSV file**: tabular dataset with columns Y, U0, U1, U2 representing the synthetic boundary layer measurement
+- **Plot 1**: streamwise velocity $U_0$ versus wall-normal distance $Y$
+- **Plot 2**: all three velocity components ($U_0$, $U_1$, $U_2$) versus $Y$ on a single axes
