@@ -18,9 +18,9 @@ This script visualizes the formation of menisci in glass tubes by plotting two s
 
 The contact angle $\theta_c$ is measured between the liquid–solid interface and the liquid surface at the point of contact:
 
-$$\theta_c < 90° \Rightarrow \text{hydrophilic (water on glass)} \Rightarrow \text{liquid climbs} \Rightarrow \text{concave meniscus}$$
+$$\theta_c < 90^\circ \Rightarrow \text{hydrophilic (water on glass)} \Rightarrow \text{liquid climbs} \Rightarrow \text{concave meniscus}$$
 
-$$\theta_c > 90° \Rightarrow \text{hydrophobic (mercury on glass)} \Rightarrow \text{liquid depresses} \Rightarrow \text{convex meniscus}$$
+$$\theta_c > 90^\circ \Rightarrow \text{hydrophobic (mercury on glass)} \Rightarrow \text{liquid depresses} \Rightarrow \text{convex meniscus}$$
 
 ### Young's Equation
 

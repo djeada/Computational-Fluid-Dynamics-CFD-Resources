@@ -27,7 +27,7 @@ $$Fr \approx 0.35 \quad \Longrightarrow \quad \text{minimum wave resistance}$$
 
 ### Kelvin Wake Angle
 
-$$\theta_K = \arcsin\!\left(\frac{1}{3}\right) \approx 19.47°$$
+$$\theta_K = \arcsin\!\left(\frac{1}{3}\right) \approx 19.47^\circ$$
 
 The Kelvin wake angle is universal: independent of ship speed for deep water.
 

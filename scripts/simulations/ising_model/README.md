@@ -18,7 +18,7 @@ The energy of a spin configuration is described by:
 
 $$H = -J \sum_{\langle i,j \rangle} s_i s_j$$
 
-where $J$ is the coupling constant ($J>0$ ferromagnetic, $J<0$ antiferromagnetic) and $\langle i,j\rangle$ denotes nearest-neighbor pairs.
+where $J$ is the coupling constant ($J > 0$ ferromagnetic, $J < 0$ antiferromagnetic) and $\langle i,j\rangle$ denotes nearest-neighbor pairs.
 
 ### Magnetization
 
