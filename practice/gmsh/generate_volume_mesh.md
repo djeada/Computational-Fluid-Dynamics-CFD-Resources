@@ -6,14 +6,11 @@ Gmsh is a nice fit for this because it can sit in the middle between “I have a
 
 An STL is a *discrete surface mesh*. For volume meshing, Gmsh needs a *closed* surface that it can treat as the boundary of a region. In practice, you usually end up doing three steps:
 
-1. **Make the surface usable as geometry**
-   STL triangles don’t come with nice topological structure (edges, curves, “this set of triangles is one face”, etc.). Gmsh typically “classifies” the triangles into surface patches based on feature angles, then builds a parametric representation for those patches. This is exactly what the official tutorial for remeshing STL does. ([gmsh.info][2])
+1. **Make the surface usable as geometry** STL triangles don’t come with nice topological structure (edges, curves, “this set of triangles is one face”, etc.). Gmsh typically “classifies” the triangles into surface patches based on feature angles, then builds a parametric representation for those patches. This is exactly what the official tutorial for remeshing STL does. ([gmsh.info][2])
 
-2. **Define a volume from the closed surface**
-   Once Gmsh has surface entities, you wrap them into a “surface loop” and then create a volume from that loop.
+2. **Define a volume from the closed surface** Once Gmsh has surface entities, you wrap them into a “surface loop” and then create a volume from that loop.
 
-3. **Generate the 3D mesh + check quality**
-   Tetrahedral meshing is usually one command, but quality control is where you decide whether the result is solver-ready.
+3. **Generate the 3D mesh + check quality** Tetrahedral meshing is usually one command, but quality control is where you decide whether the result is solver-ready.
 
 If you *also* have the original CAD (STEP/IGES), it’s usually better to import that instead of going through STL reparametrization—CAD surfaces tend to be smoother and mesh more cleanly. ([gmsh.info][2])
 
@@ -28,7 +25,7 @@ If your STL is clean and you just want to get moving:
 
 This is fine for small models. For bigger STLs or anything you want to repeat, it’s worth switching to scripts.
 
-### A minimal `.geo` that actually works on typical STLs
+### A minimal `.geo` that works on typical STLs
 
 A lot of “minimal examples” online skip the important part: turning the STL into something Gmsh can build a volume from. The Gmsh tutorial `t13` shows the robust version: merge STL, classify surfaces, create geometry, then define the volume. ([gmsh.info][2])
 
@@ -124,9 +121,9 @@ gmsh mesh_from_stl.geo -3 -part 8 -part_split -o part.msh
 
 This won’t magically fix a bad mesh, but it’s handy once the mesh is already good and you need it packaged for downstream tooling.
 
-### A corrected “complete” Python API example (STL → volume mesh)
+### Python API example (STL → volume mesh)
 
-One important fix from your draft: `gmsh.model.mesh.importStl()` is *not* a “load this STL file” function—it imports an STL representation *from the current model* and takes no filename. ([gmsh.info][2])
+`gmsh.model.mesh.importStl()` is *not* a “load this STL file” function—it imports an STL representation *from the current model* and takes no filename. ([gmsh.info][2])
 For loading an STL file in the API, the common approach is to merge it, then classify/create geometry (same logic as the `.geo` script).
 
 Here’s a self-contained example that mirrors the tutorial flow:
@@ -173,8 +170,6 @@ gmsh.finalize()
 ```
 
 If you run into “too many tiny surfaces” or “one giant surface that won’t parametrize well”, the first knob to touch is `angle_deg`. Lower angles create more patches (more splitting on features); higher angles keep patches larger.
-
----
 
 [1]: https://gmsh.info/ "Gmsh: a three-dimensional finite element mesh generator with built-in pre- and post-processing facilities"
 [2]: https://gmsh.info/doc/texinfo/gmsh.html "Gmsh 4.15.0"
