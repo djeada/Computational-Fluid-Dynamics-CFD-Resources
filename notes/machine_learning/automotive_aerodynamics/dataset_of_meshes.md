@@ -20,7 +20,7 @@ Two commonly monitored cell quality metrics are:
 
 - **Equiangle Skewness**: Measures how far a cell’s angles deviate from those of an ideal element (equilateral triangle in 2D, regular tetrahedron in 3D):
 
-$$S_{\text{eq}} = \max\!\left(\frac{\theta_{\max} - \theta_{\text{ideal}}}{180° - \theta_{\text{ideal}}},\; \frac{\theta_{\text{ideal}} - \theta_{\min}}{\theta_{\text{ideal}}}\right)$$
+$$S_{\text{eq}} = \max\!\left(\frac{\theta_{\max} - \theta_{\text{ideal}}}{180^\circ - \theta_{\text{ideal}}},\; \frac{\theta_{\text{ideal}} - \theta_{\min}}{\theta_{\text{ideal}}}\right)$$
 
 where $\theta_{\max}$ and $\theta_{\min}$ are the largest and smallest angles in the cell. Values range from 0 (ideal) to 1 (degenerate); cells with $S_{\text{eq}} > 0.85$ should typically be flagged or removed.
 

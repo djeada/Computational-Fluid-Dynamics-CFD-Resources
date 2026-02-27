@@ -46,7 +46,7 @@ ML models, often deep neural networks, are trained on pairs of input images and 
 
 In conventional PIV, the displacement between two successive images is estimated by computing the cross-correlation function $R(\mathbf{s})$ over interrogation windows:
 
-$$R(\mathbf{s}) = \int I_1(\mathbf{x}) \, I_2(\mathbf{x} + \mathbf{s}) \, d\mathbf{x}$$
+$$R(\mathbf{s}) = \int_{\Omega} I_1(\mathbf{x}) \, I_2(\mathbf{x} + \mathbf{s}) \, d\mathbf{x}$$
 
 where $I_1$ and $I_2$ are the image intensity fields from two frames separated by a known time interval $\Delta t$, and $\mathbf{s}$ is the displacement vector. The peak of $R$ gives the most probable particle displacement $\mathbf{s}^*$, and the local velocity is then $\mathbf{u} = \mathbf{s}^*/\Delta t$. ML-based approaches learn to approximate this mapping end-to-end, predicting $\mathbf{u}$ directly from the image pair without explicit correlation computation.
 
