@@ -236,3 +236,20 @@ The initial one-stage design can serve as a foundation. Once the surrogate is bu
 IV. **Computational Tools**:
 
 Many software packages (R, Python, MATLAB) provide routines for generating LHDs, Sobol sequences, and even heuristics to improve designs. For instance, MATLAB’s `lhsdesign` function can generate LHDs with an option to improve space-filling properties. Python’s `pyDOE` package and R’s `lhs` package offer similar functionalities.
+
+## Purpose in CFD
+
+The accuracy of any surrogate model depends on how well the training points cover the design space. This note surveys one-stage (a priori) sampling strategies—full factorial, Latin Hypercube Sampling (LHS), distance-based designs, and low-discrepancy sequences (Sobol, Halton)—and explains space-filling criteria such as maximin distance and discrepancy. Choosing the right sampling plan is the first step in building a reliable CFD surrogate.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Design space dimension $d$, number of sample points $N$, space-filling criterion (maximin, minimax, discrepancy), sequence type |
+| **Outputs** | Set of design points $\{x^{(i)}\}_{i=1}^N \subset \mathbb{R}^d$, space-filling metric values |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/plots/design_space_distribution/main.py` | Generates and visualizes a 2-D Sobol-sequence design, illustrating the low-discrepancy sampling discussed in this note. |
