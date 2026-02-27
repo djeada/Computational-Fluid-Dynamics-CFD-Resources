@@ -101,7 +101,7 @@ Where:
 
 ## Reynolds Transport Theorem
 
-* defined trough reynold transport theorem
+* defined through reynold transport theorem
 * RTT relates lagrangian system to eulerian control volume
 * The RTT connects a Lagrangian system with an Eulerian control volume. 
     * By Lagrangian system, we mean a system of a given specified mass, or a *marked mass*.
