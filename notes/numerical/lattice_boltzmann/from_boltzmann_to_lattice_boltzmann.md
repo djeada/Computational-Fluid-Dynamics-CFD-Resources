@@ -1,6 +1,6 @@
 # From Boltzmann to Lattice-Boltzmann
 
-The Boltzmann equation forms the basis of relating to motion theory by statistically describing the evolution of the distribution function $f(\xi, x, t)$ of particles in phase space. To numerically solve macroscopic fluid dynamics problems (i.e., the NSE) using a relating to motion approach, one discretizes this continuous equation—leading to the Lattice-Boltzmann method (LBM). This mesoscopic approach simplifies the complicated collision dynamics while preserving necessary physics.
+The Boltzmann equation forms the basis of kinetic theory by statistically describing the evolution of the distribution function $f(\xi, x, t)$ of particles in phase space. To numerically solve macroscopic fluid dynamics problems (i.e., the NSE) using a kinetic approach, one discretizes this continuous equation—leading to the Lattice-Boltzmann method (LBM). This mesoscopic approach simplifies the complicated collision dynamics while preserving necessary physics.
 
 ## 1. Discretization of the Distribution Function $f(\xi, x, t)$
 
@@ -25,7 +25,7 @@ III. **Velocity Space:**
 
 ## 2. Velocity Space Discretization
 
-The key to bridging relating to motion theory and macroscopic fluid dynamics lies in how we treat the velocity space. For solving the NSE, we require only certain moments of the distribution function:
+The key to bridging kinetic theory and macroscopic fluid dynamics lies in how we treat the velocity space. For solving the NSE, we require only certain moments of the distribution function:
 
 $$\int d^3\xi , f(\xi, x, t) = \rho(x, t), \quad \int d^3\xi , \xi, f(\xi, x, t) = \rho(x, t),\mathbf{u}(x, t)$$
 

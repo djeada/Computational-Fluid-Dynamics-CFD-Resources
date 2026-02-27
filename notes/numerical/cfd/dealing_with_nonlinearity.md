@@ -88,7 +88,7 @@ The iterative process makes sure that the approximation gradually improves, redu
 
 ## Convergence
 
-Convergence is a important aspect of the iterative solution process. It makes sure that the numerical solution becomes both stable and accurate as the iterations progress.
+Convergence is an important aspect of the iterative solution process. It makes sure that the numerical solution becomes both stable and accurate as the iterations progress.
 
 - Convergence Check:  
 A common practice is to compute the residual (the difference between the left- and right-hand sides of the equation) or the difference between successive iterates. When these quantities fall below a predefined threshold, the solution is deemed converged.

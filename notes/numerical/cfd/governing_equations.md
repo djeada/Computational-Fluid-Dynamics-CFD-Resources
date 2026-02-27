@@ -10,8 +10,7 @@ The Continuity Equation represents the conservation of mass in a fluid flow. It 
 
 For a compressible fluid:
 
-$$ \frac{\partial \rho}{\partial t} + 
-abla \cdot (\rho \vec{v}) = 0 $$
+$$ \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{v}) = 0 $$
 
 Where:
 - $ \rho $ is the fluid density,
@@ -20,14 +19,12 @@ Where:
 
 For an incompressible fluid ($ \rho $ is constant):
 
-$$ 
-abla \cdot \vec{v} = 0 $$
+$$ \nabla \cdot \vec{v} = 0 $$
 
 ### Explanation
 
 - The first term, $ \frac{\partial \rho}{\partial t} $, represents the local rate of change of density.
-- The second term, $ 
-abla \cdot (\rho \vec{v}) $, represents the convective rate of change of density due to fluid motion.
+- The second term, $ \nabla \cdot (\rho \vec{v}) $, represents the convective rate of change of density due to fluid motion.
 
 ## Navier-Stokes Equations
 
@@ -37,12 +34,7 @@ The Navier-Stokes Equations describe the conservation of momentum in fluid flows
 
 For a compressible fluid:
 
-$$ \rho \left( \frac{\partial \vec{v}}{\partial t} + \vec{v} \cdot 
-abla \vec{v} \right) = -
-abla p + \mu 
-abla^2 \vec{v} + \left( \frac{\mu}{3} + \mu_v \right) 
-abla (
-abla \cdot \vec{v}) + \vec{f} $$
+$$ \rho \left( \frac{\partial \vec{v}}{\partial t} + \vec{v} \cdot \nabla \vec{v} \right) = - \nabla p + \mu \nabla^2 \vec{v} + \left( \frac{\mu}{3} + \mu_v \right) \nabla ( \nabla \cdot \vec{v}) + \vec{f} $$
 
 Where:
 - $ \vec{v} $ is the fluid velocity vector,
@@ -53,10 +45,7 @@ Where:
 
 For an incompressible fluid:
 
-$$ \rho \left( \frac{\partial \vec{v}}{\partial t} + \vec{v} \cdot 
-abla \vec{v} \right) = -
-abla p + \mu 
-abla^2 \vec{v} + \vec{f} $$
+$$ \rho \left( \frac{\partial \vec{v}}{\partial t} + \vec{v} \cdot \nabla \vec{v} \right) = - \nabla p + \mu \nabla^2 \vec{v} + \vec{f} $$
 
 ### Explanation
 
@@ -71,11 +60,7 @@ The Energy Equation describes the conservation of energy in a fluid flow. It acc
 
 For a compressible fluid:
 
-$$ \frac{\partial}{\partial t} \left( \rho e \right) + 
-abla \cdot \left( \rho e \vec{v} \right) = - p (
-abla \cdot \vec{v}) + 
-abla \cdot (k 
-abla T) + \Phi $$
+$$ \frac{\partial}{\partial t} \left( \rho e \right) + \nabla \cdot \left( \rho e \vec{v} \right) = - p ( \nabla \cdot \vec{v}) + \nabla \cdot (k \nabla T) + \Phi $$
 
 Where:
 - $ e $ is the total energy per unit mass,
@@ -85,9 +70,7 @@ Where:
 
 For an incompressible fluid (simplified form):
 
-$$ \rho c_p \left( \frac{\partial T}{\partial t} + \vec{v} \cdot 
-abla T \right) = k 
-abla^2 T + \Phi $$
+$$ \rho c_p \left( \frac{\partial T}{\partial t} + \vec{v} \cdot \nabla T \right) = k \nabla^2 T + \Phi $$
 
 Where:
 - $ c_p $ is the specific heat at constant pressure.
@@ -161,28 +144,16 @@ $$\frac{d}{dt}\int_V\rho edV + \int_A\rho e\vec{v}\cdot\vec{n}dA =
 * We can find the differential form as follows.
     * If the control volume is fixed in time, we can move $d/dt$ inside the volume integral.
     * Replace integrals over the surface area with volume integrals by applying the Gauss Divergence Theorem:
-    $$\int_A\vec{v}\cdot\vec{n}dA = \int_V
-abla\cdot\vec{v},$$
+    $$\int_A\vec{v}\cdot\vec{n}dA = \int_V \nabla\cdot\vec{v},$$
     where $\vec{v}$ is some vector (not necessarily velocity).
-        * Hence, in the equation for mass we have $\int_A\rho\vec{v}\cdot\vec{n}dA = \int_V
-abla\cdot(\rho\vec{v})dV$.
-    * Combine all the volume integrals into $\int_V(\text{all terms})dV = 0$. Since the volume integrated over is arbitrary, this equation can only be true if the integrand $(\text{all terms})$ itself is 0. This gives the final result. (Also, $
-abla\cdot(P\boldsymbol{\delta}) = 
-abla P$.)
+        * Hence, in the equation for mass we have $\int_A\rho\vec{v}\cdot\vec{n}dA = \int_V \nabla\cdot(\rho\vec{v})dV$.
+    * Combine all the volume integrals into $\int_V(\text{all terms})dV = 0$. Since the volume integrated over is arbitrary, this equation can only be true if the integrand $(\text{all terms})$ itself is 0. This gives the final result. (Also, $ \nabla\cdot(P\boldsymbol{\delta}) = \nabla P$.)
     
-$$\text{Mass Equation:} \quad \frac{\partial \rho}{\partial t} + 
-abla \cdot (\rho \mathbf{v}) = 0$$
+$$\text{Mass Equation:} \quad \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \mathbf{v}) = 0$$
 
-$$\text{Momentum Equation:} \quad \frac{\partial (\rho \mathbf{v})}{\partial t} + 
-abla \cdot (\rho \mathbf{v} \mathbf{v}) = -
-abla \cdot \boldsymbol{\tau} \text{ (viscous forces)} - 
-abla P \text{ (pressure forces)} + \rho \mathbf{g} \text{ (gravitational forces)}$$
+$$\text{Momentum Equation:} \quad \frac{\partial (\rho \mathbf{v})}{\partial t} + \nabla \cdot (\rho \mathbf{v} \mathbf{v}) = - \nabla \cdot \boldsymbol{\tau} \text{ (viscous forces)} - \nabla P \text{ (pressure forces)} + \rho \mathbf{g} \text{ (gravitational forces)}$$
 
-$$\text{Energy Equation:} \quad \frac{\partial (\rho e)}{\partial t} + 
-abla \cdot (\rho e \mathbf{v}) = -
-abla \cdot \mathbf{q} \text{ (heat flux)} - 
-abla \cdot (\boldsymbol{\tau} \cdot \mathbf{v}) \text{ (viscous heating)} -
-abla \cdot (P \mathbf{v}) \text{ (PV work)} + \rho \mathbf{g} \cdot \mathbf{v} \text{ (field work)}$$
+$$\text{Energy Equation:} \quad \frac{\partial (\rho e)}{\partial t} + \nabla \cdot (\rho e \mathbf{v}) = - \nabla \cdot \mathbf{q} \text{ (heat flux)} - \nabla \cdot (\boldsymbol{\tau} \cdot \mathbf{v}) \text{ (viscous heating)} - \nabla \cdot (P \mathbf{v}) \text{ (PV work)} + \rho \mathbf{g} \cdot \mathbf{v} \text{ (field work)}$$
 
 * The terms on the left hand side (LHS) of the equation are the accumulation and in/out transport through the control volume.
 * The terms on the right hand side (RHS) are as noted. In the energy equation, field work will convert potential energy to kinetic energy (which is part of $e$).

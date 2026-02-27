@@ -45,7 +45,7 @@ $$\mathcal{L}(u) = 0$$
 
 then the finite element method tries to solve the integral condition
 
-$$\int_{\Omega} w(x)\,\mathcal{L}(u)\dx = 0$$
+$$\int_{\Omega} w(x)\,\mathcal{L}(u)\,dx = 0$$
 
 for all test functions $w$ in a suitable function space, sometimes with additional boundary terms if integration by parts is applied. The unknown $u$ and the test functions $w$ are expanded in terms of local basis functions that have support only over a small portion of the domain.
 
@@ -71,11 +71,11 @@ $$- \frac{d}{dx} \Big( p(x) \frac{du}{dx} \Big) = f(x), \quad x \in [0,L]$$
 
 with boundary conditions on $u$. The weak form is obtained by multiplying by a test function $w(x)$ and integrating over $[0,L]$:
 
-$$\int_0^L w(x) \Big( - \frac{d}{dx}\big( p(x)\,u'(x) \big) \Big) \dx = \int_0^L w(x)\, f(x)\dx$$
+$$\int_0^L w(x) \Big( - \frac{d}{dx}\big( p(x)\,u'(x) \big) \Big) \,dx = \int_0^L w(x)\, f(x)\,dx$$
 
 By applying integration by parts, one obtains
 
-$$\int_0^L p(x)\,w'(x)\,u'(x)\dx - \Big[\underbrace{p(x)\,w(x)\,u'(x)}_{\text{boundary term}} \Big]_0^L = \int_0^L w(x)\, f(x)\dx$$
+$$\int_0^L p(x)\,w'(x)\,u'(x)\,dx - \Big[\underbrace{p(x)\,w(x)\,u'(x)}_{\text{boundary term}} \Big]_0^L = \int_0^L w(x)\, f(x)\,dx$$
 
 and boundary conditions help determine how to handle the boundary term.
 
@@ -91,7 +91,7 @@ where each global basis function $\Phi_i$ is built from the local shape function
 
 $$K^e_{ij} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} p(x)\,\phi_i^e{}'(x)\,\phi_j^e{}'(x)\, dx, 
 \quad 
-F^e_{i} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} \phi_i^e(x)\,f(x)\dx$$
+F^e_{i} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} \phi_i^e(x)\,f(x)\,dx$$
 
 These integrals capture how each pair of shape functions interacts under the problem’s differential operator and forcing term.
 
@@ -115,11 +115,11 @@ $$- \frac{d^2 u}{dx^2} = f(x), \quad x \in [0,1]$$
 
 with boundary conditions $u(0) = 0$ and $u(1) = 0$ for simplicity. The weak form is found by multiplying by a test function $w(x)$ and integrating:
 
-$$\int_0^1 w(x) \Big( -\frac{d^2 u}{dx^2} \Big)\dx = \int_0^1 w(x)\,f(x)\dx$$
+$$\int_0^1 w(x) \Big( -\frac{d^2 u}{dx^2} \Big)\,dx = \int_0^1 w(x)\,f(x)\,dx$$
 
 Integration by parts yields
 
-$$\int_0^1 w'(x)\,u'(x)\dx = \int_0^1 w(x)\,f(x)\dx$$
+$$\int_0^1 w'(x)\,u'(x)\,dx = \int_0^1 w(x)\,f(x)\,dx$$
 
 assuming homogeneous Dirichlet boundary conditions eliminate boundary terms. The domain is divided into elements $[x_{i-1}, x_i]$ for $i=1,\dots,N$. On each element, approximate $u$ by a linear combination of local shape functions. Compute the local stiffness matrices and load vectors, and assemble them into
 

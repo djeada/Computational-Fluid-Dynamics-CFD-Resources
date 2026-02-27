@@ -87,7 +87,7 @@ II. Fluctuating Component of Velocity:
 
 III. Square of the Fluctuating Velocity:
 
-- A plot displaying $u'^2$ over time, with the dashed line representing its time average. This is a direct measure of the turbulent relating to motion energy associated with the fluctuations.
+- A plot displaying $u'^2$ over time, with the dashed line representing its time average. This is a direct measure of the turbulent kinetic energy associated with the fluctuations.
 
 ## Governing Equations for Turbulent Flow
 
@@ -167,7 +167,7 @@ I. Turbulent Relating to motion Energy (k)
  Represents the energy contained in the turbulent fluctuations.
 
 - Typical Magnitudes:  
- In highly turbulent flows, $k$ may account for a few percent (often up to 5%) of the relating to motion energy of the mean flow.
+ In highly turbulent flows, $k$ may account for a few percent (often up to 5%) of the kinetic energy of the mean flow.
 
 II. Turbulent Energy Dissipation Rate (ε)
 
@@ -175,7 +175,7 @@ II. Turbulent Energy Dissipation Rate (ε)
  $$\epsilon = \nu \left[ \left( \frac{\partial \overline{u'}}{\partial x} \right)^2 + \left( \frac{\partial \overline{v'}}{\partial y} \right)^2 + \left( \frac{\partial \overline{w'}}{\partial z} \right)^2 + \left( \frac{\partial v'}{\partial x} \right)^2 + \left( \frac{\partial w'}{\partial y} \right)^2 + \left( \frac{\partial u'}{\partial z} \right)^2 \right]$$
 
 - Role:  
- Measures the rate at which turbulent relating to motion energy is dissipated into heat due to viscosity.
+ Measures the rate at which turbulent kinetic energy is dissipated into heat due to viscosity.
 
 - Significance:  
  Accurate modeling of $\epsilon$ is necessary for predicting the decay and spatial distribution of turbulence.
@@ -184,7 +184,7 @@ II. Turbulent Energy Dissipation Rate (ε)
 
 - k-ε Models:
 - These models are among the most widely used in industrial CFD simulations.
-- They involve solving two additional transport equations—one for the turbulent relating to motion energy $k$ and one for the dissipation rate $\epsilon$—to close the RANS equations.
+- They involve solving two additional transport equations—one for the turbulent kinetic energy $k$ and one for the dissipation rate $\epsilon$—to close the RANS equations.
 - Advantages:  
 Simplicity and robustness in many engineering applications.
 

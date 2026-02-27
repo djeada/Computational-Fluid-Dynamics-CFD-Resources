@@ -21,9 +21,9 @@ Consider a finite-difference approximation on a four-point grid. For example, th
 $$
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
--1 & 1 + 2 \Delta x u_{g2} & 0 & 0 \\
-0 & -1 & 1 + 2 \Delta x u_{g3} & 0 \\
-0 & 0 & -1 & 1 + 2 \Delta x u_{g4}
+-1 & 1 + 2 \Delta x\, u_{g2} & 0 & 0 \\
+0 & -1 & 1 + 2 \Delta x\, u_{g3} & 0 \\
+0 & 0 & -1 & 1 + 2 \Delta x\, u_{g4}
 \end{bmatrix}
 \begin{bmatrix}
 u_1 \\
@@ -31,22 +31,19 @@ u_2 \\
 u_3 \\
 u_4
 \end{bmatrix}
-$$
-
-$$
-\=
+=
 \begin{bmatrix}
 1 \\
-\Delta x u_{g2}^2 \\
-\Delta x u_{g3}^2 \\
-\Delta x u_{g4}^2
+\Delta x\, u_{g2}^2 \\
+\Delta x\, u_{g3}^2 \\
+\Delta x\, u_{g4}^2
 \end{bmatrix}
 $$
 
 In this system:
 
-- The diagonal entries contain terms like $1 + 2 \Delta x, u_{gi}$, where $u_{gi}$ represents the guess value at grid point $i$.
-- The right-hand side reflects the nonlinear contributions, here expressed as $\Delta x, u_{gi}^2$.
+- The diagonal entries contain terms like $1 + 2 \Delta x\, u_{gi}$, where $u_{gi}$ represents the guess value at grid point $i$.
+- The right-hand side reflects the nonlinear contributions, here expressed as $\Delta x\, u_{gi}^2$.
 This representation is obtained after applying a linearization (such as a Newton–Raphson type approach) to the original nonlinear finite-difference equations.
 
 ### Challenges with Large Systems

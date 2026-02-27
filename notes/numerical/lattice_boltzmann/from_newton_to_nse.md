@@ -45,25 +45,25 @@ This flow illustrates how the Lattice-Boltzmann method serves as the crucial int
 
 ## 3. The Probability Distribution Function (PDF)
 
-At the heart of the LBM lies the **probability distribution function** \( f(\xi, x, t) \). This function encapsulates the statistical information about particles at a mesoscopic scale.
+At the heart of the LBM lies the **probability distribution function** $ f(\xi, x, t) $. This function encapsulates the statistical information about particles at a mesoscopic scale.
 
 ### 3.1. Simplifying Microscopic Details
 
-The objective is to remove unnecessary microscopic details while retaining the essential physics needed to describe macroscopic fluid behavior. This is achieved by averaging over a volume \( \ell_{\text{av}} \) that satisfies
+The objective is to remove unnecessary microscopic details while retaining the essential physics needed to describe macroscopic fluid behavior. This is achieved by averaging over a volume $ \ell_{\text{av}} $ that satisfies
 
-\[
+$$
 \ell_{\text{mfp}} \ll \ell_{\text{av}} \ll \ell,
-\]
+$$
 
 where:
-- \( \ell_{\text{mfp}} \) is the mean free path (the typical distance a molecule travels between collisions),
-- \( \ell \) is the macroscopic length scale.
+- $ \ell_{\text{mfp}} $ is the mean free path (the typical distance a molecule travels between collisions),
+- $ \ell $ is the macroscopic length scale.
 
-The **distribution function** \( f(\xi, x, t) \):
-- **Definition:** Describes the density of molecules with velocity \( \xi \) at position \( x \) and time \( t \).
-- **Kinetic Link:** The molecular velocity is defined as \( \xi = \frac{dx}{dt} \).
+The **distribution function** $ f(\xi, x, t) $:
+- **Definition:** Describes the density of molecules with velocity $ \xi $ at position $ x $ and time $ t $.
+- **Kinetic Link:** The molecular velocity is defined as $ \xi = \frac{dx}{dt} $.
 
-In essence, \( f(\xi, x, t) \, d\xi \, dx \) represents the number of molecules in a small velocity range \( d\xi \) and spatial element \( dx \).
+In essence, $ f(\xi, x, t) \, d\xi \, dx $ represents the number of molecules in a small velocity range $ d\xi $ and spatial element $ dx $.
 
 ### 3.2. Visualizing Molecular Averaging
 
@@ -102,36 +102,36 @@ The LBM offers several compelling benefits compared to conventional CFD approach
 
 ---
 
-## 5. Macroscopic Properties via Moments of \( f(\xi, x, t) \)
+## 5. Macroscopic Properties via Moments of $ f(\xi, x, t) $
 
-The power of the LBM lies in its ability to recover macroscopic fluid properties by taking moments of the probability distribution function \( f(\xi, x, t) \).
+The power of the LBM lies in its ability to recover macroscopic fluid properties by taking moments of the probability distribution function $ f(\xi, x, t) $.
 
 ### 5.1. Important Properties
 
 1. **Normalization (Total Mass):**
-   \[
+   $$
    \int d^3\xi \int d^3x \, f(\xi, x, t) = M(t),
-   \]
-   where \( M(t) \) is the total mass.
+   $$
+   where $ M(t) $ is the total mass.
 
 2. **Fluid Density:**
-   \[
+   $$
    \int d^3\xi \, f(\xi, x, t) = \rho(x, t),
-   \]
-   which defines the density at point \( x \) and time \( t \).
+   $$
+   which defines the density at point $ x $ and time $ t $.
 
 3. **Momentum Density:**
-   \[
+   $$
    \int d^3\xi \, \xi\, f(\xi, x, t) = \rho(x, t)\, u(x, t),
-   \]
-   where \( u(x, t) \) is the macroscopic fluid velocity.
+   $$
+   where $ u(x, t) $ is the macroscopic fluid velocity.
 
 4. **Pressure and Stress Tensor:**
-   Higher moments (involving \( \xi \otimes \xi \)) provide information about the pressure and viscous stresses in the fluid. Although the exact expressions are more involved, they underpin the recovery of the Navier-Stokes equations from the kinetic model.
+   Higher moments (involving $ \xi \otimes \xi $) provide information about the pressure and viscous stresses in the fluid. Although the exact expressions are more involved, they underpin the recovery of the Navier-Stokes equations from the kinetic model.
 
-### 5.2. Comprehensive Role of \( f(\xi, x, t) \)
+### 5.2. Comprehensive Role of $ f(\xi, x, t) $
 
-The function \( f(\xi, x, t) \) holds all local information about the fluid:
+The function $ f(\xi, x, t) $ holds all local information about the fluid:
 - **Zeroth Moment:** Yields the density.
 - **First Moment:** Gives the momentum.
 - **Second Moment:** Relates to the pressure and stress tensor.
@@ -139,7 +139,7 @@ The function \( f(\xi, x, t) \) holds all local information about the fluid:
 Thus, macroscopic properties are obtained as **moments** of the mesoscopic distribution, effectively bridging the scales.
 
 ![Probability Distribution Function](https://github.com/djeada/Computational-Fluid-Dynamics-CFD-Resources/assets/37275728/9821d7ff-d499-45a9-8fdd-3e4d73e6efb9)
-*Figure: The probability distribution function \( f(\xi, x, t) \) encapsulates the complete mesoscopic description of the fluid, from which macroscopic properties emerge.*
+*Figure: The probability distribution function $ f(\xi, x, t) $ encapsulates the complete mesoscopic description of the fluid, from which macroscopic properties emerge.*
 
 
 

@@ -1,6 +1,6 @@
 # Introduction to the Boltzmann Equation
 
-Fluid dynamics spans multiple scales—from the microscopic interactions of individual molecules to the macroscopic behavior described by the Navier-Stokes equations (NSE). The **Boltzmann equation** plays a central role in relating to motion theory by statistically describing the evolution of a particle system. In doing so, it serves as a important bridge between molecular dynamics and continuum fluid mechanics.
+Fluid dynamics spans multiple scales—from the microscopic interactions of individual molecules to the macroscopic behavior described by the Navier-Stokes equations (NSE). The **Boltzmann equation** plays a central role in kinetic theory by statistically describing the evolution of a particle system. In doing so, it serves as an important bridge between molecular dynamics and continuum fluid mechanics.
 
 ## 1. Key Concepts
 
@@ -12,7 +12,7 @@ $$f(\xi, x, t)$$
 represents the state of a particle system by quantifying the density of particles having velocity $\xi$ at position $x$ and time $t$.
 
 - **Role:**  
-It encapsulates the statistical information about the microscopic state of the system and determines how the number of particles varies over space and time. In essence, $f(\xi, x, t)$ is the cornerstone of relating to motion theory, linking microscopic particle dynamics with macroscopic observables.
+It encapsulates the statistical information about the microscopic state of the system and determines how the number of particles varies over space and time. In essence, $f(\xi, x, t)$ is the cornerstone of kinetic theory, linking microscopic particle dynamics with macroscopic observables.
 
 ### 1.2. Evolution of $f(\xi, x, t)$
 
@@ -38,7 +38,7 @@ where:
 ### 2.1. Connection to the Navier-Stokes Equations
 
 - **Chapman-Enskog Analysis:**  
-Through the Chapman-Enskog expansion, one can derive the macroscopic Navier-Stokes equations from the Boltzmann equation. This derivation demonstrates that, under appropriate limits (e.g., small Knudsen numbers), the microscopic relating to motion description recovers the familiar continuum fluid dynamics.
+Through the Chapman-Enskog expansion, one can derive the macroscopic Navier-Stokes equations from the Boltzmann equation. This derivation demonstrates that, under appropriate limits (e.g., small Knudsen numbers), the microscopic kinetic description recovers the familiar continuum fluid dynamics.
 
 - **Bridging Scales:**  
 While the NSE capture the large-scale behavior of fluids, the Boltzmann equation provides insight into how microscopic interactions and non-equilibrium effects give rise to macroscopic transport phenomena like viscosity and thermal conductivity.
@@ -46,7 +46,7 @@ While the NSE capture the large-scale behavior of fluids, the Boltzmann equation
 ### 2.2. A Mesoscopic Perspective
 
 - **More Detailed Physics:**  
-The Boltzmann equation retains necessary relating to motion details—such as particle collisions and non-equilibrium distributions—that are typically absent in purely macroscopic descriptions. This level of detail can be particularly important for flows with high gradients or rarefied gas dynamics.
+The Boltzmann equation retains necessary kinetic details—such as particle collisions and non-equilibrium distributions—that are typically absent in purely macroscopic descriptions. This level of detail can be particularly important for flows with high gradients or rarefied gas dynamics.
 
 - **Eliminating Redundant Microscopic Details:**  
 By statistically averaging over many particles, the Boltzmann framework removes unnecessary complexities while still capturing the key dynamics needed to describe fluid behavior.
@@ -84,7 +84,7 @@ Understanding various velocity definitions is important for linking microscopic 
 ### 4.1. Molecular (Absolute) Velocity $\boldsymbol{\xi}$
 
 - **Definition:**  
-$\xi$ represents the instantaneous velocity of an individual molecule. It is the primary variable in the relating to motion description.
+$\xi$ represents the instantaneous velocity of an individual molecule. It is the primary variable in the kinetic description.
 
 ### 4.2. Average (Macroscopic) Velocity $\mathbf{u}$
 
@@ -145,7 +145,7 @@ The ultimate goal is to use the Boltzmann equation to solve for macroscopic vari
 
 - **Advantages:**
 - **Enhanced Physical Detail:**  
-The relating to motion approach inherently captures non-equilibrium effects and particle-level dynamics.
+The kinetic approach inherently captures non-equilibrium effects and particle-level dynamics.
 
 - **Numerical Efficiency:**  
 Methods such as the Lattice-Boltzmann Equation (LBE) discretize both velocity and space, leading to algorithms that are highly parallelizable and simple to carry out.
