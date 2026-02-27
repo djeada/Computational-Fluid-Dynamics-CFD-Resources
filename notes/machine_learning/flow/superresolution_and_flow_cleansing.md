@@ -93,6 +93,16 @@ Trade-off between the cost of direct high-resolution imaging and ML-driven enhan
 
 **Reducing Computational Cost:** Efforts focus on making ML models more efficient, possibly through model compression, faster architectures, or better optimization techniques. Achieving cost-effective superresolution models would broaden their applicability across multiple domains.
 
+**Quantitative Metrics:** Two widely used metrics for evaluating reconstruction quality are peak signal-to-noise ratio (PSNR) and structural similarity index (SSIM). PSNR measures the ratio of maximum possible signal power to noise power:
+
+$$\text{PSNR} = 10 \cdot \log_{10}\!\left(\frac{\text{MAX}^2}{\text{MSE}}\right)$$
+
+where MAX is the maximum possible value of the field variable and MSE is the mean squared error between the reconstructed and reference fields. SSIM evaluates structural similarity through luminance, contrast, and structure comparisons:
+
+$$\text{SSIM}(x, y) = \frac{(2\mu_x \mu_y + c_1)(2\sigma_{xy} + c_2)}{(\mu_x^2 + \mu_y^2 + c_1)(\sigma_x^2 + \sigma_y^2 + c_2)}$$
+
+where $\mu_x, \mu_y$ are local means, $\sigma_x, \sigma_y$ are local standard deviations, $\sigma_{xy}$ is the cross-covariance, and $c_1, c_2$ are small stabilization constants. SSIM ranges from $-1$ to $1$ in theory but is typically between $0$ and $1$ for real data, with $1$ indicating perfect structural agreement. For flow fields, these pixel-level metrics should be complemented by physics-based measures such as energy-spectrum agreement and divergence error.
+
 **Generative Adversarial Networks (GANs):** Explorations by Xie et al. (2018) and others have shown that GANs can produce striking improvements in image quality. GANs pit two networks against each other—one generating candidate images, the other judging their authenticity—leading to even finer detail restoration and more realistic textures.
 
 ### Setting Up the Problem

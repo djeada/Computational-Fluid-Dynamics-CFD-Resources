@@ -37,22 +37,22 @@ II. **Governing Equations**
    where $P_k$ is the turbulence production term, $\mu_t$ is the turbulent eddy viscosity, and $\omega$ is the specific dissipation rate. Choosing the turbulence model (e.g., Spalart–Allmaras, k–$\epsilon$ variants, etc.) depends on whether the objective is capturing mean forces or more complex flow structures.
 
 III. **Boundary Conditions and Domain Setup**  
-- Specified velocity or mass flow rate, sometimes with turbulence intensity and length scale.
-- Pressure-outlet or outflow condition to allow fluid to exit the domain without reflection.
-- No-slip condition on the vehicle surface, often with near-wall modeling to resolve boundary layers accurately.
-- Many automotive problems leverage a symmetry plane to halve the computational domain (especially if the vehicle geometry is symmetric).
+- **Inlet**: Specified velocity or mass flow rate, sometimes with turbulence intensity and length scale.
+- **Outlet**: Pressure-outlet or outflow condition to allow fluid to exit the domain without reflection.
+- **Wall**: No-slip condition on the vehicle surface, often with near-wall modeling to resolve boundary layers accurately.
+- **Symmetry**: Many automotive problems leverage a symmetry plane to halve the computational domain (especially if the vehicle geometry is symmetric).
 IV. **Temporal Discretization**  
-- Commonly used for design optimization focusing on time-averaged drag, lift, and overall flow patterns.
-- Required for cases involving transient wake dynamics, bluff-body flows, or vortex shedding around spoilers or side mirrors. Time step selection depends on the characteristic flow frequencies (e.g., shedding Strouhal numbers).
+- **Steady-State Simulations**: Commonly used for design optimization focusing on time-averaged drag, lift, and overall flow patterns.
+- **Unsteady/Transient Simulations**: Required for cases involving transient wake dynamics, bluff-body flows, or vortex shedding around spoilers or side mirrors. Time step selection depends on the characteristic flow frequencies (e.g., shedding Strouhal numbers).
 
 ### 2. Turbulence Modeling Considerations
 
 I. **RANS Models**  
-- Balances near-wall resolution (from the k–$\omega$ formulation) with free-stream stability (from the k–$\epsilon$ adaptation). Widely used in automotive design for body- and underbody-flow predictions.
-- Simplified single-equation model often used for external aerodynamics due to its good compromise between accuracy and computational cost.
+- **k–ω SST (Shear Stress Transport)**: Balances near-wall resolution (from the k–$\omega$ formulation) with free-stream stability (from the k–$\epsilon$ adaptation). Widely used in automotive design for body- and underbody-flow predictions.
+- **Spalart–Allmaras**: Simplified single-equation model often used for external aerodynamics due to its good compromise between accuracy and computational cost.
 II. **Scale-Resolving Simulations**  
-- Partially resolves the large turbulent eddies in 3D, requiring a very fine mesh in critical regions (e.g., around wheels, in separated wakes). This can drastically increase computational requirements, sometimes by one or two orders of magnitude compared to RANS.
-- Combines RANS in near-wall or attached-flow regions with LES-like modeling in separated or wake regions. This is a cost-effective path to capturing unsteady flow features more accurately than pure RANS but with lower HPC overhead than full LES.
+- **Large Eddy Simulation (LES)**: Partially resolves the large turbulent eddies in 3D, requiring a very fine mesh in critical regions (e.g., around wheels, in separated wakes). This can drastically increase computational requirements, sometimes by one or two orders of magnitude compared to RANS.
+- **Detached Eddy Simulation (DES) / Delayed DES (DDES)**: Combines RANS in near-wall or attached-flow regions with LES-like modeling in separated or wake regions. This is a cost-effective path to capturing unsteady flow features more accurately than pure RANS but with lower HPC overhead than full LES.
 
 Choosing the right turbulence modeling approach depends on the problem’s needs: capturing approximate time-averaged forces may suffice for many design studies, while advanced modeling is necessary for detailed wake analyses or acoustic predictions.
 
@@ -67,9 +67,9 @@ I. **Low $y^+$ and High $y^+$ Zones**
      where $u_\tau$ is the friction velocity ($u_\tau = \sqrt{\tau_w/\rho}$), $\Delta y$ is the distance from the wall to the first cell center, and $\tau_w$ is the wall-shear stress. This criterion ensures the boundary-layer profile is adequately captured within the CFD solver’s near-wall model or the fully resolved viscous sublayer in case of LES.  
 - In regions far away from critical surfaces (e.g., domain far-field), the boundary layer is not of primary concern. A coarser “wall function” approach can be adopted here, reducing cell count and solver time. Typical $y^+$ targets might be 30–200, depending on the chosen wall-function implementation.
 II. **Mesh Topologies**  
-- Offer highly structured cells and can yield accurate solutions with fewer elements in regions of simple geometry. However, they are harder to generate around extremely complex surfaces.
-- Provide more flexibility in conforming to intricate vehicle geometries (e.g., wheel arches, engine bays). By having more faces per cell, polyhedral elements can improve convergence and reduce cell count compared to strictly tetrahedral meshes.
-- Start from a structured background grid that is “trimmed” around curved surfaces. This approach can yield predominantly orthogonal cells in free-stream regions while still adapting to the vehicle boundary.
+- **Hexahedral Meshes**: Offer highly structured cells and can yield accurate solutions with fewer elements in regions of simple geometry. However, they are harder to generate around extremely complex surfaces.
+- **Polyhedral Meshes**: Provide more flexibility in conforming to intricate vehicle geometries (e.g., wheel arches, engine bays). By having more faces per cell, polyhedral elements can improve convergence and reduce cell count compared to strictly tetrahedral meshes.
+- **Trimmer Meshes**: Start from a structured background grid that is “trimmed” around curved surfaces. This approach can yield predominantly orthogonal cells in free-stream regions while still adapting to the vehicle boundary.
 
 III. **Targeted Refinement**  
 
@@ -133,9 +133,9 @@ II. **Temporal Discretization (Unsteady Cases)**
      where $u$ is the local flow velocity, $\Delta x$ is the cell size, and $\Delta t$ is the time step.  
    - Ensure enough temporal resolution to capture relevant flow instabilities or periodic phenomena (e.g., vortex shedding, unsteady wake fluctuations).
 III. **Convergence Monitoring**  
-- Track momentum, continuity, and turbulence equation residuals; they should drop by at least three to four orders of magnitude in steady RANS.
-- Drag ($C_d$) and lift ($C_l$) can be monitored in real-time to confirm they settle to stable values.
-- Evaluate boundary-layer profiles, velocity magnitudes in the wake, or pressure distributions on the car surface against known benchmarks or validation data (e.g., wind-tunnel measurements).
+- **Residual Monitoring**: Track momentum, continuity, and turbulence equation residuals; they should drop by at least three to four orders of magnitude in steady RANS.
+- **Force Monitoring**: Drag ($C_d$) and lift ($C_l$) can be monitored in real-time to confirm they settle to stable values.
+- **Physical Quantity Checks**: Evaluate boundary-layer profiles, velocity magnitudes in the wake, or pressure distributions on the car surface against known benchmarks or validation data (e.g., wind-tunnel measurements).
 
 ### 6. Data Extraction for ML and Post-Processing
 

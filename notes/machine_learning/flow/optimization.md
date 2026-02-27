@@ -131,6 +131,13 @@ Techniques:
 - Surrogate Models:  
   ML algorithms are used to build surrogate models that approximate the behavior of the full CFD system. These surrogate models are inexpensive to evaluate and enable rapid testing of new design configurations. Detailed CFD simulations are then reserved for refining only the most promising designs.
 
+- Bayesian Optimization:  
+  A particularly effective surrogate-based strategy that models the cost function using a Gaussian process (GP) and selects new evaluation points by maximizing an acquisition function such as Expected Improvement (EI):
+
+  $$\text{EI}(\mathbf{x}) = \mathbb{E}\bigl[\max(f_{\min} - f(\mathbf{x}),\; 0)\bigr]$$
+
+  where $f_{\min}$ is the best objective value observed so far. The GP provides both a predicted mean and an uncertainty estimate at each candidate point, allowing the optimizer to balance exploitation (evaluating near known good regions) with exploration (sampling where uncertainty is high). This makes Bayesian optimization highly sample-efficient, often converging in tens of evaluations rather than the hundreds needed by gradient-free methods.
+
 - Data-Driven Optimization:  
   This approach incorporates simulation and experimental data into the optimization loop. Continuous updates and retraining of the ML model make sure that the surrogate remains accurate as new data become available, adapting the optimization process to evolving design requirements and environmental conditions.
 

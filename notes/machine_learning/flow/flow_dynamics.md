@@ -23,6 +23,12 @@ Classical techniques such as dynamic mode decomposition (DMD) and Koopman analys
 
 Dynamic Mode Decomposition (DMD), introduced by Schmid (2010) and further developed by Kutz et al. (2016), uses time-resolved snapshots of fluid flows to identify spatiotemporal modes. These modes, along with their associated eigenvalues, form a linear model that approximates the system’s evolution. Although DMD is effective in many situations, its inherent linearity can limit its ability to capture strongly nonlinear temporary phenomena without additional modifications.
 
+Mathematically, given a sequence of $m$ snapshots $\mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_m$ arranged into data matrices
+
+$$\mathbf{X} = [\mathbf{x}_1 \;\; \mathbf{x}_2 \;\; \cdots \;\; \mathbf{x}_{m-1}], \qquad \mathbf{X}' = [\mathbf{x}_2 \;\; \mathbf{x}_3 \;\; \cdots \;\; \mathbf{x}_m],$$
+
+DMD seeks the best-fit linear operator $\mathbf{A}$ such that $\mathbf{X}' \approx \mathbf{A}\mathbf{X}$. In practice, $\mathbf{A}$ is computed via the singular value decomposition $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^*$ and its rank-$r$ projection $\tilde{\mathbf{A}} = \mathbf{U}_r^* \mathbf{X}' \mathbf{V}_r \boldsymbol{\Sigma}_r^{-1}$. The eigenvalues $\lambda_j$ and eigenvectors of $\tilde{\mathbf{A}}$ yield the DMD modes and their associated growth rates and oscillation frequencies, providing a compact linear model of the flow dynamics.
+
 Koopman analysis extends this idea by considering the evolution of all possible observables of the system. The Koopman operator acts on functions of the state, theoretically unfolding the nonlinear dynamics into an infinite-dimensional linear framework. In practice, one approximates this operator using finite-dimensional techniques, often by incorporating nonlinear measurements, kernel methods, or deep neural networks to construct effective nonlinear embeddings. These embeddings allow us to capture the rich dynamics of the original system in a linearized form, providing both interpretability and predictive power.
 
 ```

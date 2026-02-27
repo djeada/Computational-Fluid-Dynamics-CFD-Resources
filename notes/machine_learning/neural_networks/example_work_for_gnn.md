@@ -19,7 +19,11 @@ Practical Steps
 I. Local Feature Prediction  
 
 - Node-Level Learning:  
- Instead of focusing solely on global aerodynamic metrics, the GNN is trained to predict node- or cell-based quantities such as local pressure $p$, wall shear stress $\tau_w$, and turbulent relating to motion energy $k$. This approach provides a detailed map of the flow field over the entire domain, which can then be integrated to compute global performance metrics.
+ Instead of focusing solely on global aerodynamic metrics, the GNN is trained to predict node- or cell-based quantities such as local pressure $p$, wall shear stress $\tau_w$, and turbulent kinetic energy $k$. At each message-passing layer $\ell$, the hidden state of node $v$ is updated by aggregating features from its neighbors:
+
+$$\mathbf{h}_v^{(\ell+1)} = \phi\!\left(\mathbf{h}_v^{(\ell)},\; \bigoplus_{u \in \mathcal{N}(v)} \psi\!\left(\mathbf{h}_v^{(\ell)},\, \mathbf{h}_u^{(\ell)},\, \mathbf{e}_{vu}\right)\right)$$
+
+where $\phi$ and $\psi$ are learnable functions (typically small MLPs), $\bigoplus$ is a permutation-invariant aggregation (sum, mean, or max), $\mathcal{N}(v)$ denotes the neighbors of $v$, and $\mathbf{e}_{vu}$ are edge features (e.g., relative position and distance). After $L$ layers, the final node embeddings $\mathbf{h}_v^{(L)}$ are passed through a readout network to predict the target field variables. This approach provides a detailed map of the flow field over the entire domain, which can then be integrated to compute global performance metrics.
 
 II. Hybridization with Traditional CFD  
 

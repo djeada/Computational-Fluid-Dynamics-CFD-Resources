@@ -133,9 +133,9 @@ Mathematically, autoencoders approximate a manifold in a high-dimensional shape 
 
 After choosing a parameterization—either through explicit morphing or learned latent vectors—the next step is to train a regression model to estimate aerodynamic metrics. While neural networks often dominate in deep learning contexts, other methods also appear:
 
-- Nonlinear, nonparametric models that can handle tabular parameter data effectively.
-- A more simplistic, instance-based approach.
-- Favored in some engineering contexts for its built-in uncertainty quantification.
+- **Random Forests / Gradient-Boosted Trees**: Nonlinear, nonparametric models that can handle tabular parameter data effectively.
+- **k-Nearest Neighbors (k-NN)**: A more simplistic, instance-based approach.
+- **Gaussian Process Regression (GPR)**: Favored in some engineering contexts for its built-in uncertainty quantification.
 
 In each case, one aims to map geometric or latent space parameters to aerodynamic outputs. Symbolically:
 
@@ -194,9 +194,9 @@ With these limitations in mind, ongoing research seeks to improve the speed-accu
 
 Traditional CFD remains the gold standard for aerodynamic analysis. Common tactics include:
 
-- Widely used in industry, capable of stable and relatively quick solutions for steady-state problems.
-- More accurate for transient and separated flows, but much more computationally expensive.
-- Attempt to bridge the gap, modeling near-wall regions with RANS while resolving large-scale eddies in free shear flows.
+- **Reynolds-Averaged Navier–Stokes (RANS)**: Widely used in industry, capable of stable and relatively quick solutions for steady-state problems.
+- **Large Eddy Simulation (LES)**: More accurate for transient and separated flows, but much more computationally expensive.
+- **Detached Eddy Simulation (DES) and Hybrid Methods**: Attempt to bridge the gap, modeling near-wall regions with RANS while resolving large-scale eddies in free shear flows.
 
 Reduced-order modeling has been explored for decades to accelerate these computations, often projecting the flow onto a lower-dimensional subspace (e.g., using Proper Orthogonal Decomposition). Neural networks build upon these ideas but benefit from more flexible functional approximations and large training datasets. Nonetheless, the rigorous validation and trust in classical CFD mean it is far from being replaced.
 

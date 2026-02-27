@@ -117,7 +117,11 @@ Hyperparameter tuning is an essential part of creating robust machine learning m
 
 ### Evaluation, Validation, and Error Metrics  
 
-Testing model accuracy is vital. Common evaluation metrics for aerodynamic regression tasks include Mean Absolute Error (MAE), Mean Squared Error (MSE), and coefficient of determination (R²). Cross-validation splits the dataset into multiple folds, rotating the training and validation sets to ensure consistent model performance. Overfitting can be a concern if the ML model memorizes design patterns from the training set but fails on new geometries.  
+Testing model accuracy is vital. Common evaluation metrics for aerodynamic regression tasks include Mean Absolute Error (MAE), Mean Squared Error (MSE), and coefficient of determination ($R^2$). These are defined as:
+
+$$\text{MAE} = \frac{1}{N}\sum_{i=1}^{N}|y_i - \hat{y}_i|, \qquad \text{MSE} = \frac{1}{N}\sum_{i=1}^{N}(y_i - \hat{y}_i)^2, \qquad R^2 = 1 - \frac{\sum_i(y_i - \hat{y}_i)^2}{\sum_i(y_i - \bar{y})^2}$$
+
+where $y_i$ are the reference values, $\hat{y}_i$ are the predictions, and $\bar{y}$ is the mean of the references. Cross-validation splits the dataset into multiple folds, rotating the training and validation sets to ensure consistent model performance. Overfitting can be a concern if the ML model memorizes design patterns from the training set but fails on new geometries.  
 
 One might compare predicted coefficients of drag or lift with results from high-fidelity CFD or from wind tunnel experiments. If the predicted values deviate beyond acceptable thresholds, engineers examine the differences to find data anomalies, missing physical phenomena, or an insufficient feature set.
 

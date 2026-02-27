@@ -33,7 +33,7 @@ Each dataset entry generally originates from high-fidelity simulations based on 
 
 Key elements of CFD foundations include:
 
-- Governing Equations: The simulations solve for quantities such as the velocity field $\mathbf{u}(\mathbf{x})$, pressure $p(\mathbf{x})$, and possibly additional variables like turbulence relating to motion energy $k$ or dissipation $\epsilon$.  
+- Governing Equations: The simulations solve for quantities such as the velocity field $\mathbf{u}(\mathbf{x})$, pressure $p(\mathbf{x})$, and possibly additional variables like turbulent kinetic energy $k$ or dissipation $\epsilon$.  
 - Mesh Discretization: The flow domain around the geometry is discretized using a computational mesh, which can vary in resolution depending on the simulation objectives and available resources.  
 - Boundary Conditions: Standard atmospheric or wind-tunnel conditions are typically applied, making sure that the simulations reflect realistic operational environments.
 - Data Partitioning: After generating a target number of simulation cases (e.g., several hundred or thousand), the data is usually split into training, testing, and sometimes validation sets. A common split might allocate 90% of the samples for training and 10% for testing, making sure that the model’s performance is evaluated on unseen cases.
@@ -65,9 +65,14 @@ Below is an illustrative example of how such datasets might be structured:
 | 5          | Vehicle A     | Changes in Underbody Design     | Underbody geometry altered                    | Standard atmospheric conditions          |
 | 6          | Vehicle A     | Different Tire Profiles         | Tire profiles changed                         | Standard atmospheric conditions          |
 | 7          | Vehicle A     | Roof Rack Added                 | Roof rack added                               | Standard atmospheric conditions          |
+| 8          | Vehicle A     | Crosswind Study                 | None                                          | Yaw angle 5°, 10°, 15°                  |
+| 9          | Vehicle A     | High-Speed Regime               | None                                          | Inlet velocity 40 m/s ($Re \approx 8 \times 10^6$) |
+| 10         | Vehicle A     | Elevated Turbulence             | None                                          | Turbulence intensity 5%, length scale 0.1 m |
+| 11         | Vehicle B     | Baseline (SUV)                  | None                                          | Standard atmospheric conditions          |
+| 12         | Vehicle B     | Lowered Ride Height             | Ground clearance reduced 30 mm                | Standard atmospheric conditions          |
 | ...        | ...           | ...                             | ...                                           | ...                                      |
 
-This table can be extended to include additional columns for specific parameters such as Reynolds number, inlet velocity magnitude, yaw angle, or turbulence intensity if the study focuses on particular flow phenomena. The “Variant Description” column provides a concise reference to more detailed notes on geometry and flow specifications, making the dataset easier to find your way through and interpret.
+This table can be extended to include additional columns for specific parameters such as Reynolds number, inlet velocity magnitude, yaw angle, or turbulence intensity if the study focuses on particular flow phenomena. Including multiple vehicle models (Vehicle A, Vehicle B, etc.) and both geometry-driven and flow-driven variations ensures the dataset captures a broad range of aerodynamic behaviors. The “Variant Description” column provides a concise reference to more detailed notes on geometry and flow specifications, making the dataset easier to find your way through and interpret.
 
 ## Decimation Workflow
 
@@ -102,7 +107,7 @@ subject to constraints that preserve the topology and key geometric features.
 After geometry decimation, the flow field data must be interpolated onto the new, coarser mesh. This involves several considerations:
 
 - Variable Mapping:  
-Key flow variables such as pressure $p$, velocity components $\mathbf{u} = (u, v, w)$, and other quantities (e.g., turbulence relating to motion energy $k$) are mapped from the high-resolution CFD mesh onto the decimated mesh.
+Key flow variables such as pressure $p$, velocity components $\mathbf{u} = (u, v, w)$, and other quantities (e.g., turbulent kinetic energy $k$) are mapped from the high-resolution CFD mesh onto the decimated mesh.
 
 - Preservation of Necessary Flow Structures:  
 Higher-order interpolation schemes may be used, particularly near regions with steep gradients, such as boundary layers and separation zones. Special techniques, like adaptive interpolation near important areas, help maintain the fidelity of the flow features.
