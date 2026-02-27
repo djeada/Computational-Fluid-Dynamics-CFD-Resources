@@ -1,63 +1,59 @@
-## Interactive Maze Solver
+# Laplace Equation Maze Solver
 
-This simulation generates a random maze, computes a steady-state potential field via the Laplace equation, and then traces a path by following the potential gradient.
+This simulation generates a random perfect maze, solves Laplace's equation over the maze interior to produce a smooth potential field, and traces the solution path by following the potential gradient from entrance to exit. Watch it in action: [![YouTube](https://img.youtube.com/vi/kyYcME2sBws/maxresdefault.jpg)](https://youtu.be/kyYcME2sBws)
 
-[![Interactive Maze Solver](https://img.youtube.com/vi/kyYcME2sBws/maxresdefault.jpg)](https://youtu.be/kyYcME2sBws)
+## Overview
 
-## Maze Generation
+- **Depth-first maze generation**: recursive backtracker produces a perfect $N\times N$ maze with exactly one path between any two cells.
+- **Laplace's equation** $\nabla^2\phi=0$ solved over open cells with Dirichlet BCs: entrance $\phi=0$, exit $\phi=1$, walls $\phi=-1$.
+- **Gradient ascent**: path traced by stepping to the neighbor with the highest potential.
+- **Pygame rendering**: walls in black, open cells color-mapped by $\phi$, solution path highlighted in gold.
 
-A perfect maze on an $N\times N$ grid is created using a depth-first “recursive backtracker”:
+## Mathematical Background
 
-I. Start at a chosen cell, mark it as open.
+### Laplace's Equation for Potential
 
-II. While there are cells on the stack:
+Interior open cells satisfy:
 
-* Look for unvisited neighbors two steps away.
-* If any exist, carve a passage to one chosen at random and push it onto the stack.
-* Otherwise, pop back to the previous cell.
+$$\nabla^2\phi = 0$$
 
-This yields a maze with exactly one path between any two cells.
+with boundary conditions $\phi=0$ at the entrance, $\phi=1$ at the exit, and walls fixed at $\phi=-1$ (excluded from relaxation).
 
-## Laplace’s Equation for Potential
+### Finite-Difference Relaxation
 
-We assign boundary potentials at the entrance ($\phi=0$) and exit ($\phi=1$), and walls are set to $\phi=-1$ to exclude them.  The interior potential $\phi(x,y)$ satisfies
+The discrete Laplacian is iterated via Gauss–Seidel relaxation:
 
-$$\nabla^2 \phi = 0$$
+$$\phi_{i,j}^{\text{new}} = \phi_{i,j} + \Delta t\!\left(\frac{1}{4}\sum_{(k,\ell)\in\mathcal{N}(i,j)}\phi_{k,\ell} - \phi_{i,j}\right)$$
 
-Numerically, we iterate
+where $\mathcal{N}(i,j)$ denotes the four orthogonal neighbors. Iteration stops when $\max|\Delta\phi| < \varepsilon$ or after a fixed iteration cap.
 
-$$\phi_{i,j}^{\mathrm{new}} = \phi_{i,j} + \Delta t\Bigl(\tfrac{1}{4}\sum_{(k,\ell)\in N_{i,j}(i,j)}\phi_{k,\ell} - \phi_{i,j}\Bigr)$$
+### Path Extraction via Gradient Ascent
 
-where the sum runs over the four orthogonal neighbors.  Iteration continues until the maximum change in $\phi$ falls below a tolerance or until a fixed number of steps is reached.
+Starting at the entrance, move greedily to the open neighbor with the largest potential:
 
-## Path Extraction via Gradient Ascent
+$$\text{next cell} = \arg\max_{(k,\ell)\in\mathcal{N}(i,j)} \phi_{k,\ell}$$
 
-Starting from the entrance, the path to the exit is found by:
+Continue until the exit is reached, backtracking if no unvisited neighbor has higher $\phi$.
 
-I. At each cell, examine all available neighbors (including diagonals).
+### Color Mapping
 
-II. Move to the neighbor with the highest potential $\phi$.
+Open cells are colored proportionally to their potential, mapping $[-1,+1]$ to the blue–green range:
 
-III. Continue until the exit is reached or backtrack if no unvisited neighbor has higher $\phi$.
+$$\text{color} \propto \left(\frac{\phi+1}{2}\right)$$
 
-This traces the steepest ascent on the potential field, flexible the maze solution.
+## Implementation
 
-## Discretization and Parameters
+1. Build a perfect maze on an $N\times N$ grid using a depth-first recursive backtracker; mark walls and passages.
+2. Assign boundary potentials: $\phi=0$ (entrance), $\phi=1$ (exit), $\phi=-1$ (walls).
+3. Iteratively apply the finite-difference relaxation stencil to all open interior cells until convergence ($\max|\Delta\phi|<10^{-6}$) or 5000 iterations.
+4. Perform gradient ascent from the entrance: at each step move to the open neighbor with the largest $\phi$.
+5. Each frame: extend the visible gold path by one step and redraw the full maze with current $\phi$ colors.
+6. Continue until the path reaches the exit or the window is closed.
 
-* **Maze grid**: $N\times N$ cells (e.g.\ $100\times100$).
-* **Time step**: $\Delta t$ for relaxation (e.g.\ 0.1).
-* **Tolerance**: threshold for $\max|\Delta\phi|$ (e.g.\ $10^{-6}$).
-* **Max iterations**: cap on relaxation steps (e.g.\ 5000).
+## Output
 
-Periodic boundary conditions are applied only for the relaxation stencil; walls remain at fixed potential.
+The Pygame window displays the maze and potential field rendered in real time:
 
-## Visualization
-
-* **Walls**: black
-* **Open cells**: color from blue ($\phi=-1$) to green ($\phi=+1$), via
-
-$$\text{color} \propto \bigl(\tfrac{\phi+1}{2}\bigr)$$
-
-* **Path**: highlighted in gold as it is gradually revealed.
-* **Start/End**: marked in red and green respectively.
-Each frame updates the potential relaxation, extends the visible path, and redraws the maze until the window is closed.
+- **Potential gradient**: a smooth color ramp from blue (entrance, $\phi=0$) to green (exit, $\phi=1$) reveals how the solution flows through maze passages.
+- **Gold path**: the traced solution route is incrementally revealed frame by frame.
+- **Start/End markers**: entrance in red, exit in green.

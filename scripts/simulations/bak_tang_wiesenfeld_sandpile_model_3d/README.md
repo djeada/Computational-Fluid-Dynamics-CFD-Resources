@@ -1,5 +1,46 @@
-The **Bak-Tang-Wiesenfeld Sandpile Model** is a pioneering mathematical framework introduced in 1987 to illustrate the concept of **self-organized criticality (SOC)**. SOC describes how complex systems naturally evolve into a critical state where a minor event can trigger significant, unpredictable changes—much like how a single grain of sand can cause an avalanche in a sandpile. The BTW model serves as a paradigmatic example of SOC by demonstrating how simple, local interactions among elements can lead to emergent, large-scale behavior without the need for fine-tuning external parameters. This model has profound implications across various disciplines, including physics, biology, economics, and computer science, as it provides insights into the inherent complexity and unpredictability observed in natural and artificial systems.
+# Bak–Tang–Wiesenfeld Sandpile Model (3D)
 
-At the heart of the BTW model are its **toppling rules**, which govern how grains of sand are redistributed across a discrete two-dimensional grid. The grid represents a lattice where each cell holds a certain number of sand grains. A cell becomes **unstable** when the number of grains exceeds a predefined **critical threshold** (in your simulation, this threshold is set to 4). When a cell topples, it loses a specific number of grains (typically equal to the critical threshold) and distributes one grain to each of its neighboring cells—up, down, left, and right. This redistribution can cause neighboring cells to become unstable, leading to a **cascading effect** or **avalanche** of topplings. Mathematically, this process is akin to applying a set of discrete **difference equations** that update the state of each cell based on its neighbors' states, ensuring the system remains near the critical state through continuous addition and redistribution of grains.
+This script animates the three-dimensional Bak–Tang–Wiesenfeld (BTW) sandpile model on a 20×20 grid with a critical height of 8. At each frame a single grain is added to a randomly chosen cell. When a cell's grain count meets or exceeds the critical threshold, it topples: it loses grains equal to the threshold and each of its four cardinal neighbours receives one grain. Boundary cells lose grains off the edge, providing the open-boundary dissipation required for self-organised criticality (SOC). The evolving height field is rendered as an animated 3D surface with the plasma colormap on a dark background.
 
-The BTW model's simplicity belies the complexity of its emergent behavior. Mathematically, the model is studied using **cellular automata** and **finite difference methods**, which facilitate the simulation of local interactions and their global consequences over time. The iterative application of toppling rules leads the system to a **critical state** characterized by a power-law distribution of avalanche sizes, meaning that small and large avalanches occur with probabilities that follow a specific scaling relation. This scale-invariant behavior is a hallmark of critical systems and indicates that the model lacks a characteristic size for avalanches, allowing for unpredictable and wide-ranging events. The criticality emerges naturally from the system's dynamics without external tuning, exemplifying how complex patterns and structures can arise from simple, deterministic rules—a fundamental concept in the study of complex systems and statistical mechanics.
+## Overview
+
+- 20×20 lattice with critical threshold $z_c = 8$ and open (dissipative) boundaries
+- One grain added per animation frame to a uniformly random cell
+- Iterative toppling loop redistributes grains until the lattice is stable
+- Real-time 3D surface plot with plasma colormap on a dark background
+- Demonstrates self-organised criticality emerging from simple local rules
+
+## Mathematical Background
+
+### Toppling Rule
+
+A cell $(i, j)$ is unstable when its height $z_{ij}$ reaches the critical threshold $z_c$. The toppling update is:
+
+$$z_{ij} \geq z_c \;\Rightarrow\; z_{ij} \to z_{ij} - z_c, \quad z_{i\pm1,j},\, z_{i,j\pm1} \to z_{i\pm1,j} + 1,\; z_{i,j\pm1} + 1$$
+
+### Open Boundary Conditions
+
+Grains that would be distributed to cells outside the grid are simply discarded, making the boundary dissipative. This energy loss is essential for the system to reach a stationary critical state.
+
+### Power-Law Avalanche Distribution
+
+Repeated addition and toppling drives the system to a critical state where avalanche sizes $s$ (total number of topplings per added grain) follow a power-law probability distribution:
+
+$$P(s) \sim s^{-\tau}, \qquad \tau \approx 1.2 \text{ (2D BTW)}$$
+
+### Self-Organised Criticality
+
+Unlike conventional critical phenomena, SOC requires no external tuning of a control parameter. The system self-organises to the critical state through the competition between slow driving (grain addition) and fast relaxation (avalanche toppling).
+
+## Implementation
+
+1. Initialise a 20×20 integer array of grain heights to zero.
+2. At each animation frame, increment a random cell by one grain.
+3. Enter a toppling loop: scan for unstable cells ($z_{ij} \geq z_c$), apply the toppling rule, and repeat until no unstable cells remain.
+4. Update the 3D surface plot with the new height field using `plot_surface` and the plasma colormap.
+5. Repeat for the desired number of frames to produce the animation.
+
+## Output
+
+The script produces an interactive animated 3D surface plot of the sandpile height field, updated frame by frame as grains are added and avalanches propagate. The plasma colormap maps grain height to colour, and the dark background emphasises the evolving topographic structure of the critical sandpile.
+

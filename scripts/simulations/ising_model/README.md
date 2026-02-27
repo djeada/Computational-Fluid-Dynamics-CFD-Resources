@@ -1,147 +1,70 @@
 # Ising Model Simulation
 
-This script simulates a two-dimensional Ising model using the Metropolis algorithm. The Ising model is a fundamental statistical physics model for understanding phase transitions, such as the transition between ferromagnetic and paramagnetic states.
+This script simulates a two-dimensional Ising model using the Metropolis algorithm to study phase transitions between ferromagnetic and paramagnetic states on a 2D spin lattice. Watch it on YouTube: [![YouTube](https://img.youtube.com/vi/aIUKwLx_Kj8/maxresdefault.jpg)](https://youtube.com/shorts/aIUKwLx_Kj8?feature=share)
 
-[![Watch the Short on YouTube](https://img.youtube.com/vi/aIUKwLx_Kj8/maxresdefault.jpg)](https://youtube.com/shorts/aIUKwLx_Kj8?feature=share)
+## Overview
 
-## Mathematical Foundation
+- **2D spin lattice**: each site $s_i \in \{+1,-1\}$, initialized randomly.
+- **Metropolis Monte Carlo**: samples spin configurations from the Boltzmann distribution.
+- **Phase transition** at critical temperature $T_c$: spontaneous magnetization appears below $T_c$.
+- **Numba-accelerated** (`@njit`) energy and magnetization calculations for fast Monte Carlo sweeps.
+- **Live animation**: spin lattice coloring plus real-time plots of magnetization and energy.
 
-The Ising model describes a system of interacting spins on a lattice, where each spin $s_i$ can take one of two values: $+1$ (spin-up) or $-1$ (spin-down).
+## Mathematical Background
 
-### Hamiltonian (Energy of the System)
+### Hamiltonian
 
-The energy of a spin configuration is described by the Hamiltonian:
+The energy of a spin configuration is described by:
 
-$$H = -J \sum_{\langle i, j \rangle} s_i s_j$$
+$$H = -J \sum_{\langle i,j \rangle} s_i s_j$$
 
-- $J$: Coupling constant, representing the strength of the interaction between neighboring spins.
-- $J > 0$: Favors aligned spins (ferromagnetic interaction).
-- $J < 0$: Favors anti-aligned spins (antiferromagnetic interaction).
-- $\langle i, j \rangle$: Sum over all nearest-neighbor pairs.
-- $s_i$: Spin value at site $i$ ($+1$ or $-1$).
-
-This Hamiltonian captures the competition between thermal fluctuations and spin alignment.
+where $J$ is the coupling constant ($J>0$ ferromagnetic, $J<0$ antiferromagnetic) and $\langle i,j\rangle$ denotes nearest-neighbor pairs.
 
 ### Magnetization
 
-The **magnetization** is the net spin of the system, a measure of how "aligned" the spins are:
-
 $$M = \sum_i s_i$$
 
-- $M > 0$: Spins are predominantly aligned (ferromagnetic phase).
-- $M \approx 0$: Spins are disordered (paramagnetic phase).
+$M > 0$ indicates a ferromagnetic phase; $M \approx 0$ a disordered (paramagnetic) phase.
 
-### Temperature and the Boltzmann Factor
+### Boltzmann Factor
 
-Thermal fluctuations are introduced via the Boltzmann factor:
+Thermal fluctuations enter via the acceptance probability:
 
-$$P(\Delta E) = \exp\left(-\frac{\Delta E}{k_B T}\right)$$
+$$P(\Delta E) = \exp\!\left(-\frac{\Delta E}{k_B T}\right)$$
 
-- $T$: Temperature.
-- $\Delta E$: Change in energy due to flipping a spin.
-- $k_B$: Boltzmann constant (typically set to 1 in dimensionless simulations).
+where $\Delta E = 2s_i\sum_{\text{neighbors}} s_j$ is the energy change from flipping spin $s_i$.
 
-At high $T$, thermal fluctuations dominate, leading to disordered spins. At low $T$, spin alignment minimizes the energy.
+### Metropolis Criterion
 
-## Physics of the Simulation
+A proposed spin flip is accepted with probability:
 
-The simulation models a 2D lattice of spins evolving under the influence of:
+$$A = \begin{cases} 1 & \Delta E \le 0 \\ e^{-\beta\Delta E} & \Delta E > 0 \end{cases}, \quad \beta = \frac{1}{k_B T}$$
 
-I. **Thermal fluctuations**: Controlled by temperature ($\beta = \frac{1}{k_B T}$).
+At low $T$ the system orders (ferromagnetic phase); at high $T$ thermal noise destroys order (paramagnetic phase).
 
-II. **Energy minimization**: The system naturally evolves toward configurations that minimize the Hamiltonian.
+## Implementation
 
-A **phase transition** occurs at a critical temperature $T_c$, below which the system exhibits spontaneous magnetization (ferromagnetic phase).
+1. Initialize an $N\times N$ lattice with random $\pm1$ spins via `initialize_lattice(N_ROWS, N_COLS)`.
+2. For each Monte Carlo step, loop over all lattice sites: compute $\Delta E = 2s_i\sum_{\text{neighbors}}s_j$ using `metropolis_step_numba` (Numba JIT-compiled).
+3. Accept or reject each spin flip using the Metropolis criterion with $\beta = 1/(k_B T)$.
+4. Periodically compute total energy via `calculate_energy_numba` and magnetization via `calculate_magnetization_numba`.
+5. Feed the lattice state and thermodynamic observables into `animate_simulation` for live plotting.
+6. Repeat for `TOTAL_STEPS` Monte Carlo sweeps.
 
-## Numerical Method: Metropolis Algorithm
+## Output
 
-The simulation uses the **Metropolis algorithm**, a Monte Carlo method to sample spin configurations based on the Boltzmann probability distribution.
+The animation produces three synchronized panels:
 
-### Steps:
+- **Lattice**: spin-up ($+1$) sites colored orange, spin-down ($-1$) blue; domain walls are visible near $T_c$.
+- **Magnetization plot**: tracks $M(t)$; shows spontaneous symmetry breaking below $T_c$.
+- **Energy plot**: tracks $H(t)$; drops sharply as the system orders at low temperature.
 
-I. Randomly select a spin $s_i$ and calculate the energy change $\Delta E$ if the spin were flipped.
+## Running the Script
 
-$$\Delta E = 2 s_i \sum_{\text{neighbors}} s_j$$
-
-II. Flip the spin with probability:
-
-- $1$, if $\Delta E \leq 0$ (energy decreases).
-- $\exp(-\beta \Delta E)$, if $\Delta E > 0$ (energy increases).
-
-III. Repeat for all spins in the lattice.
-
-This process evolves the system toward equilibrium.
-
-## Code Structure
-
-### Lattice Initialization
-
-The lattice is initialized randomly with $+1$ or $-1$ spins.
+Adjust `N_ROWS`, `N_COLS`, `BETA`, and `TOTAL_STEPS` at the top of the script:
 
 ```python
-def initialize_lattice(n_rows: int, n_cols: int) -> np.ndarray:
-return np.random.choice([-1, 1], size=(n_rows, n_cols)).astype(np.int8)
+N_ROWS, N_COLS = 100, 100   # lattice size
+BETA           = 0.44       # ≈ 1/T_c for the 2D Ising model
+TOTAL_STEPS    = 500        # Monte Carlo sweeps
 ```
-
-### Metropolis Step
-
-The energy change for a potential spin flip is calculated, and the spin is flipped based on the Metropolis criterion.
-
-```python
-@njit
-def metropolis_step_numba(lattice, beta):
-...
-```
-
-### Energy and Magnetization Calculation
-
-The total energy and magnetization of the lattice are calculated periodically.
-
-```python
-
-@njit
-def calculate_energy_numba(lattice):
-
-...
-
-@njit
-def calculate_magnetization_numba(lattice):
-
-...
-```
-
-### Animation
-
-An animated visualization of the lattice is created, with live plots of magnetization and energy.
-
-```python
-def animate_simulation(lattice, beta, steps, ...):
-...
-```
-
-## Inputs
-
-- **Lattice Size**: $N \times N$, controlled by `N_ROWS` and `N_COLS`.
-- **Temperature**: Controlled via `BETA = 1 / (k_B T)`.
-- **Steps**: Number of Monte Carlo steps (`TOTAL_STEPS`).
-- **Animation Options**: Interval and update frequency.
-
-## Outputs
-
-I. **Lattice Evolution**
-
-Spin-up ($+1$) is visualized as orange, and spin-down ($-1$) as blue.
-
-II. **Magnetization Plot**
-
-Tracks the total magnetization of the system over time.
-
-III. **Energy Plot**
-
-Tracks the total energy of the system over time.
-
-## Parameters
-
-- **Temperature ($T$)**: Higher $T$ introduces more randomness in spin configurations.
-- **Coupling Constant ($J$)**: Determines the interaction strength between spins.
-- **Beta ($\beta$)**: Inverse temperature ($\beta = 1 / k_B T$).

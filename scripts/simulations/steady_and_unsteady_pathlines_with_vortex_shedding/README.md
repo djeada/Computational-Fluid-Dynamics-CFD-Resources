@@ -1,83 +1,71 @@
 # Flow Visualization Around a Cylinder: Steady and Unsteady Pathlines with Vortex Shedding
 
-This project provides a comprehensive simulation of fluid flow around a cylindrical object, demonstrating both steady and unsteady flow conditions. By visualizing pathlines and streamlines, the simulation highlights the phenomenon of vortex shedding, a critical aspect in fluid dynamics with applications in engineering and environmental sciences.
+This project simulates fluid flow around a cylindrical obstacle using potential flow superposition and discrete shed vortices, then compares steady streamlines with unsteady particle pathlines integrated by the Runge-Kutta 4th-order method.
 
-## Features
+## Overview
 
-- **Steady Flow Simulation**: Visualizes the steady-state flow around a cylinder where streamlines and pathlines coincide.
-- **Unsteady Flow with Vortex Shedding**: Demonstrates unsteady flow conditions where vortices are periodically shed from the cylinder, causing streamlines and pathlines to diverge.
-- **Interactive Visualization**: Uses Matplotlib to animate the flow, allowing for dynamic observation of particle pathlines.
-- **Numerical Integration**: Implements the Runge-Kutta 4th order (RK4) method for accurate computation of particle trajectories.
-- **Customizable Parameters**: Easily adjust parameters such as cylinder radius, free stream velocity, circulation, and simulation time.
+- **Potential flow** around a cylinder: uniform stream superposed with circulation $\Gamma = 4\pi RU_\infty$.
+- **Vortex shedding model**: discrete vortices added via Biot–Savart law to simulate an unsteady wake.
+- **Strouhal number** $St = fD/U_\infty \approx 0.2$ characterizes shedding frequency at $Re \approx 100$–1000.
+- **RK4 integration** computes accurate particle trajectories in the time-varying velocity field.
+- **Matplotlib animation**: overlays pathline trails and instantaneous streamlines for direct comparison.
 
-## Physics Behind the Simulation
+## Mathematical Background
 
-### Steady Flow
+### Potential Flow Around a Cylinder
 
-In a steady flow scenario, the fluid moves uniformly around the cylinder without any temporal changes. The flow is characterized by:
+The stream function for flow past a cylinder of radius $R$ with circulation $\Gamma$ in a uniform stream $U_\infty$:
 
-- **Streamlines**: Lines that represent the flow direction at every point in the fluid. In steady flow, streamlines are constant over time.
-- **Pathlines**: Trajectories that individual fluid particles follow over time. In steady flow, pathlines coincide with streamlines.
+$$\psi = U_\infty\!\left(r - \frac{R^2}{r}\right)\sin\theta + \frac{\Gamma}{2\pi}\ln\frac{r}{R}$$
 
-### Unsteady Flow and Vortex Shedding
+Velocity components at any point $(X,Y)$, with $\theta = \arctan(Y/X)$:
 
-Unsteady flow introduces time-dependent changes in the fluid motion, leading to complex phenomena such as vortex shedding:
+$$U_r = U_\infty\!\left(1 - \frac{R^2}{X^2+Y^2}\right), \quad U_\theta = -U_\infty\frac{R^2}{X^2+Y^2} + \frac{\Gamma}{2\pi(X^2+Y^2)}$$
 
-- **Vortex Shedding**: Periodic detachment of vortices from the surface of the cylinder, leading to alternating patterns of swirling fluid. This results in oscillating forces on the cylinder, which can cause vibrations and structural fatigue.
-- **Differences Between Streamlines and Pathlines**: In unsteady flow, streamlines change over time, and pathlines no longer coincide with streamlines, illustrating the dynamic nature of the flow.
+$$U_x = U_r\cos\theta - U_\theta\sin\theta, \quad U_y = U_r\sin\theta + U_\theta\cos\theta$$
 
-## Mathematical Foundations
+### Vortex Shedding via Biot–Savart Law
 
-### Velocity Field Calculation
+Each shed vortex at $(x_v,y_v)$ with strength $\gamma$ contributes:
 
-The velocity field around the cylinder is computed using the superposition of a uniform flow and a circulation-induced flow:
+$$U_x = \frac{\gamma}{2\pi}\left(-\frac{Y-y_v}{(X-x_v)^2+(Y-y_v)^2}\right), \quad U_y = \frac{\gamma}{2\pi}\left(\frac{X-x_v}{(X-x_v)^2+(Y-y_v)^2}\right)$$
 
-- **Uniform Flow**: Represents the free stream velocity $U$.
-- **Circulation ($\Gamma$)**: Introduces rotational motion around the cylinder, calculated as $\Gamma = 4\pi R U$, where $R$ is the cylinder radius.
+The shedding frequency satisfies $St = fD/U_\infty \approx 0.2$ for $Re \approx 100$–1000.
 
-The steady velocity components $U_x$ and $U_y$ at any point $(X, Y)$ are given by:
+### RK4 Particle Integration
 
-$$U_r = U \left(1 - \frac{R^2}{X^2 + Y^2}\right)$$
+Particle positions are advanced with the classical Runge-Kutta 4th-order scheme:
 
-$$U_\theta = -U \frac{R^2}{X^2 + Y^2} + \frac{\Gamma}{2\pi (X^2 + Y^2)}$$
+$$k_1 = \mathbf{u}(\mathbf{x}_n),\quad k_2 = \mathbf{u}(\mathbf{x}_n+\tfrac{\Delta t}{2}k_1),\quad k_3 = \mathbf{u}(\mathbf{x}_n+\tfrac{\Delta t}{2}k_2),\quad k_4 = \mathbf{u}(\mathbf{x}_n+\Delta t\,k_3)$$
 
-$$U_x = U_r \cos(\theta) - U_\theta \sin(\theta)$$
+$$\mathbf{x}_{n+1} = \mathbf{x}_n + \frac{\Delta t}{6}(k_1+2k_2+2k_3+k_4)$$
 
-$$U_y = U_r \sin(\theta) + U_\theta \cos(\theta)$$
+## Implementation
 
-Where $\theta = \arctan\left(\frac{Y}{X}\right)$.
+1. Set parameters: cylinder radius $R$, free-stream velocity $U_\infty$, circulation $\Gamma = 4\pi RU_\infty$, time step $\Delta t$, steps `nt`, and particle count `num_particles`.
+2. Seed fluid particles at initial positions upstream of the cylinder.
+3. At each time step, compute the base potential-flow velocity field from the cylinder superposition formula.
+4. Add vortex contributions from all currently shed vortices using the Biot–Savart formula.
+5. Advance each particle position using RK4; remove particles that enter the cylinder interior.
+6. Periodically shed a new vortex pair from the cylinder surface at the Strouhal frequency.
+7. Animate pathline trails and instantaneous streamlines in Matplotlib.
 
-### Vortex Contribution
+## Output
 
-Additional vortices are introduced to simulate unsteady flow. The velocity contribution from each vortex is calculated using the Biot-Savart law:
+The Matplotlib animation shows:
 
-$$U_x = \frac{\gamma}{2\pi} \left(-\frac{Y - y_v}{(X - x_v)^2 + (Y - y_v)^2}\right)$$
+- **Steady case**: pathlines coincide with streamlines, tracing smooth arcs around the cylinder.
+- **Unsteady case**: shed vortices distort the wake into a von Kármán vortex street; pathlines diverge from instantaneous streamlines, illustrating the key difference between the two concepts.
 
-$$U_y = \frac{\gamma}{2\pi} \left(\frac{X - x_v}{(X - x_v)^2 + (Y - y_v)^2}\right)$$
+## Running the Script
 
-Where $(x_v, y_v)$ is the position of the vortex and $\gamma$ is its strength.
+Modify parameters at the top of the script to explore different flow regimes:
 
-### Numerical Integration with RK4
-
-The Runge-Kutta 4th order method is employed to compute the trajectories of fluid particles:
-
-I. **Compute $k_1$**: Velocity at the current position.
-
-II. **Compute $k_2$**: Velocity at the midpoint using $k_1$.
-
-III. **Compute $k_3$**: Velocity at the midpoint using $k_2$.
-
-IV. **Compute $k_4$**: Velocity at the next step using $k_3$.
-
-V. **Update Position**: Combine the slopes to estimate the new position.
-
-### Adjusting Parameters
-
-You can modify various parameters within the script to observe different flow behaviors:
-
-- **Cylinder Radius (`R`)**
-- **Free Stream Velocity (`U`)**
-- **Circulation (`Gamma`)**
-- **Time Step (`dt`)**
-- **Number of Time Steps (`nt`)**
-- **Number of Particles (`num_particles`)**
+```python
+R            = 1.0          # cylinder radius
+U            = 1.0          # free-stream velocity
+Gamma        = 4*pi*R*U     # circulation
+dt           = 0.05         # time step
+nt           = 200          # number of time steps
+num_particles = 50          # number of tracer particles
+```

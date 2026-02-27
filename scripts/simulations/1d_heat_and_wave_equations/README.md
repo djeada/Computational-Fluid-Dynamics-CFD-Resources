@@ -1,43 +1,60 @@
-## The Heat Equation
+# 1D Heat and Wave Equation Simulations
 
-The heat equation describes how temperature changes over time in a material. In one dimension, it is:
+This script numerically solves both the 1D heat equation and the 1D wave equation using explicit finite difference schemes. It demonstrates fundamental time-stepping techniques in computational physics and highlights the stability conditions that govern each method.
+
+## Overview
+
+- Solves the 1D heat (diffusion) equation via the explicit forward-Euler finite difference method
+- Solves the 1D wave equation via the explicit leapfrog (second-order in time) finite difference method
+- Enforces stability criteria for both equations before time-stepping
+- Visualises the evolving temperature and displacement fields over time
+
+## Mathematical Background
+
+### Heat Equation
+
+The 1D heat equation governs diffusive transport of temperature $u(x,t)$:
 
 $$\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}$$
 
-Here, $u(x, t)$ is the temperature at position $x$ and time $t$, and $\alpha$ is the thermal diffusivity, which controls how fast heat spreads. The equation shows that the temperature change rate depends on the curvature of the temperature profile.
+where $\alpha$ is the thermal diffusivity.
 
-### Numerical Solutions for the Heat Equation
+### Explicit Finite Difference Discretisation (Heat)
 
-Analytical solutions exist for simple cases, but most real problems use numerical methods. A common approach is the explicit finite difference method. The second spatial derivative is approximated by:
+Approximating both derivatives on a uniform grid:
 
-$$\frac{\partial^2 u}{\partial x^2} \approx \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{\Delta x^2}$$
+$$\frac{\partial^2 u}{\partial x^2} \approx \frac{u_{i+1}^n - 2u_i^n + u_{i-1}^n}{\Delta x^2}, \qquad \frac{\partial u}{\partial t} \approx \frac{u_i^{n+1} - u_i^n}{\Delta t}$$
 
-and the time derivative by:
-
-$$\frac{\partial u}{\partial t} \approx \frac{u_i^{n+1} - u_i^n}{\Delta t}$$
-
-Putting these into the heat equation gives an update formula for each grid point. To keep the solution stable, the time step must satisfy:
+Stability requires the time step to satisfy:
 
 $$\Delta t \leq \frac{\Delta x^2}{2\alpha}$$
 
-If $\Delta t$ is too large, the solution can become unstable or oscillate.
+### Wave Equation
 
-## The Wave Equation
-
-The wave equation models how waves move through a medium. In one dimension:
+The 1D wave equation models displacement $u(x,t)$ propagating at speed $c$:
 
 $$\frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2}$$
 
-Here, $u(x, t)$ is the displacement at position $x$ and time $t$, and $c$ is the wave speed. The equation means the acceleration of the wave is linked to its spatial curvature.
+### Leapfrog Discretisation (Wave)
 
-### Numerical Approaches for the Wave Equation
-
-Finite difference methods work here too, but account for the second-order time derivative. One explicit scheme uses:
+The second-order time derivative is discretised as:
 
 $$\frac{\partial^2 u}{\partial t^2} \approx \frac{u_i^{n+1} - 2u_i^n + u_i^{n-1}}{\Delta t^2}$$
 
-with the same spatial derivative as before. This yields an update rule using current and past values. Stability requires:
+Stability (CFL condition) requires:
 
-$$\frac{c \Delta t}{\Delta x} \leq 1$$
+$$\frac{c\,\Delta t}{\Delta x} \leq 1$$
 
-If this condition isn’t met, the simulation can show artificial reflections or growing amplitudes.
+## Implementation
+
+1. Define spatial grid, time step, and physical parameters ($\alpha$ for heat; $c$ for wave)
+2. Verify stability conditions ($\Delta t \leq \Delta x^2/2\alpha$ and $c\Delta t/\Delta x \leq 1$)
+3. Set initial conditions (e.g., Gaussian pulse or step function)
+4. Apply boundary conditions (Dirichlet or Neumann) at domain edges
+5. Advance each equation through time using the respective explicit update formula
+6. Render or save snapshots of the field at selected time steps
+
+## Output
+
+- **Heat simulation**: animated or saved frames showing temperature profile diffusing and flattening over time
+- **Wave simulation**: animated or saved frames showing the displacement profile propagating and reflecting from boundaries
