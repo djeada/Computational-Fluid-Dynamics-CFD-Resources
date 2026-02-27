@@ -129,8 +129,13 @@ II. **Wind Tunnel or Road Tests**
 
 III. **Optimization Loop**  
 
-- **Gradient-based or heuristic** (e.g., genetic algorithms) methods search for parameter combinations yielding minimal drag, suitable downforce, or balanced performance.  
-- Regression or graph-based neural networks learn from the parametric dataset, predicting aerodynamics without re-running full CFD.
+- **Gradient-based or heuristic** (e.g., genetic algorithms) methods search for parameter combinations yielding minimal drag, suitable downforce, or balanced performance. For gradient-based approaches, the sensitivity of an aerodynamic objective $J$ (e.g., $C_d$) with respect to a deformation parameter $p_k$ is approximated as:
+
+$$\frac{\partial J}{\partial p_k} \approx \frac{J(\mathbf{p} + \delta \mathbf{e}_k) - J(\mathbf{p})}{\delta}$$
+
+where $\mathbf{e}_k$ is the unit vector in the $k$-th parameter direction and $\delta$ is a small perturbation. Adjoint methods compute all such sensitivities simultaneously at a cost independent of the number of parameters, making them highly efficient for high-dimensional design spaces.
+
+- **ML Surrogates**: Regression or graph-based neural networks learn from the parametric dataset, predicting aerodynamics without re-running full CFD. Once trained, these surrogates evaluate thousands of candidate designs per second, enabling exhaustive searches that would be infeasible with direct CFD.
 
 ### Setting Up the Problem  
 

@@ -65,9 +65,14 @@ Below is an illustrative example of how such datasets might be structured:
 | 5          | Vehicle A     | Changes in Underbody Design     | Underbody geometry altered                    | Standard atmospheric conditions          |
 | 6          | Vehicle A     | Different Tire Profiles         | Tire profiles changed                         | Standard atmospheric conditions          |
 | 7          | Vehicle A     | Roof Rack Added                 | Roof rack added                               | Standard atmospheric conditions          |
+| 8          | Vehicle A     | Crosswind Study                 | None                                          | Yaw angle 5°, 10°, 15°                  |
+| 9          | Vehicle A     | High-Speed Regime               | None                                          | Inlet velocity 40 m/s ($Re \approx 8 \times 10^6$) |
+| 10         | Vehicle A     | Elevated Turbulence             | None                                          | Turbulence intensity 5%, length scale 0.1 m |
+| 11         | Vehicle B     | Baseline (SUV)                  | None                                          | Standard atmospheric conditions          |
+| 12         | Vehicle B     | Lowered Ride Height             | Ground clearance reduced 30 mm                | Standard atmospheric conditions          |
 | ...        | ...           | ...                             | ...                                           | ...                                      |
 
-This table can be extended to include additional columns for specific parameters such as Reynolds number, inlet velocity magnitude, yaw angle, or turbulence intensity if the study focuses on particular flow phenomena. The “Variant Description” column provides a concise reference to more detailed notes on geometry and flow specifications, making the dataset easier to find your way through and interpret.
+This table can be extended to include additional columns for specific parameters such as Reynolds number, inlet velocity magnitude, yaw angle, or turbulence intensity if the study focuses on particular flow phenomena. Including multiple vehicle models (Vehicle A, Vehicle B, etc.) and both geometry-driven and flow-driven variations ensures the dataset captures a broad range of aerodynamic behaviors. The “Variant Description” column provides a concise reference to more detailed notes on geometry and flow specifications, making the dataset easier to find your way through and interpret.
 
 ## Decimation Workflow
 

@@ -37,10 +37,10 @@ II. **Governing Equations**
    where $P_k$ is the turbulence production term, $\mu_t$ is the turbulent eddy viscosity, and $\omega$ is the specific dissipation rate. Choosing the turbulence model (e.g., Spalart–Allmaras, k–$\epsilon$ variants, etc.) depends on whether the objective is capturing mean forces or more complex flow structures.
 
 III. **Boundary Conditions and Domain Setup**  
-- Specified velocity or mass flow rate, sometimes with turbulence intensity and length scale.
-- Pressure-outlet or outflow condition to allow fluid to exit the domain without reflection.
-- No-slip condition on the vehicle surface, often with near-wall modeling to resolve boundary layers accurately.
-- Many automotive problems leverage a symmetry plane to halve the computational domain (especially if the vehicle geometry is symmetric).
+- **Inlet**: Specified velocity or mass flow rate, sometimes with turbulence intensity and length scale.
+- **Outlet**: Pressure-outlet or outflow condition to allow fluid to exit the domain without reflection.
+- **Wall**: No-slip condition on the vehicle surface, often with near-wall modeling to resolve boundary layers accurately.
+- **Symmetry**: Many automotive problems leverage a symmetry plane to halve the computational domain (especially if the vehicle geometry is symmetric).
 IV. **Temporal Discretization**  
 - **Steady-State Simulations**: Commonly used for design optimization focusing on time-averaged drag, lift, and overall flow patterns.
 - **Unsteady/Transient Simulations**: Required for cases involving transient wake dynamics, bluff-body flows, or vortex shedding around spoilers or side mirrors. Time step selection depends on the characteristic flow frequencies (e.g., shedding Strouhal numbers).

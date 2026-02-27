@@ -12,7 +12,11 @@ The output often comes in standardized data formats like VTK (Visualization Tool
 
 Time-averaged volume fields, slices through the domain, and surface data are central to understanding where vortex structures form or how boundary layer regions behave. Aerodynamic forces, especially drag, lift, side force, and yaw moment, are computed over time, and machine learning methods can predict their trends under varied operating conditions. The following single-level list details these output types in a friendly, conversation-like manner.
 
-– Time-Averaged Volume Fields. These often come as VTK files that capture quantities such as velocity $\mathbf{u} = (u, v, w)$, pressure $p$, and density $\rho$ over the flow domain surrounding the vehicle. Having a time-averaged field means each cell in the domain reflects the average of these quantities over a certain window, thus filtering out short-lived fluctuations. Engineers commonly extract turbulence-related variables like turbulent kinetic energy (TKE) or dissipation rate $\varepsilon$. In automotive contexts, you might see specialized fields such as micro drag or total pressure coefficient, which help pinpoint where flow energy is lost around the body.  
+– Time-Averaged Volume Fields. These often come as VTK files that capture quantities such as velocity $\mathbf{u} = (u, v, w)$, pressure $p$, and density $\rho$ over the flow domain surrounding the vehicle. Having a time-averaged field means each cell in the domain reflects the average of these quantities over a certain window, thus filtering out short-lived fluctuations. Engineers commonly extract turbulence-related variables like turbulent kinetic energy (TKE) or dissipation rate $\varepsilon$. In automotive contexts, you might see specialized fields such as micro drag or total pressure coefficient $C_{p_0}$, defined as:
+
+$$C_{p_0} = \frac{p + \tfrac{1}{2}\rho |\mathbf{u}|^2 - p_{0,\infty}}{\tfrac{1}{2}\rho U_\infty^2}$$
+
+where $p_{0,\infty} = p_\infty + \tfrac{1}{2}\rho U_\infty^2$ is the freestream total pressure. Regions where $C_{p_0}$ drops below unity indicate total pressure losses due to viscous dissipation, separation, or turbulent mixing, helping pinpoint where flow energy is lost around the body.  
 – Time-Averaged Surface Data. Surfaces of the vehicle are often exported in VTK format, making it easier to plot and compare things like pressure coefficients $C_p$ or mean skin friction $\tau_w$. The pressure coefficient is derived from  
 $$C_p = \frac{p - p_\infty}{\tfrac{1}{2}\rho U_\infty^2}$$  
 

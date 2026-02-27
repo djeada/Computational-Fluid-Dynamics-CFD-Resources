@@ -146,7 +146,11 @@ An important aspect of the pre-processing step is the use of masking. Regions co
 
 #### Training
 
-The training phase involves thousands of mesh-image pairs, allowing the network to learn the complicated relationship between geometric features and optimal mesh density distributions. A masked loss function is used during training to make sure that errors in regions outside the fluid domain do not adversely affect the learning process. 
+The training phase involves thousands of mesh-image pairs, allowing the network to learn the complicated relationship between geometric features and optimal mesh density distributions. A masked loss function is used during training to make sure that errors in regions outside the fluid domain do not adversely affect the learning process. Formally, the masked mean squared error is defined as:
+
+$$\mathcal{L} = \frac{1}{\sum_{i} m_i} \sum_{i} m_i \bigl(\hat{d}_i - d_i\bigr)^2$$
+
+where $\hat{d}_i$ is the predicted mesh density at pixel $i$, $d_i$ is the ground-truth density from the adjoint-refined mesh, and $m_i \in \{0,1\}$ is the binary mask that is 1 for fluid-domain pixels and 0 for solid interior or prism-layer regions. This formulation ensures the network only receives gradients from physically meaningful regions. 
 
 A variety of hyperparameters are carefully tuned—ranging from the choice of optimizer (such as the Adam optimizer) to the configuration of skip connections and learning rates. Extensive experimentation shows that networks capable of capturing both large-scale patterns and minute details tend to perform best. The resulting model demonstrates high prediction accuracy, providing a reliable starting point for CFD simulations and, if necessary, further refinement using traditional methods.
 

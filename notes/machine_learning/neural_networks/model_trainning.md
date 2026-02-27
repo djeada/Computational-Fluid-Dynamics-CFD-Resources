@@ -75,10 +75,18 @@ To evaluate the success of this approach, each trained model’s outputs (e.g., 
 
 Commonly used performance metrics include:
 
-- Measures how well predicted results correlate with reference CFD data.
-- Indicates the average deviation between predicted and actual values (e.g., $C_d$).
-- Shows how the prediction errors are distributed around the mean.
-- Puts the errors into percentage form relative to a typical baseline (e.g., the nominal drag coefficient of a baseline geometry).
+- **$R^2$ Score (Coefficient of Determination)**: Measures how well predicted results correlate with reference CFD data. An $R^2$ of 1.0 indicates perfect prediction, while values below 0.5 suggest the model explains less than half the variance in the data. Formally:
+
+$$R^2 = 1 - \frac{\sum_i (y_i - \hat{y}_i)^2}{\sum_i (y_i - \bar{y})^2}$$
+
+where $y_i$ are the reference CFD values, $\hat{y}_i$ are the model predictions, and $\bar{y}$ is the mean of the reference values.
+
+- **Mean Absolute Error (MAE)**: Indicates the average deviation between predicted and actual values (e.g., $C_d$). Defined as:
+
+$$\text{MAE} = \frac{1}{N}\sum_{i=1}^{N} |y_i - \hat{y}_i|$$
+
+- **Standard Deviation of Error**: Shows how the prediction errors are distributed around the mean. A low standard deviation indicates consistent predictions, while a high value suggests the model is unreliable for certain configurations.
+- **Relative MAE (%)**: Puts the errors into percentage form relative to a typical baseline (e.g., the nominal drag coefficient of a baseline geometry), making it easier to judge engineering significance across different quantities.
 
 Together, these metrics give engineers a comprehensive picture of how each model behaves on both training and test sets.
 
@@ -96,6 +104,12 @@ Together, these metrics give engineers a comprehensive picture of how each model
 ### Quality of Field Variable Predictions  
 
 For more nuanced validation, predicted flow fields (e.g., surface pressure, velocity contours, turbulent kinetic energy) can be compared against CFD references. Visual inspections often confirm whether the GDL model reproduces key flow features like stagnation regions, vortical structures, and trailing wake patterns. While minor discrepancies may arise—especially in regions of high curvature or strong flow separation—the overall accuracy often proves sufficient for early-stage design exploration or parametric studies.
+
+Quantitative field-level validation typically involves computing pointwise error metrics across the surface or volume mesh. A common approach is to evaluate the normalized root-mean-square error (NRMSE) for a field variable $\phi$ (e.g., surface pressure coefficient $C_p$):
+
+$$\text{NRMSE}(\phi) = \frac{\sqrt{\frac{1}{N}\sum_{i=1}^{N}(\phi_i^{\text{pred}} - \phi_i^{\text{ref}})^2}}{\phi_{\max}^{\text{ref}} - \phi_{\min}^{\text{ref}}}$$
+
+Spatial error maps—computed as $\Delta\phi(\mathbf{x}) = \phi^{\text{pred}}(\mathbf{x}) - \phi^{\text{ref}}(\mathbf{x})$—are especially useful for identifying systematic prediction weaknesses. For example, consistently high errors near the A-pillar or in the rear wake indicate that the network struggles with separated flow regions and may benefit from additional training data or architectural changes in those areas.
 
 ### Setting Up the Problem
 

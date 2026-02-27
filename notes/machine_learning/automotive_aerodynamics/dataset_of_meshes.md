@@ -16,6 +16,16 @@ Once the design space is defined, the next consideration is how to pick the geom
 
 A robust sampling approach only pays off if each mesh is created with enough resolution and minimal distortion. Detailed features like sharp edges, underbody details, and boundary layer regions near the vehicle’s skin can significantly alter drag, lift, and separation patterns. Many engineers refine meshes more aggressively in these sensitive zones, a process sometimes referred to as local refinement. The shape and size of each cell matter, because poorly shaped (e.g., high skew or aspect ratio) elements can degrade both simulation stability and accuracy. Ensuring consistent mesh resolution across the entire dataset reduces variability caused by differing mesh standards instead of true aerodynamic differences.
 
+Two commonly monitored cell quality metrics are:
+
+- **Equiangle Skewness**: Measures how far a cell’s angles deviate from those of an ideal element (equilateral triangle in 2D, regular tetrahedron in 3D):
+
+$$S_{\text{eq}} = \max\!\left(\frac{\theta_{\max} - \theta_{\text{ideal}}}{180° - \theta_{\text{ideal}}},\; \frac{\theta_{\text{ideal}} - \theta_{\min}}{\theta_{\text{ideal}}}\right)$$
+
+where $\theta_{\max}$ and $\theta_{\min}$ are the largest and smallest angles in the cell. Values range from 0 (ideal) to 1 (degenerate); cells with $S_{\text{eq}} > 0.85$ should typically be flagged or removed.
+
+- **Aspect Ratio**: The ratio of the longest cell edge (or dimension) to the shortest. In boundary-layer regions, high aspect ratios are intentional (thin, stretched cells aligned with the flow), but in the free stream, values above 100 can degrade solver convergence.
+
 ![design space distribution](https://github.com/djeada/Computational-Fluid-Dynamics-CFD-Resources/assets/37275728/bfe914f2-1543-458e-9f4f-06aa8cff871c)
 
 A simple ASCII diagram can illustrate how local refinement fits into a typical mesh generation process:

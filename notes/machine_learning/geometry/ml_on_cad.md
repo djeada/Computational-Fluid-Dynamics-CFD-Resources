@@ -142,7 +142,11 @@ Building a text-to-CAD pipeline requires careful preparation at each stage:
 2. **Extract geometric and topological features**: Compute surface area, volume, curvature distributions, and edge-face connectivity graphs. Normalize features so models of different scales are comparable.
 3. **Choose NLP models for text-to-geometry mapping**: Use pretrained embeddings (Word2Vec, BERT) to encode design descriptions. Fine-tune on domain-specific vocabulary (e.g., "fillet," "chamfer," "draft angle") to improve semantic alignment.
 4. **Select a generative architecture**: GANs produce sharp, realistic geometries but can be unstable to train. VAEs offer smoother latent spaces and easier interpolation between shapes. Evaluate both on your dataset before committing.
-5. **Set up training pipelines**: Define loss functions that combine reconstruction accuracy (Chamfer distance, Earth Mover's distance) with text-alignment terms. Use learning rate schedules, gradient clipping, and checkpoint saving to stabilize long training runs.
+5. **Set up training pipelines**: Define loss functions that combine reconstruction accuracy (Chamfer distance, Earth Mover's distance) with text-alignment terms. Use learning rate schedules, gradient clipping, and checkpoint saving to stabilize long training runs. The Chamfer distance between two point sets $S_1$ and $S_2$ is defined as:
+
+   $$d_{\text{CD}}(S_1, S_2) = \frac{1}{|S_1|}\sum_{x \in S_1} \min_{y \in S_2} \|x - y\|^2 + \frac{1}{|S_2|}\sum_{y \in S_2} \min_{x \in S_1} \|y - x\|^2$$
+
+   This bidirectional metric penalizes both missing geometry and spurious additions, making it well suited for evaluating generated CAD shapes against reference models.
 6. **Validate generated geometries**: Check outputs against engineering constraints such as watertight meshes, minimum wall thickness, and manufacturability rules. Automate validation with scripted checks before passing models downstream.
 
 ## Key Takeaways
