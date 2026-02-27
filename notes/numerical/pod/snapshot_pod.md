@@ -103,3 +103,21 @@ The main advantage of Snapshot POD is computational efficiency, especially when 
 Both Snapshot and Direct POD methods yield the same set of significant modes (limited by $\min(m,n)$). If $m<n$, some modes from the direct method would correspond to zero eigenvalues and be physically irrelevant. Snapshot POD naturally avoids dealing with those irrelevant modes due to its truncated dimension. Additionally:
 
 - The sign of the modes (or time coefficients) may differ between methods. This is inconsequential, as a negative sign can be absorbed either in the mode shape or the coefficient. The physics (energy, variance captured) remains the same.
+
+## Purpose in CFD
+
+In high-fidelity CFD the spatial dimension $n$ (millions of grid points) far exceeds the number of snapshots $m$ (hundreds or thousands). Snapshot POD avoids forming the huge $n \times n$ covariance matrix by instead working with the much smaller $m \times m$ correlation matrix, making the eigenvalue decomposition tractable. This note explains both Snapshot POD methods, the normalization step needed to recover spatial modes, and the computational savings.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Snapshot matrix $\mathbf{U} \in \mathbb{R}^{m \times n}$ with $m \ll n$ |
+| **Outputs** | Correlation matrix $\mathbf{C}_s \in \mathbb{R}^{m \times m}$, eigenvalues (same as Direct POD), temporal modes $A_s$, spatial modes $\boldsymbol{\Phi}_s = \mathbf{U}^T A_s$ (after normalization) |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/snapshot_pod/main.py` | Implements Snapshot POD on spatio-temporal flow data, forming the $m \times m$ correlation matrix. |
+| `scripts/algorithms/pod/main.py` | Standard POD via SVD for comparison with the Snapshot POD approach. |

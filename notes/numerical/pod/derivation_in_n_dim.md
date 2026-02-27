@@ -327,3 +327,22 @@ $$
 ## Refrences
 
 These notes are inspired by Julien Weiss's "A Tutorial on the Proper Orthogonal Decomposition," presented at the 2019 AIAA Aviation Forum in Dallas, Texas.
+
+## Purpose in CFD
+
+This note extends the 2-D POD derivation to N dimensions, which is the form used in practical CFD applications. It explains how to build the snapshot matrix $\mathbf{U}$ from PIV or simulation data, compute the $m \times m$ covariance matrix (efficient when $m \ll n$), extract eigenvalues and modes, and reconstruct the original field. The procedure applies directly to velocity, pressure, or any scalar field.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Snapshot matrix $\mathbf{U} \in \mathbb{R}^{m \times n}$ (rows = time instants, columns = spatial points), number of modes to retain |
+| **Outputs** | Eigenvalues $\lambda_k$, spatial modes, temporal coefficients, energy distribution, truncated reconstruction |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | Standard POD implementation using SVD on an $m \times n$ snapshot matrix. |
+| `scripts/algorithms/snapshot_pod/main.py` | Snapshot POD variant that works with the $m \times m$ correlation matrix for efficiency. |
+| `scripts/plots/longitudinal_velocity_fluctuations_and_projections/main.py` | Plots turbulent velocity fluctuations and their projection onto principal components (POD modes). |

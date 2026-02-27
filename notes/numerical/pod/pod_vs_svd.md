@@ -100,3 +100,21 @@ Below is a structured comparison of POD, Snapshot POD, and SVD-based methods for
 - **Interpreting Results**:
 
 The singular values $\sigma_i$ inform the significance of each mode. Modes corresponding to larger $\sigma_i$ (or eigenvalues $\sigma_i^2/(m-1)$) represent directions in which the data vary most. Truncating small $\sigma_i$ yields a reduced model retaining the dominant dynamics.
+
+## Purpose in CFD
+
+This note clarifies the mathematical relationship between POD and SVD. It shows that the eigenvalues from POD equal $\sigma_i^2/(m-1)$, the right singular vectors of $\mathbf{U}$ are the spatial modes, and the left singular vectors are the temporal modes. Understanding this equivalence helps practitioners choose the most efficient computational path and interpret results from different software implementations.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Snapshot matrix $\mathbf{U} \in \mathbb{R}^{m \times n}$ (mean-subtracted) |
+| **Outputs** | SVD factorization $\mathbf{U} = \mathbf{L}\mathbf{\Sigma}\mathbf{R}^T$, singular values $\sigma_i$, equivalence to POD eigenvalues $\lambda_i = \sigma_i^2/(m-1)$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | Uses `numpy.linalg.svd` to perform POD, directly demonstrating the SVD–POD equivalence. |
+| `scripts/algorithms/image_compression_using_svd/main.py` | Applies truncated SVD for image compression, illustrating how singular value truncation works in practice. |

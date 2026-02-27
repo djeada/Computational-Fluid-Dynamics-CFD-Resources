@@ -189,3 +189,25 @@ III. **Contemporary Research**:
 
 - Rowley, C.W., Dawson, S.T.M.: "Model reduction for flow analysis and control." Annual Review of Fluid Mechanics (2017) provides an overview of POD and related techniques.
 - Taira, K. et al.: "Modal Analysis of Fluid Flows: An Overview." AIAA Journal (2017) discusses POD, DMD, and other modal decomposition methods.
+
+## Purpose in CFD
+
+POD is the foundational technique for Reduced-Order Modeling in CFD. By extracting the most energetic spatial modes from high-dimensional simulation data, POD compresses flow fields from millions of degrees of freedom to a handful of modes. The resulting Reduced-Order Model (ROM) can replace full Navier–Stokes solves in optimization, control, uncertainty quantification, and real-time applications.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Snapshot matrix $\mathbf{X} \in \mathbb{R}^{M \times N}$ (each column is a flow field at one time/parameter), number of retained modes $r$, energy threshold (e.g., 99%) |
+| **Outputs** | POD modes $\boldsymbol{\Phi}_1, \dots, \boldsymbol{\Phi}_r$, eigenvalues $\lambda_i$ (energy per mode), temporal coefficients $a_j(t)$, reconstructed fields $\mathbf{u} \approx \bar{\mathbf{u}} + \sum a_j \boldsymbol{\Phi}_j$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | Performs standard POD via SVD on spatio-temporal flow data and extracts dominant modes. |
+| `scripts/algorithms/snapshot_pod/main.py` | Implements the Snapshot POD variant for large spatial dimensions. |
+| `scripts/plots/pod_analysis_for_flow_fields/main.py` | Plots POD eigenvalue spectra and turbulent kinetic energy distribution across modes. |
+| `scripts/plots/pod_modes_2d/main.py` | Visualizes 2-D POD spatial modes and their temporal coefficients. |
+| `scripts/plots/pod_modes_and_temporal_coefficients/main.py` | Displays the first three POD modes alongside their time-dependent coefficients. |
+| `scripts/algorithms/image_compression_using_svd/main.py` | Demonstrates truncated SVD (the mathematical core of POD) for image compression. |

@@ -166,3 +166,21 @@ Extending Gappy POD to nonlinear manifolds or using kernel POD or autoencoder-ba
 IV. **Data Assimilation in Complex Multiphysics Problems**:
 
 Combining Gappy POD with advanced data assimilation frameworks (e.g., Ensemble Kalman Filters) to merge incomplete experimental or field data with high-fidelity simulations, improving model predictions and uncertainty quantification.
+
+## Purpose in CFD
+
+In experiments and sensor-limited environments, full-field data are rarely available. Gappy POD reconstructs complete flow fields from sparse or incomplete measurements by leveraging a pre-computed POD basis. This is critical for data assimilation in CFD, where partial sensor readings (e.g., a few pressure taps on an airfoil) must be combined with simulation-derived modes to estimate the full pressure or velocity field.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Partial measurements $Y = [y(x^{(1)}), \dots, y(x^{(N)})]^T$, POD modes $\{\psi_j\}_{j=1}^L$ (from a complete database), sample locations $x^{(i)}$ |
+| **Outputs** | Reconstructed coefficients $\Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T Y$, full-field approximation $\hat{y}(x) = \sum a_j \psi_j(x)$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/algorithms/pod/main.py` | Provides the POD basis that Gappy POD uses for reconstruction. |
+| `scripts/algorithms/snapshot_pod/main.py` | Alternative basis-computation method applicable to the Gappy POD workflow. |
