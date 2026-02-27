@@ -74,3 +74,20 @@ print("Simulation complete.")
 - The approach employs straightforward techniques such as bounce-back and immersed boundary methods, which lead to *simplified boundary conditions* that ease the handling of complex geometries.
 These characteristics make LBM appealing for modern applications requiring fast, scalable simulations.
 
+
+## Purpose in CFD
+
+This note addresses common practical questions about LBM: it clarifies that LBM uses a structured lattice (not meshless), highlights real-world applications (porous media, biomedical flows, automotive aerodynamics), provides a minimal Python implementation snippet, and summarizes the computational advantages (parallelization, simple boundary handling) that make LBM attractive for modern CFD.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Lattice dimensions $n_x \times n_y$, number of iterations, relaxation parameter $\omega$, initial distribution functions $f_i$ |
+| **Outputs** | Density field $\rho$, velocity field, boundary-enforced solution, convergence status |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lattice_boltzmann_cylinder_flow/main.py` | Production-level LBM script for 2-D cylinder flow, complementing the simplified snippet shown in this note. |

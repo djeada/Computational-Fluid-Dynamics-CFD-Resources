@@ -205,3 +205,20 @@ Below is a schematic diagram illustrating the hierarchy of models and the role o
 ```
 
 *The diagram emphasizes how the Lattice-Boltzmann method sits at the mesoscopic level, bridging microscopic particle dynamics and macroscopic fluid behavior.*
+
+## Purpose in CFD
+
+The Boltzmann equation is the kinetic-theory foundation of the Lattice Boltzmann Method. This note defines the distribution function $f(\xi, x, t)$, derives the Boltzmann transport equation (advection + external forces + collisions), introduces the BGK collision model, and shows how macroscopic quantities (density, momentum, pressure) emerge as moments of $f$. Understanding these concepts is essential before discretizing the equation on a lattice.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Distribution function $f(\xi, x, t)$, external force $F$, collision kernel $g(\mathbf{v}, \Omega)$, relaxation time $\tau$ |
+| **Outputs** | Macroscopic density $\rho = \int f\,d^3\xi$, momentum $\rho\mathbf{u} = \int \xi f\,d^3\xi$, pressure tensor (second moment), equilibrium distribution $f^{\text{eq}}$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lattice_boltzmann_cylinder_flow/main.py` | Implements the BGK collision operator and moment calculations described in this note for 2-D cylinder flow. |

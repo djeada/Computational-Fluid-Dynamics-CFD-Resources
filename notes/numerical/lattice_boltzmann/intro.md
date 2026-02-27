@@ -188,3 +188,20 @@ From reality to simulation:
 - Move from **physical models** (conceptual) to **mathematical models** (equations).
 - Convert equations into **numerical models** suitable for computation.
 - **Simulation** solves these models, while **verification** makes sure numerical correctness and **validation** checks physical realism.
+
+## Purpose in CFD
+
+This note motivates the Lattice Boltzmann Method (LBM) by reviewing the challenges of solving the Navier–Stokes equations directly: nonlinearity, complex meshes, and the pressure Poisson equation. It introduces the hierarchy of modeling scales (microscopic → mesoscopic → macroscopic) and positions LBM as a mesoscopic alternative that bridges molecular dynamics and continuum CFD.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Physical domain, flow regime (Reynolds number), choice of modeling scale, boundary complexity assessment |
+| **Outputs** | Justification for choosing LBM vs. traditional CFD, understanding of scale hierarchy (molecular → Boltzmann → Navier–Stokes) |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lattice_boltzmann_cylinder_flow/main.py` | Complete LBM simulation of 2-D cylinder flow at Re = 350, demonstrating the mesoscopic approach introduced in this note. |

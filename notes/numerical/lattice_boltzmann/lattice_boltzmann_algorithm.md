@@ -382,3 +382,20 @@ Post-processing involves:
 
 - Optimize memory layout (SoA vs AoS), cache usage, and vectorization.
 - Use MPI or OpenMP for parallelization.
+
+## Purpose in CFD
+
+This note is a comprehensive implementation guide for the LBM algorithm. It covers every practical step: problem setup, discrete velocity selection (D2Q9/D3Q19), data-structure initialization, the collision and streaming loops, boundary-condition enforcement (bounce-back, inflow/outflow), macroscopic variable extraction, and post-processing/validation. It also discusses advanced topics such as Hermite expansions, viscosity–relaxation-time relations, and extensions to thermal and turbulent flows.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Domain size $N_x \times N_y$, lattice spacing $\Delta x$, time step $\Delta t$, relaxation time $\tau$, initial density $\rho_0$ and velocity $\mathbf{u}_0$, boundary condition types, maximum iterations $T_{\max}$ |
+| **Outputs** | Density field $\rho(x,t)$, velocity field $\mathbf{u}(x,t)$, pressure (from $\rho$), vorticity, residual/convergence history, saved fields for visualization (VTK/HDF5) |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lattice_boltzmann_cylinder_flow/main.py` | Full LBM implementation for 2-D cylinder flow (Re = 350) following the algorithm steps described here. |

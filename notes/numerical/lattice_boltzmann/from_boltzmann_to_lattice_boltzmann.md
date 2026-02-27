@@ -226,3 +226,20 @@ Below is a schematic diagram summarizing the process from the Boltzmann equation
 
 ```
 
+
+## Purpose in CFD
+
+This note details how the continuous Boltzmann equation is discretized into the Lattice Boltzmann Equation (LBE). It covers the three discretization steps—space ($\Delta x$), time ($\Delta t$), and velocity (finite set $\{c_i\}$)—introduces common velocity sets (D2Q9, D3Q19), and derives the collision, streaming, and macroscopic-variable-extraction steps. The Maxwell–Boltzmann equilibrium distribution and the Chapman–Enskog link to the NSE are also presented.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Lattice spacing $\Delta x$, time step $\Delta t$, discrete velocity set (e.g., D2Q9), relaxation time $\tau$, initial/boundary conditions |
+| **Outputs** | Post-collision distributions $f_i^{\text{post}}$, streamed distributions, macroscopic density $\rho = \sum_i f_i$, velocity $\mathbf{u} = \sum_i c_i f_i / \rho$ |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lattice_boltzmann_cylinder_flow/main.py` | Implements the D2Q9 collision and streaming steps derived in this note for 2-D flow past a cylinder. |
