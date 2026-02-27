@@ -125,3 +125,22 @@ The linearized form of the governing equations is solved at each time step, grad
 
 - Iterative Convergence:  
 As the time steps progress, the solution iterates converge toward a steady state. In this context, the iterative process not only handles nonlinear terms and matrix inversion but also makes sure that the temporary behavior decays, leaving behind a stable, steady solution.
+
+## Purpose in CFD
+
+After discretization the governing equations reduce to a large algebraic system $Ax = b$. This note explains **direct solvers** (Gaussian elimination, LU decomposition) suitable for small systems, and **iterative solvers** (Conjugate Gradient, GMRES) preferred for the large, sparse matrices typical of CFD. It also covers parallelization strategies and the role of grid convergence in verifying the discrete solution.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Coefficient matrix $A$ (sparse), right-hand-side vector $b$, initial guess $u_g$, convergence tolerance, grid spacing $\Delta x$ |
+| **Outputs** | Solution vector $x$ (nodal values of velocity, pressure, etc.), residual history, comparison with exact solutions |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/backward_facing_step_simple/main.py` | Uses the SIMPLE iterative algorithm to solve the coupled pressure–velocity system on a 2-D grid. |
+| `scripts/plots/numerical_vs_exact_solution/main.py` | Compares discrete and exact solutions, visualizing the truncation error discussed in this note. |
+| `scripts/plots/comparing_grid_convergence/main.py` | Plots solution accuracy versus grid resolution, demonstrating the grid convergence analysis described here. |
