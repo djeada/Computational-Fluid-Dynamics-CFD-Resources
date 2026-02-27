@@ -2,7 +2,14 @@
 
 This script implements Proper Orthogonal Decomposition (POD) on synthetic spatio-temporal flow data using Singular Value Decomposition (SVD). It extracts dominant spatial modes and their corresponding temporal coefficients to reveal the most energetically significant structures in a flow field.
 
-## Mathematical Foundation
+## Overview
+
+- Generates synthetic 3D spatio-temporal flow data using trigonometric functions.
+- Constructs a snapshot matrix and applies mean-subtraction to center the data.
+- Performs POD via SVD to extract spatial modes and temporal coefficients.
+- Visualizes the leading modes and their time evolution side by side.
+
+## Mathematical Background
 
 POD seeks an optimal low-dimensional basis for representing a dataset. Given a snapshot matrix $U \in \mathbb{R}^{N \times M}$ (where $N$ is the number of spatial points and $M$ is the number of time snapshots), POD is computed via the SVD:
 

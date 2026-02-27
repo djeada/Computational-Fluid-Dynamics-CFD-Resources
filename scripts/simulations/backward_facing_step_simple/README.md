@@ -2,17 +2,19 @@
 
 This script simulates 2D incompressible viscous flow over a backward-facing step using the SIMPLE (Semi-Implicit Method for Pressure-Linked Equations) algorithm. It is a classic benchmark problem in computational fluid dynamics for validating flow solvers in the presence of separated flow and reattachment.
 
-## Problem Description
+## Overview
 
-A fluid with a parabolic inlet velocity profile enters a channel and encounters a sudden expansion (the backward-facing step). The flow separates at the step corner and reattaches downstream, forming a recirculation zone whose length depends on the Reynolds number:
+- Models steady 2D incompressible Navier-Stokes flow on a staggered MAC grid.
+- Uses the SIMPLE pressure-velocity coupling algorithm with Gauss-Seidel SOR iterations.
+- Applies a parabolic inlet velocity profile and enforces no-slip on walls and the step face.
+- Monitors momentum residuals and global mass imbalance for convergence.
+- Renders a live plot of the velocity magnitude field, residual history, and mass imbalance.
 
-$$Re = \frac{\rho U_{avg} H}{\mu}$$
+## Mathematical Background
 
-where $H$ is the channel height upstream of the step, $U_{avg}$ is the mean inlet velocity, $\rho$ is the fluid density, and $\mu$ is the dynamic viscosity.
+### Governing Equations
 
-## Governing Equations
-
-The 2D steady incompressible Navier-Stokes equations in conservative form:
+The 2D steady incompressible Navier-Stokes equations:
 
 **Continuity**:
 $$\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} = 0$$
@@ -23,29 +25,28 @@ $$\rho \left( u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y} 
 **Momentum** ($y$-component):
 $$\rho \left( u \frac{\partial v}{\partial x} + v \frac{\partial v}{\partial y} \right) = -\frac{\partial p}{\partial y} + \mu \left( \frac{\partial^2 v}{\partial x^2} + \frac{\partial^2 v}{\partial y^2} \right)$$
 
-## Numerical Method
+### Reynolds Number
 
-The solver uses a staggered grid (MAC arrangement) and the SIMPLE pressure-velocity coupling algorithm:
+The flow regime is characterised by the Reynolds number:
 
-1. **Predictor step**: Solve the discretized momentum equations (using hybrid upwind/central differencing) to obtain intermediate velocities $u^*$ and $v^*$.
-2. **Pressure correction**: Solve a Poisson equation for the pressure correction $p'$ that enforces continuity.
-3. **Corrector step**: Update velocities and pressure using $p'$ to satisfy the divergence-free constraint.
-4. **Repeat** until momentum residuals and the global mass imbalance fall below convergence thresholds.
+$$Re = \frac{\rho U_{avg} H}{\mu}$$
 
-The linear systems are solved iteratively using a Gauss-Seidel SOR (Successive Over-Relaxation) sweep.
+where $H$ is the upstream channel height and $U_{avg}$ is the mean inlet velocity.
 
-## Boundary Conditions
+## Implementation
 
-- **Inlet** (left): Parabolic velocity profile $u_{in}(y)$ on the open portion above the step; no-penetration ($v = 0$).
-- **Outlet** (right): Zero-gradient for velocity ($\partial u / \partial x = 0$); pressure correction set to zero ($p' = 0$).
-- **Walls** (top and bottom): No-slip ($u = v = 0$).
-- **Step face**: No-slip enforced via the solid mask.
+1. **Geometry Masks**: Boolean arrays mark fluid and solid cells for the pressure, $u$, and $v$ grids on the staggered MAC arrangement.
+2. **Predictor Step**: Discretized momentum equations (hybrid upwind/central differencing) are assembled and solved with Gauss-Seidel SOR to obtain intermediate velocities $u^*$ and $v^*$.
+3. **Pressure Correction**: A Poisson equation for the pressure correction $p'$ is solved to enforce continuity, with $p' = 0$ enforced at the outlet.
+4. **Corrector Step**: Velocities and pressure are updated using $p'$ to satisfy the divergence-free constraint.
+5. **Convergence Check**: Iteration stops when momentum residuals drop three orders of magnitude and mass imbalance falls below 0.5%.
+6. **Live Visualization**: Every `plot_interval` iterations, the velocity magnitude field, residuals, and mass imbalance are updated on an interactive Matplotlib figure.
 
 ## Output
 
-The script renders a live interactive plot containing:
+The script renders a live interactive figure containing:
 - **Velocity magnitude field** with quiver arrows showing the flow direction.
-- **Residual history** (u, v, and pressure residuals on a log scale).
+- **Residual history** ($u$, $v$, and pressure residuals on a log scale).
 - **Global mass imbalance** history (percentage of inlet flux).
 
 ## Running the Script

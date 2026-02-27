@@ -2,7 +2,15 @@
 
 This script implements the Snapshot POD method on synthetic spatio-temporal flow data. Unlike the direct SVD-based POD, the Snapshot POD computes modes by solving an eigenvalue problem in the smaller time domain, making it computationally efficient when the number of snapshots is much smaller than the number of spatial points.
 
-## Mathematical Foundation
+## Overview
+
+- Generates synthetic 3D spatio-temporal flow data using trigonometric functions.
+- Constructs a snapshot matrix and applies mean-subtraction to center the data.
+- Assembles and solves the temporal covariance eigenvalue problem to obtain time coefficients.
+- Recovers spatial modes by projecting the data onto the temporal eigenvectors and normalizes them.
+- Visualizes the leading modes and their time evolution side by side.
+
+## Mathematical Background
 
 Given a centered snapshot matrix $\tilde{U} \in \mathbb{R}^{N \times M}$ (where $N$ is the number of spatial points and $M$ is the number of snapshots), the Snapshot POD forms the temporal covariance matrix:
 
@@ -14,13 +22,15 @@ $$C_s \mathbf{a}_i = \lambda_i \mathbf{a}_i$$
 
 where $\lambda_i$ are the eigenvalues (proportional to the energy of each mode) and $\mathbf{a}_i$ are the temporal eigenvectors, ordered by decreasing eigenvalue.
 
+### Spatial Mode Recovery
+
 The spatial modes are recovered by projecting the data onto the temporal eigenvectors:
 
 $$\boldsymbol{\phi}_i = \tilde{U} \mathbf{a}_i$$
 
 The modes are then normalized so that $\|\boldsymbol{\phi}_i\| = 1$.
 
-### Advantages of Snapshot POD
+### Advantages over Direct POD
 
 When $M \ll N$ (many spatial points, few snapshots), forming $C_s \in \mathbb{R}^{M \times M}$ is far cheaper than the direct POD covariance matrix $C \in \mathbb{R}^{N \times N}$. Both approaches yield identical spatial modes.
 
