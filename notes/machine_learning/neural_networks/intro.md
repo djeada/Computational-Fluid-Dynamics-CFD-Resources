@@ -1,5 +1,7 @@
 ## Neural Networks in Aerodynamics  
 
+High-fidelity CFD simulations for aerodynamic analysis are computationally expensive, often requiring hours to days per design variant on HPC clusters. This cost limits the number of designs that can be evaluated during optimization. Neural networks offer a way to build fast surrogate models that approximate the mapping from geometry and flow conditions to aerodynamic quantities, enabling rapid exploration of large design spaces at a fraction of the computational cost.
+
 Neural networks in computational fluid dynamics (CFD) blend powerful machine-learning algorithms with physics-based simulation methods. This fusion paves the way for faster and more efficient aerodynamic calculations, unveiling new flow phenomena, accelerating shape optimization, and handling large-scale design tasks. While traditional CFD remains indispensable for high-fidelity simulations in industry, neural networks are reshaping the landscape by offering novel capabilities: reduced computational cost, rapid prototyping, and near real-time flow predictions for complex geometries and operating conditions.
 
 ### Advances in Neural Networks for CFD  
@@ -250,3 +252,26 @@ Mathematically, multi-scale GNNs construct a hierarchy of graphs $G_0, G_1, \dot
 Neural networks, particularly those informed by physics and geometry, are gradually taking root in aerodynamic design workflows. From parametric morphing strategies to advanced GNNs, there is a clear trajectory toward faster, data-driven surrogates that preserve essential fluid physics. Challenges remain, including the cost of data generation, the risk of losing fine geometric details, and ensuring robust out-of-distribution performance.
 
 In the near future, hybrid solvers may become more common—part neural net, part traditional CFD—where neural corrections accelerate or refine parts of the domain. Incorporating real sensor data could also help networks adapt to real-world conditions. For the moment, neural networks serve as a powerful companion to classical CFD, enabling engineers and researchers to explore broader design spaces, investigate novel concepts, and expedite the quest for aerodynamic efficiency. As mathematical techniques and computational resources advance, the synergy between machine learning and fluid dynamics will continue to shape the next generation of aerodynamic optimization and analysis.
+
+### Setting Up the Problem
+
+To apply neural networks to aerodynamic prediction, a structured workflow is essential:
+
+1. **Define Input/Output Pairs**: Identify the mapping to learn, e.g., geometry parameters and flow conditions $(\mathbf{p}, Re, M)$ as inputs and aerodynamic quantities $(C_d, C_l, \text{flow fields})$ as outputs.
+2. **Choose the Modeling Approach**: Decide between physics-informed (PINNs), purely data-driven, or hybrid strategies based on available data volume and accuracy requirements.
+3. **Prepare Training Data from CFD**: Run a set of high-fidelity simulations covering the design space of interest. Use efficient sampling strategies (Latin hypercube, Bayesian optimization) to minimize the number of required runs.
+4. **Select Network Architecture**: Match the architecture to the data representation—CNNs for voxelized or image-based fields, GNNs for unstructured meshes, or autoencoders for dimensionality reduction of complex geometries.
+5. **Train and Validate the Model**: Split data into training, validation, and test sets. Monitor generalization error and use regularization (dropout, weight decay) to prevent overfitting. Validate predictions against held-out CFD results.
+6. **Integrate into Design Workflows**: Deploy the trained surrogate within optimization loops, sensitivity analyses, or real-time feedback systems, replacing or augmenting full CFD evaluations where speed is critical.
+
+Starting with a well-scoped problem—such as predicting $C_d$ for a parametric airfoil family—before scaling to more complex geometries and flow regimes is a practical way to build confidence in the approach.
+
+### Key Takeaways
+
+- High-fidelity CFD is accurate but computationally expensive; neural network surrogates can reduce evaluation time from hours to milliseconds once trained.
+- Physics-informed approaches (PINNs) embed governing equations into the loss function, improving generalization with limited data.
+- Purely data-driven models require large, high-quality datasets but can learn complex input-output mappings without explicit PDE formulations.
+- Architecture choice matters: CNNs suit grid-based data, GNNs handle unstructured meshes, and autoencoders compress high-dimensional geometries into manageable latent spaces.
+- Training data generation remains the primary bottleneck; efficient sampling and active learning strategies are essential to control costs.
+- Neural networks are best used as complements to traditional CFD—accelerating design exploration, not replacing rigorous validation.
+- Ensuring robust out-of-distribution performance and quantifying prediction uncertainty are open challenges that must be addressed before deploying surrogates in safety-critical applications.
