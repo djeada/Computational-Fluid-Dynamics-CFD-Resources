@@ -17,12 +17,15 @@ This script simulates 2D incompressible viscous flow over a backward-facing step
 The 2D steady incompressible Navier-Stokes equations:
 
 **Continuity**:
+
 $$\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} = 0$$
 
 **Momentum** ($x$-component):
+
 $$\rho \left( u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y} \right) = -\frac{\partial p}{\partial x} + \mu \left( \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} \right)$$
 
 **Momentum** ($y$-component):
+
 $$\rho \left( u \frac{\partial v}{\partial x} + v \frac{\partial v}{\partial y} \right) = -\frac{\partial p}{\partial y} + \mu \left( \frac{\partial^2 v}{\partial x^2} + \frac{\partial^2 v}{\partial y^2} \right)$$
 
 ### Reynolds Number

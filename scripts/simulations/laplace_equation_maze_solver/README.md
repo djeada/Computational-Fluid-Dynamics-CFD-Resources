@@ -45,7 +45,7 @@ $$\text{color} \propto \left(\frac{\phi+1}{2}\right)$$
 
 1. Build a perfect maze on an $N\times N$ grid using a depth-first recursive backtracker; mark walls and passages.
 2. Assign boundary potentials: $\phi=0$ (entrance), $\phi=1$ (exit), $\phi=-1$ (walls).
-3. Iteratively apply the finite-difference relaxation stencil to all open interior cells until convergence ($\max|\Delta\phi|<10^{-6}$) or 5000 iterations.
+3. Iteratively apply the finite-difference relaxation stencil to all open interior cells until convergence ($\max|\Delta\phi| < 10^{-6}$) or 5000 iterations.
 4. Perform gradient ascent from the entrance: at each step move to the open neighbor with the largest $\phi$.
 5. Each frame: extend the visible gold path by one step and redraw the full maze with current $\phi$ colors.
 6. Continue until the path reaches the exit or the window is closed.

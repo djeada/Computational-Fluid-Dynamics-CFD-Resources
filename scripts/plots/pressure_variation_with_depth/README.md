@@ -16,8 +16,8 @@ $$P(h) = P_0 + \rho g h$$
 
 where:
 - $P_0$ — atmospheric pressure at the free surface (Pa),
-- $\rho$ — fluid density (kg/m³),
-- $g$ — gravitational acceleration (m/s²),
+- $\rho$ — fluid density (kg/m$^3$),
+- $g$ — gravitational acceleration (m/s$^2$),
 - $h$ — depth below the free surface (m).
 
 ### Derivation
@@ -26,7 +26,7 @@ This relationship is derived from the condition of static equilibrium applied to
 
 $$\frac{dP}{dh} = \rho g$$
 
-Integrating from the surface downward yields the linear pressure profile above. For water ($\rho = 1000$ kg/m³) and standard gravity ($g = 9.81$ m/s²), the pressure increases by approximately $9810$ Pa per metre of depth.
+Integrating from the surface downward yields the linear pressure profile above. For water ($\rho = 1000$ kg/m$^3$) and standard gravity ($g = 9.81$ m/s$^2$), the pressure increases by approximately $9810$ Pa per metre of depth.
 
 ## Implementation
 
@@ -40,8 +40,8 @@ The `plot_pressure_variation_with_depth` function accepts the following keyword 
 
 | Parameter       | Default | Description                          |
 |-----------------|---------|--------------------------------------|
-| `fluid_density` | 1000    | Fluid density in kg/m³               |
-| `g`             | 9.81    | Gravitational acceleration in m/s²   |
+| `fluid_density` | 1000    | Fluid density in kg/m$^3$               |
+| `g`             | 9.81    | Gravitational acceleration in m/s$^2$   |
 | `max_depth`     | 20      | Maximum depth to plot in metres       |
 
 ## Output

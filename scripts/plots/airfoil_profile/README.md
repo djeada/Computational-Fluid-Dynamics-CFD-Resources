@@ -29,6 +29,7 @@ $$t(x) = \frac{t_{\max}}{0.2}\!\left(0.2969\sqrt{\frac{x}{c}} - 0.1260\frac{x}{c
 Surface coordinates are offset from the camber line perpendicular to its local slope $\theta = \arctan(dy_c/dx)$:
 
 $$y_u = y_c + t\cos\theta, \qquad y_l = y_c - t\cos\theta$$
+
 $$x_u = x - t\sin\theta, \qquad x_l = x + t\sin\theta$$
 
 ## Implementation

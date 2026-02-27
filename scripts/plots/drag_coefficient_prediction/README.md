@@ -29,7 +29,7 @@ $$\min_{m,\,b}\sum_{i=1}^{N}\!\left(C_{d,pred,i} - m\,C_{d,i} - b\right)^2$$
 
 The analytical solution is $m = \frac{\sum(C_d - \bar{C}_d)(C_{d,pred} - \overline{C_{d,pred}})}{\sum(C_d - \bar{C}_d)^2}$, $b = \overline{C_{d,pred}} - m\bar{C}_d$.
 
-### Perfect Prediction and R²
+### Perfect Prediction and $R^2$
 
 A perfect model satisfies $C_{d,pred} = C_d$ (slope = 1, intercept = 0). The coefficient of determination measures goodness of fit:
 

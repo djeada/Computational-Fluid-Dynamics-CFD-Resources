@@ -6,8 +6,8 @@ This script draws a stylised 2D cross-section of a ship hull together with a fre
 
 - Renders a schematic hull cross-section below a sinusoidal free surface
 - Annotates the Froude number formula directly on the figure
-- Highlights the Kelvin wake half-angle of approximately 19.47°
-- Indicates the hull-speed Froude number of Fr ≈ 0.35 where wave resistance is minimised
+- Highlights the Kelvin wake half-angle of approximately $19.47^\circ$
+- Indicates the hull-speed Froude number of $Fr \approx 0.35$ where wave resistance is minimised
 
 ## Mathematical Background
 
@@ -27,7 +27,7 @@ $$Fr \approx 0.35 \quad \Longrightarrow \quad \text{minimum wave resistance}$$
 
 ### Kelvin Wake Angle
 
-$$\theta_K = \arcsin\!\left(\frac{1}{3}\right) \approx 19.47°$$
+$$\theta_K = \arcsin\!\left(\frac{1}{3}\right) \approx 19.47^\circ$$
 
 The Kelvin wake angle is universal: independent of ship speed for deep water.
 
@@ -41,6 +41,6 @@ The Kelvin wake angle is universal: independent of ship speed for deep water.
 
 ## Output
 
-The script displays a 2D schematic figure showing the hull cross-section submerged beneath a sinusoidal wave pattern. Annotations label the Froude number expression and the 19.47° Kelvin wake half-angle, providing an intuitive reference for free-surface CFD post-processing.
+The script displays a 2D schematic figure showing the hull cross-section submerged beneath a sinusoidal wave pattern. Annotations label the Froude number expression and the $19.47^\circ$ Kelvin wake half-angle, providing an intuitive reference for free-surface CFD post-processing.
 
 ![ship_hull_in_water](https://github.com/user-attachments/assets/f1265bd2-3b3c-4860-87a2-7a90a9fdc064)

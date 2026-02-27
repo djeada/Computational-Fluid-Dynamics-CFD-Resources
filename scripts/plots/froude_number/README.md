@@ -16,7 +16,7 @@ This script plots the Froude number as a function of flow velocity for four diff
 
 $$Fr = \frac{U}{\sqrt{gL}}$$
 
-where $U$ is the flow velocity (m/s), $g = 9.81$ m/s² is gravitational acceleration, and $L$ is the characteristic hull length (m).
+where $U$ is the flow velocity (m/s), $g = 9.81$ m/s$^2$ is gravitational acceleration, and $L$ is the characteristic hull length (m).
 
 ### Flow Regimes
 
