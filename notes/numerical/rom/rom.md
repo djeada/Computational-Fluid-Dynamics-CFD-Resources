@@ -163,6 +163,13 @@ III. **Software and Tutorials**:
 
 ROM replaces expensive full-order CFD solves with low-dimensional approximations. This note gives a complete overview of the ROM workflow: collect high-fidelity snapshots, build a POD basis, project the governing equations (Galerkin projection), and evaluate the resulting ODE system online for new parameters. ROM is essential for design optimization, uncertainty quantification, and real-time control of fluid systems.
 
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | High-fidelity CFD solver, parameter set $\mathcal{P}$, snapshots $\{u_h(\mu_i)\}$, reduction method (POD/greedy), error tolerance |
+| **Outputs** | Reduced basis $\{\zeta_n\}_{n=1}^N$, reduced system matrices, fast online evaluation $u_N(\mu)$ for new parameters, a posteriori error estimates |
+
 ## Related Python Scripts
 
 | Script | Description |
