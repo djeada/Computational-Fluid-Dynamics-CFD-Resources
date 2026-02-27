@@ -313,3 +313,23 @@ In the post-processing stage, we visualize the flow field data obtained from the
    - **Purpose**: Show levels of specific flow variables such as pressure or velocity, providing insight into the flow behavior.
 
 Effective post-processing helps in interpreting and analyzing the simulation results, facilitating better understanding and decision-making.
+
+## Purpose in CFD
+
+This note details the four-step CFD workflow: pre-processing (data structures, initial conditions), discretization (converting PDEs to algebraic equations), solving the linear system ($Ax = b$), and post-processing (visualization). It provides a practical roadmap for implementing any CFD solver and explains the concepts of grid convergence and solution accuracy.
+
+## Input / Output
+
+| Aspect | Details |
+|---|---|
+| **Inputs** | Domain geometry, grid spacing $\Delta x$, boundary conditions (Dirichlet, Neumann), fluid properties, initial field values (velocity $U$, $V$, pressure $P$) |
+| **Outputs** | Discrete solution arrays ($u_1, u_2, \dots, u_N$), residual history, converged velocity and pressure fields, contour and vector plots |
+
+## Related Python Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/simulations/lid_driven_cavity/main.py` | End-to-end CFD solver demonstrating all four steps of the CFD process for the lid-driven cavity problem. |
+| `scripts/simulations/backward_facing_step_simple/main.py` | SIMPLE-based solver showing pre-processing setup, iterative solving, residual monitoring, and post-processing visualization. |
+| `scripts/plots/numerical_vs_exact_solution/main.py` | Compares numerical and exact solutions, illustrating the accuracy discussion in Step 3. |
+| `scripts/plots/comparing_grid_convergence/main.py` | Demonstrates grid convergence by plotting solutions at different grid resolutions. |
