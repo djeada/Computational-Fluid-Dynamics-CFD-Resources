@@ -1,18 +1,21 @@
-## Incompressible Flow and Temperature Transport
+# Kelvin–Helmholtz Instability Simulation
 
-This simulation models a 2D incompressible fluid carrying a temperature field to illustrate the Kelvin–Helmholtz instability.  It combines the Navier–Stokes equations for velocity with an advection–diffusion equation for temperature.
+This simulation models a 2D incompressible fluid carrying a temperature field to illustrate the Kelvin–Helmholtz instability — the characteristic rolling vortices that form at the shear interface between fluid layers moving at different velocities.
 
-## Incompressible Navier–Stokes Equations
+## Overview
 
-The velocity field $\mathbf{u}(x,y,t) = (u,v)$ satisfies
+- **2D incompressible Navier–Stokes** solved with a projection (pressure-correction) method.
+- **Temperature advection–diffusion** coupled to the velocity field for visual contrast.
+- **Periodic boundary conditions** on all sides; instability seeded by sinusoidal velocity perturbations.
+- **Real-time color rendering**: temperature mapped to hue (blue = cold, red = hot).
 
-$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u} =
--\nabla p + \nu \nabla^2\mathbf{u},
-\quad
-\nabla\cdot\mathbf{u} = 0$$
+## Mathematical Background
 
-* $\nu$ is the kinematic viscosity.
-* $p(x,y,t)$ is the pressure, enforcing incompressibility.
+### Incompressible Navier–Stokes Equations
+
+The velocity field $\mathbf{u}=(u,v)$ satisfies:
+
+$$\frac{\partial\mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u} = -\nabla p + \nu\nabla^2\mathbf{u}, \quad \nabla\cdot\mathbf{u}=0$$
 
 ### Projection Method
 
@@ -20,54 +23,44 @@ I. **Advection**: backtrace fluid parcels along $\mathbf{u}$ and interpolate to 
 
 II. **Diffusion**: apply viscosity via the Laplacian:
 
-$$\mathbf{u}^{**} = \mathbf{u}^* + \nu \Delta t \nabla^2\mathbf{u}^*$$
+$$\mathbf{u}^{**} = \mathbf{u}^* + \nu\,\Delta t\,\nabla^2\mathbf{u}^*$$
 
-III. **Pressure solve**: find $p$ from
+III. **Pressure solve** from the Poisson equation, then correct velocity to enforce $\nabla\cdot\mathbf{u}=0$:
 
-$$\nabla^2 p = \frac{1}{\Delta t} \nabla\!\cdot\mathbf{u}^{**}$$
+$$\nabla^2 p = \frac{1}{\Delta t}\nabla\cdot\mathbf{u}^{**}, \quad \mathbf{u}^{n+1} = \mathbf{u}^{**} - \Delta t\,\nabla p$$
 
-then correct
+### Temperature Advection–Diffusion
 
-$$\mathbf{u}^{n+1} = \mathbf{u}^{**} - \Delta t \nabla p$$
+The scalar temperature $T(x,y,t)$ evolves by:
 
-## Temperature Advection–Diffusion
+$$\frac{\partial T}{\partial t} + (\mathbf{u}\cdot\nabla)T = D\,\nabla^2 T$$
 
-The scalar temperature field $T(x,y,t)$ evolves by
+where $D$ is the thermal diffusivity. Advection uses the same backtracing as velocity; diffusion adds $D\,\Delta t\,\nabla^2 T$ each step.
 
-$$\frac{\partial T}{\partial t} + (\mathbf{u}\cdot\nabla)T=
-D \nabla^2 T$$
+### Discretization and Stability
 
-where $D$ is the thermal diffusion coefficient.
-
-* **Advection** uses the same backtracing and bilinear interpolation as for velocity.
-* **Diffusion** adds $D \Delta t \nabla^2 T$ at each step.
-
-## Discretization and Stability
-
-**Grid**: uniform $N_x\times N_y$ cells, periodic in both directions.
-
-**Time step** $\Delta t$ chosen to satisfy a CFL-like constraint for advection:
+Grid: uniform $N_x\times N_y$ cells, periodic in both directions. Time step satisfies the CFL condition:
 
 $$\max|\mathbf{u}|\frac{\Delta t}{\Delta x} \le 1$$
 
-and to make sure stability of diffusion.
+Second-order central-difference Laplacian:
 
-**Finite differences** for spatial derivatives:
+$$\nabla^2 f_{i,j} \approx \frac{f_{i+1,j}+f_{i-1,j}-2f_{i,j}}{\Delta x^2} + \frac{f_{i,j+1}+f_{i,j-1}-2f_{i,j}}{\Delta y^2}$$
 
-$$\nabla^2 f_{i,j}
-\approx
-\frac{f_{i+1,j} + f_{i-1,j} - 2f_{i,j}}{\Delta x^2}
-+
-\frac{f_{i,j+1} + f_{i,j-1} - 2f_{i,j}}{\Delta y^2}$$
+## Implementation
 
-## Initial and Boundary Conditions
+1. Initialize a uniform $N_x\times N_y$ grid with periodic boundaries; set opposing base velocity layers and a sinusoidal perturbation to seed the instability.
+2. Assign the temperature field: hot region (one side) $T=1$, cold region (other side) $T=0$.
+3. Each time step: backtrace velocity and temperature for advection via bilinear interpolation.
+4. Apply viscous diffusion to velocity and thermal diffusion to temperature.
+5. Solve the pressure Poisson equation; project velocity onto the divergence-free subspace.
+6. Update arrays in-place and re-apply periodic boundary wrapping.
+7. Render each cell colored by temperature and display the frame.
 
-* **Velocity**: zero base flow with small sinusoidal perturbations to seed instability.
-* **Temperature**: hot region on the left, cold region on the right.
-* **Boundaries**: periodic on all sides.
+## Output
 
-## Visualization
+The rendered window shows the evolving temperature field colored from blue (cold) to red (hot):
 
-* **Mapping**: temperature mapped to hue, e.g. blue (cold) to red (hot).
-* **Rendering**: each grid cell colored and displayed, optionally with grid lines.
-* **Loop**: update velocity $\to$ enforce incompressibility $\to$ transport temperature $\to$ render frame.
+- Initially a sharp interface between the two fluid layers.
+- Sinusoidal perturbations grow into characteristic **Kelvin–Helmholtz rolls** that curl and entrain fluid from both layers.
+- The rolls cascade into smaller-scale turbulent mixing as the simulation progresses.

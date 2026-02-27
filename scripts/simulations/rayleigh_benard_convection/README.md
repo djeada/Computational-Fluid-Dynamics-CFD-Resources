@@ -1,68 +1,60 @@
 # Rayleigh-Bénard Convection Simulation
 
-This project simulates the Rayleigh-Bénard convection using a simplified thermal convection model and visualizes it using Pygame.
+This project simulates Rayleigh-Bénard convection — buoyancy-driven flow between a hot lower plate and a cold upper plate — using a simplified thermal-velocity coupling on a 128×128 grid rendered in real time with Pygame. Watch it in action: [![YouTube](https://i9.ytimg.com/vi/E_N-ld6Vfwo/mqdefault.jpg)](https://youtube.com/shorts/E_N-ld6Vfwo)
 
-## Demonstration
+## Overview
 
-Watch the Rayleigh-Bénard Convection Simulation in action:
+- **128×128 grid** with a linear temperature gradient: $T=1$ (bottom, hot) to $T=0$ (top, cold).
+- **Buoyancy coupling**: hot fluid rises, cold fluid sinks, forming convection rolls.
+- **Multiprocessing**: cell updates parallelized across cores for performance.
+- **Pygame visualization**: 400×400 window at 60 fps; temperature mapped to an RGB color palette.
 
-[![Rayleigh-Bénard Convection Simulation](https://i9.ytimg.com/vi/E_N-ld6Vfwo/mqdefault.jpg?sqp=CJiVlrQG-oaymwEoCMACELQB8quKqQMcGADwAQH4AbYIgAK-CIoCDAgAEAEYEyAiKH8wDw==&rs=AOn4CLAVlKO8E4MPwP5jiYMMJgc0MW4Aig)](https://youtube.com/shorts/E_N-ld6Vfwo)
+## Mathematical Background
 
-## Features
+### Rayleigh Number
 
-- **Grid Initialization**: The grid is initialized with a linear temperature gradient from 1.0 (bottom) to 0.0 (top).
-- **Temperature and Velocity Updates**: Updates the temperature and velocity fields to simulate convection.
-- **Visualization**: Uses Pygame to visualize the temperature distribution.
+The onset of convection is governed by the dimensionless Rayleigh number:
 
-## Simulation Parameters
+$$Ra = \frac{g\,\beta\,\Delta T\,H^3}{\nu\,\kappa}$$
 
-- **Grid Size**: 128x128 cells
-- **Window Size**: 400x400 pixels
-- **Frame Rate**: 60 frames per second
-- **Cell Size**: Computed as `WINDOW_SIZE // GRID_SIZE`
-- **Temperature Range**: [0.0, 1.0]
+where $g$ is gravitational acceleration, $\beta$ is the thermal expansion coefficient, $\Delta T$ the temperature difference across height $H$, $\nu$ kinematic viscosity, and $\kappa$ thermal diffusivity. Convection cells form when $Ra > Ra_c \approx 1708$.
 
-## Detailed Explanation
+### Temperature Advection–Diffusion
 
-### Initialization
+The temperature field $T$ evolves via advection by the local velocity and thermal diffusion:
 
-- **Libraries**: Imports necessary libraries (Pygame, NumPy, multiprocessing).
-- **Simulation Parameters**: Sets up the grid size, window size, frame rate, and other simulation parameters.
-- **Pygame Setup**: Initializes Pygame for visualization.
+$$\frac{\partial T}{\partial t} + \mathbf{u}\cdot\nabla T = \kappa\,\nabla^2 T$$
 
-### Temperature to Color Conversion
+### Buoyancy and Velocity Update
 
-- **Function**: Defines a function to map temperature values to colors for visual representation.
+The vertical velocity is driven by the local temperature gradient; hot cells ($T > 0.5$) experience upward buoyancy:
 
-### Grid Initialization
+$$v_{i,j}^{n+1} = v_{i,j}^n + \alpha\,(T_{i,j} - T_{i-1,j})$$
 
-- **Temperature Gradient**: Initializes the grid with a temperature gradient, with higher temperatures at the bottom and lower temperatures at the top.
+where $\alpha$ is a coupling coefficient controlling convective strength. Buoyancy is proportional to $\beta(T - T_\text{ref})$.
 
-### Cell Update Function
+## Implementation
 
-- **Temperature Update**: Defines a function to update the temperature of a cell based on its neighbors and velocity field.
-- **Multiprocessing**: Utilizes multiprocessing for efficient computation of temperature updates.
+1. Initialize the 128×128 temperature grid with $T_{i,j} = 1 - i/N$ (linear gradient) and velocity fields $u$, $v$ to zero.
+2. Each frame, launch a multiprocessing pool to update each cell's temperature from its four neighbors and the local velocity.
+3. Update the velocity field from the vertical temperature gradient to model buoyancy.
+4. Clamp temperatures to $[0,1]$ and enforce fixed boundary conditions: bottom $T=1$, top $T=0$.
+5. Map each cell's temperature to an RGB color (cold → blue, hot → red) and draw to the Pygame surface.
+6. Handle Pygame events and tick the clock at 60 fps.
 
-### Grid Update
+## Output
 
-- **Parallel Updates**: Defines a function to update the entire grid using multiprocessing to parallelize cell updates.
+The Pygame window displays the evolving temperature field as a real-time color map:
 
-### Velocity Update
-
-- **Gradient-Based Update**: Defines a function to update the velocity fields based on the temperature gradient.
-
-### Grid Drawing
-
-- **Visualization**: Defines a function to draw the grid on the Pygame window using the color mapping function.
-
-### Main Loop
-
-- **Initialization**: Initializes the grid and velocity fields.
-- **Continuous Update**: Runs the main loop to continuously update and draw the grid.
-- **Event Handling**: Handles Pygame events to allow quitting the simulation.
+- **Convection rolls** emerge as warm plumes rise from the bottom and cool fluid descends from the top.
+- **Color gradient** transitions from deep blue (cold, top) to bright red (hot, bottom), with intermediate hues marking the mixing layer.
+- The simulation runs continuously until the window is closed.
 
 ## Running the Script
 
-1. **Dependencies**: Ensure you have Pygame and NumPy installed.
-2. **Execution**: Run the script to start the simulation.
-3. **Visualization**: The simulation window will display the evolving temperature field, with colors indicating different temperatures.
+```bash
+pip install pygame numpy
+python rayleigh_benard_convection.py
+```
+
+Adjust `GRID_SIZE`, `ALPHA` (buoyancy coupling), and `FPS` at the top of the script to explore different convection regimes.
