@@ -62,7 +62,7 @@ This can be written explicitly as:
 
 $$
 \text{MSE}[\hat{y}(x)] =
-\sigma^2 \left\{
+\sigma^2 \left(
 1 -
 \begin{pmatrix}
 r(x) \\
@@ -70,13 +70,13 @@ f(x)
 \end{pmatrix}^{T}
 \begin{pmatrix}
 R & F \\
-F^T & 0
+F^{T} & 0
 \end{pmatrix}^{-1}
 \begin{pmatrix}
 r(x) \\
 f(x)
 \end{pmatrix}
-\right\}
+\right)
 $$
 
 From this formula, we see that if $x$ coincides with a sample point $x^{(i)}$, the MSE goes to zero, confirming exact interpolation.
