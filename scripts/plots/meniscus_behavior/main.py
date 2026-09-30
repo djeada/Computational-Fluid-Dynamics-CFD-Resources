@@ -7,11 +7,15 @@ is drawn as the parabola y = +/- 0.5 x^2 between the tube walls, and the
 contact angle implied by that shape is computed and annotated.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 CURVATURE = 0.5  # meniscus shape y = +/- CURVATURE * x**2 [1/length]
 X_WALL = 1.0  # inner radius of the tube, walls at x = +/- X_WALL [length]
@@ -118,13 +122,7 @@ def plot_menisci():
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", type=Path, metavar="DIR", help="save the figure as PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     for wetting, name in ((True, "water"), (False, "mercury")):
@@ -134,11 +132,9 @@ def main(argv=None):
 
     fig = plot_menisci()
 
-    if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(args.output / "meniscus_behavior.png", dpi=100, bbox_inches="tight")
-    if not args.no_show:
-        plt.show()
+    finish_figures(
+        {"meniscus_behavior.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

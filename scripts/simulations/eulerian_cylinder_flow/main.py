@@ -12,13 +12,16 @@ interpolation damps the flow.
 Keys: P pauses or resumes, M advances one frame while paused.
 """
 
-import argparse
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
-import pygame
 from numba import njit
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int  # noqa: E402
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600  # pixels
 SIM_HEIGHT = 1.1  # visible height of the window, m
@@ -275,6 +278,8 @@ def setup_scene(scene_number=1):
 
 def draw(screen, fluid, canvas_scale):
     """Draw the dye field (4-colour banded map) and the obstacle."""
+    import pygame
+
     nx, ny = fluid.grid_width, fluid.grid_height
     m = fluid.density_field.reshape(nx, ny)
     solid = fluid.solid.reshape(nx, ny)
@@ -293,18 +298,10 @@ def draw(screen, fluid, canvas_scale):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show",
-        action="store_true",
-        help="run without a window (SDL dummy video driver)",
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save a screenshot of the last frame in DIR"
-    )
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=None,
         help="simulate this many frames, then stop (default: run until closed; "
         f"{DEFAULT_HEADLESS_STEPS} with --no-show)",
@@ -316,47 +313,55 @@ def main(argv=None):
         if max_steps is None:
             max_steps = DEFAULT_HEADLESS_STEPS
 
+    import pygame
+
     pygame.init()
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    pygame.display.set_caption("Eulerian Cylinder Flow")
-    clock = pygame.time.Clock()
-    canvas_scale = WINDOW_HEIGHT / SIM_HEIGHT  # pixels per metre
+    try:
+        screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        pygame.display.set_caption("Eulerian Cylinder Flow")
+        clock = pygame.time.Clock()
+        canvas_scale = WINDOW_HEIGHT / SIM_HEIGHT  # pixels per metre
 
-    fluid = setup_scene(1)
-    fluid.set_obstacle(OBSTACLE_X, OBSTACLE_Y, OBSTACLE_RADIUS)
+        fluid = setup_scene(1)
+        fluid.set_obstacle(OBSTACLE_X, OBSTACLE_Y, OBSTACLE_RADIUS)
 
-    running = True
-    paused = False
-    frame_number = 0
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        running = True
+        paused = False
+        frame_number = 0
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        paused = not paused
+                    elif event.key == pygame.K_m:
+                        fluid.simulate(
+                            DELTA_TIME, GRAVITY, NUM_ITERATIONS, OVER_RELAXATION
+                        )
+                        frame_number += 1
+                        paused = True
+
+            if not paused:
+                fluid.simulate(DELTA_TIME, GRAVITY, NUM_ITERATIONS, OVER_RELAXATION)
+                frame_number += 1
+
+            draw(screen, fluid, canvas_scale)
+            pygame.display.flip()
+            if max_steps is not None and frame_number >= max_steps:
                 running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    paused = not paused
-                elif event.key == pygame.K_m:
-                    fluid.simulate(DELTA_TIME, GRAVITY, NUM_ITERATIONS, OVER_RELAXATION)
-                    frame_number += 1
-                    paused = True
+            if not args.no_show:
+                clock.tick(60)
 
-        if not paused:
-            fluid.simulate(DELTA_TIME, GRAVITY, NUM_ITERATIONS, OVER_RELAXATION)
-            frame_number += 1
-
-        draw(screen, fluid, canvas_scale)
-        pygame.display.flip()
-        if max_steps is not None and frame_number >= max_steps:
-            running = False
-        if not args.no_show:
-            clock.tick(60)
-
-    print(f"simulated {frame_number} frames (t = {frame_number * DELTA_TIME:.2f} s)")
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        pygame.image.save(screen, str(out_dir / "eulerian_cylinder_flow.png"))
-    pygame.quit()
+        print(
+            f"simulated {frame_number} frames (t = {frame_number * DELTA_TIME:.2f} s)"
+        )
+        if args.output:
+            out_dir = Path(args.output)
+            out_dir.mkdir(parents=True, exist_ok=True)
+            pygame.image.save(screen, str(out_dir / "eulerian_cylinder_flow.png"))
+    finally:
+        pygame.quit()
 
 
 if __name__ == "__main__":

@@ -5,11 +5,15 @@ interpolation system R w = y for four values of the correlation parameter
 theta, and compares each interpolant with the true function.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 N_SAMPLES = 11  # training points in [0, 1]
 N_PREDICT = 100  # prediction points in [0, 1]
@@ -60,13 +64,7 @@ def plot_interpolants(x_data, y_data, x_fine, thetas):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     return parser.parse_args(argv)
 
 
@@ -78,14 +76,9 @@ def main(argv=None):
     x_fine = np.linspace(0.0, 1.0, N_PREDICT)
     fig = plot_interpolants(x_data, y_data, x_fine, THETA_VALUES)
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "kriging_interpolation.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"kriging_interpolation.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

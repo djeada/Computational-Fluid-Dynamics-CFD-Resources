@@ -5,11 +5,15 @@ fluctuation with its mean, and lists u_bar, u_rms, k = <u'^2>/2 and the
 turbulence intensity in the fourth panel.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 MEAN_VELOCITY = 5.0  # m/s
 OSCILLATION_AMPLITUDE = 1.0  # m/s
@@ -95,26 +99,15 @@ def plot_decomposition(time, velocity):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     time, velocity = synthetic_signal()
     fig = plot_decomposition(time, velocity)
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "turbulence_plots.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"turbulence_plots.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

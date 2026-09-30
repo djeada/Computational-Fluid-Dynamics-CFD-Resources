@@ -6,12 +6,16 @@ free-fall units. Small seeded temperature noise grows into convection rolls,
 and the temperature field is drawn as a colour map in real time.
 """
 
-import argparse
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
 from scipy import fft
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int  # noqa: E402
 
 # Physical parameters (dimensionless)
 RAYLEIGH = 1.0e5  # Ra = g beta dT H^3 / (nu kappa)
@@ -152,12 +156,10 @@ def draw_grid(screen, pygame, temperature):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", type=Path, help="directory to save a screenshot")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=None,
         help=f"frames to run, each {STEPS_PER_FRAME} time steps "
         "(default: until the window is closed)",

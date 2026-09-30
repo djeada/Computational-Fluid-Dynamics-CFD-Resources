@@ -7,11 +7,15 @@ figures are produced: the data cloud with the eigenvectors drawn as arrows, and
 the data projected onto each eigenvector.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 SEED = 0
 N_SAMPLES = 1000
@@ -96,13 +100,7 @@ def plot_projections_on_eigenvectors(data, eigenvalues, eigenvectors):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot windows"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figures as PNG files in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     data = generate_fluctuations()
@@ -124,15 +122,11 @@ def main(argv=None):
         ),
     }
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        for name, fig in figures.items():
-            fig.savefig(out_dir / name, dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close("all")
-    else:
-        plt.show()
+    finish_figures(
+        figures,
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

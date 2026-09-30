@@ -38,17 +38,17 @@ $$
 
 - The columns of $\Phi \in \mathbb{R}^{N \times M}$ are the orthonormal spatial (POD) modes.
 - $\Sigma = \mathrm{diag}(\sigma_1, \dots, \sigma_M)$ holds the singular values, with $\sigma_1 \geq \sigma_2 \geq \cdots \geq 0$.
-- The rows of $\Psi^T \in \mathbb{R}^{M \times M}$ are the unit-norm temporal coefficients.
+- The rows of $\Psi^T$ are unit-norm temporal eigenvectors. The amplitude-scaled temporal coefficients are $A = \Sigma\Psi^T$, so $\tilde{U} = \Phi A$.
 
 Mode $i$ holds the fraction $\sigma_i^2 / \sum_j \sigma_j^2$ of the fluctuation energy.
 
 ## Implementation
 
-- `generate_synthetic_data(n_samples, n_x, n_y)` returns the field and its $x$, $y$, $t$ axes.
-- `create_snapshot_matrix(data)` reshapes the $(n_x, n_y, n_t)$ array to $(n_x n_y) \times n_t$.
-- `preprocess_data(snapshot_matrix)` subtracts the temporal mean.
-- The `POD` class runs the SVD in `run()`, storing `modes` ($\Phi$), `singular_values` and `time_coeffs` ($\Psi^T$). `energy_fractions()` returns the energy share of each mode.
-- `plot_modes_and_time_coeffs(pod, x, y, t, num_modes)` draws the contour plots and time series on a `GridSpec` layout.
+- `generate_synthetic_data(n_samples, n_x, n_y)` and `create_snapshot_matrix(data)` are shared with the snapshot example in [the numerical helpers](../../_numerics.py).
+- `compute_pod(snapshots)` subtracts the temporal mean and computes the thin SVD. It returns a `PODResult` with `mean`, orthonormal `modes`, `singular_values`, and amplitude-scaled `coefficients` ($\Sigma\Psi^T$).
+- `result.energy_fractions` gives the energy share of each retained mode. Numerical null modes are discarded, so constant data has zero retained modes instead of undefined energy fractions.
+- `result.reconstruct(n_modes)` reconstructs the original snapshots from the mean and the requested leading modes.
+- `plot_modes_and_time_coeffs` reshapes the modes and calls the shared `plot_pod_mode_pairs` layout.
 - `N_SAMPLES`, `N_X`, `N_Y` and `NUM_MODES` set the data size and the number of modes plotted.
 
 ## Usage

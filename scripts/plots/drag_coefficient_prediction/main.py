@@ -7,12 +7,16 @@ its least-squares regression line and the line of perfect prediction, and the
 legend reports the slope, intercept, and coefficient of determination.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import linregress
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 SEED = 0
 N_SAMPLES = 50
@@ -76,27 +80,16 @@ def make_figure(cd, pred_red, pred_blue):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG file in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     fig = make_figure(*generate_data())
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "drag_coefficient_prediction.png", dpi=100, bbox_inches="tight"
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"drag_coefficient_prediction.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

@@ -8,11 +8,16 @@ SVD, and the rank-one contributions U~^k = a_k phi_k^T of modes 1 and 2 are
 plotted for each point together with their sum.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
+from _numerics import compute_pod  # noqa: E402
 
 T_START, T_END = 0.9, 1.1  # time window [s]
 N_SAMPLES = 1000  # number of snapshots m
@@ -41,12 +46,12 @@ def pod_contributions(snapshots):
     The rows of Phi^T are the spatial modes phi_k, the columns of A = W S are
     the time coefficients a_k, and U~^k = a_k phi_k^T has the same shape as U'.
     """
-    fluctuations = snapshots - snapshots.mean(axis=0)
-    W, S, PhiT = np.linalg.svd(fluctuations, full_matrices=False)
-    time_coeffs = W * S
-    contributions = [np.outer(time_coeffs[:, k], PhiT[k, :]) for k in range(len(S))]
-    energy_fraction = S**2 / np.sum(S**2)
-    return contributions, PhiT, energy_fraction
+    result = compute_pod(snapshots.T)
+    contributions = [
+        np.outer(result.coefficients[k], result.modes[:, k])
+        for k in range(len(result.singular_values))
+    ]
+    return contributions, result.modes.T, result.energy_fractions
 
 
 def plot_contributions(t, contributions, energy_fraction):
@@ -77,13 +82,7 @@ def plot_contributions(t, contributions, energy_fraction):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", type=Path, metavar="DIR", help="save the figure as PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     t, snapshots = generate_signals()
@@ -96,11 +95,7 @@ def main(argv=None):
 
     fig = plot_contributions(t, contributions, energy_fraction)
 
-    if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(args.output / "pod_modes_2d.png", dpi=100, bbox_inches="tight")
-    if not args.no_show:
-        plt.show()
+    finish_figures({"pod_modes_2d.png": fig}, output=args.output, show=not args.no_show)
 
 
 if __name__ == "__main__":

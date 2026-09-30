@@ -5,11 +5,15 @@ floats or sinks, and draws the block (partly submerged at equilibrium when it
 floats) with force arrows scaled to the force magnitudes.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 G = 9.81  # gravitational acceleration (m/s^2)
 DEFAULT_OBJECT_DENSITY = 500.0  # kg/m^3
@@ -120,7 +124,7 @@ def plot_archimedes_principle(object_density, fluid_density, object_volume):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--object-density",
         type=float,
@@ -139,12 +143,6 @@ def parse_args(argv=None):
         default=DEFAULT_OBJECT_VOLUME,
         help="object volume in m^3 (default: %(default)s)",
     )
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
     return parser.parse_args(argv)
 
 
@@ -155,14 +153,9 @@ def main(argv=None):
         args.object_density, args.fluid_density, args.object_volume
     )
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "archimedes_principle.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"archimedes_principle.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

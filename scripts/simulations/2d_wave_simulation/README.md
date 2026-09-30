@@ -37,14 +37,15 @@ The code uses half of this limit, `dt = 0.5 * min(dx, dy) / (c * sqrt(2))`, whic
 
 $$u(x, y, 0) = A \exp\left(-\frac{x^2 + y^2}{2}\right), \qquad \frac{\partial u}{\partial t}(x, y, 0) = 0$$
 
-with $A = 5$. The zero initial velocity is imposed by setting $u^{-1} = u^0$, which is first-order accurate for the first step.
+with $A = 5$. The initial pulse is set to zero on all boundary nodes. Zero initial velocity uses the second-order starting level $u^{-1} = u^0 + \tfrac{1}{2}(c\Delta t)^2\nabla_h^2 u^0$, so the first forward step contains half the discrete acceleration.
 
 ## Implementation
 
 - `make_grid` builds the grid with `np.meshgrid`, so array axis 0 is $y$ and axis 1 is $x$, and computes `dt` from the CFL condition.
-- `initial_condition` returns the two starting levels $u^{-1} = u^0$.
+- `initial_condition` enforces the fixed edges and returns the second-order zero-velocity starting levels.
 - `leapfrog_step` applies the update above to interior points and sets the boundary to zero.
-- `main` builds the figure. It either animates with `FuncAnimation`, advancing one step and redrawing the surface each frame, or, with `--no-show`, runs all the steps and draws the final surface once. A shared `Normalize(-5, 5)` keeps the surface colours consistent with the colour bar.
+- `WaveSimulation(length, nx, ny, c, cfl_safety)` owns the fields and step counter. `advance(steps)` runs without a figure; `time` is derived from the completed step count. Grid and CFL parameters are validated.
+- `main` builds the figure. It either animates with `FuncAnimation`, advancing one step and redrawing the surface each frame, or, with `--no-show`, runs all the steps and draws the final surface once. Animation initialization redraws without advancing time. A shared `Normalize(-5, 5)` keeps the surface colours consistent with the colour bar.
 
 ## Usage
 

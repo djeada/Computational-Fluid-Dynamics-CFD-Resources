@@ -5,12 +5,16 @@ Fourier method (hbar = m = 1) on a periodic grid, and the probability density
 |psi|^2 is animated as a 3D surface.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 # Parameters (dimensionless units with hbar = m = 1)
 DOMAIN_LENGTH = 10.0  # side length L of the periodic square domain
@@ -23,6 +27,8 @@ N_FRAMES = int(round(FINAL_TIME / TIME_STEP)) // SPEED_FACTOR
 
 def make_grid(length=DOMAIN_LENGTH, n=N_POINTS):
     """Return the grid spacing and periodic coordinate arrays X, Y."""
+    if length <= 0 or n < 2:
+        raise ValueError("require positive length and at least two grid points")
     dx = length / n
     x = -length / 2 + dx * np.arange(n)  # periodic grid: no duplicated end point
     X, Y = np.meshgrid(x, x)
@@ -60,6 +66,42 @@ def probability_norm(psi, dx):
     return float(np.sum(np.abs(psi) ** 2) * dx**2)
 
 
+class SchrodingerSimulation:
+    """Wavefunction state with FFT propagators cached for the chosen time step."""
+
+    def __init__(self, length=DOMAIN_LENGTH, n=N_POINTS, dt=TIME_STEP):
+        if dt <= 0:
+            raise ValueError("time step must be positive")
+        self.dx, self.X, self.Y = make_grid(length, n)
+        self.dt = dt
+        self.psi = initial_wavefunction(self.X, self.Y, self.dx)
+        self.half_kinetic = np.exp(-1j * squared_wavenumbers(n, self.dx) * dt / 4)
+        self.potential_phase = np.exp(-1j * potential(self.X, self.Y) * dt)
+        self.steps = 0
+
+    @property
+    def time(self):
+        return self.steps * self.dt
+
+    @property
+    def density(self):
+        return np.abs(self.psi) ** 2
+
+    @property
+    def norm(self):
+        return probability_norm(self.psi, self.dx)
+
+    def advance(self, steps=1):
+        """Advance Strang steps without rendering or rebuilding propagators."""
+        if steps < 0:
+            raise ValueError("steps must be nonnegative")
+        for _ in range(steps):
+            self.psi = np.fft.ifft2(np.fft.fft2(self.psi) * self.half_kinetic)
+            self.psi *= self.potential_phase
+            self.psi = np.fft.ifft2(np.fft.fft2(self.psi) * self.half_kinetic)
+            self.steps += 1
+
+
 def style_axes(ax, z_max, time):
     ax.set_facecolor("black")
     ax.set_xlim(-DOMAIN_LENGTH / 2, DOMAIN_LENGTH / 2)
@@ -76,30 +118,25 @@ def style_axes(ax, z_max, time):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", type=Path, help="directory to save the final frame")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=N_FRAMES,
         help=f"animation frames, each {SPEED_FACTOR} time steps (default: {N_FRAMES})",
     )
     args = parser.parse_args(argv)
 
-    dx, X, Y = make_grid()
-    V = potential(X, Y)
-    k2 = squared_wavenumbers(N_POINTS, dx)
-    state = {"psi": initial_wavefunction(X, Y, dx), "time": 0.0}
-    initial_norm = probability_norm(state["psi"], dx)
-
-    density = np.abs(state["psi"]) ** 2
+    simulation = SchrodingerSimulation()
+    X, Y = simulation.X, simulation.Y
+    initial_norm = simulation.norm
+    density = simulation.density
     z_max = density.max()  # fixed colour and z range: the peak only decreases
 
     fig = plt.figure(facecolor="black")
     ax = fig.add_subplot(111, projection="3d")
     ax.plot_surface(X, Y, density, cmap="viridis", vmin=0, vmax=z_max)
-    style_axes(ax, z_max, state["time"])
+    style_axes(ax, z_max, simulation.time)
 
     cax = fig.add_axes([0.05, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
     mappable = plt.cm.ScalarMappable(cmap="viridis", norm=plt.Normalize(0, z_max))
@@ -107,38 +144,34 @@ def main(argv=None):
     cbar.ax.tick_params(color="white", labelcolor="white")
     cbar.outline.set_edgecolor("white")
 
-    def update(frame):
-        for _ in range(SPEED_FACTOR):
-            state["psi"] = evolve(state["psi"], TIME_STEP, k2, V)
-            state["time"] += TIME_STEP
-        density = np.abs(state["psi"]) ** 2
+    def redraw():
         ax.clear()
-        ax.plot_surface(X, Y, density, cmap="viridis", vmin=0, vmax=z_max)
-        style_axes(ax, z_max, state["time"])
+        ax.plot_surface(X, Y, simulation.density, cmap="viridis", vmin=0, vmax=z_max)
+        style_axes(ax, z_max, simulation.time)
         return ()
 
+    def update(frame):
+        simulation.advance(SPEED_FACTOR)
+        return redraw()
+
     if args.no_show:
-        for frame in range(args.steps):
-            update(frame)
+        simulation.advance(args.steps * SPEED_FACTOR)
+        redraw()
     else:
         animation = FuncAnimation(  # noqa: F841 (keep a reference while showing)
             fig, update, frames=args.steps, init_func=lambda: (), repeat=False
         )
         plt.show()
 
-    final_norm = probability_norm(state["psi"], dx)
+    final_norm = simulation.norm
     print(
-        f"t = {state['time']:.2f}: total probability {final_norm:.15f} "
+        f"t = {simulation.time:.2f}: total probability {final_norm:.15f} "
         f"(change {final_norm - initial_norm:+.2e})"
     )
 
     if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            args.output / "schroedinger_equation.png",
-            dpi=100,
-            bbox_inches="tight",
-            facecolor=fig.get_facecolor(),
+        save_figure(
+            fig, args.output, "schroedinger_equation.png", facecolor=fig.get_facecolor()
         )
     plt.close(fig)
 

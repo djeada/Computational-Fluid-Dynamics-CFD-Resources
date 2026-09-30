@@ -4,12 +4,16 @@ Fits SciPy's ``Rbf`` interpolant with the multiquadric basis through a fixed
 set of 11 points on [0, 1] and plots the interpolant on a fine grid.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import Rbf
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 # Data points digitised from a reference plot
 X_DATA = np.array([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
@@ -34,13 +38,7 @@ def plot_interpolation(x, y, x_new, y_new):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     return parser.parse_args(argv)
 
 
@@ -52,16 +50,9 @@ def main(argv=None):
     x_new = np.linspace(0.0, 1.0, N_PREDICT)
     fig = plot_interpolation(X_DATA, Y_DATA, x_new, rbf(x_new))
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "radial_basis_functions.png", dpi=100, bbox_inches="tight"
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"radial_basis_functions.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

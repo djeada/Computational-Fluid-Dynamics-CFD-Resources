@@ -1,10 +1,14 @@
 """Plot the linear increase of hydrostatic pressure with depth, P = P0 + rho g h."""
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 ATMOSPHERIC_PRESSURE = 101325.0  # Pa
 
@@ -39,27 +43,16 @@ def plot_pressure_variation_with_depth(fluid_density=1000, g=9.81, max_depth=20)
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     fig = plot_pressure_variation_with_depth()
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "pressure_variation_with_depth.png", dpi=100, bbox_inches="tight"
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"pressure_variation_with_depth.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

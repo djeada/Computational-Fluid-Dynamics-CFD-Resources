@@ -10,7 +10,7 @@ the residual history and the global mass imbalance. The reattachment length of
 the recirculation zone behind the step is printed at the end.
 """
 
-import argparse
+import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,6 +19,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.ma as ma
 from numba import njit
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 DTYPE = np.float32
 
@@ -445,14 +449,14 @@ def update_plot(
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = create_parser(__doc__)
     parser.add_argument("--nx", type=int, default=240)
     parser.add_argument("--ny", type=int, default=80)
     parser.add_argument("--max-iters", type=int, default=3000)
     parser.add_argument("--plot-interval", type=int, default=20)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=None,
         help="run at most this many SIMPLE iterations (overrides --max-iters)",
     )
@@ -467,8 +471,6 @@ def main(argv=None):
         action="store_true",
         help="quick demo: 120x40 grid, 400 iterations, plot every 5",
     )
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", metavar="DIR", help="save the final figure as PNG")
     args = parser.parse_args(argv)
 
     plt.style.use("dark_background")
@@ -689,9 +691,7 @@ def main(argv=None):
         )
 
     if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "backward_facing_step.png", dpi=100, bbox_inches="tight")
+        save_figure(fig, args.output, "backward_facing_step.png")
     if interactive:
         plt.ioff()
         plt.show()

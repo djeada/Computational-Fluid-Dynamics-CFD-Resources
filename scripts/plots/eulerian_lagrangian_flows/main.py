@@ -5,11 +5,15 @@ fixed grid. The right panel is Lagrangian: the paths of 20 particles, released a
 random (seeded) positions and advected with a fourth-order Runge-Kutta scheme.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures, positive_int  # noqa: E402
 
 DT = 0.01  # time step (non-dimensional time units)
 NUM_STEPS = 500  # default number of RK4 steps
@@ -183,16 +187,10 @@ def make_figure(num_steps=NUM_STEPS, dt=DT):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG file in DIR"
-    )
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=NUM_STEPS,
         metavar="N",
         help=f"number of RK4 time steps (default {NUM_STEPS})",
@@ -201,16 +199,11 @@ def main(argv=None):
 
     fig = make_figure(num_steps=args.steps)
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "eulerian_lagrangian_flows.png", dpi=100, bbox_inches="tight"
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"eulerian_lagrangian_flows.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

@@ -7,12 +7,16 @@ removed, and the SVD gives the spatial modes (contour plots) and temporal
 coefficients a_i(t) = sigma_i psi_i(t) (time series).
 """
 
-import argparse
+import sys
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.gridspec import GridSpec
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
+from _numerics import compute_pod, create_snapshot_matrix  # noqa: E402
+from _plotting import plot_pod_mode_pairs  # noqa: E402
 
 N_X, N_Y, N_T = 50, 30, 100  # grid points in x, y and number of snapshots
 X_RANGE = (1700.0, 2000.0)  # streamwise extent [mm]
@@ -52,65 +56,35 @@ def pod(field, n_modes=N_MODES):
     coefficients a_i(t) = sigma_i psi_i(t) with shape (n_modes, N_T), and the
     fraction of energy in every mode.
     """
-    nx, ny, nt = field.shape
-    snapshots = field.reshape(nx * ny, nt)
-    snapshots = snapshots - snapshots.mean(axis=1, keepdims=True)
-    Phi, S, PsiT = np.linalg.svd(snapshots, full_matrices=False)
-    modes = Phi[:, :n_modes].reshape(nx, ny, n_modes)
-    time_coeffs = S[:n_modes, None] * PsiT[:n_modes, :]
-    energy_fraction = S**2 / np.sum(S**2)
-    return modes, time_coeffs, energy_fraction
+    nx, ny, _ = field.shape
+    result = compute_pod(create_snapshot_matrix(field))
+    if not 1 <= n_modes <= len(result.singular_values):
+        raise ValueError("n_modes must be between one and the retained rank")
+    modes = result.modes[:, :n_modes].reshape(nx, ny, n_modes)
+    return modes, result.coefficients[:n_modes], result.energy_fractions
 
 
 def plot_modes(x, y, t, modes, time_coeffs, energy_fraction):
     """Contour plots of the modes (left) and their time coefficients (right)."""
-    n_modes = modes.shape[2]
-    fig = plt.figure(figsize=(12, 10))
-    gs = GridSpec(n_modes, 2, width_ratios=[1, 1])
-    for i in range(n_modes):
-        title = f"Mode {i + 1} ({100 * energy_fraction[i]:.1f}% TKE)"
-        ax = fig.add_subplot(gs[i, 0])
-        c = ax.contourf(x, y, modes[:, :, i].T, cmap="jet", levels=50)
-        fig.colorbar(c, ax=ax)
-        ax.set_title(title)
-        ax.set_xlabel("x (mm)")
-        ax.set_ylabel("y (mm)")
-
-        ax = fig.add_subplot(gs[i, 1])
-        ax.plot(t, time_coeffs[i, :])
-        ax.set_title(title)
-        ax.set_xlabel("t (s)")
-        ax.set_ylabel(f"$a_{i + 1}(t)$")
-    fig.tight_layout()
-    return fig
+    return plot_pod_mode_pairs(x, y, t, modes, time_coeffs, energy_fraction)
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", type=Path, metavar="DIR", help="save the figure as PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     x, y, t, field = generate_field()
     modes, time_coeffs, energy_fraction = pod(field)
-    for i in range(N_MODES + 1):
+    for i in range(min(N_MODES + 1, len(energy_fraction))):
         print(f"mode {i + 1}: TKE = {100 * energy_fraction[i]:.2f} %")
 
     fig = plot_modes(x, y, t, modes, time_coeffs, energy_fraction)
 
-    if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            args.output / "pod_modes_and_temporal_coefficients.png",
-            dpi=100,
-            bbox_inches="tight",
-        )
-    if not args.no_show:
-        plt.show()
+    finish_figures(
+        {"pod_modes_and_temporal_coefficients.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

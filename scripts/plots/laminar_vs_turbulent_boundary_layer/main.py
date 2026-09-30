@@ -5,11 +5,15 @@ u/U = 2 eta - eta^2 and the turbulent profile is the empirical 1/7 power law
 u/U = eta^(1/7), both plotted against eta = y / delta.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 N_POINTS = 200
 
@@ -60,29 +64,16 @@ def make_figure(n_points=N_POINTS):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG file in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     fig = make_figure()
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "laminar_vs_turbulent_boundary_layer.png",
-            dpi=100,
-            bbox_inches="tight",
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"laminar_vs_turbulent_boundary_layer.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

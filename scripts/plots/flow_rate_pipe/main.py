@@ -6,11 +6,15 @@ flow arrows whose length is proportional to v, inlet and outlet labels, and a
 text box listing r, L, v, A, and Q.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 PIPE_RADIUS = 0.1  # m
 VELOCITY = 2.0  # mean (plug) velocity, m/s
@@ -75,25 +79,14 @@ def plot_flow_rate(pipe_radius=PIPE_RADIUS, velocity=VELOCITY, length=PIPE_LENGT
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG file in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     fig = plot_flow_rate()
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "flow_rate_pipe.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"flow_rate_pipe.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

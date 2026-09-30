@@ -8,11 +8,15 @@ with ``--no-show`` (or ``--auto-inject``) a seeded rising, swaying plume is
 injected automatically instead.
 """
 
-import argparse
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int  # noqa: E402
 
 SEED = 0
 SCREEN_SIZE = (800, 600)  # pixels
@@ -201,12 +205,10 @@ def draw_simulation(pygame, screen, fluid_sim, screen_size):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", type=Path, help="directory to save a screenshot")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=None,
         help="frames (one solver step each) to run (default: until the window is closed)",
     )

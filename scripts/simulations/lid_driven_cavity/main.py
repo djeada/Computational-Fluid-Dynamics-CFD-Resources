@@ -7,13 +7,17 @@ are animated, and ``--compare-ghia`` adds the vertical-centreline u profile
 against the Re = 100 benchmark of Ghia, Ghia & Shin (1982).
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
 from numpy import ndarray
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 # Physical parameters (SI units)
 CAVITY_SIZE: float = 1.0  # side length L [m]
@@ -124,6 +128,36 @@ def centreline_u(u: ndarray, y: ndarray) -> tuple[ndarray, ndarray]:
     return profile, np.interp(GHIA_Y * CAVITY_SIZE, y, profile)
 
 
+class CavitySimulation:
+    """Projection-solver state independent of animation and benchmark plotting."""
+
+    def __init__(self, n_points=N_POINTS):
+        if n_points < 3:
+            raise ValueError("at least three points per axis are required")
+        self.y = np.linspace(0.0, CAVITY_SIZE, n_points)
+        self.X, self.Y = np.meshgrid(self.y, self.y)
+        self.element_length = CAVITY_SIZE / (n_points - 1)
+        self.u = np.zeros((n_points, n_points))
+        self.v = np.zeros_like(self.u)
+        self.p = np.zeros_like(self.u)
+        apply_boundary_conditions(self.u, self.v, LID_VELOCITY)
+        self.steps = 0
+
+    @property
+    def time(self):
+        return self.steps * TIME_STEP
+
+    def advance(self, steps=1):
+        """Advance exactly steps projection iterations without drawing contours."""
+        if steps < 0:
+            raise ValueError("steps must be nonnegative")
+        for _ in range(steps):
+            self.u, self.v, self.p = time_step(
+                self.u, self.v, self.p, self.element_length
+            )
+            self.steps += 1
+
+
 def style_axes(ax) -> None:
     ax.set_facecolor("black")
     ax.tick_params(colors="white")
@@ -150,12 +184,10 @@ def draw_contour(fig, ax, X, Y, field, title):
 
 
 def main(argv=None) -> None:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", type=Path, help="directory to save the final frame")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=N_FRAMES,
         help=f"animation frames, each {STEPS_PER_FRAME} time steps "
         f"of {TIME_STEP:g} s (default: {N_FRAMES})",
@@ -168,17 +200,8 @@ def main(argv=None) -> None:
     args = parser.parse_args(argv)
 
     reynolds = LID_VELOCITY * CAVITY_SIZE / KINEMATIC_VISCOSITY
-    element_length = CAVITY_SIZE / (N_POINTS - 1)
-    x = np.linspace(0.0, CAVITY_SIZE, N_POINTS)
-    y = np.linspace(0.0, CAVITY_SIZE, N_POINTS)
-    X, Y = np.meshgrid(x, y)
-
-    state = {
-        "u": np.zeros((N_POINTS, N_POINTS)),
-        "v": np.zeros((N_POINTS, N_POINTS)),
-        "p": np.zeros((N_POINTS, N_POINTS)),
-    }
-    apply_boundary_conditions(state["u"], state["v"], LID_VELOCITY)
+    simulation = CavitySimulation()
+    X, Y, y = simulation.X, simulation.Y, simulation.y
 
     n_panels = 3 if args.compare_ghia else 2
     fig, axs = plt.subplots(1, n_panels, figsize=(6 * n_panels, 6), facecolor="black")
@@ -194,15 +217,15 @@ def main(argv=None) -> None:
         style_axes(ax)
 
     artists = {}
-    artists["u"] = draw_contour(fig, ax_u, X, Y, state["u"], "Velocity u [m/s]")
-    artists["v"] = draw_contour(fig, ax_v, X, Y, state["v"], "Velocity v [m/s]")
+    artists["u"] = draw_contour(fig, ax_u, X, Y, simulation.u, "Velocity u [m/s]")
+    artists["v"] = draw_contour(fig, ax_v, X, Y, simulation.v, "Velocity v [m/s]")
     iteration_text = fig.suptitle(f"Re = {reynolds:g}, t = 0.00 s", color="white")
 
     if args.compare_ghia:
         ax_c = axs[2]
         ax_c.plot(GHIA_U, GHIA_Y, "o", color="orange", label="Ghia et al. (1982)")
         (profile_line,) = ax_c.plot(
-            state["u"][:, N_POINTS // 2],
+            simulation.u[:, len(y) // 2],
             y / CAVITY_SIZE,
             color="cyan",
             label="this solver",
@@ -215,25 +238,20 @@ def main(argv=None) -> None:
         ax_c.grid(color="0.35")
         ax_c.legend(facecolor="black", labelcolor="white", edgecolor="white")
 
-    def update(frame: int):
-        for _ in range(STEPS_PER_FRAME):
-            state["u"], state["v"], state["p"] = time_step(
-                state["u"], state["v"], state["p"], element_length
-            )
-        t = (frame + 1) * STEPS_PER_FRAME * TIME_STEP
-
+    def redraw(frame: int):
+        t = simulation.time
         for key in ("u", "v"):
             contour, colorbar = artists[key]
             colorbar.remove()  # before the contour set it belongs to
             contour.remove()
-        artists["u"] = draw_contour(fig, ax_u, X, Y, state["u"], "Velocity u [m/s]")
-        artists["v"] = draw_contour(fig, ax_v, X, Y, state["v"], "Velocity v [m/s]")
+        artists["u"] = draw_contour(fig, ax_u, X, Y, simulation.u, "Velocity u [m/s]")
+        artists["v"] = draw_contour(fig, ax_v, X, Y, simulation.v, "Velocity v [m/s]")
         iteration_text.set_text(
             f"Re = {reynolds:g}, t = {t:.2f} s (frame {frame + 1}/{args.steps})"
         )
 
         if args.compare_ghia:
-            profile, at_ghia = centreline_u(state["u"], y)
+            profile, at_ghia = centreline_u(simulation.u, y)
             profile_line.set_xdata(profile)
             error = at_ghia - GHIA_U
             print(
@@ -243,9 +261,13 @@ def main(argv=None) -> None:
             )
         return ()
 
+    def update(frame: int):
+        simulation.advance(STEPS_PER_FRAME)
+        return redraw(frame)
+
     if args.no_show:
-        for frame in range(args.steps):
-            update(frame)
+        simulation.advance(args.steps * STEPS_PER_FRAME)
+        redraw(args.steps - 1)
     else:
         animation = FuncAnimation(  # noqa: F841 (keep a reference while showing)
             fig, update, frames=args.steps, init_func=lambda: (), repeat=False
@@ -253,12 +275,8 @@ def main(argv=None) -> None:
         plt.show()
 
     if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            args.output / "lid_driven_cavity.png",
-            dpi=100,
-            bbox_inches="tight",
-            facecolor=fig.get_facecolor(),
+        save_figure(
+            fig, args.output, "lid_driven_cavity.png", facecolor=fig.get_facecolor()
         )
     plt.close(fig)
 

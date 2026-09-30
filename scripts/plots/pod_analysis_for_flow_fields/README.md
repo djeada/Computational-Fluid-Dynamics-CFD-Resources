@@ -46,6 +46,8 @@ $$
 
 ## Implementation
 
+The numerical wrappers use [the shared POD implementation](../../_numerics.py). They transpose their inputs as needed to its `(spatial points, snapshots)` convention and retain amplitude-scaled temporal coefficients.
+
 - Constants: `N_SAMPLES = 100`, `N_POINTS = 50`, `WAVES` (amplitude, wavenumber, angular frequency), `MEAN_VELOCITY = 1.0`, `NOISE_STD = 0.3`, `SEED = 42` and `N_PLOT = 10`.
 - `generate_snapshots(n_samples, n_points, noise_std, seed)` builds the matrix.
 - `pod(data)` subtracts the mean, runs the SVD and returns the eigenvalues, spatial modes and temporal coefficients.
