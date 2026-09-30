@@ -42,8 +42,7 @@ F^T & 0
 \end{pmatrix}
 \begin{pmatrix}
 \lambda(x) \\ \mu(x)
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
 r(x) \\ f(x)
 \end{pmatrix}
@@ -61,18 +60,24 @@ $$\text{MSE}[\hat{y}(x)] = \mathbb{E}[(\hat{y}(x)-y(x))^2].$$
 
 This can be written explicitly as:
 
-$$\text{MSE}[\hat{y}(x)] = \sigma^2 \left\{1 - 
+$$
+\text{MSE}[\hat{y}(x)] =
+\sigma^2 \left\{
+1 -
 \begin{pmatrix}
-r(x) \\ f(x)
-\end{pmatrix}^T
+r(x) \\
+f(x)
+\end{pmatrix}^{T}
 \begin{pmatrix}
-R & F \\ F^T & 0
+R & F \\
+F^T & 0
 \end{pmatrix}^{-1}
 \begin{pmatrix}
-r(x) \\ f(x)
+r(x) \\
+f(x)
 \end{pmatrix}
 \right\}
-$$  
+$$
 
 From this formula, we see that if $x$ coincides with a sample point $x^{(i)}$, the MSE goes to zero, confirming exact interpolation.
 
