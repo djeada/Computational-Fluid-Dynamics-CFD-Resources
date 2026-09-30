@@ -5,13 +5,17 @@ scikit-image), reconstructs it from its 5, 25 and 100 largest singular values,
 and plots the singular value spectrum and the cumulative energy ratio.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from skimage import color, data, io
 from skimage.util import img_as_float
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 RANKS = [5, 25, 100]  # truncation ranks shown next to the original
 ENERGY_LEVELS = [0.90, 0.95, 0.99]  # energy fractions marked on the energy plot
@@ -91,17 +95,11 @@ def plot_energy_ratios(ratios, levels):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--image",
         metavar="PATH",
         help="image file to compress (default: scikit-image 'camera' sample)",
-    )
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot windows"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figures as PNGs in DIR"
     )
     return parser.parse_args(argv)
 
@@ -123,15 +121,11 @@ def main(argv=None):
         "energy_ratios": plot_energy_ratios(ratios, ENERGY_LEVELS),
     }
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        for name, fig in figures.items():
-            fig.savefig(out_dir / f"{name}.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close("all")
-    else:
-        plt.show()
+    finish_figures(
+        {f"{name}.png": fig for (name, fig) in figures.items()},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

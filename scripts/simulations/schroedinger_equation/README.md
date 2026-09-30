@@ -42,9 +42,10 @@ where $\tilde\psi$ is the 2D FFT of $\psi$. Each factor has modulus one, so the 
 - `make_grid` builds the periodic grid $x_j = -L/2 + j\,\Delta x$, which has no duplicated end point, as the FFT requires.
 - `initial_wavefunction` builds the normalised Gaussian. `potential` defines $V$.
 - `squared_wavenumbers` returns $k^2$ on the FFT grid.
-- `evolve` performs one Strang step.
+- `evolve` provides a standalone reference implementation of one Strang step.
+- `SchrodingerSimulation(length, n, dt)` owns the wavefunction and caches the kinetic and potential propagators. `advance(steps)` evolves without plotting; `density`, `norm`, and `time` expose the current state.
 - `probability_norm` computes $\sum|\psi|^2\,\Delta x^2$.
-- `main` parses the flags, draws the surface and colour bar, and advances `SPEED_FACTOR` steps per frame with `FuncAnimation`, or with a plain loop when `--no-show` is given.
+- `main` parses the flags, draws the surface and colour bar, and advances `SPEED_FACTOR` steps per frame with `FuncAnimation`, or advances all requested steps and redraws once when `--no-show` is given.
 - Parameters are module constants: `DOMAIN_LENGTH`, `N_POINTS`, `TIME_STEP`, `FINAL_TIME` and `SPEED_FACTOR`.
 
 ## Usage

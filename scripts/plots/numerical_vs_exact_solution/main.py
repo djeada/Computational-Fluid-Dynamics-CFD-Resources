@@ -8,11 +8,15 @@ compares the discrete and exact solutions; the bottom panel shows the
 pointwise error.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 X_END = 1.0  # right end of the domain [-]
 U0 = 1.0  # boundary value u(0) [-]
@@ -58,13 +62,7 @@ def plot_comparison(x, u_num, error):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", type=Path, metavar="DIR", help="save the figure as PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--points",
         type=int,
@@ -85,15 +83,11 @@ def main(argv=None):
 
     fig = plot_comparison(x, u_num, error)
 
-    if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            args.output / "numerical_vs_exact_solution.png",
-            dpi=100,
-            bbox_inches="tight",
-        )
-    if not args.no_show:
-        plt.show()
+    finish_figures(
+        {"numerical_vs_exact_solution.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

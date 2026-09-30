@@ -60,10 +60,13 @@ With $\Delta t = 10^{-3}$ s all the usual limits are satisfied:
 - `solve_pressure_poisson` runs `N_PRESSURE_POISSON_ITERATIONS` Jacobi sweeps with zero-gradient pressure walls and removes the mean.
 - `time_step` performs the predictor, pressure solve and correction for one `TIME_STEP`.
 - `centreline_u` extracts $u/U$ on the column $x = L/2$ and interpolates it to the Ghia et al. $y/L$ values. These are nodes of the same 129-point grid, rounded to four decimals.
+- `CavitySimulation(n_points)` owns `u`, `v`, `p`, the grid, and the completed step counter. `advance(steps)` runs projection iterations without plotting.
 - `main` parses the flags, builds the figure with `draw_contour`, and advances `STEPS_PER_FRAME` steps per animation frame.
 - Physical and numerical constants (`LID_VELOCITY`, `KINEMATIC_VISCOSITY`, `DENSITY`, `TIME_STEP`, `N_FRAMES`) are at the top of the file. Changing `KINEMATIC_VISCOSITY` changes $Re$, and the Ghia data are only valid for $Re = 100$.
 
 The 50 Jacobi sweeps do not fully converge the pressure within a single step during the start-up transient. The warm start carries the iteration over from step to step, so the pressure converges as the flow approaches steady state.
+
+Headless execution advances all requested frames and renders the final contours once. With `--compare-ghia`, it prints the final centreline error; interactive execution reports it per frame.
 
 ## Usage
 

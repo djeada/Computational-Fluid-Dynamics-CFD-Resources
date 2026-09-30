@@ -5,11 +5,15 @@ functions R(h; theta) on lags h in [-2, 2] and overlays the curves for
 theta = 0.5, 1 and 2 in a 2 x 2 figure.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 H_MAX = 2.0  # lag range is [-H_MAX, H_MAX]
 N_LAGS = 400  # number of lag samples
@@ -64,13 +68,7 @@ def plot_correlation_functions(h, thetas):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     return parser.parse_args(argv)
 
 
@@ -80,14 +78,9 @@ def main(argv=None):
     h = np.linspace(-H_MAX, H_MAX, N_LAGS)
     fig = plot_correlation_functions(h, THETAS)
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "correlation_functions.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"correlation_functions.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

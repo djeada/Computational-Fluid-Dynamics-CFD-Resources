@@ -6,11 +6,15 @@ wind-tunnel measurements. Both data sets are synthetic: the "experiment" is an
 exponentially damped sine and the "CFD SRS" curve adds seeded Gaussian noise.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 N_POINTS = 50  # number of sample points along the line [-]
 X_MAX = 6.0  # length of the sampling line [m]
@@ -47,13 +51,7 @@ def plot_profiles(x, exp, cfd):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", type=Path, metavar="DIR", help="save the figure as PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     x, exp, cfd = generate_data()
@@ -62,13 +60,9 @@ def main(argv=None):
 
     fig = plot_profiles(x, exp, cfd)
 
-    if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            args.output / "mean_velocity_magnitude.png", dpi=100, bbox_inches="tight"
-        )
-    if not args.no_show:
-        plt.show()
+    finish_figures(
+        {"mean_velocity_magnitude.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

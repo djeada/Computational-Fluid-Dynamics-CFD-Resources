@@ -7,11 +7,15 @@ cover each parameter plane. In a real workflow each sample would be mapped to a
 deformed mesh and simulated.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 from scipy.stats.qmc import Sobol
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 SEED = 0  # seed for the Sobol scrambling
 LOG2_SAMPLES = 9  # 2**9 = 512 samples; Sobol balance needs a power of two
@@ -43,28 +47,17 @@ def make_figure(samples, parameters=PARAMETERS):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG file in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     samples = generate_design()
     fig = make_figure(samples)
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "design_space_distribution.png", dpi=100, bbox_inches="tight"
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"design_space_distribution.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

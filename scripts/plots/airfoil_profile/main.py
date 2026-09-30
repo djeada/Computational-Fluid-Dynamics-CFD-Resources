@@ -5,11 +5,15 @@ NACA thickness distribution, offsets the surfaces perpendicular to the camber
 line, and labels the leading edge, trailing edge, chord line and camber line.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 DEFAULT_CODE = "4412"  # 4 % camber at 40 % chord, 12 % thickness
 CHORD = 1.0  # chord length (unit length for simplicity)
@@ -107,18 +111,12 @@ def plot_airfoil(code, c=1.0, n=500):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--naca",
         default=DEFAULT_CODE,
         metavar="CODE",
         help=f"four-digit NACA designation (default: {DEFAULT_CODE})",
-    )
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
     )
     return parser.parse_args(argv)
 
@@ -128,14 +126,9 @@ def main(argv=None):
 
     fig = plot_airfoil(args.naca, CHORD, N_POINTS)
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "airfoil_profile.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"airfoil_profile.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

@@ -6,11 +6,15 @@ plots its 2-norm condition number over a logarithmic sweep of the correlation
 parameter theta.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 N_POINTS = 10  # number of sample locations in [0, 1]
 THETA_MIN = 1e-2  # smallest correlation parameter in the sweep
@@ -80,13 +84,7 @@ def plot_condition_numbers(thetas, cond_numbers):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     return parser.parse_args(argv)
 
 
@@ -97,18 +95,11 @@ def main(argv=None):
     cond_numbers = condition_numbers(lag_matrix(N_POINTS), thetas)
     fig = plot_condition_numbers(thetas, cond_numbers)
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "condition_number_of_the_correlation_matrix.png",
-            dpi=100,
-            bbox_inches="tight",
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"condition_number_of_the_correlation_matrix.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

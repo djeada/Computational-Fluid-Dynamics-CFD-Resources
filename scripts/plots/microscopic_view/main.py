@@ -6,11 +6,15 @@ u = (sin(y/2), cos(x/2)) as a quiver plot, standing for the continuum
 description in which velocity is defined at every point.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 BOX_SIZE = 10.0  # side length of each panel [arbitrary units]
 N_MOLECULES = 20  # number of dots in the molecular panel
@@ -67,22 +71,14 @@ def plot_microscopic_view():
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", type=Path, metavar="DIR", help="save the figure as PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     fig = plot_microscopic_view()
 
-    if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(args.output / "microscopic_view.png", dpi=100, bbox_inches="tight")
-    if not args.no_show:
-        plt.show()
+    finish_figures(
+        {"microscopic_view.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

@@ -5,10 +5,14 @@ form a stepped velocity profile. The velocity gradient between adjacent layers
 is annotated at each interface.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 LAYERS = ["Slow layer (bottom)", "Medium layer (middle)", "Fast layer (top)"]
 VELOCITIES = [0, 5, 10]  # arbitrary units
@@ -86,27 +90,16 @@ def draw_layers(layers=LAYERS, velocities=VELOCITIES, boundaries=LAYER_BOUNDARIE
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     fig = draw_layers()
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "velocity_layers_viscosity.png", dpi=100, bbox_inches="tight"
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"velocity_layers_viscosity.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

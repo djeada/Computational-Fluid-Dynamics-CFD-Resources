@@ -9,6 +9,8 @@ Thanks for helping improve this repository. Corrections, new notes, new scripts,
 | `notes/` | Theory notes in Markdown, grouped by subject (`fluid_mechanics`, `numerical`, `machine_learning`, `applied_mechanics`) |
 | `practice/` | Tool guides and worked projects (Gmsh, ParaView, OpenFOAM, meshing) |
 | `scripts/algorithms/`, `scripts/plots/`, `scripts/simulations/` | One folder per Python script, each with `main.py` and `README.md` |
+| `tests/` | Numerical correctness, import safety, figure ownership, and runner tests |
+| `scripts/_numerics.py`, `scripts/_plotting.py`, `scripts/_common.py` | Shared computation, plotting layouts, and CLI/output helpers |
 | `tools/` | Maintenance scripts used locally and in CI |
 | `ROADMAP.md` | Topics that are planned but not written yet |
 
@@ -28,7 +30,9 @@ Run these before opening a pull request. CI runs the same commands.
 python tools/check_links.py          # every relative link and image resolves
 python tools/generate_index.py       # refresh the counts and script index in README.md
 python tools/sync_related_scripts.py # add "Related Scripts" links to notes from script READMEs
-ruff check scripts tools             # syntax errors and undefined names
+ruff check scripts tools tests             # correctness, imports, and modern Python syntax
+ruff format --check scripts tools tests    # consistent formatting
+python -m unittest discover -s tests -v # numerical and runtime regression tests
 python tools/run_scripts.py          # run every script headless (or pass a name filter)
 ```
 
@@ -39,24 +43,27 @@ Each script lives in its own folder: `scripts/<category>/<name>/main.py` with a 
 ### Code
 
 - Start the file with a module docstring that says what the script demonstrates.
-- Put all logic in functions. Do not run anything at import time; end the file with:
+- Put computation in functions or explicit solver state classes. Do not run anything at import time; end the file with:
 
   ```python
   if __name__ == "__main__":
       main()
   ```
 
+- Use `create_parser(__doc__)` from `scripts/_common.py` for shared CLI options and `finish_figures({"name.png": fig}, output=args.output, show=not args.no_show)` for static examples. Animations use `save_figure` after their final redraw. Keep simulation state separate from artist callbacks; `advance(steps)` must work without a figure. Reuse the POD implementation in `scripts/_numerics.py` with spatial points in rows and snapshots in columns. The examples add the `scripts/` directory to the import path so direct execution works from any working directory without installing a package.
 - `main(argv=None)` parses arguments with `argparse` and supports these flags:
 
   | Flag | Required | Behaviour |
   |------|----------|-----------|
   | `--no-show` | always | Do not open plot or pygame windows |
   | `--output DIR` | always | Create `DIR` and save every figure as a PNG in it (`dpi=100`, `bbox_inches="tight"`). Animations save their final frame; pygame scripts save a screenshot of the last frame |
-  | `--steps N` | time-stepping, animated, or interactive scripts | Run exactly `N` iterations/frames, then stop |
+  | `--steps N` | time-stepping, animated, or interactive scripts | Use `type=positive_int` for a positive iteration/frame count |
 
   Running with no flags keeps the original interactive behaviour.
 - With `--no-show --output DIR --steps 10`, a script must finish in well under a minute on a laptop.
 - Never use absolute paths. Resolve input files relative to the script with `Path(__file__).parent`.
+- Animation initialization functions must draw without advancing the solver. Headless runs should advance all steps and render the final state once.
+- Test numerical changes against reconstruction identities, analytical solutions, or conservation laws. A successful PNG export alone does not establish numerical correctness.
 - Seed random number generators so the output is reproducible.
 - Keep physical parameters as named constants or function arguments with units in a comment.
 

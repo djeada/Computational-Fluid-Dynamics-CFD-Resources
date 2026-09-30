@@ -52,8 +52,9 @@ $$\nu = c_s^2\left(\tau - \tfrac12\right) = \frac{1}{3}\left(\frac{1}{\omega} - 
 
 - `compute_density`, `compute_velocity` and `equilibrium` evaluate the moments and $f^{eq}$ with vectorised `numpy.einsum`.
 - `make_obstacle` returns the cylinder mask. `make_inflow_velocity` builds the perturbed inflow profile.
-- `lbm_step(fin, obstacle, inflow_velocity)` performs one step in place: outflow condition, moments, Zou/He inlet, BGK collision (`RELAXATION_PARAMETER`), bounce-back (`NOSLIP` gives the opposite directions), and streaming with `np.roll`.
-- `main` sets up the figure and advances `STEPS_PER_FRAME` time steps per frame, with `FuncAnimation` or, with `--no-show`, a plain loop.
+- `lbm_step(fin, obstacle, inflow_velocity, relaxation)` performs one step in place: outflow condition, moments, Zou/He inlet, BGK collision with the supplied relaxation rate, bounce-back (`NOSLIP` gives the opposite directions), and streaming with `np.roll`.
+- `LatticeBoltzmannSimulation(dimensions)` owns the populations, inlet profile, obstacle, and iteration counter. Smaller grids can be used for numerical checks. `advance(steps)` runs without plotting; `speed` computes velocity from the current streamed populations and masks the cylinder.
+- `main` sets up the figure and advances `STEPS_PER_FRAME` time steps per frame, with `FuncAnimation` or, with `--no-show`, one batch followed by a final redraw.
 - Parameters are module constants: `REYNOLDS_NUMBER`, `LATTICE_DIMENSIONS`, `CYLINDER_RADIUS`, `VELOCITY_LATTICE_UNITS`, `STEPS_PER_FRAME` and `N_FRAMES`.
 
 ## Usage

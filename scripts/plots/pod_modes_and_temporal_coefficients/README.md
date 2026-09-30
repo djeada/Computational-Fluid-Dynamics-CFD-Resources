@@ -44,10 +44,12 @@ $a_i(t)$ is the projection of each snapshot onto mode $i$. The field is recovere
 
 ## Implementation
 
+The numerical wrappers use [the shared POD implementation](../../_numerics.py). They transpose their inputs as needed to its `(spatial points, snapshots)` convention and retain amplitude-scaled temporal coefficients.
+
 - Constants: `N_X, N_Y, N_T = 50, 30, 100`, `X_RANGE = (1700, 2000)` mm, `Y_RANGE = (0, 100)` mm, `T_END = 4.0` s, `STRUCTURES` (amplitude, x and y wavenumbers, time function), `NOISE_STD = 0.02`, `SEED = 42` and `N_MODES = 3`.
 - `generate_field(noise_std, seed)` returns `x`, `y`, `t` and the field with shape `(N_X, N_Y, N_T)`.
 - `pod(field, n_modes)` reshapes, removes the mean, runs `numpy.linalg.svd`, and returns the reshaped modes, the scaled temporal coefficients and the energy fractions.
-- `plot_modes(x, y, t, modes, time_coeffs, energy_fraction)` lays out the 3 × 2 grid with `GridSpec`, using `contourf` with the `jet` colormap and 50 levels.
+- `plot_modes(x, y, t, modes, time_coeffs, energy_fraction)` delegates the 3 × 2 layout to the shared `plot_pod_mode_pairs` helper, using `contourf` with the `jet` colormap and 50 levels.
 - `main(argv)` handles the flags.
 
 ## Usage

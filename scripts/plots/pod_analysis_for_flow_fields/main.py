@@ -8,11 +8,16 @@ the percentage and cumulative percentage of turbulent kinetic energy (TKE)
 captured by each mode.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
+from _numerics import compute_pod  # noqa: E402
 
 N_SAMPLES = 100  # number of snapshots M (rows of the snapshot matrix)
 N_POINTS = 50  # number of spatial points N (columns)
@@ -45,16 +50,13 @@ def pod(data):
     Returns the eigenvalues lambda_i = sigma_i^2 / (M - 1), the spatial modes
     (rows) and the temporal coefficients (columns).
     """
-    n_samples = data.shape[0]
-    fluctuations = data - data.mean(axis=0)
-    U, S, Vt = np.linalg.svd(fluctuations, full_matrices=False)
-    eigenvalues = S**2 / (n_samples - 1)
-    time_coeffs = U * S
-    return eigenvalues, Vt, time_coeffs
+    result = compute_pod(data.T)
+    return result.eigenvalues, result.modes.T, result.coefficients.T
 
 
 def plot_spectrum(eigenvalues, n_plot=N_PLOT):
     """Bar chart of eigenvalues with %TKE and cumulative %TKE on a twin axis."""
+    n_plot = min(n_plot, len(eigenvalues))
     tke_percentage = 100.0 * eigenvalues / eigenvalues.sum()
     cumulative = np.cumsum(tke_percentage)
     modes = np.arange(1, n_plot + 1)
@@ -84,19 +86,13 @@ def plot_spectrum(eigenvalues, n_plot=N_PLOT):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", type=Path, metavar="DIR", help="save the figure as PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     data = generate_snapshots()
     eigenvalues, _, _ = pod(data)
     tke = 100.0 * eigenvalues / eigenvalues.sum()
-    for i in range(N_PLOT):
+    for i in range(min(N_PLOT, len(eigenvalues))):
         print(
             f"mode {i + 1:2d}: lambda = {eigenvalues[i]:.4f}, TKE = {tke[i]:5.2f} %, "
             f"cumulative = {tke[: i + 1].sum():6.2f} %"
@@ -104,15 +100,11 @@ def main(argv=None):
 
     fig = plot_spectrum(eigenvalues)
 
-    if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            args.output / "pod_analysis_for_flow_fields.png",
-            dpi=100,
-            bbox_inches="tight",
-        )
-    if not args.no_show:
-        plt.show()
+    finish_figures(
+        {"pod_analysis_for_flow_fields.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

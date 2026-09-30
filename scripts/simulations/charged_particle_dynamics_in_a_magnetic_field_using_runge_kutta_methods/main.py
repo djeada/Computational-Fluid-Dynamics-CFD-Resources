@@ -5,12 +5,16 @@ integrated with the classical fourth-order Runge-Kutta method (RK4). The
 trajectory is revealed progressively in a 3D animation.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 Q = 1.0  # particle charge, C
 M = 1.0  # particle mass, kg
@@ -69,12 +73,10 @@ def report(t_vals, r_vals, v_vals):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", metavar="DIR", help="save the final frame as PNG")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=NUM_FRAMES,
         help=f"animation frames, each {STEPS_PER_FRAME} RK4 steps of dt = {DT} s "
         f"(default {NUM_FRAMES}, i.e. t = 50 s)",
@@ -132,13 +134,11 @@ def main(argv=None):
         del ani
 
     if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
         update(n_frames)
-        fig.savefig(
-            out_dir / "charged_particle_helix.png",
-            dpi=100,
-            bbox_inches="tight",
+        save_figure(
+            fig,
+            args.output,
+            "charged_particle_helix.png",
             facecolor=fig.get_facecolor(),
         )
     plt.close(fig)

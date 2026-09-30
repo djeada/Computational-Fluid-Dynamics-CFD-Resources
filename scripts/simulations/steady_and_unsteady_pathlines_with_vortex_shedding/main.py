@@ -9,13 +9,17 @@ over the streamlines: they coincide in the steady case and differ in the
 unsteady one.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Circle
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 # Flow parameters (dimensionless)
 R = 1.0  # cylinder radius
@@ -144,12 +148,10 @@ def draw_panel(ax, title, X, Y, Ux, Uy, color):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", type=Path, help="directory to save the final frame")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=N_STEPS,
         help=f"time steps of {TIME_STEP} (one frame each) (default: {N_STEPS})",
     )
@@ -221,12 +223,7 @@ def main(argv=None):
         plt.show()
 
     if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            args.output / "steady_and_unsteady_pathlines.png",
-            dpi=100,
-            bbox_inches="tight",
-        )
+        save_figure(fig, args.output, "steady_and_unsteady_pathlines.png")
     plt.close(fig)
 
 

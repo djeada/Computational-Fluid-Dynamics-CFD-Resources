@@ -1,6 +1,6 @@
 target-version = "py310"
 
 [lint]
-# Only rules that catch real breakage: syntax errors, undefined names,
-# and invalid escape sequences.
-select = ["E9", "F63", "F7", "F82", "W605"]
+# Catch broken code, unused imports/variables, inconsistent import ordering,
+# obsolete Python syntax, and invalid string escapes.
+select = ["E9", "F", "I", "UP", "W605"]

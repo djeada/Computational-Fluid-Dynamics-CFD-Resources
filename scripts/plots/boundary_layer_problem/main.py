@@ -6,11 +6,15 @@ component, writes the samples to a CSV file and plots the velocity components
 against the wall-normal coordinate.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 U_INF = 1.0  # free-stream velocity (m/s)
 DELTA = 0.05  # boundary layer thickness (m)
@@ -66,16 +70,7 @@ def plot_all_components(y, u0, u1, u2):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot windows"
-    )
-    parser.add_argument(
-        "--output",
-        metavar="DIR",
-        help="save the figures and the CSV file in DIR "
-        "(without it the CSV is written to the current directory)",
-    )
+    parser = create_parser(__doc__)
     return parser.parse_args(argv)
 
 
@@ -93,13 +88,11 @@ def main(argv=None):
         "U0_vs_Y": plot_u0(y, u0),
         "U_vs_Y": plot_all_components(y, u0, u1, u2),
     }
-    if args.output:
-        for name, fig in figures.items():
-            fig.savefig(out_dir / f"{name}.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close("all")
-    else:
-        plt.show()
+    finish_figures(
+        {f"{name}.png": fig for (name, fig) in figures.items()},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

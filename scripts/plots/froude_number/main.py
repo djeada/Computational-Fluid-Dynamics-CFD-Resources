@@ -6,11 +6,15 @@ Fr = 1/sqrt(2 pi) (about 0.40), where the bow wave length equals the hull
 length, and Fr = 1, a rough threshold for the planing regime.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 G = 9.81  # gravitational acceleration, m/s^2
 HULL_LENGTHS = [5, 10, 15, 20]  # m
@@ -84,25 +88,14 @@ def plot_froude_number_vs_velocity(lengths=HULL_LENGTHS, g=G, v_max=V_MAX):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG file in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     fig = plot_froude_number_vs_velocity()
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "froude_number.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"froude_number.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":

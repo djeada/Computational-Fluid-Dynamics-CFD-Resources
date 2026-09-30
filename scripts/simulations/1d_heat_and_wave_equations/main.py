@@ -7,7 +7,7 @@ the explicit second-order leapfrog scheme, whose Courant number c*dt/dx must
 not exceed 1. Both share one time step, set by the wave CFL limit.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.animation as animation
@@ -15,6 +15,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.sparse import diags, identity
 from scipy.sparse.linalg import splu
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 L = 10.0  # domain length (nondimensional)
 T = 500.0  # total simulated time
@@ -27,6 +31,10 @@ PULSE_WIDTH = 5.0  # initial condition exp(-PULSE_WIDTH * (x - L/2)^2)
 
 def make_grid(length=L, nx=NX, c=C, courant=COURANT, total_time=T):
     """Return x, dx, dt and the number of steps needed to reach total_time."""
+    if nx < 3 or min(length, c, total_time) <= 0 or not 0 < courant <= 1:
+        raise ValueError(
+            "require nx >= 3, positive length/speed/time, and 0 < Courant <= 1"
+        )
     x = np.linspace(0.0, length, nx)
     dx = x[1] - x[0]
     nt = int(np.ceil(total_time / (courant * dx / c)))
@@ -67,15 +75,48 @@ def wave_step(u_prev, u, courant2):
     u[:] = u_new
 
 
-def initial_state(x, dx, dt):
+def initial_state(x, dx, dt, c=C, pulse_width=PULSE_WIDTH):
     """Return (heat, wave_prev, wave) for a Gaussian pulse at rest."""
-    u0 = np.exp(-PULSE_WIDTH * (x - L / 2) ** 2)
+    u0 = np.exp(-pulse_width * (x - (x[0] + x[-1]) / 2) ** 2)
     u0[0] = u0[-1] = 0.0
-    courant2 = (C * dt / dx) ** 2
+    courant2 = (c * dt / dx) ** 2
     # Zero initial velocity: u^{-1} = u^0 + (C^2/2) * delta^2 u^0 (second order)
     u_prev = u0.copy()
     u_prev[1:-1] += 0.5 * courant2 * (u0[2:] - 2.0 * u0[1:-1] + u0[:-2])
     return u0.copy(), u_prev, u0.copy()
+
+
+class HeatWaveSimulation:
+    """Coupled heat/wave state with cached Crank-Nicolson factorization."""
+
+    def __init__(
+        self, length=L, nx=NX, c=C, diffusivity=D, courant=COURANT, total_time=T
+    ):
+        if diffusivity < 0:
+            raise ValueError("diffusivity must be nonnegative")
+        self.x, self.dx, self.dt, self.default_steps = make_grid(
+            length, nx, c, courant, total_time
+        )
+        self.r = diffusivity * self.dt / self.dx**2
+        self.courant2 = (c * self.dt / self.dx) ** 2
+        self.lu, self.b = crank_nicolson_operators(nx, self.r)
+        self.heat, self.wave_prev, self.wave = initial_state(
+            self.x, self.dx, self.dt, c
+        )
+        self.steps = 0
+
+    @property
+    def time(self):
+        return self.steps * self.dt
+
+    def advance(self, steps=1):
+        """Advance both equations exactly steps iterations, without plotting."""
+        if steps < 0:
+            raise ValueError("steps must be nonnegative")
+        for _ in range(steps):
+            heat_step(self.heat, self.lu, self.b)
+            wave_step(self.wave_prev, self.wave, self.courant2)
+            self.steps += 1
 
 
 def setup_figure(x):
@@ -83,7 +124,7 @@ def setup_figure(x):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), facecolor="black")
     for ax in (ax1, ax2):
         ax.set_facecolor("black")
-        ax.set_xlim(0, L)
+        ax.set_xlim(x[0], x[-1])
         ax.grid(False)
         ax.tick_params(axis="x", colors="white")
         ax.tick_params(axis="y", colors="white")
@@ -103,67 +144,57 @@ def setup_figure(x):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", metavar="DIR", help="save the final frame as PNG")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=None,
         help="number of time steps (animation frames); default reaches t = T",
     )
     args = parser.parse_args(argv)
 
-    x, dx, dt, nt = make_grid()
-    n_steps = nt if args.steps is None else args.steps
-    r = D * dt / dx**2
-    courant2 = (C * dt / dx) ** 2
+    simulation = HeatWaveSimulation()
+    n_steps = simulation.default_steps if args.steps is None else args.steps
     print(
-        f"dx = {dx:.4f}, dt = {dt:.4f}, Courant = {np.sqrt(courant2):.3f}, "
-        f"r = D dt/dx^2 = {r:.2f} (Crank-Nicolson: stable for any r)"
+        f"dx = {simulation.dx:.4f}, dt = {simulation.dt:.4f}, "
+        f"Courant = {np.sqrt(simulation.courant2):.3f}, "
+        f"r = D dt/dx^2 = {simulation.r:.2f} (Crank-Nicolson: stable for any r)"
     )
-    if courant2 > 1.0:
-        print("Warning: Courant number > 1, the leapfrog wave solver is unstable.")
 
-    lu, b = crank_nicolson_operators(len(x), r)
-    heat, wave_prev, wave = initial_state(x, dx, dt)
+    fig, (line_heat, line_wave, text1, text2) = setup_figure(simulation.x)
 
-    fig, (line_heat, line_wave, text1, text2) = setup_figure(x)
-
-    def draw(step):
-        line_heat.set_ydata(heat)
-        line_wave.set_ydata(wave)
-        label = f"Time = {step * dt:.4f} s"
+    def draw():
+        line_heat.set_ydata(simulation.heat)
+        line_wave.set_ydata(simulation.wave)
+        label = f"Time = {simulation.time:.4f} s"
         text1.set_text(label)
         text2.set_text(label)
         return [line_heat, line_wave, text1, text2]
 
     def animate(i):
-        heat_step(heat, lu, b)
-        wave_step(wave_prev, wave, courant2)
-        return draw(i + 1)
+        simulation.advance()
+        return draw()
 
-    draw(0)
+    draw()
     if args.no_show:
-        for _ in range(n_steps):
-            heat_step(heat, lu, b)
-            wave_step(wave_prev, wave, courant2)
-        draw(n_steps)
+        simulation.advance(n_steps)
+        draw()
     else:
         ani = animation.FuncAnimation(
-            fig, animate, frames=n_steps, interval=20, blit=True, repeat=False
+            fig,
+            animate,
+            frames=n_steps,
+            init_func=draw,
+            interval=20,
+            blit=True,
+            repeat=False,
         )
         plt.show()  # after the window closes, the figure holds the last frame
         del ani
 
     if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "heat_and_wave_1d.png",
-            dpi=100,
-            bbox_inches="tight",
-            facecolor=fig.get_facecolor(),
+        save_figure(
+            fig, args.output, "heat_and_wave_1d.png", facecolor=fig.get_facecolor()
         )
     plt.close(fig)
 

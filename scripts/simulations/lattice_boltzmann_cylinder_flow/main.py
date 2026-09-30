@@ -6,12 +6,16 @@ The velocity magnitude is animated with Matplotlib and shows the von Karman
 vortex street once shedding sets in.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 # Simulation parameters (lattice units: dx = dt = 1)
 REYNOLDS_NUMBER = 350.0  # Re = U * r / nu, based on the cylinder radius
@@ -62,30 +66,29 @@ def equilibrium(rho, u):
     return rho * LATTICE_WEIGHTS[:, None, None] * (1.0 + cu + 0.5 * cu**2 - usqr)
 
 
-def make_obstacle():
+def make_obstacle(
+    dimensions=LATTICE_DIMENSIONS, coords=CYLINDER_COORDS, radius=CYLINDER_RADIUS
+):
     """Boolean mask of the lattice nodes inside the cylinder."""
     return np.fromfunction(
-        lambda x, y: (
-            (x - CYLINDER_COORDS[0]) ** 2 + (y - CYLINDER_COORDS[1]) ** 2
-            < CYLINDER_RADIUS**2
-        ),
-        LATTICE_DIMENSIONS,
+        lambda x, y: (x - coords[0]) ** 2 + (y - coords[1]) ** 2 < radius**2,
+        dimensions,
     )
 
 
-def make_inflow_velocity():
+def make_inflow_velocity(dimensions=LATTICE_DIMENSIONS, speed=VELOCITY_LATTICE_UNITS):
     """Uniform inflow with a tiny sinusoidal perturbation that triggers shedding."""
     return np.fromfunction(
         lambda d, x, y: (
             (1 - d)
-            * VELOCITY_LATTICE_UNITS
-            * (1.0 + 1e-4 * np.sin(y / (LATTICE_DIMENSIONS[1] - 1.0) * 2 * np.pi))
+            * speed
+            * (1.0 + 1e-4 * np.sin(y / (dimensions[1] - 1.0) * 2 * np.pi))
         ),
-        (2, *LATTICE_DIMENSIONS),
+        (2, *dimensions),
     )
 
 
-def lbm_step(fin, obstacle, inflow_velocity):
+def lbm_step(fin, obstacle, inflow_velocity, relaxation=RELAXATION_PARAMETER):
     """Advance the populations by one time step in place; return the velocity."""
     # Right wall: zero-gradient outflow for the populations entering the domain.
     fin[INDICES_RIGHT_WALL, -1, :] = fin[INDICES_RIGHT_WALL, -2, :]
@@ -108,7 +111,7 @@ def lbm_step(fin, obstacle, inflow_velocity):
     )
 
     # BGK collision.
-    fout = fin - RELAXATION_PARAMETER * (fin - feq)
+    fout = fin - relaxation * (fin - feq)
 
     # Full-way bounce-back inside the obstacle (no-slip wall).
     fout[:, obstacle] = fin[NOSLIP][:, obstacle]
@@ -119,13 +122,44 @@ def lbm_step(fin, obstacle, inflow_velocity):
     return u
 
 
+class LatticeBoltzmannSimulation:
+    """Population state and BGK time integration, with configurable grid size."""
+
+    def __init__(self, dimensions=LATTICE_DIMENSIONS):
+        nx, ny = dimensions
+        if nx < 12 or ny < 12:
+            raise ValueError("at least 12 nodes per axis are required")
+        radius = ny // 12
+        self.viscosity = VELOCITY_LATTICE_UNITS * radius / REYNOLDS_NUMBER
+        self.relaxation = 1.0 / (3.0 * self.viscosity + 0.5)
+        self.obstacle = make_obstacle(dimensions, (nx // 4, ny // 2), radius)
+        self.inflow_velocity = make_inflow_velocity(dimensions)
+        self.populations = equilibrium(1.0, self.inflow_velocity)
+        self.steps = 0
+
+    @property
+    def speed(self):
+        velocity = compute_velocity(self.populations, compute_density(self.populations))
+        speed = np.linalg.norm(velocity, axis=0)
+        speed[self.obstacle] = np.nan
+        return speed
+
+    def advance(self, steps=1):
+        """Advance exactly steps collision/streaming iterations without plotting."""
+        if steps < 0:
+            raise ValueError("steps must be nonnegative")
+        for _ in range(steps):
+            lbm_step(
+                self.populations, self.obstacle, self.inflow_velocity, self.relaxation
+            )
+            self.steps += 1
+
+
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", type=Path, help="directory to save the final frame")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=N_FRAMES,
         help=f"animation frames, each {STEPS_PER_FRAME} LBM time steps "
         f"(default: {N_FRAMES})",
@@ -137,17 +171,12 @@ def main(argv=None):
         f"omega = {RELAXATION_PARAMETER:.4f}, tau = {1 / RELAXATION_PARAMETER:.4f}"
     )
 
-    obstacle = make_obstacle()
-    inflow_velocity = make_inflow_velocity()
-    fin = equilibrium(1.0, inflow_velocity)
-    state = {"time_step": 0}
+    simulation = LatticeBoltzmannSimulation()
 
     fig, ax = plt.subplots(facecolor="black")
     ax.set_facecolor("black")
-    initial_speed = np.sqrt(inflow_velocity[0] ** 2 + inflow_velocity[1] ** 2)
-    initial_speed[obstacle] = np.nan  # obstacle drawn in the background colour
     image = ax.imshow(
-        initial_speed.T,
+        simulation.speed.T,
         cmap="viridis",
         origin="lower",
         vmin=0.0,
@@ -165,19 +194,18 @@ def main(argv=None):
     for spine in ax.spines.values():
         spine.set_edgecolor("white")
 
-    def update(frame):
-        for _ in range(STEPS_PER_FRAME):
-            u = lbm_step(fin, obstacle, inflow_velocity)
-        state["time_step"] += STEPS_PER_FRAME
-        speed = np.sqrt(u[0] ** 2 + u[1] ** 2)
-        speed[obstacle] = np.nan
-        image.set_data(speed.T)
-        title.set_text(f"2D Flow Around a Cylinder (step {state['time_step']})")
+    def redraw():
+        image.set_data(simulation.speed.T)
+        title.set_text(f"2D Flow Around a Cylinder (step {simulation.steps})")
         return (image,)
 
+    def update(frame):
+        simulation.advance(STEPS_PER_FRAME)
+        return redraw()
+
     if args.no_show:
-        for frame in range(args.steps):
-            update(frame)
+        simulation.advance(args.steps * STEPS_PER_FRAME)
+        redraw()
     else:
         animation = FuncAnimation(  # noqa: F841 (keep a reference while showing)
             fig, update, frames=args.steps, init_func=lambda: (), repeat=False
@@ -185,11 +213,10 @@ def main(argv=None):
         plt.show()
 
     if args.output:
-        args.output.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            args.output / "lattice_boltzmann_cylinder_flow.png",
-            dpi=100,
-            bbox_inches="tight",
+        save_figure(
+            fig,
+            args.output,
+            "lattice_boltzmann_cylinder_flow.png",
             facecolor=fig.get_facecolor(),
         )
     plt.close(fig)

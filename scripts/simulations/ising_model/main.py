@@ -6,7 +6,7 @@ Metropolis Monte Carlo sweeps, accelerated with Numba. The animation shows the
 spin lattice together with the total magnetization and energy versus sweeps.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.animation as animation
@@ -17,6 +17,10 @@ from matplotlib.colors import ListedColormap
 from matplotlib.patches import Patch
 from matplotlib.ticker import FuncFormatter
 from numba import njit
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 N_ROWS, N_COLS = 300, 300  # lattice size
 BETA = 0.6  # inverse temperature 1/(k_B T); critical value ln(1 + sqrt 2)/2 ~ 0.4407
@@ -212,12 +216,10 @@ def animate_simulation(
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", metavar="DIR", help="save the final frame as PNG")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=TOTAL_STEPS,
         help=f"number of Monte Carlo sweeps (default {TOTAL_STEPS})",
     )
@@ -242,9 +244,7 @@ def main(argv=None):
     )
 
     if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "ising_model.png", dpi=100, bbox_inches="tight")
+        save_figure(fig, args.output, "ising_model.png")
     plt.close(fig)
 
 

@@ -4,12 +4,16 @@ Plots f(v) for 300, 600, 900 and 1200 K and marks the most probable, mean and
 root-mean-square speed of each curve.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.lines import Line2D
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 K_B = 1.380649e-23  # Boltzmann constant, J/K
 M_N2 = 4.65e-26  # mass of one N2 molecule, kg (28.01 u)
@@ -76,13 +80,7 @@ def plot_distributions(temperatures=TEMPERATURES, max_speed=MAX_SPEED):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     for T in TEMPERATURES:
@@ -93,18 +91,11 @@ def main(argv=None):
 
     fig = plot_distributions()
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "probability_distribution_function.png",
-            dpi=100,
-            bbox_inches="tight",
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"probability_distribution_function.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

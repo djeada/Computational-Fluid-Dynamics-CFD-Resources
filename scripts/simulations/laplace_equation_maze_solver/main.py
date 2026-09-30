@@ -7,13 +7,16 @@ that are animated in Pygame. The route is then traced by stepping to the
 neighbour with the largest potential and revealed one cell per frame.
 """
 
-import argparse
 import os
 import random
+import sys
 from pathlib import Path
-from typing import List, Tuple
 
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int  # noqa: E402
 
 # Constants
 MAZE_SIZE: int = 100  # grid cells per side (walls and passages)
@@ -23,11 +26,11 @@ CG_ITERATIONS_PER_FRAME: int = 25  # solver iterations drawn per frame
 MAX_ITERATIONS: int = 50_000  # cap on conjugate-gradient iterations
 TOLERANCE: float = 1e-10  # stop when ||residual|| / ||b|| < TOLERANCE
 FPS: int = 30
-SCREEN_COLOR: Tuple[int, int, int] = (255, 255, 255)
-WALL_COLOR: Tuple[int, int, int] = (0, 0, 0)
-PATH_COLOR: Tuple[int, int, int] = (255, 215, 0)
-START_COLOR: Tuple[int, int, int] = (255, 0, 0)
-END_COLOR: Tuple[int, int, int] = (0, 255, 0)
+SCREEN_COLOR: tuple[int, int, int] = (255, 255, 255)
+WALL_COLOR: tuple[int, int, int] = (0, 0, 0)
+PATH_COLOR: tuple[int, int, int] = (255, 215, 0)
+START_COLOR: tuple[int, int, int] = (255, 0, 0)
+END_COLOR: tuple[int, int, int] = (0, 255, 0)
 
 NEIGHBOURS = ((0, 1), (1, 0), (0, -1), (-1, 0))
 
@@ -37,7 +40,7 @@ def generate_maze(size: int, rng: random.Random) -> np.ndarray:
     maze = np.ones((size, size), dtype=int)
     start = (0, 0)
     maze[start] = 0
-    stack: List[Tuple[int, int]] = [start]
+    stack: list[tuple[int, int]] = [start]
     directions = [(-2, 0), (2, 0), (0, -2), (0, 2)]
 
     while stack:
@@ -126,10 +129,10 @@ class LaplaceSolver:
 
 
 def follow_gradient(
-    phi: np.ndarray, open_mask: np.ndarray, start: Tuple[int, int], end: Tuple[int, int]
-) -> List[Tuple[int, int]]:
+    phi: np.ndarray, open_mask: np.ndarray, start: tuple[int, int], end: tuple[int, int]
+) -> list[tuple[int, int]]:
     """Greedy ascent to the open 4-neighbour with the largest phi, with backtracking."""
-    path: List[Tuple[int, int]] = [start]
+    path: list[tuple[int, int]] = [start]
     visited = {start}
     while path and path[-1] != end:
         x, y = path[-1]
@@ -173,12 +176,10 @@ def draw_maze(
 
 
 def main(argv=None) -> None:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", type=Path, help="directory to save a screenshot")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=None,
         help=f"frames to run; each frame does {CG_ITERATIONS_PER_FRAME} solver "
         "iterations, or reveals one path cell once solved (default: until closed)",
@@ -200,7 +201,7 @@ def main(argv=None) -> None:
         screen = pygame.display.set_mode((MAZE_SIZE * CELL_SIZE, MAZE_SIZE * CELL_SIZE))
         pygame.display.set_caption("Interactive Maze Solver")
         clock = pygame.time.Clock()
-        path: List[Tuple[int, int]] = []
+        path: list[tuple[int, int]] = []
         visible_path_length = 0
         frame = 0
 

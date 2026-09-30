@@ -7,13 +7,17 @@ a 3D surface after each grain, and the size of the avalanche it caused (number
 of topplings) is shown in the title.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation
 from matplotlib.colors import Normalize
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int, save_figure  # noqa: E402
 
 GRID_SIZE = 20  # lattice is GRID_SIZE x GRID_SIZE
 NUM_GRAINS = 1000  # grains added in the default animation
@@ -109,12 +113,10 @@ def setup_figure(grid):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", metavar="DIR", help="save the final frame as PNG")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=NUM_GRAINS,
         help=f"number of grains to add, one per frame (default {NUM_GRAINS})",
     )
@@ -152,14 +154,7 @@ def main(argv=None):
             f"{np.count_nonzero(sizes)} avalanches, largest {sizes.max()} topplings"
         )
     if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "sandpile_3d.png",
-            dpi=100,
-            bbox_inches="tight",
-            facecolor=fig.get_facecolor(),
-        )
+        save_figure(fig, args.output, "sandpile_3d.png", facecolor=fig.get_facecolor())
     plt.close(fig)
 
 

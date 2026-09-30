@@ -39,6 +39,8 @@ Column 1 of $\tilde{\mathbf{U}}^k$ is the contribution of mode $k$ to $u'_a$, an
 
 ## Implementation
 
+The numerical wrappers use [the shared POD implementation](../../_numerics.py). They transpose their inputs as needed to its `(spatial points, snapshots)` convention and retain amplitude-scaled temporal coefficients.
+
 - Constants: `T_START = 0.9`, `T_END = 1.1` s, `N_SAMPLES = 1000`, `FREQUENCY = 10.0` Hz, `AMP_FUNDAMENTAL = 1.0`, `AMP_HARMONIC = 0.5`, `NOISE_STD = 0.1` and `SEED = 0`.
 - `generate_signals(n_samples, noise_std, seed)` returns $t$ and the $m \times 2$ matrix.
 - `pod_contributions(snapshots)` removes the mean, runs `numpy.linalg.svd` and returns the list of $\tilde{\mathbf{U}}^k$, the modes and the energy fractions.

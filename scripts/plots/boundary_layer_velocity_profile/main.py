@@ -4,11 +4,15 @@ Evaluates u / U_inf = (y / delta)^(1/7) for 0 <= y / delta <= 1 and marks the
 wall and the boundary layer edge.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 N_POINTS = 1000  # wall-normal samples (dense, because du/dy is infinite at the wall)
 POWER = 1 / 7  # exponent of the power law
@@ -50,13 +54,7 @@ def plot_profile(eta, u_ratio):
 
 
 def parse_args(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open the plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     return parser.parse_args(argv)
 
 
@@ -66,18 +64,11 @@ def main(argv=None):
     eta = np.linspace(0, 1, N_POINTS)
     fig = plot_profile(eta, power_law_profile(eta))
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(
-            out_dir / "boundary_layer_velocity_profile.png",
-            dpi=100,
-            bbox_inches="tight",
-        )
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"boundary_layer_velocity_profile.png": fig},
+        output=args.output,
+        show=not args.no_show,
+    )
 
 
 if __name__ == "__main__":

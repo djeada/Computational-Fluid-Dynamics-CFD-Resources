@@ -7,11 +7,15 @@ explicit viscous diffusion, and a passive temperature field marks the two
 layers so the roll-up is visible in the Pygame window.
 """
 
-import argparse
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, positive_int  # noqa: E402
 
 # Simulation parameters (grid units: dx = dy = 1)
 GRID_SIZE = 256  # cells per side of the periodic square domain
@@ -129,12 +133,10 @@ def draw(screen, pygame, temperature):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--no-show", action="store_true", help="do not open a window")
-    parser.add_argument("--output", type=Path, help="directory to save a screenshot")
+    parser = create_parser(__doc__)
     parser.add_argument(
         "--steps",
-        type=int,
+        type=positive_int,
         default=None,
         help=f"frames to run, each {STEPS_PER_FRAME} solver steps "
         "(default: until the window is closed)",

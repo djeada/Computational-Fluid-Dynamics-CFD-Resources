@@ -39,7 +39,10 @@ It is stable for $C \le 1$ (CFL condition). For a pulse at rest ($\partial u/\pa
 - `crank_nicolson_operators` assembles the sparse matrices $A = I - \tfrac{r}{2}\delta^2$ and $B = I + \tfrac{r}{2}\delta^2$ with identity boundary rows, and factorises $A$ with `scipy.sparse.linalg.splu`.
 - `heat_step` solves $A u^{n+1} = B u^n$ and `wave_step` applies the leapfrog update. Both work in place.
 - `initial_state` creates the Gaussian pulse and the second-order starting level for the wave.
+- `HeatWaveSimulation` owns the heat and wave fields, caches the sparse factorization, and exposes `advance(steps)` and `time`. Grid, diffusivity, and Courant parameters can be passed to its constructor.
 - `setup_figure` draws the two panels. `main` either animates with `FuncAnimation` (one step per frame) or, with `--no-show`, runs the steps directly and draws the final state.
+
+Animation initialization only draws the current fields. Headless execution advances all requested steps and redraws once.
 
 ## Usage
 

@@ -5,11 +5,15 @@ deep-water dispersion relation (phase speed = ship speed), so the sketch also
 reports the speed and Froude number that the drawn wave corresponds to.
 """
 
-import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Allow execution with `python main.py` from any working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from _common import create_parser, finish_figures  # noqa: E402
 
 G = 9.81  # m/s^2
 HULL_LENGTH = 10.0  # waterline length L, m
@@ -86,25 +90,14 @@ def draw_ship_hull_and_waves(
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open a plot window"
-    )
-    parser.add_argument(
-        "--output", metavar="DIR", help="save the figure as a PNG in DIR"
-    )
+    parser = create_parser(__doc__)
     args = parser.parse_args(argv)
 
     fig = draw_ship_hull_and_waves()
 
-    if args.output:
-        out_dir = Path(args.output)
-        out_dir.mkdir(parents=True, exist_ok=True)
-        fig.savefig(out_dir / "ship_hull_in_water.png", dpi=100, bbox_inches="tight")
-    if args.no_show:
-        plt.close(fig)
-    else:
-        plt.show()
+    finish_figures(
+        {"ship_hull_in_water.png": fig}, output=args.output, show=not args.no_show
+    )
 
 
 if __name__ == "__main__":
