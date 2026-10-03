@@ -11,17 +11,20 @@ Inviscid flow theory studies the motion of fluids where viscous effects are negl
 For inviscid flow, the Navier-Stokes equations reduce to the Euler equations:
 
 **Conservation of Mass (Continuity)**:
+
 $$
 \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{V}) = 0
 $$
 
 **Conservation of Momentum**:
+
 $$
 \frac{\partial \vec{V}}{\partial t} +
 (\vec{V} \cdot \nabla)\vec{V} = -\frac{1}{\rho}\nabla p + \vec{g}
 $$
 
 **Conservation of Energy**:
+
 $$
 \frac{\partial e}{\partial t} + \vec{V} \cdot \nabla e = -\frac{p}{\rho}\nabla \cdot
 \vec{V}
@@ -48,6 +51,7 @@ $$
 ### Governing Equation
 
 Substituting into continuity equation for incompressible flow:
+
 $$
 \nabla^2 \phi = 0
 $$
@@ -67,6 +71,7 @@ This is **Laplace's equation** - a linear PDE that allows superposition of solut
 $$
 \phi = U_\infty x
 $$
+
 $$
 u = U_\infty, \quad v = 0
 $$
@@ -76,6 +81,7 @@ $$
 $$
 \phi = \frac{m}{2\pi} \ln r
 $$
+
 $$
 u_r = \frac{m}{2\pi r}, \quad u_\theta = 0
 $$
@@ -87,6 +93,7 @@ where $m > 0$ (source), $m < 0$ (sink).
 $$
 \phi = -\frac{\mu}{2\pi} \frac{\cos \theta}{r}
 $$
+
 $$
 u_r = \frac{\mu}{2\pi r^2} \cos \theta, \quad u_\theta = \frac{\mu}{2\pi r^2} \sin
 \theta
@@ -97,6 +104,7 @@ $$
 $$
 \phi = -\frac{\Gamma}{2\pi} \theta
 $$
+
 $$
 u_r = 0, \quad u_\theta = \frac{\Gamma}{2\pi r}
 $$
@@ -116,6 +124,7 @@ For flow past bodies, we can use:
 ### Complex Potential
 
 For 2D flow, define complex potential:
+
 $$
 F(z) = \phi + i\psi
 $$
@@ -123,6 +132,7 @@ $$
 where $z = x + iy$ and $\psi$ is the stream function.
 
 The complex velocity is:
+
 $$
 w = \frac{dF}{dz} = u - iv
 $$
@@ -132,11 +142,13 @@ $$
 ### Flow Past a Cylinder
 
 **Without circulation**:
+
 $$
 F(z) = U_\infty\left(z + \frac{a^2}{z}\right)
 $$
 
 **With circulation**:
+
 $$
 F(z) = U_\infty\left(z + \frac{a^2}{z}\right) - i \frac{\Gamma}{2\pi}\ln z
 $$
@@ -144,6 +156,7 @@ $$
 ### Kutta-Joukowsky Theorem
 
 For a cylinder with circulation in crossflow:
+
 $$
 L = \rho U_\infty \Gamma
 $$
@@ -153,6 +166,7 @@ This explains lift generation on airfoils.
 ### Flow Past an Airfoil
 
 Using Joukowsky transformation:
+
 $$
 z = \zeta + \frac{c^2}{4\zeta}
 $$
@@ -164,12 +178,14 @@ Maps a circle in the $\zeta$-plane to an airfoil in the $z$-plane.
 ### Derivation
 
 For inviscid, incompressible flow, the momentum equation gives:
+
 $$
 \frac{\partial \vec{V}}{\partial t} +
 (\vec{V} \cdot \nabla)\vec{V} = -\frac{1}{\rho}\nabla p + \vec{g}
 $$
 
 For steady flow along a streamline:
+
 $$
 \frac{p}{\rho} + \frac{1}{2}V^2 + gz = \text{constant}
 $$
@@ -193,6 +209,7 @@ $$
 ### Kelvin's Circulation Theorem
 
 For inviscid flow:
+
 $$
 \frac{D\Gamma}{Dt} = 0
 $$
