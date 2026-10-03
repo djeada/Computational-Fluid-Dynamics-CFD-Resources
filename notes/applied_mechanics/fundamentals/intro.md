@@ -16,45 +16,60 @@ Applied mechanics is the branch of mechanics that deals with the application of 
 Applied mechanics traditionally divides into several interconnected fields:
 
 ### 1. Statics
+
 The study of bodies in equilibrium, where the sum of forces and moments equals zero. Applications include:
 
-$$\sum F = 0 \quad \text{and} \quad \sum M = 0$$
+$$
+\sum F = 0 \quad \text{and} \quad \sum M = 0
+$$
 
 - Structural analysis of buildings and bridges
 - Design of support systems
 - Force analysis in mechanisms
 
 ### 2. Dynamics
+
 The study of bodies in motion, considering the relationship between forces and motion. Key areas:
 
 **Kinematics**: Motion description without considering forces
+
 - Position: $\mathbf{r}(t)$
 - Velocity: $\mathbf{v}(t) = \frac{d\mathbf{r}}{dt}$
 - Acceleration: $\mathbf{a}(t) = \frac{d\mathbf{v}}{dt}$
 
 **Kinetics**: Motion analysis considering forces (Newton's Laws)
+
 - $F = ma$ (Second Law)
 - Action-reaction principle (Third Law)
 
 ### 3. Strength of Materials (Mechanics of Materials)
+
 Analysis of stress, strain, and deformation in structural elements:
 
 **Stress**: Force per unit area
 
-$$\sigma = \frac{F}{A}$$
+$$
+\sigma = \frac{F}{A}
+$$
 
 **Strain**: Relative deformation
 
-$$\epsilon = \frac{\Delta L}{L_0}$$
+$$
+\epsilon = \frac{\Delta L}{L_0}
+$$
 
 **Hooke's Law**: Linear relationship for elastic materials
 
-$$\sigma = E\epsilon$$
+$$
+\sigma = E\epsilon
+$$
 
 where $E$ is the elastic modulus.
 
 ### 4. Fluid Mechanics
+
 Study of fluid behavior and its interaction with solid boundaries:
+
 - **Fluid statics**: Pressure distribution in static fluids
 - **Fluid dynamics**: Flow analysis and forces on submerged bodies
 - **Fluid-structure interaction**: Coupling between fluid flow and structural response
@@ -67,29 +82,40 @@ Study of fluid behavior and its interaction with solid boundaries:
 
 2. **Second Law**: The acceleration of a body is proportional to the net force and inversely proportional to its mass:
 
-   $$\mathbf{F} = m\mathbf{a}$$
+   ```math
+   \mathbf{F} = m\mathbf{a}
+   ```
 
 3. **Third Law**: For every action, there is an equal and opposite reaction:
 
-   $$\mathbf{F}_{AB} = -\mathbf{F}_{BA}$$
+   ```math
+   \mathbf{F}_{AB} = -\mathbf{F}_{BA}
+   ```
 
 ### Conservation Laws
 
-**Conservation of Mass**: 
+**Conservation of Mass**:
 
-$$\frac{dm}{dt} = 0 \quad \text{(for closed systems)}$$
+$$
+\frac{dm}{dt} = 0 \quad \text{(for closed systems)}
+$$
 
 **Conservation of Energy**:
 
-$$E_{kinetic} + E_{potential} + E_{internal} = \text{constant}$$
+$$
+E_{kinetic} + E_{potential} + E_{internal} = \text{constant}
+$$
 
 **Conservation of Momentum**:
 
-$$\mathbf{p} = m\mathbf{v} = \text{constant} \quad \text{(in absence of external forces)}$$
+$$
+\mathbf{p} = m\mathbf{v} = \text{constant} \quad \text{(in absence of external forces)}
+$$
 
 ## Mathematical Tools
 
 ### Vector Analysis
+
 Forces, velocities, and accelerations are vector quantities requiring vector mathematics:
 
 **Vector Addition**: $\mathbf{C} = \mathbf{A} + \mathbf{B}$
@@ -99,15 +125,19 @@ Forces, velocities, and accelerations are vector quantities requiring vector mat
 **Cross Product**: $\mathbf{A} \times \mathbf{B} = |\mathbf{A}||\mathbf{B}|\sin\theta \, \hat{\mathbf{n}}$
 
 ### Differential Equations
+
 Many mechanics problems involve differential equations:
 
 **Simple Harmonic Motion**:
 
-$$m\frac{d^2x}{dt^2} + kx = 0$$
+$$
+m \frac{d^2x}{dt^2} + kx = 0
+$$
 
 Solution: $x(t) = A\cos(\omega t + \phi)$ where $\omega = \sqrt{k/m}$
 
 ### Calculus Applications
+
 - **Integration**: For finding work, impulse, and center of mass
 - **Differentiation**: For relating position, velocity, and acceleration
 - **Partial derivatives**: For stress analysis and field problems
@@ -115,24 +145,28 @@ Solution: $x(t) = A\cos(\omega t + \phi)$ where $\omega = \sqrt{k/m}$
 ## Engineering Applications
 
 ### Aerospace Engineering
+
 - Aircraft wing design and load analysis
 - Rocket trajectory optimization
 - Spacecraft attitude control
 - Turbulence effects on flight stability
 
 ### Automotive Engineering
+
 - Vehicle dynamics and handling
 - Crash safety analysis
 - Engine vibration control
 - Aerodynamic optimization
 
 ### Civil Engineering
+
 - Building structural design
 - Bridge load analysis
 - Earthquake resistance
 - Wind load calculations
 
 ### Mechanical Engineering
+
 - Machine component design
 - Vibration analysis
 - Heat exchanger design
@@ -141,29 +175,34 @@ Solution: $x(t) = A\cos(\omega t + \phi)$ where $\omega = \sqrt{k/m}$
 ## Problem-Solving Methodology
 
 ### 1. Problem Definition
+
 - Identify the physical system
 - Determine what needs to be found
 - List given information and constraints
 
 ### 2. System Modeling
+
 - Create simplified representations
 - Draw free body diagrams
 - Establish coordinate systems
 - Make reasonable assumptions
 
 ### 3. Apply Fundamental Principles
+
 - Choose appropriate equations
 - Apply conservation laws
 - Use equilibrium conditions
 - Consider material properties
 
 ### 4. Mathematical Solution
+
 - Solve governing equations
 - Apply boundary/initial conditions
 - Check dimensional consistency
 - Verify solution reasonableness
 
 ### 5. Interpretation and Validation
+
 - Compare with experimental data
 - Assess accuracy and limitations
 - Consider practical implications
@@ -173,7 +212,8 @@ Solution: $x(t) = A\cos(\omega t + \phi)$ where $\omega = \sqrt{k/m}$
 
 Consider a simply supported beam with uniform load:
 
-**Given**: 
+**Given**:
+
 - Beam length: $L = 6$ m
 - Uniform load: $w = 10$ kN/m
 - Material: Steel with $E = 200$ GPa
@@ -182,6 +222,7 @@ Consider a simply supported beam with uniform load:
 **Find**: Maximum deflection
 
 **Solution**:
+
 1. **Reactions**: $R_A = R_B = wL/2 = 30$ kN
 
 2. **Maximum moment**: $M_{max} = \frac{wL^2}{8} = 45$ kN⋅m
@@ -195,16 +236,19 @@ This example demonstrates the systematic approach: from load analysis to deflect
 Modern applied mechanics increasingly relies on computational tools:
 
 ### Finite Element Analysis (FEA)
+
 - Discretizes complex geometries into simple elements
 - Solves systems of equations numerically
 - Enables analysis of complex loading and boundary conditions
 
 ### Computational Fluid Dynamics (CFD)
+
 - Solves fluid flow equations numerically
 - Provides detailed flow field information
 - Enables optimization of fluid-structure systems
 
 ### Multiphysics Simulation
+
 - Couples multiple physical phenomena
 - Considers thermal, structural, and fluid effects simultaneously
 - Provides comprehensive system behavior prediction
@@ -239,9 +283,15 @@ The subsequent chapters will delve deeper into each area, providing the detailed
 <details>
 <summary>Answer</summary>
 
-$$A = \frac{\pi(0.02)^2}{4} = 3.14 \times 10^{-4} \text{ m}^2, \quad \sigma = \frac{50\,000}{3.14 \times 10^{-4}} = 159 \text{ MPa}$$
+```math
+A = \frac{\pi(0.02)^2}{4} = 3.14 \times 10^{-4} \text{ m}^2, \quad
+\sigma = \frac{50\,000}{3.14 \times 10^{-4}} = 159 \text{ MPa}
+```
 
-$$\epsilon = \frac{\sigma}{E} = 7.96 \times 10^{-4}, \quad \Delta L = \epsilon L_0 = 1.59 \text{ mm}$$
+```math
+\epsilon = \frac{\sigma}{E} = 7.96 \times 10^{-4}, \quad \Delta L = \epsilon L_0 = 1.59
+\text{ mm}
+```
 
 </details>
 
@@ -263,7 +313,9 @@ Deflection is linear in $w$ but proportional to $L^4$. Doubling the load doubles
 
 $\delta_{allow} = 6000/360 = 16.7$ mm. Rearranging the deflection formula:
 
-$$I_{req} = \frac{5wL^4}{384E\delta_{allow}} = \frac{5 \times 10^4 \times 6^4}{384 \times 200 \times 10^9 \times 0.01667} = 5.06 \times 10^{-5} \text{ m}^4$$
+```math
+I_{req} = \frac{5wL^4}{384E\delta_{allow}} = \frac{5 \times 10^4 \times 6^4}{384 \times 200 \times 10^9 \times 0.01667} = 5.06 \times 10^{-5} \text{ m}^4
+```
 
 This is about 6.1 times the $I$ of the section in the example, consistent with its computed deflection of about $L/59$.
 

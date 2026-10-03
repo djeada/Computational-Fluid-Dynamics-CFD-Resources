@@ -17,7 +17,8 @@ This script plots the Maxwell-Boltzmann speed distribution of nitrogen (N₂) mo
 The probability density of molecular speed $v$ in an ideal gas at temperature $T$ is
 
 $$
-f(v) = 4\pi\left(\frac{m}{2\pi k_B T}\right)^{3/2} v^2 \exp\left(-\frac{m v^2}{2 k_B T}\right)
+f(v) = 4\pi\left(\frac{m}{2\pi k_B T}\right)^{3/2} v^2
+\exp\left(-\frac{m v^2}{2 k_B T}\right)
 $$
 
 It has units of s/m and integrates to one over $0 \le v < \infty$.
@@ -60,7 +61,7 @@ python main.py --no-show --output . # save probability_distribution_function.png
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 

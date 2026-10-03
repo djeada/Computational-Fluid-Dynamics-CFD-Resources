@@ -25,7 +25,10 @@ Dynamic Mode Decomposition (DMD), introduced by Schmid (2010) and further develo
 
 Mathematically, given a sequence of $m$ snapshots $\mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_m$ arranged into data matrices
 
-$$\mathbf{X} = [\mathbf{x}_1 \;\; \mathbf{x}_2 \;\; \cdots \;\; \mathbf{x}_{m-1}], \qquad \mathbf{X}' = [\mathbf{x}_2 \;\; \mathbf{x}_3 \;\; \cdots \;\; \mathbf{x}_m],$$
+$$
+\mathbf{X} = [\mathbf{x}_1 \;\; \mathbf{x}_2 \;\; \cdots \;\; \mathbf{x}_{m-1}],
+\qquad \mathbf{X}' = [\mathbf{x}_2 \;\; \mathbf{x}_3 \;\; \cdots \;\; \mathbf{x}_m]
+$$
 
 DMD seeks the best-fit linear operator $\mathbf{A}$ such that $\mathbf{X}' \approx \mathbf{A}\mathbf{X}$. In practice, $\mathbf{A}$ is computed via the singular value decomposition $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^*$ and its rank-$r$ projection $\tilde{\mathbf{A}} = \mathbf{U}_r^* \mathbf{X}' \mathbf{V}_r \boldsymbol{\Sigma}_r^{-1}$. The eigenvalues $\lambda_j$ and eigenvectors of $\tilde{\mathbf{A}}$ yield the DMD modes and their associated growth rates and oscillation frequencies, providing a compact linear model of the flow dynamics.
 
@@ -187,7 +190,9 @@ The eigenvalues are $0.9 \pm 0.2i$, with $|\lambda| \approx 0.922$ and phase $\a
 
 Take $\mathbf{z} = (x, y, x^2)$. Then $x^2_{k+1} = \lambda^2 x_k^2$, so
 
-$$\mathbf{z}_{k+1} = \begin{bmatrix} \lambda & 0 & 0 \\ 0 & \mu & c \\ 0 & 0 & \lambda^2 \end{bmatrix} \mathbf{z}_k.$$
+```math
+\mathbf{z}_{k+1} = \begin{bmatrix} \lambda & 0 & 0 \\ 0 & \mu & c \\ 0 & 0 & \lambda^2 \end{bmatrix} \mathbf{z}_k
+```
 
 The matrix is upper triangular, so its eigenvalues are $\lambda$, $\mu$ and $\lambda^2$.
 
@@ -213,7 +218,11 @@ With two bias vectors per gate (as in PyTorch) the LSTM part becomes $4(640 + 40
 <details>
 <summary>Answer</summary>
 
-$$\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} = \frac{\partial^2 \psi}{\partial x \partial y} - \frac{\partial^2 \psi}{\partial y \partial x} = 0,$$
+```math
+\frac{\partial u}{\partial x} +
+\frac{\partial v}{\partial y} = \frac{\partial^2 \psi}{\partial x \partial y} -
+\frac{\partial^2 \psi}{\partial y \partial x} = 0
+```
 
 because mixed partial derivatives commute for a smooth $\psi$.
 

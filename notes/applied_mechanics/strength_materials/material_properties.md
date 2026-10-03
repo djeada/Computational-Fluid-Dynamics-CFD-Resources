@@ -10,15 +10,23 @@ The uniaxial tensile test is the most common method for characterizing material 
 
 **Engineering stress and strain:**
 
-$$\sigma_{eng} = \frac{P}{A_0}, \quad \epsilon_{eng} = \frac{\Delta L}{L_0}$$
+$$
+\sigma_{eng} = \frac{P}{A_0}, \quad \epsilon_{eng} = \frac{\Delta L}{L_0}
+$$
 
 **True stress and strain:**
 
-$$\sigma_{true} = \frac{P}{A_{inst}}, \quad \epsilon_{true} = \ln\left(\frac{L}{L_0}\right)$$
+$$
+\sigma_{true} = \frac{P}{A_{inst}}, \quad
+\epsilon_{true} = \ln\left(\frac{L}{L_0}\right)
+$$
 
 Relationship between engineering and true quantities (before necking):
 
-$$\sigma_{true} = \sigma_{eng}(1 + \epsilon_{eng}), \quad \epsilon_{true} = \ln(1 + \epsilon_{eng})$$
+$$
+\sigma_{true} = \sigma_{eng}(1 + \epsilon_{eng}), \quad
+\epsilon_{true} = \ln(1 + \epsilon_{eng})
+$$
 
 ### Key Points on the Stress-Strain Curve
 
@@ -34,13 +42,17 @@ $$\sigma_{true} = \sigma_{eng}(1 + \epsilon_{eng}), \quad \epsilon_{true} = \ln(
 
 In the elastic region, deformation is fully recoverable upon unloading:
 
-$$\sigma = E\epsilon$$
+$$
+\sigma = E\epsilon
+$$
 
 where $E$ is the elastic modulus (Young's modulus). The elastic modulus represents the stiffness of the material and is a measure of atomic bond strength.
 
 **Elastic strain energy density (resilience per unit volume):**
 
-$$u = \frac{1}{2}\sigma\epsilon = \frac{\sigma^2}{2E}$$
+$$
+u = \frac{1}{2}\sigma\epsilon = \frac{\sigma^2}{2E}
+$$
 
 ### Plastic Region
 
@@ -52,13 +64,16 @@ Beyond the yield point, permanent (plastic) deformation occurs. Key characterist
 
 **Strain hardening exponent** (power-law model):
 
-$$\sigma_{true} = K \epsilon_{true}^n$$
+$$
+\sigma_{true} = K \epsilon_{true}^n
+$$
 
 where $K$ is the strength coefficient and $n$ is the strain hardening exponent. Typical values of $n$ range from 0.1 to 0.5.
 
 ### Yield Strength Determination
 
 For materials without a clear yield point, the **0.2% offset method** is used:
+
 1. Draw a line parallel to the elastic region, offset by $\epsilon = 0.002$
 2. The intersection with the stress-strain curve defines $\sigma_{y(0.2\%)}$
 
@@ -70,11 +85,15 @@ Ductile materials undergo significant plastic deformation before fracture. Examp
 
 **Percent elongation:**
 
-$$\% EL = \frac{L_f - L_0}{L_0} \times 100$$
+$$
+\% EL = \frac{L_f - L_0}{L_0} \times 100
+$$
 
 **Percent reduction in area:**
 
-$$\% RA = \frac{A_0 - A_f}{A_0} \times 100$$
+$$
+\% RA = \frac{A_0 - A_f}{A_0} \times 100
+$$
 
 A material with $\% EL > 5\%$ is generally considered ductile.
 
@@ -93,24 +112,30 @@ Brittle materials fracture with little or no plastic deformation. Examples inclu
 Hardness measures resistance to localized plastic deformation (indentation):
 
 | Scale | Method | Typical Application |
-|-------|--------|-------------------|
+| --- | --- | --- |
 | Brinell (HB) | 10 mm steel ball | Castings, forgings |
 | Rockwell (HRC) | Diamond cone | Hardened steels |
 | Vickers (HV) | Diamond pyramid | Thin sections, coatings |
 
 **Approximate relationship with tensile strength (for steels):**
 
-$$\sigma_u \approx 3.45 \times HB \text{ (MPa)}$$
+$$
+\sigma_u \approx 3.45 \times HB \text{ (MPa)}
+$$
 
 ### Toughness
 
 Toughness is the total energy absorbed per unit volume up to fracture, represented by the area under the entire stress-strain curve:
 
-$$u_T = \int_0^{\epsilon_f} \sigma \, d\epsilon$$
+$$
+u_T = \int_0^{\epsilon_f} \sigma \, d\epsilon
+$$
 
 **Approximate toughness for a ductile material:**
 
-$$u_T \approx \frac{\sigma_y + \sigma_u}{2} \times \epsilon_f$$
+$$
+u_T \approx \frac{\sigma_y + \sigma_u}{2} \times \epsilon_f
+$$
 
 **Impact toughness** is measured using the Charpy or Izod test and quantifies resistance to sudden loading.
 
@@ -118,7 +143,9 @@ $$u_T \approx \frac{\sigma_y + \sigma_u}{2} \times \epsilon_f$$
 
 Resilience is the energy absorbed per unit volume within the elastic region:
 
-$$u_r = \frac{\sigma_y^2}{2E}$$
+$$
+u_r = \frac{\sigma_y^2}{2E}
+$$
 
 Materials with high resilience can absorb significant elastic energy — useful for springs and shock absorbers.
 
@@ -130,7 +157,10 @@ Fatigue failure occurs under cyclic loading at stresses well below the ultimate 
 
 **Stress amplitude and mean stress:**
 
-$$\sigma_a = \frac{\sigma_{max} - \sigma_{min}}{2}, \quad \sigma_m = \frac{\sigma_{max} + \sigma_{min}}{2}$$
+$$
+\sigma_a = \frac{\sigma_{max} - \sigma_{min}}{2}, \quad
+\sigma_m = \frac{\sigma_{max} + \sigma_{min}}{2}
+$$
 
 ### S-N Curve
 
@@ -138,13 +168,17 @@ The S-N (stress–number of cycles) curve characterizes fatigue behavior. For fe
 
 **Approximate endurance limit (steels):**
 
-$$\sigma_e \approx 0.5\,\sigma_u \quad \text{for } \sigma_u \leq 1400 \text{ MPa}$$
+$$
+\sigma_e \approx 0.5\,\sigma_u \quad \text{for } \sigma_u \leq 1400 \text{ MPa}
+$$
 
 ### Modified Goodman Criterion
 
 For combined alternating and mean stress:
 
-$$\frac{\sigma_a}{\sigma_e} + \frac{\sigma_m}{\sigma_u} = 1$$
+$$
+\frac{\sigma_a}{\sigma_e} + \frac{\sigma_m}{\sigma_u} = 1
+$$
 
 ## Creep and Stress Relaxation
 
@@ -153,13 +187,16 @@ $$\frac{\sigma_a}{\sigma_e} + \frac{\sigma_m}{\sigma_u} = 1$$
 Creep is the time-dependent deformation under sustained constant stress, significant at elevated temperatures (typically $T > 0.4\,T_m$ where $T_m$ is the melting point in Kelvin).
 
 **Three stages of creep:**
+
 1. **Primary creep** — decreasing strain rate
 2. **Secondary (steady-state) creep** — constant strain rate $\dot{\epsilon}_s$
 3. **Tertiary creep** — accelerating strain rate leading to rupture
 
 **Steady-state creep rate (Arrhenius model):**
 
-$$\dot{\epsilon}_s = A \sigma^n e^{-Q/(RT)}$$
+$$
+\dot{\epsilon}_s = A \sigma^n e^{-Q/(RT)}
+$$
 
 where $A$ is a material constant, $n$ is the stress exponent, $Q$ is the activation energy, $R$ is the gas constant, and $T$ is absolute temperature.
 
@@ -167,7 +204,9 @@ where $A$ is a material constant, $n$ is the stress exponent, $Q$ is the activat
 
 Stress relaxation is the decrease in stress over time under constant strain, important for bolted joints and seals:
 
-$$\sigma(t) = \sigma_0 \, e^{-t/\tau}$$
+$$
+\sigma(t) = \sigma_0 \, e^{-t/\tau}
+$$
 
 where $\tau$ is the relaxation time constant.
 
@@ -178,7 +217,7 @@ where $\tau$ is the relaxation time constant.
 Material selection often involves optimizing a **performance index** that combines multiple properties:
 
 | Design Goal | Performance Index |
-|-------------|------------------|
+| --- | --- |
 | Light, stiff tie rod | $E / \rho$ |
 | Light, stiff beam | $E^{1/2} / \rho$ |
 | Light, strong tie rod | $\sigma_y / \rho$ |
@@ -189,7 +228,7 @@ where $\rho$ is the material density.
 ### Typical Material Properties
 
 | Material | $E$ (GPa) | $\sigma_y$ (MPa) | $\sigma_u$ (MPa) | $\rho$ (kg/m³) |
-|----------|-----------|-----------------|-----------------|----------------|
+| --- | --- | --- | --- | --- |
 | Mild steel | 200 | 250 | 400 | 7850 |
 | Aluminum 6061-T6 | 69 | 276 | 310 | 2700 |
 | Titanium Ti-6Al-4V | 114 | 880 | 950 | 4430 |
@@ -202,6 +241,7 @@ where $\rho$ is the material density.
 A tensile test on a steel specimen ($d_0 = 12.5$ mm, $L_0 = 50$ mm) yields the following data: yield load $P_y = 38$ kN, maximum load $P_u = 58$ kN, fracture length $L_f = 63$ mm, fracture diameter $d_f = 8.5$ mm.
 
 **Given:**
+
 - $d_0 = 12.5$ mm, $L_0 = 50$ mm
 - $P_y = 38$ kN, $P_u = 58$ kN
 - $L_f = 63$ mm, $d_f = 8.5$ mm
@@ -210,15 +250,25 @@ A tensile test on a steel specimen ($d_0 = 12.5$ mm, $L_0 = 50$ mm) yields the f
 
 **Solution:**
 
-$$A_0 = \frac{\pi (12.5)^2}{4} = 122.7 \text{ mm}^2$$
+$$
+A_0 = \frac{\pi (12.5)^2}{4} = 122.7 \text{ mm}^2
+$$
 
-$$\sigma_y = \frac{P_y}{A_0} = \frac{38\,000}{122.7} = 309.7 \text{ MPa}$$
+$$
+\sigma_y = \frac{P_y}{A_0} = \frac{38\,000}{122.7} = 309.7 \text{ MPa}
+$$
 
-$$\sigma_u = \frac{P_u}{A_0} = \frac{58\,000}{122.7} = 472.7 \text{ MPa}$$
+$$
+\sigma_u = \frac{P_u}{A_0} = \frac{58\,000}{122.7} = 472.7 \text{ MPa}
+$$
 
-$$\% EL = \frac{63 - 50}{50} \times 100 = 26\%$$
+$$
+\% EL = \frac{63 - 50}{50} \times 100 = 26\%
+$$
 
-$$\% RA = \frac{122.7 - 56.7}{122.7} \times 100 = 53.8\%$$
+$$
+\% RA = \frac{122.7 - 56.7}{122.7} \times 100 = 53.8\%
+$$
 
 The material is ductile ($\% EL > 5\%$) with good strength and formability.
 
@@ -227,6 +277,7 @@ The material is ductile ($\% EL > 5\%$) with good strength and formability.
 A steel shaft ($\sigma_u = 600$ MPa) is subjected to fluctuating bending with $\sigma_a = 250$ MPa and $\sigma_m = 100$ MPa.
 
 **Given:**
+
 - $\sigma_u = 600$ MPa, $\sigma_e \approx 0.5 \times 600 = 300$ MPa
 - $\sigma_a = 250$ MPa, $\sigma_m = 100$ MPa
 
@@ -234,7 +285,10 @@ A steel shaft ($\sigma_u = 600$ MPa) is subjected to fluctuating bending with $\
 
 **Solution:**
 
-$$\frac{\sigma_a}{\sigma_e} + \frac{\sigma_m}{\sigma_u} = \frac{250}{300} + \frac{100}{600} = 0.833 + 0.167 = 1.0$$
+$$
+\frac{\sigma_a}{\sigma_e} + \frac{\sigma_m}{\sigma_u} = \frac{250}{300} +
+\frac{100}{600} = 0.833 + 0.167 = 1.0
+$$
 
 The sum equals 1.0, indicating the shaft is exactly at the fatigue limit — it is on the boundary of safe design and should be redesigned with a larger cross-section or better surface finish.
 
@@ -255,7 +309,10 @@ Understanding mechanical properties enables engineers to select materials that m
 <details>
 <summary>Answer</summary>
 
-$$\sigma_{true} = \sigma_{eng}(1 + \epsilon_{eng}) = 472.7 \times 1.18 = 558 \text{ MPa}, \quad \epsilon_{true} = \ln 1.18 = 0.166$$
+```math
+\sigma_{true} = \sigma_{eng}(1 + \epsilon_{eng}) = 472.7 \times 1.18 = 558 \text{ MPa},
+\quad \epsilon_{true} = \ln 1.18 = 0.166
+```
 
 Necking starts at maximum load, so $n \approx 0.17$, within the typical range of 0.1 to 0.5.
 
@@ -291,7 +348,9 @@ Aluminium stores about 3.5 times more elastic energy per volume and 10 times mor
 
 With the Goodman line scaled by $n$, $\sigma_a/\sigma_e + \sigma_m/\sigma_u = 1/n$:
 
-$$\frac{1}{n} = \frac{200}{300} + \frac{100}{600} = 0.833 \implies n = 1.2$$
+```math
+\frac{1}{n} = \frac{200}{300} + \frac{100}{600} = 0.833 \implies n = 1.2
+```
 
 For $n = 1.5$: $\sigma_a = 300\,(1/1.5 - 100/600) = 150$ MPa.
 
@@ -306,7 +365,9 @@ In practice $\sigma_e$ would first be reduced by the surface, size and reliabili
 
 (a)
 
-$$\frac{\dot{\epsilon}_{850}}{\dot{\epsilon}_{800}} = \exp\left[\frac{Q}{R}\left(\frac{1}{800} - \frac{1}{850}\right)\right] = \exp\left[\frac{250\,000}{8.314} \times 7.35 \times 10^{-5}\right] = 9.1$$
+```math
+\frac{\dot{\epsilon}_{850}}{\dot{\epsilon}_{800}} = \exp\left[\frac{Q}{R}\left(\frac{1}{800} - \frac{1}{850}\right)\right] = \exp\left[\frac{250\,000}{8.314} \times 7.35 \times 10^{-5}\right] = 9.1
+```
 
 (b) $1.2^5 = 2.49$.
 

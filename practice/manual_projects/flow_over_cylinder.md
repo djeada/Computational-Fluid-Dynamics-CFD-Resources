@@ -13,12 +13,14 @@ This tutorial demonstrates a complete CFD workflow for flow over a circular cyli
 ## 📋 Problem Description
 
 ### Physical Setup
+
 - **Geometry**: Circular cylinder (diameter D = 0.1 m) in cross-flow
 - **Domain**: 20D × 10D rectangular domain
 - **Reynolds Number**: Re = 100 (based on diameter and inlet velocity)
 - **Fluid**: Incompressible viscous flow (air properties)
 
 ### Expected Results
+
 - **Strouhal Number**: St ≈ 0.164 for Re = 100
 - **Mean Drag Coefficient**: Cd ≈ 1.35
 - **RMS Lift Coefficient**: Cl_rms ≈ 0.25
@@ -36,6 +38,7 @@ This tutorial demonstrates a complete CFD workflow for flow over a circular cyli
 ## 📐 Step 1: Geometry and Mesh Generation
 
 ### Create Case Directory
+
 ```bash
 mkdir flow_over_cylinder
 cd flow_over_cylinder
@@ -45,6 +48,7 @@ mkdir 0 constant system
 ### Mesh Generation with blockMesh
 
 Create `system/blockMeshDict`:
+
 ```cpp
 FoamFile
 {
@@ -152,6 +156,7 @@ mergePatchPairs
 ### Create Cylinder using topoSet
 
 Create `system/topoSetDict`:
+
 ```cpp
 FoamFile
 {
@@ -191,6 +196,7 @@ actions
 ```
 
 ### Generate Mesh
+
 ```bash
 # Generate initial mesh
 blockMesh
@@ -208,6 +214,7 @@ checkMesh
 ## ⚙️ Step 2: Initial and Boundary Conditions
 
 ### Velocity Field (0/U)
+
 ```cpp
 FoamFile
 {
@@ -252,6 +259,7 @@ boundaryField
 ```
 
 ### Pressure Field (0/p)
+
 ```cpp
 FoamFile
 {
@@ -296,6 +304,7 @@ boundaryField
 ```
 
 ### Transport Properties (constant/transportProperties)
+
 ```cpp
 FoamFile
 {
@@ -312,6 +321,7 @@ nu              [0 2 -1 0 0 0 0] 0.001;
 ## 🔧 Step 3: Solver Configuration
 
 ### Control Dictionary (system/controlDict)
+
 ```cpp
 FoamFile
 {
@@ -389,6 +399,7 @@ functions
 ```
 
 ### Numerical Schemes (system/fvSchemes)
+
 ```cpp
 FoamFile
 {
@@ -431,6 +442,7 @@ snGradSchemes
 ```
 
 ### Solution Controls (system/fvSolution)
+
 ```cpp
 FoamFile
 {
@@ -489,6 +501,7 @@ gnuplot -e "plot 'logs/Ux_0' with lines, 'logs/Uy_0' with lines, 'logs/p_0' with
 ## 📊 Step 5: Post-Processing and Analysis
 
 ### Visualization with ParaView
+
 ```bash
 # Generate ParaView files
 foamToVTK
@@ -498,6 +511,7 @@ paraview --data=VTK/
 ```
 
 ### Force Analysis
+
 ```python
 #!/usr/bin/env python3
 """
@@ -594,6 +608,7 @@ if __name__ == "__main__":
 ```
 
 ### Vorticity Visualization
+
 ```python
 #!/usr/bin/env python3
 """
@@ -651,6 +666,7 @@ def calculate_vorticity(u_file, v_file, x_file, y_file):
 ## ✅ Step 6: Validation
 
 ### Comparison with Literature
+
 ```python
 #!/usr/bin/env python3
 """
@@ -748,24 +764,28 @@ def validate_results(sim_results, lit_data):
 After completing this tutorial, you will have:
 
 1. **Practical CFD Skills**:
+
    - Complete OpenFOAM workflow
    - Mesh generation and quality assessment
    - Boundary condition setup
    - Unsteady flow simulation
 
 2. **Physical Understanding**:
+
    - Vortex shedding mechanisms
    - Reynolds number effects
    - Force coefficient interpretation
    - Strouhal number significance
 
 3. **Analysis Capabilities**:
+
    - Time series analysis
    - Frequency domain analysis
    - Flow visualization techniques
    - Validation methodologies
 
 4. **Best Practices**:
+
    - Case organization
    - Documentation standards
    - Result verification
@@ -776,16 +796,19 @@ After completing this tutorial, you will have:
 ### Common Issues:
 
 1. **Convergence Problems**:
+
    - Reduce time step
    - Check mesh quality
    - Verify boundary conditions
 
 2. **Unphysical Results**:
+
    - Check Reynolds number calculation
    - Verify reference values in force calculation
    - Ensure adequate domain size
 
 3. **Mesh Quality Issues**:
+
    - Refine near cylinder
    - Improve aspect ratios
    - Check orthogonality

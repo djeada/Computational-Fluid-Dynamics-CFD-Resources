@@ -8,15 +8,20 @@ The idea behind Kriging is to model your data as a realization of a Gaussian pro
 
 Kriging treats the unknown function of interest, typically denoted by $y(x)$ for $x \in \Omega \subset \mathbb{R}^d$, as the sum of a known global trend and a stochastic fluctuation term. This approach encodes the idea that we know something about the large-scale behavior of the function while acknowledging the complexity of the smaller-scale variations. In this formulation, each observation $y_i = y(x^{(i)})$ at a sample location $x^{(i)}$ is seen as a realization from a Gaussian process.
 
-Consider a function modeled as  
+Consider a function modeled as
 
-$$y(x) = \sum_{j=1}^{K} \beta_j f_j(x) + z(x),$$  
+$$
+y(x) = \sum_{j=1}^{K} \beta_j f_j(x) + z(x)
+$$
 
 where the functions $f_j(x)$ are known and capture the global or trend-like behavior, and the coefficients $\beta_j \in \mathbb{R}$ are unknown parameters. The term $z(x)$ represents the more complex, nonlinear part of the function, and is assumed to be a realization of a Gaussian process with zero mean, variance $\sigma^2$, and a correlation structure defined by a chosen correlation function $R(\|x-\tilde{x}\|)$.
 
-A key assumption is second-order stationarity, meaning that the covariance depends only on the distance between points, not on their absolute position. Formally,  
+A key assumption is second-order stationarity, meaning that the covariance depends only on the distance between points, not on their absolute position. Formally,
 
-$$\mathbb{E}[z(x)] = 0, \quad \text{Cov}[z(x), z(\tilde{x})] = \sigma^2 R(\|x - \tilde{x}\|).$$  
+$$
+\mathbb{E}[z(x)] = 0, \quad \text{Cov}[z(x), z(\tilde{x})] = \sigma^2
+R(\| x - \tilde{x}\|)
+$$
 
 Here, $\sigma^2$ is the process variance and $R(\|\cdot\|)$ is a spatial autocorrelation function. This correlation function must be symmetric and positive definite, ensuring a well-posed problem that leads to a unique and stable solution.
 
@@ -26,17 +31,22 @@ In practice, this implies that points closer together are more strongly correlat
 
 The Kriging predictor $\hat{y}(x)$ at any new point $x$ is defined as a linear combination of the observed data $Y = (y_1, \dots, y_N)^T$:
 
-$$\hat{y}(x) = \sum_{i=1}^N \lambda_i(x) y_i.$$  
+$$
+\hat{y}(x) = \sum_{i=1}^N \lambda_i(x) y_i
+$$
 
 The weights $\lambda_i(x)$ depend on $x$ and are chosen to achieve the best linear unbiased prediction (BLUP). Best means that the mean squared error of the prediction is minimized, and unbiased means the expected difference between $\hat{y}(x)$ and $y(x)$ is zero.
 
-This leads to a constrained optimization problem. The predictor must be unbiased, so that for any $f(x)$ representing the known trend,  
+This leads to a constrained optimization problem. The predictor must be unbiased, so that for any $f(x)$ representing the known trend,
 
-$$\mathbb{E}[\hat{y}(x)] = f(x)^T \beta.$$  
+$$
+\mathbb{E}[\hat{y}(x)] = f(x)^T \beta
+$$
 
 From the Gaussian process assumptions, it follows that there exist weights $\lambda(x) = (\lambda_1(x), \ldots, \lambda_N(x))^T \in \mathbb{R}^N$ and a vector $\mu(x) \in \mathbb{R}^K$ such that the Kriging weights and the Lagrange multipliers $\mu(x)$ solve the system:
 
-$$\begin{pmatrix}
+$$
+\begin{pmatrix}
 R & F \\
 F^T & 0
 \end{pmatrix}
@@ -56,7 +66,9 @@ One of the neatest features of Kriging is its interpolation property. If we eval
 
 The mean squared error (MSE) of the Kriging predictor measures the expected squared difference between the predicted value and the true function value:
 
-$$\text{MSE}[\hat{y}(x)] = \mathbb{E}[(\hat{y}(x)-y(x))^2].$$  
+$$
+\text{MSE}[\hat{y}(x)] = \mathbb{E}[(\hat{y}(x) - y(x))^2]
+$$
 
 This can be written explicitly as:
 
@@ -87,7 +99,9 @@ When working with noisy data, additional regularization terms can be introduced,
 
 Kriging can be viewed as a weighted sum of correlation functions and low-order regression functions. After solving the initial system once, the evaluation of the Kriging surrogate at any new point $x$ is straightforward:
 
-$$\hat{y}(x) = (w^{(Y)})^T r(x) + (w^{(f)})^T f(x),$$  
+$$
+\hat{y}(x) = (w^{(Y)})^T r(x) + (w^{(f)})^T f(x)
+$$
 
 where the weight vectors $w^{(Y)}$ and $w^{(f)}$ depend only on the sample set and not on $x$.
 
@@ -103,7 +117,9 @@ The correlation function $R(\| x - \tilde{x} \|)$ lies at the heart of Kriging. 
 
 For instance, the Gaussian correlation function
 
-$$R(h) = \exp\{ -\theta h^2 \}$$
+$$
+R(h) = \exp\{ - \theta h^2 \}
+$$
 
 produces very smooth interpolants but can be ill-conditioned if the data are highly correlated.
 
@@ -131,7 +147,9 @@ In geostatistics, one may opt for variograms instead of correlation functions. A
 
 Consider a one-dimensional test function:
 
-$$y(x) = (6x - 2)^2 \sin(12x - 4)$$
+$$
+y(x) = (6x - 2)^2 \sin(12x - 4)
+$$
 
 on the interval $\Omega = [0, 1]$. Suppose we choose nine sample points distributed more densely near the upper half of the domain where the function exhibits more erratic behavior.
 
@@ -139,29 +157,39 @@ Let us demonstrate how to build a Kriging surrogate step-by-step, including the 
 
 I. Choose sample points $x^{(i)}$, for $i = 1, \ldots, 9$. For example, let:
 
-$$X = \{0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 \}.$$
+$$
+X = \{0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 \}
+$$
 
 Compute $y_i = y(x^{(i)})$ at these points. Since the function is known, we can directly evaluate:
 
-$$y(x^{(i)}) = (6x^{(i)} - 2)^2 \sin(12x^{(i)} - 4).$$
+$$
+y(x^{(i)}) = (6x^{(i)} - 2)^2 \sin(12x^{(i)} - 4)
+$$
 
 For instance, if $x^{(1)} = 0.0$:
 
-$$y(0.0) = (6 \cdot 0 - 2)^2 \sin(-4) = 4 \sin(-4).$$
+$$
+y(0.0) = (6 \cdot 0 - 2)^2 \sin(-4) = 4 \sin(-4)
+$$
 
 If we approximate $\sin(-4)$ numerically (with $\sin(-4) \approx 0.7568$), this gives:
 
-$$y(0.0) \approx 4 \cdot 0.7568 = 3.0272.$$
+$$
+y(0.0) \approx 4 \cdot 0.7568 = 3.0272
+$$
 
 Similarly, we compute $y(x^{(i)})$ for all sample points.
 
 II. Choose a correlation function, for example a cubic correlation function. Its general form for a one-dimensional case might be:
 
-$$R(h,\theta) = \begin{cases}
+$$
+R(h,\theta) = \begin{cases}
 1 - 6(|\theta|h)^2 + 6(|\theta|h)^3 & \text{if } 0 \leq |\theta|h < 0.5, \\
 2(1-|\theta|h)^3 & \text{if } 0.5 \leq |\theta|h < 1, \\
 0 & \text{if } 1 \leq |\theta|h.
-\end{cases}$$
+\end{cases}
+$$
 
 Here, $h = |x - x^{(i)}|$ is the distance, and $\theta > 0$ is the hyperparameter that we need to estimate.
 
@@ -169,7 +197,11 @@ III. Construct the correlation matrix $R(\theta)$ of size $9 \times 9$ by evalua
 
 IV. Perform maximum likelihood estimation. We need to find $\beta, \sigma^2, \theta$ that maximize:
 
-$$L(\beta,\sigma^2,\theta | Y) = (2 \pi \sigma^2)^{-\frac{N}{2}} (\det R(\theta))^{-\frac{1}{2}} \exp \left(-\frac{1}{2\sigma^2}(Y-F\beta)^T R(\theta)^{-1}(Y-F\beta)\right).$$
+$$
+L(\beta,\sigma^2,\theta | Y) = (2 \pi \sigma^2)^{-\frac{N}{2}}
+(\det R(\theta))^{-\frac{1}{2}} \exp
+\left(-\frac{1}{2\sigma^2}(Y - F\beta)^T R(\theta)^{-1}(Y - F\beta)\right)
+$$
 
 Here, if we assume a simple constant trend $f(x) = 1$, then $F$ is just a column of ones and $\beta$ is a scalar. We can derive conditions to solve for $\beta$ and $\sigma^2$ in terms of $\theta$. Then we use numerical optimization (e.g., gradient-based methods) to find the $\theta$ that maximizes the likelihood.
 
@@ -177,7 +209,9 @@ Suppose after optimization we find an approximately optimal $\theta^* = 2.5$.
 
 V. Once $\theta^*$ is determined, we form the Kriging predictor:
 
-$$\hat{y}(x) = f(x)^T\hat{\beta} + r(x)^T R(\theta^*)^{-1} (Y - F\hat{\beta}),$$
+$$
+\hat{y}(x) = f(x)^T\hat{\beta} + r(x)^T R(\theta^*)^{-1} (Y - F\hat{\beta})
+$$
 
 where $\hat{\beta}$ and $\sigma^{2*}$ are the estimated parameters. For each $x$, we compute $r(x)$, the correlation vector between $x$ and all sample points. Solving the linear systems provides the Kriging weights.
 
@@ -194,7 +228,7 @@ Kriging (Gaussian-process regression) is the most widely used surrogate in simul
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Sample points $\{x^{(i)}\}_{i=1}^N$, observations $Y = (y_1,\dots,y_N)^T$, correlation function $R(\cdot)$, hyperparameters $\theta$ |
 | **Outputs** | Kriging predictor $\hat{y}(x)$, mean squared error $\hat{s}^2(x)$, confidence interval, optimized hyperparameters $\hat{\theta}$ via MLE |
 
@@ -212,7 +246,7 @@ Kriging (Gaussian-process regression) is the most widely used surrogate in simul
 <summary>Answer</summary>
 
 | $x$ | 0 | 0.125 | 0.25 | 0.375 | 0.5 | 0.625 | 0.75 | 0.875 | 1 |
-|---|---|---|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | $y$ | 3.0272 | -0.9351 | -0.2104 | 0.0300 | 0.9093 | -1.0743 | -5.9933 | 2.2722 | 15.8297 |
 
 Note that $\sin(-4) = +0.7568$, because $4$ rad lies in the third quadrant, where the sine is negative.
@@ -236,7 +270,7 @@ $R(0.125) = e^{-0.15625} = 0.8553$ and $R(0.5) = e^{-2.5} = 0.0821$. From $\exp(
 With $\xi = \theta h$:
 
 | $h$ | 0 | 0.125 | 0.25 | 0.375 | 0.5 |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | $\xi$ | 0 | 0.3125 | 0.625 | 0.9375 | 1.25 |
 | $R$ | 1 | $1 - 6\xi^2 + 6\xi^3 = 0.59717$ | $2(1 - \xi)^3 = 0.10547$ | $2(1 - \xi)^3 = 0.00049$ | 0 |
 
@@ -251,9 +285,9 @@ Only lags of up to three spacings are nonzero, so $R$ is banded with half-bandwi
 
 $R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}$ with $\rho = e^{-1} = 0.3679$. By symmetry $R^{-1}\mathbf{1} \propto \mathbf{1}$, so $\hat{\beta} = \mathbf{1}^T R^{-1} Y/\mathbf{1}^T R^{-1}\mathbf{1} = 2$. Then $Y - \hat{\beta} = (-1, 1)$ and $R^{-1}(-1, 1)^T = (-1, 1)^T/(1 - \rho)$, so
 
-$$
-\hat{y}(x) = 2 + \frac{r_2(x) - r_1(x)}{1 - e^{-1}}.
-$$
+```math
+\hat{y}(x) = 2 + \frac{r_2(x) - r_1(x)}{1 - e^{-1}}
+```
 
 - $x = 0.5$: $r_1 = r_2$, so $\hat{y} = 2$ and $\text{MSE}/\sigma^2 = 0.1263$.
 - $x = 0.25$: $r_1 = e^{-0.0625} = 0.9394$ and $r_2 = e^{-0.5625} = 0.5698$, so $\hat{y} = 2 - 0.3696/0.6321 = 1.4153$ and $\text{MSE}/\sigma^2 = 0.0667$.

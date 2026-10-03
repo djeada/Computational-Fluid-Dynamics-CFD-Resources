@@ -15,13 +15,18 @@ This script simulates the two-dimensional Ising model with the Metropolis Monte 
 
 ### Hamiltonian
 
-$$H = -J \sum_{\langle i,j \rangle} s_i s_j$$
+$$
+H = -J \sum_{\langle i,j \rangle} s_i s_j
+$$
 
 The sum runs over nearest-neighbour pairs, each counted once. The code uses $J = 1$ (ferromagnetic) and counts each bond once by summing only the right and lower neighbours of every site. Energies therefore lie between $-2N$ (all spins aligned) and $+2N$.
 
 ### Magnetization
 
-$$M = \sum_i s_i, \qquad -N \le M \le N$$
+$$
+M = \sum_i s_i,
+\qquad - N \le M \le N
+$$
 
 $|M| \approx N$ in a fully ordered state. $M \approx 0$ in the disordered (paramagnetic) phase, and also in an ordered state split into equal up and down domains.
 
@@ -29,11 +34,15 @@ $|M| \approx N$ in a fully ordered state. $M \approx 0$ in the disordered (param
 
 Flipping spin $s_i$ changes the energy by
 
-$$\Delta E = 2 J s_i \sum_{j \in \text{nn}(i)} s_j$$
+$$
+\Delta E = 2 J s_i \sum_{j \in \text{nn}(i)} s_j
+$$
 
 The flip is accepted with probability
 
-$$A = \begin{cases} 1 & \Delta E \le 0 \\ e^{-\beta\Delta E} & \Delta E > 0 \end{cases}, \qquad \beta = \frac{1}{k_B T}$$
+$$
+A = \begin{cases} 1 & \Delta E \le 0 \\ e^{-\beta\Delta E} & \Delta E > 0 \end{cases}, \qquad \beta = \frac{1}{k_B T}
+$$
 
 ### Phase Transition
 

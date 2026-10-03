@@ -31,7 +31,8 @@ where $U$ is the ship speed, $g$ the gravitational acceleration and $L$ the wate
 A deep-water gravity wave of wavelength $\lambda$ travels at phase speed $c = \sqrt{g\lambda/2\pi}$. The transverse waves of a ship are steady relative to the hull, so they travel at the ship speed, $c = U$. Therefore
 
 $$
-U = \sqrt{\frac{g\lambda}{2\pi}}, \qquad \frac{\lambda}{L} = 2\pi\, Fr^2
+U = \sqrt{\frac{g\lambda}{2\pi}},
+\qquad \frac{\lambda}{L} = 2\pi\, Fr^2
 $$
 
 With $\lambda = 4$ m and $L = 10$ m this gives $U = 2.50$ m/s and $Fr = 0.25$. When $\lambda = L$ ($Fr = 1/\sqrt{2\pi} \approx 0.40$, the classical "hull speed") the bow and stern waves reinforce each other and wave-making resistance rises steeply.
@@ -52,7 +53,7 @@ python main.py --no-show --output . # save ship_hull_in_water.png without openin
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 

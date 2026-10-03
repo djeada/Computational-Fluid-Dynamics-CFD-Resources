@@ -33,7 +33,7 @@ One common way to analyze turbulent flows is to study the time history of flow v
 - Typical Time History of a Flow Variable $u$:
 - Shows the instantaneous values of a velocity component over time.
 - A dashed line or other visual indicator is often used to represent the long-term average (mean) value of the variable.
-This approach helps to distinguish between the underlying mean flow and the superimposed turbulent fluctuations.
+  This approach helps to distinguish between the underlying mean flow and the superimposed turbulent fluctuations.
 
 ## Types of Averages
 
@@ -56,7 +56,10 @@ III. Ensemble Average
 
 - Definition:
 
-$$\overline{u}(y) \equiv \lim_{\tau \to \infty} \frac{1}{2\tau} \int_{-\tau}^{\tau} u(y,t) \, dt$$
+$$
+\overline{u}(y) \equiv \lim_{\tau \to \infty} \frac{1}{2\tau} \int_{-\tau}^{\tau} u(y,t)
+\, dt
+$$
 
 - This formula represents the mean value of a flow variable over a long period and is particularly applicable to statistically stationary flows where the statistics do not change with time.
 
@@ -64,7 +67,9 @@ $$\overline{u}(y) \equiv \lim_{\tau \to \infty} \frac{1}{2\tau} \int_{-\tau}^{\t
 
 - Definition:
 
-$$u' \equiv u - \overline{u}$$
+$$
+u' \equiv u - \overline{u}
+$$
 
 - Here, $u'$ represents the deviation of the instantaneous velocity from its mean value. By definition, the time average of the fluctuations is zero: $\overline{u'} = 0$.
 
@@ -82,7 +87,7 @@ I. Time History of Velocity:
 - Dashed line indicates the average velocity.
 
 ![Time History of Velocity](../../../scripts/plots/turbulent_flow/turbulence_plots.png)
-   
+
 II. Fluctuating Component of Velocity:
 
 - A graph illustrating $u'$, the deviation of the instantaneous velocity from the mean, highlighting the random nature of turbulence.
@@ -102,25 +107,25 @@ III. Square of the Fluctuating Velocity:
 
 I. Direct Numerical Simulations (DNS)
 
-- Description:  
- DNS involves solving the full, unaveraged Navier–Stokes equations without any turbulence models, resolving all scales of motion.
+- Description:\
+  DNS involves solving the full, unaveraged Navier–Stokes equations without any turbulence models, resolving all scales of motion.
 
-- Advantages:  
- Provides the most detailed and accurate representation of turbulence.
+- Advantages:\
+  Provides the most detailed and accurate representation of turbulence.
 
-- Limitations:  
- Extremely computationally expensive and typically limited to simple geometries and low Reynolds numbers.
+- Limitations:\
+  Extremely computationally expensive and typically limited to simple geometries and low Reynolds numbers.
 
 II. Reynolds-Averaged Navier-Stokes (RANS) Equations
 
-- Description:  
- RANS equations result from applying an averaging process (typically time averaging) to the Navier–Stokes equations, resulting in equations for the mean flow quantities.
+- Description:\
+  RANS equations result from applying an averaging process (typically time averaging) to the Navier–Stokes equations, resulting in equations for the mean flow quantities.
 
-- Advantages:  
- Computationally efficient and widely used in industrial applications.
+- Advantages:\
+  Computationally efficient and widely used in industrial applications.
 
-- Limitations:  
- Require turbulence models (closure approximations) to represent the effects of the turbulent fluctuations (e.g., Reynolds stresses), which can introduce significant uncertainties.
+- Limitations:\
+  Require turbulence models (closure approximations) to represent the effects of the turbulent fluctuations (e.g., Reynolds stresses), which can introduce significant uncertainties.
 
 ## The Closure Problem in RANS
 
@@ -137,14 +142,19 @@ When the Navier–Stokes equations are averaged, additional terms known as Reyno
 
 A simplified form of the averaged momentum equation in the streamwise ($x$) direction may be written as:
 
-$$\frac{d}{dy} \overline{u'v'} + \frac{1}{\rho} \frac{dp}{dx} = \nu \frac{d^2 \overline{u}(y)}{dy^2}$$
+$$
+\frac{d}{dy} \overline{u'v'} + \frac{1}{\rho} \frac{dp}{dx} = \nu
+\frac{d^2 \overline{u}(y)}{dy^2}
+$$
 
 with boundary conditions such as:
 
-$$\begin{aligned}
-& y = 0: \quad \frac{d\overline{u}}{dy} = 0, \\
-& y = H: \quad \overline{u} = 0,
-\end{aligned}$$
+$$
+\begin{aligned}
+   & y = 0: \quad \frac{d\overline{u}}{dy} = 0, \\
+   & y = H: \quad \overline{u} = 0,
+\end{aligned}
+$$
 
 where:
 
@@ -153,8 +163,8 @@ where:
 
 ### Reynolds Stress Modeling (Closure Approximation)
 
-- Importance:  
-The accuracy of RANS-based predictions depends critically on how well the Reynolds stresses are modeled. Common approaches include eddy-viscosity models, which relate the Reynolds stresses to the mean velocity gradients using a turbulent viscosity concept.
+- Importance:\
+  The accuracy of RANS-based predictions depends critically on how well the Reynolds stresses are modeled. Common approaches include eddy-viscosity models, which relate the Reynolds stresses to the mean velocity gradients using a turbulent viscosity concept.
 
 ## Turbulence Parameters
 
@@ -164,48 +174,57 @@ I. Turbulent Kinetic Energy (k)
 
 - Definition:
 
- $$k = \frac{1}{2} \left( \overline{u'^2} + \overline{v'^2} + \overline{w'^2} \right)$$
+$$
+k = \frac{1}{2} \left(\overline{u'^2} + \overline{v'^2} + \overline{w'^2} \right)
+$$
 
-- Role:  
- Represents the energy contained in the turbulent fluctuations.
+- Role:\
+  Represents the energy contained in the turbulent fluctuations.
 
-- Typical Magnitudes:  
- In highly turbulent flows, $k$ may account for a few percent (often up to 5%) of the kinetic energy of the mean flow.
+- Typical Magnitudes:\
+  In highly turbulent flows, $k$ may account for a few percent (often up to 5%) of the kinetic energy of the mean flow.
 
 II. Turbulent Energy Dissipation Rate (ε)
 
 - Definition (with summation over $i, j = 1, 2, 3$):
 
- $$\epsilon = \nu \, \overline{\frac{\partial u_i'}{\partial x_j} \frac{\partial u_i'}{\partial x_j}}$$
+$$
+\epsilon = \nu \,
+\overline{\frac{\partial u_i'}{\partial x_j} \frac{\partial u_i'}{\partial x_j}}
+$$
 
- Strictly, this is the pseudo-dissipation. The true dissipation is $2\nu \, \overline{s_{ij}' s_{ij}'}$ with $s_{ij}' = \frac{1}{2}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)$; the two are equal in homogeneous turbulence.
+Strictly, this is the pseudo-dissipation. The true dissipation is $2\nu \, \overline{s_{ij}' s_{ij}'}$ with $s_{ij}' = \frac{1}{2}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)$; the two are equal in homogeneous turbulence.
 
-- Role:  
- Measures the rate at which turbulent kinetic energy is dissipated into heat due to viscosity.
+- Role:\
+  Measures the rate at which turbulent kinetic energy is dissipated into heat due to viscosity.
 
-- Significance:  
- Accurate modeling of $\epsilon$ is necessary for predicting the decay and spatial distribution of turbulence.
+- Significance:\
+  Accurate modeling of $\epsilon$ is necessary for predicting the decay and spatial distribution of turbulence.
 
 ## Turbulence Modeling in CFD
 
 - k-ε Models:
-- These models are among the most widely used in industrial CFD simulations.
-- They involve solving two additional transport equations—one for the turbulent kinetic energy $k$ and one for the dissipation rate $\epsilon$—to close the RANS equations.
-- Advantages:  
-Simplicity and robustness in many engineering applications.
 
-- Limitations:  
-May struggle to accurately capture complicated flows with strong anisotropy or near-wall phenomena without further modifications or additional models.
+- These models are among the most widely used in industrial CFD simulations.
+
+- They involve solving two additional transport equations—one for the turbulent kinetic energy $k$ and one for the dissipation rate $\epsilon$—to close the RANS equations.
+
+- Advantages:\
+  Simplicity and robustness in many engineering applications.
+
+- Limitations:\
+  May struggle to accurately capture complicated flows with strong anisotropy or near-wall phenomena without further modifications or additional models.
 
 - Other Models:
-- k-ω Models:  
-Often provide improved performance in the near-wall region.
 
-- Reynolds Stress Models (RSM):  
-Offer a more detailed representation by directly modeling the transport equations for the Reynolds stresses, at the expense of higher computational cost.
+- k-ω Models:\
+  Often provide improved performance in the near-wall region.
 
-- Large Eddy Simulation (LES):  
-Resolves the larger turbulent scales while modeling only the smallest scales, providing a compromise between DNS and RANS in terms of computational cost and fidelity.
+- Reynolds Stress Models (RSM):\
+  Offer a more detailed representation by directly modeling the transport equations for the Reynolds stresses, at the expense of higher computational cost.
+
+- Large Eddy Simulation (LES):\
+  Resolves the larger turbulent scales while modeling only the smallest scales, providing a compromise between DNS and RANS in terms of computational cost and fidelity.
 
 Turbulence modeling remains an active area of research, with ongoing efforts to improve the accuracy of models and reduce the reliance on empirical closure approximations. The integration of data-driven approaches and advanced computational methods continues to push the boundaries of what is achievable in turbulent flow simulations.
 
@@ -216,7 +235,7 @@ Most engineering flows are turbulent. Because resolving every eddy (DNS) is proh
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Mean velocity field $\overline{u}$, Reynolds number, turbulence model choice (k-ε, k-ω, etc.), wall treatment, boundary values for $k$ and $\epsilon$ |
 | **Outputs** | Reynolds stress tensor $\overline{u'_i u'_j}$, turbulent kinetic energy $k$, dissipation rate $\epsilon$, eddy viscosity $\nu_t$, mean velocity profile |
 
@@ -262,7 +281,9 @@ The mean-flow kinetic energy is $\tfrac{1}{2}\overline{u}^2 = 50$ m²/s², so $k
 
 Integrating $\frac{d}{dy}\overline{u'v'} + \frac{1}{\rho}\frac{dp}{dx} = \nu\frac{d^2\overline{u}}{dy^2}$ from 0 to $y$, and using $d\overline{u}/dy = 0$ and $\overline{u'v'} = 0$ at the centreline (symmetry):
 
-$$\nu\frac{d\overline{u}}{dy} - \overline{u'v'} = \frac{y}{\rho}\frac{dp}{dx}.$$
+```math
+\nu \frac{d\overline{u}}{dy} - \overline{u'v'} = \frac{y}{\rho} \frac{dp}{dx}
+```
 
 The total (viscous plus turbulent) shear stress varies linearly across the channel.
 

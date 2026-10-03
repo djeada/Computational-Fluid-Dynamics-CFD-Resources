@@ -6,25 +6,33 @@ The Proportional-Integral-Derivative (PID) controller is the most widely used co
 
 The standard (parallel) PID controller is:
 
-$$u(t) = K_p e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d \frac{de(t)}{dt}$$
+$$
+u(t) = K_p e(t) + K_i \int_0^t e(\tau)\, d\tau + K_d \frac{de(t)}{dt}
+$$
 
 where $e(t) = r(t) - y(t)$ is the error signal.
 
 In the Laplace domain:
 
-$$C(s) = K_p + \frac{K_i}{s} + K_d s$$
+$$
+C(s) = K_p + \frac{K_i}{s} + K_d s
+$$
 
 ### Alternative Forms
 
 **Ideal (textbook) form**:
 
-$$C(s) = K_p \left(1 + \frac{1}{T_i s} + T_d s\right)$$
+$$
+C(s) = K_p \left(1 + \frac{1}{T_i s} + T_d s\right)
+$$
 
 where $T_i = K_p / K_i$ is the integral time and $T_d = K_d / K_p$ is the derivative time.
 
 **Series (interacting) form** — common in industrial controllers:
 
-$$C(s) = K_c \frac{T_i s + 1}{T_i s} \cdot (T_d s + 1)$$
+$$
+C(s) = K_c \frac{T_i s + 1}{T_i s} \cdot (T_d s + 1)
+$$
 
 ## Effect of Each Term on Response
 
@@ -52,7 +60,7 @@ $$C(s) = K_c \frac{T_i s + 1}{T_i s} \cdot (T_d s + 1)$$
 ### Summary Table
 
 | Parameter | Rise Time | Overshoot | Settling Time | Steady-State Error |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | $K_p \uparrow$ | Decrease | Increase | Small change | Decrease |
 | $K_i \uparrow$ | Decrease | Increase | Increase | Eliminate |
 | $K_d \uparrow$ | Small change | Decrease | Decrease | No effect |
@@ -70,7 +78,7 @@ $$C(s) = K_c \frac{T_i s + 1}{T_i s} \cdot (T_d s + 1)$$
 **Tuning rules**:
 
 | Controller | $K_p$ | $T_i$ | $T_d$ |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | P | $0.50\, K_u$ | — | — |
 | PI | $0.45\, K_u$ | $T_u / 1.2$ | — |
 | PID | $0.60\, K_u$ | $T_u / 2$ | $T_u / 8$ |
@@ -81,12 +89,14 @@ These rules give a quarter-decay ratio (overshoot decays by 75% each cycle), whi
 
 For a plant that can be approximated as a first-order-plus-dead-time (FOPDT) model:
 
-$$G(s) \approx \frac{K_p e^{-Ls}}{Ts + 1}$$
+$$
+G(s) \approx \frac{K_p e^{-Ls}}{Ts + 1}
+$$
 
 where $L$ is the apparent dead time and $T$ is the time constant, both estimated from the open-loop step response.
 
 | Controller | $K_p$ | $T_i$ | $T_d$ |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | P | $T/(K_p L)$ | — | — |
 | PI | $0.9\,T/(K_p L)$ | $3.33\,L$ | — |
 | PID | $1.2\,T/(K_p L)$ | $2\,L$ | $0.5\,L$ |
@@ -114,13 +124,17 @@ When the actuator saturates, the integrator continues to accumulate error, causi
 
 Stop integrating when the actuator is saturated:
 
-$$\text{If } |u| \geq u_{max}: \quad \text{freeze } \int e\,d\tau$$
+$$
+\text{If } |u| \geq u_{max}: \quad \text{freeze } \int e\, d\tau
+$$
 
 ### Back-Calculation
 
 Feed back the difference between the controller output and the actual (saturated) actuator output:
 
-$$\frac{d}{dt}\int e\,d\tau = e(t) + \frac{1}{T_t}\big(u_{sat} - u\big)$$
+$$
+\frac{d}{dt}\int e\, d\tau = e(t) + \frac{1}{T_t}\big(u_{sat} - u\big)
+$$
 
 where $T_t$ is the tracking time constant, typically $T_t = \sqrt{T_i T_d}$.
 
@@ -134,11 +148,16 @@ In a sampled-data system with sampling period $T_s$, the continuous PID is discr
 
 ### Position Form
 
-$$u[k] = K_p\, e[k] + K_i T_s \sum_{j=0}^{k} e[j] + K_d \frac{e[k] - e[k-1]}{T_s}$$
+$$
+u[k] = K_p\, e[k] + K_i T_s \sum_{j=0}^{k} e[j] + K_d \frac{e[k] - e[k-1]}{T_s}
+$$
 
 ### Velocity (Incremental) Form
 
-$$\Delta u[k] = u[k] - u[k-1] = K_p(e[k] - e[k-1]) + K_i T_s\, e[k] + K_d \frac{e[k] - 2e[k-1] + e[k-2]}{T_s}$$
+$$
+\Delta u[k] = u[k] - u[k - 1] = K_p(e[k] - e[k - 1]) + K_i T_s\, e[k] + K_d
+\frac{e[k] - 2e[k-1] + e[k-2]}{T_s}
+$$
 
 **Advantages of velocity form**: bumpless transfer between manual/automatic modes, inherent anti-windup, and direct output limiting.
 
@@ -152,7 +171,9 @@ Rule of thumb: $T_s \leq T_u / 10$ or equivalently the sampling frequency should
 
 Pure derivative amplifies noise. A practical derivative term includes a low-pass filter:
 
-$$D(s) = \frac{K_d s}{1 + (T_d / N) s}$$
+$$
+D(s) = \frac{K_d s}{1 + (T_d / N) s}
+$$
 
 where $T_d = K_d / K_p$ and $N$ is the filter coefficient, typically $N = 8$ to $20$. This limits the derivative gain at high frequencies to $N \cdot K_p$.
 
@@ -160,7 +181,9 @@ where $T_d = K_d / K_p$ and $N$ is the filter coefficient, typically $N = 8$ to 
 
 To reduce overshoot from setpoint changes while maintaining disturbance rejection:
 
-$$u(t) = K_p(b\, r - y) + K_i \int(r - y)\,d\tau + K_d\frac{d(c\, r - y)}{dt}$$
+$$
+u(t) = K_p(b\, r - y) + K_i \int(r - y)\, d\tau + K_d \frac{d(c\, r - y)}{dt}
+$$
 
 where $b \in [0,1]$ and $c \in [0,1]$ are weighting factors. Setting $b < 1$ reduces proportional kick; setting $c = 0$ avoids derivative kick.
 
@@ -168,7 +191,9 @@ where $b \in [0,1]$ and $c \in [0,1]$ are weighting factors. Setting $b < 1$ red
 
 Always implement output limiting:
 
-$$u_{applied} = \text{clamp}(u, u_{min}, u_{max})$$
+$$
+u_{applied} = \text{clamp}(u, u_{min}, u_{max})
+$$
 
 and couple it with anti-windup to prevent integrator accumulation during saturation.
 
@@ -184,17 +209,27 @@ and couple it with anti-windup to prevent integrator accumulation during saturat
 
 Using $K_p = 2$, $L = 3$, $T = 10$:
 
-$$K_p = \frac{1.2\, T}{K_p L} = \frac{1.2 \times 10}{2 \times 3} = 2.0$$
+$$
+K_p = \frac{1.2\, T}{K_p L} = \frac{1.2 \times 10}{2 \times 3} = 2.0
+$$
 
-$$T_i = 2L = 6\;\text{s}$$
+$$
+T_i = 2L = 6\; \text{s}
+$$
 
-$$T_d = 0.5L = 1.5\;\text{s}$$
+$$
+T_d = 0.5L = 1.5\; \text{s}
+$$
 
 Converting to parallel form:
 
-$$K_i = \frac{K_p}{T_i} = \frac{2.0}{6} = 0.333\;\text{s}^{-1}$$
+$$
+K_i = \frac{K_p}{T_i} = \frac{2.0}{6} = 0.333\; \text{s}^{-1}
+$$
 
-$$K_d = K_p \cdot T_d = 2.0 \times 1.5 = 3.0\;\text{s}$$
+$$
+K_d = K_p \cdot T_d = 2.0 \times 1.5 = 3.0\; \text{s}
+$$
 
 The controller is: $C(s) = 2.0 + \frac{0.333}{s} + 3.0s$.
 
@@ -210,11 +245,17 @@ Tracking time constant: $T_t = \sqrt{T_i T_d} = \sqrt{(K_p/K_i)(K_d/K_p)} = \sqr
 
 Digital implementation at $T_s = 0.01$ s:
 
-$$u_{raw}[k] = K_p\, e[k] + I[k] + K_d \frac{e[k] - e[k-1]}{T_s}$$
+$$
+u_{raw}[k] = K_p\, e[k] + I[k] + K_d \frac{e[k] - e[k-1]}{T_s}
+$$
 
-$$u_{sat}[k] = \text{clamp}(u_{raw}[k],\, -12,\, 12)$$
+$$
+u_{sat}[k] = \text{clamp}(u_{raw}[k],\, - 12,\, 12)
+$$
 
-$$I[k+1] = I[k] + K_i T_s\, e[k] + \frac{T_s}{T_t}(u_{sat}[k] - u_{raw}[k])$$
+$$
+I[k + 1] = I[k] + K_i T_s\, e[k] + \frac{T_s}{T_t}(u_{sat}[k] - u_{raw}[k])
+$$
 
 The back-calculation term $\frac{T_s}{T_t}(u_{sat} - u_{raw})$ prevents the integrator from growing when the output is clamped, ensuring fast recovery from saturation.
 
@@ -230,11 +271,17 @@ Ultimate gain: $K_u = \frac{4d}{\pi a} = \frac{4 \times 1}{\pi \times 0.5} = \fr
 
 Apply Ziegler-Nichols PID rules:
 
-$$K_p = 0.6\, K_u = 0.6 \times 2.55 = 1.53$$
+$$
+K_p = 0.6\, K_u = 0.6 \times 2.55 = 1.53
+$$
 
-$$T_i = T_u / 2 = 2.0\;\text{s} \implies K_i = K_p / T_i = 0.765\;\text{s}^{-1}$$
+$$
+T_i = T_u / 2 = 2.0\; \text{s} \implies K_i = K_p / T_i = 0.765\; \text{s}^{-1}
+$$
 
-$$T_d = T_u / 8 = 0.5\;\text{s} \implies K_d = K_p \cdot T_d = 0.765\;\text{s}$$
+$$
+T_d = T_u / 8 = 0.5\; \text{s} \implies K_d = K_p \cdot T_d = 0.765\; \text{s}
+$$
 
 ## Applications
 
@@ -283,9 +330,15 @@ PID: $K_p = 0.6 \times 8 = 4.8$, $T_i = T_u/2 = 1.25$ s, $T_d = T_u/8 = 0.3125$ 
 
 With $L/T = 0.3$:
 
-$$K_c = \frac{1}{K}\frac{T}{L}\left(\frac{4}{3} + \frac{L}{4T}\right) = \frac{1}{2} \times 3.333 \times (1.333 + 0.075) = 2.35$$
+```math
+K_c = \frac{1}{K} \frac{T}{L}\left(\frac{4}{3} + \frac{L}{4T}\right) = \frac{1}{2}
+\times 3.333 \times (1.333 + 0.075) = 2.35
+```
 
-$$T_i = L\frac{32 + 6L/T}{13 + 8L/T} = 3 \times \frac{33.8}{15.4} = 6.58 \text{ s}, \quad T_d = L\frac{4}{11 + 2L/T} = \frac{12}{11.6} = 1.03 \text{ s}$$
+```math
+T_i = L \frac{32 + 6L/T}{13 + 8L/T} = 3 \times \frac{33.8}{15.4} = 6.58 \text{ s}, \quad
+T_d = L \frac{4}{11 + 2L/T} = \frac{12}{11.6} = 1.03 \text{ s}
+```
 
 Ziegler-Nichols gave $K_p = 2.0$, $T_i = 6$ s, $T_d = 1.5$ s. Because $L/T = 0.3 > 0.25$, Cohen-Coon is the more appropriate rule here. It gives about 17% more gain, similar integral time, and less derivative action. Both are starting points to be refined by simulation.
 
@@ -298,9 +351,13 @@ Ziegler-Nichols gave $K_p = 2.0$, $T_i = 6$ s, $T_d = 1.5$ s. Because $L/T = 0.3
 
 $K_d = K_p T_d = 1$ s. The filter time constant is $T_d/N = 0.05$ s, so the corner frequency is 20 rad/s.
 
-$$|D(j1)| = \frac{1}{\sqrt{1 + 0.05^2}} = 0.999 \quad (\text{ideal: } 1.0)$$
+```math
+|D(j1)| = \frac{1}{\sqrt{1 + 0.05^2}} = 0.999 \quad (\text{ideal: } 1.0)
+```
 
-$$|D(j200)| = \frac{200}{\sqrt{1 + 10^2}} = 19.9 \quad (\text{ideal: } 200)$$
+```math
+|D(j200)| = \frac{200}{\sqrt{1 + 10^2}} = 19.9 \quad (\text{ideal: } 200)
+```
 
 Well below the corner the filter acts as a true derivative. At high frequency its gain levels off at $K_d N/T_d = N K_p = 20$, instead of growing without bound and amplifying noise.
 
@@ -311,7 +368,10 @@ Well below the corner the filter acts as a true derivative. At high frequency it
 <details>
 <summary>Answer</summary>
 
-$$\Delta u[k] = 2(0.5 - 0.8) + 0.5 \times 0.1 \times 0.5 + 0.1\,\frac{0.5 - 1.6 + 1.0}{0.1} = -0.6 + 0.025 - 0.1 = -0.675$$
+```math
+\Delta u[k] = 2(0.5 - 0.8) + 0.5 \times 0.1 \times 0.5 + 0.1\,
+\frac{0.5 - 1.6 + 1.0}{0.1} = -0.6 + 0.025 - 0.1 = -0.675
+```
 
 The controller outputs an increment that is added to the previous applied value. If $u[k-1]$ is the saturated actuator value, no integral state keeps growing beyond the limit. As soon as the error changes sign, the increments move the output back off the limit, so there is no stored windup to unwind.
 

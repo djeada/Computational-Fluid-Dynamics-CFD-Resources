@@ -12,11 +12,16 @@ However, in many practical scenarios—such as when sensors fail, data become pa
 
 Both POD and Gappy POD are naturally formulated in Hilbert spaces. Consider a function space $L^2(\Omega)$, where $\Omega \subseteq \mathbb{R}^d$ is the spatial domain. A function $y(x)$, with $x \in \Omega$, belongs to $L^2(\Omega)$ if the integral of $|y(x)|^2$ over $\Omega$ is finite. This ensures an inner product and norm can be defined:
 
-$$\langle f, g \rangle_{L^2(\Omega)} = \int_\Omega f(x) g(x) \, dx, \quad \|y\|_{L^2(\Omega)} = \sqrt{\langle y, y \rangle_{L^2(\Omega)}}.$$
+$$
+\langle f, g \rangle_{L^2(\Omega)} = \int_\Omega f(x) g(x) \, dx, \quad \|
+y\|_{L^2(\Omega)} = \sqrt{\langle y, y \rangle_{L^2(\Omega)}}
+$$
 
 POD typically seeks a low-dimensional subspace $\mathcal{Y}^L \subseteq L^2(\Omega)$ spanned by the first $L$ POD modes $\{\psi_j(x)\}_{j=1}^L$. These modes form an orthonormal basis in that subspace. Any function $y \in \mathcal{Y}^L$ can be approximated as:
 
-$$y(x) \approx \hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x),$$
+$$
+y(x) \approx \hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x)
+$$
 
 where the coefficients $a_j^{(y)} = \langle y, \psi_j \rangle_{L^2(\Omega)}$ are determined by projecting $y$ onto each mode.
 
@@ -26,15 +31,22 @@ where the coefficients $a_j^{(y)} = \langle y, \psi_j \rangle_{L^2(\Omega)}$ are
 
 If we have a complete description of $y \in L^2(\Omega)$, the best $L^2$-approximation in the subspace spanned by $\{\psi_j\}$ is obtained by minimizing:
 
-$$\min_{\{a_j^{(y)}\}} \frac{1}{2}\|y(x) - \sum_{j=1}^L a_j^{(y)}\psi_j(x)\|_{L^2(\Omega)}^2.$$
+$$
+\min_{\{a_j^{(y)}\}} \frac{1}{2}\| y(x) - \sum_{j=1}^L
+a_j^{(y)}\psi_j(x)\|_{L^2(\Omega)}^2
+$$
 
 The solution is straightforward:
 
-$$a_j^{(y)} = \langle y, \psi_j \rangle_{L^2(\Omega)},$$
+$$
+a_j^{(y)} = \langle y, \psi_j \rangle_{L^2(\Omega)}
+$$
 
 resulting in
 
-$$\hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x).$$
+$$
+\hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x)
+$$
 
 This assumes we have full knowledge of $y(x)$. In practice, especially in experimental settings or databases built from simulations at parameter sets, we often have only a set of discrete measurements $\{y(x^{(i)})\}_{i=1}^N$.
 
@@ -42,29 +54,42 @@ This assumes we have full knowledge of $y(x)$. In practice, especially in experi
 
 In Gappy POD, instead of minimizing over the entire domain $\Omega$, we only have partial information at sample points $x^{(i)}$, $i=1,\ldots,N$:
 
-$$\min_{\{a_j^{(y)}\}} \frac{1}{2} \sum_{i=1}^N (y(x^{(i)}) - \sum_{j=1}^L a_j^{(y)} \psi_j(x^{(i)}))^2.$$
+$$
+\min_{\{a_j^{(y)}\}} \frac{1}{2} \sum_{i=1}^N
+(y(x^{(i)}) - \sum_{j=1}^L a_j^{(y)} \psi_j(x^{(i)}))^2
+$$
 
 Define the "design matrix" $\Psi \in \mathbb{R}^{N \times L}$ as:
 
-$$\Psi_{ij} = \psi_j(x^{(i)}).$$
+$$
+\Psi_{ij} = \psi_j(x^{(i)})
+$$
 
 We also have the vector $Y = [y(x^{(1)}), y(x^{(2)}), \ldots, y(x^{(N)})]^T \in \mathbb{R}^N$. The optimization problem becomes:
 
-$$\min_{\Gamma_{a}^{(y)}} \frac{1}{2}\|Y - \Psi \Gamma_{a}^{(y)}\|_2^2,$$
+$$
+\min_{\Gamma_{a}^{(y)}} \frac{1}{2}\| Y - \Psi \Gamma_{a}^{(y)}\|_2^2
+$$
 
 where $\Gamma_{a}^{(y)} = [a_1^{(y)}, \ldots, a_L^{(y)}]^T$. Provided $\text{rank}(\Psi)=L$, the least-squares solution is:
 
-$$\Gamma_{a}^{(y)} = (\Psi^T \Psi)^{-1} \Psi^T Y.$$
+$$
+\Gamma_{a}^{(y)} = (\Psi^T \Psi)^{-1} \Psi^T Y
+$$
 
 Thus, even with incomplete data, we recover the coefficients that best fit the data to the chosen POD basis. The reconstructed approximation is then:
 
-$$\hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x).$$
+$$
+\hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x)
+$$
 
 ### Avoiding Redundancy and Database Functions
 
 In many practical cases, the POD modes $\psi_j(x)$ come from a pre-computed database of solutions $\{\phi_j(x)\}_{j=1}^M$ that span a larger manifold $\mathcal{M} \subset L^2(\Omega)$. Using a singular value decomposition (SVD), we extract the dominant $L \le M$ modes to form a reduced basis $\psi_j(x)$. Then:
 
-$$\Psi = \Phi V_L W_L^{-1},$$
+$$
+\Psi = \Phi V_L W_L^{-1}
+$$
 
 where $\Phi \in \mathbb{R}^{N \times M}$ contains evaluations of the original database functions $\phi_j(x)$. This decomposition ensures that the Gappy POD approximation can leverage a well-structured database.
 
@@ -76,7 +101,9 @@ I. **Transforming Database Elements**:
 
 If each database element $\bar{\phi}(x)$ must be transformed according to some parameter $p$, we redefine:
 
-$$\bar{\phi}(p) := \bar{\phi}(x(p)),$$
+$$
+\bar{\phi}(p): = \bar{\phi}(x(p))
+$$
 
 where $x(p)$ encodes scaling, translation, or more general transformations (e.g., from a parametric mapping $x \mapsto x(1+p_1)+p_2$). This allows the database to be "aligned," ensuring that different snapshots represent comparable features at corresponding locations.
 
@@ -84,7 +111,10 @@ II. **Approximation with Transformation**:
 
 After alignment, we write:
 
-$$\bar{y}(\bar{\phi}(p), p, a^{(y)}) = \bar{\phi}(\bar{\phi}(p)) V_L W_L^{-1} a^{(y)} + p_5,$$
+$$
+\bar{y}(\bar{\phi}(p), p, a^{(y)}) = \bar{\phi}(\bar{\phi}(p)) V_L W_L^{-1} a^{(y)} +
+p_5
+$$
 
 ensuring that the function reconstruction accounts for geometric changes or parameter shifts in the dataset.
 
@@ -92,7 +122,11 @@ III. **Regularization**:
 
 In presence of transformations and incomplete data, a regularization term $\frac{\delta}{2} p^T p$ can be introduced to stabilize the solution. The optimization problem becomes:
 
-$$\min_{\Gamma_{a}^{(y)}, p} \left\{ \frac{1}{2}\sum_{i=1}^N (y(x^{(i)}) - \bar{y}(\bar{\phi}(p), p, a^{(y)}))^2 + \frac{\delta}{2} \|p\|_2^2 \right\}.$$
+$$
+\min_{\Gamma_{a}^{(y)}, p} \left\{ \frac{1}{2}\sum_{i=1}^N
+(y(x^{(i)}) - \bar{y}(\bar{\phi}(p), p, a^{(y)}))^2 + \frac{\delta}{2} \| p\|_2^2
+\right\}
+$$
 
 This ensures robustness against ill-conditioned problems and overfitting.
 
@@ -100,11 +134,11 @@ This ensures robustness against ill-conditioned problems and overfitting.
 
 ### Purpose and Focus
 
-- **Traditional POD**:  
+- **Traditional POD**:
 
 The classical POD approach aims at reducing computational complexity by extracting a low-dimensional subspace that captures the dominant flow features. It is commonly used for Reduced-Order Modeling (ROM) in CFD, structural dynamics, acoustics, and more. The primary goal is to replace expensive full-scale simulations with cheaper reduced models, enabling rapid simulations, optimization, and control.
 
-- **Gappy POD**:  
+- **Gappy POD**:
 
 Gappy POD is not primarily about reducing computational costs in a fully known scenario. Instead, it focuses on reconstructing and identifying important underlying structures from incomplete or sparse data. While it can still facilitate model reduction (if a partial dataset is used to build or enhance a ROM), its defining characteristic is its ability to handle partial, gappy information.
 
@@ -174,7 +208,7 @@ In experiments and sensor-limited environments, full-field data are rarely avail
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Partial measurements $Y = [y(x^{(1)}), \dots, y(x^{(N)})]^T$, POD modes $\{\psi_j\}_{j=1}^L$ (from a complete database), sample locations $x^{(i)}$ |
 | **Outputs** | Reconstructed coefficients $\Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T Y$, full-field approximation $\hat{y}(x) = \sum a_j \psi_j(x)$ |
 
@@ -214,9 +248,9 @@ Points 1 and 2: both rows of $\Psi$ equal $(1/2, 1/2)$, so $\text{rank}(\Psi) = 
 
 $\Psi$ has rows $(1/2, 1/2), (1/2, 1/2), (1/2, -1/2)$, so
 
-$$
-\Psi^T\Psi = \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix}, \qquad \Psi^T Y = \begin{pmatrix} 2.5 \\ 1.5 \end{pmatrix}.
-$$
+```math
+\Psi^T\Psi = \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix}, \qquad \Psi^T Y = \begin{pmatrix} 2.5 \\ 1.5 \end{pmatrix}
+```
 
 Solving gives $a = (3, 1)$, so $\hat{y} = (2, 2, 1, 1)$, equal to the noise-free field. The residual is $(0.1, -0.1, 0)$: the two redundant sensors at points 1 and 2 average out their opposite errors. With more sensors than modes, least squares filters measurement noise.
 
@@ -231,9 +265,9 @@ Let $S$ be the $N \times n$ matrix that selects the measured points, so that $\P
 
 If $y = \Psi_{\text{full}}a^*$, then $Y = \Psi a^*$ and
 
-$$
-\Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T\Psi a^* = a^*.
-$$
+```math
+\Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T\Psi a^* = a^*
+```
 
 The reconstruction error of gappy POD therefore comes only from the part of $y$ outside the span of the basis (and from noise), amplified by the conditioning of $\Psi^T\Psi$.
 

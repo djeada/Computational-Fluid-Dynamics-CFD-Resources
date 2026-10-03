@@ -10,7 +10,7 @@ At its core, ROM reduces the dimensionality of a high-fidelity model by identify
 
 **Inputs to ROM**:
 
-I. **High-Fidelity (HF) Model**:  
+I. **High-Fidelity (HF) Model**:
 
 - A CFD solver (e.g., finite volume, finite element, spectral method) that accurately solves the Navier-Stokes equations (or related PDEs) for given parameters $\mu \in \mathcal{P}$.
 - The parameter set $\mathcal{P}$ can include geometric parameters, boundary conditions, Reynolds numbers, Mach numbers, material properties, or forcing terms.
@@ -46,17 +46,19 @@ III. **Reduced Predictions**:
 
 I. **Offline Phase** (Computationally Intense, Done Once):
 
-**Step A: Construct the HF Model**:  
+**Step A: Construct the HF Model**:
 
 Solve the full-order PDE discretized by, for example, a finite volume method (FVM) or finite element method (FEM). This step uses the original large-dimensional system with $N_h$ DOFs.
 
-**Step B: Sampling the Parameter Space**:  
+**Step B: Sampling the Parameter Space**:
 
 Choose parameter points $\{\mu_1, \ldots, \mu_{N_s}\}$ and possibly time instances. Run the HF model at each sampled point to produce snapshots:
 
-$$u_h(\mu_1), u_h(\mu_2), \ldots, u_h(\mu_{N_s}) \in \mathbb{R}^{N_h}.$$
+$$
+u_h(\mu_1), u_h(\mu_2), \ldots, u_h(\mu_{N_s}) \in \mathbb{R}^{N_h}
+$$
 
-**Step C: Snapshot Matrix and POD**:  
+**Step C: Snapshot Matrix and POD**:
 
 Arrange snapshots into a matrix $X \in \mathbb{R}^{N_h \times N_s}$. Apply POD:
 
@@ -64,11 +66,13 @@ Arrange snapshots into a matrix $X \in \mathbb{R}^{N_h \times N_s}$. Apply POD:
 - Perform SVD or eigenvalue decomposition to find eigenvectors and eigenvalues.
 - Select the top $N$ eigenmodes with the largest eigenvalues to form the reduced basis $\{\xi_i\}_{i=1}^N$.
 
-**Step D: Galerkin Projection**:  
+**Step D: Galerkin Projection**:
 
 Insert the reduced basis into the PDE (weak) formulation to derive reduced operators. Precompute:
 
-$$A^r(\mu) = B^T A^{\mu} B, \quad f^r(\mu) = B^T f^\mu,$$
+$$
+A^r(\mu) = B^T A^{\mu} B, \quad f^r(\mu) = B^T f^\mu
+$$
 
 where $A^\mu, f^\mu$ are the high-fidelity system matrices and vectors, and $B \in \mathbb{R}^{N_h \times N}$ contains the basis modes. Store these reduced operators (or parametric components for efficient online assembly).
 
@@ -85,10 +89,11 @@ This separation of offline/online computations is a hallmark of ROM, allowing ne
 
 While POD is a mainstay approach, other methods like greedy algorithms have emerged. These require error estimators to guide snapshot selection:
 
-- **Greedy Algorithms**:  
+- **Greedy Algorithms**:
 
-Start with an empty basis. Iteratively add the snapshot that maximizes the error (predicted by a posteriori error estimators) until a desired accuracy is met.  
+Start with an empty basis. Iteratively add the snapshot that maximizes the error (predicted by a posteriori error estimators) until a desired accuracy is met.\
 Advantages:
+
 - Efficient handling of large parameter spaces $\mathcal{P}$.
 - Automatic discovery of "difficult" parameter regions that require more modes.
 - **Error Estimators**:
@@ -106,12 +111,12 @@ ROM initially found success in linear, elliptic PDEs, but the approach has matur
 - Nonlinear terms require additional strategies: Empirical interpolation or hyper-reduction techniques approximate nonlinear operators efficiently.
 
 **Time-Dependent Problems**:
-  
+
 - Treat snapshots as a temporal sequence. Time discretization is done once in the HF model. The ROM solves a much smaller ODE system in time, allowing fast parametric sweeps.
 
 **Turbulent Flows**:
-  
-- Including turbulence models (RANS, LES) in ROM is challenging due to nonlinearity and complex dynamics.  
+
+- Including turbulence models (RANS, LES) in ROM is challenging due to nonlinearity and complex dynamics.
 - Approaches like eddy viscosity modeling in ROM or calibration strategies ensure reduced models still capture main turbulent features.
 
 ## ROM in Finite Volume Discretizations
@@ -166,7 +171,7 @@ ROM replaces expensive full-order CFD solves with low-dimensional approximations
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | High-fidelity CFD solver, parameter set $\mathcal{P}$, snapshots $\{u_h(\mu_i)\}$, reduction method (POD/greedy), error tolerance |
 | **Outputs** | Reduced basis $\{\zeta_n\}_{n=1}^N$, reduced system matrices, fast online evaluation $u_N(\mu)$ for new parameters, a posteriori error estimates |
 
@@ -199,7 +204,7 @@ $B$: $10^6 \times 20 \times 8 = 1.6 \times 10^8$ bytes (160 MB). $A^r$: $400 \ti
 **Exercise 3.** Apply Step D to the system
 
 $$
-A = \begin{pmatrix} 4 & -1 & 0 \\ -1 & 4 & -1 \\ 0 & -1 & 4 \end{pmatrix}, \qquad f = (1, 2, 1)^T,
+A = \begin{pmatrix} 4 & -1 & 0 \\ -1 & 4 & -1 \\ 0 & -1 & 4 \end{pmatrix}, \qquad f = (1, 2, 1)^T
 $$
 
 with the orthonormal basis $B = [\,(1, 0, 1)^T/\sqrt{2},\ (0, 1, 0)^T\,]$. Compute $A^r = B^T A B$ and $f^r = B^T f$, solve for $u_N$, and compare $B u_N$ with the truth $A^{-1}f$.
@@ -209,9 +214,9 @@ with the orthonormal basis $B = [\,(1, 0, 1)^T/\sqrt{2},\ (0, 1, 0)^T\,]$. Compu
 
 $A b_1 = (4, -2, 4)^T/\sqrt{2}$ and $A b_2 = (-1, 4, -1)^T$, so
 
-$$
-A^r = \begin{pmatrix} 4 & -\sqrt{2} \\ -\sqrt{2} & 4 \end{pmatrix}, \qquad f^r = \begin{pmatrix} \sqrt{2} \\ 2 \end{pmatrix}.
-$$
+```math
+A^r = \begin{pmatrix} 4 & -\sqrt{2} \\ -\sqrt{2} & 4 \end{pmatrix}, \qquad f^r = \begin{pmatrix} \sqrt{2} \\ 2 \end{pmatrix}
+```
 
 Solving gives $u_N = (3\sqrt{2}/7, 5/7) \approx (0.6061, 0.7143)$, so $B u_N = (3/7, 5/7, 3/7) \approx (0.4286, 0.7143, 0.4286)$. This equals $A^{-1}f$, as you can check: $4 \cdot 3/7 - 5/7 = 1$ and $-3/7 + 20/7 - 3/7 = 2$. The ROM is exact because the truth solution is symmetric and $B$ spans all symmetric vectors.
 

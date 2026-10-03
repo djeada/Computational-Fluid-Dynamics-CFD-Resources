@@ -5,6 +5,7 @@ Structural analysis is the systematic determination of the effects of loads on p
 ## Introduction to Structural Systems
 
 A **structure** is an assembly of members connected together to support loads and transmit them safely to the ground or other supports. The primary goals of structural analysis are:
+
 - Determine support reactions
 - Find internal forces (axial, shear, bending moment) in each member
 - Assess deformations and displacements
@@ -15,6 +16,7 @@ A **structure** is an assembly of members connected together to support loads an
 ### Beams
 
 Beams are members subjected primarily to transverse loads and bending:
+
 - **Simply supported beam**: Supported by a pin and a roller
 - **Cantilever beam**: Fixed at one end, free at the other
 - **Overhanging beam**: Extends beyond one or both supports
@@ -23,6 +25,7 @@ Beams are members subjected primarily to transverse loads and bending:
 ### Trusses
 
 Trusses consist of straight members connected at joints, loaded only at the joints:
+
 - Members carry purely axial forces (tension or compression)
 - Connections are idealized as frictionless pins
 - Self-weight of members is typically neglected or applied at the joints
@@ -30,6 +33,7 @@ Trusses consist of straight members connected at joints, loaded only at the join
 ### Frames
 
 Frames are structures with at least one multi-force member:
+
 - Members can carry axial force, shear, and bending moment simultaneously
 - Connections may be rigid or pinned
 - Common in buildings, bridges, and machinery
@@ -37,25 +41,31 @@ Frames are structures with at least one multi-force member:
 ### Arches
 
 Arches are curved structures that transfer loads primarily through compression:
+
 - **Three-hinged arch**: Statically determinate with pins at supports and crown
 - **Two-hinged arch**: One degree of indeterminacy
 - **Fixed arch**: Three degrees of indeterminacy
 
 The horizontal thrust $H$ in a three-hinged parabolic arch under uniform load $w$ is:
 
-$$H = \frac{wL^2}{8h}$$
+$$
+H = \frac{wL^2}{8h}
+$$
 
 where $L$ is the span and $h$ is the rise.
 
 ### Cables
 
 Cables are flexible members that carry loads in pure tension:
+
 - Under a uniform load along the horizontal, a cable takes a **parabolic** shape
 - Under its own weight (catenary loading), the shape is a **catenary curve**
 
 The equation of a parabolic cable with sag $h$ and span $L$ is:
 
-$$y = \frac{4h}{L^2}x^2$$
+$$
+y = \frac{4h}{L^2}x^2
+$$
 
 The maximum tension occurs at the supports and the minimum tension at the lowest point.
 
@@ -65,7 +75,9 @@ The maximum tension occurs at the supports and the minimum tension at the lowest
 
 For statically determinate structures, equilibrium equations alone suffice:
 
-$$\sum F_x = 0, \quad \sum F_y = 0, \quad \sum M = 0$$
+$$
+\sum F_x = 0, \quad \sum F_y = 0, \quad \sum M = 0
+$$
 
 This is the foundation for analyzing determinate beams, trusses, and frames.
 
@@ -73,7 +85,9 @@ This is the foundation for analyzing determinate beams, trusses, and frames.
 
 For statically indeterminate structures, additional equations based on geometric compatibility of deformations are required:
 
-$$\delta_{total} = \delta_{load} + R \cdot \delta_{redundant} = 0$$
+$$
+\delta_{total} = \delta_{load} + R \cdot \delta_{redundant} = 0
+$$
 
 where $R$ is the redundant reaction and $\delta$ represents displacements.
 
@@ -81,7 +95,9 @@ where $R$ is the redundant reaction and $\delta$ represents displacements.
 
 The stiffness (displacement) method relates forces to displacements through the stiffness matrix:
 
-$$\mathbf{F} = \mathbf{K}\mathbf{d}$$
+$$
+\mathbf{F} = \mathbf{K}\mathbf{d}
+$$
 
 where $\mathbf{K}$ is the global stiffness matrix and $\mathbf{d}$ is the displacement vector. This method is the basis for modern finite element analysis.
 
@@ -90,6 +106,7 @@ where $\mathbf{K}$ is the global stiffness matrix and $\mathbf{d}$ is the displa
 ### Modeling Assumptions
 
 Real structures are idealized through simplifying assumptions:
+
 - **Supports**: Classified as pins, rollers, or fixed based on the degree of restraint
 - **Connections**: Treated as perfectly rigid or perfectly pinned
 - **Members**: Assumed to be straight, prismatic (uniform cross-section), and made of linearly elastic material
@@ -98,7 +115,7 @@ Real structures are idealized through simplifying assumptions:
 ### Load Types
 
 | Load Type | Description | Example |
-|---|---|---|
+| --- | --- | --- |
 | Dead load | Permanent, self-weight | Weight of beams, slabs |
 | Live load | Variable, occupancy-related | People, furniture |
 | Wind load | Lateral pressure from wind | Pressure on building facades |
@@ -115,13 +132,16 @@ A **load path** is the route through which an applied force travels from the poi
 
 For distributed systems such as floor slabs, the load carried by each beam is estimated using the tributary area:
 
-$$P_{beam} = w \times A_{tributary}$$
+$$
+P_{beam} = w \times A_{tributary}
+$$
 
 where $w$ is the load per unit area and $A_{tributary}$ is the area of floor supported by that beam.
 
 ### Hierarchical Load Transfer
 
 In a typical building structure, loads transfer through the following hierarchy:
+
 1. **Slab** → carries floor loads
 2. **Beams** → receive loads from the slab
 3. **Girders** → receive loads from beams
@@ -138,19 +158,25 @@ An **influence line** is a graph showing how a particular response (reaction, sh
 
 For a simply supported beam of length $L$, the influence line for the reaction at A is:
 
-$$R_A(x) = 1 - \frac{x}{L}$$
+$$
+R_A(x) = 1 - \frac{x}{L}
+$$
 
 where $x$ is the position of the unit load measured from A.
 
 The influence line for the bending moment at a section located at distance $a$ from A is:
 
-$$M(x) = \begin{cases} \frac{(L - a)}{L}x & \text{for } 0 \le x \le a \\ \frac{a}{L}(L - x) & \text{for } a \le x \le L \end{cases}$$
+$$
+M(x) = \begin{cases} \frac{(L - a)}{L}x & \text{for } 0 \le x \le a \\ \frac{a}{L}(L - x) & \text{for } a \le x \le L \end{cases}
+$$
 
 ### Using Influence Lines
 
 To find the effect of a distributed load $w(x)$ on a response quantity, integrate the product of the load and the influence line ordinate:
 
-$$R = \int w(x) \cdot \eta(x) \, dx$$
+$$
+R = \int w(x) \cdot \eta(x) \, dx
+$$
 
 where $\eta(x)$ is the influence line ordinate.
 
@@ -159,6 +185,7 @@ where $\eta(x)$ is the influence line ordinate.
 Determine the shear force and bending moment at the midpoint of a 10 m simply supported beam carrying a 20 kN point load at 3 m from the left support A.
 
 **Given:**
+
 - Beam length: $L = 10$ m
 - Point load: $P = 20$ kN at $x = 3$ m from A
 - Section of interest: midpoint $x = 5$ m
@@ -169,35 +196,46 @@ Determine the shear force and bending moment at the midpoint of a 10 m simply su
 
 First, determine support reactions:
 
-$$\sum M_A = 0: \quad B_y(10) - 20(3) = 0 \implies B_y = 6 \text{ kN}$$
+$$
+\sum M_A = 0: \quad B_y(10) - 20(3) = 0 \implies B_y = 6 \text{ kN}
+$$
 
-$$\sum F_y = 0: \quad A_y + 6 - 20 = 0 \implies A_y = 14 \text{ kN}$$
+$$
+\sum F_y = 0: \quad A_y + 6 - 20 = 0 \implies A_y = 14 \text{ kN}
+$$
 
 Cut the beam at the midpoint ($x = 5$ m) and consider the left segment:
 
 Shear force at midpoint:
 
-$$V = A_y - P = 14 - 20 = -6 \text{ kN}$$
+$$
+V = A_y - P = 14 - 20 = -6 \text{ kN}
+$$
 
 Bending moment at midpoint:
 
-$$M = A_y(5) - P(5 - 3) = 14(5) - 20(2) = 70 - 40 = 30 \text{ kN}\cdot\text{m}$$
+$$
+M = A_y(5) - P(5 - 3) = 14(5) - 20(2) = 70 - 40 = 30 \text{ kN}\cdot \text{m}
+$$
 
 **Results:** $V = -6$ kN and $M = 30$ kN·m at the midpoint.
 
 ## Applications
 
 ### Civil Engineering
+
 - **Building design**: Analyzing frames and shear walls for gravity and lateral loads
 - **Bridge engineering**: Designing girders, decks, and cable systems
 - **Foundation design**: Transferring superstructure loads to the soil
 
 ### Mechanical Engineering
+
 - **Machine frames**: Analyzing housings, brackets, and support structures
 - **Pressure vessels**: Evaluating shell and nozzle stresses
 - **Automotive chassis**: Predicting structural response under road loads
 
 ### Aerospace Engineering
+
 - **Aircraft fuselage**: Analyzing semi-monocoque structures
 - **Wing spars**: Evaluating bending and shear under aerodynamic loads
 - **Launch vehicle structures**: Designing for thrust, pressure, and inertia loads
@@ -219,7 +257,9 @@ Structural analysis provides the essential toolkit for understanding how forces 
 <details>
 <summary>Answer</summary>
 
-$$H = \frac{wL^2}{8h} = \frac{20 \times 40^2}{8 \times 8} = 500 \text{ kN}$$
+```math
+H = \frac{wL^2}{8h} = \frac{20 \times 40^2}{8 \times 8} = 500 \text{ kN}
+```
 
 $V = wL/2 = 400$ kN at each support, and the resultant is $\sqrt{500^2 + 400^2} = 640$ kN.
 
@@ -249,7 +289,9 @@ Direct check: $M(4) = \dfrac{wL}{2}(4) - \dfrac{w(4)^2}{2} = 100 - 40 = 60$ kN·
 
 Moment equilibrium of half the cable about its lowest point gives $H = wL^2/(8h)$:
 
-$$H = \frac{2 \times 100^2}{8 \times 10} = 250 \text{ kN}$$
+```math
+H = \frac{2 \times 100^2}{8 \times 10} = 250 \text{ kN}
+```
 
 At a support the vertical component is $wL/2 = 100$ kN, so $T_{max} = \sqrt{250^2 + 100^2} = 269$ kN. $T_{min} = H = 250$ kN at mid-span.
 
@@ -262,7 +304,9 @@ At a support the vertical component is $wL/2 = 100$ kN, so $T_{max} = \sqrt{250^
 
 Remove the roller. The tip deflection of the cantilever under the load is $wL^4/(8EI)$ downward. A tip force $R_B$ deflects it by $R_B L^3/(3EI)$ upward. Compatibility requires zero deflection at B:
 
-$$\frac{wL^4}{8EI} = \frac{R_B L^3}{3EI} \implies R_B = \frac{3wL}{8} = 22.5 \text{ kN}$$
+```math
+\frac{wL^4}{8EI} = \frac{R_B L^3}{3EI} \implies R_B = \frac{3wL}{8} = 22.5 \text{ kN}
+```
 
 Then $A_y = 60 - 22.5 = 37.5$ kN and $M_A = wL^2/2 - R_B L = 180 - 135 = 45$ kN·m, which equals $wL^2/8$.
 

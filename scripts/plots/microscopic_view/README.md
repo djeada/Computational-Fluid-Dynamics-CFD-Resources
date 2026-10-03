@@ -27,7 +27,8 @@ where $\lambda$ is the molecular mean free path and $L$ is the characteristic le
 ### Field in the right-hand panel
 
 $$
-u(x, y) = \sin\left(\frac{y}{2}\right), \qquad v(x, y) = \cos\left(\frac{x}{2}\right)
+u(x, y) = \sin\left(\frac{y}{2}\right),
+\qquad v(x, y) = \cos\left(\frac{x}{2}\right)
 $$
 
 $u$ does not depend on $x$ and $v$ does not depend on $y$. The field is therefore divergence-free, $\partial u/\partial x + \partial v/\partial y = 0$, which is the continuity equation for an incompressible flow.
@@ -48,7 +49,7 @@ python main.py --no-show --output . # save microscopic_view.png without opening 
 ```
 
 | Flag | Effect |
-|------|--------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save `microscopic_view.png` in it |
 

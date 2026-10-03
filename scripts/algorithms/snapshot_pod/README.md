@@ -18,13 +18,14 @@ This script computes POD modes of a synthetic spatio-temporal field with the sna
 For the mean-subtracted snapshot matrix $\tilde{U} \in \mathbb{R}^{N \times M}$, with $N$ spatial points and $M$ snapshots:
 
 $$
-C_s = \frac{1}{M-1} \tilde{U}^T \tilde{U} \in \mathbb{R}^{M \times M}.
+C_s = \frac{1}{M-1} \tilde{U}^T \tilde{U} \in \mathbb{R}^{M \times M}
 $$
 
 ### Eigenvalue Problem
 
 $$
-C_s \mathbf{a}_i = \lambda_i \mathbf{a}_i, \qquad \lambda_1 \geq \lambda_2 \geq \cdots \geq 0,
+C_s \mathbf{a}_i = \lambda_i \mathbf{a}_i,
+\qquad \lambda_1 \geq \lambda_2 \geq \cdots \geq 0
 $$
 
 where the $\mathbf{a}_i$ are unit-norm temporal eigenvectors and $\lambda_i$ is proportional to the energy of mode $i$.

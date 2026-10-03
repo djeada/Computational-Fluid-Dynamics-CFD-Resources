@@ -14,6 +14,7 @@ POD aims to find an orthonormal basis (set of modes) that best represents the da
 I. **Centered Data**: Usually, one first subtracts the mean from each snapshot to focus on fluctuations. For simplicity, assume $\mathbf{U}$ is already mean-subtracted.
 
 II. **Covariance Matrices**:
+
 - The covariance matrix in "state space": $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T \mathbf{U}$ is an $n \times n$ matrix.
 - The covariance matrix in "snapshot space": $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$ is an $m \times m$ matrix.
 
@@ -23,7 +24,9 @@ Eigen-decomposition of either $\mathbf{C}$ or $\mathbf{C}_s$ yields the POD mode
 
 SVD provides a factorization of the snapshot matrix $\mathbf{U}$ itself:
 
-$$\mathbf{U} = \mathbf{L} \mathbf{\Sigma} \mathbf{R}^T,$$
+$$
+\mathbf{U} = \mathbf{L} \mathbf{\Sigma} \mathbf{R}^T
+$$
 
 where:
 
@@ -41,17 +44,22 @@ I. **From SVD to Covariance**:
 
 Consider $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T \mathbf{U}$:
 
-$$\mathbf{C} = \frac{1}{m-1} (\mathbf{R}(\mathbf{\Sigma}^T\mathbf{\Sigma})\mathbf{R}^T).$$
+$$
+\mathbf{C} = \frac{1}{m-1} (\mathbf{R}(\mathbf{\Sigma}^T\mathbf{\Sigma})\mathbf{R}^T)
+$$
 
 Since $\mathbf{R}$ is orthonormal and $\mathbf{\Sigma}^T\mathbf{\Sigma}$ is diagonal with $\sigma_i^2$ on the diagonal, the eigen-decomposition of $\mathbf{C}$ gives eigenvalues $\frac{\sigma_i^2}{m-1}$ and eigenvectors $\mathbf{R}$.
 
 Similarly, $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$:
 
-$$\mathbf{C}_s = \frac{1}{m-1} (\mathbf{L}(\mathbf{\Sigma}\mathbf{\Sigma}^T)\mathbf{L}^T).$$
+$$
+\mathbf{C}_s = \frac{1}{m-1} (\mathbf{L}(\mathbf{\Sigma}\mathbf{\Sigma}^T)\mathbf{L}^T)
+$$
 
 Its eigenvalues are also $\frac{\sigma_i^2}{m-1}$, and eigenvectors are the columns of $\mathbf{L}$.
 
 II. **Eigenvalues and Modes**:
+
 - The singular values $\sigma_i$ of $\mathbf{U}$ determine the energy content of the modes.
 - The columns of $\mathbf{R}$ (right singular vectors) correspond to eigenvectors of $\mathbf{C}$ and represent spatial modes in Direct POD.
 - The columns of $\mathbf{L}$ (left singular vectors) correspond to eigenvectors of $\mathbf{C}_s$ and represent temporal modes in Snapshot POD.
@@ -82,14 +90,14 @@ Thus, whether one uses Direct POD or Snapshot POD, the underlying mathematics is
 
 Below is a structured comparison of POD, Snapshot POD, and SVD-based methods for extracting modes.
 
-| **Method**       | **Procedure**                                                                                                                                         | **Advantages**                                                                | **Disadvantages**                                                                    |
-|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| **POD (Direct)** | - Form $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$ and compute eigen-decomposition.<br>- Suitable if $n$ is moderate.                  | - Direct method aligns well with theoretical definitions of POD.               | - Infeasible for very large $n$ due to storing and factorizing $n \times n$ matrix |
-|                  | - Extract spatial modes as eigenvectors of $\mathbf{C}$.                                                   | - Provides direct access to spatial modes.                                    |                                                                                      |
-| **Snapshot POD** | - Form $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$ and compute eigen-decomposition.<br>- Favored when $m < n$.                        | - Much less computationally expensive for $n \gg m$.                        | - Indirect: Must map back to spatial modes after finding temporal modes.              |
-|                  | - Extract temporal modes first, then spatial modes via $\mathbf{U}^T\mathbf{L}$.                                | - Ideal for large-dimensional problems with relatively few snapshots.          |                                                                                      |
-| **SVD**          | - Perform $\mathbf{U} = \mathbf{L}\mathbf{\Sigma}\mathbf{R}^T$.<br>- SVD provides both sets of modes directly. | - Unified approach, no separate covariance needed.                            | - Similar computational cost to snapshot method, still large SVD computations.        |
-|                  | - Spatial modes: columns of $\mathbf{R}$.<br>Temporal modes: columns of $\mathbf{L}$.                        | - Gives a direct link between both POD approaches.                            | - Scaling by $\sqrt{m-1}$ needed to relate to POD eigenvalues.                     |
+| **Method** | **Procedure** | **Advantages** | **Disadvantages** |
+| --- | --- | --- | --- |
+| **POD (Direct)** | - Form $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$ and compute eigen-decomposition.<br>- Suitable if $n$ is moderate. | - Direct method aligns well with theoretical definitions of POD. | - Infeasible for very large $n$ due to storing and factorizing $n \times n$ matrix |
+|  | - Extract spatial modes as eigenvectors of $\mathbf{C}$. | - Provides direct access to spatial modes. |  |
+| **Snapshot POD** | - Form $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$ and compute eigen-decomposition.<br>- Favored when $m < n$. | - Much less computationally expensive for $n \gg m$. | - Indirect: Must map back to spatial modes after finding temporal modes. |
+|  | - Extract temporal modes first, then spatial modes via $\mathbf{U}^T\mathbf{L}$. | - Ideal for large-dimensional problems with relatively few snapshots. |  |
+| **SVD** | - Perform $\mathbf{U} = \mathbf{L}\mathbf{\Sigma}\mathbf{R}^T$.<br>- SVD provides both sets of modes directly. | - Unified approach, no separate covariance needed. | - Similar computational cost to snapshot method, still large SVD computations. |
+|  | - Spatial modes: columns of $\mathbf{R}$.<br>Temporal modes: columns of $\mathbf{L}$. | - Gives a direct link between both POD approaches. | - Scaling by $\sqrt{m-1}$ needed to relate to POD eigenvalues. |
 
 ## Practical Considerations
 
@@ -108,7 +116,7 @@ This note clarifies the mathematical relationship between POD and SVD. It shows 
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Snapshot matrix $\mathbf{U} \in \mathbb{R}^{m \times n}$ (mean-subtracted) |
 | **Outputs** | SVD factorization $\mathbf{U} = \mathbf{L}\mathbf{\Sigma}\mathbf{R}^T$, singular values $\sigma_i$, equivalence to POD eigenvalues $\lambda_i = \sigma_i^2/(m-1)$ |
 
@@ -143,7 +151,7 @@ Snapshot POD and the thin SVD are of the same order. The SVD avoids squaring the
 **Exercise 2.** Let $m = 3$ mean-subtracted snapshots (rows) of $n = 2$ variables be
 
 $$
-\mathbf{U} = \begin{pmatrix} 1 & 1 \\ 1 & -1 \\ -2 & 0 \end{pmatrix}.
+\mathbf{U} = \begin{pmatrix} 1 & 1 \\ 1 & -1 \\ -2 & 0 \end{pmatrix}
 $$
 
 Compute the singular values from $\mathbf{U}^T\mathbf{U}$, the POD eigenvalues $\lambda_i = \sigma_i^2/(m-1)$, the right singular vectors $\mathbf{R}$ and the left singular vectors $\ell_i = \mathbf{U} r_i/\sigma_i$.
@@ -162,9 +170,9 @@ $\mathbf{R} = \mathbf{I}$, so the spatial modes are $(1, 0)$ and $(0, 1)$. The l
 <details>
 <summary>Answer</summary>
 
-$$
-\mathbf{C}_s = \frac{1}{2}\begin{pmatrix} 2 & 0 & -2 \\ 0 & 2 & -2 \\ -2 & -2 & 4 \end{pmatrix} = \begin{pmatrix} 1 & 0 & -1 \\ 0 & 1 & -1 \\ -1 & -1 & 2 \end{pmatrix}.
-$$
+```math
+\mathbf{C}_s = \frac{1}{2}\begin{pmatrix} 2 & 0 & -2 \\ 0 & 2 & -2 \\ -2 & -2 & 4 \end{pmatrix} = \begin{pmatrix} 1 & 0 & -1 \\ 0 & 1 & -1 \\ -1 & -1 & 2 \end{pmatrix}
+```
 
 - $\mathbf{C}_s(1, 1, -2) = (3, 3, -6)$, eigenvalue 3.
 - $\mathbf{C}_s(1, -1, 0) = (1, -1, 0)$, eigenvalue 1.

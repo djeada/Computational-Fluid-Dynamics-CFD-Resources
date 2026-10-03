@@ -14,7 +14,9 @@ This script plots the length-based Froude number $Fr = U/\sqrt{gL}$ against spee
 
 ### Froude Number
 
-$$Fr = \frac{U}{\sqrt{gL}}$$
+$$
+Fr = \frac{U}{\sqrt{gL}}
+$$
 
 where $U$ is the speed (m/s), $g$ the gravitational acceleration (m/s²), and $L$ the hull waterline length (m).
 
@@ -22,11 +24,15 @@ where $U$ is the speed (m/s), $g$ the gravitational acceleration (m/s²), and $L
 
 A ship moving at speed $U$ makes deep-water waves with phase speed $U$. Their wavelength follows from the dispersion relation:
 
-$$\lambda = \frac{2\pi U^2}{g}$$
+$$
+\lambda = \frac{2\pi U^2}{g}
+$$
 
 When the wavelength equals the hull length, the bow and stern waves reinforce each other and wave-making resistance rises steeply. Setting $\lambda = L$ gives
 
-$$Fr_{\text{hull}} = \frac{1}{\sqrt{2\pi}} \approx 0.40$$
+$$
+Fr_{\text{hull}} = \frac{1}{\sqrt{2\pi}} \approx 0.40
+$$
 
 This is equivalent to the traditional rule of thumb $V_{\text{hull}} \approx 1.34\sqrt{L_{\text{ft}}}$ knots. The hull speeds for the plotted lengths are 2.8, 4.0, 4.8, and 5.6 m/s.
 
@@ -53,7 +59,7 @@ python main.py --no-show --output out   # save froude_number.png into out/
 ```
 
 | Flag | Meaning |
-|------|---------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure as a PNG |
 

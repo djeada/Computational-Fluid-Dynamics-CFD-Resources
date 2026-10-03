@@ -17,13 +17,15 @@ $$
 and the **probability density function** (PDF) is its derivative, $f(V) = dF/dV$. The PDF has the properties
 
 $$
-f(V) \ge 0, \qquad \int_{-\infty}^{\infty} f(V)\,dV = 1, \qquad \mathrm{Prob}(a \le u < b) = \int_a^b f(V)\,dV
+f(V) \ge 0,
+\qquad \int_{-\infty}^{\infty} f(V)\, dV = 1,
+\qquad \mathrm{Prob}(a \le u < b) = \int_a^b f(V)\, dV
 $$
 
 The PDF contains everything there is to know about $u$ at one point and one time. Expectations of any function $Q(u)$ follow from it:
 
 $$
-\langle Q(u) \rangle = \int_{-\infty}^{\infty} Q(V)\,f(V)\,dV
+\langle Q(u) \rangle = \int_{-\infty}^{\infty} Q(V)\, f(V)\, dV
 $$
 
 In an experiment the PDF is estimated from a normalized histogram of samples.
@@ -35,13 +37,14 @@ For two variables, such as $u$ and $v$ at the same point, the **joint PDF** $f_{
 The mean is the first moment, $\langle u \rangle = \int V f(V)\,dV$. Higher-order **central moments** describe the shape of the PDF:
 
 $$
-\mu_n = \langle (u - \langle u \rangle)^n \rangle = \int_{-\infty}^{\infty} (V - \langle u \rangle)^n f(V)\,dV
+\mu_n = \langle (u - \langle u \rangle)^n \rangle = \int_{-\infty}^{\infty}
+(V - \langle u \rangle)^n f(V)\, dV
 $$
 
 The standard normalized measures are:
 
 | Moment | Definition | Measures |
-|---|---|---|
+| --- | --- | --- |
 | Variance | $\sigma^2 = \langle u'^2 \rangle$ | Spread; $\sigma = u_{rms}$ |
 | Skewness | $S = \langle u'^3 \rangle / \sigma^3$ | Asymmetry of the PDF |
 | Flatness (kurtosis) | $F = \langle u'^4 \rangle / \sigma^4$ | Weight of the tails, i.e. how often extreme events occur |
@@ -49,7 +52,7 @@ The standard normalized measures are:
 Reference values help with interpretation:
 
 | Distribution | $S$ | $F$ |
-|---|---|---|
+| --- | --- | --- |
 | Gaussian | 0 | 3 |
 | Uniform | 0 | 1.8 |
 | Pure sine wave | 0 | 1.5 |
@@ -65,7 +68,8 @@ In turbulence:
 The **covariance** of two fluctuating quantities is $\langle u'v' \rangle$. Normalizing gives the **correlation coefficient**:
 
 $$
-\rho_{uv} = \frac{\langle u'v' \rangle}{u_{rms}\,v_{rms}}, \qquad -1 \le \rho_{uv} \le 1
+\rho_{uv} = \frac{\langle u'v' \rangle}{u_{rms}\,v_{rms}},
+\qquad - 1 \le \rho_{uv} \le 1
 $$
 
 In boundary layers and channel flows, $\rho_{uv}$ is typically of order $-0.4$ to $-0.5$ across much of the layer. The velocities are clearly correlated, but far from perfectly.
@@ -87,7 +91,8 @@ The closest laboratory approximation is **grid turbulence**, the decaying turbul
 Single-point statistics say nothing about the size of turbulent structures. For that we correlate velocities at two points:
 
 $$
-R_{ij}(\mathbf{r};\mathbf{x},t) = \langle u_i'(\mathbf{x},t)\,u_j'(\mathbf{x} + \mathbf{r},t) \rangle
+R_{ij}(\mathbf{r};\mathbf{x},t) = \langle u_i'(\mathbf{x},t)\,
+u_j'(\mathbf{x} + \mathbf{r},t) \rangle
 $$
 
 In homogeneous turbulence $R_{ij}$ depends only on the separation $\mathbf{r}$. It satisfies $R_{ij}(\mathbf{0}) = \langle u_i'u_j' \rangle$ and $R_{ij}(\mathbf{r}) = R_{ji}(-\mathbf{r})$.
@@ -95,7 +100,8 @@ In homogeneous turbulence $R_{ij}$ depends only on the separation $\mathbf{r}$. 
 At a single point in a stationary flow, the analogous quantity is the **autocorrelation** in time:
 
 $$
-R(s) = \langle u'(t)\,u'(t + s) \rangle, \qquad \rho(s) = \frac{R(s)}{\langle u'^2 \rangle}
+R(s) = \langle u'(t)\, u'(t + s) \rangle,
+\qquad \rho(s) = \frac{R(s)}{\langle u'^2 \rangle}
 $$
 
 It is even in $s$, with $\rho(0) = 1$ and $\lvert \rho(s) \rvert \le 1$.
@@ -113,20 +119,22 @@ In isotropic turbulence two scalar functions describe $R_{ij}$ completely. With 
 ```
 
 $$
-f(r) = \frac{\langle u_1'(\mathbf{x})\,u_1'(\mathbf{x} + r\mathbf{e}_1) \rangle}{\langle u_1'^2 \rangle}, \qquad
+f(r) = \frac{\langle u_1'(\mathbf{x})\,u_1'(\mathbf{x} + r\mathbf{e}_1) \rangle}{\langle u_1'^2 \rangle},
+\qquad
 g(r) = \frac{\langle u_2'(\mathbf{x})\,u_2'(\mathbf{x} + r\mathbf{e}_1) \rangle}{\langle u_2'^2 \rangle}
 $$
 
 In terms of these,
 
 $$
-R_{ij}(\mathbf{r}) = u'^2\left[g(r)\,\delta_{ij} + \big(f(r) - g(r)\big)\frac{r_i r_j}{r^2}\right]
+R_{ij}(\mathbf{r}) = u'^2\left[g(r)\,\delta_{ij} + \big(f(r) - g(r)\big)
+\frac{r_i r_j}{r^2}\right]
 $$
 
 where $u'^2$ is the variance of any single component. Incompressibility links the two functions:
 
 $$
-g(r) = f(r) + \frac{r}{2}\frac{df}{dr}
+g(r) = f(r) + \frac{r}{2} \frac{df}{dr}
 $$
 
 ## Integral Scales
@@ -134,7 +142,9 @@ $$
 The **integral time scale** and the **integral length scale** measure how long, and over what distance, the velocity stays correlated:
 
 $$
-\mathcal{T} = \int_0^\infty \rho(s)\,ds, \qquad L_{11} = \int_0^\infty f(r)\,dr, \qquad L_{22} = \int_0^\infty g(r)\,dr
+\mathcal{T} = \int_0^\infty \rho(s)\, ds,
+\qquad L_{11} = \int_0^\infty f(r)\, dr,
+\qquad L_{22} = \int_0^\infty g(r)\, dr
 $$
 
 For isotropic turbulence $L_{22} = L_{11}/2$ (Exercise 5). The integral length scale is a measure of the size of the energy-containing eddies. For an exponential correlation $\rho(s) = e^{-\lvert s \rvert/\tau}$ the integral scale is simply $\tau$.
@@ -146,7 +156,9 @@ Correlations with negative lobes, such as signals with a strong periodic compone
 Integral scales determine how quickly statistics converge. The mean estimated from a record of length $T$ is itself a random variable, with variance
 
 $$
-\mathrm{var}\left(\frac{1}{T}\int_0^T u\,dt\right) = \frac{1}{T^2}\int_0^T\int_0^T R(t - t')\,dt\,dt' \approx \frac{2\,\mathcal{T}\,\sigma^2}{T} \qquad (T \gg \mathcal{T})
+\mathrm{var}\left(\frac{1}{T}\int_0^T u\, dt\right) = \frac{1}{T^2}\int_0^T\int_0^T
+R(t - t')\, dt\, dt' \approx \frac{2\,\mathcal{T}\,\sigma^2}{T}
+\qquad (T \gg \mathcal{T})
 $$
 
 The record therefore behaves as if it contained $N_{eff} \approx T/(2\mathcal{T})$ independent samples, however fast it was sampled. Sampling faster than about once per integral time scale adds almost no statistical information about the mean. It is still needed for resolving spectra.
@@ -156,13 +168,15 @@ The record therefore behaves as if it contained $N_{eff} \approx T/(2\mathcal{T}
 Expanding the correlation functions near the origin defines the **Taylor microscales** $\lambda_f$ and $\lambda_g$ through the osculating parabolas:
 
 $$
-f(r) \approx 1 - \frac{r^2}{\lambda_f^2}, \qquad g(r) \approx 1 - \frac{r^2}{\lambda_g^2}
+f(r) \approx 1 - \frac{r^2}{\lambda_f^2},
+\qquad g(r) \approx 1 - \frac{r^2}{\lambda_g^2}
 $$
 
 In isotropic turbulence $\lambda_f = \sqrt{2}\,\lambda_g$, and the dissipation rate can be written as
 
 $$
-\varepsilon = 15\,\nu \left\langle \left(\frac{\partial u_1'}{\partial x_1}\right)^2 \right\rangle = 15\,\nu\,\frac{u'^2}{\lambda_g^2}
+\varepsilon = 15\,\nu \left\langle \left(\frac{\partial u_1'}{\partial x_1}\right)^2
+\right\rangle = 15\,\nu\, \frac{u'^2}{\lambda_g^2}
 $$
 
 This is how $\varepsilon$ is estimated from single hot-wire measurements, using Taylor's hypothesis (below) to convert time derivatives into space derivatives. The **Taylor-scale Reynolds number** $R_\lambda = u'\lambda_g/\nu$ is the standard way to quote the Reynolds number of homogeneous turbulence. It is related to the large-scale Reynolds number by $R_\lambda = (20\,R_L/3)^{1/2}$, where $R_L = k^2/(\varepsilon\nu)$. The Taylor microscale lies between the integral scale and the Kolmogorov scale. It is a convenient length, not the size of any identifiable eddy.
@@ -172,7 +186,9 @@ This is how $\varepsilon$ is estimated from single hot-wire measurements, using 
 A single probe gives a time series, but theory is usually phrased in terms of spatial structure. G. I. Taylor (1938) suggested that when turbulence is swept past a probe by a mean velocity $U$ much larger than the fluctuations, the eddies change little while they pass. The pattern behaves as if frozen and convected:
 
 $$
-u'(x, t + s) \approx u'(x - U s, t) \qquad \Longrightarrow \qquad \frac{\partial}{\partial t} \approx -U\frac{\partial}{\partial x}
+u'(x, t + s) \approx u'(x - U s, t)
+\qquad \Longrightarrow
+\qquad \frac{\partial}{\partial t} \approx - U \frac{\partial}{\partial x}
 $$
 
 The consequences are:
@@ -189,17 +205,19 @@ The hypothesis works well when $u_{rms}/U$ is small, roughly 10–20% or less. I
 For a stationary signal the **Wiener–Khinchin theorem** states that the autocovariance and the power spectral density form a Fourier transform pair. Using a one-sided spectrum over $\omega \ge 0$:
 
 $$
-E(\omega) = \frac{1}{\pi}\int_{-\infty}^{\infty} R(s)\,e^{-i\omega s}\,ds = \frac{2}{\pi}\int_0^\infty R(s)\cos(\omega s)\,ds
+E(\omega) = \frac{1}{\pi}\int_{-\infty}^{\infty} R(s)\, e^{-i\omega s}\,
+ds = \frac{2}{\pi}\int_0^\infty R(s)\cos(\omega s)\, ds
 $$
 
 $$
-R(s) = \int_0^\infty E(\omega)\cos(\omega s)\,d\omega
+R(s) = \int_0^\infty E(\omega)\cos(\omega s)\, d\omega
 $$
 
 Two consequences follow immediately:
 
 $$
-\langle u'^2 \rangle = R(0) = \int_0^\infty E(\omega)\,d\omega, \qquad E(0) = \frac{2}{\pi}\langle u'^2 \rangle\,\mathcal{T}
+\langle u'^2 \rangle = R(0) = \int_0^\infty E(\omega)\, d\omega,
+\qquad E(0) = \frac{2}{\pi}\langle u'^2 \rangle\,\mathcal{T}
 $$
 
 The first says the variance is distributed over frequencies, with $E(\omega)\,d\omega$ the contribution from the band $d\omega$. The second says the low-frequency plateau of the spectrum measures the integral time scale.
@@ -217,13 +235,15 @@ This spectrum is flat for $\omega\tau \ll 1$ and rolls off as $\omega^{-2}$ for 
 In homogeneous turbulence the two-point correlation is transformed in space. The **velocity spectrum tensor** is
 
 $$
-\Phi_{ij}(\boldsymbol{\kappa}) = \frac{1}{(2\pi)^3}\int R_{ij}(\mathbf{r})\,e^{-i\boldsymbol{\kappa}\cdot\mathbf{r}}\,d\mathbf{r}
+\Phi_{ij}(\boldsymbol{\kappa}) = \frac{1}{(2\pi)^3}\int R_{ij}(\mathbf{r})\,
+e^{-i\boldsymbol{\kappa}\cdot\mathbf{r}}\, d\mathbf{r}
 $$
 
 Integrating half its trace over spherical shells of radius $\kappa = \lvert \boldsymbol{\kappa} \rvert$ removes directional information and gives the **energy spectrum function** $E(\kappa)$, which satisfies
 
 $$
-k = \int_0^\infty E(\kappa)\,d\kappa, \qquad \varepsilon = 2\nu\int_0^\infty \kappa^2 E(\kappa)\,d\kappa
+k = \int_0^\infty E(\kappa)\, d\kappa,
+\qquad \varepsilon = 2\nu\int_0^\infty \kappa^2 E(\kappa)\, d\kappa
 $$
 
 The factor $\kappa^2$ shows that energy sits at small wavenumbers (large eddies) while dissipation sits at large wavenumbers (small eddies).
@@ -231,13 +251,16 @@ The factor $\kappa^2$ shows that energy sits at small wavenumbers (large eddies)
 Experiments usually measure a **one-dimensional spectrum** along a line:
 
 $$
-E_{11}(\kappa_1) = \frac{1}{\pi}\int_{-\infty}^{\infty} R_{11}(r\,\mathbf{e}_1)\,e^{-i\kappa_1 r}\,dr, \qquad L_{11} = \frac{\pi\,E_{11}(0)}{2\langle u_1'^2 \rangle}
+E_{11}(\kappa_1) = \frac{1}{\pi}\int_{-\infty}^{\infty} R_{11}(r\,\mathbf{e}_1)\,
+e^{-i\kappa_1 r}\, dr,
+\qquad L_{11} = \frac{\pi\,E_{11}(0)}{2\langle u_1'^2 \rangle}
 $$
 
 In isotropic turbulence it is related to $E(\kappa)$ by
 
 $$
-E_{11}(\kappa_1) = \int_{\kappa_1}^\infty \frac{E(\kappa)}{\kappa}\left(1 - \frac{\kappa_1^2}{\kappa^2}\right)d\kappa
+E_{11}(\kappa_1) = \int_{\kappa_1}^\infty
+\frac{E(\kappa)}{\kappa}\left(1 - \frac{\kappa_1^2}{\kappa^2}\right)d\kappa
 $$
 
 A line measurement at wavenumber $\kappa_1$ picks up contributions from all three-dimensional wavenumbers with $\kappa \ge \kappa_1$, i.e. from eddies whose wavevector is oblique to the line. This **aliasing** is why $E_{11}$ stays finite and flat as $\kappa_1 \to 0$, while $E(\kappa)$ goes to zero.
@@ -253,7 +276,7 @@ II. **Integral length scale.** $L_{11} \approx U\mathcal{T} = 12 \times 0.008 = 
 III. **Spectrum.** The fitted exponential gives a spectrum that is flat up to $\omega\tau \approx 1$, i.e. $f = 1/(2\pi\mathcal{T}) = 19.9$ Hz. Frozen turbulence maps frequencies to wavelengths $\Lambda = U/f$:
 
 | $f$ (Hz) | $\kappa_1 = 2\pi f/U$ (rad/m) | Wavelength $U/f$ (m) |
-|---|---|---|
+| --- | --- | --- |
 | 10 | 5.24 | 1.2 |
 | 100 | 52.4 | 0.12 |
 | 1000 | 524 | 0.012 |
@@ -261,7 +284,8 @@ III. **Spectrum.** The fitted exponential gives a spectrum that is flat up to $\
 IV. **Record length.** Suppose the mean must be known to within $\pm 0.5\%$ of $U$ with 95% confidence (1.96 standard deviations). Then
 
 $$
-1.96\,u_{rms}\sqrt{\frac{2\mathcal{T}}{T}} \le 0.005\,U \quad \Longrightarrow \quad T \ge 2\mathcal{T}\left(\frac{1.96\,u_{rms}}{0.005\,U}\right)^2 = 13.8\ \mathrm{s}
+1.96\, u_{rms} \sqrt{\frac{2\mathcal{T}}{T}} \le 0.005\, U \quad \Longrightarrow \quad T
+\ge 2\mathcal{T}\left(\frac{1.96\,u_{rms}}{0.005\,U}\right)^2 = 13.8\ \mathrm{s}
 $$
 
 This corresponds to $N_{eff} \approx 860$ independent samples. Sampling at 10 kHz for 13.8 s gives 138,000 samples, but only about 860 of them carry independent information about the mean. Higher moments, and statistics in regions with longer integral scales, need much longer records.
@@ -322,9 +346,10 @@ With $u_{rms}/U = 0.3$, eddies are advected at speeds varying by $\pm 30\%$ and 
 <details>
 <summary>Answer</summary>
 
-$$
-T = 2\mathcal{T}\left(\frac{1.96\,u_{rms}}{0.01\,U}\right)^2 = 0.04 \times (39.2)^2 = 61.5\ \mathrm{s}
-$$
+```math
+T = 2\mathcal{T}\left(\frac{1.96\,u_{rms}}{0.01\,U}\right)^2 = 0.04 \times
+(39.2)^2 = 61.5\ \mathrm{s}
+```
 
 Halving the tolerance quadruples the record length.
 
@@ -337,15 +362,15 @@ Halving the tolerance quadruples the record length.
 
 Integrate the relation from 0 to $\infty$:
 
-$$
-L_{22} = \int_0^\infty g\,dr = L_{11} + \frac{1}{2}\int_0^\infty r\frac{df}{dr}\,dr
-$$
+```math
+L_{22} = \int_0^\infty g\, dr = L_{11} + \frac{1}{2}\int_0^\infty r \frac{df}{dr}\, dr
+```
 
 Integrate the last term by parts:
 
-$$
-\int_0^\infty r f'\,dr = \big[r f\big]_0^\infty - \int_0^\infty f\,dr = -L_{11}
-$$
+```math
+\int_0^\infty r f'\, dr = \big[r f\big]_0^\infty - \int_0^\infty f\, dr = -L_{11}
+```
 
 Hence $L_{22} = L_{11} - L_{11}/2 = L_{11}/2$. Transverse correlations decay faster than longitudinal ones and can go negative, a direct consequence of continuity.
 

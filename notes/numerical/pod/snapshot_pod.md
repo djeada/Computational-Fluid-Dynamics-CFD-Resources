@@ -6,7 +6,10 @@ The Proper Orthogonal Decomposition (POD) is a powerful technique used to identi
 
 A key concept behind POD is that it involves decomposing a field $\mathbf{u}'(\mathbf{x}, t)$ into modes that depend either on space or on time. Mathematically, POD often starts from an equation like:
 
-$$\mathbf{u}'(\mathbf{x}, t) = \sum_{k=1}^{\infty} a_k(t) \mathbf{\Phi}_k(\mathbf{x}), \quad (1)$$
+$$
+\mathbf{u}'(\mathbf{x}, t) = \sum_{k=1}^{\infty} a_k(t) \mathbf{\Phi}_k(\mathbf{x}),
+\quad (1)
+$$
 
 Here:
 
@@ -29,7 +32,9 @@ II. **Second Method (Use the Original Snapshot Matrix)**:
 
 The hallmark of Snapshot POD as originally proposed by Sirovich is that you keep the original $m \times n$ snapshot matrix $\mathbf{U}$ intact, but you form a correlation matrix differently:
 
-$$\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T.$$
+$$
+\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T
+$$
 
 Notice that in Direct POD, you'd consider $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$, an $n \times n$ matrix (if you have $n$ spatial points). However, now $\mathbf{C}_s$ is $m \times m$, which can be much smaller and thus computationally more feasible if $m < n$.
 
@@ -42,7 +47,9 @@ The matrix $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$ can be interpret
 
 You then compute the eigenvalue decomposition:
 
-$$[A_s, LAM_s] = \text{eig}(C_s),$$
+$$
+[A_s, LAM_s] = \text{eig}(C_s)
+$$
 
 where $A_s \in \mathbb{R}^{m \times m}$ contains eigenvectors and $LAM_s$ is the diagonal matrix of eigenvalues. These eigenvectors represent temporal modes in this framework.
 
@@ -50,7 +57,9 @@ where $A_s \in \mathbb{R}^{m \times m}$ contains eigenvectors and $LAM_s$ is the
 
 Once you have the temporal modes from $\mathbf{C}_s$, you still need the spatial patterns. Since your original data is in $\mathbf{U}$, you can recover the spatial coefficients:
 
-$$\mathbf{\Phi}_s = \mathbf{U}^T A_s,$$
+$$
+\mathbf{\Phi}_s = \mathbf{U}^T A_s
+$$
 
 where $\mathbf{\Phi}_s$ will provide the spatial structures of the modes. This step effectively translates the temporal mode representation into spatial patterns.
 
@@ -75,9 +84,12 @@ To align the results of Snapshot POD with those of Direct POD, a normalization s
 
 An essential property of POD (including Snapshot POD) is that you can reconstruct the original data matrix $\mathbf{U}$ using the product of temporal modes and spatial modes. Specifically, from the Snapshot POD framework:
 
-$$\mathbf{U} = A_s \mathbf{\Phi}_s^T,$$
+$$
+\mathbf{U} = A_s \mathbf{\Phi}_s^T
+$$
 
 where:
+
 - $A_s$ contains the temporal modes (time coefficients).
 - $\mathbf{\Phi}_s$ contains the (unnormalized) spatial modes.
 
@@ -111,7 +123,7 @@ In high-fidelity CFD the spatial dimension $n$ (millions of grid points) far exc
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Snapshot matrix $\mathbf{U} \in \mathbb{R}^{m \times n}$ with $m \ll n$ |
 | **Outputs** | Correlation matrix $\mathbf{C}_s \in \mathbb{R}^{m \times m}$, eigenvalues (same as Direct POD), temporal modes $A_s$, spatial modes $\boldsymbol{\Phi}_s = \mathbf{U}^T A_s$ (after normalization) |
 
@@ -136,7 +148,7 @@ The storage ratio is $(n/m)^2$. For the separation bubble, $(5805/3580)^2 \appro
 **Exercise 2.** Take $m = 2$ snapshots at $n = 3$ points,
 
 $$
-\mathbf{U} = \begin{pmatrix} 2 & 1 & 0 \\ 1 & 2 & 1 \end{pmatrix},
+\mathbf{U} = \begin{pmatrix} 2 & 1 & 0 \\ 1 & 2 & 1 \end{pmatrix}
 $$
 
 used without mean subtraction, so that $\frac{1}{m-1} = 1$. Compute $\mathbf{C}_s$, its eigenvalues and eigenvectors $A_s$, the unnormalized spatial modes $\mathbf{\Phi}_s = \mathbf{U}^T A_s$ and their norms, and the normalized modes. Compare with the eigen-decomposition of $\mathbf{C} = \mathbf{U}^T\mathbf{U}$.
@@ -157,9 +169,10 @@ Direct POD: $\mathbf{C} = \begin{pmatrix} 5 & 4 & 1 \\ 4 & 5 & 2 \\ 1 & 2 & 1 \e
 <details>
 <summary>Answer</summary>
 
-$$
-\mathbf{C}\,(\mathbf{U}^T a) = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}\mathbf{U}^T a = \mathbf{U}^T\mathbf{C}_s a = \lambda\,\mathbf{U}^T a.
-$$
+```math
+\mathbf{C}\,(\mathbf{U}^T a) = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}\mathbf{U}^T
+a = \mathbf{U}^T\mathbf{C}_s a = \lambda\,\mathbf{U}^T a
+```
 
 $\mathbf{U}^T a \neq 0$ because $\|\mathbf{U}^T a\|^2 = a^T\mathbf{U}\mathbf{U}^T a = (m-1)\,a^T\mathbf{C}_s a = (m-1)\lambda > 0$. Dividing by the square root of this norm gives a unit spatial mode, $\phi = \mathbf{U}^T a/\sqrt{(m-1)\lambda}$. In Exercise 2, $m - 1 = 1$ and the norms were $\sqrt{\lambda}$.
 
@@ -174,9 +187,9 @@ $A_s$ is an orthogonal $m \times m$ matrix, so $A_s\mathbf{\Phi}_s^T = A_s A_s^T
 
 With $\phi_k = \mathbf{U}^T a_k/\sqrt{(m-1)\lambda_k}$:
 
-$$
-\mathbf{U}\phi_k = \frac{\mathbf{U}\mathbf{U}^T a_k}{\sqrt{(m-1)\lambda_k}} = \frac{(m-1)\lambda_k\,a_k}{\sqrt{(m-1)\lambda_k}} = \sqrt{(m-1)\lambda_k}\;a_k.
-$$
+```math
+\mathbf{U}\phi_k = \frac{\mathbf{U}\mathbf{U}^T a_k}{\sqrt{(m-1)\lambda_k}} = \frac{(m-1)\lambda_k\,a_k}{\sqrt{(m-1)\lambda_k}} = \sqrt{(m-1)\lambda_k}\; a_k
+```
 
 So the snapshot eigenvectors are the time coefficients rescaled to unit norm; this is the scaling step mentioned in the note. For Exercise 2, $\mathbf{U}\phi_1 = 3.0873 \times (0.6618, 0.7497) = (2.0432, 2.3144)$.
 

@@ -4,7 +4,6 @@ Flow kinematics focuses on describing the motion of fluids without directly cons
 
 Kinematics in fluid mechanics is somewhat analogous to describing the paths and patterns of dancers on a stage without worrying about why they are dancing that way. The focus remains on identifying trajectories, understanding how shapes within the fluid change, and clarifying how fluid elements translate, rotate, and stretch. Once these geometric descriptions are in place, one can add in forces, pressure gradients, viscosity, and other factors to get the full story.
 
-  
 ```
 Visualizing Flow Kinematics
 ---------------------------
@@ -37,11 +36,17 @@ The fundamental starting point in flow kinematics is the velocity field $\vec{v}
 
 The material derivative links Eulerian and Lagrangian views. For any property $\phi$ (such as velocity), its material derivative $D\phi/Dt$ represents the rate of change experienced by a fluid particle moving with the flow. If $\vec{v} = (u,v,w)$ in Cartesian coordinates:
 
-$$\frac{D\phi}{Dt} = \frac{\partial \phi}{\partial t} + u \frac{\partial \phi}{\partial x} + v \frac{\partial \phi}{\partial y} + w \frac{\partial \phi}{\partial z}.$$
+$$
+\frac{D\phi}{Dt} = \frac{\partial \phi}{\partial t} + u
+\frac{\partial \phi}{\partial x} + v \frac{\partial \phi}{\partial y} + w
+\frac{\partial \phi}{\partial z}
+$$
 
 For velocity itself, the material derivative gives the particle acceleration:
 
-$$\frac{D\vec{v}}{Dt} = \frac{\partial \vec{v}}{\partial t} + (\vec{v}\cdot\nabla)\vec{v}.$$
+$$
+\frac{D\vec{v}}{Dt} = \frac{\partial \vec{v}}{\partial t} + (\vec{v}\cdot\nabla)\vec{v}
+$$
 
 This expression shows how fluid particles accelerate both because of local changes in velocity over time and because they move to regions with different velocities.
 
@@ -66,15 +71,14 @@ combining local and convective effects.
 
 Flow kinematics also characterizes how fluid elements deform. Consider a small fluid element initially shaped like a cube. As it moves through the flow, it may change shape due to velocity gradients. Deformation can be broken down into three categories:
 
-1. Translation: The fluid element moves as a whole without changing shape or orientation.  
-2. Rotation: The fluid element spins as it moves, like a tiny gear in the flow.  
+1. Translation: The fluid element moves as a whole without changing shape or orientation.
+2. Rotation: The fluid element spins as it moves, like a tiny gear in the flow.
 3. Deformation or Straining: The fluid element’s shape changes, possibly stretching or compressing in different directions.
 
 The velocity gradients $\partial u/\partial x$, $\partial v/\partial y$, etc., determine these deformation characteristics. By examining the velocity gradient tensor $\nabla \vec{v}$, one can split it into symmetric and antisymmetric parts. The antisymmetric part relates to rotation (vorticity), while the symmetric part relates to strain rates.
 
 Vorticity $\vec{\omega} = \nabla \times \vec{v}$ measures the fluid’s local spinning motion. Regions of high vorticity often correspond to vortices, which are common flow structures. The strain rate tensor measures how fluid elements stretch or compress. For instance, a flow accelerating in the x-direction and decelerating in the y-direction would stretch fluid elements in one direction and compress them in another.
 
-  
 ```
 Deformation of a Fluid Element:
 --------------------------------
@@ -138,9 +142,15 @@ In an unsteady flow they differ. One example is smoke from a chimney when the wi
 
 (b) The flow is steady, so only the convective terms remain:
 
-$$a_x = u\frac{\partial u}{\partial x} + v\frac{\partial u}{\partial y} = x^2(2x) + (-2xy)(0) = 2x^3$$
+```math
+a_x = u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y} = x^2(2x) +
+(-2xy)(0) = 2x^3
+```
 
-$$a_y = u\frac{\partial v}{\partial x} + v\frac{\partial v}{\partial y} = x^2(-2y) + (-2xy)(-2x) = 2x^2 y$$
+```math
+a_y = u \frac{\partial v}{\partial x} + v \frac{\partial v}{\partial y} = x^2(-2y) +
+(-2xy)(-2x) = 2x^2 y
+```
 
 At $(1,2)$: $\vec{a} = (2, 4)$ in the units of the field.
 

@@ -30,7 +30,9 @@ For simplicity, assume each snapshot $\mathbf{u}(x,t_i)$ is reshaped into a colu
 
 Often, we consider fluctuations around the mean flow. Let $\bar{\mathbf{u}}$ be the temporal mean:
 
-$$\bar{\mathbf{u}} = \frac{1}{N}\sum_{i=1}^N \mathbf{u}_i.$$
+$$
+\bar{\mathbf{u}} = \frac{1}{N}\sum_{i=1}^N \mathbf{u}_i
+$$
 
 We may define $\mathbf{X}' = \mathbf{X} - \bar{\mathbf{u}}\mathbf{1}^T$, so each snapshot represents a fluctuation about the mean.
 
@@ -38,7 +40,9 @@ We may define $\mathbf{X}' = \mathbf{X} - \bar{\mathbf{u}}\mathbf{1}^T$, so each
 
 The correlation matrix $\mathbf{C}$ is defined as:
 
-$$\mathbf{C} = \frac{1}{N}\mathbf{X}'^T \mathbf{X}' \in \mathbb{R}^{N \times N}.$$
+$$
+\mathbf{C} = \frac{1}{N}\mathbf{X}'^T \mathbf{X}' \in \mathbb{R}^{N \times N}
+$$
 
 It encodes the covariance of the data. Alternatively, one could form $\mathbf{X}' \mathbf{X}'^T$ which is $M \times M$, but typically $N \ll M$, making the $N \times N$ formulation more computationally efficient (the so-called "snapshot POD").
 
@@ -46,7 +50,9 @@ It encodes the covariance of the data. Alternatively, one could form $\mathbf{X}
 
 Solve the eigenvalue problem:
 
-$$\mathbf{C}\mathbf{v}_i = \lambda_i \mathbf{v}_i,$$
+$$
+\mathbf{C}\mathbf{v}_i = \lambda_i \mathbf{v}_i
+$$
 
 where $\lambda_i$ are eigenvalues (sorted $\lambda_1 \geq \lambda_2 \geq \ldots \geq 0$) and $\mathbf{v}_i$ are eigenvectors. Each eigenvalue $\lambda_i$ represents the energy (variance) captured by the corresponding mode.
 
@@ -54,7 +60,9 @@ where $\lambda_i$ are eigenvalues (sorted $\lambda_1 \geq \lambda_2 \geq \ldots 
 
 The POD modes (spatial structures) $\boldsymbol{\Phi}_i \in \mathbb{R}^M$ are given by:
 
-$$\boldsymbol{\Phi}_i = \frac{1}{\sqrt{N\lambda_i}}\mathbf{X}'\mathbf{v}_i.$$
+$$
+\boldsymbol{\Phi}_i = \frac{1}{\sqrt{N\lambda_i}}\mathbf{X}'\mathbf{v}_i
+$$
 
 These modes form an orthonormal basis. They capture dominant flow patterns ranked by their importance (energy content).
 
@@ -62,11 +70,15 @@ These modes form an orthonormal basis. They capture dominant flow patterns ranke
 
 Choose $r \ll N$ to keep only the top $r$ modes. The reduced basis:
 
-$$\boldsymbol{\Phi} = [\boldsymbol{\Phi}_1, \ldots, \boldsymbol{\Phi}_r]$$
+$$
+\boldsymbol{\Phi} = [\boldsymbol{\Phi}_1, \ldots, \boldsymbol{\Phi}_r]
+$$
 
 approximates snapshots as:
 
-$$\mathbf{u}_i \approx \bar{\mathbf{u}} + \sum_{j=1}^r a_{j}(t_i) \boldsymbol{\Phi}_j,$$
+$$
+\mathbf{u}_i \approx \bar{\mathbf{u}} + \sum_{j=1}^r a_{j}(t_i) \boldsymbol{\Phi}_j
+$$
 
 where $a_j(t_i)$ are the projection coefficients onto the $j$-th mode.
 
@@ -76,29 +88,29 @@ If a PDE-based system (e.g., Navier-Stokes) governs the flow, one can project th
 
 ## Applications in CFD
 
-I. **Flow Analysis and Data Compression**:  
+I. **Flow Analysis and Data Compression**:
 
 POD identifies coherent structures such as vortices, shear layers, or wakes. By focusing on a small number of modes, one can visualize and quantify the key patterns driving fluid dynamics. It also dramatically compresses storage needs.
 
-II. **Reduced-Order Modeling for Rapid Simulations**:  
+II. **Reduced-Order Modeling for Rapid Simulations**:
 
 Instead of solving full Navier-Stokes PDEs at every time step, use the ROM derived from POD modes. This can enable real-time simulations for control applications, rapid design iterations, and embedded systems (e.g., UAV flight control).
 
-III. **Flow Control and Optimization**:  
+III. **Flow Control and Optimization**:
 
 POD-based ROMs allow quick exploration of parameter spaces. For example, optimizing the shape of an airfoil for minimal drag under varying operating conditions can be done orders of magnitude faster using a POD-ROM instead of full CFD.
 
-IV. **Uncertainty Quantification (UQ) and Sensitivity Studies**:  
+IV. **Uncertainty Quantification (UQ) and Sensitivity Studies**:
 
 When exploring uncertainties in boundary conditions, material properties, or geometric parameters, POD-based ROMs allow thousands of runs for Monte Carlo or polynomial chaos expansions, which would be infeasible with full-scale CFD.
 
-V. **Detection of Dominant Frequencies and Structures**:  
+V. **Detection of Dominant Frequencies and Structures**:
 
 Combining POD with temporal Fourier analysis or Dynamic Mode Decomposition (DMD) can distinguish between energetic structures and their characteristic frequencies. This is valuable in turbulence research and stability analysis.
 
 ## Comparison with Other Techniques
 
-I. **POD vs. PCA in Statistics**:  
+I. **POD vs. PCA in Statistics**:
 
 POD and PCA are essentially the same technique, but in CFD, POD typically deals with vector fields and continuous domains. PCA often deals with tabular numerical data. Both find principal directions of maximum variance.
 
@@ -117,18 +129,19 @@ PGD constructs solution manifolds incrementally and can handle multidimensional 
 ## Best Practices and Practical Considerations
 
 I. **Choice of Snapshots**:
+
 - Ensure snapshots adequately represent the flow variability. Include multiple time instants, parameter variations, and operating conditions.
 - Too few snapshots may lead to inaccurate mode representations. Too many snapshots increase computational cost.
-II. **Preprocessing**:
+  II. **Preprocessing**:
 - Mean subtraction ensures focusing on fluctuations.
 - Normalization or scaling may be necessary if variables have vastly different magnitudes.
-III. **Computational Efficiency**:
+  III. **Computational Efficiency**:
 - For large-scale problems, directly handling $\mathbf{X}' \mathbf{X}'^T$ (size $M \times M$) is expensive. Use the snapshot formulation ($N \times N$) if $N < M$.
 - Use efficient linear algebra libraries, parallel computing, and iterative solvers for eigenvalue problems.
-IV. **Mode Selection Criteria**:
+  IV. **Mode Selection Criteria**:
 - Retain modes corresponding to large eigenvalues until a certain energy threshold (e.g., 99% of energy) is captured.
 - Overly aggressive truncation might lose crucial dynamics.
-V. **Stability and Robustness**:
+  V. **Stability and Robustness**:
 - POD modes derived from a limited dataset might not generalize well outside that dataset’s parameter range.
 - Regular updates or adaptive POD techniques can be used as the system evolves or if new conditions are introduced.
 
@@ -136,39 +149,40 @@ V. **Stability and Robustness**:
 
 **Scenario**: Simulate a 2D laminar flow past a circular cylinder at a Reynolds number of 100. The flow exhibits periodic vortex shedding, resulting in a well-known von Kármán vortex street.
 
-I. **Snapshot Generation**:  
+I. **Snapshot Generation**:
 
 Run a high-fidelity CFD simulation (e.g., finite volume method) and store velocity fields at $N=200$ time steps evenly spaced over a few shedding periods.
 
-II. **POD Analysis**:  
+II. **POD Analysis**:
 
 Form $\mathbf{X}$ from the stacked velocity fields. Subtract the mean flow. Compute the correlation matrix $\mathbf{C}$ and find its eigen-decomposition.
 
-III. **Interpretation of Modes**:  
+III. **Interpretation of Modes**:
 
 The first few POD modes often represent symmetrical and anti-symmetrical vortex structures. The first mode might capture the largest-scale vortical pattern, the second mode the next significant spatial variation, and so forth.
 
-IV. **Reduced-Order Model**:  
+IV. **Reduced-Order Model**:
 
-Keep the top $r=10$ modes to represent 99% of the flow energy. Project Navier-Stokes equations onto these modes to obtain a ROM.  
+Keep the top $r=10$ modes to represent 99% of the flow energy. Project Navier-Stokes equations onto these modes to obtain a ROM.
 
 This ROM can simulate the dynamics of vortex shedding much faster than the original solver, enabling quick parametric studies or control law testing.
 
 ## Advanced Topics and Research Directions
 
-I. **Time-Dependent Coefficients and Online Updating**:  
+I. **Time-Dependent Coefficients and Online Updating**:
 
 Adaptive or online POD methods update modes as new data arrives, accommodating non-stationary flows.
 
-II. **Nonlinear Model Reduction**:  
+II. **Nonlinear Model Reduction**:
 
 POD is linear. For strongly nonlinear dynamics, techniques like Kernel PCA or manifold learning might better capture essential features. Neural network-based autoencoders also offer nonlinear dimension reduction.
 
-III. **Parametric and Multi-Fidelity Extensions**:  
+III. **Parametric and Multi-Fidelity Extensions**:
 
 Extend POD to handle variation in parameters (geometry, inflow conditions) by including multiple parameter slices in the snapshot set. Combine POD with Co-Kriging or Gaussian Processes to interpolate POD modes across parameter spaces.
 
 IV. **Integration with Machine Learning (ML)**:
+
 - Use ML-based regression to map parameters to POD coefficients, enabling parametric surrogate models.
 - Employ deep learning to identify nonlinear embeddings that improve model accuracy over standard POD modes.
 
@@ -200,7 +214,7 @@ POD is the foundational technique for Reduced-Order Modeling in CFD. By extracti
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Snapshot matrix $\mathbf{X} \in \mathbb{R}^{M \times N}$ (each column is a flow field at one time/parameter), number of retained modes $r$, energy threshold (e.g., 99%) |
 | **Outputs** | POD modes $\boldsymbol{\Phi}_1, \dots, \boldsymbol{\Phi}_r$, eigenvalues $\lambda_i$ (energy per mode), temporal coefficients $a_j(t)$, reconstructed fields $\mathbf{u} \approx \bar{\mathbf{u}} + \sum a_j \boldsymbol{\Phi}_j$ |
 
@@ -241,15 +255,15 @@ $M \times M$: $10^{12} \times 8 = 8 \times 10^{12}$ bytes, i.e. 8 TB. $N \times 
 
 $\bar{\mathbf{u}} = (2, 2, 2)$. The columns of $\mathbf{X}'$ are $(-1, 0, 1)$, $(0, 0, 0)$ and $(1, 0, -1)$, and
 
-$$
-\mathbf{C} = \frac{1}{3}\mathbf{X}'^T\mathbf{X}' = \frac{1}{3}\begin{pmatrix} 2 & 0 & -2 \\ 0 & 0 & 0 \\ -2 & 0 & 2 \end{pmatrix}.
-$$
+```math
+\mathbf{C} = \frac{1}{3}\mathbf{X}'^T\mathbf{X}' = \frac{1}{3}\begin{pmatrix} 2 & 0 & -2 \\ 0 & 0 & 0 \\ -2 & 0 & 2 \end{pmatrix}
+```
 
 The only nonzero eigenvalue is $\lambda_1 = 4/3$, with $\mathbf{v}_1 = (1, 0, -1)/\sqrt{2}$. Then
 
-$$
-\boldsymbol{\Phi}_1 = \frac{\mathbf{X}'\mathbf{v}_1}{\sqrt{N\lambda_1}} = \frac{(-2, 0, 2)/\sqrt{2}}{2} = \frac{(-1, 0, 1)}{\sqrt{2}},
-$$
+```math
+\boldsymbol{\Phi}_1 = \frac{\mathbf{X}'\mathbf{v}_1}{\sqrt{N\lambda_1}} = \frac{(-2, 0, 2)/\sqrt{2}}{2} = \frac{(-1, 0, 1)}{\sqrt{2}}
+```
 
 which has unit norm. The coefficients are $a_1(t_i) = \boldsymbol{\Phi}_1^T(\mathbf{u}_i - \bar{\mathbf{u}}) = (\sqrt{2}, 0, -\sqrt{2})$. The reconstruction $\bar{\mathbf{u}} + \sqrt{2}\,\boldsymbol{\Phi}_1 = (2,2,2) + (-1,0,1) = (1,2,3) = \mathbf{u}_1$ is exact, because one mode holds 100% of the fluctuation energy.
 
@@ -260,15 +274,15 @@ which has unit norm. The coefficients are $a_1(t_i) = \boldsymbol{\Phi}_1^T(\mat
 <details>
 <summary>Answer</summary>
 
-$$
-\boldsymbol{\Phi}_i^T\boldsymbol{\Phi}_j = \frac{\mathbf{v}_i^T\mathbf{X}'^T\mathbf{X}'\mathbf{v}_j}{N\sqrt{\lambda_i\lambda_j}} = \frac{\mathbf{v}_i^T\mathbf{C}\mathbf{v}_j}{\sqrt{\lambda_i\lambda_j}} = \frac{\lambda_j\,\mathbf{v}_i^T\mathbf{v}_j}{\sqrt{\lambda_i\lambda_j}} = \delta_{ij}.
-$$
+```math
+\boldsymbol{\Phi}_i^T\boldsymbol{\Phi}_j = \frac{\mathbf{v}_i^T\mathbf{X}'^T\mathbf{X}'\mathbf{v}_j}{N\sqrt{\lambda_i\lambda_j}} = \frac{\mathbf{v}_i^T\mathbf{C}\mathbf{v}_j}{\sqrt{\lambda_i\lambda_j}} = \frac{\lambda_j\,\mathbf{v}_i^T\mathbf{v}_j}{\sqrt{\lambda_i\lambda_j}} = \delta_{ij}
+```
 
 For the eigenvector property:
 
-$$
-\frac{1}{N}\mathbf{X}'\mathbf{X}'^T\boldsymbol{\Phi}_i = \frac{\mathbf{X}'(\mathbf{X}'^T\mathbf{X}'/N)\mathbf{v}_i}{\sqrt{N\lambda_i}} = \lambda_i\frac{\mathbf{X}'\mathbf{v}_i}{\sqrt{N\lambda_i}} = \lambda_i\boldsymbol{\Phi}_i.
-$$
+```math
+\frac{1}{N}\mathbf{X}'\mathbf{X}'^T\boldsymbol{\Phi}_i = \frac{\mathbf{X}'(\mathbf{X}'^T\mathbf{X}'/N)\mathbf{v}_i}{\sqrt{N\lambda_i}} = \lambda_i \frac{\mathbf{X}'\mathbf{v}_i}{\sqrt{N\lambda_i}} = \lambda_i\boldsymbol{\Phi}_i
+```
 
 The $N \times N$ and $M \times M$ problems share their nonzero eigenvalues, which is why the snapshot method gives the same modes as the direct method.
 

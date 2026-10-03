@@ -8,28 +8,38 @@ Shear and moment diagrams are graphical representations of the internal shear fo
 
 The relationships between the distributed load $w(x)$, shear force $V(x)$, and bending moment $M(x)$ are:
 
-$$\frac{dV}{dx} = -w(x)$$
+$$
+\frac{dV}{dx} = -w(x)
+$$
 
-$$\frac{dM}{dx} = V(x)$$
+$$
+\frac{dM}{dx} = V(x)
+$$
 
 Combining these:
 
-$$\frac{d^2M}{dx^2} = -w(x)$$
+$$
+\frac{d^2M}{dx^2} = -w(x)
+$$
 
 ### Integral Forms
 
 These differential equations can be integrated to give:
 
-$$V(x) = V(x_0) - \int_{x_0}^{x} w(\xi)\,d\xi$$
+$$
+V(x) = V(x_0) - \int_{x_0}^{x} w(\xi)\, d\xi
+$$
 
-$$M(x) = M(x_0) + \int_{x_0}^{x} V(\xi)\,d\xi$$
+$$
+M(x) = M(x_0) + \int_{x_0}^{x} V(\xi)\, d\xi
+$$
 
 **Key insight:** The change in shear between two points equals the negative of the area under the load diagram; the change in moment between two points equals the area under the shear diagram.
 
 ### Important Consequences
 
 | Load Condition | Shear Diagram | Moment Diagram |
-|---------------|---------------|----------------|
+| --- | --- | --- |
 | No load ($w = 0$) | Constant | Linear |
 | Uniform load ($w = $ const) | Linear | Parabolic (2nd degree) |
 | Linearly varying load | Parabolic | Cubic (3rd degree) |
@@ -93,6 +103,7 @@ Identifying the locations and magnitudes of maximum shear and moment is the prim
 A simply supported beam of length $L = 6$ m carries a uniform distributed load $w = 10$ kN/m.
 
 **Given:**
+
 - $L = 6$ m, $w = 10$ kN/m
 
 **Find:** Shear and moment diagrams; maximum $V$ and $M$.
@@ -101,23 +112,34 @@ A simply supported beam of length $L = 6$ m carries a uniform distributed load $
 
 **Reactions** (by symmetry):
 
-$$R_A = R_B = \frac{wL}{2} = \frac{10 \times 6}{2} = 30 \text{ kN}$$
+$$
+R_A = R_B = \frac{wL}{2} = \frac{10 \times 6}{2} = 30 \text{ kN}
+$$
 
 **Shear force:**
 
-$$V(x) = R_A - wx = 30 - 10x \text{ kN}$$
+$$
+V(x) = R_A - wx = 30 - 10x \text{ kN}
+$$
 
 $V = 0$ when $x = 3$ m (midspan).
 
-$$V_{max} = 30 \text{ kN (at supports)}$$
+$$
+V_{max} = 30 \text{ kN (at supports)}
+$$
 
 **Bending moment:**
 
-$$M(x) = R_A x - \frac{wx^2}{2} = 30x - 5x^2 \text{ kN}\cdot\text{m}$$
+$$
+M(x) = R_A x - \frac{wx^2}{2} = 30x - 5x^2 \text{ kN}\cdot \text{m}
+$$
 
-$$M_{max} = M(3) = 30(3) - 5(3)^2 = 90 - 45 = 45 \text{ kN}\cdot\text{m}$$
+$$
+M_{max} = M(3) = 30(3) - 5(3)^2 = 90 - 45 = 45 \text{ kN}\cdot \text{m}
+$$
 
 **Diagram shapes:**
+
 - Shear: linear, from +30 kN to −30 kN
 - Moment: parabolic, maximum of 45 kN·m at midspan
 
@@ -126,6 +148,7 @@ $$M_{max} = M(3) = 30(3) - 5(3)^2 = 90 - 45 = 45 \text{ kN}\cdot\text{m}$$
 A cantilever beam of length $L = 3$ m has a point load $P = 12$ kN at the free end.
 
 **Given:**
+
 - $L = 3$ m, $P = 12$ kN at the free end
 
 **Find:** Shear and moment diagrams.
@@ -134,19 +157,29 @@ A cantilever beam of length $L = 3$ m has a point load $P = 12$ kN at the free e
 
 **Reactions at the fixed end:**
 
-$$R_A = 12 \text{ kN (upward)}, \quad M_A = 12 \times 3 = 36 \text{ kN}\cdot\text{m (clockwise, fixed end on the right)}$$
+$$
+R_A = 12 \text{ kN (upward)}, \quad M_A = 12 \times 3 = 36 \text{ kN}\cdot
+\text{m (clockwise, fixed end on the right)}
+$$
 
 **Shear force** (measuring $x$ from the free end):
 
-$$V(x) = -P = -12 \text{ kN (constant along the beam)}$$
+$$
+V(x) = -P = -12 \text{ kN (constant along the beam)}
+$$
 
 **Bending moment** (measuring $x$ from the free end):
 
-$$M(x) = -Px = -12x \text{ kN}\cdot\text{m}$$
+$$
+M(x) = -Px = -12x \text{ kN}\cdot \text{m}
+$$
 
-$$M_{max} = 36 \text{ kN}\cdot\text{m (at fixed support)}$$
+$$
+M_{max} = 36 \text{ kN}\cdot \text{m (at fixed support)}
+$$
 
 **Diagram shapes:**
+
 - Shear: constant at −12 kN
 - Moment: linear, from 0 at free end to −36 kN·m at the fixed support
 
@@ -155,6 +188,7 @@ $$M_{max} = 36 \text{ kN}\cdot\text{m (at fixed support)}$$
 A beam is supported at A ($x = 0$) and B ($x = 4$ m) with an overhang to C ($x = 6$ m). A point load $P = 18$ kN acts at C.
 
 **Given:**
+
 - $L_{AB} = 4$ m, $L_{BC} = 2$ m
 - $P = 18$ kN at C
 
@@ -166,13 +200,18 @@ A beam is supported at A ($x = 0$) and B ($x = 4$ m) with an overhang to C ($x =
 
 $\sum M_A = 0$:
 
-$$R_B \times 4 - 18 \times 6 = 0 \implies R_B = 27 \text{ kN}$$
+$$
+R_B \times 4 - 18 \times 6 = 0 \implies R_B = 27 \text{ kN}
+$$
 
 $\sum F_y = 0$:
 
-$$R_A + 27 - 18 = 0 \implies R_A = -9 \text{ kN (downward)}$$
+$$
+R_A + 27 - 18 = 0 \implies R_A = -9 \text{ kN (downward)}
+$$
 
 **Shear diagram:**
+
 - At A: $V = -9$ kN
 - A to B: $V = -9$ kN (constant, no load between)
 - At B: $V = -9 + 27 = +18$ kN
@@ -180,6 +219,7 @@ $$R_A + 27 - 18 = 0 \implies R_A = -9 \text{ kN (downward)}$$
 - At C: $V = 18 - 18 = 0$ ✓
 
 **Moment diagram:**
+
 - At A: $M = 0$
 - At B: $M = -9 \times 4 = -36$ kN·m
 - At C: $M = -36 + 18 \times 2 = 0$ ✓
@@ -191,6 +231,7 @@ The maximum moment is $|M_{max}| = 36$ kN·m at support B. Note the negative mom
 A simply supported beam ($L = 8$ m) carries a point load $P_1 = 10$ kN at $x = 2$ m and a point load $P_2 = 20$ kN at $x = 5$ m.
 
 **Given:**
+
 - $L = 8$ m
 - $P_1 = 10$ kN at $x = 2$ m, $P_2 = 20$ kN at $x = 5$ m
 
@@ -202,23 +243,31 @@ A simply supported beam ($L = 8$ m) carries a point load $P_1 = 10$ kN at $x = 2
 
 $\sum M_A = 0$:
 
-$$R_B \times 8 = 10 \times 2 + 20 \times 5 = 120 \implies R_B = 15 \text{ kN}$$
+$$
+R_B \times 8 = 10 \times 2 + 20 \times 5 = 120 \implies R_B = 15 \text{ kN}
+$$
 
 $\sum F_y = 0$:
 
-$$R_A = 10 + 20 - 15 = 15 \text{ kN}$$
+$$
+R_A = 10 + 20 - 15 = 15 \text{ kN}
+$$
 
 **Shear diagram:**
+
 - $0 \leq x < 2$: $V = +15$ kN
 - $2 < x < 5$: $V = 15 - 10 = +5$ kN
 - $5 < x \leq 8$: $V = 5 - 20 = -15$ kN
 
 **Moment at key points:**
+
 - $M(2) = 15 \times 2 = 30$ kN·m
 - $M(5) = 15 \times 5 - 10 \times 3 = 75 - 30 = 45$ kN·m
 - $M(8) = 0$ ✓
 
-$$M_{max} = 45 \text{ kN}\cdot\text{m at } x = 5 \text{ m}$$
+$$
+M_{max} = 45 \text{ kN}\cdot \text{m at } x = 5 \text{ m}
+$$
 
 ## Graphical Construction Tips
 
@@ -239,16 +288,19 @@ $$M_{max} = 45 \text{ kN}\cdot\text{m at } x = 5 \text{ m}$$
 ## Applications
 
 ### Structural Engineering
+
 - **Building beams**: sizing floor joists and girders for code-required load combinations
 - **Bridge design**: determining critical moment and shear sections for traffic loading
 - **Retaining walls**: moment diagrams for lateral earth pressure
 
 ### Mechanical Engineering
+
 - **Machine shafts**: identifying critical cross-sections for combined shear and bending
 - **Crane booms**: shear and moment analysis under moving loads
 - **Vehicle frames**: load path analysis for suspension and body loads
 
 ### Influence Lines
+
 For moving loads (bridges, cranes), influence lines show how $V$ and $M$ at a specific section vary as a unit load moves across the beam. These are closely related to shear and moment diagrams but serve a complementary purpose.
 
 ## Practical Tips
@@ -282,7 +334,10 @@ The total load is $w_0L/2 = 36$ kN, acting at $2L/3 = 4$ m from A. Hence $R_B = 
 
 With $w(x) = 2x$ kN/m, $V(x) = 12 - x^2$, which is zero at $x = \sqrt{12} = 3.46$ m.
 
-$$M(x) = 12x - \frac{x^3}{3} \implies M_{max} = 12(3.46) - \frac{3.46^3}{3} = 27.7 \text{ kN}\cdot\text{m}$$
+```math
+M(x) = 12x - \frac{x^3}{3} \implies M_{max} = 12(3.46) - \frac{3.46^3}{3} = 27.7
+\text{ kN}\cdot \text{m}
+```
 
 This agrees with the formula $w_0L^2/(9\sqrt{3})$.
 
@@ -310,7 +365,9 @@ $\sum M_A$: $6R_B = 80(4)$, so $R_B = 53.3$ kN and $R_A = 26.7$ kN.
 
 In AB, $V = 26.7 - 10x$, which is zero at $x = 2.67$ m:
 
-$$M_{max}^+ = 26.7(2.67) - 5(2.67)^2 = 35.6 \text{ kN}\cdot\text{m}$$
+```math
+M_{max}^+ = 26.7(2.67) - 5(2.67)^2 = 35.6 \text{ kN}\cdot\text{m}
+```
 
 At B, $M_B = -10(2)^2/2 = -20$ kN·m (hogging, from the overhang).
 
@@ -329,7 +386,9 @@ Vertical equilibrium: $V - w\,dx - (V + dV) = 0$, so $dV/dx = -w$.
 
 Moments about the right face:
 
-$$-M + (M + dM) - V\,dx + w\,dx\,\frac{dx}{2} = 0$$
+```math
+-M + (M + dM) - V\, dx + w\, dx\, \frac{dx}{2} = 0
+```
 
 Dropping the second-order term gives $dM/dx = V$.
 

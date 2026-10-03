@@ -16,9 +16,13 @@ When a member is subjected to multiple loads, the resulting stress at any point 
 
 At a given point, normal stresses from different sources are added directly:
 
-$$\sigma_{total} = \sigma_{axial} + \sigma_{bending}$$
+$$
+\sigma_{total} = \sigma_{axial} + \sigma_{bending}
+$$
 
-$$\sigma_{total} = \frac{P}{A} \pm \frac{My}{I}$$
+$$
+\sigma_{total} = \frac{P}{A} \pm \frac{My}{I}
+$$
 
 The sign depends on whether the axial and bending stresses are tensile or compressive at the point of interest.
 
@@ -28,9 +32,14 @@ The sign depends on whether the axial and bending stresses are tensile or compre
 
 When an axial load is applied with an eccentricity $e$ from the centroid, it produces both axial stress and bending stress:
 
-$$\sigma = \frac{P}{A} + \frac{Pey}{I}$$
+$$
+\sigma = \frac{P}{A} + \frac{Pey}{I}
+$$
 
-$$\sigma = \frac{P}{A}\left(1 + \frac{ey}{I/A}\right) = \frac{P}{A}\left(1 + \frac{ey}{r^2}\right)$$
+$$
+\sigma = \frac{P}{A}\left(1 + \frac{ey}{I/A}\right) = \frac{P}{A}\left(1 +
+\frac{ey}{r^2}\right)
+$$
 
 where $r = \sqrt{I/A}$ is the radius of gyration.
 
@@ -38,7 +47,9 @@ where $r = \sqrt{I/A}$ is the radius of gyration.
 
 The **kern** (or core) is the region within the cross-section where a compressive load can be applied without producing any tensile stress. For a rectangular section ($b \times h$):
 
-$$e_y \leq \frac{h}{6}, \quad e_x \leq \frac{b}{6}$$
+$$
+e_y \leq \frac{h}{6}, \quad e_x \leq \frac{b}{6}
+$$
 
 This defines the **middle-third rule** for rectangular sections — the load must fall within the middle third to avoid tension.
 
@@ -46,7 +57,9 @@ This defines the **middle-third rule** for rectangular sections — the load mus
 
 When bending occurs about both principal axes:
 
-$$\sigma = \frac{P}{A} + \frac{M_y z}{I_y} + \frac{M_z y}{I_z}$$
+$$
+\sigma = \frac{P}{A} + \frac{M_y z}{I_y} + \frac{M_z y}{I_z}
+$$
 
 where $M_y$ and $M_z$ are moments about the $y$- and $z$-axes respectively.
 
@@ -58,27 +71,39 @@ A shaft subjected to simultaneous bending and torsion has both normal and shear 
 
 **Bending stress:**
 
-$$\sigma_x = \frac{Mc}{I} = \frac{32M}{\pi d^3}$$
+$$
+\sigma_x = \frac{Mc}{I} = \frac{32M}{\pi d^3}
+$$
 
 **Torsional shear stress:**
 
-$$\tau_{xy} = \frac{Tc}{J} = \frac{16T}{\pi d^3}$$
+$$
+\tau_{xy} = \frac{Tc}{J} = \frac{16T}{\pi d^3}
+$$
 
 ### Principal Stresses
 
 Using the stress transformation equations:
 
-$$\sigma_{1,2} = \frac{\sigma_x}{2} \pm \sqrt{\left(\frac{\sigma_x}{2}\right)^2 + \tau_{xy}^2}$$
+$$
+\sigma_{1,2} = \frac{\sigma_x}{2} \pm
+\sqrt{\left(\frac{\sigma_x}{2}\right)^2 + \tau_{xy}^2}
+$$
 
 ### Equivalent Stresses for Shaft Design
 
 **Maximum shear stress theory (Tresca):**
 
-$$\tau_{max} = \sqrt{\left(\frac{\sigma_x}{2}\right)^2 + \tau_{xy}^2} = \frac{16}{\pi d^3}\sqrt{M^2 + T^2}$$
+$$
+\tau_{max} = \sqrt{\left(\frac{\sigma_x}{2}\right)^2 + \tau_{xy}^2} = \frac{16}{\pi d^3}
+\sqrt{M^2 + T^2}
+$$
 
 **Distortion energy theory (von Mises):**
 
-$$\sigma_{eq} = \sqrt{\sigma_x^2 + 3\tau_{xy}^2} = \frac{16}{\pi d^3}\sqrt{4M^2 + 3T^2}$$
+$$
+\sigma_{eq} = \sqrt{\sigma_x^2 + 3\tau_{xy}^2} = \frac{16}{\pi d^3} \sqrt{4M^2 + 3T^2}
+$$
 
 These are used to determine the required shaft diameter for a given allowable stress.
 
@@ -90,11 +115,15 @@ A thin-walled cylindrical pressure vessel (wall thickness $t \ll r$, typically $
 
 **Hoop (circumferential) stress:**
 
-$$\sigma_1 = \frac{pr}{t}$$
+$$
+\sigma_1 = \frac{pr}{t}
+$$
 
 **Longitudinal (axial) stress:**
 
-$$\sigma_2 = \frac{pr}{2t}$$
+$$
+\sigma_2 = \frac{pr}{2t}
+$$
 
 The hoop stress is twice the longitudinal stress, which is why cylindrical pressure vessels tend to fail along a longitudinal seam.
 
@@ -102,7 +131,9 @@ The hoop stress is twice the longitudinal stress, which is why cylindrical press
 
 For a thin-walled sphere under internal pressure:
 
-$$\sigma_1 = \sigma_2 = \frac{pr}{2t}$$
+$$
+\sigma_1 = \sigma_2 = \frac{pr}{2t}
+$$
 
 The stress is uniform in all directions — spherical vessels are more efficient than cylindrical ones for a given volume.
 
@@ -110,11 +141,15 @@ The stress is uniform in all directions — spherical vessels are more efficient
 
 **In-plane maximum shear stress:**
 
-$$\tau_{max,in} = \frac{\sigma_1 - \sigma_2}{2} = \frac{pr}{4t}$$
+$$
+\tau_{max,in} = \frac{\sigma_1 - \sigma_2}{2} = \frac{pr}{4t}
+$$
 
 **Absolute maximum shear stress** (considering the zero stress on the inner/outer surface):
 
-$$\tau_{max,abs} = \frac{\sigma_1}{2} = \frac{pr}{2t}$$
+$$
+\tau_{max,abs} = \frac{\sigma_1}{2} = \frac{pr}{2t}
+$$
 
 ## Mohr's Circle for Combined Stress
 
@@ -126,23 +161,33 @@ Mohr's circle is a graphical method for stress transformation that provides prin
 
 **Center of the circle:**
 
-$$C = \frac{\sigma_x + \sigma_y}{2}$$
+$$
+C = \frac{\sigma_x + \sigma_y}{2}
+$$
 
 **Radius of the circle:**
 
-$$R = \sqrt{\left(\frac{\sigma_x - \sigma_y}{2}\right)^2 + \tau_{xy}^2}$$
+$$
+R = \sqrt{\left(\frac{\sigma_x - \sigma_y}{2}\right)^2 + \tau_{xy}^2}
+$$
 
 **Principal stresses:**
 
-$$\sigma_1 = C + R, \quad \sigma_2 = C - R$$
+$$
+\sigma_1 = C + R, \quad \sigma_2 = C - R
+$$
 
 **Maximum in-plane shear stress:**
 
-$$\tau_{max} = R$$
+$$
+\tau_{max} = R
+$$
 
 **Principal angle:**
 
-$$\tan(2\theta_p) = \frac{2\tau_{xy}}{\sigma_x - \sigma_y}$$
+$$
+\tan(2\theta_p) = \frac{2\tau_{xy}}{\sigma_x - \sigma_y}
+$$
 
 ### Interpretation
 
@@ -157,23 +202,38 @@ $$\tan(2\theta_p) = \frac{2\tau_{xy}}{\sigma_x - \sigma_y}$$
 A short concrete column ($300 \times 300$ mm) carries a compressive load of 500 kN applied with an eccentricity of 40 mm along one axis.
 
 **Given:**
+
 - $b = h = 300$ mm, $P = 500$ kN, $e = 40$ mm
 
 **Find:** Maximum and minimum normal stress.
 
 **Solution:**
 
-$$A = 300 \times 300 = 90\,000 \text{ mm}^2$$
+$$
+A = 300 \times 300 = 90\,000 \text{ mm}^2
+$$
 
-$$I = \frac{300 \times 300^3}{12} = 6.75 \times 10^8 \text{ mm}^4$$
+$$
+I = \frac{300 \times 300^3}{12} = 6.75 \times 10^8 \text{ mm}^4
+$$
 
-$$\sigma = -\frac{P}{A} \pm \frac{Pec}{I}$$
+$$
+\sigma = -\frac{P}{A} \pm \frac{Pec}{I}
+$$
 
-$$\sigma = -\frac{500\,000}{90\,000} \pm \frac{500\,000 \times 40 \times 150}{6.75 \times 10^8}$$
+$$
+\sigma = -\frac{500\,000}{90\,000} \pm
+\frac{500\,000 \times 40 \times 150}{6.75 \times 10^8}
+$$
 
-$$\sigma = -5.56 \pm 4.44 \text{ MPa}$$
+$$
+\sigma = -5.56 \pm 4.44 \text{ MPa}
+$$
 
-$$\sigma_{max} = -1.11 \text{ MPa (compression)}, \quad \sigma_{min} = -10.0 \text{ MPa (compression)}$$
+$$
+\sigma_{max} = -1.11 \text{ MPa (compression)}, \quad \sigma_{min} = -10.0
+\text{ MPa (compression)}
+$$
 
 Since both stresses are compressive, the load falls within the kern. Check: $e = 40$ mm $< h/6 = 50$ mm ✓
 
@@ -182,6 +242,7 @@ Since both stresses are compressive, the load falls within the kern. Check: $e =
 A solid steel shaft ($d = 50$ mm) is subjected to a bending moment $M = 1.2$ kN·m and a torque $T = 0.8$ kN·m.
 
 **Given:**
+
 - $d = 50$ mm, $M = 1.2$ kN·m, $T = 0.8$ kN·m
 
 **Find:** Maximum shear stress and von Mises equivalent stress.
@@ -190,25 +251,35 @@ A solid steel shaft ($d = 50$ mm) is subjected to a bending moment $M = 1.2$ kN�
 
 **Bending stress:**
 
-$$\sigma_x = \frac{32M}{\pi d^3} = \frac{32 \times 1200 \times 10^3}{\pi \times 50^3} = 97.8 \text{ MPa}$$
+$$
+\sigma_x = \frac{32M}{\pi d^3} = \frac{32 \times 1200 \times 10^3}{\pi \times 50^3} = 97.8 \text{ MPa}
+$$
 
 **Torsional shear stress:**
 
-$$\tau_{xy} = \frac{16T}{\pi d^3} = \frac{16 \times 800 \times 10^3}{\pi \times 50^3} = 32.6 \text{ MPa}$$
+$$
+\tau_{xy} = \frac{16T}{\pi d^3} = \frac{16 \times 800 \times 10^3}{\pi \times 50^3} = 32.6 \text{ MPa}
+$$
 
 **Maximum shear stress:**
 
-$$\tau_{max} = \sqrt{\left(\frac{97.8}{2}\right)^2 + 32.6^2} = \sqrt{2392 + 1063} = 58.8 \text{ MPa}$$
+$$
+\tau_{max} = \sqrt{\left(\frac{97.8}{2}\right)^2 + 32.6^2} = \sqrt{2392 + 1063} = 58.8
+\text{ MPa}
+$$
 
 **Von Mises equivalent stress:**
 
-$$\sigma_{eq} = \sqrt{97.8^2 + 3 \times 32.6^2} = \sqrt{9565 + 3189} = 113.0 \text{ MPa}$$
+$$
+\sigma_{eq} = \sqrt{97.8^2 + 3 \times 32.6^2} = \sqrt{9565 + 3189} = 113.0 \text{ MPa}
+$$
 
 ### Example 3: Cylindrical Pressure Vessel with Axial Load
 
 A thin-walled cylindrical tank ($r = 400$ mm, $t = 8$ mm) is under internal pressure $p = 2$ MPa and an external axial tensile force $F = 300$ kN.
 
 **Given:**
+
 - $r = 400$ mm, $t = 8$ mm, $p = 2$ MPa, $F = 300$ kN
 
 **Find:** Principal stresses at the outer surface.
@@ -217,13 +288,20 @@ A thin-walled cylindrical tank ($r = 400$ mm, $t = 8$ mm) is under internal pres
 
 **Hoop stress (from pressure only):**
 
-$$\sigma_1 = \frac{pr}{t} = \frac{2 \times 400}{8} = 100 \text{ MPa}$$
+$$
+\sigma_1 = \frac{pr}{t} = \frac{2 \times 400}{8} = 100 \text{ MPa}
+$$
 
 **Longitudinal stress (pressure + axial force):**
 
-$$\sigma_2 = \frac{pr}{2t} + \frac{F}{2\pi r t} = \frac{2 \times 400}{2 \times 8} + \frac{300\,000}{2\pi \times 400 \times 8}$$
+$$
+\sigma_2 = \frac{pr}{2t} + \frac{F}{2\pi r t} = \frac{2 \times 400}{2 \times 8} +
+\frac{300\,000}{2\pi \times 400 \times 8}
+$$
 
-$$\sigma_2 = 50 + 14.9 = 64.9 \text{ MPa}$$
+$$
+\sigma_2 = 50 + 14.9 = 64.9 \text{ MPa}
+$$
 
 The principal stresses are $\sigma_1 = 100$ MPa (hoop) and $\sigma_2 = 64.9$ MPa (longitudinal), with no shear on the principal planes.
 
@@ -231,29 +309,36 @@ The principal stresses are $\sigma_1 = 100$ MPa (hoop) and $\sigma_2 = 64.9$ MPa
 
 ### Maximum Shear Stress Theory (Tresca)
 
-$$\tau_{max,abs} = \frac{\max\left(|\sigma_1 - \sigma_2|,\ |\sigma_1|,\ |\sigma_2|\right)}{2} \leq \frac{\sigma_y}{2}$$
+$$
+\tau_{max,abs} = \frac{\max\left(|\sigma_1 - \sigma_2|,\ |\sigma_1|,\ |\sigma_2|\right)}{2} \leq \frac{\sigma_y}{2}
+$$
 
 In plane stress the out-of-plane principal stress is zero and must be included, so $(\sigma_1 - \sigma_2)/2$ alone is only correct when $\sigma_1$ and $\sigma_2$ have opposite signs. Conservative for ductile materials; easy to apply.
 
 ### Distortion Energy Theory (von Mises)
 
-$$\sigma_{eq} = \sqrt{\sigma_1^2 - \sigma_1\sigma_2 + \sigma_2^2} \leq \sigma_y$$
+$$
+\sigma_{eq} = \sqrt{\sigma_1^2 - \sigma_1\sigma_2 + \sigma_2^2} \leq \sigma_y
+$$
 
 More accurate for ductile materials; widely used in practice and FEA.
 
 ## Applications
 
 ### Structural Engineering
+
 - **Beam-columns**: members under simultaneous axial load and bending
 - **Retaining walls**: bending from earth pressure plus axial weight
 - **Eccentric connections**: combined loading at bolted and welded joints
 
 ### Mechanical Engineering
+
 - **Rotating shafts**: bending from gear/pulley forces combined with transmitted torque
 - **Pressure piping**: internal pressure combined with thermal and weight stresses
 - **Crank mechanisms**: complex combined loading on connecting rods
 
 ### Aerospace Engineering
+
 - **Fuselage panels**: pressurization (hoop and longitudinal stress) combined with flight loads
 - **Landing gear struts**: combined axial, bending, and torsional loads during touchdown
 
@@ -274,7 +359,10 @@ Combined loading analysis is essential for safe design of real-world structures 
 <details>
 <summary>Answer</summary>
 
-$$\sigma = -\frac{500\,000}{90\,000} \pm \frac{500\,000 \times 60 \times 150}{6.75 \times 10^8} = -5.56 \pm 6.67 \text{ MPa}$$
+```math
+\sigma = -\frac{500\,000}{90\,000} \pm
+\frac{500\,000 \times 60 \times 150}{6.75 \times 10^8} = -5.56 \pm 6.67 \text{ MPa}
+```
 
 The extremes are $\sigma = +1.11$ MPa (tension) and $-12.2$ MPa. The load is outside the kern ($e > h/6 = 50$ mm), so one face goes into tension, which matters for unreinforced concrete or masonry.
 
@@ -285,7 +373,9 @@ The extremes are $\sigma = +1.11$ MPa (tension) and $-12.2$ MPa. The load is out
 <details>
 <summary>Answer</summary>
 
-$$C = \frac{80 - 40}{2} = 20 \text{ MPa}, \quad R = \sqrt{60^2 + 30^2} = 67.1 \text{ MPa}$$
+```math
+C = \frac{80 - 40}{2} = 20 \text{ MPa}, \quad R = \sqrt{60^2 + 30^2} = 67.1 \text{ MPa}
+```
 
 - Principal stresses: $\sigma_1 = 87.1$ MPa and $\sigma_2 = -47.1$ MPa
 - Maximum in-plane shear: $\tau_{max} = 67.1$ MPa
@@ -302,7 +392,9 @@ Because $\sigma_1$ and $\sigma_2$ have opposite signs, the in-plane maximum shea
 
 (a) $\sigma_{eq} = \dfrac{16}{\pi d^3}\sqrt{4M^2 + 3T^2} \leq 175$ MPa:
 
-$$d = \left(\frac{16\sqrt{4(1200)^2 + 3(800)^2}}{\pi \times 175 \times 10^6}\right)^{1/3} = 43.2 \text{ mm}$$
+```math
+d = \left(\frac{16\sqrt{4(1200)^2 + 3(800)^2}}{\pi \times 175 \times 10^6}\right)^{1/3} = 43.2 \text{ mm}
+```
 
 (b) $\tau_{max} = \dfrac{16}{\pi d^3}\sqrt{M^2 + T^2} \leq 87.5$ MPa gives $d = 43.8$ mm.
 
@@ -327,7 +419,10 @@ $r/t = 100$ and 200, both well above 10, so thin-wall theory applies. The end ca
 <details>
 <summary>Answer</summary>
 
-$$\sigma_{eq} = \sqrt{100^2 - 100(64.9) + 64.9^2} = 87.9 \text{ MPa} \implies n = 250/87.9 = 2.84$$
+```math
+\sigma_{eq} = \sqrt{100^2 - 100(64.9) + 64.9^2} = 87.9 \text{ MPa} \implies
+n = 250/87.9 = 2.84
+```
 
 Both in-plane stresses are tensile, so the largest principal-stress difference is $\sigma_1 - \sigma_3 = 100$ MPa. That gives $\tau_{max,abs} = 50$ MPa and $n = 125/50 = 2.5$.
 

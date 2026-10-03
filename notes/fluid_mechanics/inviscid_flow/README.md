@@ -11,13 +11,24 @@ Inviscid flow theory studies the motion of fluids where viscous effects are negl
 For inviscid flow, the Navier-Stokes equations reduce to the Euler equations:
 
 **Conservation of Mass (Continuity)**:
-$$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{V}) = 0$$
+
+$$
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{V}) = 0
+$$
 
 **Conservation of Momentum**:
-$$\frac{\partial \vec{V}}{\partial t} + (\vec{V} \cdot \nabla)\vec{V} = -\frac{1}{\rho}\nabla p + \vec{g}$$
+
+$$
+\frac{\partial \vec{V}}{\partial t} +
+(\vec{V} \cdot \nabla)\vec{V} = -\frac{1}{\rho}\nabla p + \vec{g}
+$$
 
 **Conservation of Energy**:
-$$\frac{\partial e}{\partial t} + \vec{V} \cdot \nabla e = -\frac{p}{\rho}\nabla \cdot \vec{V}$$
+
+$$
+\frac{\partial e}{\partial t} + \vec{V} \cdot \nabla e = -\frac{p}{\rho}\nabla \cdot
+\vec{V}
+$$
 
 ### Key Assumptions
 
@@ -33,12 +44,17 @@ $$\frac{\partial e}{\partial t} + \vec{V} \cdot \nabla e = -\frac{p}{\rho}\nabla
 
 For irrotational flow ($\nabla \times \vec{V} = 0$), we can define a velocity potential $\phi$:
 
-$$\vec{V} = \nabla \phi$$
+$$
+\vec{V} = \nabla \phi
+$$
 
 ### Governing Equation
 
 Substituting into continuity equation for incompressible flow:
-$$\nabla^2 \phi = 0$$
+
+$$
+\nabla^2 \phi = 0
+$$
 
 This is **Laplace's equation** - a linear PDE that allows superposition of solutions.
 
@@ -51,22 +67,47 @@ This is **Laplace's equation** - a linear PDE that allows superposition of solut
 ## Elementary Solutions
 
 ### Uniform Flow
-$$\phi = U_\infty x$$
-$$u = U_\infty, \quad v = 0$$
+
+$$
+\phi = U_\infty x
+$$
+
+$$
+u = U_\infty, \quad v = 0
+$$
 
 ### Source/Sink
-$$\phi = \frac{m}{2\pi} \ln r$$
-$$u_r = \frac{m}{2\pi r}, \quad u_\theta = 0$$
+
+$$
+\phi = \frac{m}{2\pi} \ln r
+$$
+
+$$
+u_r = \frac{m}{2\pi r}, \quad u_\theta = 0
+$$
 
 where $m > 0$ (source), $m < 0$ (sink).
 
 ### Doublet
-$$\phi = -\frac{\mu}{2\pi} \frac{\cos \theta}{r}$$
-$$u_r = \frac{\mu}{2\pi r^2} \cos \theta, \quad u_\theta = \frac{\mu}{2\pi r^2} \sin \theta$$
+
+$$
+\phi = -\frac{\mu}{2\pi} \frac{\cos \theta}{r}
+$$
+
+$$
+u_r = \frac{\mu}{2\pi r^2} \cos \theta, \quad u_\theta = \frac{\mu}{2\pi r^2} \sin
+\theta
+$$
 
 ### Vortex
-$$\phi = -\frac{\Gamma}{2\pi} \theta$$
-$$u_r = 0, \quad u_\theta = \frac{\Gamma}{2\pi r}$$
+
+$$
+\phi = -\frac{\Gamma}{2\pi} \theta
+$$
+
+$$
+u_r = 0, \quad u_\theta = \frac{\Gamma}{2\pi r}
+$$
 
 where $\Gamma$ is the circulation strength.
 
@@ -75,6 +116,7 @@ where $\Gamma$ is the circulation strength.
 ### Method of Images
 
 For flow past bodies, we can use:
+
 - **Method of images**: Mirror sources/sinks across boundaries
 - **Conformal mapping**: Transform complex geometries to simple ones
 - **Joukowsky transformation**: Airfoil generation from circles
@@ -82,34 +124,52 @@ For flow past bodies, we can use:
 ### Complex Potential
 
 For 2D flow, define complex potential:
-$$F(z) = \phi + i\psi$$
+
+$$
+F(z) = \phi + i\psi
+$$
 
 where $z = x + iy$ and $\psi$ is the stream function.
 
 The complex velocity is:
-$$w = \frac{dF}{dz} = u - iv$$
+
+$$
+w = \frac{dF}{dz} = u - iv
+$$
 
 ## Classical Solutions
 
 ### Flow Past a Cylinder
 
 **Without circulation**:
-$$F(z) = U_\infty\left(z + \frac{a^2}{z}\right)$$
+
+$$
+F(z) = U_\infty\left(z + \frac{a^2}{z}\right)
+$$
 
 **With circulation**:
-$$F(z) = U_\infty\left(z + \frac{a^2}{z}\right) - i\frac{\Gamma}{2\pi}\ln z$$
+
+$$
+F(z) = U_\infty\left(z + \frac{a^2}{z}\right) - i \frac{\Gamma}{2\pi}\ln z
+$$
 
 ### Kutta-Joukowsky Theorem
 
 For a cylinder with circulation in crossflow:
-$$L = \rho U_\infty \Gamma$$
+
+$$
+L = \rho U_\infty \Gamma
+$$
 
 This explains lift generation on airfoils.
 
 ### Flow Past an Airfoil
 
 Using Joukowsky transformation:
-$$z = \zeta + \frac{c^2}{4\zeta}$$
+
+$$
+z = \zeta + \frac{c^2}{4\zeta}
+$$
 
 Maps a circle in the $\zeta$-plane to an airfoil in the $z$-plane.
 
@@ -118,10 +178,17 @@ Maps a circle in the $\zeta$-plane to an airfoil in the $z$-plane.
 ### Derivation
 
 For inviscid, incompressible flow, the momentum equation gives:
-$$\frac{\partial \vec{V}}{\partial t} + (\vec{V} \cdot \nabla)\vec{V} = -\frac{1}{\rho}\nabla p + \vec{g}$$
+
+$$
+\frac{\partial \vec{V}}{\partial t} +
+(\vec{V} \cdot \nabla)\vec{V} = -\frac{1}{\rho}\nabla p + \vec{g}
+$$
 
 For steady flow along a streamline:
-$$\frac{p}{\rho} + \frac{1}{2}V^2 + gz = \text{constant}$$
+
+$$
+\frac{p}{\rho} + \frac{1}{2}V^2 + gz = \text{constant}
+$$
 
 ### Applications
 
@@ -142,7 +209,10 @@ $$\frac{p}{\rho} + \frac{1}{2}V^2 + gz = \text{constant}$$
 ### Kelvin's Circulation Theorem
 
 For inviscid flow:
-$$\frac{D\Gamma}{Dt} = 0$$
+
+$$
+\frac{D\Gamma}{Dt} = 0
+$$
 
 Circulation around a material loop is conserved.
 
@@ -158,6 +228,7 @@ Circulation around a material loop is conserved.
 ### Boundary Layer Effects
 
 Inviscid theory fails near walls where:
+
 - Viscous forces become important
 - No-slip condition must be satisfied
 - Boundary layers develop
@@ -165,6 +236,7 @@ Inviscid theory fails near walls where:
 ### Flow Separation
 
 Inviscid theory cannot predict:
+
 - **Flow separation points**
 - **Wake formation**
 - **Pressure recovery**
@@ -209,6 +281,7 @@ Inviscid theory predicts **zero drag** for bodies in crossflow - clearly unphysi
 ### Panel Methods
 
 Discretize body surface into panels with:
+
 - **Source distributions**
 - **Vortex distributions**
 - **Doublet distributions**
@@ -218,6 +291,7 @@ Solve for strengths to satisfy boundary conditions.
 ### Vortex Methods
 
 Represent flow field using:
+
 - **Discrete vortices**
 - **Vortex sheets**
 - **Vortex blobs**
@@ -227,6 +301,7 @@ Track vortex motion using Biot-Savart law.
 ### Boundary Element Methods
 
 Solve Laplace equation using:
+
 - **Green's functions**
 - **Fundamental solutions**
 - **Boundary integral equations**
@@ -236,6 +311,7 @@ Solve Laplace equation using:
 ### Matched Asymptotic Expansions
 
 For high Reynolds number flows:
+
 1. **Outer solution**: Inviscid flow
 2. **Inner solution**: Boundary layer
 3. **Matching**: Ensure consistency
@@ -243,6 +319,7 @@ For high Reynolds number flows:
 ### Interactive Boundary Layer Theory
 
 Couple inviscid outer flow with viscous boundary layer:
+
 - **Displacement thickness** effects
 - **Pressure gradient** coupling
 - **Separation prediction**
@@ -258,11 +335,13 @@ Couple inviscid outer flow with viscous boundary layer:
 ## Learning Resources
 
 ### Prerequisites
+
 - Vector calculus and partial differential equations
 - Complex analysis for 2D flows
 - Basic fluid mechanics concepts
 
 ### Key Concepts to Master
+
 1. Potential flow theory and Laplace equation
 2. Elementary solutions and superposition
 3. Bernoulli's equation and applications
@@ -271,6 +350,7 @@ Couple inviscid outer flow with viscous boundary layer:
 6. Kutta-Joukowsky theorem and lift generation
 
 ### Problem-Solving Approach
+
 1. Identify appropriate elementary solutions
 2. Apply superposition principle
 3. Satisfy boundary conditions

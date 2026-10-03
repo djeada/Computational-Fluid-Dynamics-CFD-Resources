@@ -15,7 +15,9 @@ This script plots laminar and turbulent radial velocity profiles of pipe flow in
 
 For $Re \lesssim 2300$ the fully developed axial velocity is
 
-$$u(r) = u_{\max}\left[1 - \left(\frac{r}{R}\right)^2\right]$$
+$$
+u(r) = u_{\max}\left[1 - \left(\frac{r}{R}\right)^2\right]
+$$
 
 and the mean velocity is half the centreline value, $\bar{u} = u_{\max}/2$.
 
@@ -23,17 +25,25 @@ and the mean velocity is half the centreline value, $\bar{u} = u_{\max}/2$.
 
 For turbulent flow ($Re \gtrsim 4000$) the time-averaged profile is approximated by
 
-$$u(r) = u_{\max}\left(1 - \frac{r}{R}\right)^{1/7}$$
+$$
+u(r) = u_{\max}\left(1 - \frac{r}{R}\right)^{1/7}
+$$
 
 Averaging over the cross-section gives
 
-$$\frac{\bar{u}}{u_{\max}} = \frac{2}{u_{\max} R^2}\int_0^R u(r)\, r\, dr = \frac{2n^2}{(n+1)(2n+1)} = \frac{49}{60} \approx 0.817 \quad (n = 7)$$
+$$
+\frac{\bar{u}}{u_{\max}} = \frac{2}{u_{\max} R^2}\int_0^R u(r)\, r\,
+dr = \frac{2n^2}{(n+1)(2n+1)} = \frac{49}{60} \approx 0.817 \quad (n = 7)
+$$
 
 so the turbulent profile is much fuller than the parabola. The power law has an infinite slope at the wall, so it does not describe the viscous sublayer.
 
 ### Reynolds Number
 
-$$Re = \frac{\rho\, \bar{u}\, D}{\mu}, \qquad D = 2R$$
+$$
+Re = \frac{\rho\, \bar{u}\, D}{\mu},
+\qquad D = 2R
+$$
 
 Transition from laminar to turbulent pipe flow typically occurs in the range $2300 < Re < 4000$. The script does not compute $Re$; it just draws one profile of each type.
 
@@ -52,7 +62,7 @@ python main.py --no-show --output out   # save laminar_vs_turbulent_pipe.png int
 ```
 
 | Flag | Meaning |
-|------|---------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure as a PNG |
 

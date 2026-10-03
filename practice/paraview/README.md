@@ -5,7 +5,7 @@ ParaView is an open-source, multi-platform application for interactive and batch
 ## Table of Contents
 
 | Guide | Description | Level |
-|-------|-------------|-------|
+| --- | --- | --- |
 | [Introduction to ParaView](intro.md) | ParaView basics, OpenFOAM integration, Pipeline Browser, filters, glyphs, and state saving | Beginner |
 | [Importing External Packages](import_external_packages.md) | Using virtual environments to bring `pandas`, `numpy`, and other packages into ParaView's `pvpython` | Intermediate |
 | [Batch Visualization](batch_visualization.md) | Automated screenshot and animation generation using Python scripting | Intermediate |
@@ -98,7 +98,7 @@ SaveAnimation("velocity_animation.avi",
 ## Useful Keyboard Shortcuts
 
 | Shortcut | Action |
-|----------|--------|
+| --- | --- |
 | `Space` | Toggle Apply button |
 | `Ctrl+Z` | Undo |
 | `Ctrl+Shift+Z` | Redo |

@@ -8,15 +8,16 @@ The Lattice Boltzmann Method (LBM) is often mistakenly considered meshless becau
 
 ### Clarifications
 
-- The simulation divides the fluid domain into a grid where flow properties are computed at each intersection, a method that benefits from a *structured lattice* to maintain consistency with traditional mesh-based CFD techniques.  
-- The computational process updates the state of the system at regular intervals in both space and time, relying on *discrete spatial and temporal steps* to accurately capture transient behaviors.  
+- The simulation divides the fluid domain into a grid where flow properties are computed at each intersection, a method that benefits from a *structured lattice* to maintain consistency with traditional mesh-based CFD techniques.
+- The computational process updates the state of the system at regular intervals in both space and time, relying on *discrete spatial and temporal steps* to accurately capture transient behaviors.
 - During each time iteration, the algorithm updates values at specific, predetermined locations without using interpolation, ensuring that *fixed node evolution* preserves the accuracy of the numerical solution.
 
 ### Practical Examples
+
 LBM is particularly effective in scenarios involving:
 
-- Engineers often simulate fluid movement through rock formations and filtering materials, a process commonly referred to as *porous media flow* that helps in assessing permeability and retention characteristics.  
-- Researchers develop models to capture the dynamics of blood circulation within complex vascular systems, exemplifying the field of *biomedical applications* in fluid dynamics.  
+- Engineers often simulate fluid movement through rock formations and filtering materials, a process commonly referred to as *porous media flow* that helps in assessing permeability and retention characteristics.
+- Researchers develop models to capture the dynamics of blood circulation within complex vascular systems, exemplifying the field of *biomedical applications* in fluid dynamics.
 - Designers evaluate the behavior of air as it interacts with vehicle shapes, using these insights to optimize performance in studies of *automotive aerodynamics*.
 
 The structured lattice and simple boundary condition treatments contribute to LBM's popularity in these practical applications.
@@ -61,19 +62,18 @@ for t in range(num_iters):
 print("Simulation complete.")
 ```
 
-- The simulation begins by preparing a grid-based domain and setting up parameters, where the *initialization* establishes the starting conditions with a nearly uniform state perturbed by slight random variations.  
-- The process then enters a repetitive cycle in which the state at each grid point is adjusted toward an equilibrium based on local density, a procedure known as the *collision step*.  
-- Following this adjustment, the updated state is propagated across the grid according to directional rules, which is referred to as the *streaming step*.  
-- The simulation enforces reflective conditions at the boundaries by reversing the movement at the edges, a technique that serves as the *bounce-back* mechanism.  
-- At the end of each cycle, the macroscopic properties such as density are recalculated from the current state, ensuring that the simulation remains consistent with the *update* of the physical variables.  
+- The simulation begins by preparing a grid-based domain and setting up parameters, where the *initialization* establishes the starting conditions with a nearly uniform state perturbed by slight random variations.
+- The process then enters a repetitive cycle in which the state at each grid point is adjusted toward an equilibrium based on local density, a procedure known as the *collision step*.
+- Following this adjustment, the updated state is propagated across the grid according to directional rules, which is referred to as the *streaming step*.
+- The simulation enforces reflective conditions at the boundaries by reversing the movement at the edges, a technique that serves as the *bounce-back* mechanism.
+- At the end of each cycle, the macroscopic properties such as density are recalculated from the current state, ensuring that the simulation remains consistent with the *update* of the physical variables.
 - Once the designated number of cycles is completed, the simulation concludes by indicating that the process is finished, marking the end of the computational experiment.
 
 ## Computational Advantages of LBM
 
-- The algorithm calculates each lattice node independently, allowing the system to leverage multiple processors through *parallelization* during computation.  
+- The algorithm calculates each lattice node independently, allowing the system to leverage multiple processors through *parallelization* during computation.
 - The approach employs straightforward techniques such as bounce-back and immersed boundary methods, which lead to *simplified boundary conditions* that ease the handling of complex geometries.
-These characteristics make LBM appealing for modern applications requiring fast, scalable simulations.
-
+  These characteristics make LBM appealing for modern applications requiring fast, scalable simulations.
 
 ## Purpose in CFD
 
@@ -82,7 +82,7 @@ This note addresses common practical questions about LBM: it clarifies that LBM 
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Lattice dimensions $n_x \times n_y$, number of iterations, relaxation parameter $\omega$, initial distribution functions $f_i$ |
 | **Outputs** | Density field $\rho$, velocity field, boundary-enforced solution, convergence status |
 

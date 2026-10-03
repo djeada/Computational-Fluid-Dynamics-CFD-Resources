@@ -32,11 +32,13 @@ A common approach to adaptive sampling is based on the mean squared error (MSE) 
 
 For a Kriging surrogate,
 
-$$\text{MSE}[\hat{y}(x)] = \sigma^2 \left\{ 1 - 
-\begin{pmatrix} r(x)^T & f(x)^T \end{pmatrix} 
+$$
+\text{MSE}[\hat{y}(x)] = \sigma^2 \left\{ 1 -
+\begin{pmatrix} r(x)^T & f(x)^T \end{pmatrix}
 \begin{pmatrix} R & F \\ F^T & 0 \end{pmatrix}^{-1}
 \begin{pmatrix} r(x) \\ f(x) \end{pmatrix}
-\right\},$$
+\right\}
+$$
 
 where $r(x)$ is the correlation vector between $x$ and the sample points, and $F$ is the regression matrix for the trend. The MSE vanishes at existing samples and grows with increasing distance from known data points. As $\|x - X\|$ becomes large, $r(x)$ approaches zero, and the MSE approaches a finite limit related to $\sigma^2$ and the chosen trend.
 
@@ -46,13 +48,18 @@ Selecting new points $x^{(N+1)}$ based on maximum MSE leads to what is essential
 
 To refine MSE-based methods, some adaptive strategies minimize integrated or maximum MSE over $\Omega$. For example, the next sample point can be chosen as:
 
-$$x^{(N+1)} = \arg \min_{x \in \Omega} \left\{ \int_\Omega \text{MSE}[\hat{y}^{(N+1)}(x')] dx' \right\}.$$
+$$
+x^{(N+1)} = \arg \min_{x \in \Omega} \left\{ \int_\Omega \text{MSE}[\hat{y}^{(N+1)}(x')]
+dx' \right\}
+$$
 
 This integrated MSE (IMSE) approach considers the entire domain and seeks a point that will globally reduce uncertainty most effectively.
 
 Alternatively, a simpler approach is to just pick the point where the MSE is currently highest:
 
-$$x^{(N+1)} = \arg \max_{x \in \Omega} \left\{ \text{MSE}[\hat{y}^{(N)}(x)] \right\}.$$
+$$
+x^{(N+1)} = \arg \max_{x \in \Omega} \left\{ \text{MSE}[\hat{y}^{(N)}(x)] \right\}
+$$
 
 While easy to implement, this maximum MSE criterion focuses purely on exploration. It places new samples in locations where the model is most uncertain, gradually filling the domain. Although this generally improves global coverage, it can still miss regions where the true response is complex or yields a high approximation error unrelated to sample spacing.
 
@@ -62,17 +69,23 @@ To incorporate information about actual response values, cross-validation (CV) c
 
 A local CV-based error estimator can be extended to any point $x \in \Omega$:
 
-$$e(x) = \frac{1}{N} \sum_{i=1}^{N} |\hat{y}_{-i}(x) - \hat{y}(x)|.$$
+$$
+e(x) = \frac{1}{N} \sum_{i=1}^{N} |\hat{y}_{-i}(x) - \hat{y}(x)|
+$$
 
 This measures how sensitive the prediction at $x$ is to the removal of individual samples. Regions where $e(x)$ is large signal that the current surrogate is fragile and overly dependent on certain points, potentially missing critical information about $y(x)$.
 
 However, $e(x)$ often peaks near existing samples. To avoid selecting samples too close to existing ones, the criterion can be modified by multiplying $e(x)$ by the distance to the nearest existing sample:
 
-$$x^{(N+1)} = \arg \max_{x \in \Omega} \{e(x) \cdot \text{dist}(x, X)\}.$$
+$$
+x^{(N+1)} = \arg \max_{x \in \Omega} \{ e(x) \cdot \text{dist}(x, X)\}
+$$
 
 Alternatively, one can multiply $e(x)$ by the MSE, merging exploration (through MSE) and exploitation (through CV):
 
-$$x^{(N+1)} = \arg \max_{x \in \Omega} \{e(x) \cdot \text{RMSE}[\hat{y}(x)]\}.$$
+$$
+x^{(N+1)} = \arg \max_{x \in \Omega} \{ e(x) \cdot \text{RMSE}[\hat{y}(x)]\}
+$$
 
 This combined metric zeroes out at existing sample points and shifts the focus to regions that are both uncertain and underrepresented.
 
@@ -95,7 +108,7 @@ When computational budgets are tight, it is more efficient to add sample points 
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Current surrogate model $\hat{y}(x)$, existing sample set, infill criterion (max MSE, max cross-validation error), budget for new samples |
 | **Outputs** | Next sample location(s) $x_{\text{new}}$, updated surrogate after evaluating the CFD solver at $x_{\text{new}}$, convergence metric |
 
@@ -138,9 +151,10 @@ B is chosen: exploitation near the current best. With $s_A = 0.4$: $z = -0.5$, $
 
 $R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}$ with $\rho = e^{-2} = 0.1353$, $F = (1, 1)^T$, and $r(0.5) = (e^{-0.5}, e^{-0.5}) = (0.6065, 0.6065)$. Eliminating the block system gives
 
-$$
-\frac{\text{MSE}}{\sigma^2} = 1 - r^T R^{-1} r + \frac{\left(F^T R^{-1} r - 1\right)^2}{F^T R^{-1} F}.
-$$
+```math
+\frac{\text{MSE}}{\sigma^2} = 1 - r^T R^{-1} r +
+\frac{\left(F^T R^{-1} r - 1\right)^2}{F^T R^{-1} F}
+```
 
 The pieces are $r^T R^{-1} r = 2r^2/(1 + \rho) = 0.6480$, $F^T R^{-1} r = 2r/(1 + \rho) = 1.0685$ and $F^T R^{-1} F = 2/(1 + \rho) = 1.7616$. So $\text{MSE}/\sigma^2 = 1 - 0.6480 + 0.0685^2/1.7616 = 0.3546$. By symmetry $x = 0.5$ is a stationary point, and a scan over $[0, 1]$ confirms it is the maximum. The max-MSE criterion therefore picks the midpoint, as a space-filling rule would.
 
@@ -153,9 +167,9 @@ The pieces are $r^T R^{-1} r = 2r^2/(1 + \rho) = 0.6480$, $F^T R^{-1} r = 2r/(1 
 
 With $S = F^T R^{-1} F$, the block inverse is
 
-$$
-\begin{pmatrix} R & F \\ F^T & 0 \end{pmatrix}^{-1} = \begin{pmatrix} R^{-1} - R^{-1}F S^{-1} F^T R^{-1} & R^{-1}F S^{-1} \\ S^{-1}F^T R^{-1} & -S^{-1} \end{pmatrix}.
-$$
+```math
+\begin{pmatrix} R & F \\ F^T & 0 \end{pmatrix}^{-1} = \begin{pmatrix} R^{-1} - R^{-1}F S^{-1} F^T R^{-1} & R^{-1}F S^{-1} \\ S^{-1}F^T R^{-1} & -S^{-1} \end{pmatrix}
+```
 
 With $r = 0$ the quadratic form reduces to the lower-right block: $(0, f)^T M^{-1} (0, f) = -f^T S^{-1} f$. Hence $\text{MSE} \to \sigma^2(1 + f^T S^{-1} f)$.
 

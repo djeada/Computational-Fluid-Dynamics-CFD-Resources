@@ -13,19 +13,28 @@ This script plots normalised laminar and turbulent boundary-layer velocity profi
 
 ### Laminar Profile (Quadratic Approximation)
 
-$$\frac{u}{U_\infty} = 2\eta - \eta^2, \qquad \eta = \frac{y}{\delta}$$
+$$
+\frac{u}{U_\infty} = 2\eta - \eta^2,
+\qquad \eta = \frac{y}{\delta}
+$$
 
 This profile meets the no-slip condition $u(0) = 0$ and the edge conditions $u(\delta) = U_\infty$ and $\partial u / \partial y|_{\delta} = 0$. It is a simple approximation used in the momentum-integral (Pohlhausen) method, not the exact Blasius solution.
 
 ### Turbulent Profile (1/7 Power Law)
 
-$$\frac{u}{U_\infty} = \eta^{1/7}$$
+$$
+\frac{u}{U_\infty} = \eta^{1/7}
+$$
 
 This is an empirical fit to the mean velocity of turbulent flat-plate boundary layers at moderate Reynolds numbers. Its velocity is much closer to $U_\infty$ over most of the layer.
 
 ### Wall Gradient and Wall Shear Stress
 
-$$\tau_w = \mu \left.\frac{\partial u}{\partial y}\right|_{y=0} = \frac{\mu U_\infty}{\delta}\left.\frac{d(u/U_\infty)}{d\eta}\right|_{\eta=0}$$
+$$
+\tau_w = \mu \left.
+\frac{\partial u}{\partial y}\right|_{y=0} = \frac{\mu U_\infty}{\delta}\left.
+\frac{d(u/U_\infty)}{d\eta}\right|_{\eta=0}
+$$
 
 For the quadratic profile the wall gradient is 2, so $\tau_w = 2\mu U_\infty/\delta$. For the power law, $d(\eta^{1/7})/d\eta = \tfrac{1}{7}\eta^{-6/7}$ grows without bound as $\eta \to 0$. The power law does not hold in the viscous sublayer and cannot be used to compute $\tau_w$. The steep near-wall rise does, however, reflect the much larger wall shear stress of turbulent layers.
 
@@ -44,7 +53,7 @@ python main.py --no-show --output out   # save laminar_vs_turbulent_boundary_lay
 ```
 
 | Flag | Meaning |
-|------|---------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure as a PNG |
 

@@ -82,6 +82,7 @@ python visualize_elbow.py
 ```
 
 *Example Output:*
+
 ```
 
 Visualization complete. Image saved as elbow_pressure.png.
@@ -137,7 +138,7 @@ For instance, to load the `disk_out_ref2` dataset, navigate to the following pat
 /opt/ParaView-5.10.1/share/paraview-5.10/examples/disk_out_ref.ex2
 ```
 
-**Selecting Variables**: 
+**Selecting Variables**:
 
 Make sure all variables are selected in the properties widget to access the full range of data available for visualization.
 
@@ -153,7 +154,7 @@ Choose a particular variable to visualize its distribution and behavior within t
 
 *Visualization of a selected variable.*
 
-**Using the Clip Filter**: 
+**Using the Clip Filter**:
 
 Apply the `Clip` filter to remove unwanted sections of the object, isolating a subvolume for focused analysis.
 
@@ -197,6 +198,7 @@ I. Apply the `Glyph` filter to your dataset.
 II. Configure the glyph properties to accurately represent the vector data. This includes setting the scale, orientation, and type of glyph used (e.g., arrows, cones).
 
 *Example Command:*
+
 ```python
 
 # Apply Glyph filter in Python script
@@ -209,6 +211,7 @@ glyph.OrientationArray = ['POINTS', 'velocity']
 ```
 
 *Example Output:*
+
 ```
 
 Glyphs representing the velocity vectors are displayed on the dataset.

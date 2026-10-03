@@ -17,7 +17,8 @@ This script performs Proper Orthogonal Decomposition on a synthetic spatio-tempo
 With $x$ and $y$ in mm and $t$ in s:
 
 $$
-u = \sin(0.02x)\cos(0.05y)\sin(0.5t) + 0.5\cos(0.04x)\sin(0.1y)\cos(2t) + 0.25\sin(0.06x)\cos(0.15y)\sin(4t)
+u = \sin(0.02x)\cos(0.05y)\sin(0.5t) + 0.5\cos(0.04x)\sin(0.1y)\cos(2t) +
+0.25\sin(0.06x)\cos(0.15y)\sin(4t)
 $$
 
 on $x \in [1700, 2000]$, $y \in [0, 100]$ and $t \in [0, 4]$.
@@ -27,7 +28,8 @@ on $x \in [1700, 2000]$, $y \in [0, 100]$ and $t \in [0, 4]$.
 Each column of the snapshot matrix $U \in \mathbb{R}^{N \times M}$ holds one snapshot, with $N$ spatial points and $M$ snapshots. The temporal mean of each row is removed:
 
 $$
-\tilde{U} = U - \bar{U}, \qquad \bar{U}_{k} = \frac{1}{M}\sum_{j=1}^{M} U_{kj}.
+\tilde{U} = U - \bar{U},
+\qquad \bar{U}_{k} = \frac{1}{M}\sum_{j=1}^{M} U_{kj}
 $$
 
 ### POD via the SVD

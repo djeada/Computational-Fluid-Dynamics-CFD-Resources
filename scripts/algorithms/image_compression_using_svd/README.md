@@ -17,7 +17,7 @@ This script compresses a grayscale image by keeping only its $r$ largest singula
 An $m \times n$ pixel matrix $A$ can be factored as
 
 $$
-A = U \Sigma V^T,
+A = U \Sigma V^T
 $$
 
 with $p = \min(m, n)$, $U \in \mathbb{R}^{m \times p}$ and $V \in \mathbb{R}^{n \times p}$ having orthonormal columns, and $\Sigma = \mathrm{diag}(\sigma_1, \dots, \sigma_p)$ with $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_p \geq 0$.
@@ -31,7 +31,7 @@ $$
 By the Eckart–Young theorem, $A_r$ is the best rank-$r$ approximation of $A$ in both the Frobenius norm and the 2-norm. Its Frobenius error is
 
 $$
-\|A - A_r\|_F = \sqrt{\sum_{i=r+1}^{p} \sigma_i^2}.
+\| A - A_r\|_F = \sqrt{\sum_{i=r+1}^{p} \sigma_i^2}
 $$
 
 ### Cumulative Energy Ratio
@@ -47,7 +47,7 @@ The image is not mean-subtracted, so $\sigma_1$ carries the mean brightness and 
 Storing $A_r$ takes $r(m + n + 1)$ numbers instead of $mn$:
 
 $$
-\rho = \frac{mn}{r(m + n + 1)}.
+\rho = \frac{mn}{r(m + n + 1)}
 $$
 
 ## Implementation

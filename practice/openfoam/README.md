@@ -19,6 +19,7 @@ OpenFOAM (Open Field Operation and Manipulation) is a powerful, open-source CFD 
 ## Installation Guide
 
 ### Linux Installation (Ubuntu/Debian)
+
 ```bash
 # Add OpenFOAM repository
 sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key | apt-key add -"
@@ -34,6 +35,7 @@ source ~/.bashrc
 ```
 
 ### Docker Installation
+
 ```bash
 # Pull OpenFOAM Docker image
 docker pull openfoam/openfoam11-paraview510
@@ -43,6 +45,7 @@ docker run -it --rm -v $(pwd):/workspace openfoam/openfoam11-paraview510
 ```
 
 ### Verification
+
 ```bash
 # Check installation
 foamInstallationTest
@@ -74,7 +77,7 @@ case/
 ### Incompressible Flow Solvers
 
 | Solver | Description | Applications |
-|--------|-------------|--------------|
+| --- | --- | --- |
 | `icoFoam` | Laminar, incompressible, transient | Simple flows, validation |
 | `simpleFoam` | Steady-state RANS turbulence | External aerodynamics |
 | `pimpleFoam` | Transient RANS turbulence | Unsteady flows |
@@ -83,7 +86,7 @@ case/
 ### Compressible Flow Solvers
 
 | Solver | Description | Applications |
-|--------|-------------|--------------|
+| --- | --- | --- |
 | `rhoCentralFoam` | Density-based, high-speed | Supersonic flows |
 | `rhoSimpleFoam` | Pressure-based, steady | Subsonic compressible |
 | `sonicFoam` | Transient compressible | Shock tubes |
@@ -91,6 +94,7 @@ case/
 ## Meshing with blockMesh
 
 ### Basic blockMeshDict Structure
+
 ```cpp
 FoamFile
 {
@@ -162,6 +166,7 @@ mergePatchPairs
 ## Common Workflow
 
 ### 1. Case Setup
+
 ```bash
 # Copy tutorial case
 cp -r $FOAM_TUTORIALS/incompressible/simpleFoam/pitzDaily .
@@ -169,6 +174,7 @@ cd pitzDaily
 ```
 
 ### 2. Mesh Generation
+
 ```bash
 # Generate mesh
 blockMesh
@@ -178,6 +184,7 @@ checkMesh
 ```
 
 ### 3. Run Simulation
+
 ```bash
 # Run solver
 simpleFoam
@@ -189,6 +196,7 @@ reconstructPar
 ```
 
 ### 4. Post-Processing
+
 ```bash
 # Launch ParaView
 paraFoam
@@ -251,11 +259,13 @@ inlet
 ## Turbulence Models
 
 ### RANS Models
+
 - **k-ε**: Standard, realizable, RNG variants
 - **k-ω**: Standard, SST variants
 - **Reynolds Stress Models**: Full RSM
 
 ### LES Models
+
 - **Smagorinsky**: Classic SGS model
 - **Dynamic models**: Dynamic Smagorinsky
 - **Wall-adapting**: WALE model
@@ -485,21 +495,25 @@ simpleFoam -postProcess -func "forceCoeffs"
 ## Best Practices
 
 1. **Mesh Quality**
+
    - Keep aspect ratios < 100
    - Ensure orthogonality > 30°
    - Maintain smooth transitions
 
 2. **Solver Settings**
+
    - Start with loose tolerances
    - Monitor residuals
    - Use appropriate relaxation factors
 
 3. **Parallel Processing**
+
    - Decompose domain efficiently
    - Balance load across processors
    - Use appropriate number of cores
 
 4. **Convergence**
+
    - Monitor residuals and forces
    - Check mass conservation
    - Validate against experimental data
@@ -507,11 +521,13 @@ simpleFoam -postProcess -func "forceCoeffs"
 ## Troubleshooting
 
 ### Common Issues
+
 - **Divergence**: Check mesh quality, boundary conditions
 - **Slow convergence**: Adjust relaxation factors, improve mesh
 - **Mass imbalance**: Check boundary conditions, mesh quality
 
 ### Debugging Tools
+
 ```bash
 # Check mesh
 checkMesh -allTopology -allGeometry

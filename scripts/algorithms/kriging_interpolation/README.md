@@ -16,7 +16,8 @@ This script interpolates 11 samples of $y(x) = (3x-3)^2 \sin(2x-10)$ with a krig
 The interpolant is a weighted sum of correlation functions centred on the samples $x_1, \dots, x_n$:
 
 $$
-\tilde{y}(x) = \sum_{i=1}^{n} w_i\, R(x - x_i;\,\theta) = \mathbf{r}(x)^T R^{-1} \mathbf{y}.
+\tilde{y}(x) = \sum_{i=1}^{n} w_i\, R(x - x_i;\,\theta) = \mathbf{r}(x)^T R^{-1}
+\mathbf{y}
 $$
 
 This is the kriging predictor with a zero mean (no regression trend $f(x)^T\beta$). It is the same as radial basis function interpolation that uses the correlation function as the basis.
@@ -26,7 +27,8 @@ This is the kriging predictor with a zero mean (no regression trend $f(x)^T\beta
 Requiring $\tilde{y}(x_j) = y_j$ at every sample gives
 
 $$
-R\,\mathbf{w} = \mathbf{y}, \qquad R_{ij} = R(x_i - x_j;\,\theta).
+R\,\mathbf{w} = \mathbf{y},
+\qquad R_{ij} = R(x_i - x_j;\,\theta)
 $$
 
 ### Cubic Spline Correlation

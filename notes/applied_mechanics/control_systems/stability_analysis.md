@@ -6,11 +6,15 @@ Stability is the most fundamental requirement of any control system. An unstable
 
 A system is **Bounded-Input Bounded-Output (BIBO) stable** if every bounded input produces a bounded output:
 
-$$|u(t)| \leq M_u < \infty \quad \forall\, t \geq 0 \implies |y(t)| \leq M_y < \infty \quad \forall\, t \geq 0$$
+$$
+|u(t)| \leq M_u < \infty \quad \forall\, t \geq 0 \implies |y(t)| \leq M_y < \infty \quad \forall\, t \geq 0
+$$
 
 For an LTI system with impulse response $g(t)$, BIBO stability requires:
 
-$$\int_0^{\infty} |g(t)|\, dt < \infty$$
+$$
+\int_0^{\infty} |g(t)|\, dt < \infty
+$$
 
 ### Internal (Lyapunov) Stability
 
@@ -25,6 +29,7 @@ For an LTI system with transfer function $G(s)$, BIBO stability depends entirely
 - **Unstable**: Any pole in the right-half plane or repeated poles on the imaginary axis
 
 For a pole at $s = \sigma + j\omega$:
+
 - $\sigma < 0$: Decaying response component $\propto e^{\sigma t}$
 - $\sigma = 0$: Sustained oscillation or constant
 - $\sigma > 0$: Growing response — **unstable**
@@ -35,25 +40,35 @@ The Routh-Hurwitz criterion determines stability from the characteristic polynom
 
 ### Characteristic Polynomial
 
-$$P(s) = a_n s^n + a_{n-1} s^{n-1} + \cdots + a_1 s + a_0$$
+$$
+P(s) = a_n s^n + a_{n-1} s^{n-1} + \cdots + a_1 s + a_0
+$$
 
 **Necessary condition**: All coefficients $a_i$ must be positive (for $a_n > 0$). If any coefficient is zero or negative, the system is unstable.
 
 ### Routh Array Construction
 
-$$\begin{array}{c|cccc}
+$$
+\begin{array}{c|cccc}
 s^n     & a_n     & a_{n-2} & a_{n-4} & \cdots \\
 s^{n-1} & a_{n-1} & a_{n-3} & a_{n-5} & \cdots \\
 s^{n-2} & b_1     & b_2     & b_3     & \cdots \\
 s^{n-3} & c_1     & c_2     & c_3     & \cdots \\
 \vdots  & \vdots  & \vdots  &         &
-\end{array}$$
+\end{array}
+$$
 
 where:
 
-$$b_1 = \frac{a_{n-1} a_{n-2} - a_n a_{n-3}}{a_{n-1}}, \quad b_2 = \frac{a_{n-1} a_{n-4} - a_n a_{n-5}}{a_{n-1}}$$
+$$
+b_1 = \frac{a_{n-1} a_{n-2} - a_n a_{n-3}}{a_{n-1}}, \quad
+b_2 = \frac{a_{n-1} a_{n-4} - a_n a_{n-5}}{a_{n-1}}
+$$
 
-$$c_1 = \frac{b_1 a_{n-3} - a_{n-1} b_2}{b_1}, \quad c_2 = \frac{b_1 a_{n-5} - a_{n-1} b_3}{b_1}$$
+$$
+c_1 = \frac{b_1 a_{n-3} - a_{n-1} b_2}{b_1}, \quad
+c_2 = \frac{b_1 a_{n-5} - a_{n-1} b_3}{b_1}
+$$
 
 **Stability rule**: The number of sign changes in the first column of the Routh array equals the number of roots in the right-half plane.
 
@@ -70,7 +85,9 @@ The root locus is a graphical technique that shows how the closed-loop poles mig
 
 For the closed-loop characteristic equation:
 
-$$1 + K\frac{N(s)}{D(s)} = 0 \implies KG(s)H(s) = -1$$
+$$
+1 + K \frac{N(s)}{D(s)} = 0 \implies KG(s)H(s) = -1
+$$
 
 The root locus is the set of points satisfying:
 
@@ -103,9 +120,12 @@ The Nyquist contour $\Gamma$ encloses the entire right-half $s$-plane. The plot 
 
 ### Criterion Statement
 
-$$Z = N + P$$
+$$
+Z = N + P
+$$
 
 where:
+
 - $Z$ = number of closed-loop RHP poles (unstable poles)
 - $P$ = number of open-loop RHP poles (known)
 - $N$ = number of **clockwise** encirclements of the critical point $-1 + j0$
@@ -122,7 +142,9 @@ These are practical measures of **relative stability** — how close a stable sy
 
 The factor by which the open-loop gain can be increased before instability:
 
-$$GM = \frac{1}{|G(j\omega_{pc})H(j\omega_{pc})|}$$
+$$
+GM = \frac{1}{|G(j\omega_{pc})H(j\omega_{pc})|}
+$$
 
 where $\omega_{pc}$ is the **phase crossover frequency** at which $\angle G(j\omega)H(j\omega) = -180^\circ$.
 
@@ -132,14 +154,16 @@ In decibels: $GM_{dB} = -20\log_{10}|G(j\omega_{pc})H(j\omega_{pc})|$
 
 The additional phase lag needed to reach instability:
 
-$$PM = 180^\circ + \angle G(j\omega_{gc})H(j\omega_{gc})$$
+$$
+PM = 180^\circ + \angle G(j\omega_{gc})H(j\omega_{gc})
+$$
 
 where $\omega_{gc}$ is the **gain crossover frequency** at which $|G(j\omega)H(j\omega)| = 1$ (0 dB).
 
 ### Design Guidelines
 
 | Specification | Minimum Recommended |
-|---|---|
+| --- | --- |
 | Gain margin | $> 6$ dB (factor of 2) |
 | Phase margin | $> 30^\circ$ (typically $45^\circ$–$60^\circ$) |
 
@@ -166,20 +190,25 @@ Beyond simple stable/unstable classification, relative stability quantifies **ho
 
 Characteristic equation: $s^3 + 3s^2 + 2s + K(s+1) = 0$
 
-$$s^3 + 3s^2 + (2+K)s + K = 0$$
+$$
+s^3 + 3s^2 + (2 + K)s + K = 0
+$$
 
 Routh array:
 
-$$\begin{array}{c|cc}
+$$
+\begin{array}{c|cc}
 s^3 & 1 & 2+K \\
 s^2 & 3 & K \\
 s^1 & \frac{3(2+K) - K}{3} & 0 \\
 s^0 & K &
-\end{array}$$
+\end{array}
+$$
 
 The $s^1$ entry simplifies to $\frac{6 + 2K}{3}$.
 
 For stability, all first-column entries must be positive:
+
 - $s^1$ row: $6 + 2K > 0 \implies K > -3$
 - $s^0$ row: $K > 0$
 
@@ -197,9 +226,13 @@ Characteristic equation: $s^3 + 5s^2 + 4s + K = 0$.
 
 Substitute $s = j\omega$:
 
-$$(j\omega)^3 + 5(j\omega)^2 + 4(j\omega) + K = 0$$
+$$
+(j\omega)^3 + 5(j\omega)^2 + 4(j\omega) + K = 0
+$$
 
-$$(-j\omega^3 - 5\omega^2 + 4j\omega + K) = 0$$
+$$
+(-j\omega^3 - 5\omega^2 + 4j\omega + K) = 0
+$$
 
 Real part: $-5\omega^2 + K = 0 \implies K = 5\omega^2$
 
@@ -217,15 +250,23 @@ Therefore $K = 5(4) = 20$. The root locus crosses the imaginary axis at $s = \pm
 
 **Phase crossover frequency** ($\angle G = -180^\circ$):
 
-$$\angle G(j\omega) = -90^\circ - \arctan(\omega) - \arctan(0.1\omega) = -180^\circ$$
+$$
+\angle G(j\omega) = -90^\circ - \arctan(\omega) - \arctan(0.1\omega) = -180^\circ
+$$
 
-$$\arctan(\omega) + \arctan(0.1\omega) = 90^\circ$$
+$$
+\arctan(\omega) + \arctan(0.1\omega) = 90^\circ
+$$
 
 Using the identity for $\arctan a + \arctan b = 90^\circ$ when $ab = 1$: $0.1\omega^2 = 1 \implies \omega_{pc} = \sqrt{10} \approx 3.16$ rad/s.
 
-$$|G(j\omega_{pc})| = \frac{10}{3.162 \cdot \sqrt{1+10} \cdot \sqrt{1+0.1}} = \frac{10}{3.162 \times 3.317 \times 1.049} \approx 0.909$$
+$$
+|G(j\omega_{pc})| = \frac{10}{3.162 \cdot \sqrt{1+10} \cdot \sqrt{1+0.1}} = \frac{10}{3.162 \times 3.317 \times 1.049} \approx 0.909
+$$
 
-$$GM = \frac{1}{0.909} = 1.1 \implies GM_{dB} \approx 0.83\;\text{dB}$$
+$$
+GM = \frac{1}{0.909} = 1.1 \implies GM_{dB} \approx 0.83\; \text{dB}
+$$
 
 This gain margin is **far below the recommended 6 dB**: the Routh array for $0.1s^3 + 1.1s^2 + s + K = 0$ confirms that the loop becomes unstable at $K = 11$, only 10% above the actual gain. The system has very poor relative stability and would benefit from compensation.
 
@@ -252,13 +293,15 @@ This gain margin is **far below the recommended 6 dB**: the Routh array for $0.1
 <details>
 <summary>Answer</summary>
 
-$$\begin{array}{c|ccc}
+```math
+\begin{array}{c|ccc}
 s^4 & 1 & 3 & 5 \\
 s^3 & 2 & 4 & \\
 s^2 & 1 & 5 & \\
 s^1 & -6 & & \\
 s^0 & 5 & &
-\end{array}$$
+\end{array}
+```
 
 where $b_1 = (2 \cdot 3 - 1 \cdot 4)/2 = 1$, $b_2 = (2 \cdot 5)/2 = 5$ and $c_1 = (1 \cdot 4 - 2 \cdot 5)/1 = -6$. The first column $1, 2, 1, -6, 5$ changes sign twice, so there are two right-half-plane roots (numerically $s \approx 0.29 \pm 1.42j$). Positive coefficients are necessary but not sufficient.
 
@@ -282,7 +325,9 @@ At $K = 60$ the auxiliary polynomial is $6s^2 + 66 = 0$, so the crossing is at $
 
 $n = 4$ poles and $m = 1$ zero, so $n - m = 3$ asymptotes at $\phi_a = 60^\circ, 180^\circ, 300^\circ$.
 
-$$\sigma_a = \frac{(0 - 1 - 2 - 6) - (-4)}{3} = -\frac{5}{3} \approx -1.67$$
+```math
+\sigma_a = \frac{(0 - 1 - 2 - 6) - (-4)}{3} = -\frac{5}{3} \approx - 1.67
+```
 
 A real-axis point lies on the locus if an odd number of poles and zeros lie to its right: the segments are $[-1, 0]$, $[-4, -2]$ and $(-\infty, -6]$.
 
@@ -295,11 +340,15 @@ A real-axis point lies on the locus if an odd number of poles and zeros lie to i
 
 Solving $|G(j\omega)| = 1$ numerically gives $\omega_{gc} \approx 3.01$ rad/s. Then
 
-$$PM = 180^\circ - 90^\circ - \arctan(3.01) - \arctan(0.301) \approx 1.6^\circ$$
+```math
+PM = 180^\circ - 90^\circ - \arctan(3.01) - \arctan(0.301) \approx 1.6^\circ
+```
 
 A delay adds phase lag $\omega\tau$ without changing the magnitude, so instability occurs when $\omega_{gc}\tau = PM$ (in radians):
 
-$$\tau = \frac{1.6^\circ \times \pi/180}{3.01} \approx 0.009 \text{ s}$$
+```math
+\tau = \frac{1.6^\circ \times \pi/180}{3.01} \approx 0.009 \text{ s}
+```
 
 A delay of only about 9 ms destabilizes the loop, which confirms the very small margins found in the example.
 

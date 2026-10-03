@@ -83,12 +83,13 @@ A diagram summarizing this workflow is provided below.
 
 ```
 
-
 ## The Reaction-Diffusion Equation (Strong Form)
 
 Consider the following reaction-diffusion equation defined on a spatial domain $\Omega$ and over time $t > 0$:
 
-$$\frac{\partial u}{\partial t} = \nabla \cdot \big( D\,\nabla u \big) - s\,u$$
+$$
+\frac{\partial u}{\partial t} = \nabla \cdot \big(D\,\nabla u \big) - s\, u
+$$
 
 where:
 
@@ -98,7 +99,6 @@ where:
 
 This **strong form** requires that $u$ is differentiable enough to satisfy the PDE at every point in $\Omega$.
 
-
 ## Function Spaces for the Weak Formulation
 
 Before deriving the weak formulation, we need to define the function spaces for the trial (solution) and test functions. These spaces are typically Sobolev spaces that require square-integrable derivatives.
@@ -107,7 +107,10 @@ Before deriving the weak formulation, we need to define the function spaces for 
 
 We assume that the solution $u(\mathbf{x}, t)$ belongs to the space
 
-$$\mathcal{S}_{t} := \Big\{ u(\mathbf{x}, t) \;\Big|\; u(\cdot, t) \in \mathcal{H}^{1}(\Omega) \text{ for } t > 0 \Big\}$$
+$$
+\mathcal{S}_{t}: = \Big\{ u(\mathbf{x}, t) \;\Big|\; u(\cdot, t) \in
+\mathcal{H}^{1}(\Omega) \text{ for } t > 0 \Big\}
+$$
 
 where:
 
@@ -119,7 +122,9 @@ where:
 
 The test functions are chosen from the space
 
-$$\mathcal{V} := \mathcal{H}^{1}(\Omega)$$
+$$
+\mathcal{V}: = \mathcal{H}^{1}(\Omega)
+$$
 
 *Note:* Test functions are required to vanish only on parts of the boundary where a Dirichlet (essential) condition is prescribed. Here the whole boundary carries the Neumann condition, so $v$ is unrestricted on $\Gamma$; the boundary term vanishes because $\partial u/\partial n = 0$, not because $v = 0$.
 
@@ -131,13 +136,19 @@ We now derive the weak formulation step by step.
 
 Multiply the strong form of the PDE by an arbitrary test function $v \in \mathcal{V}$:
 
-$$\frac{\partial u}{\partial t} \, v = \nabla \cdot \big( D\,\nabla u \big) \, v - s\,u\,v$$
+$$
+\frac{\partial u}{\partial t} \, v = \nabla \cdot \big(D\,\nabla u \big) \, v - s\, u\,
+v
+$$
 
 ### Integrating Over the Domain
 
 Integrate the above equation over the spatial domain $\Omega$:
 
-$$\int_{\Omega} \frac{\partial u}{\partial t}\, v \, d\omega = \int_{\Omega} \nabla \cdot \big( D\,\nabla u \big) \, v \, d\omega - \int_{\Omega} s\,u\,v \, d\omega$$
+$$
+\int_{\Omega} \frac{\partial u}{\partial t}\, v \, d\omega = \int_{\Omega} \nabla \cdot
+\big(D\,\nabla u \big) \, v \, d\omega - \int_{\Omega} s\, u\, v \, d\omega
+$$
 
 where $d\omega$ represents the volume element.
 
@@ -145,25 +156,38 @@ where $d\omega$ represents the volume element.
 
 Focus on the diffusion term. Applying the divergence theorem (integration by parts), we have:
 
-$$\int_{\Omega} \nabla \cdot \big( D\,\nabla u \big) \, v \, d\omega = \underbrace{\int_{\Omega} \nabla \cdot \Big( v\,(D\,\nabla u) \Big) \, d\omega}_{\text{Surface term}} - \int_{\Omega} \nabla v \cdot \big( D\,\nabla u \big) \, d\omega$$
+$$
+\int_{\Omega} \nabla \cdot \big(D\,\nabla u \big) \, v \,
+d\omega = \underbrace{\int_{\Omega} \nabla \cdot \Big( v\,(D\,\nabla u) \Big) \, d\omega}_{\text{Surface term}} - \int_{\Omega} \nabla v \cdot \big(D\,\nabla u \big) \, d\omega
+$$
 
 The surface term becomes a boundary integral:
 
-$$\int_{\Omega} \nabla \cdot \Big( v\,(D\,\nabla u) \Big) \, d\omega = \int_{\Gamma} v\, D\, \frac{\partial u}{\partial n}\, d\gamma$$
+$$
+\int_{\Omega} \nabla \cdot \Big(v\,(D\,\nabla u) \Big) \, d\omega = \int_{\Gamma} v\,
+D\, \frac{\partial u}{\partial n}\, d\gamma
+$$
 
 with $d\gamma$ being the measure on $\Gamma$ and $\frac{\partial u}{\partial n}$ the outward normal derivative. With the imposed Neumann condition $\frac{\partial u}{\partial n} = 0$ on $\Gamma$, the boundary term vanishes:
 
-$$\int_{\Gamma} v\, D\, \frac{\partial u}{\partial n}\, d\gamma = 0$$
+$$
+\int_{\Gamma} v\, D\, \frac{\partial u}{\partial n}\, d\gamma = 0
+$$
 
 Thus, the diffusion term simplifies to:
 
-$$\int_{\Omega} \nabla \cdot \big( D\,\nabla u \big) \, v \, d\omega = - \int_{\Omega} \nabla v \cdot \big( D\,\nabla u \big) \, d\omega$$
+$$
+\int_{\Omega} \nabla \cdot \big(D\,\nabla u \big) \, v \, d\omega = -\int_{\Omega}
+\nabla v \cdot \big(D\,\nabla u \big) \, d\omega
+$$
 
 ### Temporal Discretization
 
 For a time-dependent problem, we discretize the time derivative. Using the **backward Euler scheme** at time level $n+1$ gives:
 
-$$\frac{\partial u}{\partial t} \approx \frac{u^{n+1} - u^{n}}{\Delta t}$$
+$$
+\frac{\partial u}{\partial t} \approx \frac{u^{n+1} - u^{n}}{\Delta t}
+$$
 
 where:
 
@@ -173,17 +197,28 @@ where:
 
 Substitute this approximation into the integrated equation:
 
-$$\int_{\Omega} \frac{u^{n+1} - u^{n}}{\Delta t}\, v \, d\omega = - \int_{\Omega} \nabla v \cdot \big( D\,\nabla u^{n+1} \big) \, d\omega - \int_{\Omega} s\,u^{n+1}\,v \, d\omega$$
+$$
+\int_{\Omega} \frac{u^{n+1} - u^{n}}{\Delta t}\, v \, d\omega = -\int_{\Omega} \nabla v
+\cdot \big(D\,\nabla u^{n+1} \big) \, d\omega - \int_{\Omega} s\, u^{n+1}\, v \, d\omega
+$$
 
 ### Rearranging into the Final Weak Form
 
 Rearrange the terms to isolate those involving the unknown $u^{n+1}$:
 
-$$\int_{\Omega} \frac{u^{n+1}}{\Delta t}\, v\, d\omega + \int_{\Omega} \nabla v \cdot \big( D\,\nabla u^{n+1} \big) \, d\omega + \int_{\Omega} s\,u^{n+1}\,v\, d\omega = \int_{\Omega} \frac{u^{n}}{\Delta t}\, v\, d\omega$$
+$$
+\int_{\Omega} \frac{u^{n+1}}{\Delta t}\, v\, d\omega + \int_{\Omega} \nabla v \cdot
+\big(D\,\nabla u^{n+1} \big) \, d\omega + \int_{\Omega} s\, u^{n+1}\, v\,
+d\omega = \int_{\Omega} \frac{u^{n}}{\Delta t}\, v\, d\omega
+$$
 
 It is common practice to multiply the entire equation by $\Delta t$ to simplify the appearance of the time-stepping term:
 
-$$\int_{\Omega} u^{n+1}\, v\, d\omega + \Delta t \int_{\Omega} D\,\nabla u^{n+1} \cdot \nabla v\, d\omega + \Delta t \int_{\Omega} s\,u^{n+1}\,v\, d\omega = \int_{\Omega} u^{n}\, v\, d\omega$$
+$$
+\int_{\Omega} u^{n+1}\, v\, d\omega + \Delta t \int_{\Omega} D\,\nabla u^{n+1} \cdot
+\nabla v\, d\omega + \Delta t \int_{\Omega} s\, u^{n+1}\, v\, d\omega = \int_{\Omega}
+u^{n}\, v\, d\omega
+$$
 
 This is the **final weak formulation** of the reaction-diffusion equation, ready for spatial discretization using finite element spaces.
 
@@ -234,7 +269,7 @@ Deriving the weak form is the first step in any FEM-based CFD solver. This note 
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Strong-form PDE ($\partial u/\partial t = \nabla\cdot(D\nabla u) - su$), diffusion coefficient $D$, reaction coefficient $s$, domain $\Omega$, Neumann boundary condition, time step $\Delta t$, previous solution $u^n$ |
 | **Outputs** | Weak-form bilinear problem: find $u^{n+1} \in \mathcal{S}_t$ such that the integral equation holds for all $v \in \mathcal{V}$; after FEM discretization this becomes $K U^{n+1} = F$ |
 
@@ -263,7 +298,11 @@ The boundary integral $\int_\Gamma v D\,\partial u/\partial n\,d\gamma$ then van
 
 The boundary term no longer vanishes. It becomes $\int_\Gamma v\,q\,d\gamma$, so the diffusion term is $\int_\Gamma q v\,d\gamma - \int_\Omega D\nabla u\cdot\nabla v\,d\omega$. Following the same steps:
 
-$$\int_\Omega u^{n+1}v\,d\omega + \Delta t\int_\Omega D\nabla u^{n+1}\cdot\nabla v\,d\omega + \Delta t\int_\Omega s\,u^{n+1}v\,d\omega = \int_\Omega u^n v\,d\omega + \Delta t\int_\Gamma q^{n+1}v\,d\gamma$$
+```math
+\int_\Omega u^{n+1}v\, d\omega + \Delta t\int_\Omega D\nabla u^{n+1}\cdot\nabla v\,
+d\omega + \Delta t\int_\Omega s\, u^{n+1}v\, d\omega = \int_\Omega u^n v\, d\omega +
+\Delta t\int_\Gamma q^{n+1}v\, d\gamma
+```
 
 The prescribed flux appears only on the right-hand side, as a load term.
 
@@ -279,7 +318,9 @@ The prescribed flux appears only on the right-hand side, as a load term.
 
 After assembly, the weak form becomes
 
-$$\left[(1 + \Delta t\,s)M + \Delta t\,K\right]U^{n+1} = M U^n$$
+```math
+\left[(1 + \Delta t\, s)M + \Delta t\, K\right]U^{n+1} = M U^n
+```
 
 The system matrix is symmetric positive definite, so a linear solve is needed at every step.
 
@@ -292,7 +333,10 @@ The system matrix is symmetric positive definite, so a linear solve is needed at
 
 With $h = 1$, $M$ has diagonal $1/3$ and off-diagonal $1/6$, and $K$ has diagonal $1$ and off-diagonal $-1$. The system $(M + 0.1K)U^1 = MU^0$ reads
 
-$$\frac{13}{30}U_1 + \frac{1}{15}U_2 = \frac{1}{3}, \qquad \frac{1}{15}U_1 + \frac{13}{30}U_2 = \frac{1}{6}$$
+```math
+\frac{13}{30}U_1 + \frac{1}{15}U_2 = \frac{1}{3},
+\qquad \frac{1}{15}U_1 + \frac{13}{30}U_2 = \frac{1}{6}
+```
 
 Adding the equations gives $U_1 + U_2 = 1$. Subtracting gives $U_1 - U_2 = 5/11$. So $U^1 = (8/11, 3/11) = (0.727, 0.273)$.
 
@@ -307,7 +351,10 @@ For one linear element, $\int u_h\,dx = (U_1 + U_2)/2$, which is $0.5$ both befo
 
 With $v = u^{n+1}$,
 
-$$\|u^{n+1}\|^2 + \Delta t\int_\Omega D|\nabla u^{n+1}|^2 d\omega + \Delta t\int_\Omega s\,(u^{n+1})^2 d\omega = (u^n, u^{n+1}) \le \|u^n\|\,\|u^{n+1}\|$$
+```math
+\| u^{n+1}\|^2 + \Delta t\int_\Omega D|\nabla u^{n+1}|^2 d\omega + \Delta t\int_\Omega
+s\,(u^{n+1})^2 d\omega = (u^n, u^{n+1}) \le \| u^n\|\,\| u^{n+1}\|
+```
 
 The last step uses the Cauchy–Schwarz inequality. The two integrals on the left are non-negative, so $\|u^{n+1}\|^2 \le \|u^n\|\,\|u^{n+1}\|$, which gives $\|u^{n+1}\| \le \|u^n\|$ for any $\Delta t > 0$. The discrete solution can never grow, unlike the explicit scheme with its $\Delta t \le h^2/(2D)$ limit.
 

@@ -22,25 +22,41 @@ This script simulates 2D flow past a circular cylinder with the lattice Boltzman
 
 The distribution functions $f_i$ of the discrete velocities $\mathbf{c}_i$ are streamed and relaxed towards equilibrium:
 
-$$f_i(\mathbf{x} + \mathbf{c}_i,\, t + 1) = f_i(\mathbf{x}, t) - \omega\left(f_i(\mathbf{x}, t) - f_i^{eq}(\mathbf{x}, t)\right)$$
+$$
+f_i(\mathbf{x} + \mathbf{c}_i,\, t + 1) = f_i(\mathbf{x}, t) -
+\omega\left(f_i(\mathbf{x}, t) - f_i^{eq}(\mathbf{x}, t)\right)
+$$
 
 ### D2Q9 Equilibrium and Moments
 
-$$f_i^{eq} = w_i\,\rho\left(1 + 3\,\mathbf{c}_i\cdot\mathbf{u} + \frac{9}{2}(\mathbf{c}_i\cdot\mathbf{u})^2 - \frac{3}{2}|\mathbf{u}|^2\right), \qquad \rho = \sum_i f_i, \qquad \rho\,\mathbf{u} = \sum_i f_i\,\mathbf{c}_i$$
+$$
+f_i^{eq} = w_i\,\rho\left(1 + 3\,\mathbf{c}_i\cdot\mathbf{u} +
+\frac{9}{2}(\mathbf{c}_i\cdot\mathbf{u})^2 - \frac{3}{2}|\mathbf{u}|^2\right),
+\qquad \rho = \sum_i f_i,
+\qquad \rho\,\mathbf{u} = \sum_i f_i\,\mathbf{c}_i
+$$
 
 The weights are $w_0 = 4/9$ for the rest velocity, $1/9$ for the four axis directions and $1/36$ for the four diagonals. The lattice speed of sound is $c_s = 1/\sqrt3$.
 
 ### Viscosity and Reynolds Number
 
-$$\nu = c_s^2\left(\tau - \tfrac12\right) = \frac{1}{3}\left(\frac{1}{\omega} - \frac12\right) \quad\Rightarrow\quad \omega = \frac{1}{3\nu + 1/2}, \qquad \nu = \frac{U r}{Re}$$
+$$
+\nu = c_s^2\left(\tau - \tfrac12\right) = \frac{1}{3}\left(\frac{1}{\omega} -
+\frac12\right) \quad\Rightarrow\quad \omega = \frac{1}{3\nu + 1/2},
+\qquad \nu = \frac{U r}{Re}
+$$
 
 ### Boundary Conditions
 
 - **Zou/He inlet**: the velocity $\mathbf{u}$ is prescribed. The density follows from the known populations, and the unknown populations (those with $c_{ix} > 0$) are set by bouncing back the non-equilibrium part of their opposite $\bar\imath$:
 
-  $$\rho = \frac{\sum_{c_{ix}=0} f_i + 2\sum_{c_{ix}<0} f_i}{1 - u_x}, \qquad f_i = f_i^{eq} + f_{\bar\imath} - f_{\bar\imath}^{eq}$$
+  ```math
+  \rho = \frac{\sum_{c_{ix}=0} f_i + 2\sum_{c_{ix}<0} f_i}{1 - u_x},
+  \qquad f_i = f_i^{eq} + f_{\bar\imath} - f_{\bar\imath}^{eq}
+  ```
 
 - **Outlet**: the populations with $c_{ix} < 0$ at the last column are copied from the column before it.
+
 - **Bounce-back**: at nodes inside the cylinder the post-collision populations are reversed, $f_i^{out} = f_{\bar\imath}^{in}$, which gives a no-slip wall on a staircase approximation of the circle.
 
 ### Accuracy and Stability

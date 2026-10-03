@@ -18,7 +18,9 @@ With objectives in hand, the preliminary design begins. Designers brainstorm dif
 
 At this stage, initial aerodynamic calculations are performed. Using principles like the lift equation:
 
-$$L = \frac{1}{2} \rho V^2 S C_L$$
+$$
+L = \frac{1}{2} \rho V^2 S C_L
+$$
 
 where:
 
@@ -32,7 +34,9 @@ designers estimate how different wing shapes and sizes will affect the aircraft'
 
 Similarly, they consider the drag equation:
 
-$$D = \frac{1}{2} \rho V^2 S C_D$$
+$$
+D = \frac{1}{2} \rho V^2 S C_D
+$$
 
 where $D$ is the drag force and $C_D$ is the drag coefficient.
 
@@ -47,12 +51,14 @@ Once a promising concept is selected, the detailed design phase dives deeper int
 Aerodynamics plays a crucial role in aircraft performance. Engineers use Computational Fluid Dynamics (CFD) to simulate airflow around the aircraft's surfaces, applying the fundamental fluid mechanics equations (see [Fluid Mechanics Theory](../../../fluid_mechanics/) for detailed mathematical treatment).
 
 **Applied CFD Analysis:**
+
 - **Lift optimization**: Wing shape design for maximum lift-to-drag ratio
 - **Drag reduction**: Surface optimization to minimize parasitic drag
 - **Control surface design**: Aileron, elevator, and rudder effectiveness
 - **Engine integration**: Nacelle positioning and inlet design
 
 **Practical Design Considerations:**
+
 - Wing camber and twist distribution
 - Angle of attack optimization for different flight phases
 - Surface roughness effects on boundary layer transition
@@ -62,7 +68,9 @@ For example, tweaking the wing's camber or angle of attack can improve lift-to-d
 
 Structural analysis ensures the aircraft can withstand various loads during operation. Engineers use Finite Element Analysis (FEA) to model the stresses and strains on different components. They apply equations from material mechanics, such as Hooke's Law for elastic materials:
 
-$$\sigma = E \epsilon$$
+$$
+\sigma = E \epsilon
+$$
 
 where:
 
@@ -76,7 +84,9 @@ By understanding how materials deform under load, engineers can design structure
 
 Integrating the aircraft's systems is like orchestrating a symphony. Electrical, hydraulic, propulsion, and control systems must work seamlessly together. For example, the design of the fuel system requires calculations to ensure adequate fuel flow rates to the engines under various conditions, using principles like Bernoulli's equation:
 
-$$P + \frac{1}{2} \rho V^2 + \rho g h = \text{constant}$$
+$$
+P + \frac{1}{2} \rho V^2 + \rho g h = \text{constant}
+$$
 
 where:
 
@@ -91,7 +101,9 @@ Choosing the right materials is critical. The goal is to find materials that off
 
 Engineers consider factors like the material's tensile strength, fatigue life, and resistance to corrosion. They might use the S-N curve (stress vs. number of cycles) to predict fatigue life:
 
-$$S = \sigma_f' \left( 2N_f \right)^b$$
+$$
+S = \sigma_f' \left(2N_f \right)^b
+$$
 
 where:
 
@@ -196,13 +208,17 @@ Designing the wing involves balancing lift, drag, and structural considerations.
 
 The lift coefficient $C_L$ can be approximated for thin airfoils using:
 
-$$C_L = 2 \pi \alpha$$
+$$
+C_L = 2 \pi \alpha
+$$
 
 where $\alpha$ is the angle of attack in radians.
 
 However, real-world wings are finite and experience induced drag due to wingtip vortices. The induced drag coefficient $C_{D_i}$ is given by:
 
-$$C_{D_i} = \frac{C_L^2}{\pi e A}$$
+$$
+C_{D_i} = \frac{C_L^2}{\pi e A}
+$$
 
 where:
 
@@ -217,7 +233,9 @@ Ensuring the aircraft is stable and controllable involves analyzing its response
 
 The static margin $SM$ is a measure of stability:
 
-$$SM = \frac{x_{NP} - x_{CG}}{c}$$
+$$
+SM = \frac{x_{NP} - x_{CG}}{c}
+$$
 
 where:
 
@@ -233,7 +251,9 @@ Integrating engines affects both performance and aerodynamics. The placement of 
 
 Engineers use thermodynamic cycles, like the Brayton cycle for jet engines, to model engine efficiency. They apply equations for thrust $T$:
 
-$$T = \dot{m} (V_e - V_0)$$
+$$
+T = \dot{m} (V_e - V_0)
+$$
 
 where:
 
@@ -293,7 +313,9 @@ Advancements in technology are driving significant changes in the design, effici
 <details>
 <summary>Answer</summary>
 
-$$S = \frac{2mg}{\rho V^2 C_L} = \frac{2 \times 75\,000 \times 9.81}{0.38 \times 230^2 \times 0.5} = 146 \text{ m}^2$$
+```math
+S = \frac{2mg}{\rho V^2 C_L} = \frac{2 \times 75\,000 \times 9.81}{0.38 \times 230^2 \times 0.5} = 146 \text{ m}^2
+```
 
 Low-speed requirements usually decide the final size: the stall and approach speed for a given $C_{L_{max}}$ with flaps, and the takeoff field length. Initial cruise altitude capability and fuel volume in the wing also play a part. A larger wing lowers these speeds but adds weight and friction drag in cruise.
 
@@ -304,7 +326,10 @@ Low-speed requirements usually decide the final size: the stall and approach spe
 <details>
 <summary>Answer</summary>
 
-$$C_{D_i}(AR = 9) = \frac{0.25}{\pi \times 0.8 \times 9} = 0.0111, \quad C_{D_i}(AR = 11) = 0.0090$$
+```math
+C_{D_i}(AR = 9) = \frac{0.25}{\pi \times 0.8 \times 9} = 0.0111, \quad
+C_{D_i}(AR = 11) = 0.0090
+```
 
 That is an 18% reduction. A longer, slenderer wing has a larger root bending moment and a thinner structural box, which means more structural weight, more flexibility (aeroelastic and flutter concerns) and less fuel volume. Airport gate span limits also apply, which is one reason for folding wingtips on some recent designs.
 
@@ -315,7 +340,9 @@ That is an 18% reduction. A longer, slenderer wing has a larger root bending mom
 <details>
 <summary>Answer</summary>
 
-$$T = 300 \times (330 - 230) = 30 \text{ kN}, \quad \eta_p = \frac{2}{1 + 330/230} = 0.82$$
+```math
+T = 300 \times (330 - 230) = 30 \text{ kN}, \quad \eta_p = \frac{2}{1 + 330/230} = 0.82
+```
 
 For a given thrust, accelerating a large mass flow by a small velocity increment wastes less kinetic energy in the jet than accelerating a small mass flow by a large one. High bypass ratios exploit this, at the cost of larger fan diameter, nacelle drag and weight.
 
@@ -326,7 +353,10 @@ For a given thrust, accelerating a large mass flow by a small velocity increment
 <details>
 <summary>Answer</summary>
 
-$$2N_f = \left(\frac{250}{1000}\right)^{1/b} = 0.25^{-10} = 1.05 \times 10^6 \implies N_f = 5.2 \times 10^5 \text{ cycles}$$
+```math
+2N_f = \left(\frac{250}{1000}\right)^{1/b} = 0.25^{-10} = 1.05 \times 10^6 \implies
+N_f = 5.2 \times 10^5 \text{ cycles}
+```
 
 At 225 MPa: $2N_f = 0.225^{-10} = 3.0 \times 10^6$, so $N_f = 1.5 \times 10^6$ cycles.
 
@@ -339,7 +369,9 @@ Life increases by $(250/225)^{10} = 2.87$. Because the exponent is small in magn
 <details>
 <summary>Answer</summary>
 
-$$SM_{fwd} = \frac{2.2 - 0.9}{4} = 0.325, \quad SM_{aft} = \frac{2.2 - 1.8}{4} = 0.10$$
+```math
+SM_{fwd} = \frac{2.2 - 0.9}{4} = 0.325, \quad SM_{aft} = \frac{2.2 - 1.8}{4} = 0.10
+```
 
 - Forward CG: very stable, but a large nose-down moment must be trimmed by tail down-load. This adds trim drag and requires enough elevator authority to rotate at takeoff and flare at landing; it usually sizes the horizontal tail.
 - Aft CG: lower trim drag and lighter control forces, but reduced stability and damping. It sets the minimum acceptable static margin.

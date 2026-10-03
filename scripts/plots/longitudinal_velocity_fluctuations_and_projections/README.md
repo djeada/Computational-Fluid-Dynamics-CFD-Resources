@@ -16,7 +16,10 @@ This script plots synthetic two-point velocity fluctuations as time traces, as a
 
 An instantaneous velocity is split into a time mean and a fluctuation:
 
-$$U = \overline{U} + u', \qquad \overline{u'} = 0$$
+$$
+U = \overline{U} + u',
+\qquad \overline{u'} = 0
+$$
 
 Here the samples are generated directly as fluctuations, and their small sample mean is subtracted.
 
@@ -24,7 +27,10 @@ Here the samples are generated directly as fluctuations, and their small sample 
 
 With the $m \times 2$ fluctuation matrix $\mathbf{U}$:
 
-$$\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}, \qquad \rho_{ab} = \frac{c_{12}}{\sqrt{c_{11}\,c_{22}}}$$
+$$
+\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U},
+\qquad \rho_{ab} = \frac{c_{12}}{\sqrt{c_{11}\,c_{22}}}
+$$
 
 For the generator used here the exact values are $c_{11} = 4$, $c_{12} = 2$, $c_{22} = 5$, and $\rho_{ab} = 1/\sqrt{5} \approx 0.45$.
 
@@ -32,11 +38,17 @@ For the generator used here the exact values are $c_{11} = 4$, $c_{12} = 2$, $c_
 
 The scalar projection of sample $\mathbf{u}'_i = (u'_{a,i}, u'_{b,i})$ onto the unit vector $\boldsymbol{\Phi} = (\phi_1, \phi_2)$ and its position on the line are
 
-$$a_i = \mathbf{u}'_i \cdot \boldsymbol{\Phi} = u'_{a,i}\phi_1 + u'_{b,i}\phi_2, \qquad \mathbf{p}_i = a_i\,\boldsymbol{\Phi}$$
+$$
+a_i = \mathbf{u}'_i \cdot \boldsymbol{\Phi} = u'_{a,i}\phi_1 + u'_{b,i}\phi_2,
+\qquad \mathbf{p}_i = a_i\,\boldsymbol{\Phi}
+$$
 
 The variance along $\boldsymbol{\Phi}$ is
 
-$$\operatorname{var}_{\boldsymbol{\Phi}} = \frac{1}{m-1}\sum_{i=1}^m a_i^2 = \boldsymbol{\Phi}^T\mathbf{C}\,\boldsymbol{\Phi}$$
+$$
+\operatorname{var}_{\boldsymbol{\Phi}} = \frac{1}{m-1}\sum_{i=1}^m
+a_i^2 = \boldsymbol{\Phi}^T\mathbf{C}\,\boldsymbol{\Phi}
+$$
 
 ### Link to POD
 
@@ -57,7 +69,7 @@ python main.py --no-show --output out   # save the three PNGs into out/
 ```
 
 | Flag | Meaning |
-|------|---------|
+| --- | --- |
 | `--no-show` | Do not open plot windows |
 | `--output DIR` | Create `DIR` and save `velocity_fluctuations_time_series.png`, `velocity_fluctuations_scatter.png`, and `velocity_fluctuations_projection.png` |
 
@@ -65,7 +77,9 @@ python main.py --no-show --output out   # save the three PNGs into out/
 
 With the default seed the script prints
 
-$$\mathbf{C} = \begin{bmatrix} 3.82 & 2.15 \\ 2.15 & 5.38 \end{bmatrix}, \qquad \rho_{ab} = 0.47, \qquad \operatorname{var}_{\boldsymbol{\Phi}} = 5.85\ \text{m}^2/\text{s}^2$$
+$$
+\mathbf{C} = \begin{bmatrix} 3.82 & 2.15 \\ 2.15 & 5.38 \end{bmatrix}, \qquad \rho_{ab} = 0.47, \qquad \operatorname{var}_{\boldsymbol{\Phi}} = 5.85\ \text{m}^2/\text{s}^2
+$$
 
 Figure 1 shows the two noisy fluctuation signals.
 

@@ -13,7 +13,9 @@ $$
 $$
 
 $$
-\frac{\partial u_i}{\partial t} + \frac{\partial (u_i u_j)}{\partial x_j} = -\frac{1}{\rho}\frac{\partial p}{\partial x_i} + \nu\frac{\partial^2 u_i}{\partial x_j \partial x_j}
+\frac{\partial u_i}{\partial t} +
+\frac{\partial (u_i u_j)}{\partial x_j} = -\frac{1}{\rho}
+\frac{\partial p}{\partial x_i} + \nu \frac{\partial^2 u_i}{\partial x_j \partial x_j}
 $$
 
 The convective term has been written in conservative form using continuity. This makes the averaging of the nonlinear term transparent.
@@ -23,7 +25,7 @@ The convective term has been written in conservative form using continuity. This
 Substitute $u_i = U_i + u_i'$ and $p = P + p'$, then average each term.
 
 | Term | Instantaneous | Averaged |
-|---|---|---|
+| --- | --- | --- |
 | Unsteady | $\partial u_i/\partial t$ | $\partial U_i/\partial t$ |
 | Convective | $\partial (u_i u_j)/\partial x_j$ | $\partial (U_i U_j)/\partial x_j + \partial\,\overline{u_i'u_j'}/\partial x_j$ |
 | Pressure | $-(1/\rho)\,\partial p/\partial x_i$ | $-(1/\rho)\,\partial P/\partial x_i$ |
@@ -32,13 +34,20 @@ Substitute $u_i = U_i + u_i'$ and $p = P + p'$, then average each term.
 Every linear term keeps its form. Only the convective term produces something new, because $\overline{u_i u_j} = U_iU_j + \overline{u_i'u_j'}$. Averaging continuity gives $\partial U_i/\partial x_i = 0$, which lets us write $\partial (U_iU_j)/\partial x_j = U_j\,\partial U_i/\partial x_j$. The result is the **RANS momentum equation**:
 
 $$
-\frac{\partial U_i}{\partial t} + U_j\frac{\partial U_i}{\partial x_j} = -\frac{1}{\rho}\frac{\partial P}{\partial x_i} + \frac{\partial}{\partial x_j}\left[\nu\left(\frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}\right) - \overline{u_i'u_j'}\right]
+\frac{\partial U_i}{\partial t} + U_j
+\frac{\partial U_i}{\partial x_j} = -\frac{1}{\rho} \frac{\partial P}{\partial x_i} +
+\frac{\partial}{\partial x_j}\left[\nu\left(\frac{\partial U_i}{\partial x_j} +
+\frac{\partial U_j}{\partial x_i}\right) - \overline{u_i'u_j'}\right]
 $$
 
 The term $\nu\,\partial U_j/\partial x_i$ contributes nothing (its divergence vanishes by continuity). It is included so that the bracket is a proper symmetric stress. Multiplying by $\rho$:
 
 $$
-\rho\frac{\overline{D} U_i}{\overline{D} t} = \frac{\partial}{\partial x_j}\left[-P\,\delta_{ij} + 2\mu\,\overline{S}_{ij} - \rho\,\overline{u_i'u_j'}\right], \qquad \overline{S}_{ij} = \frac{1}{2}\left(\frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}\right)
+\rho
+\frac{\overline{D} U_i}{\overline{D} t} = \frac{\partial}{\partial x_j}\left[-P\,\delta_{ij} + 2\mu\,\overline{S}_{ij} - \rho\,\overline{u_i'u_j'}\right],
+\qquad
+\overline{S}_{ij} = \frac{1}{2}\left(\frac{\partial U_i}{\partial x_j} +
+\frac{\partial U_j}{\partial x_i}\right)
 $$
 
 Here $\overline{D}/\overline{D}t = \partial/\partial t + U_k\,\partial/\partial x_k$ is the rate of change following the *mean* flow, not a fluid particle. The mean momentum is acted on by the mean pressure, the mean viscous stress and the **Reynolds stress** $-\rho\,\overline{u_i'u_j'}$. For compressible flow the same steps are carried out with Favre averaging (see [Reynolds Decomposition](./reynolds_decomposition.md)).
@@ -59,7 +68,11 @@ This **closure problem** is a direct consequence of the quadratic nonlinearity o
 Subtracting the RANS equation from the instantaneous Navier–Stokes equation gives an exact equation for the velocity fluctuation. The steps use $\partial (U_i u_k')/\partial x_k = u_k'\,\partial U_i/\partial x_k$ and $\partial (u_i'U_k)/\partial x_k = U_k\,\partial u_i'/\partial x_k$, both of which follow from continuity. The result is
 
 $$
-\frac{\partial u_i'}{\partial t} + U_k\frac{\partial u_i'}{\partial x_k} = -u_k'\frac{\partial U_i}{\partial x_k} - \frac{\partial}{\partial x_k}\left(u_i'u_k' - \overline{u_i'u_k'}\right) - \frac{1}{\rho}\frac{\partial p'}{\partial x_i} + \nu\frac{\partial^2 u_i'}{\partial x_k\partial x_k}
+\frac{\partial u_i'}{\partial t} + U_k \frac{\partial u_i'}{\partial x_k} = -u_k'
+\frac{\partial U_i}{\partial x_k} -
+\frac{\partial}{\partial x_k}\left(u_i'u_k' - \overline{u_i'u_k'}\right) -
+\frac{1}{\rho} \frac{\partial p'}{\partial x_i} + \nu
+\frac{\partial^2 u_i'}{\partial x_k\partial x_k}
 $$
 
 The first term on the right, $-u_k'\,\partial U_i/\partial x_k$, is the interaction of fluctuations with mean gradients. It is how the mean flow feeds the turbulence.
@@ -69,26 +82,33 @@ The first term on the right, $-u_k'\,\partial U_i/\partial x_k$, is the interact
 Multiply the fluctuation equation for $u_i'$ by $u_j'$, add the same with $i$ and $j$ exchanged, and average. After rearranging:
 
 $$
-\frac{\partial \overline{u_i'u_j'}}{\partial t} + U_k\frac{\partial \overline{u_i'u_j'}}{\partial x_k} = P_{ij} + R_{ij} - \varepsilon_{ij} - \frac{\partial T_{kij}}{\partial x_k}
+\frac{\partial \overline{u_i'u_j'}}{\partial t} + U_k
+\frac{\partial \overline{u_i'u_j'}}{\partial x_k} = P_{ij} + R_{ij} - \varepsilon_{ij} -
+\frac{\partial T_{kij}}{\partial x_k}
 $$
 
 The terms on the right are:
 
 $$
-P_{ij} = -\overline{u_i'u_k'}\frac{\partial U_j}{\partial x_k} - \overline{u_j'u_k'}\frac{\partial U_i}{\partial x_k}
+P_{ij} = -\overline{u_i'u_k'} \frac{\partial U_j}{\partial x_k} - \overline{u_j'u_k'}
+\frac{\partial U_i}{\partial x_k}
 $$
 
 $$
-R_{ij} = \overline{\frac{p'}{\rho}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)}, \qquad
+R_{ij} = \overline{\frac{p'}{\rho}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)},
+\qquad
 \varepsilon_{ij} = 2\nu\,\overline{\frac{\partial u_i'}{\partial x_k}\frac{\partial u_j'}{\partial x_k}}
 $$
 
 $$
-T_{kij} = \overline{u_i'u_j'u_k'} + \frac{1}{\rho}\left(\overline{p'u_i'}\,\delta_{jk} + \overline{p'u_j'}\,\delta_{ik}\right) - \nu\frac{\partial \overline{u_i'u_j'}}{\partial x_k}
+T_{kij} = \overline{u_i'u_j'u_k'} +
+\frac{1}{\rho}\left(\overline{p'u_i'}\,\delta_{jk} +
+\overline{p'u_j'}\,\delta_{ik}\right) - \nu
+\frac{\partial \overline{u_i'u_j'}}{\partial x_k}
 $$
 
 | Term | Name | Physical role | Closed? |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | $P_{ij}$ | Production | Energy extracted from the mean flow by the mean velocity gradients | Yes, if the stresses are known |
 | $R_{ij}$ | Pressure–strain | Redistributes energy among components; trace-free | No |
 | $\varepsilon_{ij}$ | Dissipation tensor | Viscous destruction at small scales | No |
@@ -107,13 +127,18 @@ In a simple shear flow $U(y)$ the production tensor has only two nonzero compone
 Taking half the trace of the Reynolds stress equation gives the transport equation for $k = \frac{1}{2}\overline{u_i'u_i'}$:
 
 $$
-\frac{\partial k}{\partial t} + U_j\frac{\partial k}{\partial x_j} = \mathcal{P} - \varepsilon - \frac{\partial}{\partial x_j}\left(\frac{1}{2}\overline{u_i'u_i'u_j'} + \frac{1}{\rho}\overline{p'u_j'} - \nu\frac{\partial k}{\partial x_j}\right)
+\frac{\partial k}{\partial t} + U_j \frac{\partial k}{\partial x_j} = \mathcal{P} -
+\varepsilon -
+\frac{\partial}{\partial x_j}\left(\frac{1}{2}\overline{u_i'u_i'u_j'} +
+\frac{1}{\rho}\overline{p'u_j'} - \nu \frac{\partial k}{\partial x_j}\right)
 $$
 
 with
 
 $$
-\mathcal{P} = -\overline{u_i'u_j'}\frac{\partial U_i}{\partial x_j}, \qquad \varepsilon = \nu\,\overline{\frac{\partial u_i'}{\partial x_j}\frac{\partial u_i'}{\partial x_j}}
+\mathcal{P} = -\overline{u_i'u_j'} \frac{\partial U_i}{\partial x_j},
+\qquad
+\varepsilon = \nu\,\overline{\frac{\partial u_i'}{\partial x_j}\frac{\partial u_i'}{\partial x_j}}
 $$
 
 The terms have clear physical meanings.
@@ -132,7 +157,8 @@ Two limiting cases are instructive:
 Boussinesq (1877) proposed that turbulent momentum transfer behaves like molecular momentum transfer. The Reynolds stress is taken proportional to the mean strain rate, with a scalar **eddy viscosity** $\nu_t$:
 
 $$
--\overline{u_i'u_j'} = \nu_t\left(\frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}\right) - \frac{2}{3}k\,\delta_{ij}
+-\overline{u_i'u_j'} = \nu_t\left(\frac{\partial U_i}{\partial x_j} +
+\frac{\partial U_j}{\partial x_i}\right) - \frac{2}{3}k\,\delta_{ij}
 $$
 
 The isotropic term is needed for consistency. Taking the trace of the left side gives $-2k$. On the right, the strain term has trace $2\nu_t\,\partial U_i/\partial x_i = 0$, so the $-\frac{2}{3}k\,\delta_{ij}$ term is what supplies $-2k$.
@@ -140,13 +166,19 @@ The isotropic term is needed for consistency. Taking the trace of the left side 
 Substituting into RANS gives equations of Navier–Stokes form with an effective viscosity $\nu + \nu_t$ and a modified pressure $P + \frac{2}{3}\rho k$:
 
 $$
-\frac{\partial U_i}{\partial t} + U_j\frac{\partial U_i}{\partial x_j} = -\frac{1}{\rho}\frac{\partial}{\partial x_i}\left(P + \frac{2}{3}\rho k\right) + \frac{\partial}{\partial x_j}\left[(\nu + \nu_t)\left(\frac{\partial U_i}{\partial x_j} + \frac{\partial U_j}{\partial x_i}\right)\right]
+\frac{\partial U_i}{\partial t} + U_j
+\frac{\partial U_i}{\partial x_j} = -\frac{1}{\rho}
+\frac{\partial}{\partial x_i}\left(P + \frac{2}{3}\rho k\right) +
+\frac{\partial}{\partial x_j}\left[(\nu +
+\nu_t)\left(\frac{\partial U_i}{\partial x_j} +
+\frac{\partial U_j}{\partial x_i}\right)\right]
 $$
 
 The production of $k$ becomes
 
 $$
-\mathcal{P} = 2\nu_t\,\overline{S}_{ij}\overline{S}_{ij} = \nu_t S^2 \ge 0, \qquad S = \sqrt{2\,\overline{S}_{ij}\overline{S}_{ij}}
+\mathcal{P} = 2\nu_t\,\overline{S}_{ij}\overline{S}_{ij} = \nu_t S^2 \ge 0,
+\qquad S = \sqrt{2\,\overline{S}_{ij}\overline{S}_{ij}}
 $$
 
 Unlike molecular viscosity, $\nu_t$ is a property of the *flow*, not the fluid. It varies in space and time, and it must be supplied by a turbulence model. All eddy-viscosity models (mixing length, Spalart–Allmaras, $k$–$\varepsilon$, $k$–$\omega$, SST) differ only in how they compute $\nu_t$.
@@ -168,7 +200,8 @@ The hypothesis is convenient but physically restrictive.
 Consider fully developed flow in a channel of half-height $\delta$. The mean velocity is $U(y)$, and the statistics depend only on $y$. The RANS $x$-momentum equation reduces to
 
 $$
-0 = -\frac{1}{\rho}\frac{dP}{dx} + \frac{d}{dy}\left(\nu\frac{dU}{dy} - \overline{u'v'}\right)
+0 = -\frac{1}{\rho} \frac{dP}{dx} +
+\frac{d}{dy}\left(\nu \frac{dU}{dy} - \overline{u'v'}\right)
 $$
 
 The total shear stress $\tau(y) = \rho\nu\,dU/dy - \rho\,\overline{u'v'}$ therefore varies linearly. By symmetry it vanishes on the centreline, so
@@ -227,7 +260,8 @@ The log law holds approximately for $y^+ > 30$ and $y/\delta < 0.3$. Between the
 In the log layer, production balances dissipation:
 
 $$
-\mathcal{P} = -\overline{u'v'}\frac{dU}{dy} \approx u_\tau^2\cdot\frac{u_\tau}{\kappa y} = \frac{u_\tau^3}{\kappa y} \approx \varepsilon
+\mathcal{P} = -\overline{u'v'} \frac{dU}{dy} \approx u_\tau^2\cdot
+\frac{u_\tau}{\kappa y} = \frac{u_\tau^3}{\kappa y} \approx \varepsilon
 $$
 
 A single smooth formula covering all three inner regions is **Spalding's law**:
@@ -237,7 +271,7 @@ y^+ = u^+ + e^{-\kappa B}\left[e^{\kappa u^+} - 1 - \kappa u^+ - \frac{(\kappa u
 $$
 
 | $y^+$ | Linear law $u^+ = y^+$ | Log law ($\kappa = 0.41$, $B = 5.2$) | Spalding |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | 1.00 | (not valid) | 1.00 |
 | 5 | 5.00 | (not valid) | 4.88 |
 | 10 | 10.0 | (not valid) | 8.36 |
@@ -283,7 +317,7 @@ IV. **Friction velocity and viscous length.** $u_\tau = \sqrt{\tau_w/\rho} = 0.8
 V. **Wall distances.**
 
 | Target $y^+$ | Wall distance $y = y^+\delta_\nu$ | First cell height (cell-centred, $2y$) |
-|---|---|---|
+| --- | --- | --- |
 | 1 | 0.018 mm | 0.036 mm |
 | 30 | 0.54 mm | 1.07 mm |
 | 100 | 1.79 mm | 3.57 mm |
@@ -368,9 +402,11 @@ Energy enters only the streamwise component. Pressure–strain redistributes it 
 
 **Derivation.** Boussinesq gives $-\overline{u'v'} = \nu_t\,dU/dy$. With $dU/dy = u_\tau/(\kappa y)$, this becomes $u_\tau^2 = \nu_t\,u_\tau/(\kappa y)$, so
 
-$$
-\nu_t = \kappa\,u_\tau\,y \qquad \Longrightarrow \qquad \frac{\nu_t}{\nu} = \kappa\,y^+
-$$
+```math
+\nu_t = \kappa\, u_\tau\, y
+\qquad \Longrightarrow
+\qquad \frac{\nu_t}{\nu} = \kappa\, y^ +
+```
 
 **Values.** $\nu_t/\nu = 41$ at $y^+ = 100$ and $410$ at $y^+ = 1{,}000$.
 

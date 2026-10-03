@@ -36,7 +36,7 @@ Aspect Ratio = longest edge / shortest edge
 ```
 
 | Range | Quality |
-|-------|---------|
+| --- | --- |
 | 1–5 | Excellent |
 | 5–20 | Good for most solvers |
 | 20–100 | Acceptable in boundary layers (intentionally stretched) |
@@ -53,7 +53,7 @@ Skewness = (ideal_size - actual_size) / ideal_size
 ```
 
 | Range | Quality |
-|-------|---------|
+| --- | --- |
 | 0–0.25 | Excellent |
 | 0.25–0.50 | Good |
 | 0.50–0.75 | Acceptable |
@@ -71,7 +71,7 @@ Non-orthogonality = angle between face normal and cell-center connection
 ```
 
 | Range | Quality |
-|-------|---------|
+| --- | --- |
 | 0°–40° | Good (standard corrections sufficient) |
 | 40°–65° | Requires non-orthogonal correction (increase `nNonOrthogonalCorrectors`) |
 | 65°–85° | Poor (multiple correction steps needed, slow convergence) |
@@ -88,7 +88,7 @@ Volume Ratio = max(V_neighbor) / min(V_neighbor)
 ```
 
 | Range | Quality |
-|-------|---------|
+| --- | --- |
 | 1–5 | Good |
 | 5–20 | Acceptable with care |
 | > 20 | Will cause numerical errors at the interface |
@@ -100,7 +100,7 @@ Volume Ratio = max(V_neighbor) / min(V_neighbor)
 The determinant of the Jacobian matrix of the element mapping. A positive Jacobian means the cell is valid; negative means it is inverted.
 
 | Value | Meaning |
-|-------|---------|
+| --- | --- |
 | > 0 | Valid cell |
 | = 0 | Degenerate cell (zero volume) |
 | < 0 | Inverted cell (inside-out) — **must be fixed** |
@@ -110,7 +110,7 @@ The determinant of the Jacobian matrix of the element mapping. A positive Jacobi
 For non-planar faces (common in hexahedral meshes), warpage measures how far the face deviates from a flat plane.
 
 | Range | Quality |
-|-------|---------|
+| --- | --- |
 | < 5° | Good |
 | 5°–30° | Acceptable |
 | > 30° | May cause numerical errors |
@@ -202,7 +202,7 @@ Mesh OK.
 ### Key Lines to Watch
 
 | Output | What It Means | Action If Bad |
-|--------|---------------|---------------|
+| --- | --- | --- |
 | `Max aspect ratio` | Highest cell stretch | > 1000: refine or restructure mesh |
 | `Max skewness` | Worst cell distortion | > 0.85: remesh affected region |
 | `Mesh non-orthogonality Max` | Worst face non-orthogonality | > 65: add non-orthogonal correctors |
@@ -296,7 +296,7 @@ If using a standalone mesh file:
 ### Useful ParaView Filters for Mesh Quality
 
 | Filter | Use |
-|--------|-----|
+| --- | --- |
 | **Mesh Quality** | Compute per-cell quality metrics |
 | **Threshold** | Isolate cells by quality range |
 | **Histogram** | Show distribution of quality values |
@@ -393,7 +393,7 @@ python3 mesh_quality_report.py log.checkMesh
 ### High Skewness
 
 | Cause | Fix |
-|-------|-----|
+| --- | --- |
 | Poor surface mesh transitions | Improve surface mesh grading |
 | Complex geometry corners | Add local refinement or smooth geometry |
 | Automatic mesher artifacts | Try different meshing algorithm or adjust parameters |
@@ -401,7 +401,7 @@ python3 mesh_quality_report.py log.checkMesh
 ### High Non-Orthogonality
 
 | Cause | Fix |
-|-------|-----|
+| --- | --- |
 | Unstructured tets on curved surfaces | Refine mesh; use hex-dominant meshing |
 | Large cell size transitions | Reduce growth ratio between zones |
 | Boundary layer meeting bulk mesh | Improve BL-to-bulk transition |
@@ -421,7 +421,7 @@ SIMPLE
 This is a critical failure — the mesh cannot be used.
 
 | Cause | Fix |
-|-------|-----|
+| --- | --- |
 | snappyHexMesh layer addition failure | Relax layer settings; reduce nLayers |
 | Boolean operation artifacts | Increase geometry tolerance; heal CAD model |
 | Extrusion through tight spaces | Reduce BL thickness or number of layers |
@@ -429,7 +429,7 @@ This is a critical failure — the mesh cannot be used.
 ### Large Volume Ratio
 
 | Cause | Fix |
-|-------|-----|
+| --- | --- |
 | Refinement region boundaries | Add buffer zones with intermediate sizing |
 | Mesh hanging nodes | Use proper refinement (not ad-hoc splitting) |
 
@@ -438,7 +438,7 @@ This is a critical failure — the mesh cannot be used.
 ### By Solver Type
 
 | Application | Max Skewness | Max Non-Ortho | Max Aspect Ratio | Notes |
-|-------------|-------------|---------------|-------------------|-------|
+| --- | --- | --- | --- | --- |
 | OpenFOAM (general) | < 0.85 | < 65° | < 1000 | Add non-ortho correctors > 40° |
 | OpenFOAM (LES) | < 0.50 | < 40° | < 100 | Stricter for accuracy |
 | SU2 | < 0.90 | N/A | < 1000 | More tolerant of skewed cells |
@@ -447,7 +447,7 @@ This is a critical failure — the mesh cannot be used.
 ### By Physics
 
 | Physics | Key Requirement |
-|---------|----------------|
+| --- | --- |
 | Boundary layers | High aspect ratio OK (stretched cells); y+ must match turbulence model |
 | Heat transfer | Fine mesh at solid-fluid interface; smooth transitions |
 | Multiphase (VOF) | Uniform cells at interface; avoid high aspect ratios near free surface |

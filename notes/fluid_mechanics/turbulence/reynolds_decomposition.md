@@ -19,7 +19,9 @@ Osborne Reynolds (1895) proposed splitting every flow variable into a mean part 
 Every instantaneous quantity is written as the sum of its mean and a fluctuation:
 
 $$
-u_i(\mathbf{x},t) = U_i(\mathbf{x},t) + u_i'(\mathbf{x},t), \qquad p = P + p', \qquad T = \overline{T} + T'
+u_i(\mathbf{x},t) = U_i(\mathbf{x},t) + u_i'(\mathbf{x},t),
+\qquad p = P + p',
+\qquad T = \overline{T} + T'
 $$
 
 where $U_i = \overline{u_i}$ is the mean velocity and $u_i'$ is the fluctuation. In these notes an overbar $\overline{(\cdot)}$ denotes the Reynolds average, and capital letters are used for mean velocity and pressure. The page on [turbulence statistics](./statistics.md) uses the equivalent probabilistic notation $\langle \cdot \rangle$.
@@ -33,7 +35,8 @@ By construction, averaging the decomposition gives $\overline{u_i} = \overline{U
 Imagine $N$ nominally identical realizations of the flow (same geometry, same boundary conditions, microscopically different initial conditions). The ensemble average is
 
 $$
-\langle u_i \rangle(\mathbf{x},t) = \lim_{N \to \infty} \frac{1}{N}\sum_{n=1}^{N} u_i^{(n)}(\mathbf{x},t)
+\langle u_i \rangle(\mathbf{x},t) = \lim_{N \to \infty} \frac{1}{N}\sum_{n=1}^{N}
+u_i^{(n)}(\mathbf{x},t)
 $$
 
 This is the most general definition. It allows the mean to depend on both position and time, so it handles flows whose statistics change in time: a starting jet, an engine cycle, a gust. Mathematically it is the expected value of a random field.
@@ -43,7 +46,8 @@ This is the most general definition. It allows the mean to depend on both positi
 If the flow is **statistically stationary**, meaning its statistics do not change in time, the mean can be taken from a single long record:
 
 $$
-\overline{u_i}(\mathbf{x}) = \lim_{T \to \infty} \frac{1}{T}\int_{t_0}^{t_0+T} u_i(\mathbf{x},t)\,dt
+\overline{u_i}(\mathbf{x}) = \lim_{T \to \infty} \frac{1}{T}\int_{t_0}^{t_0+T}
+u_i(\mathbf{x},t)\, dt
 $$
 
 The result is independent of $t_0$. In practice $T$ is finite, and it must be much longer than the integral time scale of the turbulence. The [statistics page](./statistics.md) shows how to estimate the required record length.
@@ -53,7 +57,8 @@ The result is independent of $t_0$. In practice $T$ is finite, and it must be mu
 If the flow is **statistically homogeneous** in some direction, the mean can be taken along that direction. In a fully developed channel flow, statistics are homogeneous in the streamwise ($x$) and spanwise ($z$) directions:
 
 $$
-\overline{u_i}(y,t) = \lim_{L_x, L_z \to \infty} \frac{1}{L_x L_z}\int_0^{L_z}\int_0^{L_x} u_i(x,y,z,t)\,dx\,dz
+\overline{u_i}(y,t) = \lim_{L_x, L_z \to \infty}
+\frac{1}{L_x L_z}\int_0^{L_z}\int_0^{L_x} u_i(x,y,z,t)\, dx\, dz
 $$
 
 DNS databases for channel flow are usually averaged over $x$, $z$ *and* $t$ to speed up convergence.
@@ -83,13 +88,15 @@ V. **Commutation with integrals**: $\overline{\int f\,ds} = \int F\,ds$.
 The most important consequence is the rule for products:
 
 $$
-\overline{fg} = \overline{(F + f')(G + g')} = \overline{FG} + \overline{F g'} + \overline{f' G} + \overline{f'g'} = FG + \overline{f'g'}
+\overline{fg} = \overline{(F + f')(G + g')} = \overline{FG} + \overline{F g'} +
+\overline{f' G} + \overline{f'g'} = FG + \overline{f'g'}
 $$
 
 The **correlation** $\overline{f'g'}$ is generally *not* zero, even though $\overline{f'}$ and $\overline{g'}$ are. The same expansion for a triple product gives
 
 $$
-\overline{fgh} = FGH + F\,\overline{g'h'} + G\,\overline{f'h'} + H\,\overline{f'g'} + \overline{f'g'h'}
+\overline{fgh} = FGH + F\,\overline{g'h'} + G\,\overline{f'h'} + H\,\overline{f'g'} +
+\overline{f'g'h'}
 $$
 
 Not every practical average obeys these rules.
@@ -113,13 +120,18 @@ Subtracting this from the instantaneous equation gives $\partial u_i'/\partial x
 Using continuity, the incompressible momentum equation can be written in conservative form:
 
 $$
-\frac{\partial u_i}{\partial t} + \frac{\partial (u_i u_j)}{\partial x_j} = -\frac{1}{\rho}\frac{\partial p}{\partial x_i} + \nu \frac{\partial^2 u_i}{\partial x_j \partial x_j}
+\frac{\partial u_i}{\partial t} +
+\frac{\partial (u_i u_j)}{\partial x_j} = -\frac{1}{\rho}
+\frac{\partial p}{\partial x_i} + \nu \frac{\partial^2 u_i}{\partial x_j \partial x_j}
 $$
 
 Every linear term averages to the same term written in mean quantities. The convective term is the exception: by the product rule, $\overline{u_i u_j} = U_i U_j + \overline{u_i' u_j'}$. The averaged equation is therefore
 
 $$
-\frac{\partial U_i}{\partial t} + U_j \frac{\partial U_i}{\partial x_j} = -\frac{1}{\rho}\frac{\partial P}{\partial x_i} + \frac{\partial}{\partial x_j}\left(\nu \frac{\partial U_i}{\partial x_j} - \overline{u_i' u_j'}\right)
+\frac{\partial U_i}{\partial t} + U_j
+\frac{\partial U_i}{\partial x_j} = -\frac{1}{\rho} \frac{\partial P}{\partial x_i} +
+\frac{\partial}{\partial x_j}\left(\nu \frac{\partial U_i}{\partial x_j} -
+\overline{u_i' u_j'}\right)
 $$
 
 The step-by-step derivation, the resulting closure problem, and the transport equations for $\overline{u_i'u_j'}$ and $k$ are covered in [RANS Equations](./rans_equations.md).
@@ -167,7 +179,8 @@ A parcel moving upward ($v' > 0$) comes from a region of lower mean velocity. It
 The isotropic part of the Reynolds stress acts like a pressure. Only the deviatoric part transports momentum between layers. It is measured by
 
 $$
-a_{ij} = \overline{u_i'u_j'} - \frac{2}{3}k\,\delta_{ij}, \qquad b_{ij} = \frac{\overline{u_i'u_j'}}{2k} - \frac{1}{3}\delta_{ij}
+a_{ij} = \overline{u_i'u_j'} - \frac{2}{3}k\,\delta_{ij},
+\qquad b_{ij} = \frac{\overline{u_i'u_j'}}{2k} - \frac{1}{3}\delta_{ij}
 $$
 
 Both tensors have zero trace. The normalized anisotropy $b_{ij}$ vanishes for isotropic turbulence, and its eigenvalues lie between $-1/3$ and $2/3$.
@@ -179,7 +192,8 @@ The root-mean-square fluctuation of a component is $u_{rms} = \sqrt{\overline{u'
 The **turbulent kinetic energy** (TKE) per unit mass is half the trace of the Reynolds stress tensor:
 
 $$
-k = \frac{1}{2}\overline{u_i'u_i'} = \frac{1}{2}\left(\overline{u'^2} + \overline{v'^2} + \overline{w'^2}\right)
+k = \frac{1}{2}\overline{u_i'u_i'} = \frac{1}{2}\left(\overline{u'^2} +
+\overline{v'^2} + \overline{w'^2}\right)
 $$
 
 It has units of $\mathrm{m^2/s^2}$. The mean of the total kinetic energy splits cleanly into a mean-flow part and a turbulent part:
@@ -191,7 +205,9 @@ $$
 The **overall turbulence intensity** is defined from $k$ so that it equals $I_u$ when the turbulence is isotropic:
 
 $$
-I = \frac{\sqrt{2k/3}}{U_{ref}} \qquad \Longleftrightarrow \qquad k = \frac{3}{2}\left(I\,U_{ref}\right)^2
+I = \frac{\sqrt{2k/3}}{U_{ref}}
+\qquad \Longleftrightarrow
+\qquad k = \frac{3}{2}\left(I\, U_{ref}\right)^2
 $$
 
 This inversion is how CFD inlet conditions for $k$ are usually set (see [Turbulence Modeling](./modeling.md)).
@@ -201,7 +217,7 @@ This inversion is how CFD inlet conditions for $k$ are usually set (see [Turbule
 A two-component probe in a boundary layer records eight simultaneous samples of $u$ and $v$ (m/s).
 
 | Sample | $u$ | $v$ | $u'$ | $v'$ | $u'^2$ | $v'^2$ | $u'v'$ |
-|---|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 10.8 | -0.2 | 0.8 | -0.2 | 0.64 | 0.04 | -0.16 |
 | 2 | 9.1 | 0.5 | -0.9 | 0.5 | 0.81 | 0.25 | -0.45 |
 | 3 | 11.6 | -0.6 | 1.6 | -0.6 | 2.56 | 0.36 | -0.96 |
@@ -235,13 +251,16 @@ Eight samples are far too few for converged statistics. The numbers only illustr
 When density varies (compressible flows, combustion, strongly heated flows), Reynolds averaging produces density–velocity correlations even in the continuity equation:
 
 $$
-\frac{\partial \overline{\rho}}{\partial t} + \frac{\partial}{\partial x_j}\left(\overline{\rho}\,\overline{u_j} + \overline{\rho' u_j'}\right) = 0
+\frac{\partial \overline{\rho}}{\partial t} +
+\frac{\partial}{\partial x_j}\left(\overline{\rho}\,\overline{u_j} +
+\overline{\rho' u_j'}\right) = 0
 $$
 
 The momentum equation acquires triple correlations such as $\overline{\rho' u_i' u_j'}$. Favre (1965) avoided this by using a **mass-weighted average**:
 
 $$
-\tilde{u}_i = \frac{\overline{\rho u_i}}{\overline{\rho}}, \qquad u_i = \tilde{u}_i + u_i''
+\tilde{u}_i = \frac{\overline{\rho u_i}}{\overline{\rho}},
+\qquad u_i = \tilde{u}_i + u_i''
 $$
 
 The rules change:
@@ -253,13 +272,15 @@ The rules change:
 With these definitions the mean continuity equation keeps its laminar form:
 
 $$
-\frac{\partial \overline{\rho}}{\partial t} + \frac{\partial (\overline{\rho}\,\tilde{u}_j)}{\partial x_j} = 0
+\frac{\partial \overline{\rho}}{\partial t} +
+\frac{\partial (\overline{\rho}\,\tilde{u}_j)}{\partial x_j} = 0
 $$
 
 The mean momentum equation contains a single unclosed term, the Favre Reynolds stress $\overline{\rho}\,\widetilde{u_i''u_j''} = \overline{\rho\,u_i''u_j''}$:
 
 $$
-\frac{\partial (\overline{\rho}\,\tilde{u}_i)}{\partial t} + \frac{\partial (\overline{\rho}\,\tilde{u}_i\tilde{u}_j)}{\partial x_j} = -\frac{\partial \overline{p}}{\partial x_i} + \frac{\partial \overline{\tau}_{ij}}{\partial x_j} - \frac{\partial \left(\overline{\rho}\,\widetilde{u_i''u_j''}\right)}{\partial x_j}
+\frac{\partial (\overline{\rho}\,\tilde{u}_i)}{\partial t} +
+\frac{\partial (\overline{\rho}\,\tilde{u}_i\tilde{u}_j)}{\partial x_j} = -\frac{\partial \overline{p}}{\partial x_i} + \frac{\partial \overline{\tau}_{ij}}{\partial x_j} - \frac{\partial \left(\overline{\rho}\,\widetilde{u_i''u_j''}\right)}{\partial x_j}
 $$
 
 The corresponding TKE is $\tilde{k} = \frac{1}{2}\widetilde{u_i''u_i''}$. Compressible RANS solvers therefore solve Favre-averaged equations. Boundary layers at moderate supersonic Mach numbers still behave much like incompressible ones once mean density variations are accounted for (Morkovin's hypothesis), so incompressible closures are often carried over.
@@ -312,9 +333,9 @@ The remaining components are $\overline{u'^2}$, $\overline{v'^2}$, $\overline{w'
 
 The error is bounded by $2a/(\omega T) = a/(\pi f T)$. Requiring $a/(\pi f T) \le 0.001\,U_0$ gives
 
-$$
+```math
 T \ge \frac{0.5}{\pi \times 5 \times 0.001} = 31.8\ \mathrm{s}
-$$
+```
 
 That is about 160 periods. Random turbulent signals converge in a different way, governed by the integral time scale (see [Turbulence Statistics](./statistics.md)), but the lesson is the same: finite averages are only approximately Reynolds averages.
 

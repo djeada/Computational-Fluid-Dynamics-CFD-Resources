@@ -17,7 +17,10 @@ This script draws a schematic of boundary-layer separation: an attached layer th
 
 On a flat plate with zero pressure gradient the Blasius solution gives
 
-$$\delta(x) \approx \frac{5\,x}{\sqrt{Re_x}} = 5\sqrt{\frac{\nu x}{U_\infty}}, \qquad Re_x = \frac{U_\infty x}{\nu}$$
+$$
+\delta(x) \approx \frac{5\,x}{\sqrt{Re_x}} = 5 \sqrt{\frac{\nu x}{U_\infty}},
+\qquad Re_x = \frac{U_\infty x}{\nu}
+$$
 
 so $\delta \propto \sqrt{x}$. The schematic uses the same square-root shape, measured from its leading edge at $x_0 = -1$.
 
@@ -25,7 +28,9 @@ so $\delta \propto \sqrt{x}$. The schematic uses the same square-root shape, mea
 
 In the boundary layer the wall-normal pressure variation is negligible, and the outer flow sets $-\frac{1}{\rho}\frac{dp}{dx} = U_e \frac{dU_e}{dx}$. A decelerating outer flow ($dU_e/dx < 0$) therefore means an adverse pressure gradient:
 
-$$\frac{\partial p}{\partial x} > 0$$
+$$
+\frac{\partial p}{\partial x} > 0
+$$
 
 This removes momentum from the slow fluid near the wall.
 
@@ -33,13 +38,17 @@ This removes momentum from the slow fluid near the wall.
 
 Separation of a steady 2D boundary layer occurs where the wall shear stress vanishes:
 
-$$\tau_w = \mu \left.\frac{\partial u}{\partial y}\right|_{y=0} = 0$$
+$$
+\tau_w = \mu \left. \frac{\partial u}{\partial y}\right|_{y=0} = 0
+$$
 
 ### Recirculation
 
 Downstream of separation the wall shear stress changes sign and the flow next to the wall runs upstream:
 
-$$u(x, y) < 0 \quad \text{near the wall}$$
+$$
+u(x, y) < 0 \quad \text{near the wall}
+$$
 
 The recirculation region is bounded above by the dividing streamline, drawn here as the separated shear layer.
 
@@ -58,7 +67,7 @@ python main.py --no-show --output out   # save flow_separation_boundary_layer.pn
 ```
 
 | Flag | Meaning |
-|------|---------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure as a PNG |
 

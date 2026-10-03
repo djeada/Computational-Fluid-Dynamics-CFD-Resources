@@ -5,6 +5,7 @@ Applied mechanics is the branch of engineering that applies the principles of me
 ## Overview
 
 Applied mechanics integrates fundamental principles of physics with engineering practice to:
+
 - Analyze forces and motion in mechanical systems
 - Design structures and mechanisms for optimal performance
 - Solve problems related to stress, strain, and deformation
@@ -14,6 +15,7 @@ Applied mechanics integrates fundamental principles of physics with engineering 
 ## Table of Contents
 
 ### 1. [Fundamentals](./fundamentals/)
+
 - [Introduction to Applied Mechanics](./fundamentals/intro.md)
 - [Force Systems and Equilibrium](./fundamentals/force_systems.md)
 - [Moments and Couples](./fundamentals/moments_couples.md)
@@ -21,6 +23,7 @@ Applied mechanics integrates fundamental principles of physics with engineering 
 - [Vector Analysis in Mechanics](./fundamentals/vector_analysis.md)
 
 ### 2. [Statics](./statics/)
+
 - [Particle Equilibrium](./statics/particle_equilibrium.md)
 - [Rigid Body Equilibrium](./statics/rigid_body_equilibrium.md)
 - [Structural Analysis](./statics/structural_analysis.md)
@@ -29,6 +32,7 @@ Applied mechanics integrates fundamental principles of physics with engineering 
 - [Center of Mass and Centroids](./statics/center_of_mass.md)
 
 ### 3. [Dynamics](./dynamics/)
+
 - [Kinematics of Particles](./dynamics/kinematics_particles.md)
 - [Kinetics of Particles](./dynamics/kinetics_particles.md)
 - [Rigid Body Kinematics](./dynamics/rigid_body_kinematics.md)
@@ -38,6 +42,7 @@ Applied mechanics integrates fundamental principles of physics with engineering 
 - [Vibrations and Oscillations](./dynamics/vibrations.md)
 
 ### 4. [Strength of Materials](./strength_materials/)
+
 - [Stress and Strain](./strength_materials/stress_strain.md)
 - [Mechanical Properties of Materials](./strength_materials/material_properties.md)
 - [Axial Loading](./strength_materials/axial_loading.md)
@@ -48,6 +53,7 @@ Applied mechanics integrates fundamental principles of physics with engineering 
 - [Buckling and Stability](./strength_materials/buckling.md)
 
 ### 5. [Fluid Loading on Structures](./fluid_loading/)
+
 - [Introduction to Fluid Loading](./fluid_loading/intro.md)
 - [Pressure Forces on Structures](./fluid_loading/pressure_forces.md)
 - [Wind Loading on Buildings](./fluid_loading/wind_loading.md)
@@ -56,6 +62,7 @@ Applied mechanics integrates fundamental principles of physics with engineering 
 - [Hydroelastic Applications](./fluid_loading/hydroelastic_applications.md)
 
 ### 6. [Control Systems](./control_systems/)
+
 - [Introduction to Control Theory](./control_systems/intro.md)
 - [System Modeling](./control_systems/system_modeling.md)
 - [Stability Analysis](./control_systems/stability_analysis.md)
@@ -63,10 +70,12 @@ Applied mechanics integrates fundamental principles of physics with engineering 
 - [PID Controllers](./control_systems/pid_controllers.md)
 
 ### 7. [Transportation Systems](./transportation/)
+
 - **[Airplanes](./transportation/airplanes/)**: Aircraft design, aerodynamics, and flight mechanics
 - **[Cars](./transportation/cars/)**: Automotive engineering, vehicle dynamics, and design
 
 ### 8. [Mechanical Systems](./mechanical_systems/)
+
 - [Mechanisms and Linkages](./mechanical_systems/mechanisms.md)
 - [Gears and Transmissions](./mechanical_systems/gears.md)
 - [Bearings and Lubrication](./mechanical_systems/bearings.md)
@@ -78,18 +87,21 @@ Topics that are planned but not written yet (ships, railways, spacecraft, struct
 ## Learning Path
 
 ### Beginner Level
+
 1. Start with **Fundamentals** to understand basic concepts
 2. Study **Statics** for equilibrium analysis
 3. Learn **Force Systems** and **Free Body Diagrams**
 4. Practice with simple **Structural Analysis** problems
 
 ### Intermediate Level
+
 1. Progress to **Dynamics** for motion analysis
 2. Study **Strength of Materials** for stress analysis
 3. Explore **Mechanical Systems** applications
 4. Learn basic **Control Systems** concepts
 
 ### Advanced Level
+
 1. Study **Fluid Loading** and **Flow-Induced Vibrations**
 2. Explore the **Transportation** notes on airplanes and cars
 3. Connect structural response to CFD results (see below)
@@ -105,6 +117,7 @@ Topics that are planned but not written yet (ships, railways, spacecraft, struct
 ## Practical Applications
 
 Applied mechanics principles are essential in:
+
 - **Aerospace Engineering**: Aircraft and spacecraft design
 - **Automotive Engineering**: Vehicle dynamics and safety systems
 - **Civil Engineering**: Building and infrastructure design
@@ -126,6 +139,7 @@ Explore hands-on projects to reinforce theoretical concepts:
 ## Integration with CFD
 
 Applied mechanics principles directly connect with Computational Fluid Dynamics through:
+
 - **Pressure loading analysis** on structures from CFD results
 - **Structural response** to aerodynamic and hydrodynamic forces
 - **Material stress analysis** under fluid loading conditions

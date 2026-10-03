@@ -3,6 +3,7 @@
 ## Overview
 
 The energy equation represents conservation of energy in fluid flow and is essential for:
+
 - **Compressible flow analysis** (temperature and density coupling)
 - **Heat transfer problems** (thermal boundary layers)
 - **Combustion and reacting flows** (chemical energy conversion)
@@ -14,18 +15,24 @@ The energy equation represents conservation of energy in fluid flow and is essen
 
 For a fluid element, the first law of thermodynamics states:
 
-$$\frac{DE}{Dt} = \dot{Q} - \dot{W}$$
+$$
+\frac{DE}{Dt} = \dot{Q} - \dot{W}
+$$
 
 where:
+
 - $E$ = total energy per unit mass
 - $\dot{Q}$ = heat addition rate per unit mass
 - $\dot{W}$ = work done by the fluid per unit mass
 
 ### Total Energy Components
 
-$$E = e + \frac{1}{2}V^2 + gz$$
+$$
+E = e + \frac{1}{2}V^2 + gz
+$$
 
 where:
+
 - $e$ = specific internal energy
 - $\frac{1}{2}V^2$ = kinetic energy per unit mass
 - $gz$ = gravitational potential energy per unit mass
@@ -33,6 +40,7 @@ where:
 ### Heat Addition
 
 Heat addition occurs through:
+
 1. **Conduction**: $\nabla \cdot (k \nabla T)$
 2. **Radiation**: $\dot{q}_{rad}$
 3. **Chemical reactions**: $\dot{q}_{chem}$
@@ -41,6 +49,7 @@ Heat addition occurs through:
 ### Work Terms
 
 Work is done by:
+
 1. **Pressure forces**: $\nabla \cdot (p \vec{V})$
 2. **Viscous stresses**: $\nabla \cdot (\boldsymbol{\tau} \cdot \vec{V})$
 3. **Gravitational forces**: $\rho \vec{g} \cdot \vec{V}$
@@ -49,11 +58,19 @@ Work is done by:
 
 ### Total Energy Equation
 
-$$\frac{\partial (\rho E)}{\partial t} + \nabla \cdot (\rho E \vec{V}) = -\nabla \cdot (p \vec{V}) + \nabla \cdot (\boldsymbol{\tau} \cdot \vec{V}) + \nabla \cdot (k \nabla T) + \rho \dot{q} + \rho \vec{g} \cdot \vec{V}$$
+$$
+\frac{\partial (\rho E)}{\partial t} + \nabla \cdot (\rho E \vec{V}) = -\nabla \cdot
+(p \vec{V}) + \nabla \cdot (\boldsymbol{\tau} \cdot \vec{V}) + \nabla \cdot
+(k \nabla T) + \rho \dot{q} + \rho \vec{g} \cdot \vec{V}
+$$
 
 This can be rewritten as:
 
-$$\frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p)\vec{V}] = \nabla \cdot (\boldsymbol{\tau} \cdot \vec{V}) + \nabla \cdot (k \nabla T) + \rho \dot{q} + \rho \vec{g} \cdot \vec{V}$$
+$$
+\frac{\partial (\rho E)}{\partial t} + \nabla \cdot [(\rho E + p)\vec{V}] = \nabla \cdot
+(\boldsymbol{\tau} \cdot \vec{V}) + \nabla \cdot (k \nabla T) + \rho \dot{q} + \rho
+\vec{g} \cdot \vec{V}
+$$
 
 In these two equations gravity enters through the work term $\rho \vec{g} \cdot \vec{V}$, so here $E = e + \frac{1}{2}V^2$. If the potential energy $gz$ is included in $E$ (as in the definition above), the term $\rho \vec{g} \cdot \vec{V}$ must be dropped, otherwise gravity is counted twice.
 
@@ -61,7 +78,10 @@ In these two equations gravity enters through the work term $\rho \vec{g} \cdot 
 
 Introducing specific enthalpy $h = e + p/\rho$:
 
-$$\rho \frac{DH}{Dt} = \frac{\partial p}{\partial t} + \nabla \cdot (\boldsymbol{\tau} \cdot \vec{V}) + \nabla \cdot (k \nabla T) + \rho \dot{q}$$
+$$
+\rho \frac{DH}{Dt} = \frac{\partial p}{\partial t} + \nabla \cdot
+(\boldsymbol{\tau} \cdot \vec{V}) + \nabla \cdot (k \nabla T) + \rho \dot{q}
+$$
 
 where $H = h + \frac{1}{2}V^2 + gz$ is total enthalpy (steady gravitational field).
 
@@ -71,7 +91,10 @@ where $H = h + \frac{1}{2}V^2 + gz$ is total enthalpy (steady gravitational fiel
 
 Subtracting the mechanical energy equation from the total energy equation:
 
-$$\rho \frac{De}{Dt} = -p \nabla \cdot \vec{V} + \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}$$
+$$
+\rho \frac{De}{Dt} = -p \nabla \cdot \vec{V} + \nabla \cdot (k \nabla T) + \Phi + \rho
+\dot{q}
+$$
 
 ### Physical Interpretation
 
@@ -84,7 +107,16 @@ $$\rho \frac{De}{Dt} = -p \nabla \cdot \vec{V} + \nabla \cdot (k \nabla T) + \Ph
 
 For a Newtonian fluid:
 
-$$\Phi = \boldsymbol{\tau} : \nabla \vec{V} = \mu \left[2\left(\frac{\partial u}{\partial x}\right)^2 + 2\left(\frac{\partial v}{\partial y}\right)^2 + 2\left(\frac{\partial w}{\partial z}\right)^2 + \left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)^2 + \left(\frac{\partial u}{\partial z} + \frac{\partial w}{\partial x}\right)^2 + \left(\frac{\partial v}{\partial z} + \frac{\partial w}{\partial y}\right)^2\right] - \frac{2}{3}\mu\left(\nabla \cdot \vec{V}\right)^2$$
+$$
+\Phi = \boldsymbol{\tau}: \nabla \vec{V} = \mu
+\left[2\left(\frac{\partial u}{\partial x}\right)^2 +
+2\left(\frac{\partial v}{\partial y}\right)^2 +
+2\left(\frac{\partial w}{\partial z}\right)^2 + \left(\frac{\partial u}{\partial y} +
+\frac{\partial v}{\partial x}\right)^2 + \left(\frac{\partial u}{\partial z} +
+\frac{\partial w}{\partial x}\right)^2 + \left(\frac{\partial v}{\partial z} +
+\frac{\partial w}{\partial y}\right)^2\right] -
+\frac{2}{3}\mu\left(\nabla \cdot \vec{V}\right)^2
+$$
 
 ## Temperature Equation
 
@@ -92,17 +124,24 @@ $$\Phi = \boldsymbol{\tau} : \nabla \vec{V} = \mu \left[2\left(\frac{\partial u}
 
 Using the relation $de = c_v dT$ for an ideal gas:
 
-$$\rho c_v \frac{DT}{Dt} = -p \nabla \cdot \vec{V} + \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}$$
+$$
+\rho c_v \frac{DT}{Dt} = -p \nabla \cdot \vec{V} + \nabla \cdot (k \nabla T) + \Phi +
+\rho \dot{q}
+$$
 
 ### Simplified Forms
 
 **For incompressible flow** ($\nabla \cdot \vec{V} = 0$):
 
-$$\rho c_p \frac{DT}{Dt} = \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}$$
+$$
+\rho c_p \frac{DT}{Dt} = \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}
+$$
 
 **For constant properties**:
 
-$$\frac{DT}{Dt} = \alpha \nabla^2 T + \frac{\Phi}{\rho c_p} + \frac{\dot{q}}{c_p}$$
+$$
+\frac{DT}{Dt} = \alpha \nabla^2 T + \frac{\Phi}{\rho c_p} + \frac{\dot{q}}{c_p}
+$$
 
 where $\alpha = k/(\rho c_p)$ is thermal diffusivity.
 
@@ -110,19 +149,26 @@ where $\alpha = k/(\rho c_p)$ is thermal diffusivity.
 
 ### Substantial Derivative Form
 
-$$\rho \frac{Dh}{Dt} = \frac{Dp}{Dt} + \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}$$
+$$
+\rho \frac{Dh}{Dt} = \frac{Dp}{Dt} + \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}
+$$
 
 ### For Ideal Gas
 
 Using $h = c_p T$:
 
-$$\rho c_p \frac{DT}{Dt} = \frac{Dp}{Dt} + \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}$$
+$$
+\rho c_p \frac{DT}{Dt} = \frac{Dp}{Dt} + \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}
+$$
 
 ### Stagnation Enthalpy
 
 For flow without heat conduction, heat sources, or body forces:
 
-$$\rho \frac{D}{Dt}\left(h + \frac{1}{2}V^2\right) = \frac{\partial p}{\partial t} + \nabla \cdot (\boldsymbol{\tau} \cdot \vec{V})$$
+$$
+\rho \frac{D}{Dt}\left(h + \frac{1}{2}V^2\right) = \frac{\partial p}{\partial t} +
+\nabla \cdot (\boldsymbol{\tau} \cdot \vec{V})
+$$
 
 For steady, inviscid flow: $h_0 = h + \frac{1}{2}V^2 = \text{constant}$
 
@@ -151,6 +197,7 @@ For steady, inviscid flow: $h_0 = h + \frac{1}{2}V^2 = \text{constant}$
 ### Energy Equation Scaling
 
 Characteristic scales:
+
 - Length: $L$
 - Velocity: $U$
 - Temperature difference: $\Delta T$
@@ -168,7 +215,10 @@ Characteristic scales:
 
 ### Dimensionless Energy Equation
 
-$$\frac{D\Theta}{Dt^*} = \frac{1}{Pe} \nabla^{*2} \Theta + \frac{Ec}{Re} \Phi^* + \dot{Q}^*$$
+$$
+\frac{D\Theta}{Dt^*} = \frac{1}{Pe} \nabla^{*2} \Theta + \frac{Ec}{Re} \Phi^* +
+\dot{Q}^*
+$$
 
 where $\Theta = (T - T_\infty)/\Delta T$ is dimensionless temperature, $t^* = tU/L$, $\Phi^* = \Phi L^2/(\mu U^2)$, and the dissipation coefficient $Ec/Re$ equals $Br/Pe$.
 
@@ -178,15 +228,20 @@ where $\Theta = (T - T_\infty)/\Delta T$ is dimensionless temperature, $t^* = tU
 
 **Incompressible energy equation**:
 
-$$\rho c_p \frac{DT}{Dt} = \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}$$
+$$
+\rho c_p \frac{DT}{Dt} = \nabla \cdot (k \nabla T) + \Phi + \rho \dot{q}
+$$
 
 **Boussinesq approximation**: For natural convection
 
-$$\rho = \rho_0[1 - \beta(T - T_0)]$$
+$$
+\rho = \rho_0[1 - \beta(T - T_0)]
+$$
 
 ### High-Speed Flow
 
 **Compressible effects dominant**:
+
 - Coupling with momentum equations
 - Shock wave heating
 - Viscous heating becomes important
@@ -195,7 +250,11 @@ $$\rho = \rho_0[1 - \beta(T - T_0)]$$
 
 **Thermal boundary layer**:
 
-$$u \frac{\partial T}{\partial x} + v \frac{\partial T}{\partial y} = \alpha \frac{\partial^2 T}{\partial y^2} + \frac{\nu}{c_p}\left(\frac{\partial u}{\partial y}\right)^2$$
+$$
+u \frac{\partial T}{\partial x} + v \frac{\partial T}{\partial y} = \alpha
+\frac{\partial^2 T}{\partial y^2} +
+\frac{\nu}{c_p}\left(\frac{\partial u}{\partial y}\right)^2
+$$
 
 ## Numerical Methods
 
@@ -203,17 +262,27 @@ $$u \frac{\partial T}{\partial x} + v \frac{\partial T}{\partial y} = \alpha \fr
 
 **Explicit schemes**: Forward Euler, Runge-Kutta
 
-$$T_i^{n+1} = T_i^n + \Delta t \left[\alpha \frac{T_{i+1}^n - 2T_i^n + T_{i-1}^n}{(\Delta x)^2} + S_i^n\right]$$
+$$
+T_i^{n+1} = T_i^n + \Delta t
+\left[\alpha \frac{T_{i+1}^n - 2T_i^n + T_{i-1}^n}{(\Delta x)^2} + S_i^n\right]
+$$
 
 **Implicit schemes**: Backward Euler, Crank-Nicolson
 
-$$T_i^{n+1} - \Delta t \alpha \frac{T_{i+1}^{n+1} - 2T_i^{n+1} + T_{i-1}^{n+1}}{(\Delta x)^2} = T_i^n + \Delta t S_i^{n+1}$$
+$$
+T_i^{n+1} - \Delta t \alpha
+\frac{T_{i+1}^{n+1} - 2T_i^{n+1} + T_{i-1}^{n+1}}{(\Delta x)^2} = T_i^n + \Delta t
+S_i^{n+1}
+$$
 
 ### Finite Volume Methods
 
 **Control volume discretization**:
 
-$$\frac{\partial (\rho c_p T)}{\partial t} + \nabla \cdot (\rho c_p T \vec{V}) = \nabla \cdot (k \nabla T) + S$$
+$$
+\frac{\partial (\rho c_p T)}{\partial t} + \nabla \cdot (\rho c_p T \vec{V}) = \nabla
+\cdot (k \nabla T) + S
+$$
 
 **Convection-diffusion equation**: Special attention to numerical diffusion
 
@@ -221,7 +290,11 @@ $$\frac{\partial (\rho c_p T)}{\partial t} + \nabla \cdot (\rho c_p T \vec{V}) =
 
 **Weak formulation**:
 
-$$\int_\Omega w \rho c_p \frac{\partial T}{\partial t} d\Omega + \int_\Omega \nabla w \cdot (k \nabla T) d\Omega = \int_\Omega w S d\Omega + \int_{\partial \Omega} w q_n d\Gamma$$
+$$
+\int_\Omega w \rho c_p \frac{\partial T}{\partial t} d\Omega + \int_\Omega \nabla w
+\cdot (k \nabla T) d\Omega = \int_\Omega w S d\Omega + \int_{\partial \Omega} w q_n
+d\Gamma
+$$
 
 ## Applications
 
@@ -229,15 +302,21 @@ $$\int_\Omega w \rho c_p \frac{\partial T}{\partial t} d\Omega + \int_\Omega \na
 
 **Forced convection**: Flow over heated surfaces
 
-$$Nu = f(Re, Pr)$$
+$$
+Nu = f(Re, Pr)
+$$
 
 **Natural convection**: Buoyancy-driven flows
 
-$$Nu = f(Ra, Pr)$$
+$$
+Nu = f(Ra, Pr)
+$$
 
 **Mixed convection**: Combined forced and natural
 
-$$Nu = f(Re, Gr, Pr)$$
+$$
+Nu = f(Re, Gr, Pr)
+$$
 
 ### Compressible Flow Applications
 
@@ -245,7 +324,9 @@ $$Nu = f(Re, Gr, Pr)$$
 
 **Shock waves**: Temperature jump across normal shocks:
 
-$$\frac{T_2}{T_1} = \frac{[2\gamma Ma_1^2 - (\gamma-1)][(\gamma-1)Ma_1^2 + 2]}{(\gamma+1)^2 Ma_1^2}$$
+$$
+\frac{T_2}{T_1} = \frac{[2\gamma Ma_1^2 - (\gamma-1)][(\gamma-1)Ma_1^2 + 2]}{(\gamma+1)^2 Ma_1^2}
+$$
 
 **Atmospheric entry**: Extreme heating due to compression
 
@@ -253,17 +334,23 @@ $$\frac{T_2}{T_1} = \frac{[2\gamma Ma_1^2 - (\gamma-1)][(\gamma-1)Ma_1^2 + 2]}{(
 
 **Gas turbines**: Work extraction and heat addition
 
-$$W = c_p(T_{03} - T_{04})$$
+$$
+W = c_p(T_{03} - T_{04})
+$$
 
 **Compressors**: Temperature rise due to compression
 
-$$T_{02}/T_{01} = \left(p_{02}/p_{01}\right)^{(\gamma-1)/\gamma}$$
+$$
+T_{02}/T_{01} = \left(p_{02}/p_{01}\right)^{(\gamma-1)/\gamma}
+$$
 
 ### Combustion Systems
 
 **Energy release**: Chemical energy to thermal energy
 
-$$\dot{q}_{chem} = -\sum_i h_{f,i} \dot{\omega}_i$$
+$$
+\dot{q}_{chem} = -\sum_i h_{f,i} \dot{\omega}_i
+$$
 
 **Flame propagation**: Coupling of energy and species equations
 
@@ -273,7 +360,10 @@ $$\dot{q}_{chem} = -\sum_i h_{f,i} \dot{\omega}_i$$
 
 **Reynolds-averaged**:
 
-$$\rho c_p \frac{D\bar{T}}{Dt} = \nabla \cdot (k \nabla \bar{T}) - \nabla \cdot \overline{\rho c_p \vec{v}' T'} + \bar{\Phi} + \rho \dot{q}$$
+$$
+\rho c_p \frac{D\bar{T}}{Dt} = \nabla \cdot (k \nabla \bar{T}) - \nabla \cdot
+\overline{\rho c_p \vec{v}' T'} + \bar{\Phi} + \rho \dot{q}
+$$
 
 **Turbulent heat flux**: $\overline{\rho c_p \vec{v}' T'}$ requires modeling
 
@@ -289,7 +379,9 @@ $$\rho c_p \frac{D\bar{T}}{Dt} = \nabla \cdot (k \nabla \bar{T}) - \nabla \cdot 
 
 **Phase change**: Latent heat effects
 
-$$\rho \frac{DH}{Dt} = \rho L \frac{D\alpha}{Dt}$$
+$$
+\rho \frac{DH}{Dt} = \rho L \frac{D\alpha}{Dt}
+$$
 
 **Interface tracking**: Energy conservation across interfaces
 
@@ -322,11 +414,13 @@ $$\rho \frac{DH}{Dt} = \rho L \frac{D\alpha}{Dt}$$
 ## Learning Strategy
 
 ### Prerequisites
+
 - Thermodynamics and heat transfer fundamentals
 - Vector calculus and differential equations
 - Basic fluid mechanics and conservation laws
 
 ### Key Concepts
+
 1. Energy conservation and first law of thermodynamics
 2. Internal energy vs. enthalpy formulations
 3. Viscous dissipation and its significance
@@ -335,6 +429,7 @@ $$\rho \frac{DH}{Dt} = \rho L \frac{D\alpha}{Dt}$$
 6. Dimensionless parameters for energy transport
 
 ### Problem-Solving Approach
+
 1. Identify the appropriate form of energy equation
 2. Determine relevant assumptions and simplifications
 3. Apply proper boundary and initial conditions
@@ -369,7 +464,10 @@ For a Newtonian fluid, $\Phi$ is a sum of squares of strain-rate combinations mu
 
 (b) With $T(0) = T(h) = T_w$, the solution is $T - T_w = \frac{\Phi}{2k}y(h - y)$. The maximum is at mid-gap:
 
-$$\Delta T_{max} = \frac{\Phi h^2}{8k} = \frac{4.64 \times 10^6 \times (5 \times 10^{-4})^2}{8 \times 0.145} = 1.0 \text{ K}$$
+```math
+\Delta
+T_{max} = \frac{\Phi h^2}{8k} = \frac{4.64 \times 10^6 \times (5 \times 10^{-4})^2}{8 \times 0.145} = 1.0 \text{ K}
+```
 
 (c) $\Phi h = 2320$ W/m², and $\tau U = \mu (U/h) U = 0.29 \times 4000 \times 2 = 2320$ W/m². All the work done by the moving plate is dissipated as heat.
 
@@ -410,7 +508,10 @@ $Ec$ and $Br$ are tiny, so viscous dissipation is negligible compared with condu
 
 (b) $r = 1.43 \times 10^{-7} \times 2/10^{-6} = 0.286$, and
 
-$$T_i^{n+1} = T_i^n + r\,(T_{i+1}^n - 2T_i^n + T_{i-1}^n) = 30 + 0.286 \times (20 - 60 + 20) = 24.28\ ^\circ\text{C}$$
+```math
+T_i^{n+1} = T_i^n + r\,(T_{i+1}^n - 2T_i^n + T_{i-1}^n) = 30 + 0.286 \times
+(20 - 60 + 20) = 24.28\ ^\circ \text{C}
+```
 
 The hot spot cools toward its neighbours, as diffusion should.
 

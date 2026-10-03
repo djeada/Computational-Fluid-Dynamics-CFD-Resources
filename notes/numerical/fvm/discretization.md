@@ -14,7 +14,10 @@ The finite-volume method (FVM) is a widely used technique for solving partial di
 
 The starting point in FVM is the integral formulation of a conservation law over an arbitrary control volume $V$ with boundary surface $S$:
 
-$$\frac{\partial}{\partial t}\int_V \phi \, dV + \int_S \vec{F} \cdot \hat{n} \, dS = \int_V S_\phi \, dV$$
+$$
+\frac{\partial}{\partial t}\int_V \phi \, dV + \int_S \vec{F} \cdot \hat{n} \,
+dS = \int_V S_\phi \, dV
+$$
 
 where:
 
@@ -27,7 +30,9 @@ where:
 
 For steady, incompressible flow (i.e., time-independent with constant density), the continuity equation simplifies to:
 
-$$\int_S \vec{V} \cdot \hat{n} \, dS = 0$$
+$$
+\int_S \vec{V} \cdot \hat{n} \, dS = 0
+$$
 
 where $\vec{V}$ is the velocity vector. This equation implies that the net volumetric flow into the control volume is zero.
 
@@ -52,22 +57,30 @@ A schematic of the rectangular cell is as follows:
                 Δx
                 Δy (vertical distance)
 ```
- 
+
 Face 1 (Left):
 
-$$\vec{V}_1 = u_1 \, \hat{i} + v_1 \, \hat{j}$$
+$$
+\vec{V}_1 = u_1 \, \hat{i} + v_1 \, \hat{j}
+$$
 
 Face 2 (Top):
 
-$$\vec{V}_2 = u_2 \, \hat{i} + v_2 \, \hat{j}$$
+$$
+\vec{V}_2 = u_2 \, \hat{i} + v_2 \, \hat{j}
+$$
 
 Face 3 (Right):
 
-$$\vec{V}_3 = u_3 \, \hat{i} + v_3 \, \hat{j}$$
+$$
+\vec{V}_3 = u_3 \, \hat{i} + v_3 \, \hat{j}
+$$
 
 Face 4 (Bottom):
 
-$$\vec{V}_4 = u_4 \, \hat{i} + v_4 \, \hat{j}$$
+$$
+\vec{V}_4 = u_4 \, \hat{i} + v_4 \, \hat{j}
+$$
 
 *Note:* In many practical applications, one assumes that the primary contributions come from the normal components of the velocity at each face. For instance, on the left and right faces, the $u$-component is dominant, and on the top and bottom faces, the $v$-component is dominant.
 
@@ -75,29 +88,41 @@ $$\vec{V}_4 = u_4 \, \hat{i} + v_4 \, \hat{j}$$
 
 By applying the integral continuity equation to the control volume, we approximate the surface integrals over each face. Let the contribution from each face be given by the product of the normal velocity and the face length. Assuming the outward normals are defined as:
 
-Left face: 
+Left face:
 
-$$\hat{n} = -\hat{i}$$
+$$
+\hat{n} = -\hat{i}
+$$
 
-Top face: 
+Top face:
 
-$$\hat{n} = +\hat{j}$$
+$$
+\hat{n} = +\hat{j}
+$$
 
-Right face: 
+Right face:
 
-$$\hat{n} = +\hat{i}$$
+$$
+\hat{n} = +\hat{i}
+$$
 
-Bottom face: 
+Bottom face:
 
-$$\hat{n} = -\hat{j}$$
+$$
+\hat{n} = -\hat{j}
+$$
 
 the discrete form of the continuity equation becomes:
 
-$$(-u_1) \Delta y + (v_2) \Delta x + (u_3) \Delta y + (-v_4) \Delta x = 0$$
+$$
+(-u_1) \Delta y + (v_2) \Delta x + (u_3) \Delta y + (-v_4) \Delta x = 0
+$$
 
 Rearranging the terms:
 
-$$- u_1 \, \Delta y - v_4 \, \Delta x + u_3 \, \Delta y + v_2 \, \Delta x = 0$$
+$$
+-u_1 \, \Delta y - v_4 \, \Delta x + u_3 \, \Delta y + v_2 \, \Delta x = 0
+$$
 
 This expression states that the net mass flux through the cell faces must sum to zero, thus preserving mass conservation within the control volume.
 
@@ -107,7 +132,10 @@ This expression states that the net mass flux through the cell faces must sum to
 
 For the momentum equations, the same approach is used. For example, the $x$-momentum conservation in its integral form is:
 
-$$\int_S \rho u \, \vec{V} \cdot \hat{n} \, dS = \int_S (\text{Pressure and viscous forces}) \cdot \hat{i} \, dS$$
+$$
+\int_S \rho u \, \vec{V} \cdot \hat{n} \, dS = \int_S
+(\text{Pressure and viscous forces}) \cdot \hat{i} \, dS
+$$
 
 After discretizing the surface integrals over the cell faces (and including any body forces or source terms), one obtains an algebraic equation for the $x$-momentum at the cell center. A similar procedure applies to the $y$-momentum.
 
@@ -115,7 +143,10 @@ After discretizing the surface integrals over the cell faces (and including any 
 
 Similarly, the energy conservation equation is integrated over the control volume:
 
-$$\int_S \left( \rho E \, \vec{V} + p \, \vec{V} \right) \cdot \hat{n} \, dS = \int_S \text{Heat flux} \, dS$$
+$$
+\int_S \left(\rho E \, \vec{V} + p \, \vec{V} \right) \cdot \hat{n} \, dS = \int_S
+\text{Heat flux} \, dS
+$$
 
 and then discretized by approximating the fluxes across each cell face.
 
@@ -125,7 +156,9 @@ and then discretized by approximating the fluxes across each cell face.
 
 In the finite-volume framework, the primary unknowns (e.g., velocities, pressures) are typically stored at the cell centers. However, the fluxes at the cell faces require values at these locations. To obtain face-centered values, interpolation is used. A common approach is linear interpolation. For example, the velocity at a face between cell $P$ (primary cell) and cell $N$ (neighboring cell) is approximated as:
 
-$$u_f = \frac{1}{2}\left(u_P + u_N\right)$$
+$$
+u_f = \frac{1}{2}\left(u_P + u_N\right)
+$$
 
 ### Assembly and Solution
 
@@ -157,7 +190,7 @@ This note shows how to discretize the integral conservation equations (continuit
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Rectangular cell dimensions $\Delta x$, $\Delta y$, face velocity components $(u_f, v_f)$, outward normals $\hat{n}$, cell-centered primary variables |
 | **Outputs** | Discrete continuity equation $(-u_1)\Delta y + (v_2)\Delta x + (u_3)\Delta y + (-v_4)\Delta x = 0$, momentum and energy algebraic equations, global matrix system |
 
@@ -175,7 +208,10 @@ This note shows how to discretize the integral conservation equations (continuit
 
 $(-u_1)\Delta y + v_2\Delta x + u_3\Delta y - v_4\Delta x = 0$, so
 
-$$v_2 = v_4 - (u_3 - u_1)\frac{\Delta y}{\Delta x} = 0.3 - 0.2 \times 0.5 = 0.2 \text{ m/s}$$
+```math
+v_2 = v_4 - (u_3 - u_1) \frac{\Delta y}{\Delta x} = 0.3 - 0.2 \times 0.5 = 0.2
+\text{ m/s}
+```
 
 The net volume flow out through the right face ($0.2 \times 0.05 = 0.01$ m²/s) is balanced by a reduced outflow through the top.
 
@@ -186,7 +222,9 @@ The net volume flow out through the right face ($0.2 \times 0.05 = 0.01$ m²/s) 
 <details>
 <summary>Answer</summary>
 
-$$\frac{u_3 - u_1}{\Delta x} + \frac{v_2 - v_4}{\Delta y} = 0$$
+```math
+\frac{u_3 - u_1}{\Delta x} + \frac{v_2 - v_4}{\Delta y} = 0
+```
 
 The face values sit a half cell on either side of the centre, so each quotient is a central difference with spacing $\Delta x$ (or $\Delta y$) about the centre. Its truncation error is $O(\Delta x^2) + O(\Delta y^2)$. The finite-volume balance is therefore consistent and second-order accurate, while also conserving mass exactly.
 
@@ -199,7 +237,9 @@ The face values sit a half cell on either side of the centre, so each quotient i
 
 Linear interpolation with weight $f = (x_f - x_P)/(x_N - x_P) = 1/3$ gives
 
-$$u_f = (1 - f)u_P + f u_N = \frac{2}{3}(2) + \frac{1}{3}(5) = 3.0$$
+```math
+u_f = (1 - f)u_P + f u_N = \frac{2}{3}(2) + \frac{1}{3}(5) = 3.0
+```
 
 The simple average $(u_P + u_N)/2 = 3.5$ would be wrong here, because the face is not midway.
 

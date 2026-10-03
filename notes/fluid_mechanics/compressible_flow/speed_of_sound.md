@@ -61,7 +61,8 @@ $$
 **Combining** the two results:
 
 $$
-dp = \rho a \cdot \frac{a\, d\rho}{\rho} = a^2\, d\rho \quad \Rightarrow \quad a^2 = \frac{dp}{d\rho}
+dp = \rho a \cdot \frac{a\, d\rho}{\rho} = a^2\, d\rho \quad \Rightarrow \quad
+a^2 = \frac{dp}{d\rho}
 $$
 
 ### Which Derivative?
@@ -91,7 +92,7 @@ The momentum result $dp = \rho a\, dV$ is also useful on its own. It relates the
 ### Typical Values
 
 | Medium | Condition | Speed of sound |
-|---|---|---|
+| --- | --- | --- |
 | Air | 288.15 K (sea level, standard atmosphere) | 340.3 m/s |
 | Air | 300 K | 347.2 m/s |
 | Air | 216.65 K (11 km, standard atmosphere) | 295.0 m/s |
@@ -131,7 +132,7 @@ It is a local property: $a$ changes with temperature, so the same velocity gives
 ### Flow Regimes
 
 | Regime | Mach range (approximate) | Characteristics |
-|---|---|---|
+| --- | --- | --- |
 | Incompressible | $M < 0.3$ | density changes below about 5%, Bernoulli applies |
 | Subsonic | $0.3 < M < 0.8$ | smooth flow, noticeable compressibility corrections |
 | Transonic | $0.8 < M < 1.2$ | mixed subsonic and supersonic regions, local shocks on wings |
@@ -168,11 +169,12 @@ In the frame of the source, a supersonic stream flows past it:
 The half-angle $\mu$ of the cone follows from the right triangle formed by the source path $V t$ and the pulse radius $a t$. The cone surface is tangent to the pulse sphere, so
 
 $$
-\sin \mu = \frac{a t}{V t} = \frac{1}{M}, \qquad \mu = \arcsin\frac{1}{M}
+\sin \mu = \frac{a t}{V t} = \frac{1}{M},
+\qquad \mu = \arcsin \frac{1}{M}
 $$
 
 | $M$ | 1.2 | 1.5 | 2 | 3 | 5 |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | $\mu$ | $56.4^\circ$ | $41.8^\circ$ | $30.0^\circ$ | $19.5^\circ$ | $11.5^\circ$ |
 
 The surface of the cone is a **Mach wave**: the limit of an infinitely weak shock, across which properties change only infinitesimally. Mach waves are the characteristic lines of steady supersonic flow. They are the building blocks of the Prandtl–Meyer expansion fan and the method of characteristics ([shock_waves.md](shock_waves.md)). Only points inside the downstream cone can be influenced by the source, which is why supersonic flow has no upstream influence without a shock.
@@ -184,7 +186,8 @@ An aircraft flies level at $M = 1.5$ at an altitude of $h = 3000\ \text{m}$. Tak
 The observer hears the aircraft when the Mach cone reaches them. By then the aircraft has passed overhead and travelled a horizontal distance $x$ with $\tan \mu = h/x$:
 
 $$
-\mu = \arcsin\frac{1}{1.5} = 41.8^\circ, \qquad x = \frac{h}{\tan \mu} = h\sqrt{M^2 - 1} = 3000 \times 1.118 = 3354\ \text{m}
+\mu = \arcsin \frac{1}{1.5} = 41.8^\circ,
+\qquad x = \frac{h}{\tan \mu} = h \sqrt{M^2 - 1} = 3000 \times 1.118 = 3354\  \text{m}
 $$
 
 The aircraft speed is $V = 1.5 \times 340 = 510\ \text{m/s}$, so the boom arrives $t = 3354/510 = 6.58\ \text{s}$ after the aircraft was directly overhead. A real atmosphere is colder at altitude, which bends the cone and shifts this estimate.
@@ -206,7 +209,8 @@ $$
 For the largest density change in a flow, compare the free stream with the stagnation point. From [thermodynamics.md](thermodynamics.md):
 
 $$
-\frac{\rho_0}{\rho} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{1/(\gamma - 1)} = 1 + \frac{M^2}{2} + \frac{2 - \gamma}{8} M^4 + \cdots
+\frac{\rho_0}{\rho} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{1/(\gamma - 1)} = 1 +
+\frac{M^2}{2} + \frac{2 - \gamma}{8} M^4 + \cdots
 $$
 
 So the fractional density change is $\Delta\rho/\rho \approx M^2/2$.
@@ -214,11 +218,12 @@ So the fractional density change is $\Delta\rho/\rho \approx M^2/2$.
 The pressure rise at the stagnation point, compared with the incompressible prediction $\tfrac{1}{2}\rho V^2$, is
 
 $$
-\frac{p_0 - p}{\tfrac{1}{2}\rho V^2} = 1 + \frac{M^2}{4} + \frac{2 - \gamma}{24} M^4 + \cdots
+\frac{p_0 - p}{\tfrac{1}{2}\rho V^2} = 1 + \frac{M^2}{4} + \frac{2 - \gamma}{24} M^4 +
+\cdots
 $$
 
 | $M$ | $\rho_0/\rho - 1$ (exact) | $M^2/2$ | $(p_0 - p)/(\tfrac{1}{2}\rho V^2)$ |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 0.1 | 0.50% | 0.50% | 1.0025 |
 | 0.2 | 2.01% | 2.00% | 1.0100 |
 | 0.3 | 4.56% | 4.50% | 1.0227 |

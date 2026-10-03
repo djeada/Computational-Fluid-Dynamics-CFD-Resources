@@ -19,21 +19,30 @@ In a typical CFD simulation, one would assign a velocity or pressure boundary co
 
 The study of fluid flow in CFD is typically based on a set of partial differential equations that represent the laws of conservation of mass, momentum, and energy. These equations rest on the continuum hypothesis, which imagines the fluid as a continuous medium rather than a collection of discrete molecules. This viewpoint is usually valid for flows in which the mean free path of molecules is much smaller than the characteristic length scale of the domain.
 
-1) Continuity Equation. This equation enforces conservation of mass and, in differential form, can appear as  
+1) Continuity Equation. This equation enforces conservation of mass and, in differential form, can appear as
 
-$$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \mathbf{v}) = 0$$  
+$$
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \mathbf{v}) = 0
+$$
 
 where $\rho$ is the fluid density and $\mathbf{v}$ is the velocity vector. It states that changes in mass within a control volume must be balanced by the net flow of mass across its boundaries.
 
-2) Navier–Stokes Equations. These equations govern the conservation of momentum. In their most general incompressible form for constant density, they often appear as  
+2) Navier–Stokes Equations. These equations govern the conservation of momentum. In their most general incompressible form for constant density, they often appear as
 
-$$\frac{\partial \mathbf{v}}{\partial t} + (\mathbf{v} \cdot \nabla)\mathbf{v} = -\frac{1}{\rho}\nabla p + \nu \nabla^2 \mathbf{v} + \mathbf{f}$$  
+$$
+\frac{\partial \mathbf{v}}{\partial t} +
+(\mathbf{v} \cdot \nabla)\mathbf{v} = -\frac{1}{\rho}\nabla p + \nu \nabla^2
+\mathbf{v} + \mathbf{f}
+$$
 
 where $p$ is pressure, $\nu$ is kinematic viscosity, and $\mathbf{f}$ represents body forces (such as gravity). These can be extremely challenging to solve analytically, so CFD provides the numerical path to solutions.
 
-3) Energy Equation. This equation captures conservation of energy, including effects like heat conduction, convection, and possibly sources or sinks of thermal energy. For many flows, it can be written as  
+3) Energy Equation. This equation captures conservation of energy, including effects like heat conduction, convection, and possibly sources or sinks of thermal energy. For many flows, it can be written as
 
-$$\rho c_p \Big(\frac{\partial T}{\partial t} + \mathbf{v}\cdot \nabla T\Big) = k \nabla^2 T + S$$  
+$$
+\rho c_p \Big(\frac{\partial T}{\partial t} + \mathbf{v}\cdot \nabla T\Big) = k \nabla^2
+T + S
+$$
 
 where $T$ is temperature, $c_p$ is specific heat at constant pressure, $k$ is thermal conductivity, and $S$ can include various heat sources.
 
@@ -70,30 +79,37 @@ CFD does not correspond to a single numerical method, but rather it is the overa
 Computational Fluid Dynamics (CFD) has a wide range of applications across various engineering and scientific fields. By solving the governing equations of fluid flow using numerical methods, CFD can be applied to analyze and optimize numerous processes and systems. Some of the key applications include:
 
 #### Aerospace Engineering
+
 - **Aircraft Design**: CFD is used to simulate and optimize the aerodynamics of aircraft, including lift, drag, and stability.
 - **Spacecraft Reentry**: Predicting heat and pressure distribution on spacecraft during reentry into the Earth's atmosphere.
 
 #### Automotive Engineering
+
 - **Aerodynamics**: Enhancing the aerodynamic performance of vehicles to reduce drag and improve fuel efficiency.
 - **Engine Combustion**: Analyzing and optimizing the combustion processes in internal combustion engines.
 
 #### Civil Engineering
+
 - **Building Design**: Simulating wind loads and natural ventilation in buildings to ensure structural integrity and comfort.
 - **Environmental Engineering**: Modeling pollutant dispersion in the atmosphere and water bodies to assess environmental impact.
 
 #### Chemical and Process Engineering
+
 - **Mixing and Separation**: Improving the efficiency of mixing, separation, and chemical reactions in industrial processes.
 - **Heat Exchangers**: Designing and optimizing heat exchangers for better thermal performance.
 
 #### Marine Engineering
+
 - **Ship Hydrodynamics**: Analyzing the flow around ship hulls to reduce resistance and improve propulsion efficiency.
 - **Offshore Structures**: Assessing the impact of waves and currents on offshore platforms and wind turbines.
 
 #### Biomedical Engineering
+
 - **Blood Flow**: Simulating blood flow in arteries and veins to aid in the design of medical devices and treatment plans.
 - **Respiratory Flows**: Analyzing airflow in the human respiratory system to improve ventilator design and respiratory therapies.
 
 #### Energy Sector
+
 - **Wind Turbines**: Optimizing the design and placement of wind turbines to maximize energy capture.
 - **Combustion Systems**: Enhancing the performance and emission characteristics of combustion systems in power plants.
 
@@ -118,7 +134,7 @@ This note introduces the foundations of Computational Fluid Dynamics. It explain
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Typical Inputs** | Geometry definition, mesh/grid, fluid properties ($\rho$, $\mu$, $k$, $c_p$), boundary conditions (velocity, pressure, temperature), initial conditions |
 | **Typical Outputs** | Velocity field $\mathbf{v}(x,t)$, pressure field $p(x,t)$, temperature field $T(x,t)$, derived quantities (drag, lift, heat flux) |
 
@@ -175,7 +191,9 @@ Halving the cell size multiplies the count by 8 in 3D. Uniform meshes are unaffo
 
 At each interior node, $-T_{i-1} + 2T_i - T_{i+1} = h^2 = 0.0625$, giving
 
-$$\begin{bmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{bmatrix}\begin{bmatrix} T_1 \\ T_2 \\ T_3 \end{bmatrix} = \begin{bmatrix} 0.0625 \\ 0.0625 \\ 0.0625 \end{bmatrix}.$$
+```math
+\begin{bmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{bmatrix}\begin{bmatrix} T_1 \\ T_2 \\ T_3 \end{bmatrix} = \begin{bmatrix} 0.0625 \\ 0.0625 \\ 0.0625 \end{bmatrix}
+```
 
 The solution is $T = (0.09375, 0.125, 0.09375)$.
 

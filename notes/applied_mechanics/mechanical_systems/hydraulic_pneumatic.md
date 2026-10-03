@@ -8,7 +8,9 @@ Hydraulic and pneumatic systems use pressurized fluids to transmit power, contro
 
 Pressure applied to a confined fluid is transmitted equally in all directions throughout the fluid:
 
-$$p = \frac{F}{A}$$
+$$
+p = \frac{F}{A}
+$$
 
 This principle is the foundation of all hydraulic power systems.
 
@@ -16,15 +18,21 @@ This principle is the foundation of all hydraulic power systems.
 
 A hydraulic system amplifies force by using pistons of different areas:
 
-$$\frac{F_2}{F_1} = \frac{A_2}{A_1}$$
+$$
+\frac{F_2}{F_1} = \frac{A_2}{A_1}
+$$
 
 The volume of fluid displaced is conserved:
 
-$$A_1 x_1 = A_2 x_2$$
+$$
+A_1 x_1 = A_2 x_2
+$$
 
 Therefore the work input equals the work output (ideal case):
 
-$$F_1 x_1 = F_2 x_2$$
+$$
+F_1 x_1 = F_2 x_2
+$$
 
 The mechanical advantage comes at the expense of displacement — the larger piston moves a shorter distance.
 
@@ -36,7 +44,9 @@ Hydraulic pressure acts on one side only; a spring or external load provides the
 
 **Extending force:**
 
-$$F = p \cdot A = p \cdot \frac{\pi D^2}{4}$$
+$$
+F = p \cdot A = p \cdot \frac{\pi D^2}{4}
+$$
 
 ### Double-Acting Cylinder
 
@@ -44,17 +54,23 @@ Hydraulic pressure can be applied to either side, providing force in both direct
 
 **Extending force** (full bore side):
 
-$$F_{ext} = p \cdot \frac{\pi D^2}{4}$$
+$$
+F_{ext} = p \cdot \frac{\pi D^2}{4}
+$$
 
 **Retracting force** (rod side):
 
-$$F_{ret} = p \cdot \frac{\pi (D^2 - d^2)}{4}$$
+$$
+F_{ret} = p \cdot \frac{\pi (D^2 - d^2)}{4}
+$$
 
 where $D$ is the bore diameter and $d$ is the rod diameter.
 
 ### Cylinder Velocity
 
-$$v = \frac{Q}{A}$$
+$$
+v = \frac{Q}{A}
+$$
 
 where $Q$ is the volumetric flow rate and $A$ is the effective piston area.
 
@@ -69,19 +85,23 @@ Pumps convert mechanical energy into hydraulic energy by displacing fluid under 
 ### Gear Pumps
 
 Two meshing gears trap and move fluid from inlet to outlet.
+
 - Flow rate: $Q = 2 V_t n \eta_v$
 - Simple, compact, and economical; pressure up to 20 MPa
 
 ### Vane Pumps
 
 Sliding vanes in a rotor sweep fluid from inlet to outlet within an eccentric housing.
+
 - Fixed or variable displacement; pressure up to 17 MPa
 
 ### Piston Pumps
 
 **Axial piston pump**: Pistons arranged parallel to the drive shaft, displaced by a swashplate.
 
-$$Q = A_p \cdot z \cdot d_s \cdot \tan\alpha \cdot n \cdot \eta_v$$
+$$
+Q = A_p \cdot z \cdot d_s \cdot \tan\alpha \cdot n \cdot \eta_v
+$$
 
 - Variable displacement via swashplate angle; pressure up to 40 MPa
 
@@ -91,13 +111,17 @@ Hydraulic motors convert hydraulic energy back into rotational mechanical energy
 
 ### Motor Torque
 
-$$T = \frac{\Delta p \cdot V_d}{2\pi} \cdot \eta_m$$
+$$
+T = \frac{\Delta p \cdot V_d}{2\pi} \cdot \eta_m
+$$
 
 where $\Delta p$ is the pressure differential, $V_d$ is the displacement per revolution, and $\eta_m$ is the mechanical efficiency.
 
 ### Motor Speed and Power
 
-$$n = \frac{Q}{V_d} \cdot \eta_v, \quad P = \Delta p \cdot Q \cdot \eta_{overall}$$
+$$
+n = \frac{Q}{V_d} \cdot \eta_v, \quad P = \Delta p \cdot Q \cdot \eta_{overall}
+$$
 
 Types include gear, vane, and piston motors, mirroring their pump counterparts.
 
@@ -106,6 +130,7 @@ Types include gear, vane, and piston motors, mirroring their pump counterparts.
 ### Directional Control Valves (DCVs)
 
 DCVs control the path of fluid flow through the circuit. They are classified by:
+
 - **Number of ports**: 2-way, 3-way, 4-way
 - **Number of positions**: 2-position, 3-position
 - **Center condition**: Open center, closed center, tandem center
@@ -116,7 +141,9 @@ A **4/3 DCV** (4-way, 3-position) is the most common for controlling double-acti
 
 **Relief valve**: Limits maximum system pressure by diverting excess flow to tank.
 
-$$p_{set} = F_{spring} / A_{poppet}$$
+$$
+p_{set} = F_{spring} / A_{poppet}
+$$
 
 **Pressure reducing valve**: Maintains a constant reduced pressure downstream.
 
@@ -126,7 +153,9 @@ $$p_{set} = F_{spring} / A_{poppet}$$
 
 **Orifice equation** for flow through a restriction:
 
-$$Q = C_d A \sqrt{\frac{2\Delta p}{\rho}}$$
+$$
+Q = C_d A \sqrt{\frac{2\Delta p}{\rho}}
+$$
 
 where $C_d$ is the discharge coefficient, $A$ is the orifice area, $\Delta p$ is the pressure drop, and $\rho$ is the fluid density.
 
@@ -137,6 +166,7 @@ where $C_d$ is the discharge coefficient, $A$ is the orifice area, $\Delta p$ is
 ### Basic Circuit Elements
 
 A complete hydraulic circuit includes:
+
 - **Pump**: Energy source
 - **Reservoir**: Fluid storage and conditioning
 - **Relief valve**: Overpressure protection
@@ -156,13 +186,16 @@ A complete hydraulic circuit includes:
 
 Pneumatic systems use the compressibility of air, governed by the ideal gas law:
 
-$$pV = mRT$$
+$$
+pV = mRT
+$$
 
 For isothermal processes: $p_1 V_1 = p_2 V_2$
 
 For adiabatic processes: $p_1 V_1^\gamma = p_2 V_2^\gamma$ where $\gamma = 1.4$ for air.
 
 ### Comparison with Hydraulics
+
 - **Advantages**: Clean, lighter, air freely available, safer in explosive environments
 - **Disadvantages**: Lower force (limited to ~1 MPa), compressibility limits speed control, noisy exhaust
 
@@ -182,11 +215,15 @@ For isothermal compression: $W = p_1 V_1 \ln(p_2/p_1)$
 
 For adiabatic compression:
 
-$$W = \frac{\gamma}{\gamma - 1} p_1 V_1 \left[\left(\frac{p_2}{p_1}\right)^{(\gamma-1)/\gamma} - 1\right]$$
+$$
+W = \frac{\gamma}{\gamma - 1} p_1 V_1
+\left[\left(\frac{p_2}{p_1}\right)^{(\gamma-1)/\gamma} - 1\right]
+$$
 
 ### Air Treatment (FRL Unit)
 
 Compressed air must be treated before use:
+
 - **Filter**: Removes particulates and water droplets
 - **Regulator**: Reduces and stabilizes supply pressure
 - **Lubricator**: Adds oil mist for component lubrication
@@ -203,19 +240,28 @@ Compressed air must be treated before use:
 
 Pump piston area:
 
-$$A_1 = \frac{\pi (0.020)^2}{4} = 3.142 \times 10^{-4} \text{ m}^2$$
+$$
+A_1 = \frac{\pi (0.020)^2}{4} = 3.142 \times 10^{-4} \text{ m}^2
+$$
 
 System pressure:
 
-$$p = \frac{F_1}{A_1} = \frac{500}{3.142 \times 10^{-4}} = 1.592 \text{ MPa}$$
+$$
+p = \frac{F_1}{A_1} = \frac{500}{3.142 \times 10^{-4}} = 1.592 \text{ MPa}
+$$
 
 Ram area:
 
-$$A_2 = \frac{\pi (0.200)^2}{4} = 3.142 \times 10^{-2} \text{ m}^2$$
+$$
+A_2 = \frac{\pi (0.200)^2}{4} = 3.142 \times 10^{-2} \text{ m}^2
+$$
 
 Ram force:
 
-$$F_2 = p \cdot A_2 = 1.592 \times 10^6 \times 3.142 \times 10^{-2} = 50{,}000 \text{ N} = 50 \text{ kN}$$
+$$
+F_2 = p \cdot A_2 = 1.592 \times 10^6 \times 3.142 \times 10^{-2} = 50{,}000
+\text{ N} = 50 \text{ kN}
+$$
 
 The mechanical advantage is $A_2/A_1 = (200/20)^2 = 100$.
 
@@ -229,11 +275,15 @@ The mechanical advantage is $A_2/A_1 = (200/20)^2 = 100$.
 
 Bore area:
 
-$$A_{cap} = \frac{\pi (0.100)^2}{4} = 7.854 \times 10^{-3} \text{ m}^2$$
+$$
+A_{cap} = \frac{\pi (0.100)^2}{4} = 7.854 \times 10^{-3} \text{ m}^2
+$$
 
 Rod area:
 
-$$A_{rod} = \frac{\pi (0.050)^2}{4} = 1.964 \times 10^{-3} \text{ m}^2$$
+$$
+A_{rod} = \frac{\pi (0.050)^2}{4} = 1.964 \times 10^{-3} \text{ m}^2
+$$
 
 Annulus area: $A_{ann} = A_{cap} - A_{rod} = 5.890 \times 10^{-3}$ m²
 
@@ -241,33 +291,48 @@ Flow rate: $Q = 30 / 60{,}000 = 5.0 \times 10^{-4}$ m³/s
 
 **Extension:**
 
-$$F_{ext} = p \cdot A_{cap} = 15 \times 10^6 \times 7.854 \times 10^{-3} = 117.8 \text{ kN}$$
+$$
+F_{ext} = p \cdot A_{cap} = 15 \times 10^6 \times 7.854 \times 10^{-3} = 117.8
+\text{ kN}
+$$
 
-$$v_{ext} = \frac{Q}{A_{cap}} = \frac{5.0 \times 10^{-4}}{7.854 \times 10^{-3}} = 0.0637 \text{ m/s}$$
+$$
+v_{ext} = \frac{Q}{A_{cap}} = \frac{5.0 \times 10^{-4}}{7.854 \times 10^{-3}} = 0.0637
+\text{ m/s}
+$$
 
 **Retraction:**
 
-$$F_{ret} = p \cdot A_{ann} = 15 \times 10^6 \times 5.890 \times 10^{-3} = 88.4 \text{ kN}$$
+$$
+F_{ret} = p \cdot A_{ann} = 15 \times 10^6 \times 5.890 \times 10^{-3} = 88.4 \text{ kN}
+$$
 
-$$v_{ret} = \frac{Q}{A_{ann}} = \frac{5.0 \times 10^{-4}}{5.890 \times 10^{-3}} = 0.0849 \text{ m/s}$$
+$$
+v_{ret} = \frac{Q}{A_{ann}} = \frac{5.0 \times 10^{-4}}{5.890 \times 10^{-3}} = 0.0849
+\text{ m/s}
+$$
 
 The retraction is faster but produces less force due to the reduced effective area.
 
 ## Applications
 
 ### Construction and Mining
+
 - **Excavators**: Hydraulic cylinders for boom, arm, and bucket
 - **Hydraulic presses**: Metal forming, forging, compaction
 
 ### Manufacturing
+
 - **CNC machine tools**: Hydraulic clamping and workholding
 - **Pneumatic pick-and-place**: High-speed assembly automation
 
 ### Aerospace
+
 - **Flight control actuators**: Redundant hydraulic systems at 21 MPa
 - **Landing gear actuation**: Extension and retraction cylinders
 
 ### Mobile Equipment
+
 - **Agricultural machinery**: Hydraulic implement control
 - **Forklifts**: Hydraulic lift and tilt cylinders
 - **Cranes**: Telescopic boom and outrigger cylinders
@@ -294,11 +359,16 @@ Work per stroke: input $500 \times 0.050 = 25$ J, output $50\,000 \times 0.0005 
 
 (a)
 
-$$D_{min} = \sqrt{\frac{4F}{\pi p}} = \sqrt{\frac{4 \times 40\,000}{\pi \times 12 \times 10^6}} = 0.0651 \text{ m} = 65.1 \text{ mm}$$
+```math
+D_{min} = \sqrt{\frac{4F}{\pi p}} = \sqrt{\frac{4 \times 40\,000}{\pi \times 12 \times 10^6}} = 0.0651 \text{ m} = 65.1 \text{ mm}
+```
 
 (b) $A = \pi(0.070)^2/4 = 3.848 \times 10^{-3}$ m², so $F = pA = 46.2$ kN, a margin of about 15% for seal friction and back-pressure.
 
-$$Q = vA = 0.1 \times 3.848 \times 10^{-3} = 3.85 \times 10^{-4} \text{ m}^3\text{/s} = 23.1 \text{ L/min}$$
+```math
+Q = vA = 0.1 \times 3.848 \times 10^{-3} = 3.85 \times 10^{-4} \text{ m}^3
+\text{/s} = 23.1 \text{ L/min}
+```
 
 </details>
 
@@ -307,9 +377,14 @@ $$Q = vA = 0.1 \times 3.848 \times 10^{-3} = 3.85 \times 10^{-4} \text{ m}^3\tex
 <details>
 <summary>Answer</summary>
 
-$$T = \frac{\Delta p\, V_d}{2\pi}\eta_m = \frac{18 \times 10^6 \times 40 \times 10^{-6}}{2\pi} \times 0.90 = 103.1 \text{ N}\cdot\text{m}$$
+```math
+T = \frac{\Delta p\, V_d}{2\pi}\eta_m = \frac{18 \times 10^6 \times 40 \times 10^{-6}}{2\pi} \times 0.90 = 103.1 \text{ N}\cdot \text{m}
+```
 
-$$n = \frac{Q}{V_d}\eta_v = \frac{50\,000 \text{ cm}^3\text{/min}}{40 \text{ cm}^3} \times 0.94 = 1175 \text{ rpm}$$
+```math
+n = \frac{Q}{V_d}\eta_v = \frac{50\,000 \text{ cm}^3\text{/min}}{40 \text{ cm}^3} \times
+0.94 = 1175 \text{ rpm}
+```
 
 Output power: $T\omega = 103.1 \times (1175 \times 2\pi/60) = 12.69$ kW. Hydraulic input: $\Delta p\, Q = 18 \times 10^6 \times 8.333 \times 10^{-4} = 15.0$ kW. Overall efficiency: $12.69/15.0 = 0.846$, which equals $\eta_v \eta_m$.
 
@@ -322,7 +397,11 @@ Output power: $T\omega = 103.1 \times (1175 \times 2\pi/60) = 12.69$ kW. Hydraul
 
 (a) $A = \pi(0.0025)^2/4 = 4.909 \times 10^{-6}$ m²:
 
-$$Q = C_d A\sqrt{\frac{2\Delta p}{\rho}} = 0.62 \times 4.909 \times 10^{-6} \times \sqrt{\frac{2 \times 4 \times 10^6}{870}} = 2.92 \times 10^{-4} \text{ m}^3\text{/s} = 17.5 \text{ L/min}$$
+```math
+Q = C_d A \sqrt{\frac{2\Delta p}{\rho}} = 0.62 \times 4.909 \times 10^{-6} \times
+\sqrt{\frac{2 \times 4 \times 10^6}{870}} = 2.92 \times 10^{-4} \text{ m}^3
+\text{/s} = 17.5 \text{ L/min}
+```
 
 (b) $Q \propto \sqrt{\Delta p}$, so halving the flow needs a quarter of the pressure drop: 1 MPa.
 
@@ -337,11 +416,20 @@ $$Q = C_d A\sqrt{\frac{2\Delta p}{\rho}} = 0.62 \times 4.909 \times 10^{-6} \tim
 
 Pressure ratio: $700/101.3 = 6.910$.
 
-$$W_{iso} = p_1 V_1 \ln\frac{p_2}{p_1} = 101\,300 \times 1 \times \ln 6.910 = 195.8 \text{ kJ}$$
+```math
+W_{iso} = p_1 V_1 \ln \frac{p_2}{p_1} = 101\,300 \times 1 \times \ln 6.910 = 195.8
+\text{ kJ}
+```
 
-$$W_{ad} = \frac{1.4}{0.4} \times 101\,300 \times \left(6.910^{0.2857} - 1\right) = 261.4 \text{ kJ}$$
+```math
+W_{ad} = \frac{1.4}{0.4} \times 101\,300 \times \left(6.910^{0.2857} - 1\right) = 261.4
+\text{ kJ}
+```
 
-$$T_2 = T_1\left(\frac{p_2}{p_1}\right)^{(\gamma-1)/\gamma} = 293.15 \times 6.910^{0.2857} = 509 \text{ K} \approx 236\ ^\circ\text{C}$$
+```math
+T_2 = T_1\left(\frac{p_2}{p_1}\right)^{(\gamma-1)/\gamma} = 293.15 \times
+6.910^{0.2857} = 509 \text{ K} \approx 236\ ^\circ \text{C}
+```
 
 Adiabatic compression needs about 33% more work. Staged compression with intercooling brings the process closer to isothermal, which saves work and keeps the delivery temperature within what oil and seals can tolerate.
 

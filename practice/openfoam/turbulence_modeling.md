@@ -17,7 +17,7 @@ This guide covers the theory, setup, and practical usage of turbulence models av
 ## Overview of Turbulence Approaches
 
 | Approach | Description | Cost | Accuracy |
-|----------|-------------|------|----------|
+| --- | --- | --- | --- |
 | **DNS** | Resolves all scales; no model needed | Very high | Exact (within numerical error) |
 | **LES** | Resolves large eddies; models small scales | High | High for unsteady flows |
 | **RANS** | Models all turbulent fluctuations | Low | Good for mean flow quantities |
@@ -339,6 +339,7 @@ omega = k^0.5 / (C_mu^0.25 * l)
 ```
 
 Where:
+
 - `I` = turbulence intensity (typically 0.01–0.10 for external flows, 0.05–0.20 for internal)
 - `l` = turbulent length scale (typically 0.07 × hydraulic diameter for pipes)
 - `C_mu` = 0.09
@@ -394,7 +395,7 @@ inlet
 Use wall functions when your mesh cannot resolve the viscous sublayer:
 
 | Field | Wall Function |
-|-------|--------------|
+| --- | --- |
 | `nut` | `nutkWallFunction` |
 | `k` | `kqRWallFunction` |
 | `omega` | `omegaWallFunction` |
@@ -405,7 +406,7 @@ Use wall functions when your mesh cannot resolve the viscous sublayer:
 When using low-Re models or when wall resolution is critical:
 
 | Field | Boundary Type |
-|-------|--------------|
+| --- | --- |
 | `nut` | `nutLowReWallFunction` or `fixedValue uniform 0` |
 | `k` | `fixedValue uniform 0` |
 | `omega` | `omegaWallFunction` (automatic switching) |
@@ -446,7 +447,7 @@ Is the flow steady-state with no separation?
 ### Quick Reference Table
 
 | Scenario | Recommended Model | y+ Target |
-|----------|------------------|-----------|
+| --- | --- | --- |
 | Simple pipe/duct flow | k-ε or k-ω SST | 30–300 (wall functions) |
 | External aerodynamics | k-ω SST or SA | ~1 (resolved) |
 | Turbomachinery | k-ω SST | ~1 |
@@ -539,7 +540,7 @@ simpleFoam -postProcess -func 'turbulenceFields(R, devReff, L, I, nut, nuEff, k,
 ### Common Troubleshooting
 
 | Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
+| --- | --- | --- |
 | `k` goes negative | Poor initialization or mesh | Initialize with larger k; refine mesh near walls |
 | `omega` unbounded | Missing or wrong wall function | Check `0/omega` wall BC; use `omegaWallFunction` |
 | High `nut/nu` (>10,000) | Poor mesh or wrong BCs | Check y+; refine mesh; check inlet values |

@@ -7,18 +7,21 @@ Fluid statics (hydrostatics) studies fluids at rest or in equilibrium, where the
 ## Topics Covered
 
 ### Fundamental Concepts
+
 - **[Hydrostatics](hydrostatics.md)**: Pressure distribution in static fluids and applications
 - Pascal's principle and pressure transmission
 - Hydrostatic pressure and gauge pressure
 - Atmospheric pressure and barometric measurements
 
 ### Pressure Distribution
+
 - Hydrostatic equation and pressure variation
 - Pressure heads and manometry
 - Pressure measurement devices
 - Absolute vs gauge vs vacuum pressure
 
 ### Buoyancy and Stability
+
 - Archimedes' principle and buoyant forces
 - Center of buoyancy and metacentric height
 - Stability of floating and submerged bodies
@@ -29,16 +32,19 @@ Fluid statics (hydrostatics) studies fluids at rest or in equilibrium, where the
 ### Hydrostatic Equation
 
 For a fluid in gravitational equilibrium:
+
 ```
 dp/dz = -ρg
 ```
 
 For incompressible fluids:
+
 ```
 p = p₀ + ρgh
 ```
 
 For compressible fluids (atmospheric):
+
 ```
 dp/dz = -ρ(z)g
 ```
@@ -46,6 +52,7 @@ dp/dz = -ρ(z)g
 ### Buoyancy Force
 
 Archimedes' principle:
+
 ```
 F_b = ρ_fluid × g × V_displaced
 ```
@@ -53,28 +60,34 @@ F_b = ρ_fluid × g × V_displaced
 ### Metacentric Height
 
 For floating body stability:
+
 ```
 GM = BM - BG
 ```
+
 where:
+
 - BM = metacentric radius
 - BG = distance from center of buoyancy to center of gravity
 
 ## Pressure Measurement
 
 ### Manometry
+
 - U-tube manometers
 - Inclined manometers
 - Differential manometers
 - Micromanometers for low pressures
 
 ### Pressure Transducers
+
 - Strain gauge pressure sensors
 - Capacitive pressure sensors
 - Piezoelectric pressure sensors
 - Digital pressure measurement systems
 
 ### Calibration and Standards
+
 - Primary pressure standards
 - Dead weight testers
 - Pressure calibration procedures
@@ -85,21 +98,26 @@ where:
 ### Forces on Submerged Surfaces
 
 **Flat surfaces:**
+
 ```
 F = ρg h_c A
 ```
+
 where h_c is the depth of the centroid.
 
 **Center of pressure:**
+
 ```
 y_cp = y_c + I_xx/(y_c A)
 ```
 
 **Curved surfaces:**
+
 - Horizontal component: Force on projected vertical area
 - Vertical component: Weight of fluid above surface
 
 ### Applications
+
 - Dam design and analysis
 - Pressure vessel design
 - Gate and valve sizing
@@ -108,18 +126,21 @@ y_cp = y_c + I_xx/(y_c A)
 ## Buoyancy Applications
 
 ### Naval Architecture
+
 - Ship design and stability analysis
 - Load line calculations
 - Trim and heel analysis
 - Damage stability assessment
 
 ### Offshore Engineering
+
 - Platform stability and design
 - Anchor and mooring systems
 - Subsea equipment buoyancy
 - Pipeline buoyancy control
 
 ### Aerospace Applications
+
 - Balloon and airship design
 - Atmospheric pressure effects
 - High-altitude flight considerations
@@ -128,12 +149,14 @@ y_cp = y_c + I_xx/(y_c A)
 ## Fluid Statics in Multiple Fluids
 
 ### Immiscible Fluids
+
 - Interface location and pressure jumps
 - Manometer calculations with multiple fluids
 - Stratified flow considerations
 - Oil-water separation systems
 
 ### Density Stratification
+
 - Atmospheric density variation
 - Ocean density layering
 - Thermal stratification effects
@@ -142,24 +165,28 @@ y_cp = y_c + I_xx/(y_c A)
 ## Engineering Applications
 
 ### Civil Engineering
+
 - Dam and reservoir design
 - Groundwater pressure analysis
 - Foundation design considerations
 - Hydraulic structures
 
 ### Mechanical Engineering
+
 - Hydraulic systems and machinery
 - Pressure vessel design
 - Lubrication system analysis
 - HVAC pressure distribution
 
 ### Chemical Engineering
+
 - Distillation column pressure drops
 - Reactor pressure analysis
 - Storage tank design
 - Process fluid handling
 
 ### Environmental Engineering
+
 - Atmospheric pressure modeling
 - Ocean engineering applications
 - Groundwater flow analysis
@@ -168,18 +195,21 @@ y_cp = y_c + I_xx/(y_c A)
 ## Advanced Topics
 
 ### Rotating Fluid Systems
+
 - Centrifugal effects on pressure distribution
 - Rotating machinery applications
 - Geophysical fluid applications
 - Laboratory rotating table experiments
 
 ### Surface Tension Effects
+
 - Capillary rise and depression
 - Meniscus formation in containers
 - Small-scale device applications
 - Microfluidics considerations
 
 ### Compressible Fluid Statics
+
 - Atmospheric pressure variation
 - Gas storage system analysis
 - Pneumatic system design
@@ -188,18 +218,21 @@ y_cp = y_c + I_xx/(y_c A)
 ## Experimental Methods
 
 ### Pressure Measurement Techniques
+
 - Static pressure tap design
 - Pressure measurement errors
 - Dynamic pressure effects
 - Temperature compensation
 
 ### Buoyancy Measurements
+
 - Hydrostatic weighing methods
 - Density measurement techniques
 - Stability testing procedures
 - Model testing in water tanks
 
 ### Flow Visualization
+
 - Pressure field visualization
 - Buoyancy-driven flow patterns
 - Stratified flow imaging
@@ -208,12 +241,14 @@ y_cp = y_c + I_xx/(y_c A)
 ## Computational Aspects
 
 ### Numerical Methods
+
 - Pressure field calculation
 - Hydrostatic equilibrium solutions
 - Stability analysis algorithms
 - Optimization of floating bodies
 
 ### Software Tools
+
 - Naval architecture software
 - Pressure system analysis tools
 - CFD preprocessing for static cases
@@ -230,11 +265,13 @@ y_cp = y_c + I_xx/(y_c A)
 ## Learning Path
 
 ### Prerequisites
+
 - Basic physics and statics
 - Vector analysis and calculus
 - Elementary thermodynamics
 
 ### Core Concepts
+
 1. Hydrostatic pressure distribution
 2. Pressure measurement principles
 3. Buoyancy and Archimedes' principle
@@ -242,12 +279,14 @@ y_cp = y_c + I_xx/(y_c A)
 5. Stability of floating bodies
 
 ### Applications Focus
+
 1. Engineering pressure systems
 2. Naval architecture applications
 3. Civil engineering structures
 4. Environmental fluid systems
 
 ### Advanced Topics
+
 1. Multi-fluid systems
 2. Rotating reference frames
 3. Compressible fluid statics

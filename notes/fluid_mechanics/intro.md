@@ -11,10 +11,12 @@ Exploring fluid behavior can start from a microscopic viewpoint, thinking about 
 ![microscopic_view](https://github.com/user-attachments/assets/dae1b6b6-6215-413b-b285-4aa1495d8be7)
 
 **I. Microscopic (Molecular) View:**
+
 ```
 ●   ●    ●  ● ●    ●
  ●   ●  ●    ●   ●
 ```
+
 Molecules in constant random motion.
 
 **II. Macroscopic (Continuum) View:**
@@ -27,20 +29,23 @@ By stepping back from individual molecules, fluid properties become smoothly var
 This section focuses on the **theoretical foundations** of fluid mechanics, including:
 
 ### Core Theory
+
 - **Fundamental equations**: Navier-Stokes, continuity, energy equations
 - **Fluid properties**: Viscosity, compressibility, surface tension
 - **Flow classification**: Laminar, turbulent, compressible, incompressible
 - **Mathematical methods**: Analytical and numerical solution techniques
 
-### Advanced Concepts  
+### Advanced Concepts
+
 - **Boundary layer theory**: Viscous effects near solid boundaries
 - **Turbulence modeling**: Statistical description of chaotic flows
 - **Compressible flow**: High-speed gas dynamics and shock waves
 - **Multiphase flow**: Flows involving multiple fluid phases
 
 ### Theoretical Analysis
+
 - **Dimensional analysis**: Similarity and scaling laws
-- **Stability theory**: Linear and nonlinear stability analysis  
+- **Stability theory**: Linear and nonlinear stability analysis
 - **Asymptotic methods**: Perturbation techniques for complex flows
 - **Computational methods**: Numerical solution of fluid equations
 
@@ -58,9 +63,9 @@ The continuum hypothesis underpins classical fluid mechanics. It assumes that th
 
 Defining field variables allows writing down equations that describe how a fluid moves and changes:
 
-• **Density field** $\rho(x,y,z,t)$ gives the mass of fluid per unit volume at each point.  
+• **Density field** $\rho(x,y,z,t)$ gives the mass of fluid per unit volume at each point.
 
-• **Velocity field** $\vec{v}(x,y,z,t)$ describes how fast fluid parcels move and in which direction.  
+• **Velocity field** $\vec{v}(x,y,z,t)$ describes how fast fluid parcels move and in which direction.
 
 • **Pressure field** $p(x,y,z,t)$ represents the isotropic part of the stress state in the fluid, essentially capturing how force is distributed throughout the fluid's volume.
 
@@ -72,7 +77,9 @@ Pressure is a key property that gives fluid mechanics much of its predictive pow
 
 In static fluids, pressure commonly changes with depth due to gravity. Deeper layers of fluid support the weight of the fluid above them, resulting in higher pressure. Mathematically, assuming the vertical axis $z$ is positive upward and ignoring other forces:
 
-$$\frac{dp}{dz} = -\rho g,$$
+$$
+\frac{dp}{dz} = -\rho g
+$$
 
 where $g$ is the acceleration due to gravity. This equation shows that going deeper into a fluid increases the pressure. It underlies familiar phenomena like ears popping when diving deeper into a swimming pool or the pressure differences that influence submarine design.
 
@@ -88,11 +95,15 @@ By adopting the continuum viewpoint, fluid mechanics uses partial differential e
 
 Conservation of mass ensures that fluid is neither created nor destroyed. This principle leads to the continuity equation:
 
-$$\nabla \cdot \vec{v} = 0 \quad \text{(for incompressible fluids)}$$
+$$
+\nabla \cdot \vec{v} = 0 \quad \text{(for incompressible fluids)}
+$$
 
 or more generally:
 
-$$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{v}) = 0.$$
+$$
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{v}) = 0
+$$
 
 ### Conservation of Momentum
 
@@ -107,14 +118,17 @@ By solving these equations, one can predict how fluids flow around objects (like
 ## Fluid Classification
 
 ### By Compressibility
+
 - **Incompressible fluids**: Density remains essentially constant ($\rho \approx$ constant)
 - **Compressible fluids**: Density varies significantly with pressure and temperature
 
 ### By Viscosity
+
 - **Inviscid fluids**: Idealized fluids with no viscosity ($\mu = 0$)
 - **Viscous fluids**: Real fluids with internal friction effects
 
 ### By Flow Type
+
 - **Laminar flow**: Smooth, ordered fluid motion with layers sliding past each other
 - **Turbulent flow**: Chaotic, irregular motion with rapid mixing and fluctuations
 
@@ -123,19 +137,23 @@ By solving these equations, one can predict how fluids flow around objects (like
 Fluid mechanics relies heavily on:
 
 ### Vector Calculus
+
 - **Gradient** ($\nabla$): Describes how scalar fields change in space
 - **Divergence** ($\nabla \cdot$): Measures source/sink strength of vector fields
 - **Curl** ($\nabla \times$): Quantifies rotation in vector fields
 
 ### Partial Differential Equations
+
 Most fluid problems involve coupled PDEs that must be solved simultaneously with appropriate boundary and initial conditions.
 
 ### Dimensional Analysis
+
 Systematic approach to understanding scaling relationships and deriving dimensionless parameters that characterize flow behavior.
 
 ## Theoretical vs. Applied Perspectives
 
 This fluid mechanics section emphasizes:
+
 - **Mathematical rigor**: Derivations and theoretical foundations
 - **Physical understanding**: Why fluids behave as they do
 - **Analytical solutions**: Exact solutions for simplified cases
@@ -146,6 +164,7 @@ For practical engineering applications of these principles, see the [Applied Mec
 ## Historical Development
 
 Fluid mechanics has evolved through contributions from many great scientists:
+
 - **Leonardo da Vinci** (1452-1519): Early observations of flow patterns
 - **Isaac Newton** (1643-1727): Viscosity law and foundation of mechanics
 - **Daniel Bernoulli** (1700-1782): Bernoulli's principle
@@ -158,6 +177,7 @@ Fluid mechanics has evolved through contributions from many great scientists:
 ## Modern Applications
 
 Today's fluid mechanics enables:
+
 - **Aerospace engineering**: Aircraft and spacecraft design
 - **Weather prediction**: Atmospheric modeling and climate studies
 - **Biomedical engineering**: Blood flow and respiratory system analysis
@@ -172,7 +192,9 @@ Pressure is a key property that gives fluid mechanics much of its predictive pow
 
 In static fluids, pressure commonly changes with depth due to gravity. Deeper layers of fluid support the weight of the fluid above them, resulting in higher pressure. Mathematically, assuming the vertical axis $z$ is positive upward and ignoring other forces:
 
-$$\frac{dp}{dz} = -\rho g,$$
+$$
+\frac{dp}{dz} = -\rho g
+$$
 
 where $g$ is the acceleration due to gravity. This equation shows that going deeper into a fluid increases the pressure. It underlies familiar phenomena like ears popping when diving deeper into a swimming pool or the pressure differences that influence submarine design.
 
@@ -188,11 +210,15 @@ By adopting the continuum viewpoint, fluid mechanics uses partial differential e
 
 Conservation of mass ensures that fluid is neither created nor destroyed. This principle leads to the continuity equation:
 
-$$\nabla \cdot \vec{v} = 0 \quad \text{(for incompressible fluids)}$$
+$$
+\nabla \cdot \vec{v} = 0 \quad \text{(for incompressible fluids)}
+$$
 
 or more generally:
 
-$$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{v}) = 0.$$
+$$
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{v}) = 0
+$$
 
 **II. Conservation of momentum**
 
@@ -249,7 +275,9 @@ Integrating from the surface ($z = 0$) down to $z = -h$ gives $p = p_{atm} + \rh
 
 Expand the divergence: $\partial \rho/\partial t + \vec{v} \cdot \nabla \rho + \rho \nabla \cdot \vec{v} = 0$. Since $\nabla \rho = 0$,
 
-$$\nabla \cdot \vec{v} = -\frac{1}{\rho}\frac{\partial \rho}{\partial t} = \frac{1}{\tau}$$
+```math
+\nabla \cdot \vec{v} = -\frac{1}{\rho} \frac{\partial \rho}{\partial t} = \frac{1}{\tau}
+```
 
 The velocity divergence is positive, so the gas expands everywhere. The same mass spreads over a growing volume, which is why the density falls. Only when $\rho$ is constant does the equation reduce to $\nabla \cdot \vec{v} = 0$.
 

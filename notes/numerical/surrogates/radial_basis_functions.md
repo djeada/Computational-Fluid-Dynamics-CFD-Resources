@@ -8,7 +8,9 @@ The core idea behind RBF interpolation is to construct a surrogate model $\hat{y
 
 A general RBF surrogate takes the form:
 
-$$\hat{y}(x) := \sum_{i=1}^{N} w_i R(\| x - x^{(i)} \|),$$
+$$
+\hat{y}(x): = \sum_{i=1}^{N} w_i R(\| x - x^{(i)} \|)
+$$
 
 where $\| \cdot \|$ is typically the Euclidean norm, and the centers $x^{(i)}$ correspond to the known sample locations. In principle, one could also choose different centers $c^{(i)}$ not coinciding with the sample points, but the standard approach sets centers equal to sample locations for simplicity.
 
@@ -16,19 +18,28 @@ where $\| \cdot \|$ is typically the Euclidean norm, and the centers $x^{(i)}$ c
 
 To achieve an exact interpolation of the available data $(x^{(i)}, y(x^{(i)}))$, the surrogate must satisfy:
 
-$$\hat{y}(x^{(i)}) = y(x^{(i)}), \quad \text{for } i=1,\ldots,N.$$
+$$
+\hat{y}(x^{(i)}) = y(x^{(i)}), \quad \text{for } i = 1,\ldots,N
+$$
 
 Substituting into the surrogate model yields a system of linear equations:
 
-$$\sum_{j=1}^{N} w_j R(\| x^{(i)} - x^{(j)} \|) = y_i, \quad i=1,\ldots,N,$$
+$$
+\sum_{j=1}^{N} w_j R(\| x^{(i)} - x^{(j)} \|) = y_i, \quad i = 1,\ldots,N
+$$
 
 which can be written in matrix form as:
 
-$$R w = Y,$$
+$$
+R w = Y
+$$
 
 where:
 
-$$R := [R(\| x^{(i)} - x^{(j)} \|)]_{i,j=1}^{N,N} \quad \text{and} \quad w := (w_1, \ldots, w_N)^T, \quad Y := (y_1, \ldots, y_N)^T.$$
+$$
+R: = [R(\| x^{(i)} - x^{(j)} \|)]_{i,j=1}^{N,N} \quad \text{and} \quad
+w: = (w_1, \ldots, w_N)^T, \quad Y: = (y_1, \ldots, y_N)^T
+$$
 
 Provided that $R$ is nonsingular, this system can be solved for the weights $w$. Nonsingularity typically requires distinct sample points $(x^{(i)} \neq x^{(j)} \text{ for } i \neq j)$.
 
@@ -74,7 +85,8 @@ For such cases, more sophisticated methods like Kriging offer a built-in way to 
 
 Consider a set of data points:
 
-$$\begin{array}{|c|c|}
+$$
+\begin{array}{|c|c|}
 \hline
 x & y(x) \\
 \hline
@@ -85,7 +97,8 @@ x & y(x) \\
 0.8 & 1.6 \\
 1.0 & 2.0 \\
 \hline
-\end{array}$$
+\end{array}
+$$
 
 Using an RBF interpolation with, for instance, the polyharmonic spline $R(h) = h^3$, one can reconstruct a smooth curve passing exactly through these points. Even for more complex functions like $y(x) = (6x - 2)^2 \sin(12x - 4)$, an RBF interpolant using $R(h) = h^3$ can capture the nonlinear oscillations accurately, outperforming simple polynomial fits.
 
@@ -102,7 +115,7 @@ RBF interpolation provides a flexible, mesh-free surrogate that can handle scatt
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Sample points $\{x^{(i)}\}_{i=1}^N$, observations $Y$, choice of radial function $R(\cdot)$, scaling parameter $c$ |
 | **Outputs** | Weight vector $w = R^{-1}Y$, surrogate prediction $\hat{y}(x)$ at new points, interpolation system matrix $R$ |
 
@@ -121,9 +134,9 @@ RBF interpolation provides a flexible, mesh-free surrogate that can handle scatt
 
 $R = \begin{pmatrix} 1 & e^{-1} \\ e^{-1} & 1 \end{pmatrix}$ with $\det R = 1 - e^{-2} = 0.8647$. Then
 
-$$
-w = R^{-1}Y = \frac{1}{1 - e^{-2}}\begin{pmatrix} 1 - 2e^{-1} \\ 2 - e^{-1} \end{pmatrix} = \begin{pmatrix} 0.3056 \\ 1.8876 \end{pmatrix},
-$$
+```math
+w = R^{-1}Y = \frac{1}{1 - e^{-2}}\begin{pmatrix} 1 - 2e^{-1} \\ 2 - e^{-1} \end{pmatrix} = \begin{pmatrix} 0.3056 \\ 1.8876 \end{pmatrix}
+```
 
 and $\hat{y}(0.5) = e^{-0.25}(w_1 + w_2) = 0.7788 \times 2.1932 = 1.7080$. Far from the data every Gaussian decays, so $\hat{y} \to 0$. Adding a regression term $f(x)^T\beta$ (e.g. a constant or linear trend) gives sensible behaviour away from the samples.
 
@@ -149,9 +162,9 @@ Without the polynomial, the weights are $w \approx (9.010, -15.179, 3.447, 1.392
 
 With the polynomial, the augmented system
 
-$$
-\begin{pmatrix} R & P \\ P^T & 0 \end{pmatrix}\begin{pmatrix} w \\ c \end{pmatrix} = \begin{pmatrix} Y \\ 0 \end{pmatrix}, \qquad P = [\mathbf{1}, X],
-$$
+```math
+\begin{pmatrix} R & P \\ P^T & 0 \end{pmatrix}\begin{pmatrix} w \\ c \end{pmatrix} = \begin{pmatrix} Y \\ 0 \end{pmatrix}, \qquad P = [\mathbf{1}, X]
+```
 
 gives $w = 0$ and $(c_0, c_1) = (0, 2)$, so $\hat{y}(x) = 2x$ exactly and $\hat{y}(0.1) = 0.2$. The cubic RBF is only conditionally positive definite, so a low-degree polynomial tail is the standard way to guarantee solvability and to reproduce polynomial trends.
 
@@ -164,9 +177,11 @@ gives $w = 0$ and $(c_0, c_1) = (0, 2)$, so $\hat{y}(x) = 2x$ exactly and $\hat{
 
 For any real $w \ne 0$,
 
-$$
-w^T R w = \sum_{j,k} w_j w_k e^{-\theta^2(x_j - x_k)^2} = \frac{1}{2\theta\sqrt{\pi}}\int_{-\infty}^{\infty} e^{-\omega^2/(4\theta^2)}\left|\sum_j w_j e^{i\omega x_j}\right|^2 d\omega \ge 0.
-$$
+```math
+w^T R w = \sum_{j,k} w_j w_k
+e^{-\theta^2(x_j - x_k)^2} = \frac{1}{2\theta\sqrt{\pi}}\int_{-\infty}^{\infty}
+e^{-\omega^2/(4\theta^2)}\left|\sum_j w_j e^{i\omega x_j}\right|^2 d\omega \ge 0
+```
 
 The weight $e^{-\omega^2/(4\theta^2)}$ is strictly positive, so the integral vanishes only if $\sum_j w_j e^{i\omega x_j} = 0$ for all $\omega$. For distinct $x_j$ the exponentials are linearly independent, which forces $w = 0$. Hence $w^T R w > 0$ for all $w \ne 0$, and $R$ is nonsingular. The same argument (Bochner's theorem) holds in $\mathbb{R}^d$.
 

@@ -18,11 +18,10 @@ x₁=0      x₂=1/3         x₃=2/3        x₄=1
     Δx=1/3       Δx=1/3       Δx=1/3
 ```
 
-
 This grid has four equally spaced grid points with $\Delta x$ being the spacing between successive points. The governing equation is valid at any grid point:
 
 $$
-\left( \frac{du}{dx} \right)_i + u_i = 0
+\left(\frac{du}{dx} \right)_i + u_i = 0
 $$
 
 where the subscript $i$ represents the value at grid point $x_i$.
@@ -32,7 +31,7 @@ where the subscript $i$ represents the value at grid point $x_i$.
 To express $\left( \frac{du}{dx} \right)_i$ in terms of $u$ at the grid points, we expand $u_{i-1}$ in a Taylor series:
 
 $$
-u_{i-1} = u_i - \Delta x \left( \frac{du}{dx} \right)_i + O(\Delta x^2)
+u_{i-1} = u_i - \Delta x \left(\frac{du}{dx} \right)_i + O(\Delta x^2)
 $$
 
 Rearranging gives:
@@ -60,9 +59,9 @@ Thus, we have converted a differential equation into an algebraic equation.
 2. **Select a Grid**: Divide the domain into a finite number of grid points. For the given problem, the domain $0 \le x \le 1$ is divided into 4 points with $\Delta x = \frac{1}{3}$.
 
 3. **Discretize the Derivatives**: Use finite-difference approximations to express derivatives at the grid points. For example, the first derivative $\frac{du}{dx}$ at point $i$ is approximated as:
-   
+
 $$
-\left( \frac{du}{dx} \right)_i \approx \frac{u_i - u_{i-1}}{\Delta x}
+\left(\frac{du}{dx} \right)_i \approx \frac{u_i - u_{i-1}}{\Delta x}
 $$
 
 4. **Substitute into the Original Equation**: Replace the derivatives in the original differential equation with their finite-difference approximations. This results in an algebraic equation for each grid point.
@@ -74,28 +73,28 @@ $$
 Given the initial condition $u(0) = 1$, we can solve the discrete equation step-by-step for each grid point:
 
 - For $x_2 = \frac{1}{3}$:
-  
+
 $$
 \frac{u_2 - u_1}{\Delta x} + u_2 = 0
 $$
-  
-  Given $u_1 = 1$ and $\Delta x = \frac{1}{3}$, solve for $u_2$.
+
+Given $u_1 = 1$ and $\Delta x = \frac{1}{3}$, solve for $u_2$.
 
 - For $x_3 = \frac{2}{3}$:
-  
+
 $$
 \frac{u_3 - u_2}{\Delta x} + u_3 = 0
 $$
-  
-  Use the previously calculated $u_2$ to solve for $u_3$.
+
+Use the previously calculated $u_2$ to solve for $u_3$.
 
 - For $x_4 = 1$:
-  
+
 $$
 \frac{u_4 - u_3}{\Delta x} + u_4 = 0
 $$
-  
-  Use the previously calculated $u_3$ to solve for $u_4$.
+
+Use the previously calculated $u_3$ to solve for $u_4$.
 
 By following these steps, we obtain a numerical solution for $u$ at each grid point, providing an approximate solution to the original differential equation.
 
@@ -106,7 +105,7 @@ This note demonstrates the core FDM discretization workflow on a minimal 1-D exa
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | ODE $du/dx + u^m = 0$ with $u(0) = 1$, grid points $x_1, \dots, x_4$, spacing $\Delta x = 1/3$, exponent $m$ |
 | **Outputs** | Discrete solution values $u_1, u_2, u_3, u_4$, truncation error order $O(\Delta x)$ |
 
@@ -155,7 +154,9 @@ The error ratio is $0.0540/0.0287 = 1.88$, close to 2. Halving $\Delta x$ roughl
 
 (a) $u_{i-1} = u_i - \Delta x\,u'_i + \frac{\Delta x^2}{2}u''_i - \dots$, so
 
-$$\frac{u_i - u_{i-1}}{\Delta x} = u'_i - \frac{\Delta x}{2}u''_i + O(\Delta x^2)$$
+```math
+\frac{u_i - u_{i-1}}{\Delta x} = u'_i - \frac{\Delta x}{2}u''_i + O(\Delta x^2)
+```
 
 The leading error is $-\frac{\Delta x}{2}u''$.
 
@@ -172,10 +173,12 @@ If $\Delta x > 2$, then $|1 - \Delta x| > 1$ and the forward solution oscillates
 
 Each step is a quadratic, $\Delta x\,u_i^2 + u_i - u_{i-1} = 0$. Its positive root is
 
-$$u_i = \frac{-1 + \sqrt{1 + 4\Delta x\,u_{i-1}}}{2\Delta x}$$
+```math
+u_i = \frac{-1 + \sqrt{1 + 4\Delta x\,u_{i-1}}}{2\Delta x}
+```
 
 | $x$ | numerical | exact $1/(1+x)$ |
-|-----|-----------|-----------------|
+| --- | --- | --- |
 | 1/3 | 0.7913 | 0.7500 |
 | 2/3 | 0.6503 | 0.6000 |
 | 1 | 0.5496 | 0.5000 |

@@ -87,15 +87,15 @@ After comparing the performance of several airfoils, you would likely identify t
 
 Here's a simple table comparing some common airfoils based on their general characteristics and typical applications. This should help in visualizing how different airfoils stack up against each other in terms of lift, drag, stall characteristics, and typical use cases.
 
-| **Airfoil**     | **Type**         | **Lift (CL)**           | **Drag (CD)**          | **Stall Characteristics** | **Typical Use Cases**             | **Notes**                                                                 |
-|-----------------|------------------|-------------------------|------------------------|----------------------------|------------------------------------|---------------------------------------------------------------------------|
-| NACA 2412       | Cambered          | Moderate (balanced)     | Moderate               | Gradual stall              | General aviation (e.g., Cessna 172)| Good all-rounder, balance between lift and drag for medium speeds.         |
-| NACA 0012       | Symmetric         | Low at zero AoA         | Low at high speeds      | Sharp stall                | Aerobatics, helicopter rotors, tail surfaces | No lift at zero AoA; stable in both directions for inverted flight.       |
-| NACA 4412       | Highly Cambered   | High                    | Higher drag at low speeds | More gradual stall         | Slow-flying aircraft, gliders      | Great for high lift at slow speeds but suffers from increased drag.       |
-| Clark Y         | Flat-bottomed     | High                    | Moderate to high        | Moderate stall             | Homebuilt aircraft, early aircraft | Popular due to simplicity and good lift generation at lower speeds.       |
-| NACA 23012      | Cambered          | Moderate to high        | Moderate               | Gradual stall              | Light aircraft, gliders            | Balances good low-speed lift and efficiency for cruising.                 |
-| Eppler 423 (E423)| Cambered (Glider) | High at low speeds      | Low to moderate         | Gradual stall              | Gliders, sailplanes                | Optimized for high lift-to-drag ratios, great for sustained gliding.      |
-| NACA 63(3)-618  | Laminar flow      | Moderate                | Very low (laminar drag) | Moderate stall             | High-speed gliders, sailplanes     | Excellent for low drag at higher speeds, used in modern sailplanes.       |
+| **Airfoil** | **Type** | **Lift (CL)** | **Drag (CD)** | **Stall Characteristics** | **Typical Use Cases** | **Notes** |
+| --- | --- | --- | --- | --- | --- | --- |
+| NACA 2412 | Cambered | Moderate (balanced) | Moderate | Gradual stall | General aviation (e.g., Cessna 172) | Good all-rounder, balance between lift and drag for medium speeds. |
+| NACA 0012 | Symmetric | Low at zero AoA | Low at high speeds | Sharp stall | Aerobatics, helicopter rotors, tail surfaces | No lift at zero AoA; stable in both directions for inverted flight. |
+| NACA 4412 | Highly Cambered | High | Higher drag at low speeds | More gradual stall | Slow-flying aircraft, gliders | Great for high lift at slow speeds but suffers from increased drag. |
+| Clark Y | Flat-bottomed | High | Moderate to high | Moderate stall | Homebuilt aircraft, early aircraft | Popular due to simplicity and good lift generation at lower speeds. |
+| NACA 23012 | Cambered | Moderate to high | Moderate | Gradual stall | Light aircraft, gliders | Balances good low-speed lift and efficiency for cruising. |
+| Eppler 423 (E423) | Cambered (Glider) | High at low speeds | Low to moderate | Gradual stall | Gliders, sailplanes | Optimized for high lift-to-drag ratios, great for sustained gliding. |
+| NACA 63(3)-618 | Laminar flow | Moderate | Very low (laminar drag) | Moderate stall | High-speed gliders, sailplanes | Excellent for low drag at higher speeds, used in modern sailplanes. |
 
 ### Related Scripts
 
@@ -119,7 +119,9 @@ Here's a simple table comparing some common airfoils based on their general char
 <details>
 <summary>Answer</summary>
 
-$$C_{D_i} = \frac{C_L^2}{\pi e\,AR} = \frac{0.64}{\pi \times 0.9 \times 20} = 0.0113$$
+```math
+C_{D_i} = \frac{C_L^2}{\pi e\,AR} = \frac{0.64}{\pi \times 0.9 \times 20} = 0.0113
+```
 
 $C_D \approx 0.008 + 0.0113 = 0.0193$, so $L/D \approx 0.8/0.0193 = 41$.
 

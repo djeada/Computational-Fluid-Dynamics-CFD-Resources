@@ -15,13 +15,20 @@ This script solves the 2D scalar wave equation on a square domain with an explic
 
 The 2D wave equation for a scalar field $u(x, y, t)$ with wave speed $c$ is:
 
-$$\frac{\partial^2 u}{\partial t^2} = c^2 \left( \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} \right)$$
+$$
+\frac{\partial^2 u}{\partial t^2} = c^2
+\left(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} \right)
+$$
 
 ### Finite Difference Discretization
 
 With central differences in space and time, the explicit update is:
 
-$$u_{i,j}^{n+1} = 2u_{i,j}^n - u_{i,j}^{n-1} + (c\,\Delta t)^2 \left( \frac{u_{i+1,j}^n - 2u_{i,j}^n + u_{i-1,j}^n}{\Delta x^2} + \frac{u_{i,j+1}^n - 2u_{i,j}^n + u_{i,j-1}^n}{\Delta y^2} \right)$$
+$$
+u_{i,j}^{n+1} = 2u_{i,j}^n - u_{i,j}^{n-1} + (c\,\Delta t)^2
+\left(\frac{u_{i+1,j}^n - 2u_{i,j}^n + u_{i-1,j}^n}{\Delta x^2} +
+\frac{u_{i,j+1}^n - 2u_{i,j}^n + u_{i,j-1}^n}{\Delta y^2} \right)
+$$
 
 where $i$ indexes $x$ and $j$ indexes $y$. The scheme is second-order accurate in space and time.
 
@@ -29,13 +36,18 @@ where $i$ indexes $x$ and $j$ indexes $y$. The scheme is second-order accurate i
 
 The scheme is stable when $c\,\Delta t\,\sqrt{1/\Delta x^2 + 1/\Delta y^2} \le 1$. For $\Delta x = \Delta y$ this becomes
 
-$$\Delta t \le \frac{\min(\Delta x, \Delta y)}{c\sqrt{2}}$$
+$$
+\Delta t \le \frac{\min(\Delta x, \Delta y)}{c\sqrt{2}}
+$$
 
 The code uses half of this limit, `dt = 0.5 * min(dx, dy) / (c * sqrt(2))`, which gives $\Delta t \approx 0.0357$ for $\Delta x = 0.101$.
 
 ### Initial Condition
 
-$$u(x, y, 0) = A \exp\left(-\frac{x^2 + y^2}{2}\right), \qquad \frac{\partial u}{\partial t}(x, y, 0) = 0$$
+$$
+u(x, y, 0) = A \exp\left(-\frac{x^2 + y^2}{2}\right),
+\qquad \frac{\partial u}{\partial t}(x, y, 0) = 0
+$$
 
 with $A = 5$. The initial pulse is set to zero on all boundary nodes. Zero initial velocity uses the second-order starting level $u^{-1} = u^0 + \tfrac{1}{2}(c\Delta t)^2\nabla_h^2 u^0$, so the first forward step contains half the discrete acceleration.
 

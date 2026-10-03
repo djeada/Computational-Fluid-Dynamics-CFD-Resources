@@ -58,7 +58,9 @@ The **pitching moment ($M$)** is a torque that causes rotation about the aircraf
 
 The total pitching moment about the $CG$ is:
 
-$$M = M_{\text{wing}} + M_{\text{tail}} + M_{\text{fuselage}}$$
+$$
+M = M_{\text{wing}} + M_{\text{tail}} + M_{\text{fuselage}}
+$$
 
 Where:
 
@@ -70,7 +72,9 @@ Where:
 
 The non-dimensional pitching moment coefficient is:
 
-$$C_m = \frac{M}{\frac{1}{2} \rho V^2 S c}$$
+$$
+C_m = \frac{M}{\frac{1}{2} \rho V^2 S c}
+$$
 
 Where:
 
@@ -87,25 +91,36 @@ An aircraft is **statically stable** in pitch if it tends to return to its origi
 
 The stability criterion is:
 
-$$\frac{\partial C_m}{\partial \alpha} < 0$$
+$$
+\frac{\partial C_m}{\partial \alpha} < 0
+$$
 
 #### Contribution of Aircraft Components
 
 **Wing**: Generates lift acting at its aerodynamic center. With $x$ measured aft (towards the tail) and nose-up moments positive:
 
-$$M_{\text{wing}} = L_{\text{wing}} (x_{\text{CG}} - x_{\text{AC,wing}})$$
+$$
+M_{\text{wing}} = L_{\text{wing}} (x_{\text{CG}} - x_{\text{AC,wing}})
+$$
 
 **Tail**: Provides a restoring moment.
 
-$$L_{\text{tail}} = q S_{\text{tail}} C_{L_{\text{tail}}}$$
+$$
+L_{\text{tail}} = q S_{\text{tail}} C_{L_{\text{tail}}}
+$$
 
-$$M_{\text{tail}} = -L_{\text{tail}} l_{\text{tail}}$$
+$$
+M_{\text{tail}} = -L_{\text{tail}} l_{\text{tail}}
+$$
 
 Where $l_{\text{tail}} = x_{\text{AC,tail}} - x_{\text{CG}}$ is the (positive) tail moment arm.
 
 #### Total Pitching Moment Coefficient
 
-$$C_m = C_{m_{\text{ac}}} + C_{L_{\text{wing}}} \left( \frac{x_{\text{CG}} - x_{\text{ac}}}{c} \right) - \eta V_H C_{L_{\text{tail}}}$$
+$$
+C_m = C_{m_{\text{ac}}} + C_{L_{\text{wing}}}
+\left(\frac{x_{\text{CG}} - x_{\text{ac}}}{c} \right) - \eta V_H C_{L_{\text{tail}}}
+$$
 
 where $\eta = q_{\text{tail}}/q$ is the tail efficiency and $V_H$ is the tail volume coefficient defined below (fuselage contribution neglected).
 
@@ -119,7 +134,9 @@ The neutral point is the $CG$ location where the aircraft is neutrally stable ($
 
 The static margin is:
 
-$$SM = \frac{x_{\text{NP}} - x_{\text{CG}}}{c}$$
+$$
+SM = \frac{x_{\text{NP}} - x_{\text{CG}}}{c}
+$$
 
 - $SM > 0$: Aircraft is stable.
 - $SM < 0$: Aircraft is unstable.
@@ -128,7 +145,9 @@ $$SM = \frac{x_{\text{NP}} - x_{\text{CG}}}{c}$$
 
 The tail volume coefficient ($V_H$) is a non-dimensional parameter representing the tail's effectiveness:
 
-$$V_H = \frac{S_{\text{tail}} l_{\text{tail}}}{S c}$$
+$$
+V_H = \frac{S_{\text{tail}} l_{\text{tail}}}{S c}
+$$
 
 ### Trim Condition
 
@@ -136,13 +155,17 @@ For steady-level flight, the aircraft must be in **trim**, meaning the sum of mo
 
 #### Trim Equation
 
-$$M_{\text{total}} = 0$$
+$$
+M_{\text{total}} = 0
+$$
 
 #### Elevator Deflection for Trim
 
 The required elevator deflection ($\delta_e$) for trim is found by solving:
 
-$$C_m = C_{m_0} + C_{m_\alpha} \alpha + C_{m_{\delta_e}} \delta_e = 0$$
+$$
+C_m = C_{m_0} + C_{m_\alpha} \alpha + C_{m_{\delta_e}} \delta_e = 0
+$$
 
 ### Dynamic Stability
 
@@ -157,11 +180,15 @@ Dynamic stability involves the aircraft's response over time.
 
 - **Pitch damping** ($C_{m_q}$): Derivative of pitching moment with respect to non-dimensional pitch rate ($q$).
 
-$$C_{m_q} = \frac{\partial C_m}{\partial (q c / 2V)}$$
+$$
+C_{m_q} = \frac{\partial C_m}{\partial (q c / 2V)}
+$$
 
 The corresponding derivative with respect to the rate of change of angle of attack is:
 
-$$C_{m_{\dot{\alpha}}} = \frac{\partial C_m}{\partial (\dot{\alpha} c / 2V)}$$
+$$
+C_{m_{\dot{\alpha}}} = \frac{\partial C_m}{\partial (\dot{\alpha} c / 2V)}
+$$
 
 ### Control Surface Sizing
 
@@ -169,7 +196,9 @@ $$C_{m_{\dot{\alpha}}} = \frac{\partial C_m}{\partial (\dot{\alpha} c / 2V)}$$
 
 The change in pitching moment due to elevator deflection is:
 
-$$C_{m_{\delta_e}} = -\eta_{\text{e}} V_H C_{L_{\alpha_{\text{tail}}}}$$
+$$
+C_{m_{\delta_e}} = -\eta_{\text{e}} V_H C_{L_{\alpha_{\text{tail}}}}
+$$
 
 Where:
 
@@ -178,7 +207,9 @@ Where:
 
 #### Required Elevator Deflection
 
-$$\delta_e = -\frac{C_{m_0} + C_{m_\alpha} \alpha}{C_{m_{\delta_e}}}$$
+$$
+\delta_e = -\frac{C_{m_0} + C_{m_\alpha} \alpha}{C_{m_{\delta_e}}}
+$$
 
 ### Practical Design Considerations
 
@@ -204,9 +235,14 @@ From $\delta_e = -(C_{m_0} + C_{m_\alpha}\alpha)/C_{m_{\delta_e}}$: raising $\al
 <details>
 <summary>Answer</summary>
 
-$$V_H = \frac{S_{tail}\,l_{tail}}{Sc} = \frac{3.6 \times 4.5}{16 \times 1.5} = 0.675$$
+```math
+V_H = \frac{S_{tail}\,l_{tail}}{Sc} = \frac{3.6 \times 4.5}{16 \times 1.5} = 0.675
+```
 
-$$C_{m_{\delta_e}} = -\eta_e V_H C_{L_{\alpha_{tail}}} = -0.45 \times 0.675 \times 4.3 = -1.31 \text{ per rad}$$
+```math
+C_{m_{\delta_e}} = -\eta_e V_H C_{L_{\alpha_{tail}}} = -0.45 \times 0.675 \times
+4.3 = -1.31 \text{ per rad}
+```
 
 </details>
 
@@ -217,7 +253,9 @@ $$C_{m_{\delta_e}} = -\eta_e V_H C_{L_{\alpha_{tail}}} = -0.45 \times 0.675 \tim
 
 $\alpha = 0.0873$ rad, so $C_{m_0} + C_{m_\alpha}\alpha = 0.06 - 0.0873 = -0.0273$.
 
-$$\delta_e = -\frac{-0.0273}{-1.31} = -0.0209 \text{ rad} = -1.20^\circ$$
+```math
+\delta_e = -\frac{-0.0273}{-1.31} = -0.0209 \text{ rad} = -1.20^\circ
+```
 
 That is 1.2° trailing edge up, consistent with Exercise 1.
 
@@ -228,7 +266,9 @@ That is 1.2° trailing edge up, consistent with Exercise 1.
 <details>
 <summary>Answer</summary>
 
-$$SM = \frac{0.62 - 0.45}{1.5} = 0.113 \ (11.3\%), \quad C_{m_\alpha} = -5.2 \times 0.113 = -0.59 \text{ per rad}$$
+```math
+SM = \frac{0.62 - 0.45}{1.5} = 0.113 \ (11.3\%), \quad C_{m_\alpha} = -5.2 \times 0.113 = -0.59 \text{ per rad}
+```
 
 For $SM \geq 0.05$: $x_{CG} \leq 0.62 - 0.05 \times 1.5 = 0.545$ m. The aft CG limit is therefore 0.545 m, and loading must keep the CG ahead of it.
 
@@ -239,7 +279,9 @@ For $SM \geq 0.05$: $x_{CG} \leq 0.62 - 0.05 \times 1.5 = 0.545$ m. The aft CG l
 <details>
 <summary>Answer</summary>
 
-$$T \approx \pi\sqrt{2} \times \frac{60}{9.81} = 27 \text{ s}$$
+```math
+T \approx \pi \sqrt{2} \times \frac{60}{9.81} = 27 \text{ s}
+```
 
 The phugoid is a slow exchange of height and speed at nearly constant angle of attack, so a pilot has plenty of time to correct it even when it is lightly damped. The short-period mode involves angle of attack and pitch rate over about a second, faster than a pilot can respond without risking pilot-induced oscillation. It therefore needs good natural damping ($C_{m_q}$) or a stability augmentation system.
 

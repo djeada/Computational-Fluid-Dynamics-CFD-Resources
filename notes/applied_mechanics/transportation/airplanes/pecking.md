@@ -48,7 +48,9 @@ Pecking is particularly relevant in aerodynamics, where structures like aircraft
 
 To describe pecking mathematically, we can use the equation of motion for a damped harmonic oscillator:
 
-$$m\frac{d^2x}{dt^2} + c\frac{dx}{dt} + kx = 0$$
+$$
+m \frac{d^2x}{dt^2} + c \frac{dx}{dt} + kx = 0
+$$
 
 Where:
 
@@ -60,7 +62,9 @@ Where:
 
 The solution to this differential equation depends on the damping ratio $\zeta$:
 
-$$\zeta = \frac{c}{2\sqrt{mk}}$$
+$$
+\zeta = \frac{c}{2\sqrt{mk}}
+$$
 
 - In an **overdamped** system, the system returns to equilibrium without oscillating. The damping ratio ($\zeta$) is greater than one, which helps prevent oscillatory motion. Overdamped conditions ensure stability but may result in a slower response to disturbances.
 - In a **critically** damped system, the system achieves the fastest return to equilibrium without oscillating. When the damping ratio ($\zeta$) equals one, it balances responsiveness and stability effectively. Critical damping is often desirable in applications requiring quick stabilization.
@@ -74,7 +78,9 @@ To make sure systems remain stable and avoid destructive oscillations, engineers
 
 Consider the equation again:
 
-$$\zeta = \frac{c}{2\sqrt{mk}}$$
+$$
+\zeta = \frac{c}{2\sqrt{mk}}
+$$
 
 By increasing $c$, the damping ratio $\zeta$ increases, moving the system from underdamped towards critically damped or overdamped, thereby reducing oscillations.
 
@@ -94,7 +100,10 @@ Analyzing pecking and stability isn't just theoretical; it's applied in various 
 <details>
 <summary>Answer</summary>
 
-$$\omega_n = \sqrt{k/m} = 20 \text{ rad/s}, \quad \zeta = \frac{c}{2\sqrt{mk}} = \frac{8}{2\sqrt{1600}} = 0.10$$
+```math
+\omega_n = \sqrt{k/m} = 20 \text{ rad/s}, \quad
+\zeta = \frac{c}{2\sqrt{mk}} = \frac{8}{2\sqrt{1600}} = 0.10
+```
 
 $\omega_d = \omega_n\sqrt{1 - \zeta^2} = 19.9$ rad/s.
 

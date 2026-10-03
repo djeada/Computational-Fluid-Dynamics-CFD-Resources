@@ -14,7 +14,9 @@ This script solves $du/dx + u = 0$ with $u(0) = 1$ by a first-order finite-diffe
 ### Problem and exact solution
 
 $$
-\frac{du}{dx} + u = 0, \qquad 0 \le x \le 1, \qquad u(0) = 1 \quad\Longrightarrow\quad u(x) = e^{-x}
+\frac{du}{dx} + u = 0,
+\qquad 0 \le x \le 1,
+\qquad u(0) = 1 \quad\Longrightarrow\quad u(x) = e^{-x}
 $$
 
 ### Discretisation
@@ -22,13 +24,15 @@ $$
 A backward Taylor expansion gives the first-order approximation $\left(du/dx\right)_i \approx (u_i - u_{i-1})/\Delta x$, with truncation error $O(\Delta x)$. Substituting it into the ODE gives
 
 $$
-\frac{u_i - u_{i-1}}{\Delta x} + u_i = 0 \quad\Longrightarrow\quad u_i = \frac{u_{i-1}}{1 + \Delta x} = \left(\frac{1}{1 + \Delta x}\right)^{i}
+\frac{u_i - u_{i-1}}{\Delta x} + u_i = 0 \quad\Longrightarrow\quad
+u_i = \frac{u_{i-1}}{1 + \Delta x} = \left(\frac{1}{1 + \Delta x}\right)^{i}
 $$
 
 This is the implicit (backward) Euler method applied to $u' = -u$. For $\Delta x = 1/3$ the ratio is $3/4$, so
 
 $$
-u_N = \left[1,\ \frac{3}{4},\ \frac{9}{16},\ \frac{27}{64}\right] \quad\text{at}\quad x_i = \left[0,\ \frac{1}{3},\ \frac{2}{3},\ 1\right]
+u_N = \left[1,\  \frac{3}{4},\  \frac{9}{16},\  \frac{27}{64}\right] \quad
+\text{at}\quad x_i = \left[0,\  \frac{1}{3},\  \frac{2}{3},\ 1\right]
 $$
 
 ### Pointwise error
@@ -40,7 +44,7 @@ $$
 Since $1/(1 + \Delta x) > e^{-\Delta x}$, the scheme decays too slowly. Every $e_i$ for $i \ge 1$ is negative, and $|e_i|$ grows with $x$. With four points the values are:
 
 | $x_i$ | $u_i$ | $e^{-x_i}$ | $e_i$ | relative error |
-|------|------|------|------|------|
+| --- | --- | --- | --- | --- |
 | 0 | 1 | 1 | 0 | 0% |
 | 1/3 | 0.7500 | 0.7165 | −0.0335 | 4.7% |
 | 2/3 | 0.5625 | 0.5134 | −0.0491 | 9.6% |
@@ -65,7 +69,7 @@ python main.py --no-show --output . # save numerical_vs_exact_solution.png witho
 ```
 
 | Flag | Effect |
-|------|--------|
+| --- | --- |
 | `--points N` | Number of grid points including both ends (default 4) |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save `numerical_vs_exact_solution.png` in it |

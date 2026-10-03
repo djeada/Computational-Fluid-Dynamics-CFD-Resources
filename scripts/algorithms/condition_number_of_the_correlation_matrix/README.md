@@ -17,7 +17,7 @@ This script plots how the condition number of a kriging correlation matrix chang
 For sample locations $x_1, \dots, x_n$ the correlation matrix is
 
 $$
-R_{ij} = R(x_i - x_j;\, \theta), \quad i, j = 1, \dots, n.
+R_{ij} = R(x_i - x_j;\, \theta), \quad i, j = 1, \dots, n
 $$
 
 It is symmetric with ones on the diagonal. In the convention used here, a small $\theta$ gives long-range correlation (all entries close to 1) and a large $\theta$ gives short-range correlation ($R$ close to the identity).
@@ -25,7 +25,7 @@ It is symmetric with ones on the diagonal. In the convention used here, a small 
 ### Condition Number
 
 $$
-\kappa(R) = \frac{\sigma_{\max}(R)}{\sigma_{\min}(R)},
+\kappa(R) = \frac{\sigma_{\max}(R)}{\sigma_{\min}(R)}
 $$
 
 where $\sigma_{\max}$ and $\sigma_{\min}$ are the largest and smallest singular values. For a symmetric positive semi-definite matrix these are its largest and smallest eigenvalues. In double precision, values of order $10^{16}$ or more mean the matrix is numerically singular.

@@ -14,7 +14,9 @@ This script plots a mock validation figure of mean pressure coefficient $C_P$ ag
 
 ### Pressure Coefficient
 
-$$C_P = \frac{p - p_\infty}{\frac{1}{2}\,\rho\,U_\infty^2}$$
+$$
+C_P = \frac{p - p_\infty}{\frac{1}{2}\,\rho\,U_\infty^2}
+$$
 
 where $p$ is the local static pressure, $p_\infty$ the free-stream static pressure, $\rho$ the density, and $U_\infty$ the free-stream velocity. Since $C_P$ is linear in $p$, $\partial C_P/\partial x > 0$ is the same as an adverse pressure gradient $\partial p/\partial x > 0$.
 
@@ -22,7 +24,10 @@ where $p$ is the local static pressure, $p_\infty$ the free-stream static pressu
 
 Where the flow separates, the pressure on the surface under the separated region stays almost constant until the flow reattaches:
 
-$$C_P \approx C_{P,\text{sep}}, \qquad x_{\text{sep}} \le x \le x_{\text{reat}}$$
+$$
+C_P \approx C_{P,\text{sep}},
+\qquad x_{\text{sep}} \le x \le x_{\text{reat}}
+$$
 
 A simulation that predicts too short or too weak a separation shows a rounder, less flat plateau.
 
@@ -30,11 +35,18 @@ A simulation that predicts too short or too weak a separation shows a rounder, l
 
 Base curve and smooth plateau indicator, with $\sigma(z) = 1/(1 + e^{-z})$ and edge width $s = 0.08$ m:
 
-$$C_{P,0}(x) = -0.2\sin x - 0.1\cos 2x, \qquad w(x) = \sigma\!\left(\frac{x - x_{\text{sep}}}{s}\right)\sigma\!\left(\frac{x_{\text{reat}} - x}{s}\right)$$
+$$
+C_{P,0}(x) = -0.2\sin x - 0.1\cos 2x,
+\qquad
+w(x) = \sigma\!\left(\frac{x - x_{\text{sep}}}{s}\right)\sigma\!\left(\frac{x_{\text{reat}} - x}{s}\right)
+$$
 
 Each curve blends the base towards the constant value $C_{P,0}(x_{\text{sep}})$ with plateau strength $k$:
 
-$$C_P(x) = \bigl(1 - k\,w(x)\bigr)\,C_{P,0}(x) + k\,w(x)\,C_{P,0}(x_{\text{sep}}) + \epsilon(x)$$
+$$
+C_P(x) = \bigl(1 - k\, w(x)\bigr)\, C_{P,0}(x) + k\, w(x)\, C_{P,0}(x_{\text{sep}}) +
+\epsilon(x)
+$$
 
 The experiment uses $k = 1$ and $\epsilon = 0$. The CFD curve uses $k = 0.4$ and $\epsilon \sim \mathcal{N}(0, 0.01^2)$.
 
@@ -54,7 +66,7 @@ python main.py --no-show --output out   # save mean_pressure_coefficient.png int
 ```
 
 | Flag | Meaning |
-|------|---------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure as a PNG |
 

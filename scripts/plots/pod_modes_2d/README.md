@@ -15,8 +15,8 @@ This script applies Proper Orthogonal Decomposition to velocity signals measured
 ### Synthetic signals
 
 $$
-u_a = \sin(2\pi f t) + 0.5\sin(4\pi f t) + \epsilon_a, \qquad
-u_b = \sin(2\pi f t) - 0.5\sin(4\pi f t) + \epsilon_b
+u_a = \sin(2\pi f t) + 0.5\sin(4\pi f t) + \epsilon_a,
+\qquad u_b = \sin(2\pi f t) - 0.5\sin(4\pi f t) + \epsilon_b
 $$
 
 with $f = 10$ Hz and $\epsilon \sim \mathcal{N}(0, 0.1^2)$. The covariance matrix is approximately $\begin{pmatrix} 0.625 & 0.375 \\ 0.375 & 0.625 \end{pmatrix}$. Its eigenvalues are $1.0$ and $0.25$, with eigenvectors $(1, 1)/\sqrt{2}$ and $(1, -1)/\sqrt{2}$, which gives the 80%/20% energy split.
@@ -32,7 +32,8 @@ $\boldsymbol{\Phi} \in \mathbb{R}^{2 \times 2}$ holds the POD modes (principal a
 ### Mode contributions and reconstruction
 
 $$
-\tilde{\mathbf{U}}^k = \mathbf{a}_k\, \boldsymbol{\phi}_k^T, \qquad \mathbf{U}' = \tilde{\mathbf{U}}^1 + \tilde{\mathbf{U}}^2
+\tilde{\mathbf{U}}^k = \mathbf{a}_k\, \boldsymbol{\phi}_k^T,
+\qquad \mathbf{U}' = \tilde{\mathbf{U}}^1 + \tilde{\mathbf{U}}^2
 $$
 
 Column 1 of $\tilde{\mathbf{U}}^k$ is the contribution of mode $k$ to $u'_a$, and column 2 is its contribution to $u'_b$. The fraction of TKE in mode $k$ is $\sigma_k^2 / \sum_j \sigma_j^2$. With only two points, the two modes together reconstruct the data exactly.
@@ -55,7 +56,7 @@ python main.py --no-show --output . # save pod_modes_2d.png without opening a wi
 ```
 
 | Flag | Effect |
-|------|--------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save `pod_modes_2d.png` in it |
 

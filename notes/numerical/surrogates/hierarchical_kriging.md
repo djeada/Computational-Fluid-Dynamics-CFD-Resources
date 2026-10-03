@@ -22,7 +22,9 @@ III. **Hierarchical Kriging**: This newer approach integrates the low-fidelity m
 
 Hierarchical Kriging modifies the standard Kriging model by replacing the linear regression (trend) terms $f(x) \beta$ with the low-fidelity model $\bar{y}(\bar{\phi}(p), p, a)$. Here, $\bar{y}$ represents the low-fidelity approximation of the response, which may depend on parameters $p$ and auxiliary variables $\bar{\phi}(p)$ that help map input parameters to the low-fidelity model space. In the presence of these terms, the Hierarchical Kriging model is expressed as:
 
-$$y(x) = \bar{y}(\bar{\phi}(p), p, a) + z(x), \quad x \in \Omega \subset \mathbb{R}^d.$$
+$$
+y(x) = \bar{y}(\bar{\phi}(p), p, a) + z(x), \quad x \in \Omega \subset \mathbb{R}^d
+$$
 
 The term $z(x)$ represents a zero-mean Gaussian process used to model the deviation from $\bar{y}(x)$. In classical Kriging, the deterministic part is often a linear trend $f(x)^T \beta$. By using $\bar{y}(x)$ instead, one incorporates prior knowledge or a simpler model directly, improving efficiency and accuracy.
 
@@ -30,30 +32,37 @@ The term $z(x)$ represents a zero-mean Gaussian process used to model the deviat
 
 As in standard Kriging, the predictor $\hat{y}(x)$ at an arbitrary point $x$ is a weighted linear combination of the known responses $Y = \{ y(x^{(1)}), \dots, y(x^{(N)}) \}$:
 
-$$\hat{y}(x) = \lambda(x)^T Y,$$
+$$
+\hat{y}(x) = \lambda(x)^T Y
+$$
 
 where $\lambda(x) \in \mathbb{R}^N$ is a vector of weights determined by solving a linear system that ensures both unbiasedness and minimal mean squared error. To achieve unbiasedness, one imposes constraints involving $\bar{y}(x)$ at the sample points.
 
 Define the correlation matrix $R \in \mathbb{R}^{N \times N}$ from the Gaussian process assumption, and a vector $r(x) \in \mathbb{R}^N$ of correlations between $x$ and the sample points $X = \{x^{(i)}\}$. With Hierarchical Kriging, the role of the regression matrix $F \in \mathbb{R}^{N}$ (which in standard Kriging corresponds to the regression functions evaluated at sample points) is taken by:
 
-$$F := \bigl( \bar{y}(\bar{\phi}(p), p, a) \bigr)_{i=1}^N \in \mathbb{R}^N.$$
+$$
+F: = \bigl(\bar{y}(\bar{\phi}(p), p, a) \bigr)_{i=1}^N \in \mathbb{R}^N
+$$
 
 Similarly, for the point $x$, we define:
 
-$$f(x) := \bar{y}(\bar{\phi}(p), p, a).$$
+$$
+f(x): = \bar{y}(\bar{\phi}(p), p, a)
+$$
 
 The Kriging system, ensuring optimal weights, is:
 
-$$\begin{pmatrix}
+$$
+\begin{pmatrix}
 R & F \\ F^T & 0
 \end{pmatrix}
 \begin{pmatrix}
 \lambda(x) \\ \mu(x)
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
 r(x) \\ f(x)
-\end{pmatrix}.$$
+\end{pmatrix}
+$$
 
 Solving this system yields $\lambda(x)$ and $\mu(x)$, which in turn gives the prediction $\hat{y}(x) = \lambda(x)^T Y$.
 
@@ -61,7 +70,8 @@ Solving this system yields $\lambda(x)$ and $\mu(x)$, which in turn gives the pr
 
 Using matrix operations, one can write the Hierarchical Kriging predictor in a compact form:
 
-$$\hat{y}(x) = 
+$$
+\hat{y}(x) =
 \begin{pmatrix}
 r(x)^T & f(x)
 \end{pmatrix}
@@ -70,15 +80,20 @@ R & F \\ F^T & 0
 \end{pmatrix}^{-1}
 \begin{pmatrix}
 Y \\ 0
-\end{pmatrix}.$$
+\end{pmatrix}
+$$
 
 Alternatively, if we define:
 
-$$\beta := (F^T R^{-1} F)^{-1} F^T R^{-1} Y,$$
+$$
+\beta: = (F^T R^{-1} F)^{-1} F^T R^{-1} Y
+$$
 
 we can express the predictor as:
 
-$$\hat{y}(x) = f(x) \beta + r(x)^T R^{-1}(Y - F \beta).$$
+$$
+\hat{y}(x) = f(x) \beta + r(x)^T R^{-1}(Y - F \beta)
+$$
 
 This form mirrors the structure of standard Kriging but replaces the regression term with the low-fidelity model $\bar{y}$. The coefficient $\beta$ adjusts the scale of the low-fidelity model so that the combined model $f(x)\beta$ fits the global trend suggested by $Y$. The term $r(x)^T R^{-1}(Y - F \beta)$ ensures that the model interpolates the data exactly, applying local corrections based on the correlation structure.
 
@@ -86,16 +101,17 @@ This form mirrors the structure of standard Kriging but replaces the regression 
 
 In practice, the preferred formulation for implementation is the block matrix inversion form. Rather than explicitly computing $\beta$, one solves:
 
-$$\begin{pmatrix}
+$$
+\begin{pmatrix}
 R & F \\ F^T & 0
 \end{pmatrix}
 \begin{pmatrix}
 w^{(Y)} \\ w^{(f)}
-\end{pmatrix}
-=
+\end{pmatrix} =
 \begin{pmatrix}
 Y \\ 0
-\end{pmatrix},$$
+\end{pmatrix}
+$$
 
 where $\begin{pmatrix} w^{(Y)} \\ w^{(f)} \end{pmatrix}$ is independent of $x$ and can be solved once and stored. The predictor evaluation at a new point $x$ then involves computing $(r(x), f(x))$ and taking their dot product with the stored solution. This method is computationally efficient and maintains the exact interpolation property.
 
@@ -118,7 +134,7 @@ High-fidelity CFD is expensive, but cheaper low-fidelity models (coarser meshes,
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Low-fidelity model $\hat{y}_c(x)$, high-fidelity samples $\{(x^{(i)}, y^{(i)})\}$, correlation function $R(\cdot)$, hyperparameters |
 | **Outputs** | Hierarchical Kriging predictor $\hat{y}(x)$ combining low- and high-fidelity information, mean squared error, optimized hyperparameters |
 
@@ -145,9 +161,10 @@ $F^T F = 1 + 4 + 9 = 14$ and $F^T Y = 1.2 + 4.2 + 9.9 = 15.3$, so $\beta = 15.3/
 
 At a sample point, the correlation vector is the $i$-th column of $R$, so $r(x^{(i)}) = R e_i$, and $f(x^{(i)}) = F_i$. Therefore
 
-$$
-\hat{y}(x^{(i)}) = F_i\beta + e_i^T R R^{-1}(Y - F\beta) = F_i\beta + (y_i - F_i\beta) = y_i.
-$$
+```math
+\hat{y}(x^{(i)}) = F_i\beta + e_i^T R R^{-1}(Y - F\beta) = F_i\beta +
+(y_i - F_i\beta) = y_i
+```
 
 This holds for any $\beta$ and any low-fidelity model, provided $R$ is nonsingular (no nugget term).
 

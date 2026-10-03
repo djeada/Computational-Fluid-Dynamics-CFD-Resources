@@ -26,7 +26,8 @@ $$
 **Momentum.** The wall shear stress $\tau_w$ acts on the perimeter $\pi D$:
 
 $$
--A\, dp - \tau_w \pi D\, dx = \rho V A\, dV \quad \Rightarrow \quad dp + \rho V\, dV + \frac{4\tau_w}{D} dx = 0
+-A\, dp - \tau_w \pi D\, dx = \rho V A\, dV \quad \Rightarrow \quad dp + \rho V\, dV +
+\frac{4\tau_w}{D} dx = 0
 $$
 
 **Energy.** The flow is adiabatic with no work, so $h_0$ is constant:
@@ -50,13 +51,15 @@ The sign of $1 - M^2$ tells the story. Friction always adds a positive $dx$, so 
 Integrate from a station with Mach number $M$ to the (possibly imaginary) station downstream where $M = 1$. The length between them is the **choking length** $L^*$:
 
 $$
-\frac{4f L^*}{D} = \frac{1 - M^2}{\gamma M^2} + \frac{\gamma + 1}{2\gamma} \ln\left[\frac{(\gamma + 1) M^2}{2 + (\gamma - 1) M^2}\right]
+\frac{4f L^*}{D} = \frac{1 - M^2}{\gamma M^2} + \frac{\gamma + 1}{2\gamma}
+\ln\left[\frac{(\gamma + 1) M^2}{2 + (\gamma - 1) M^2}\right]
 $$
 
 For two stations 1 and 2 in the same duct, a distance $L$ apart,
 
 $$
-\frac{4f L}{D} = \left(\frac{4f L^*}{D}\right)_{M_1} - \left(\frac{4f L^*}{D}\right)_{M_2}
+\frac{4f L}{D} = \left(\frac{4f L^*}{D}\right)_{M_1} -
+\left(\frac{4f L^*}{D}\right)_{M_2}
 $$
 
 ### Property Ratios
@@ -64,17 +67,21 @@ $$
 Continuity ($\rho V = \rho^* V^*$), constant $T_0$, and the state equation give the ratios to the sonic state:
 
 $$
-\frac{T}{T^*} = \frac{\gamma + 1}{2 + (\gamma - 1) M^2}, \qquad \frac{p}{p^*} = \frac{1}{M}\sqrt{\frac{\gamma + 1}{2 + (\gamma - 1) M^2}}
+\frac{T}{T^*} = \frac{\gamma + 1}{2 + (\gamma - 1) M^2},
+\qquad \frac{p}{p^*} = \frac{1}{M} \sqrt{\frac{\gamma + 1}{2 + (\gamma - 1) M^2}}
 $$
 
 $$
-\frac{\rho}{\rho^*} = \frac{V^*}{V} = \frac{1}{M}\sqrt{\frac{2 + (\gamma - 1) M^2}{\gamma + 1}}, \qquad \frac{p_0}{p_0^*} = \frac{1}{M}\left[\frac{2 + (\gamma - 1) M^2}{\gamma + 1}\right]^{\frac{\gamma + 1}{2(\gamma - 1)}}
+\frac{\rho}{\rho^*} = \frac{V^*}{V} = \frac{1}{M}
+\sqrt{\frac{2 + (\gamma - 1) M^2}{\gamma + 1}},
+\qquad
+\frac{p_0}{p_0^*} = \frac{1}{M}\left[\frac{2 + (\gamma - 1) M^2}{\gamma + 1}\right]^{\frac{\gamma + 1}{2(\gamma - 1)}}
 $$
 
 The last ratio has the same form as the isentropic area ratio $A/A^*$. Ratios between two stations follow by division, for example $p_2/p_1 = (p/p^*)_{M_2}/(p/p^*)_{M_1}$.
 
 | $M$ | $4fL^*/D$ | $T/T^*$ | $p/p^*$ | $\rho/\rho^*$ | $p_0/p_0^*$ |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | 0.2 | 14.533 | 1.1905 | 5.4554 | 4.5826 | 2.9635 |
 | 0.3 | 5.2993 | 1.1788 | 3.6191 | 3.0702 | 2.0351 |
 | 0.5 | 1.0691 | 1.1429 | 2.1381 | 1.8708 | 1.3398 |
@@ -122,17 +129,21 @@ The momentum equation is the same as for a normal shock, because friction is abs
 With $\rho V^2 = \gamma p M^2$, the momentum equation gives $p(1 + \gamma M^2) = \text{const}$. Combining with continuity and the state equation gives:
 
 $$
-\frac{p}{p^*} = \frac{1 + \gamma}{1 + \gamma M^2}, \qquad \frac{T}{T^*} = M^2 \left(\frac{1 + \gamma}{1 + \gamma M^2}\right)^2, \qquad \frac{\rho}{\rho^*} = \frac{V^*}{V} = \frac{1 + \gamma M^2}{(1 + \gamma) M^2}
+\frac{p}{p^*} = \frac{1 + \gamma}{1 + \gamma M^2},
+\qquad \frac{T}{T^*} = M^2 \left(\frac{1 + \gamma}{1 + \gamma M^2}\right)^2,
+\qquad \frac{\rho}{\rho^*} = \frac{V^*}{V} = \frac{1 + \gamma M^2}{(1 + \gamma) M^2}
 $$
 
 $$
-\frac{T_0}{T_0^*} = \frac{(\gamma + 1) M^2 \left[2 + (\gamma - 1) M^2\right]}{\left(1 + \gamma M^2\right)^2}, \qquad \frac{p_0}{p_0^*} = \frac{1 + \gamma}{1 + \gamma M^2}\left[\frac{2 + (\gamma - 1) M^2}{\gamma + 1}\right]^{\gamma/(\gamma - 1)}
+\frac{T_0}{T_0^*} = \frac{(\gamma + 1) M^2 \left[2 + (\gamma - 1) M^2\right]}{\left(1 + \gamma M^2\right)^2},
+\qquad
+\frac{p_0}{p_0^*} = \frac{1 + \gamma}{1 + \gamma M^2}\left[\frac{2 + (\gamma - 1) M^2}{\gamma + 1}\right]^{\gamma/(\gamma - 1)}
 $$
 
 Here $T_0^*$ is the stagnation temperature the stream would have if enough heat were added to bring it exactly to $M = 1$.
 
 | $M$ | $T_0/T_0^*$ | $T/T^*$ | $p/p^*$ | $p_0/p_0^*$ |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 0.2 | 0.17355 | 0.20661 | 2.2727 | 1.2346 |
 | 0.3 | 0.34686 | 0.40887 | 2.1314 | 1.1985 |
 | 0.5 | 0.69136 | 0.79012 | 1.7778 | 1.1141 |
@@ -152,7 +163,8 @@ Here $T_0^*$ is the stagnation temperature the stream would have if enough heat 
 The largest amount of heat a stream at $M_1$ can absorb is
 
 $$
-q_{max} = c_p \left(T_0^* - T_{01}\right) = c_p T_{01}\left[\frac{1}{(T_0/T_0^*)_{M_1}} - 1\right]
+q_{max} = c_p \left(T_0^* - T_{01}\right) = c_p
+T_{01}\left[\frac{1}{(T_0/T_0^*)_{M_1}} - 1\right]
 $$
 
 If more heat is added, the duct is **thermally choked**. A subsonic flow responds by reducing its inlet Mach number, and hence its mass flow, until the exit is just sonic. A supersonic flow responds with a shock that moves upstream. This is one of the main operating limits of ramjets and afterburners.
@@ -204,7 +216,7 @@ Plotting static temperature against entropy gives a map of each process. For Fan
 ### Summary of Trends
 
 | Property | Fanno, subsonic | Fanno, supersonic | Rayleigh heating, subsonic | Rayleigh heating, supersonic |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | $M$ | increases | decreases | increases | decreases |
 | $V$ | increases | decreases | increases | decreases |
 | $p$ | decreases | increases | decreases | increases |
@@ -223,7 +235,8 @@ Air enters a pipe with $D = 5\ \text{cm}$ and Darcy friction factor $f_D = 4f = 
 **Is the pipe choked?**
 
 $$
-\left(\frac{4fL^*}{D}\right)_1 = 5.2993 \quad \Rightarrow \quad L_1^* = \frac{5.2993 \times 0.05}{0.02} = 13.25\ \text{m}
+\left(\frac{4fL^*}{D}\right)_1 = 5.2993 \quad \Rightarrow \quad
+L_1^* = \frac{5.2993 \times 0.05}{0.02} = 13.25\  \text{m}
 $$
 
 Since $8\ \text{m} < 13.25\ \text{m}$, the pipe is not choked.
@@ -231,7 +244,8 @@ Since $8\ \text{m} < 13.25\ \text{m}$, the pipe is not choked.
 **Exit Mach number.**
 
 $$
-\left(\frac{4fL^*}{D}\right)_2 = 5.2993 - \frac{0.02 \times 8}{0.05} = 2.0993 \quad \Rightarrow \quad M_2 = 0.4121 \quad \text{(subsonic root)}
+\left(\frac{4fL^*}{D}\right)_2 = 5.2993 - \frac{0.02 \times 8}{0.05} = 2.0993 \quad
+\Rightarrow \quad M_2 = 0.4121 \quad \text{(subsonic root)}
 $$
 
 **Exit properties.**
@@ -254,13 +268,15 @@ Air enters a constant-area combustor at $M_1 = 0.2$, $T_1 = 400\ \text{K}$ and $
 **Stagnation temperatures.**
 
 $$
-T_{01} = 400 \times 1.008 = 403.2\ \text{K}, \qquad T_{02} = 403.2 + \frac{800\,000}{1004.5} = 1199.6\ \text{K}
+T_{01} = 400 \times 1.008 = 403.2\  \text{K},
+\qquad T_{02} = 403.2 + \frac{800\,000}{1004.5} = 1199.6\  \text{K}
 $$
 
 **Reference state and exit Mach number.**
 
 $$
-T_0^* = \frac{403.2}{0.17355} = 2323.2\ \text{K}, \qquad \frac{T_{02}}{T_0^*} = 0.5164 \quad \Rightarrow \quad M_2 = 0.3928
+T_0^* = \frac{403.2}{0.17355} = 2323.2\  \text{K},
+\qquad \frac{T_{02}}{T_0^*} = 0.5164 \quad \Rightarrow \quad M_2 = 0.3928
 $$
 
 **Exit properties.**

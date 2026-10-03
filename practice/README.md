@@ -13,34 +13,46 @@ This directory contains practical tutorials, guides, and resources for computati
 ## Directory Structure
 
 ### 📐 [gmsh/](./gmsh/)
+
 Comprehensive guides for Gmsh mesh generation
+
 - [Introduction to Gmsh](gmsh/intro.md) — fundamentals, workflow, and scripting
 - [Volume Mesh Generation](gmsh/generate_volume_mesh.md) — STL to volume mesh workflow
 - [Boolean Operations](gmsh/boolean_operations.md) — union, cut, intersect, and fragment geometries
 
 ### 📊 [paraview/](./paraview/)
+
 ParaView visualization and post-processing
+
 - [Introduction to ParaView](paraview/intro.md) — GUI basics, filters, and OpenFOAM integration
 - [Importing External Packages](paraview/import_external_packages.md) — using pandas/numpy with pvpython
 - [Batch Visualization](paraview/batch_visualization.md) — automated screenshots, animations, and data extraction
 
 ### 🔧 [openfoam/](./openfoam/)
+
 OpenFOAM CFD solver tutorials and workflows
+
 - [Getting Started](openfoam/getting_started.md) — lid-driven cavity tutorial with validation
 - [Turbulence Modeling](openfoam/turbulence_modeling.md) — RANS/LES setup, wall treatment, and worked examples
 
 ### 🌊 [mesh_generation/](./mesh_generation/)
+
 3D mesh generation tools and techniques
+
 - [Boundary Layer Meshing](mesh_generation/boundary_layers.md) — y+ calculations and layer generation
 - [Mesh Quality Assessment](mesh_generation/mesh_quality.md) — metrics, tools, and automated reporting
 
 ### 🚀 [cfd_tools/](./cfd_tools/)
+
 Collection of open-source CFD tools
+
 - [Solver Comparison](cfd_tools/solver_comparison.md) — decision guide for choosing a CFD solver
 - [Workflow Automation](cfd_tools/automation.md) — Python/Bash frameworks for parametric studies
 
 ### 🎯 [manual_projects/](./manual_projects/)
+
 Hands-on CFD projects and case studies
+
 - [Lid-Driven Cavity](manual_projects/lid_driven_cavity.md) — benchmark tutorial with Ghia et al. validation
 - [Flow Over Cylinder](manual_projects/flow_over_cylinder.md) — vortex shedding analysis at Re=100
 
@@ -55,14 +67,16 @@ Hands-on CFD projects and case studies
 ## Useful YouTube Resources
 
 ### ParaView and Visualization
-* [Paraview Intro](https://www.youtube.com/watch?v=yexB3W2FYM0)
-* [Postprocessing using ParaView](https://youtube.com/playlist?list=PL6fjYEpJFi7W6ayU8zKi7G0-EZmkjtbPo)
-* [Pull your own data into ParaView](https://www.youtube.com/watch?v=RVgiIBuwpPQ)
+
+- [Paraview Intro](https://www.youtube.com/watch?v=yexB3W2FYM0)
+- [Postprocessing using ParaView](https://youtube.com/playlist?list=PL6fjYEpJFi7W6ayU8zKi7G0-EZmkjtbPo)
+- [Pull your own data into ParaView](https://www.youtube.com/watch?v=RVgiIBuwpPQ)
 
 ### CFD and Mesh Generation
-* [OpenFOAM Tutorial Series](https://www.youtube.com/playlist?list=PLcOe4WUSsMkH6DLHpsYyveaqjKxnEnQqB)
-* [Gmsh Meshing Techniques](https://www.youtube.com/watch?v=X4pCWkSqSEk)
-* [CFD Fundamentals](https://www.youtube.com/playlist?list=PL30F4C5ABCE62CB61)
+
+- [OpenFOAM Tutorial Series](https://www.youtube.com/playlist?list=PLcOe4WUSsMkH6DLHpsYyveaqjKxnEnQqB)
+- [Gmsh Meshing Techniques](https://www.youtube.com/watch?v=X4pCWkSqSEk)
+- [CFD Fundamentals](https://www.youtube.com/playlist?list=PL30F4C5ABCE62CB61)
 
 ## Getting Started
 

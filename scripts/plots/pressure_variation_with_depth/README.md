@@ -36,7 +36,7 @@ and integrating from the surface, where $P = P_0$, gives the linear profile abov
 - `main(argv=None)`: parses the flags, saves the figure if requested, and shows it.
 
 | Parameter | Default | Description |
-|-----------|---------|-------------|
+| --- | --- | --- |
 | `fluid_density` | 1000 | Fluid density in kg/m$^3$ |
 | `g` | 9.81 | Gravitational acceleration in m/s$^2$ |
 | `max_depth` | 20 | Maximum depth plotted, in m |
@@ -49,7 +49,7 @@ python main.py --no-show --output . # save pressure_variation_with_depth.png wit
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 
