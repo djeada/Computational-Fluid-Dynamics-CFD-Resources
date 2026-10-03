@@ -161,10 +161,10 @@ $F^T F = 1 + 4 + 9 = 14$ and $F^T Y = 1.2 + 4.2 + 9.9 = 15.3$, so $\beta = 15.3/
 
 At a sample point, the correlation vector is the $i$-th column of $R$, so $r(x^{(i)}) = R e_i$, and $f(x^{(i)}) = F_i$. Therefore
 
-$$
+```math
 \hat{y}(x^{(i)}) = F_i\beta + e_i^T R R^{-1}(Y - F\beta) = F_i\beta +
 (y_i - F_i\beta) = y_i
-$$
+```
 
 This holds for any $\beta$ and any low-fidelity model, provided $R$ is nonsingular (no nugget term).
 

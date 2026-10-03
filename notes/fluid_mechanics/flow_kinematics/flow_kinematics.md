@@ -142,15 +142,15 @@ In an unsteady flow they differ. One example is smoke from a chimney when the wi
 
 (b) The flow is steady, so only the convective terms remain:
 
-$$
+```math
 a_x = u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y} = x^2(2x) +
 (-2xy)(0) = 2x^3
-$$
+```
 
-$$
+```math
 a_y = u \frac{\partial v}{\partial x} + v \frac{\partial v}{\partial y} = x^2(-2y) +
 (-2xy)(-2x) = 2x^2 y
-$$
+```
 
 At $(1,2)$: $\vec{a} = (2, 4)$ in the units of the field.
 

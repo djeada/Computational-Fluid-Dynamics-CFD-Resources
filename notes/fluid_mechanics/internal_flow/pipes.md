@@ -189,10 +189,10 @@ $Re = \rho V_{\text{avg}} D/\mu = 998 \times 0.509 \times 0.05/1.002 \times 10^{
 
 $Re = 900 \times 0.5 \times 0.02/0.1 = 90$, which is laminar, so $f = 64/90 = 0.711$.
 
-$$
+```math
 \Delta P = f \frac{L}{D} \frac{\rho V_{\text{avg}}^2}{2} = 0.711 \times 500 \times
 112.5 = 40000 \text{ Pa}
-$$
+```
 
 Hagen–Poiseuille gives $32 \times 0.1 \times 10 \times 0.5/0.02^2 = 40000$ Pa. The two agree exactly.
 
@@ -209,9 +209,9 @@ Hagen–Poiseuille gives $32 \times 0.1 \times 10 \times 0.5/0.02^2 = 40000$ Pa.
 
 (c) A force balance on a fluid cylinder of length $L$ gives $\Delta P\, \pi R^2 = \tau_w\, 2\pi R L$, so $\Delta P = 4L\tau_w/D$. Setting this equal to Darcy–Weisbach, $f\frac{L}{D}\frac{\rho V_{\text{avg}}^2}{2}$, gives
 
-$$
+```math
 f = \frac{8\tau_w}{\rho V_{\text{avg}}^2} = \frac{64\mu}{\rho V_{\text{avg}} D} = \frac{64}{Re}
-$$
+```
 
 </details>
 

@@ -58,16 +58,16 @@ III. **Correlation Matrix and Eigenvalue Problem**
 
 - Define the correlation matrix
 
-  $$
+  ```math
   C_{ij} = \frac{1}{N_s}\,(\mathbf{u}_i,\,\mathbf{u}_j)_{L^2}, \quad i,j = 1,\ldots,N_s
-  $$
+  ```
 
 - The inner product $(\cdot,\cdot)_{L^2}$ is approximated in the **finite volume** sense:
 
-  $$
+  ```math
   (\mathbf{u},\,\mathbf{v})_{L^2} \approx \sum_{\ell=1}^{n}
   \mathbf{u}_{\ell}\,\mathbf{v}_{\ell}\,\Delta V_{\ell}
-  $$
+  ```
 
   where $\Delta V_{\ell}$ is the volume of cell $\ell$, and $\mathbf{u}_\ell \cdot \mathbf{v}_\ell$ is the dot product of velocity components.
 
@@ -77,17 +77,17 @@ IV. **POD Modes**
 
 - For each eigenvector $g_i$, the **POD mode** $\phi_i \in \mathbb{R}^n$ (in discrete form) is typically obtained by:
 
-  $$
+  ```math
   \phi_i = \frac{1}{\sqrt{N_s \, \lambda_i}} \sum_{k=1}^{N_s} g_{ik}\,\mathbf{u}_k
-  $$
+  ```
 
 - Choose the first $N$ modes $\{\phi_1, \ldots, \phi_N\}$ with the largest eigenvalues, ensuring $\sum_{i=1}^{N}\lambda_i$ retains a high percentage (e.g., 90-99%) of the total energy $\sum_{i=1}^{N_s}\lambda_i$.
 
 - The velocity field is then approximated by
 
-  $$
+  ```math
   \mathbf{u}(x,t) \approx \sum_{i=1}^{N} a_i(t)\,\phi_i(x)
-  $$
+  ```
 
   where $\phi_i(x)$ is the continuous counterpart of the discrete mode $\phi_i$, and $a_i(t)$ are **time-dependent** modal coefficients.
 
@@ -113,21 +113,21 @@ To apply POD-Galerkin, we typically expand not only $\mathbf{u}$ but also any ad
 
 - **Velocity**:
 
-  $$
+  ```math
   \mathbf{u}(x,t) \approx \sum_{i=1}^N a_i(t)\,\phi_i(x)
-  $$
+  ```
 
 - **Pressure** (if needed for strong coupling):
 
-  $$
+  ```math
   p(x,t) \approx \sum_{i=1}^N a_i(t)\,\chi_i(x)
-  $$
+  ```
 
 - **Turbulent viscosity** $\nu_t$ (RANS case):
 
-  $$
+  ```math
   \nu_t(x,t) \approx \sum_{i=1}^N a_i(t)\,\xi_i(x)
-  $$
+  ```
 
 Here, $\phi_i(x)$, $\chi_i(x)$, and $\xi_i(x)$ are the POD modes for velocity, pressure, and turbulent viscosity, respectively. Each additional field may require a separate snapshot set and POD procedure if it must be dynamically approximated.
 

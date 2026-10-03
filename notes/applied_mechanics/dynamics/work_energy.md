@@ -377,11 +377,11 @@ Work-energy methods complement Newton's second law by providing an efficient alt
 
 All of the spring energy becomes gravitational potential energy at the top:
 
-$$
+```math
 \frac{1}{2}kx^2 = mgh \implies
 h = \frac{0.5 \times 500 \times 0.01}{0.2 \times 9.81} = \frac{2.5}{1.962} = 1.27
 \text{ m}
-$$
+```
 
 </details>
 
@@ -392,9 +392,9 @@ $$
 
 $T_1 + U_f = 0$ gives $\frac{1}{2}mv^2 = \mu_k mg\,d$, so the mass cancels:
 
-$$
+```math
 d = \frac{v^2}{2\mu_k g} = \frac{36}{2 \times 0.25 \times 9.81} = 7.34 \text{ m}
-$$
+```
 
 </details>
 
@@ -416,14 +416,14 @@ At the top the normal force must be non-negative, so $v^2 \geq gR$.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 P_{out} = \rho g Q h = 1000 \times 9.81 \times 0.05 \times 30 = 14.7 \text{ kW}
-$$
+```
 
-$$
+```math
 P_{in} = \frac{P_{out}}{\eta} = \frac{14\,715}{0.7} = 21.0
 \text{ kW} = \frac{21\,021}{745.7} = 28.2 \text{ hp}
-$$
+```
 
 </details>
 
@@ -434,10 +434,10 @@ $$
 
 $I = \frac{1}{2}mR^2 = 4$ kg·m², $\omega = 314.2$ rad/s and $T_1 = \frac{1}{2}I\omega^2 = 197.4$ kJ.
 
-$$
+```math
 M\Delta\theta = T_1 \implies \Delta\theta = \frac{197\,392}{20} = 9870
 \text{ rad} = 1571 \text{ rev}
-$$
+```
 
 The stopping time follows from angular impulse-momentum: $t = I\omega/M = 4 \times 314.2/20 = 62.8$ s.
 

@@ -23,7 +23,8 @@ $$
 For steady, adiabatic, frictionless flow of a perfect gas, mass conservation $\rho u A = \text{const}$ together with the isentropic relations gives
 
 $$
-\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1 + \frac{\gamma-1}{2}M^2\right)\right]^{\frac{\gamma+1}{2(\gamma-1)}}
+\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1 +
+\frac{\gamma-1}{2}M^2\right)\right]^{\frac{\gamma+1}{2(\gamma-1)}}
 $$
 
 For each $A/A^* > 1$ there is one subsonic and one supersonic root. In differential form,
@@ -45,7 +46,7 @@ $$
 In the quasi-1-D model $u$ is uniform across each section. For the plot, streamlines are made to follow the walls, $y/h(x) = \text{const}$, which gives
 
 $$
-v = u\,\frac{y\,h'(x)}{h(x)}
+v = u\, \frac{y\,h'(x)}{h(x)}
 $$
 
 ## Implementation
@@ -65,7 +66,7 @@ python main.py --no-show --output . # save nozzle_flow.png without opening a win
 ```
 
 | Flag | Effect |
-|------|--------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save `nozzle_flow.png` in it |
 

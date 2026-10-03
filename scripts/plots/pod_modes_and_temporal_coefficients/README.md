@@ -17,7 +17,8 @@ This script extracts the first three POD spatial modes and their temporal coeffi
 With $\xi = (x - 1700)/300$ and $\eta = y/100$, both in $[0, 1]$:
 
 $$
-u = \sin(\pi\xi)\sin(\pi\eta)\sin(\pi t) + 0.6\sin(2\pi\xi)\sin(\pi\eta)\sin(2\pi t) + 0.3\sin(\pi\xi)\sin(2\pi\eta)\cos(3\pi t) + \epsilon
+u = \sin(\pi\xi)\sin(\pi\eta)\sin(\pi t) + 0.6\sin(2\pi\xi)\sin(\pi\eta)\sin(2\pi t) +
+0.3\sin(\pi\xi)\sin(2\pi\eta)\cos(3\pi t) + \epsilon
 $$
 
 with $\epsilon \sim \mathcal{N}(0, 0.02^2)$. The three spatial shapes are orthogonal on the grid and the amplitudes differ, so the SVD returns them as separate modes ordered by energy.
@@ -25,7 +26,8 @@ with $\epsilon \sim \mathcal{N}(0, 0.02^2)$. The three spatial shapes are orthog
 ### Snapshot matrix and SVD
 
 $$
-\mathbf{U}' \in \mathbb{R}^{N_x N_y \times N_t}, \qquad N_x = 50,\ N_y = 30,\ N_t = 100
+\mathbf{U}' \in \mathbb{R}^{N_x N_y \times N_t},
+\qquad N_x = 50,\  N_y = 30,\  N_t = 100
 $$
 
 $$
@@ -60,7 +62,7 @@ python main.py --no-show --output . # save pod_modes_and_temporal_coefficients.p
 ```
 
 | Flag | Effect |
-|------|--------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save `pod_modes_and_temporal_coefficients.png` in it |
 

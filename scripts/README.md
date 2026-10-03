@@ -12,7 +12,7 @@ All examples accept `--no-show` and `--output DIR`. Iterative examples also acce
 ## Shared code
 
 | Module | Responsibility |
-|--------|----------------|
+| --- | --- |
 | [_common.py](_common.py) | CLI options, PNG export, and static figure cleanup |
 | [_numerics.py](_numerics.py) | POD by SVD or snapshot eigendecomposition, field generation, and reconstruction |
 | [_plotting.py](_plotting.py) | Paired POD spatial contours and temporal coefficient plots |

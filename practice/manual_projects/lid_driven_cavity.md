@@ -37,7 +37,7 @@ wall │                                 │
 ### Key Parameters
 
 | Parameter | Value | Description |
-|-----------|-------|-------------|
+| --- | --- | --- |
 | Domain size | 0.1 m × 0.1 m | Square cavity |
 | Lid velocity | U = 1 m/s | Constant, in x-direction |
 | Kinematic viscosity | ν = 0.01 m²/s | Gives Re = 10 |
@@ -46,14 +46,17 @@ wall │                                 │
 ### Expected Flow Features
 
 At **Re = 100**:
+
 - Single primary vortex centered slightly right of and above the geometric center.
 - Weak secondary vortices in the bottom corners.
 
 At **Re = 1,000**:
+
 - Stronger primary vortex.
 - Distinct secondary vortices in all corners.
 
 At **Re = 10,000**:
+
 - Primary vortex nearly centered.
 - Strong secondary and tertiary corner vortices.
 
@@ -66,6 +69,7 @@ Re = U × L / ν
 ```
 
 For Re = 100:
+
 ```
 U = 1 m/s
 L = 0.1 m
@@ -73,6 +77,7 @@ L = 0.1 m
 ```
 
 For Re = 1000:
+
 ```
 ν = 1 × 0.1 / 1000 = 0.0001 m²/s
 ```
@@ -451,6 +456,7 @@ sample -latestTime
 ```
 
 This creates files in `postProcessing/sets/<latestTime>/`:
+
 - `verticalLine_U.xy` — u(y) along the vertical centerline
 - `horizontalLine_U.xy` — v(x) along the horizontal centerline
 
@@ -464,6 +470,7 @@ paraview VTK/
 ```
 
 Key visualizations to create:
+
 1. **Velocity magnitude** contour plot
 2. **Streamlines** showing vortex structure
 3. **Pressure** contour plot
@@ -478,7 +485,7 @@ The standard benchmark is **Ghia, Ghia, and Shin (1982)**, "High-Re solutions fo
 Horizontal velocity (u) along the vertical centerline (x = 0.5L):
 
 | y/L | u/U (Ghia et al.) |
-|-----|-------------------|
+| --- | --- |
 | 1.0000 | 1.00000 |
 | 0.9766 | 0.84123 |
 | 0.9688 | 0.78871 |
@@ -602,7 +609,7 @@ if __name__ == "__main__":
 Explore how flow structure changes with Reynolds number by modifying `constant/transportProperties`:
 
 | Re | ν (m²/s) | Flow Character |
-|----|----------|----------------|
+| --- | --- | --- |
 | 100 | 0.001 | Single vortex, steady |
 | 400 | 0.00025 | Stronger vortex, visible corner eddies |
 | 1,000 | 0.0001 | Strong primary vortex, distinct secondary vortices |
@@ -654,7 +661,7 @@ echo "All cases completed."
 Run the same case (Re = 100) with different mesh resolutions:
 
 | Mesh | Cells | Resolution |
-|------|-------|------------|
+| --- | --- | --- |
 | Coarse | 20 × 20 | 400 cells |
 | Medium | 40 × 40 | 1,600 cells |
 | Fine | 80 × 80 | 6,400 cells |

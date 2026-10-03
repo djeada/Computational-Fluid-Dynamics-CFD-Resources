@@ -151,10 +151,10 @@ B is chosen: exploitation near the current best. With $s_A = 0.4$: $z = -0.5$, $
 
 $R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}$ with $\rho = e^{-2} = 0.1353$, $F = (1, 1)^T$, and $r(0.5) = (e^{-0.5}, e^{-0.5}) = (0.6065, 0.6065)$. Eliminating the block system gives
 
-$$
+```math
 \frac{\text{MSE}}{\sigma^2} = 1 - r^T R^{-1} r +
 \frac{\left(F^T R^{-1} r - 1\right)^2}{F^T R^{-1} F}
-$$
+```
 
 The pieces are $r^T R^{-1} r = 2r^2/(1 + \rho) = 0.6480$, $F^T R^{-1} r = 2r/(1 + \rho) = 1.0685$ and $F^T R^{-1} F = 2/(1 + \rho) = 1.7616$. So $\text{MSE}/\sigma^2 = 1 - 0.6480 + 0.0685^2/1.7616 = 0.3546$. By symmetry $x = 0.5$ is a stationary point, and a scan over $[0, 1]$ confirms it is the maximum. The max-MSE criterion therefore picks the midpoint, as a space-filling rule would.
 
@@ -167,9 +167,9 @@ The pieces are $r^T R^{-1} r = 2r^2/(1 + \rho) = 0.6480$, $F^T R^{-1} r = 2r/(1 
 
 With $S = F^T R^{-1} F$, the block inverse is
 
-$$
+```math
 \begin{pmatrix} R & F \\ F^T & 0 \end{pmatrix}^{-1} = \begin{pmatrix} R^{-1} - R^{-1}F S^{-1} F^T R^{-1} & R^{-1}F S^{-1} \\ S^{-1}F^T R^{-1} & -S^{-1} \end{pmatrix}
-$$
+```
 
 With $r = 0$ the quadratic form reduces to the lower-right block: $(0, f)^T M^{-1} (0, f) = -f^T S^{-1} f$. Hence $\text{MSE} \to \sigma^2(1 + f^T S^{-1} f)$.
 

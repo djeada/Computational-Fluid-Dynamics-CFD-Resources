@@ -294,9 +294,9 @@ $A_x = 0$. $A_y = 4(3) + 6 = 18$ kN upward.
 
 Moment about A, counterclockwise positive:
 
-$$
+```math
 M_A - 12(1.5) - 6(3) = 0 \implies M_A = 36 \text{ kN}\cdot \text{m}
-$$
+```
 
 The reaction moment is counterclockwise.
 
@@ -311,10 +311,10 @@ $W = 196.2$ N acts at mid-length. The smooth wall exerts only a horizontal force
 
 Moments about the foot:
 
-$$
+```math
 N_w(5\sin 60^\circ) = W(2.5\cos 60^\circ) \implies
 N_w = \frac{196.2 \times 1.25}{4.330} = 56.6 \text{ N}
-$$
+```
 
 Force balance gives $F = N_w = 56.6$ N and $N_f = W = 196.2$ N, so $\mu_{min} = F/N_f = 0.289$.
 
@@ -327,13 +327,13 @@ Force balance gives $F = N_w = 56.6$ N and $N_f = W = 196.2$ N, so $\mu_{min} = 
 
 The distributed load resultant is 18 kN at $x = 3$ m.
 
-$$
+```math
 \sum M_A = 6B_y - 18(3) - 10(8) = 0 \implies B_y = 22.3 \text{ kN}
-$$
+```
 
-$$
+```math
 A_y = 18 + 10 - 22.3 = 5.67 \text{ kN}
-$$
+```
 
 Both reactions are upward. A tip load above 27 kN would make $A_y$ negative, meaning the pin at A would have to hold the beam down.
 

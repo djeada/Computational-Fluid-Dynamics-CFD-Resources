@@ -108,10 +108,10 @@ The mast thermometer stays at a fixed point, so it is Eulerian and records $\par
 
 (b) The particle also sees the convective change:
 
-$$
+```math
 \frac{DT}{Dt} = \frac{\partial T}{\partial t} + u \frac{\partial T}{\partial x} = -0.1 +
 2 \times 0.5 = 0.9 \text{ K/s}
-$$
+```
 
 The fixed probe sees the air cooling, but a particle heats up, because it is carried into warmer regions faster than the field cools.
 

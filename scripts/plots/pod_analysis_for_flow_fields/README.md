@@ -35,7 +35,8 @@ The rows of $\boldsymbol{\Phi}^T$ are the spatial POD modes. The columns of $\ma
 The eigenvalues of the spatial covariance matrix $\mathbf{C} = \mathbf{U}'^T\mathbf{U}'/(M-1)$ are
 
 $$
-\lambda_i = \frac{\sigma_i^2}{M - 1}, \qquad M = 100 \text{ snapshots}
+\lambda_i = \frac{\sigma_i^2}{M - 1},
+\qquad M = 100 \text{ snapshots}
 $$
 
 ### Percentage of turbulent kinetic energy
@@ -62,7 +63,7 @@ python main.py --no-show --output . # save pod_analysis_for_flow_fields.png with
 ```
 
 | Flag | Effect |
-|------|--------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save `pod_analysis_for_flow_fields.png` in it |
 

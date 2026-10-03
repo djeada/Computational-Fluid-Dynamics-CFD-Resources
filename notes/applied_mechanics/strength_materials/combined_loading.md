@@ -359,10 +359,10 @@ Combined loading analysis is essential for safe design of real-world structures 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \sigma = -\frac{500\,000}{90\,000} \pm
 \frac{500\,000 \times 60 \times 150}{6.75 \times 10^8} = -5.56 \pm 6.67 \text{ MPa}
-$$
+```
 
 The extremes are $\sigma = +1.11$ MPa (tension) and $-12.2$ MPa. The load is outside the kern ($e > h/6 = 50$ mm), so one face goes into tension, which matters for unreinforced concrete or masonry.
 
@@ -373,9 +373,9 @@ The extremes are $\sigma = +1.11$ MPa (tension) and $-12.2$ MPa. The load is out
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 C = \frac{80 - 40}{2} = 20 \text{ MPa}, \quad R = \sqrt{60^2 + 30^2} = 67.1 \text{ MPa}
-$$
+```
 
 - Principal stresses: $\sigma_1 = 87.1$ MPa and $\sigma_2 = -47.1$ MPa
 - Maximum in-plane shear: $\tau_{max} = 67.1$ MPa
@@ -392,9 +392,9 @@ Because $\sigma_1$ and $\sigma_2$ have opposite signs, the in-plane maximum shea
 
 (a) $\sigma_{eq} = \dfrac{16}{\pi d^3}\sqrt{4M^2 + 3T^2} \leq 175$ MPa:
 
-$$
+```math
 d = \left(\frac{16\sqrt{4(1200)^2 + 3(800)^2}}{\pi \times 175 \times 10^6}\right)^{1/3} = 43.2 \text{ mm}
-$$
+```
 
 (b) $\tau_{max} = \dfrac{16}{\pi d^3}\sqrt{M^2 + T^2} \leq 87.5$ MPa gives $d = 43.8$ mm.
 
@@ -419,10 +419,10 @@ $r/t = 100$ and 200, both well above 10, so thin-wall theory applies. The end ca
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \sigma_{eq} = \sqrt{100^2 - 100(64.9) + 64.9^2} = 87.9 \text{ MPa} \implies
 n = 250/87.9 = 2.84
-$$
+```
 
 Both in-plane stresses are tensile, so the largest principal-stress difference is $\sigma_1 - \sigma_3 = 100$ MPa. That gives $\tau_{max,abs} = 50$ MPa and $n = 125/50 = 2.5$.
 

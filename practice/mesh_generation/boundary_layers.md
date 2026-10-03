@@ -5,24 +5,31 @@ Boundary layer meshing is crucial for accurately capturing near-wall flow phenom
 ## Theory Background
 
 ### Boundary Layer Physics
+
 The boundary layer is the thin region near solid walls where viscous effects dominate. Key characteristics:
+
 - Velocity changes from zero (no-slip) to free-stream value
 - Large velocity gradients require fine mesh resolution
 - Thickness depends on Reynolds number and distance from leading edge
 
 ### y+ Concept
+
 The dimensionless wall distance y+ determines mesh requirements:
+
 ```
 y+ = (y * u_τ) / ν
 ```
+
 Where:
+
 - y = distance from wall
 - u_τ = friction velocity = √(τ_wall/ρ)
 - ν = kinematic viscosity
 
 ### y+ Guidelines
+
 | Application | y+ Range | Wall Treatment |
-|-------------|----------|----------------|
+| --- | --- | --- |
 | DNS | y+ < 1 | Direct resolution |
 | Wall-resolved LES | y+ < 1 | Direct resolution |
 | Low-Re RANS | y+ < 1 | Integration to wall |
@@ -32,20 +39,26 @@ Where:
 ## First Cell Height Calculation
 
 ### Flat Plate Formula
+
 For flow over a flat plate:
+
 ```
 δ ≈ 5 * x / √(Re_x)
 y_first ≈ δ / (n_layers * growth_ratio^(n_layers-1))
 ```
 
 ### Practical Estimation
+
 Quick estimate for y+ = 1:
+
 ```
 y_first ≈ 74 * ν / √(Re_L)
 ```
+
 Where Re_L is based on characteristic length.
 
 ### Example Calculation
+
 ```python
 import numpy as np
 
@@ -84,6 +97,7 @@ print(f"First cell height: {y_first:.2e} m")
 ### Gmsh Boundary Layer Implementation
 
 #### Method 1: BoundaryLayer Field
+
 ```cpp
 // In .geo file
 Field[1] = BoundaryLayer;
@@ -98,6 +112,7 @@ Background Field = 1;
 ```
 
 #### Method 2: Extrusion with Layers
+
 ```cpp
 // Extrude surface with boundary layers
 Extrude {0, 0, 1} {
@@ -108,6 +123,7 @@ Extrude {0, 0, 1} {
 ```
 
 ### OpenFOAM snappyHexMesh
+
 ```cpp
 // snappyHexMeshDict - addLayersControls
 addLayersControls
@@ -141,6 +157,7 @@ addLayersControls
 ```
 
 ### Salome Boundary Layer Meshing
+
 ```python
 # Python script for Salome
 import salome
@@ -176,6 +193,7 @@ mesh.Compute()
 ## Quality Assessment
 
 ### Metrics for Boundary Layer Meshes
+
 1. **Aspect Ratio**: Should be high in normal direction (10-1000)
 2. **Orthogonality**: > 15° for prisms
 3. **Skewness**: < 0.85
@@ -183,6 +201,7 @@ mesh.Compute()
 5. **y+ Distribution**: Check uniformity along walls
 
 ### OpenFOAM Quality Check
+
 ```bash
 # Check mesh quality
 checkMesh -allGeometry -allTopology
@@ -192,6 +211,7 @@ simpleFoam -postProcess -func yPlus
 ```
 
 ### Python y+ Calculation
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -219,6 +239,7 @@ def plot_yplus_distribution(wall_shear_stress, first_cell_height, viscosity):
 ## Best Practices
 
 ### General Guidelines
+
 1. **Start Coarse**: Begin with fewer layers, refine as needed
 2. **Gradual Growth**: Use growth ratios of 1.1-1.3
 3. **Sufficient Layers**: 10-20 layers for wall-resolved
@@ -226,6 +247,7 @@ def plot_yplus_distribution(wall_shear_stress, first_cell_height, viscosity):
 5. **Transition Smoothly**: Avoid sudden changes in cell size
 
 ### Common Pitfalls
+
 - **Too Aggressive Growth**: High ratios cause quality issues
 - **Insufficient Layers**: Missing important physics
 - **Poor Surface Definition**: Causes layer generation failures
@@ -234,6 +256,7 @@ def plot_yplus_distribution(wall_shear_stress, first_cell_height, viscosity):
 ### Troubleshooting Layer Generation
 
 #### Gmsh Issues
+
 ```bash
 # Enable verbose output
 gmsh -v 5 geometry.geo
@@ -246,6 +269,7 @@ Mesh.ElementSizeFactor = 0.5;
 ```
 
 #### OpenFOAM snappyHexMesh Issues
+
 ```cpp
 // Relaxed settings for difficult geometries
 nRelaxIter 5;               // Increase from 3
@@ -256,6 +280,7 @@ maxFaceThicknessRatio 2.0;  // More permissive
 ## Advanced Techniques
 
 ### Anisotropic Mesh Adaptation
+
 ```python
 # Metric tensor for boundary layer adaptation
 def boundary_layer_metric(normal_direction, tangent_directions, 
@@ -278,6 +303,7 @@ def boundary_layer_metric(normal_direction, tangent_directions,
 ```
 
 ### Hybrid Meshing Strategy
+
 ```
 1. Generate structured boundary layer mesh
 2. Fill remaining domain with unstructured elements
@@ -286,6 +312,7 @@ def boundary_layer_metric(normal_direction, tangent_directions,
 ```
 
 ### Automated Layer Height Calculation
+
 ```bash
 #!/bin/bash
 # auto_layer_height.sh

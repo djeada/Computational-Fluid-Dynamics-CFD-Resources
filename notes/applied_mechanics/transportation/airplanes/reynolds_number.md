@@ -91,14 +91,14 @@ Similarly, if you’re studying insects, you’d see that they exist in a low-sp
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 Re = \frac{0.364 \times 230 \times 5}{1.42 \times 10^{-5}} = 2.9 \times 10^7
-$$
+```
 
-$$
+```math
 a = \sqrt{\gamma RT} = \sqrt{1.4 \times 287 \times 216.65} = 295 \text{ m/s}, \quad
 M = \frac{230}{295} = 0.78
-$$
+```
 
 The flow is fully turbulent over most of the wing and is in the lower transonic regime.
 
@@ -109,9 +109,9 @@ The flow is fully turbulent over most of the wing and is in the lower transonic 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 Re = \frac{1.225 \times 10 \times 0.10}{1.79 \times 10^{-5}} = 6.8 \times 10^4
-$$
+```
 
 This is about 430 times smaller than the airliner's. At this Reynolds number the boundary layer is largely laminar and prone to laminar separation, so bird and small-drone airfoils are thin and highly cambered rather than scaled-down airliner sections.
 
@@ -144,9 +144,9 @@ Real facilities raise $\rho/\mu$ instead: pressurized tunnels increase the densi
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 x_{tr} = \frac{Re_x\,\mu}{\rho V} = \frac{5 \times 10^5 \times 1.79 \times 10^{-5}}{1.225 \times 60} = 0.12 \text{ m}
-$$
+```
 
 That is only about 8% of a 1.5 m chord. On a real wing the transition location depends strongly on the pressure gradient (a favourable gradient delays it, which is how laminar-flow airfoils work), on surface roughness, insect debris and free-stream turbulence. The flat-plate value is only a rough guide.
 

@@ -186,9 +186,9 @@ The number of steps is $0.01/2.94 \times 10^{-6} = 3400$.
 
 $G = 1 - C + C e^{-\mathrm{i}\theta}$, and
 
-$$
+```math
 |G|^2 = (1 - C + C\cos\theta)^2 + C^2\sin^2\theta = 1 - 2C(1 - C)(1 - \cos\theta)
-$$
+```
 
 At $\theta = \pi$: $G = 1 - 2C$. For $C = 0.5$, $|G| = 0$ (the shortest wave is removed in one step). For $C = 1.2$, $|G| = 1.4$, so errors grow by 40% per step.
 
@@ -203,9 +203,9 @@ $|G| \le 1$ for every $\theta$ requires $C(1 - C) \ge 0$, that is $0 \le C \le 1
 
 $G(1 + C - Ce^{-\mathrm{i}\theta}) = 1$, so
 
-$$
+```math
 |G|^2 = \frac{1}{1 + 2C(1 + C)(1 - \cos\theta)} \le 1 \quad \text{for all } C \ge 0
-$$
+```
 
 and the scheme is unconditionally stable.
 

@@ -199,10 +199,10 @@ Keeping each step scripted and version-controlled ensures reproducibility and ma
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \frac{\partial J}{\partial p_k} \approx \frac{0.3065 - 0.310}{1} = -0.0035
 \text{ per degree}
-$$
+```
 
 The linear prediction for $+3^\circ$ is $0.310 + 3(-0.0035) = 0.2995$.
 
@@ -252,10 +252,10 @@ Normalization puts angles (degrees) and lengths (millimetres) on comparable scal
 
 Setting $dE/d\delta = |J''|/2 - 2\eta/\delta^2 = 0$ gives
 
-$$
+```math
 \delta^* = 2 \sqrt{\frac{\eta}{|J''|}} = 2 \sqrt{\frac{10^{-4}}{2 \times 10^{-4}}}
 \approx 1.41^\circ
-$$
+```
 
 with minimum error $E^* = 2\sqrt{\eta |J''|} \approx 2.83 \times 10^{-4}$ per degree.
 

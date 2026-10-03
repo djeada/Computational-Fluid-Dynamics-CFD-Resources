@@ -708,10 +708,10 @@ $Re = VL/\nu$.
 
 There are $n = 7$ variables ($\Delta p, \rho, V, D, \mu, L, \varepsilon$) and $k = 3$ fundamental dimensions ($M, L, T$), so there are $n - k = 4$ groups. Taking $\rho$, $V$ and $D$ as repeating variables:
 
-$$
+```math
 \frac{\Delta p}{\rho V^2} = f\left(\frac{\rho V D}{\mu}, \frac{L}{D},
 \frac{\varepsilon}{D}\right)
-$$
+```
 
 that is, a pressure coefficient as a function of $Re$, the length ratio and the relative roughness. Because $\Delta p$ grows in proportion to $L$ in fully developed flow, this reduces to the Darcy form $\Delta p/(\rho V^2) = (L/D)\, \phi(Re, \varepsilon/D)$.
 
@@ -735,9 +735,9 @@ $f = St\, U / D = 0.2 \times 10 / 0.05 = 40$ Hz.
 
 (b) With the same water in both cases,
 
-$$
+```math
 \frac{Re_m}{Re_p} = \frac{V_m L_m}{V_p L_p} = \frac{2 \times 4}{10 \times 100} = 0.008 = \frac{1}{125}
-$$
+```
 
 The model Reynolds number is 125 times too small, so Froude and Reynolds similarity cannot both hold. In practice wave resistance is scaled with $Fr$, and friction drag is corrected separately using a skin-friction correlation.
 
@@ -754,10 +754,10 @@ The model Reynolds number is 125 times too small, so Froude and Reynolds similar
 
 (c) Using the scaling law from the note,
 
-$$
+```math
 F_p = F_m \frac{\rho_p V_p^2 L_p^2}{\rho_m V_m^2 L_m^2} = F_m
 \frac{20^2 \times 10^2}{200^2 \times 1^2} = F_m
-$$
+```
 
 With $\rho$ and $\mu$ unchanged and $VL$ held fixed, the drag force is the same on the model and on the prototype.
 

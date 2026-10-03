@@ -168,9 +168,9 @@ III. **Online Phase: Reduced Basis (RB) Approximation**
 
 - **Approximate Solution**: For a new parameter $\mu$, approximate the solution in the low-dimensional subspace spanned by the POD modes:
 
-  $$
+  ```math
   u_{N_h}(\mu) = \sum_{i=1}^N a_i(\mu)\,\xi_i
-  $$
+  ```
 
   where the vectors $\xi_i \in V_h$ are the reduced basis vectors, and $a_i(\mu)$ are the new unknowns (much fewer in number than $N_h$).
 
@@ -238,9 +238,9 @@ $h = 1/2$ (one interior node): $A = [4]$ and $f = [1/2]$, so $u(1/2) = 0.125$. T
 
 $h = 1/4$ (three interior nodes):
 
-$$
+```math
 A = \begin{pmatrix} 8 & -4 & 0 \\ -4 & 8 & -4 \\ 0 & -4 & 8 \end{pmatrix}, \qquad f = \begin{pmatrix} 0.25 \\ 0.25 \\ 0.25 \end{pmatrix}, \qquad u = \begin{pmatrix} 0.09375 \\ 0.125 \\ 0.09375 \end{pmatrix}
-$$
+```
 
 These equal the exact values $x(1-x)/2$ at $x = 0.25, 0.5, 0.75$. The nodal values are exact for this 1D problem, but between nodes the piecewise-linear interpolant still differs from the parabola.
 

@@ -15,7 +15,10 @@ This script simulates Rayleigh-Bénard convection, the buoyancy-driven flow in a
 
 ### Rayleigh and Prandtl Numbers
 
-$$Ra = \frac{g\beta\,\Delta T\,H^3}{\nu\kappa}, \qquad Pr = \frac{\nu}{\kappa}$$
+$$
+Ra = \frac{g\beta\,\Delta T\,H^3}{\nu\kappa},
+\qquad Pr = \frac{\nu}{\kappa}
+$$
 
 where $g$ is the gravitational acceleration, $\beta$ the thermal expansion coefficient, $\Delta T$ the temperature difference across the layer height $H$, $\nu$ the kinematic viscosity and $\kappa$ the thermal diffusivity. For a layer between rigid plates, convection starts above $Ra_c \approx 1708$.
 
@@ -23,11 +26,21 @@ where $g$ is the gravitational acceleration, $\beta$ the thermal expansion coeff
 
 Lengths are scaled with $H$, velocities with $U_f = \sqrt{g\beta\Delta T H}$, times with $H/U_f$ and temperatures with $\Delta T$. In two dimensions $(x, z)$, with vorticity $\omega = \partial w/\partial x - \partial u/\partial z$ and streamfunction $\psi$:
 
-$$\frac{\partial T}{\partial t} + \mathbf{u}\cdot\nabla T = \frac{1}{\sqrt{Ra\,Pr}}\,\nabla^2 T$$
+$$
+\frac{\partial T}{\partial t} + \mathbf{u}\cdot\nabla
+T = \frac{1}{\sqrt{Ra\,Pr}}\,\nabla^2 T
+$$
 
-$$\frac{\partial \omega}{\partial t} + \mathbf{u}\cdot\nabla \omega = \sqrt{\frac{Pr}{Ra}}\,\nabla^2 \omega + \frac{\partial T}{\partial x}$$
+$$
+\frac{\partial \omega}{\partial t} + \mathbf{u}\cdot\nabla
+\omega = \sqrt{\frac{Pr}{Ra}}\,\nabla^2 \omega + \frac{\partial T}{\partial x}
+$$
 
-$$\nabla^2\psi = -\omega, \qquad u = \frac{\partial \psi}{\partial z}, \qquad w = -\frac{\partial \psi}{\partial x}$$
+$$
+\nabla^2\psi = -\omega,
+\qquad u = \frac{\partial \psi}{\partial z},
+\qquad w = -\frac{\partial \psi}{\partial x}
+$$
 
 The buoyancy term $\partial T/\partial x$ spins up vorticity wherever hot and cold fluid sit side by side, so hot fluid rises and cold fluid sinks.
 
@@ -47,7 +60,9 @@ The buoyancy term $\partial T/\partial x$ spins up vorticity wherever hot and co
 
 The Nusselt number is the heat flux through the bottom wall relative to pure conduction:
 
-$$Nu = -\left\langle \frac{\partial T}{\partial z}\right\rangle_{z=0}$$
+$$
+Nu = -\left\langle \frac{\partial T}{\partial z}\right\rangle_{z=0}
+$$
 
 The script evaluates it with a second-order one-sided difference. $Nu = 1$ means no convection.
 

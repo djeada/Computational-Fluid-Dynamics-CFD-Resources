@@ -317,9 +317,9 @@ Substitute $\mathbf{v} = \xi - \mathbf{u}$. The exponential factorises into thre
 
 For the second moment, $|\mathbf{v}|^2 = v_x^2 + v_y^2 + v_z^2$. Each term contributes $\rho RT$, because the one-dimensional second moment is $RT$ times the normalisation. Hence
 
-$$
+```math
 \int |\xi - \mathbf{u}|^2 f^{\text{eq}} \, d^3\xi = 3\rho R T
-$$
+```
 
 and the thermal energy density $\int \tfrac{1}{2}|\mathbf{v}|^2 f^{\text{eq}} \, d^3\xi = \tfrac{3}{2}\rho R T$ is that of a monatomic ideal gas.
 

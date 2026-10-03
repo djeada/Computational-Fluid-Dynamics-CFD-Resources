@@ -367,14 +367,14 @@ Gears remain the most efficient and reliable means of mechanical power transmiss
 
 Pitch radii 40 and 120 mm; addendum radii $r_{a1} = 44$ mm and $r_{a2} = 124$ mm; base radii $r_{b1} = 40\cos 20^\circ = 37.59$ mm and $r_{b2} = 112.76$ mm; $C = 160$ mm.
 
-$$
+```math
 \sqrt{44^2 - 37.59^2} = 22.87, \quad \sqrt{124^2 - 112.76^2} = 51.58, \quad
 C\sin\phi = 54.72
-$$
+```
 
-$$
+```math
 CR = \frac{22.87 + 51.58 - 54.72}{\pi \times 4 \times \cos 20^\circ} = \frac{19.73}{11.81} = 1.67
-$$
+```
 
 This is above the recommended minimum of 1.2: on average 1.67 tooth pairs share the load.
 
@@ -389,14 +389,14 @@ This is above the recommended minimum of 1.2: on average 1.67 tooth pairs share 
 - $\tan\phi_t = \tan\phi_n/\cos\psi$ gives $\phi_t = 21.88^\circ$
 - $T = P/\omega = 10\,000/(1000 \times 2\pi/60) = 95.49$ N·m
 
-$$
+```math
 F_t = \frac{2T}{d} = \frac{2 \times 95.49}{0.09930} = 1923 \text{ N}
-$$
+```
 
-$$
+```math
 F_r = \frac{F_t \tan\phi_n}{\cos\psi} = \frac{1923 \tan 20^\circ}{\cos 25^\circ} = 772
 \text{ N}, \quad F_a = F_t\tan\psi = 897 \text{ N}
-$$
+```
 
 The axial force of almost 900 N must be carried by a thrust-capable bearing.
 
@@ -409,10 +409,10 @@ The axial force of almost 900 N must be carried by a thrust-capable bearing.
 
 (a) Willis with $\omega_s = 0$:
 
-$$
+```math
 \frac{\omega_r - \omega_c}{0 - \omega_c} = -\frac{24}{60} \implies
 \omega_r = 1.4\,\omega_c \implies \omega_c = \frac{1000}{1.4} = 714.3 \text{ rpm}
-$$
+```
 
 in the same direction as the ring, matching $i = 1 + N_s/N_r = 1.4$.
 

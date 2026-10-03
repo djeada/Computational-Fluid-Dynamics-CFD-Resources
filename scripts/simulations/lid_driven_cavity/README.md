@@ -14,17 +14,28 @@ This script solves the 2D incompressible Navier-Stokes equations for flow in a s
 
 ### Governing Equations
 
-$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u}\cdot\nabla)\mathbf{u} = -\frac{1}{\rho}\nabla p + \nu\nabla^2\mathbf{u}, \qquad \nabla\cdot\mathbf{u} = 0$$
+$$
+\frac{\partial \mathbf{u}}{\partial t} +
+(\mathbf{u}\cdot\nabla)\mathbf{u} = -\frac{1}{\rho}\nabla p + \nu\nabla^2\mathbf{u},
+\qquad \nabla\cdot\mathbf{u} = 0
+$$
 
 ### Projection Method
 
 Each time step has three stages:
 
-$$\mathbf{u}^* = \mathbf{u}^n + \Delta t\left[-(\mathbf{u}^n\cdot\nabla)\mathbf{u}^n + \nu\nabla^2\mathbf{u}^n\right]$$
+$$
+\mathbf{u}^* = \mathbf{u}^n + \Delta
+t\left[-(\mathbf{u}^n\cdot\nabla)\mathbf{u}^n + \nu\nabla^2\mathbf{u}^n\right]
+$$
 
-$$\nabla^2 p = \frac{\rho}{\Delta t}\nabla\cdot\mathbf{u}^*$$
+$$
+\nabla^2 p = \frac{\rho}{\Delta t}\nabla\cdot\mathbf{u}^*
+$$
 
-$$\mathbf{u}^{n+1} = \mathbf{u}^* - \frac{\Delta t}{\rho}\nabla p$$
+$$
+\mathbf{u}^{n+1} = \mathbf{u}^* - \frac{\Delta t}{\rho}\nabla p
+$$
 
 The velocity boundary conditions are applied to both $\mathbf{u}^*$ and $\mathbf{u}^{n+1}$.
 
@@ -37,11 +48,19 @@ The velocity boundary conditions are applied to both $\mathbf{u}^*$ and $\mathbf
 
 With grid spacing $h = L/128$:
 
-$$\left.\frac{\partial f}{\partial x}\right|_{i,j} \approx \frac{f_{i+1,j}-f_{i-1,j}}{2h}, \qquad \nabla^2 f_{i,j} \approx \frac{f_{i+1,j}+f_{i-1,j}+f_{i,j+1}+f_{i,j-1}-4f_{i,j}}{h^2}$$
+$$
+\left. \frac{\partial f}{\partial x}\right|_{i,j} \approx
+\frac{f_{i+1,j}-f_{i-1,j}}{2h},
+\qquad \nabla^2 f_{i,j} \approx
+\frac{f_{i+1,j}+f_{i-1,j}+f_{i,j+1}+f_{i,j-1}-4f_{i,j}}{h^2}
+$$
 
 The Jacobi sweep for $\nabla^2 p = b$ is
 
-$$p_{i,j}^{(k+1)} = \frac{1}{4}\left(p_{i+1,j}^{(k)}+p_{i-1,j}^{(k)}+p_{i,j+1}^{(k)}+p_{i,j-1}^{(k)} - h^2 b_{i,j}\right)$$
+$$
+p_{i,j}^{(k+1)} = \frac{1}{4}\left(p_{i+1,j}^{(k)} + p_{i-1,j}^{(k)} + p_{i,j+1}^{(k)} +
+p_{i,j-1}^{(k)} - h^2 b_{i,j}\right)
+$$
 
 and starts from the pressure of the previous time step.
 

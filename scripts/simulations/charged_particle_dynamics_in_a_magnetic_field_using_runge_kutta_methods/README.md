@@ -14,13 +14,18 @@ This script integrates the motion of a charged particle in a uniform magnetic fi
 
 A particle with charge $q$ and mass $m$ moving with velocity $\mathbf{v}$ through a magnetic field $\mathbf{B}$ feels the Lorentz force
 
-$$\mathbf{F} = q\,(\mathbf{v} \times \mathbf{B})$$
+$$
+\mathbf{F} = q\,(\mathbf{v} \times \mathbf{B})
+$$
 
 The force is always perpendicular to $\mathbf{v}$, so it does no work and the speed $|\mathbf{v}|$ stays constant.
 
 ### Equations of Motion
 
-$$\dot{\mathbf{r}} = \mathbf{v}, \qquad \dot{\mathbf{v}} = \frac{q}{m}\,(\mathbf{v} \times \mathbf{B})$$
+$$
+\dot{\mathbf{r}} = \mathbf{v},
+\qquad \dot{\mathbf{v}} = \frac{q}{m}\,(\mathbf{v} \times \mathbf{B})
+$$
 
 ### Helical Motion
 
@@ -35,9 +40,20 @@ With the default values, $\omega_c = 1$ (period $2\pi \approx 6.28$), $r_L = 1$ 
 
 For $\dot{\mathbf{y}} = \mathbf{f}(t, \mathbf{y})$ with $\mathbf{y} = (\mathbf{r}, \mathbf{v})$:
 
-$$\mathbf{k}_1 = \mathbf{f}(t_n, \mathbf{y}_n), \quad \mathbf{k}_2 = \mathbf{f}\left(t_n + \tfrac{\Delta t}{2}, \mathbf{y}_n + \tfrac{\Delta t}{2}\mathbf{k}_1\right), \quad \mathbf{k}_3 = \mathbf{f}\left(t_n + \tfrac{\Delta t}{2}, \mathbf{y}_n + \tfrac{\Delta t}{2}\mathbf{k}_2\right), \quad \mathbf{k}_4 = \mathbf{f}(t_n + \Delta t, \mathbf{y}_n + \Delta t\,\mathbf{k}_3)$$
+$$
+\mathbf{k}_1 = \mathbf{f}(t_n, \mathbf{y}_n), \quad
+\mathbf{k}_2 = \mathbf{f}\left(t_n + \tfrac{\Delta t}{2}, \mathbf{y}_n +
+\tfrac{\Delta t}{2}\mathbf{k}_1\right), \quad
+\mathbf{k}_3 = \mathbf{f}\left(t_n + \tfrac{\Delta t}{2}, \mathbf{y}_n +
+\tfrac{\Delta t}{2}\mathbf{k}_2\right), \quad
+\mathbf{k}_4 = \mathbf{f}(t_n + \Delta t, \mathbf{y}_n + \Delta t\,\mathbf{k}_3)
+$$
 
-$$\mathbf{y}_{n+1} = \mathbf{y}_n + \frac{\Delta t}{6}\left(\mathbf{k}_1 + 2\mathbf{k}_2 + 2\mathbf{k}_3 + \mathbf{k}_4\right)$$
+$$
+\mathbf{y}_{n+1} = \mathbf{y}_n +
+\frac{\Delta t}{6}\left(\mathbf{k}_1 + 2\mathbf{k}_2 + 2\mathbf{k}_3 +
+\mathbf{k}_4\right)
+$$
 
 RK4 is fourth-order accurate but not energy-conserving. For this rotation its per-step amplitude factor is $1 - (\omega_c\Delta t)^6/144$, so with $\omega_c \Delta t = 0.01$ the speed drift over 5000 steps is of order $10^{-11}$, as the script's printout confirms.
 

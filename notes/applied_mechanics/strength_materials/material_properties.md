@@ -309,10 +309,10 @@ Understanding mechanical properties enables engineers to select materials that m
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \sigma_{true} = \sigma_{eng}(1 + \epsilon_{eng}) = 472.7 \times 1.18 = 558 \text{ MPa},
 \quad \epsilon_{true} = \ln 1.18 = 0.166
-$$
+```
 
 Necking starts at maximum load, so $n \approx 0.17$, within the typical range of 0.1 to 0.5.
 
@@ -348,9 +348,9 @@ Aluminium stores about 3.5 times more elastic energy per volume and 10 times mor
 
 With the Goodman line scaled by $n$, $\sigma_a/\sigma_e + \sigma_m/\sigma_u = 1/n$:
 
-$$
+```math
 \frac{1}{n} = \frac{200}{300} + \frac{100}{600} = 0.833 \implies n = 1.2
-$$
+```
 
 For $n = 1.5$: $\sigma_a = 300\,(1/1.5 - 100/600) = 150$ MPa.
 
@@ -365,9 +365,9 @@ In practice $\sigma_e$ would first be reduced by the surface, size and reliabili
 
 (a)
 
-$$
+```math
 \frac{\dot{\epsilon}_{850}}{\dot{\epsilon}_{800}} = \exp\left[\frac{Q}{R}\left(\frac{1}{800} - \frac{1}{850}\right)\right] = \exp\left[\frac{250\,000}{8.314} \times 7.35 \times 10^{-5}\right] = 9.1
-$$
+```
 
 (b) $1.2^5 = 2.49$.
 

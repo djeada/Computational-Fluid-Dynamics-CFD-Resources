@@ -354,9 +354,9 @@ Unknowns: the floor normal force $N_A$, the floor friction $F_A$, and the wall n
 
 Moments about the foot $A$:
 
-$$
+```math
 N_B(6\sin 60^\circ) = 200(3\cos 60^\circ) \implies N_B = 57.7 \text{ N}
-$$
+```
 
 Horizontal: $F_A = N_B = 57.7$ N. Vertical: $N_A = 200$ N. Minimum friction coefficient: $\mu_s = F_A/N_A = 0.289$.
 
@@ -382,13 +382,13 @@ Replace the distributed load by a 12 kN resultant at 2 m.
 
 The left segment carries $A_y = 15.31$ kN up at $x = 0$ and $P = 20$ kN down at $x = 3$ m, plus $V$ and $M$ at the cut. Positive $V$ acts downward on the right face of a left segment.
 
-$$
+```math
 \sum F_y = 0: \quad 15.31 - 20 - V = 0 \implies V = -4.69 \text{ kN}
-$$
+```
 
-$$
+```math
 \sum M_{cut} = 0: \quad M - 15.31(4) + 20(1) = 0 \implies M = 41.25 \text{ kN·m}
-$$
+```
 
 The negative $V$ means the shear acts opposite to the assumed direction. The positive $M$ means the beam sags at this section.
 

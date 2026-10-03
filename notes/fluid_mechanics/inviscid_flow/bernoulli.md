@@ -461,9 +461,9 @@ The dynamic pressure is $\frac{1}{2}\rho V_\infty^2 = 1531$ Pa, so $p - p_\infty
 
 $A_1/A_2 = (D_1/D_2)^2 = 4$, so
 
-$$
+```math
 V_1 = \sqrt{\frac{2(p_1 - p_2)}{\rho\left[(A_1/A_2)^2 - 1\right]}} = \sqrt{\frac{40000}{998 \times 15}} = 1.63 \text{ m/s}
-$$
+```
 
 Then $V_2 = 4V_1 = 6.54$ m/s and $Q = \frac{\pi}{4}(0.1)^2 \times 1.63 = 0.0128$ m³/s.
 
@@ -478,17 +478,17 @@ Bernoulli from the free surface ($V \approx 0$, $z = 0$) to the outlet ($p_{atm}
 
 The diameter is constant, so the crest speed is also $V$. From the free surface to the crest,
 
-$$
+```math
 p_{atm} = p_{crest} + \frac{1}{2}\rho V^2 + \rho g h \quad \Rightarrow \quad
 p_{crest} = p_{atm} - \rho g (h + H)
-$$
+```
 
 Requiring $p_{crest} \ge p_{vapor}$:
 
-$$
+```math
 h \le \frac{p_{atm} - p_{vapor}}{\rho g} - H = \frac{101325 - 2340}{998 \times 9.81} -
 3 = 10.11 - 3 = 7.11 \text{ m}
-$$
+```
 
 The flow's velocity head lowers the static limit of 10.1 m by $H$.
 

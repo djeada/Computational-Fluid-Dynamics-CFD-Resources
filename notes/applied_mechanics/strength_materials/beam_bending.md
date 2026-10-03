@@ -325,15 +325,15 @@ The flat beam has half the section modulus, so at $M = 20$ kN·m the stress doub
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 M_{max} = \frac{wL^2}{8} = \frac{12 \times 5^2}{8} = 37.5 \text{ kN}\cdot \text{m},
 \quad \sigma_{max} = \frac{37.5 \times 10^6 \times 150}{8.0 \times 10^7} = 70.3
 \text{ MPa}
-$$
+```
 
-$$
+```math
 \delta_{max} = \frac{5wL^4}{384EI} = \frac{5 \times 12 \times 5000^4}{384 \times 200\,000 \times 8.0 \times 10^7} = 6.10 \text{ mm}
-$$
+```
 
 $L/360 = 13.9$ mm, so the beam satisfies the limit.
 
@@ -346,10 +346,10 @@ $L/360 = 13.9$ mm, so the beam satisfies the limit.
 
 $V = P/2 = 10$ kN in each half.
 
-$$
+```math
 \tau_{max} = \frac{3V}{2A} = \frac{3 \times 10\,000}{2 \times 20\,000} = 0.75
 \text{ MPa}
-$$
+```
 
 It occurs at the neutral axis, where the bending stress is zero. It is only 2.5% of the 30 MPa bending stress, so shear rarely governs long solid beams. It can govern short, deep beams, thin webs and timber.
 
@@ -368,9 +368,9 @@ Integrate again: $EI\,y = -P(Lx^2/2 - x^3/6) + C_2$, and $y(0) = 0$ gives $C_2 =
 
 At $x = L$:
 
-$$
+```math
 EI\, y(L) = -P\left(\frac{L^3}{2} - \frac{L^3}{6}\right) = -\frac{PL^3}{3}
-$$
+```
 
 The negative sign means downward, and the magnitude is $PL^3/(3EI)$.
 
@@ -381,9 +381,9 @@ The negative sign means downward, and the magnitude is $PL^3/(3EI)$.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \delta_P = \frac{PL^3}{3EI} = \frac{2000 \times 2000^3}{3 \times 200\,000 \times 5 \times 10^6} = 5.33 \text{ mm}
-$$
+```
 
 Adding the 16.0 mm from the distributed load gives a total of $21.3$ mm. Superposition is valid because both deflections are small and the material is linear elastic.
 

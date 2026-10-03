@@ -322,10 +322,10 @@ $W = 490.5$ N, so $N = W\cos 20^\circ = 460.9$ N and $W\sin 20^\circ = 167.8$ N.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \beta = \frac{\ln(T_2/T_1)}{\mu} = \frac{\ln 100}{0.25} = 18.42 \text{ rad} = 2.93
 \text{ turns}
-$$
+```
 
 Use 3 full turns, which give $e^{0.25 \times 6\pi} = 111$, enough to hold 11.1 kN with 100 N.
 
@@ -338,15 +338,15 @@ Use 3 full turns, which give $e^{0.25 \times 6\pi} = 111$, enough to hold 11.1 k
 
 $\theta = \tan^{-1}[6/(2\pi \times 15)] = 3.64^\circ$ and $\phi_s = \tan^{-1}0.15 = 8.53^\circ$.
 
-$$
+```math
 M_{raise} = Wr\tan(\theta + \phi_s) = 20\,000 \times 0.015 \times \tan
 12.17^\circ = 64.7 \text{ N}\cdot \text{m}
-$$
+```
 
-$$
+```math
 M_{lower} = Wr\tan(\phi_s - \theta) = 300 \times \tan 4.89^\circ = 25.7 \text{ N}\cdot
 \text{m}
-$$
+```
 
 The screw is self-locking because $\theta < \phi_s$. Efficiency: $\eta = \tan 3.64^\circ/\tan 12.17^\circ = 0.295$. The low efficiency is the price of self-locking.
 
@@ -359,15 +359,15 @@ The screw is self-locking because $\theta < \phi_s$. Efficiency: $\eta = \tan 3.
 
 Eliminating $N$ from the two equilibrium equations gives
 
-$$
+```math
 P = \frac{W(\sin\theta + \mu_s\cos\theta)}{\cos(\alpha - \theta) + \mu_s\sin(\alpha - \theta)}
-$$
+```
 
 Substitute $\mu_s = \tan\phi_s$ and multiply top and bottom by $\cos\phi_s$:
 
-$$
+```math
 P = \frac{W\sin(\theta + \phi_s)}{\cos(\alpha - \theta - \phi_s)}
-$$
+```
 
 The denominator is largest (equal to 1) when $\alpha = \theta + \phi_s$, so $P_{min} = W\sin(\theta + \phi_s)$.
 

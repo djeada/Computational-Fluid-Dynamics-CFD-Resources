@@ -330,15 +330,15 @@ PID: $K_p = 0.6 \times 8 = 4.8$, $T_i = T_u/2 = 1.25$ s, $T_d = T_u/8 = 0.3125$ 
 
 With $L/T = 0.3$:
 
-$$
+```math
 K_c = \frac{1}{K} \frac{T}{L}\left(\frac{4}{3} + \frac{L}{4T}\right) = \frac{1}{2}
 \times 3.333 \times (1.333 + 0.075) = 2.35
-$$
+```
 
-$$
+```math
 T_i = L \frac{32 + 6L/T}{13 + 8L/T} = 3 \times \frac{33.8}{15.4} = 6.58 \text{ s}, \quad
 T_d = L \frac{4}{11 + 2L/T} = \frac{12}{11.6} = 1.03 \text{ s}
-$$
+```
 
 Ziegler-Nichols gave $K_p = 2.0$, $T_i = 6$ s, $T_d = 1.5$ s. Because $L/T = 0.3 > 0.25$, Cohen-Coon is the more appropriate rule here. It gives about 17% more gain, similar integral time, and less derivative action. Both are starting points to be refined by simulation.
 
@@ -351,13 +351,13 @@ Ziegler-Nichols gave $K_p = 2.0$, $T_i = 6$ s, $T_d = 1.5$ s. Because $L/T = 0.3
 
 $K_d = K_p T_d = 1$ s. The filter time constant is $T_d/N = 0.05$ s, so the corner frequency is 20 rad/s.
 
-$$
+```math
 |D(j1)| = \frac{1}{\sqrt{1 + 0.05^2}} = 0.999 \quad (\text{ideal: } 1.0)
-$$
+```
 
-$$
+```math
 |D(j200)| = \frac{200}{\sqrt{1 + 10^2}} = 19.9 \quad (\text{ideal: } 200)
-$$
+```
 
 Well below the corner the filter acts as a true derivative. At high frequency its gain levels off at $K_d N/T_d = N K_p = 20$, instead of growing without bound and amplifying noise.
 
@@ -368,10 +368,10 @@ Well below the corner the filter acts as a true derivative. At high frequency it
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \Delta u[k] = 2(0.5 - 0.8) + 0.5 \times 0.1 \times 0.5 + 0.1\,
 \frac{0.5 - 1.6 + 1.0}{0.1} = -0.6 + 0.025 - 0.1 = -0.675
-$$
+```
 
 The controller outputs an increment that is added to the previous applied value. If $u[k-1]$ is the saturated actuator value, no integral state keeps growing beyond the limit. As soon as the error changes sign, the increments move the output back off the limit, so there is no stored windup to unwind.
 

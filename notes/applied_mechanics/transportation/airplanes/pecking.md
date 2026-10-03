@@ -100,10 +100,10 @@ Analyzing pecking and stability isn't just theoretical; it's applied in various 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \omega_n = \sqrt{k/m} = 20 \text{ rad/s}, \quad
 \zeta = \frac{c}{2\sqrt{mk}} = \frac{8}{2\sqrt{1600}} = 0.10
-$$
+```
 
 $\omega_d = \omega_n\sqrt{1 - \zeta^2} = 19.9$ rad/s.
 

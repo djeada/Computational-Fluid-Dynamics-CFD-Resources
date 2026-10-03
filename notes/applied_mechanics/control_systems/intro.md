@@ -470,9 +470,9 @@ $\omega_n = \sqrt{k/m} = 5$ rad/s and $\zeta = \frac{c}{2\sqrt{km}} = \frac{8}{2
 
 Overshoot: $M_p = e^{-\pi\zeta/\sqrt{1-\zeta^2}} = e^{-1.371} = 0.254$, i.e. 25.4%. Settling time: $t_s \approx \frac{4}{\zeta\omega_n} = 2.0$ s.
 
-$$
+```math
 \mathbf{A} = \begin{bmatrix} 0 & 1 \\ -25 & -4 \end{bmatrix}, \quad \mathbf{B} = \begin{bmatrix} 0 \\ 0.5 \end{bmatrix}
-$$
+```
 
 </details>
 
@@ -483,14 +483,14 @@ $$
 
 Characteristic equation: $s^3 + 4s^2 + 3s + K = 0$.
 
-$$
+```math
 \begin{array}{c|cc}
 s^3 & 1 & 3 \\
 s^2 & 4 & K \\
 s^1 & \frac{12 - K}{4} & 0 \\
 s^0 & K &
 \end{array}
-$$
+```
 
 Stability requires $0 < K < 12$, so $K_u = 12$. At $K = 12$ the auxiliary equation $4s^2 + 12 = 0$ gives $s = \pm j\sqrt{3}$, so $\omega_u = 1.732$ rad/s and $T_u = 2\pi/\omega_u = 3.63$ s.
 
@@ -505,9 +505,9 @@ Ziegler-Nichols PID: $K_p = 0.6K_u = 7.2$, $K_i = 1.2K_u/T_u = 3.97\;\text{s}^{-
 
 $|G(j\omega)| = \frac{10}{\omega\sqrt{\omega^2+1}} = 1$ gives $\omega^4 + \omega^2 - 100 = 0$, so $\omega^2 = 9.51$ and $\omega_{gc} = 3.08$ rad/s.
 
-$$
+```math
 PM = 180^\circ - 90^\circ - \arctan(3.08) = 18.0^\circ
-$$
+```
 
 The phase only approaches $-180^\circ$ as $\omega \to \infty$, so there is no phase crossover and the gain margin is infinite. The phase margin is well below the $45^\circ$ guideline, so the step response will be very oscillatory.
 
@@ -520,7 +520,7 @@ The phase only approaches $-180^\circ$ as $\omega \to \infty$, so there is no ph
 
 The closed-loop polynomial is $s^4 + 3s^3 + (2 + K_d)s^2 + K_p s + K_i = s^4 + 3s^3 + 5s^2 + 12s + 8$.
 
-$$
+```math
 \begin{array}{c|ccc}
 s^4 & 1 & 5 & 8 \\
 s^3 & 3 & 12 & \\
@@ -528,7 +528,7 @@ s^2 & 1 & 8 & \\
 s^1 & -12 & & \\
 s^0 & 8 & &
 \end{array}
-$$
+```
 
 The first column changes sign twice ($1 \to -12 \to 8$), so there are two right-half-plane poles (they are $s \approx 0.14 \pm 1.95j$).
 

@@ -310,14 +310,14 @@ Understanding hydrostatic pressure forces is a prerequisite for more advanced fl
 
 The centroid depth is $\bar{h} = 1.5 + 1.5 = 3$ m and $A = 6$ m².
 
-$$
+```math
 F = \rho g\bar{h}A = 1000 \times 9.81 \times 3 \times 6 = 176.6 \text{ kN}
-$$
+```
 
-$$
+```math
 y_{cp} = \bar{y} + \frac{I_{xc}}{\bar{y}A} = 3 +
 \frac{2 \times 3^3/12}{3 \times 6} = 3 + 0.25 = 3.25 \text{ m}
-$$
+```
 
 </details>
 
@@ -328,14 +328,14 @@ $$
 
 Along the incline the top edge is $1/\sin 30^\circ = 2$ m from the surface, so $\bar{y} = 3$ m and $\bar{h} = 3\sin 30^\circ = 1.5$ m. The area is $A = 3$ m².
 
-$$
+```math
 F = 1000 \times 9.81 \times 1.5 \times 3 = 44.1 \text{ kN}
-$$
+```
 
-$$
+```math
 I_{xc} = \frac{1.5 \times 2^3}{12} = 1.0 \text{ m}^4, \quad y_{cp} = 3 +
 \frac{1.0}{3 \times 3} = 3.11 \text{ m}
-$$
+```
 
 The center of pressure is 3.11 m from the surface along the incline, i.e. 1.11 m below the top edge.
 
@@ -348,20 +348,20 @@ The center of pressure is 3.11 m from the surface along the incline, i.e. 1.11 m
 
 The vertical projection is 2 m high × 4 m wide, with centroid at 1 m depth:
 
-$$
+```math
 F_H = 1000 \times 9.81 \times 1 \times 8 = 78.5 \text{ kN}
-$$
+```
 
 The water above the gate occupies a quarter disc of area $\pi R^2/4 = \pi$ m², so
 
-$$
+```math
 F_V = \rho g\mathcal{V} = 9810 \times 4\pi = 123.3 \text{ kN}
-$$
+```
 
-$$
+```math
 F_R = \sqrt{78.5^2 + 123.3^2} = 146.1 \text{ kN}, \quad \alpha = \arctan
 \frac{123.3}{78.5} = 57.5^\circ
-$$
+```
 
 For a circular surface the resultant passes through the centre of the circle.
 
@@ -374,13 +374,13 @@ For a circular surface the resultant passes through the centre of the circle.
 
 Draft: $T = 0.5 \times 600/1000 = 0.3$ m, so $KB = 0.15$ m and $KG = 0.25$ m.
 
-$$
+```math
 BM = \frac{I_{wp}}{\mathcal{V}_{disp}} = \frac{0.5^4/12}{0.5 \times 0.5 \times 0.3} = \frac{0.005208}{0.075} = 0.069 \text{ m}
-$$
+```
 
-$$
+```math
 GM = KB + BM - KG = 0.15 + 0.069 - 0.25 = -0.031 \text{ m}
-$$
+```
 
 $GM < 0$, so this upright orientation is unstable and the cube will heel over to a tilted equilibrium.
 

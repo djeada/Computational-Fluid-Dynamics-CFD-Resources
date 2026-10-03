@@ -208,10 +208,10 @@ This note shows how to discretize the integral conservation equations (continuit
 
 $(-u_1)\Delta y + v_2\Delta x + u_3\Delta y - v_4\Delta x = 0$, so
 
-$$
+```math
 v_2 = v_4 - (u_3 - u_1) \frac{\Delta y}{\Delta x} = 0.3 - 0.2 \times 0.5 = 0.2
 \text{ m/s}
-$$
+```
 
 The net volume flow out through the right face ($0.2 \times 0.05 = 0.01$ m²/s) is balanced by a reduced outflow through the top.
 
@@ -222,9 +222,9 @@ The net volume flow out through the right face ($0.2 \times 0.05 = 0.01$ m²/s) 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \frac{u_3 - u_1}{\Delta x} + \frac{v_2 - v_4}{\Delta y} = 0
-$$
+```
 
 The face values sit a half cell on either side of the centre, so each quotient is a central difference with spacing $\Delta x$ (or $\Delta y$) about the centre. Its truncation error is $O(\Delta x^2) + O(\Delta y^2)$. The finite-volume balance is therefore consistent and second-order accurate, while also conserving mass exactly.
 
@@ -237,9 +237,9 @@ The face values sit a half cell on either side of the centre, so each quotient i
 
 Linear interpolation with weight $f = (x_f - x_P)/(x_N - x_P) = 1/3$ gives
 
-$$
+```math
 u_f = (1 - f)u_P + f u_N = \frac{2}{3}(2) + \frac{1}{3}(5) = 3.0
-$$
+```
 
 The simple average $(u_P + u_N)/2 = 3.5$ would be wrong here, because the face is not midway.
 

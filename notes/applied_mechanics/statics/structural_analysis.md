@@ -257,9 +257,9 @@ Structural analysis provides the essential toolkit for understanding how forces 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 H = \frac{wL^2}{8h} = \frac{20 \times 40^2}{8 \times 8} = 500 \text{ kN}
-$$
+```
 
 $V = wL/2 = 400$ kN at each support, and the resultant is $\sqrt{500^2 + 400^2} = 640$ kN.
 
@@ -289,9 +289,9 @@ Direct check: $M(4) = \dfrac{wL}{2}(4) - \dfrac{w(4)^2}{2} = 100 - 40 = 60$ kN·
 
 Moment equilibrium of half the cable about its lowest point gives $H = wL^2/(8h)$:
 
-$$
+```math
 H = \frac{2 \times 100^2}{8 \times 10} = 250 \text{ kN}
-$$
+```
 
 At a support the vertical component is $wL/2 = 100$ kN, so $T_{max} = \sqrt{250^2 + 100^2} = 269$ kN. $T_{min} = H = 250$ kN at mid-span.
 
@@ -304,9 +304,9 @@ At a support the vertical component is $wL/2 = 100$ kN, so $T_{max} = \sqrt{250^
 
 Remove the roller. The tip deflection of the cantilever under the load is $wL^4/(8EI)$ downward. A tip force $R_B$ deflects it by $R_B L^3/(3EI)$ upward. Compatibility requires zero deflection at B:
 
-$$
+```math
 \frac{wL^4}{8EI} = \frac{R_B L^3}{3EI} \implies R_B = \frac{3wL}{8} = 22.5 \text{ kN}
-$$
+```
 
 Then $A_y = 60 - 22.5 = 37.5$ kN and $M_A = wL^2/2 - R_B L = 180 - 135 = 45$ kN·m, which equals $wL^2/8$.
 

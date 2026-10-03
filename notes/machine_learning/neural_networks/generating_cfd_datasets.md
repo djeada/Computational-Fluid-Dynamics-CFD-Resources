@@ -62,9 +62,9 @@ I. **Low $y^+$ and High $y^+$ Zones**
 
 - For accurate boundary-layer resolution, especially around the vehicle surface, the first cell height must be chosen to achieve $y^+ \approx 1$. That is,
 
-  $$
+  ```math
   y^+ = \frac{ \rho \, u_\tau \, \Delta y }{ \mu } \approx 1
-  $$
+  ```
 
   where $u_\tau$ is the friction velocity ($u_\tau = \sqrt{\tau_w/\rho}$), $\Delta y$ is the distance from the wall to the first cell center, and $\tau_w$ is the wall-shear stress. This criterion ensures the boundary-layer profile is adequately captured within the CFD solver’s near-wall model or the fully resolved viscous sublayer in case of LES.
 
@@ -138,9 +138,9 @@ II. **Temporal Discretization (Unsteady Cases)**
 
 - Time step selection should respect the Courant–Friedrichs–Lewy (CFL) condition,
 
-  $$
+  ```math
   \text{CFL} = \frac{u \, \Delta t}{\Delta x} \lesssim 1
-  $$
+  ```
 
   where $u$ is the local flow velocity, $\Delta x$ is the cell size, and $\Delta t$ is the time step.
 
@@ -260,9 +260,9 @@ The reduction factor is $1.6 \times 10^9 / 8.4 \times 10^6 \approx 190$. The dec
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 p = \frac{\ln\left(\frac{0.3350 - 0.3210}{0.3210 - 0.3170}\right)}{\ln 2} = \frac{\ln 3.5}{\ln 2} \approx 1.81
-$$
+```
 
 Since $r^p - 1 = 2.5$, the extrapolated value is $C_{d,\text{ext}} = 0.3170 + (0.3170 - 0.3210)/2.5 = 0.3154$.
 

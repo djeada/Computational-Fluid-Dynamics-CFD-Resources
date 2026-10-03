@@ -188,10 +188,10 @@ The paint is ten times thinner while being brushed, so it spreads easily, and th
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \mu = 1.716 \times 10^{-5}\left(\frac{373}{273}\right)^{3/2}
 \frac{273 + 111}{373 + 111} = 2.17 \times 10^{-5} \text{ Pa s}
-$$
+```
 
 The ratio is about 1.27, so heating air by 100 K raises its viscosity by roughly 27%. Liquids behave the opposite way: the viscosity of water falls by about a factor of 3.5 between 0 °C and 100 °C.
 

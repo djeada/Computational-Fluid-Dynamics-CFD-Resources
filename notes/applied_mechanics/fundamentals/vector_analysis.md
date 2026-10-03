@@ -428,10 +428,10 @@ Vector analysis is the essential mathematical toolkit for all of mechanics. Prof
 
 $|\mathbf{A}| = \sqrt{9 + 16 + 144} = 13$.
 
-$$
+```math
 \alpha = \cos^{-1}(3/13) = 76.7^\circ, \quad \beta = \cos^{-1}(-4/13) = 107.9^\circ,
 \quad \gamma = \cos^{-1}(12/13) = 22.6^\circ
-$$
+```
 
 Check: $(9 + 16 + 144)/169 = 1$.
 
@@ -444,14 +444,14 @@ Check: $(9 + 16 + 144)/169 = 1$.
 
 $\hat{\mathbf{u}} = (2, -2, 1)/3$, so
 
-$$
+```math
 F_\parallel = \mathbf{F} \cdot \hat{\mathbf{u}} = \frac{60 + 80 + 20}{3} = 53.3
 \text{ N}
-$$
+```
 
-$$
+```math
 F_\perp = \sqrt{|\mathbf{F}|^2 - F_\parallel^2} = \sqrt{2900 - 2844.4} = 7.45 \text{ N}
-$$
+```
 
 </details>
 
@@ -462,10 +462,10 @@ $$
 
 $\mathbf{r}_{AB} = (-1, 2, 0)$ and $\mathbf{r}_{AC} = (-1, 0, 3)$.
 
-$$
+```math
 \mathbf{r}_{AB} \times \mathbf{r}_{AC} = (6, 3, 2), \quad |\mathbf{r}_{AB} \times
 \mathbf{r}_{AC}| = 7
-$$
+```
 
 The triangle area is half the parallelogram area: $3.5$ m². A unit normal is $\hat{\mathbf{n}} = (6, 3, 2)/7$.
 
@@ -476,15 +476,15 @@ The triangle area is half the parallelogram area: $3.5$ m². A unit normal is $\
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \begin{vmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 7 & 8 & 9 \end{vmatrix} = 1(45 - 48) - 2(36 - 42) + 3(32 - 35) = -3 + 12 - 9 = 0
-$$
+```
 
 so these vectors are coplanar.
 
-$$
+```math
 \begin{vmatrix} 1 & 0 & 0 \\ 1 & 2 & 0 \\ 0 & 1 & 3 \end{vmatrix} = 1(6 - 0) = 6
-$$
+```
 
 so the volume is 6 (cubic units).
 
@@ -495,12 +495,12 @@ so the volume is 6 (cubic units).
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \frac{d\hat{\mathbf{e}}_r}{dt} = \dot{\theta}(-\sin\theta\,\mathbf{i} +
 \cos\theta\,\mathbf{j}) = \dot{\theta}\,\hat{\mathbf{e}}_\theta, \quad
 \frac{d\hat{\mathbf{e}}_\theta}{dt} = -\dot{\theta}(\cos\theta\,\mathbf{i} +
 \sin\theta\,\mathbf{j}) = -\dot{\theta}\,\hat{\mathbf{e}}_r
-$$
+```
 
 Therefore $\mathbf{v} = \frac{d}{dt}(r\hat{\mathbf{e}}_r + z\mathbf{k}) = \dot{r}\hat{\mathbf{e}}_r + r\dot{\theta}\hat{\mathbf{e}}_\theta + \dot{z}\mathbf{k}$, since $\mathbf{k}$ is constant.
 

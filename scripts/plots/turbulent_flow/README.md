@@ -20,7 +20,7 @@ $$
 ### Time Mean
 
 $$
-\bar{u} = \frac{1}{T}\int_0^T u\,dt
+\bar{u} = \frac{1}{T}\int_0^T u\, dt
 $$
 
 evaluated as the arithmetic mean of the samples. By definition $\overline{u'} = 0$.
@@ -28,7 +28,8 @@ evaluated as the arithmetic mean of the samples. By definition $\overline{u'} = 
 ### RMS Fluctuation and Turbulence Intensity
 
 $$
-u_{rms} = \sqrt{\overline{u'^2}}, \qquad Tu = \frac{u_{rms}}{\bar{u}}
+u_{rms} = \sqrt{\overline{u'^2}},
+\qquad Tu = \frac{u_{rms}}{\bar{u}}
 $$
 
 ### Turbulent Kinetic Energy
@@ -58,7 +59,7 @@ python main.py --no-show --output . # save turbulence_plots.png without opening 
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 

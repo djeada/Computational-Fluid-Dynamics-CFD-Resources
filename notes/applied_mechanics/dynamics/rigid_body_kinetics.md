@@ -332,14 +332,14 @@ Rigid body kinetics provides the tools for analyzing real-world mechanical syste
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 I = \frac{1}{12}mL^2 + md^2 = \frac{1}{12}(2)(2.25) + 2(0.25)^2 = 0.375 + 0.125 = 0.5
 \text{ kg·m}^2
-$$
+```
 
-$$
+```math
 k = \sqrt{I/m} = \sqrt{0.25} = 0.5 \text{ m}
-$$
+```
 
 </details>
 
@@ -376,10 +376,10 @@ Vertical: $mg - R_y = ma_G$, so $R_y = m(g - \frac{3}{4}g) = \frac{1}{4}mg = 7.3
 
 Mass: $mg - T = ma$. Pulley: $TR = \frac{1}{2}MR^2(a/R)$, so $T = \frac{1}{2}Ma$. Combining:
 
-$$
+```math
 a = \frac{mg}{m + M/2} = \frac{5 \times 9.81}{5 + 5} = 4.91 \text{ m/s}^2, \quad
 T = \frac{1}{2}(10)(4.905) = 24.5 \text{ N}
-$$
+```
 
 </details>
 
@@ -390,10 +390,10 @@ $$
 
 On the crate's FBD the inertia force $ma$ acts backward through $G$, at height $h/2 = 1$ m. At the point of tipping the normal force and friction act at the rear bottom edge. Summing moments about that edge:
 
-$$
+```math
 ma \frac{h}{2} = mg \frac{b}{2} \implies a = g \frac{b}{h} = 9.81 \times
 \frac{1}{2} = 4.91 \text{ m/s}^2
-$$
+```
 
 Above this acceleration the crate tips backward, provided the friction coefficient exceeds $a/g = 0.5$ so that it does not slide first.
 

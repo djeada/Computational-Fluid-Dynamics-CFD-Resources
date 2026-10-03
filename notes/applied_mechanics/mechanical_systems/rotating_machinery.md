@@ -323,15 +323,15 @@ Mastering the principles of rotating machinery is essential for engineers workin
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \sigma_b = \frac{32M}{\pi d^3} = 79.6 \text{ MPa}, \quad
 \tau = \frac{16T}{\pi d^3} = 47.7 \text{ MPa}
-$$
+```
 
-$$
+```math
 \tau_{max} = \frac{16}{\pi d^3} \sqrt{M^2 + T^2} = 62.2 \text{ MPa}, \quad
 \sigma_{eq} = \frac{16}{\pi d^3} \sqrt{4M^2 + 3T^2} = 114.8 \text{ MPa}
-$$
+```
 
 - Tresca: $n = (350/2)/62.2 = 2.81$
 - von Mises: $n = 350/114.8 = 3.05$
@@ -345,14 +345,14 @@ Tresca is the more conservative of the two.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 I = \frac{\pi d^4}{64} = 1.917 \times 10^{-8} \text{ m}^4, \quad
 k = \frac{48EI}{L^3} = \frac{48 \times 200 \times 10^9 \times 1.917 \times 10^{-8}}{0.6^3} = 8.52 \times 10^5 \text{ N/m}
-$$
+```
 
-$$
+```math
 \omega_c = \sqrt{k/m} = 238.4 \text{ rad/s}, \quad N_c = 2276 \text{ rpm}
-$$
+```
 
 Static deflection: $\delta_{st} = mg/k = 0.173$ mm, and $\sqrt{9.81/1.727 \times 10^{-4}} = 238.4$ rad/s, which agrees. As a rigid rotor it should run below about $0.7 N_c \approx 1590$ rpm.
 
@@ -363,10 +363,10 @@ Static deflection: $\delta_{st} = mg/k = 0.173$ mm, and $\sqrt{9.81/1.727 \times
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \frac{1}{\omega_c^2} = \frac{1}{238.4^2} + \frac{1}{600^2} \implies \omega_c = 221.5
 \text{ rad/s} = 2115 \text{ rpm}
-$$
+```
 
 Dunkerley's result is a lower bound, so the true critical speed lies slightly above 2115 rpm.
 
@@ -377,19 +377,19 @@ Dunkerley's result is a lower bound, so the true critical speed lies slightly ab
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \sum m_i r_i\cos\theta_i = 0.20 + 0 + 0.18\cos 210^\circ = 0.0441 \text{ kg}\cdot
 \text{m}
-$$
+```
 
-$$
+```math
 \sum m_i r_i\sin\theta_i = 0 + 0.24 + 0.18\sin 210^\circ = 0.150 \text{ kg}\cdot
 \text{m}
-$$
+```
 
-$$
+```math
 m_b r_b = \sqrt{0.0441^2 + 0.150^2} = 0.156 \text{ kg}\cdot \text{m}
-$$
+```
 
 The resultant points at $73.6^\circ$, so the balancing mass goes opposite it, at $253.6^\circ$. At $r_b = 0.1$ m, $m_b = 1.56$ kg.
 
@@ -404,16 +404,16 @@ $I = \tfrac{1}{2}mr^2$ gives $m = 2(33.8)/0.4^2 = 422$ kg. Thickness: $t = m/(\r
 
 At 300 rpm ($\omega = 31.4$ rad/s):
 
-$$
+```math
 \sigma_{max} = \frac{3.3}{8} \times 7850 \times 31.4^2 \times 0.4^2 = 0.51 \text{ MPa}
-$$
+```
 
 For 120 MPa:
 
-$$
+```math
 \omega = \sqrt{\frac{8\sigma}{(3 + \nu)\rho r^2}} = 481 \text{ rad/s} \approx 4600
 \text{ rpm}
-$$
+```
 
 (rim speed 193 m/s). The stress is negligible at 300 rpm. Because $E \propto \omega^2$, a flywheel geared up to run faster would need far less inertia and mass.
 

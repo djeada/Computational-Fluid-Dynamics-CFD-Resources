@@ -341,10 +341,10 @@ From $U = U_r f_n D$ with $f_n D = 0.36$ m/s, the lock-in band is $1.44 \lesssim
 
 $\delta \approx 2\pi\zeta = 0.0628$, so $2m\delta = 18.85$ kg/m.
 
-$$
+```math
 Sc_{water} = \frac{18.85}{1025 \times 0.09} = 0.20, \quad
 Sc_{air} = \frac{18.85}{1.225 \times 0.09} = 171
-$$
+```
 
 Because water is about 840 times denser than air, the same structure has a very low mass-damping parameter in water. Large VIV amplitudes ($A/D$ of order 1) are therefore possible underwater, while in air the amplitudes would be negligible. Adding structural damping is ineffective in water; strakes or fairings are used instead.
 
@@ -357,21 +357,21 @@ Because water is about 840 times denser than air, the same structure has a very 
 
 (a) The transverse force per unit length is $F_y = \frac{1}{2}\rho U^2 D\,C_y = -\frac{1}{2}\rho U D\left(\frac{dC_L}{d\alpha} + C_D\right)\dot{y}$. Moving it to the left-hand side of $m\ddot{y} + 2m\omega_n\zeta\dot{y} + ky = F_y$ gives a total damping coefficient
 
-$$
+```math
 c_{tot} = 2m\omega_n\zeta + \frac{1}{2}\rho U D\left(\frac{dC_L}{d\alpha} + C_D\right)
-$$
+```
 
 The aerodynamic term can only make $c_{tot}$ negative if $\frac{dC_L}{d\alpha} + C_D < 0$ (the Den Hartog criterion). Instability then starts when $c_{tot} = 0$:
 
-$$
+```math
 U_{cr} = \frac{4m\omega_n\zeta}{\rho D\left|\frac{dC_L}{d\alpha} + C_D\right|}
-$$
+```
 
 (b) $\omega_n = 12.57$ rad/s:
 
-$$
+```math
 U_{cr} = \frac{4 \times 100 \times 12.57 \times 0.005}{1.225 \times 0.5 \times 2.7} = \frac{25.1}{1.654} = 15.2 \text{ m/s}
-$$
+```
 
 </details>
 
@@ -382,14 +382,14 @@ $$
 
 $m_{TMD} = 0.02 \times 20\,000 = 400$ kg and $f_{TMD} = 0.5/1.02 = 0.490$ Hz, so $\omega_{TMD} = 3.08$ rad/s.
 
-$$
+```math
 k_{TMD} = m_{TMD}\omega_{TMD}^2 = 400 \times 3.08^2 = 3.79 \text{ kN/m}
-$$
+```
 
-$$
+```math
 \zeta_{opt} = \sqrt{\frac{3 \times 0.02}{8(1.02)^3}} = 0.084, \quad
 c_{TMD} = 2m_{TMD}\omega_{TMD}\zeta_{opt} = 207 \text{ N·s/m}
-$$
+```
 
 </details>
 

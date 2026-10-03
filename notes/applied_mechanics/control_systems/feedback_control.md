@@ -301,13 +301,13 @@ Exact: $T(0) = 10/11 = 0.9091$ before and $11/12 = 0.9167$ after, a change of $0
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \phi_{max} = \sin^{-1} \frac{1 - 0.1}{1 + 0.1} = \sin^{-1}(0.818) = 54.9^\circ
-$$
+```
 
-$$
+```math
 \omega_m = \frac{1}{T\sqrt{\alpha}} = \frac{1}{0.5\sqrt{0.1}} = 6.32 \text{ rad/s}
-$$
+```
 
 At $\omega_m$ the gain is $1/\sqrt{\alpha} = 3.16$, i.e. 10 dB. At high frequency the gain tends to $1/\alpha = 10$ (20 dB), so sensor noise above the crossover is amplified tenfold. This is why lead compensation is usually limited to $\alpha \gtrsim 0.05$–$0.1$.
 
@@ -318,15 +318,15 @@ At $\omega_m$ the gain is $1/\sqrt{\alpha} = 3.16$, i.e. 10 dB. At high frequenc
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \frac{Y_d(s)}{D(s)} = \frac{G}{1 + CG} = \frac{\frac{1}{s+1}}{1 + \frac{Ks + K_i}{s(s+1)}} = \frac{s}{s^2 + (1+K)s + K_i}
-$$
+```
 
 With $D(s) = 1/s$, the final value theorem gives
 
-$$
+```math
 y_{d,ss} = \lim_{s \to 0} s \cdot \frac{s}{s^2 + (1+K)s + K_i} \cdot \frac{1}{s} = 0
-$$
+```
 
 The integrator in the controller makes the loop gain infinite at DC, so a constant disturbance is fully rejected. The final value theorem only applies if the closed loop is stable, which for this second-order polynomial requires $1 + K > 0$ and $K_i > 0$.
 
@@ -341,14 +341,14 @@ The zero is at $z = \omega_{gc}/10 = 0.05$ rad/s, so $T = 1/z = 20$ s. The pole 
 
 At $\omega = 0.5$ rad/s:
 
-$$
+```math
 \angle C_{lag} = \arctan(0.5 \times 20) - \arctan(0.5 \times 200) = 84.29^\circ -
 89.43^\circ = -5.1^\circ
-$$
+```
 
-$$
+```math
 |C_{lag}| = \frac{\sqrt{1 + 10^2}}{\sqrt{1 + 100^2}} = 0.1005 \approx 1/\beta
-$$
+```
 
 At crossover the network gain has already dropped to about $1/\beta$ of its DC value, so the low-frequency loop gain is $\beta = 10$ times (20 dB) larger relative to crossover, which improves the error constants. The network still costs about $5^\circ$ of phase at crossover, so the phase margin target in the design is increased by a few degrees to compensate.
 

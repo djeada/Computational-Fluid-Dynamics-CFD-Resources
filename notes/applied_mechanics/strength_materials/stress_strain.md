@@ -514,10 +514,10 @@ The lateral strain is $+0.33 \times 1.164 \times 10^{-3} = 3.84 \times 10^{-4}$,
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 G = \frac{E}{2(1 + \nu)} = \frac{200}{2.6} = 76.9 \text{ GPa}, \quad
 \gamma = \frac{\tau}{G} = \frac{100}{76\,900} = 1.30 \times 10^{-3} \text{ rad}
-$$
+```
 
 </details>
 
@@ -537,18 +537,18 @@ $$
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \epsilon_x = \frac{100 - 0.3(-50)}{200\,000} = 5.75 \times 10^{-4}, \quad
 \epsilon_y = \frac{-50 - 0.3(100)}{200\,000} = -4.00 \times 10^{-4}
-$$
+```
 
-$$
+```math
 \epsilon_z = \frac{0 - 0.3(100 - 50)}{200\,000} = -7.5 \times 10^{-5}
-$$
+```
 
-$$
+```math
 \epsilon_v = \epsilon_x + \epsilon_y + \epsilon_z = 1.0 \times 10^{-4}
-$$
+```
 
 There is a strain in $z$ even though $\sigma_z = 0$, because of the Poisson effect.
 
@@ -561,18 +561,18 @@ There is a strain in $z$ even though $\sigma_z = 0$, because of the Poisson effe
 
 $\sigma_{x'}(45^\circ) = 40 + 20\cos 90^\circ + 25\sin 90^\circ = 65$ MPa.
 
-$$
+```math
 \sigma_{1,2} = 40 \pm \sqrt{20^2 + 25^2} = 72.0,\ 8.0 \text{ MPa}, \quad \sigma_3 = 0
-$$
+```
 
 Tresca: $\tau_{max} = (\sigma_1 - \sigma_3)/2 = 36.0$ MPa, so $n = 125/36.0 = 3.47$.
 
 von Mises:
 
-$$
+```math
 \sigma_{eq} = \sqrt{\tfrac{1}{2}\left[(72.0 - 8.0)^2 + 8.0^2 + 72.0^2\right]} = 68.4
 \text{ MPa} \implies n = 3.66
-$$
+```
 
 </details>
 

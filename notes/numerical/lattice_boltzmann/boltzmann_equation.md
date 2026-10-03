@@ -276,9 +276,9 @@ The Boltzmann equation is the kinetic-theory foundation of the Lattice Boltzmann
 
 With no spatial gradients and $F = 0$ the Boltzmann equation reduces to $\partial f/\partial t = -(f - f^{\text{eq}})/\tau$. Writing $g = f - f^{\text{eq}}$ gives $dg/dt = -g/\tau$, so
 
-$$
+```math
 f(t) = f^{\text{eq}} + \left(f_0 - f^{\text{eq}}\right) e^{-t/\tau}
-$$
+```
 
 At $t = 3\tau$ the remaining fraction is $e^{-3} \approx 0.0498$, about 5%. The relaxation time $\tau$ is the e-folding time of the approach to equilibrium.
 
@@ -291,10 +291,10 @@ At $t = 3\tau$ the remaining fraction is $e^{-3} \approx 0.0498$, about 5%. The 
 
 The rate of change of density due to collisions is the zeroth moment of the collision term:
 
-$$
+```math
 \int \left(\frac{\partial f}{\partial t} \right)_{\text{collision}}
 d^3\xi = -\frac{1}{\tau} \left(\rho - \int f^{\text{eq}} \, d^3\xi \right)
-$$
+```
 
 This vanishes for every $f$ only if $\int f^{\text{eq}} \, d^3\xi = \rho$. The first moment gives $-\frac{1}{\tau}\left(\rho\mathbf{u} - \int \xi f^{\text{eq}} \, d^3\xi\right)$, which vanishes only if $\int \xi f^{\text{eq}} \, d^3\xi = \rho\mathbf{u}$. So $f^{\text{eq}}$ must be built from the local $\rho$ and $\mathbf{u}$ of $f$ itself (and from the local temperature, if energy is also to be conserved). The Maxwell–Boltzmann distribution evaluated with the local $\rho$, $\mathbf{u}$ and $T$ satisfies these constraints.
 
@@ -307,11 +307,11 @@ This vanishes for every $f$ only if $\int f^{\text{eq}} \, d^3\xi = \rho$. The f
 
 Substitute $v = \xi - u$ and use the Gaussian integrals $\int e^{-v^2/(2RT)} dv = \sqrt{2\pi RT}$, $\int v \, e^{-v^2/(2RT)} dv = 0$ and $\int v^2 e^{-v^2/(2RT)} dv = RT\sqrt{2\pi RT}$:
 
-$$
+```math
 \int f^{\text{eq}} d\xi = \rho,
 \qquad \int \xi f^{\text{eq}} d\xi = \rho u,
 \qquad \int \xi^2 f^{\text{eq}} d\xi = \rho u^2 + \rho R T
-$$
+```
 
 The pressure is the second moment of the relative velocity, $p = \int v^2 f^{\text{eq}} \, dv = \rho R T$, which is the ideal gas law. In three dimensions each diagonal component gives the same value, $\int \mathbf{v} \otimes \mathbf{v} \, f^{\text{eq}} \, d^3\xi = \rho R T \, \mathbf{I}$.
 

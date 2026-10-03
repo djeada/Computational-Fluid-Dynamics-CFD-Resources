@@ -17,11 +17,16 @@ This script compares streamlines and particle pathlines for steady potential flo
 
 In complex form, with $z = x + iy$, the complex velocity is
 
-$$u - iv = U\left(1 - \frac{R^2}{z^2}\right) - \frac{i\Gamma}{2\pi z}$$
+$$
+u - iv = U\left(1 - \frac{R^2}{z^2}\right) - \frac{i\Gamma}{2\pi z}
+$$
 
 In polar coordinates:
 
-$$u_r = U\left(1 - \frac{R^2}{r^2}\right)\cos\theta, \qquad u_\theta = -U\left(1 + \frac{R^2}{r^2}\right)\sin\theta + \frac{\Gamma}{2\pi r}$$
+$$
+u_r = U\left(1 - \frac{R^2}{r^2}\right)\cos\theta,
+\qquad u_\theta = -U\left(1 + \frac{R^2}{r^2}\right)\sin\theta + \frac{\Gamma}{2\pi r}
+$$
 
 On the surface $u_\theta = 0$ when $\sin\theta = \Gamma/(4\pi R U)$, which equals 1 for $\Gamma = 4\pi R U$. The stagnation points therefore coincide at $\theta = 90^\circ$.
 
@@ -29,15 +34,22 @@ On the surface $u_\theta = 0$ when $\sin\theta = \Gamma/(4\pi R U)$, which equal
 
 Vortex $k$ is released at $t_k = kT/2$ and sits at
 
-$$x_k(t) = 1.5R + 0.8\,U\,(t - t_k), \qquad y_k = \pm 0.6R$$
+$$
+x_k(t) = 1.5R + 0.8\, U\,(t - t_k),
+\qquad y_k = \pm 0.6R
+$$
 
 The upper row ($k$ even) is clockwise and the lower row ($k$ odd) is counter-clockwise. Its strength is
 
-$$\gamma_k(t) = \mp\frac{\Gamma}{2}\min\left(1, \frac{t - t_k}{T/2}\right)$$
+$$
+\gamma_k(t) = \mp \frac{\Gamma}{2}\min\left(1, \frac{t - t_k}{T/2}\right)
+$$
 
 Each vortex induces a regularised (core radius $\delta = 0.3R$) velocity
 
-$$u - iv = -\frac{i\gamma_k}{2\pi}\,\frac{\overline{(z - z_k)}}{|z - z_k|^2 + \delta^2}$$
+$$
+u - iv = -\frac{i\gamma_k}{2\pi}\, \frac{\overline{(z - z_k)}}{|z - z_k|^2 + \delta^2}
+$$
 
 By the circle theorem, an image vortex $-\gamma_k$ at $R^2/\bar z_k$ plus a vortex $+\gamma_k$ at the centre keep the cylinder a streamline for a point vortex. The images are unregularised, so with the regularised core the no-penetration condition holds only approximately. Vortices more than 5 units beyond the right edge of the plot are dropped.
 
@@ -49,9 +61,20 @@ By the circle theorem, an image vortex $-\gamma_k$ at $R^2/\bar z_k$ plus a vort
 
 ### RK4 Integration
 
-$$\mathbf{k}_1 = \mathbf{u}(\mathbf{x}_n, t_n), \quad \mathbf{k}_2 = \mathbf{u}\left(\mathbf{x}_n + \tfrac{\Delta t}{2}\mathbf{k}_1, t_n + \tfrac{\Delta t}{2}\right), \quad \mathbf{k}_3 = \mathbf{u}\left(\mathbf{x}_n + \tfrac{\Delta t}{2}\mathbf{k}_2, t_n + \tfrac{\Delta t}{2}\right), \quad \mathbf{k}_4 = \mathbf{u}(\mathbf{x}_n + \Delta t\,\mathbf{k}_3, t_n + \Delta t)$$
+$$
+\mathbf{k}_1 = \mathbf{u}(\mathbf{x}_n, t_n), \quad
+\mathbf{k}_2 = \mathbf{u}\left(\mathbf{x}_n + \tfrac{\Delta t}{2}\mathbf{k}_1, t_n +
+\tfrac{\Delta t}{2}\right), \quad
+\mathbf{k}_3 = \mathbf{u}\left(\mathbf{x}_n + \tfrac{\Delta t}{2}\mathbf{k}_2, t_n +
+\tfrac{\Delta t}{2}\right), \quad
+\mathbf{k}_4 = \mathbf{u}(\mathbf{x}_n + \Delta t\,\mathbf{k}_3, t_n + \Delta t)
+$$
 
-$$\mathbf{x}_{n+1} = \mathbf{x}_n + \frac{\Delta t}{6}\left(\mathbf{k}_1 + 2\mathbf{k}_2 + 2\mathbf{k}_3 + \mathbf{k}_4\right)$$
+$$
+\mathbf{x}_{n+1} = \mathbf{x}_n +
+\frac{\Delta t}{6}\left(\mathbf{k}_1 + 2\mathbf{k}_2 + 2\mathbf{k}_3 +
+\mathbf{k}_4\right)
+$$
 
 ## Implementation
 

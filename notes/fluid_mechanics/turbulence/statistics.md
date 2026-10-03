@@ -346,10 +346,10 @@ With $u_{rms}/U = 0.3$, eddies are advected at speeds varying by $\pm 30\%$ and 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 T = 2\mathcal{T}\left(\frac{1.96\,u_{rms}}{0.01\,U}\right)^2 = 0.04 \times
 (39.2)^2 = 61.5\ \mathrm{s}
-$$
+```
 
 Halving the tolerance quadruples the record length.
 
@@ -362,15 +362,15 @@ Halving the tolerance quadruples the record length.
 
 Integrate the relation from 0 to $\infty$:
 
-$$
+```math
 L_{22} = \int_0^\infty g\, dr = L_{11} + \frac{1}{2}\int_0^\infty r \frac{df}{dr}\, dr
-$$
+```
 
 Integrate the last term by parts:
 
-$$
+```math
 \int_0^\infty r f'\, dr = \big[r f\big]_0^\infty - \int_0^\infty f\, dr = -L_{11}
-$$
+```
 
 Hence $L_{22} = L_{11} - L_{11}/2 = L_{11}/2$. Transverse correlations decay faster than longitudinal ones and can go negative, a direct consequence of continuity.
 

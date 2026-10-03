@@ -24,13 +24,15 @@ The script does not compute this from velocity components. It prescribes the pro
 ### Mock experimental profile
 
 $$
-u_{\mathrm{exp}}(x) = e^{-0.2x}\sin(x) + 0.75, \qquad 0 \le x \le 6
+u_{\mathrm{exp}}(x) = e^{-0.2x}\sin(x) + 0.75,
+\qquad 0 \le x \le 6
 $$
 
 ### Mock CFD profile
 
 $$
-u_{\mathrm{CFD}}(x_i) = u_{\mathrm{exp}}(x_i) + \epsilon_i, \qquad \epsilon_i \sim \mathcal{N}(0,\, 0.05^2)
+u_{\mathrm{CFD}}(x_i) = u_{\mathrm{exp}}(x_i) + \epsilon_i,
+\qquad \epsilon_i \sim \mathcal{N}(0,\, 0.05^2)
 $$
 
 ### Agreement metric
@@ -53,7 +55,7 @@ python main.py --no-show --output . # save mean_velocity_magnitude.png without o
 ```
 
 | Flag | Effect |
-|------|--------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save `mean_velocity_magnitude.png` in it |
 

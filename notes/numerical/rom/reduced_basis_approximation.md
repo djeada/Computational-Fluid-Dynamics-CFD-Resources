@@ -247,12 +247,12 @@ $\mathbf{A}(\mu)$ and $\mathbf{F}$ are unchanged by reversing the node order, so
 
 Galerkin orthogonality: $\mathbf{Z}^\top\mathbf{A}(u_h - \mathbf{Z}a) = \mathbf{Z}^\top\mathbf{F} - \mathbf{Z}^\top\mathbf{A}\mathbf{Z}a = 0$. For any $b$, write $u_h - \mathbf{Z}b = (u_h - \mathbf{Z}a) + \mathbf{Z}(a - b)$. Then
 
-$$
+```math
 \| u_h - \mathbf{Z}b\|_{\mathbf{A}}^2 = \| u_h - \mathbf{Z}a\|_{\mathbf{A}}^2 +
 2(a - b)^\top\mathbf{Z}^\top\mathbf{A}(u_h - \mathbf{Z}a) +
 \|\mathbf{Z}(a - b)\|_{\mathbf{A}}^2 = \| u_h - \mathbf{Z}a\|_{\mathbf{A}}^2 +
 \|\mathbf{Z}(a - b)\|_{\mathbf{A}}^2
-$$
+```
 
 The last term is non-negative, which proves the claim. This is Céa's lemma with constant 1 in the energy norm, and it explains why the RB solution in Exercise 3 is exact.
 

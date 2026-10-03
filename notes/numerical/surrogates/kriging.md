@@ -285,9 +285,9 @@ Only lags of up to three spacings are nonzero, so $R$ is banded with half-bandwi
 
 $R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}$ with $\rho = e^{-1} = 0.3679$. By symmetry $R^{-1}\mathbf{1} \propto \mathbf{1}$, so $\hat{\beta} = \mathbf{1}^T R^{-1} Y/\mathbf{1}^T R^{-1}\mathbf{1} = 2$. Then $Y - \hat{\beta} = (-1, 1)$ and $R^{-1}(-1, 1)^T = (-1, 1)^T/(1 - \rho)$, so
 
-$$
+```math
 \hat{y}(x) = 2 + \frac{r_2(x) - r_1(x)}{1 - e^{-1}}
-$$
+```
 
 - $x = 0.5$: $r_1 = r_2$, so $\hat{y} = 2$ and $\text{MSE}/\sigma^2 = 0.1263$.
 - $x = 0.25$: $r_1 = e^{-0.0625} = 0.9394$ and $r_2 = e^{-0.5625} = 0.5698$, so $\hat{y} = 2 - 0.3696/0.6321 = 1.4153$ and $\text{MSE}/\sigma^2 = 0.0667$.

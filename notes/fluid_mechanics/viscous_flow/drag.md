@@ -213,9 +213,9 @@ A 33% increase in speed raises drag by 78% and power by 137%, since power scales
 
 At terminal velocity the weight balances the drag, $mg = \frac{1}{2}\rho v_t^2 C_d A$, so
 
-$$
+```math
 v_t = \sqrt{\frac{2mg}{\rho C_d A}} = \sqrt{\frac{2 \times 80 \times 9.81}{1.225 \times 0.7}} = 42.8 \text{ m/s}
-$$
+```
 
 That is about 154 km/h.
 
@@ -240,15 +240,15 @@ So the 415 N water estimate is probably too high by a factor of two or more. $C_
 
 (a)
 
-$$
+```math
 C_d = \frac{3\pi\mu D v}{\frac{1}{2}\rho v^2 \frac{\pi D^2}{4}} = \frac{24\mu}{\rho v D} = \frac{24}{Re}
-$$
+```
 
 (b) Balance weight minus buoyancy against drag: $(\rho_p - \rho)g\frac{\pi D^3}{6} = 3\pi\mu D v_t$. This gives
 
-$$
+```math
 v_t = \frac{(\rho_p - \rho)gD^2}{18\mu} = \frac{996.8 \times 9.81 \times (5 \times 10^{-5})^2}{18 \times 1.81 \times 10^{-5}} = 0.075 \text{ m/s}
-$$
+```
 
 Check: $Re = 1.2 \times 0.075 \times 5 \times 10^{-5}/1.81 \times 10^{-5} = 0.25 < 1$, so Stokes' law applies.
 

@@ -248,9 +248,9 @@ Points 1 and 2: both rows of $\Psi$ equal $(1/2, 1/2)$, so $\text{rank}(\Psi) = 
 
 $\Psi$ has rows $(1/2, 1/2), (1/2, 1/2), (1/2, -1/2)$, so
 
-$$
+```math
 \Psi^T\Psi = \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix}, \qquad \Psi^T Y = \begin{pmatrix} 2.5 \\ 1.5 \end{pmatrix}
-$$
+```
 
 Solving gives $a = (3, 1)$, so $\hat{y} = (2, 2, 1, 1)$, equal to the noise-free field. The residual is $(0.1, -0.1, 0)$: the two redundant sensors at points 1 and 2 average out their opposite errors. With more sensors than modes, least squares filters measurement noise.
 
@@ -265,9 +265,9 @@ Let $S$ be the $N \times n$ matrix that selects the measured points, so that $\P
 
 If $y = \Psi_{\text{full}}a^*$, then $Y = \Psi a^*$ and
 
-$$
+```math
 \Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T\Psi a^* = a^*
-$$
+```
 
 The reconstruction error of gappy POD therefore comes only from the part of $y$ outside the span of the basis (and from noise), amplified by the conditioning of $\Psi^T\Psi$.
 

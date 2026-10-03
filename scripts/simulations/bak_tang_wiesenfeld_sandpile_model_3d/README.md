@@ -16,7 +16,11 @@ This script simulates the two-dimensional Bak–Tang–Wiesenfeld (BTW) sandpile
 
 A site $(i, j)$ with height $z_{ij} \ge z_c = 4$ is unstable and topples:
 
-$$z_{ij} \to z_{ij} - 4, \qquad z_{i\pm1,j} \to z_{i\pm1,j} + 1, \qquad z_{i,j\pm1} \to z_{i,j\pm1} + 1$$
+$$
+z_{ij} \to z_{ij} - 4,
+\qquad z_{i\pm1,j} \to z_{i\pm1,j} + 1,
+\qquad z_{i,j\pm1} \to z_{i,j\pm1} + 1
+$$
 
 Inside the lattice a toppling conserves grains. At an edge or corner site, the grains sent to missing neighbours leave the system. The final stable configuration after an avalanche does not depend on the order in which sites topple (the model is *abelian*).
 
@@ -26,7 +30,9 @@ Slow driving (one grain at a time) and boundary dissipation push the pile to a s
 
 In that state, large lattices give a power-law distribution of avalanche sizes $s$ (number of topplings per added grain):
 
-$$P(s) \sim s^{-\tau}$$
+$$
+P(s) \sim s^{-\tau}
+$$
 
 Numerical studies of the 2D BTW model report $\tau$ of about 1.2 to 1.3. The script does not measure this distribution: a 20×20 lattice with 1000 grains is far too small for a meaningful fit.
 

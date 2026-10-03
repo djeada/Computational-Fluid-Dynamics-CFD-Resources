@@ -26,7 +26,7 @@ Boolean operations are the standard way to:
 Gmsh offers two geometry kernels. Boolean operations are only available in the OpenCASCADE kernel:
 
 | Feature | Built-in Kernel | OpenCASCADE Kernel |
-|---------|----------------|-------------------|
+| --- | --- | --- |
 | Boolean operations | No | Yes |
 | STEP/IGES import | No | Yes |
 | Fillets and chamfers | No | Yes |
@@ -284,7 +284,7 @@ Physical Volume("domain") = Volume{:};  // all remaining volumes
 ## Common Pitfalls
 
 | Problem | Cause | Solution |
-|---------|-------|----------|
+| --- | --- | --- |
 | "No volume created" | Objects don't overlap | Check geometry bounds; ensure objects intersect |
 | Tiny slivers after cut | Tangent or near-tangent surfaces | Increase `Geometry.ToleranceBoolean` |
 | Meshing fails after boolean | Small edges or degenerate faces | Use `Geometry.OCCFixDegenerated` and increase tolerance |

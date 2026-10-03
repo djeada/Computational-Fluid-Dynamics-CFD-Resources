@@ -340,19 +340,19 @@ Life is very sensitive to load. Underestimating the load (ignoring shock, misali
 
 (a) Required life in revolutions:
 
-$$
+```math
 L_{10} = \frac{60 \cdot n \cdot L_{10h}}{10^6} = \frac{60 \times 1450 \times 20\,000}{10^6} = 1740 \text{ million rev}
-$$
+```
 
-$$
+```math
 C = P\, L_{10}^{1/3} = 3.5 \times 1740^{1/3} = 3.5 \times 12.03 = 42.1 \text{ kN}
-$$
+```
 
 (b) Now $a_1 L_{10} \geq 1740$, so $L_{10} \geq 1740/0.53 = 3283$ million rev:
 
-$$
+```math
 C = 3.5 \times 3283^{1/3} = 52.0 \text{ kN}
-$$
+```
 
 Raising reliability from 90% to 96% needs a 24% higher load rating.
 
@@ -363,14 +363,14 @@ Raising reliability from 90% to 96% needs a 24% higher load rating.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 L_{10} = \frac{60 \times 1800 \times 20\,000}{10^6} = 2160 \text{ million rev}
-$$
+```
 
-$$
+```math
 P_{max} = \frac{C}{L_{10}^{1/3}} = \frac{29.1}{2160^{1/3}} = \frac{29.1}{12.93} = 2.25
 \text{ kN}
-$$
+```
 
 The load of 5.7 kN in Example 1 is about 2.5 times this, which is why that bearing reaches only about 1230 h.
 
@@ -383,19 +383,19 @@ The load of 5.7 kN in Example 1 is about 2.5 times this, which is why that beari
 
 With $P = 1.5625$ MPa, $N_s = 20$ rev/s and $R/c = 40/0.06 = 666.7$:
 
-$$
+```math
 f = 2\pi^2 \frac{\mu N_s}{P} \frac{R}{c} = 2\pi^2 \times
 \frac{0.025 \times 20}{1.5625 \times 10^6} \times 666.7 = 4.21 \times 10^{-3}
-$$
+```
 
 Friction torque: $T_f = f W R = 4.21 \times 10^{-3} \times 10\,000 \times 0.040 = 1.68$ N·m.
 
 Power loss:
 
-$$
+```math
 P_{loss} = f W \pi d N_s = 4.21 \times 10^{-3} \times 10\,000 \times \pi \times 0.080
 \times 20 = 212 \text{ W}
-$$
+```
 
 Petroff's equation assumes a concentric (lightly loaded) journal. With $S \approx 0.14$ this journal runs well off-centre, so design values of friction and temperature rise should come from the Raimondi–Boyd charts.
 
@@ -408,9 +408,9 @@ Petroff's equation assumes a concentric (lightly loaded) journal. With $S \appro
 
 (a)
 
-$$
+```math
 \Lambda = \frac{0.35}{\sqrt{0.10^2 + 0.15^2}} = \frac{0.35}{0.180} = 1.94
-$$
+```
 
 Since $1 < \Lambda < 3$, the contact runs in mixed lubrication.
 

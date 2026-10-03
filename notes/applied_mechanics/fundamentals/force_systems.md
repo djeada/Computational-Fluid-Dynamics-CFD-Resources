@@ -366,9 +366,9 @@ The next chapter will build on these concepts to explore moments and couples, wh
 
 $R_x = 300 + 250\cos 225^\circ = 300 - 176.8 = 123.2$ N and $R_y = 400 + 250\sin 225^\circ = 400 - 176.8 = 223.2$ N.
 
-$$
+```math
 R = \sqrt{123.2^2 + 223.2^2} = 255 \text{ N at } \arctan(223.2/123.2) = 61.1^\circ
-$$
+```
 
 </details>
 
@@ -377,13 +377,13 @@ $$
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \sum F_x = 0: \quad - T_1\cos 30^\circ + T_2\cos 45^\circ = 0
-$$
+```
 
-$$
+```math
 \sum F_y = 0: \quad T_1\sin 30^\circ + T_2\sin 45^\circ = 1000
-$$
+```
 
 Solving: $T_1 = 732$ N and $T_2 = 897$ N. The steeper cable carries more load.
 
@@ -394,13 +394,13 @@ Solving: $T_1 = 732$ N and $T_2 = 897$ N. The steeper cable carries more load.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 R = \int_0^3 (2 + x^2)\, dx = 6 + 9 = 15 \text{ kN}
-$$
+```
 
-$$
+```math
 \bar{x} = \frac{\int_0^3 x(2 + x^2)\,dx}{15} = \frac{9 + 20.25}{15} = 1.95 \text{ m}
-$$
+```
 
 </details>
 

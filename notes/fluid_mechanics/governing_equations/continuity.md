@@ -336,9 +336,9 @@ With $\rho$ constant and only $v_r(r)$ nonzero, $\frac{1}{r}\frac{d}{dr}(r v_r) 
 
 The flow rate through a circle is $Q = \oint v_r \, r\,d\theta = 2\pi C$, so
 
-$$
+```math
 v_r = \frac{Q}{2\pi r}
-$$
+```
 
 This is the potential-flow line source. The velocity is singular at $r = 0$, where the source sits.
 

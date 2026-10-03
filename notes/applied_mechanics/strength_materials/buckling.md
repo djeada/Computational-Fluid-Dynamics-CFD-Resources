@@ -358,10 +358,10 @@ The column buckles about the weak axis, bending in the direction of the 50 mm di
 
 $I = \pi(50^4 - 44^4)/64 = 1.228 \times 10^5$ mm⁴, $A = 443$ mm², $r = 16.65$ mm, and $L_e = 2L = 4000$ mm (theoretical $K = 2$).
 
-$$
+```math
 P_{cr} = \frac{\pi^2 \times 70\,000 \times 1.228 \times 10^5}{4000^2} = 5.30 \text{ kN},
 \quad \sigma_{cr} = 12.0 \text{ MPa}
-$$
+```
 
 $\lambda = 4000/16.65 = 240$, far above $\sqrt{\pi^2 E/\sigma_y} = 53.7$, so buckling is elastic and Euler applies. The stress at buckling is only 5% of the yield strength.
 
@@ -374,10 +374,10 @@ $\lambda = 4000/16.65 = 240$, far above $\sqrt{\pi^2 E/\sigma_y} = 53.7$, so buc
 
 $r = d/4 = 15$ mm, so $\lambda = 1200/15 = 80$. The Johnson limit is $\sqrt{2\pi^2 E/\sigma_y} = 106.2$; since $80 < 106.2$, use Johnson:
 
-$$
+```math
 \sigma_{cr} = 350 - \frac{350^2}{4\pi^2 \times 200\,000}(80)^2 = 350 - 99.3 = 250.7
 \text{ MPa}
-$$
+```
 
 $A = 2827$ mm², so $P_{cr} = 709$ kN.
 
@@ -390,9 +390,9 @@ Euler would give $\pi^2 E/\lambda^2 = 308$ MPa, or 872 kN, an unsafe overestimat
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 E_r = \frac{4EE_t}{(\sqrt{E} + \sqrt{E_t})^2} = \frac{4 \times 200 \times 50}{(14.14 + 7.07)^2} = 88.9 \text{ GPa}
-$$
+```
 
 - Tangent modulus: $\sigma_{cr} = \pi^2 (50\,000)/80^2 = 77.1$ MPa
 - Reduced modulus: $\sigma_{cr} = \pi^2 (88\,900)/80^2 = 137.1$ MPa
@@ -408,15 +408,15 @@ Shanley's analysis shows buckling begins near the tangent-modulus load, so the l
 
 $P/A = 67.9$ MPa and $ec/r^2 = 10 \times 100/51.1^2 = 0.383$.
 
-$$
+```math
 \frac{L_e}{2r} \sqrt{\frac{P}{AE}} = \frac{5000}{102.3}
 \sqrt{\frac{400\,000}{5890 \times 200\,000}} = 0.901 \text{ rad}, \quad
 \sec(0.901) = 1.611
-$$
+```
 
-$$
+```math
 \sigma_{max} = 67.9\,(1 + 0.383 \times 1.611) = 109.7 \text{ MPa}
-$$
+```
 
 A 10 mm eccentricity raises the peak stress by 62% over $P/A$.
 

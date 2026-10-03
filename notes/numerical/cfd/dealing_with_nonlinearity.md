@@ -38,45 +38,45 @@ II. Define the Perturbation:
 
 - Define the difference between the true solution $u_i$ and the guess $u_{ig}$ as:
 
-  $$
+  ```math
   \Delta u_i = u_i - u_{ig}
-  $$
+  ```
 
 III. Expand and Approximate:
 
 - Substitute $u_i = u_{ig} + \Delta u_i$ into the nonlinear term. Squaring the expression yields:
 
-  $$
+  ```math
   u_i^2 = (u_{ig} + \Delta u_i)^2 = u_{ig}^2 + 2u_{ig}\Delta u_i + (\Delta u_i)^2
-  $$
+  ```
 
 - If the perturbation $\Delta u_i$ is small compared to $u_{ig}$, then $(\Delta u_i)^2$ is insignificant. This is a standard assumption in linearization procedures, which leads to:
 
-  $$
+  ```math
   u_i^2 \approx u_{ig}^2 + 2u_{ig}\Delta u_i
-  $$
+  ```
 
 - Expressing $\Delta u_i$ in terms of $u_i$ and $u_{ig}$ gives:
 
-  $$
+  ```math
   u_i^2 \approx u_{ig}^2 + 2u_{ig}(u_i - u_{ig})
-  $$
+  ```
 
 IV. Simplify the Expression:
 
 - Simplify the expression further to obtain a linear form in $u_i$:
 
-  $$
+  ```math
   u_i^2 \approx 2u_{ig} u_i - u_{ig}^2
-  $$
+  ```
 
 V. Linearized Finite-Difference Approximation:
 
 - Substitute the linearized expression for $u_i^2$ back into the finite-difference approximation:
 
-  $$
+  ```math
   \frac{u_i - u_{i-1}}{\Delta x} + 2u_{ig} u_i - u_{ig}^2 = 0
-  $$
+  ```
 
 This linearization transforms the originally nonlinear finite-difference equation into a linear equation in terms of $u_i$, which can then be solved using standard linear solvers.
 
@@ -102,9 +102,9 @@ III. Iteration 3 and Beyond:
 
 - Continue updating the guess using:
 
-  $$
+  ```math
   u_{ig}^{(n)} = u_i^{(n-1)}
-  $$
+  ```
 
 while re-linearizing the nonlinear term around the latest guess at each iteration.
 
@@ -222,9 +222,9 @@ The number of correct digits roughly doubles each iteration: quadratic convergen
 
 Newton's method gives $u^{\text{new}} = u_g - F(u_g)/F'(u_g)$, with $F'(u) = 1/\Delta x + 2u$. Then
 
-$$
+```math
 u^{\text{new}} = \frac{u_g\left(\frac{1}{\Delta x} + 2u_g\right) - \frac{u_g - u_{i-1}}{\Delta x} - u_g^2}{\frac{1}{\Delta x} + 2u_g} = \frac{\frac{u_{i-1}}{\Delta x} + u_g^2}{\frac{1}{\Delta x} + 2u_g}
-$$
+```
 
 which is the same expression as solving the linearized equation for $u_i$. Dropping $(\Delta u_i)^2$ is the same as keeping the first-order Taylor term that Newton's method uses, which is why the error is $O((\Delta u_i)^2)$.
 
@@ -250,9 +250,9 @@ The error changes sign and shrinks by a constant factor of about $u^*/(1/\Delta 
 
 The change is $e^{(n-1)} - e^{(n)} \approx (1 - \rho)e^{(n-1)}$, so
 
-$$
+```math
 e^{(n)} \approx \frac{\rho}{1 - \rho}\,\| u^{(n)} - u^{(n-1)}\|
-$$
+```
 
 For $\rho = 0.9$: $9 \times 10^{-6}$. For $\rho = 0.99$: $9.9 \times 10^{-5}$.
 

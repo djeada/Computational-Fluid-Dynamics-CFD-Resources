@@ -205,10 +205,10 @@ The global load vector is $F = (1/6, 1/3, 1/3, 1/6)$.
 
 Deleting the rows and columns of the Dirichlet nodes 0 and 3 leaves
 
-$$
+```math
 6U_1 - 3U_2 = \frac{1}{3},
 \qquad - 3U_1 + 6U_2 = \frac{1}{3}
-$$
+```
 
 so $U_1 = U_2 = 1/9$.
 
@@ -236,10 +236,10 @@ The weak form is $\int_0^1 w'u'\,dx - [w u']_0^1 = 0$. Since $w(0) = 0$ at the D
 
 With $h = 0.5$ (so $1/h = 2$), deleting node 0 leaves
 
-$$
+```math
 4U_1 - 2U_2 = 0,
 \qquad - 2U_1 + 2U_2 = g
-$$
+```
 
 so $U_1 = g/2$ and $U_2 = g$. This matches the exact solution $u = gx$.
 

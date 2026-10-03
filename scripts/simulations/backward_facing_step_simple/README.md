@@ -18,27 +18,48 @@ This script solves steady 2D laminar incompressible flow over a backward-facing 
 
 Steady incompressible Navier–Stokes equations with density $\rho$ and viscosity $\mu$:
 
-$$\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} = 0$$
+$$
+\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} = 0
+$$
 
-$$\rho \left( u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y} \right) = -\frac{\partial p}{\partial x} + \mu \left( \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} \right)$$
+$$
+\rho
+\left(u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y}
+\right) = -\frac{\partial p}{\partial x} + \mu
+\left(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} \right)
+$$
 
-$$\rho \left( u \frac{\partial v}{\partial x} + v \frac{\partial v}{\partial y} \right) = -\frac{\partial p}{\partial y} + \mu \left( \frac{\partial^2 v}{\partial x^2} + \frac{\partial^2 v}{\partial y^2} \right)$$
+$$
+\rho
+\left(u \frac{\partial v}{\partial x} + v \frac{\partial v}{\partial y}
+\right) = -\frac{\partial p}{\partial y} + \mu
+\left(\frac{\partial^2 v}{\partial x^2} + \frac{\partial^2 v}{\partial y^2} \right)
+$$
 
 The Reynolds number is based on the inlet channel height and mean inlet velocity, so the code sets $\mu = \rho U_{avg} H / Re$ with $Re = 200$:
 
-$$Re = \frac{\rho U_{avg} H}{\mu}$$
+$$
+Re = \frac{\rho U_{avg} H}{\mu}
+$$
 
 ### Finite Volume Discretisation
 
 Integrating the $u$-momentum equation over the control volume around a $u$ face gives
 
-$$a_P u_P = a_E u_E + a_W u_W + a_N u_N + a_S u_S + (p_w - p_e)\,\Delta y$$
+$$
+a_P u_P = a_E u_E + a_W u_W + a_N u_N + a_S u_S + (p_w - p_e)\,\Delta y
+$$
 
 where $p_w$ and $p_e$ are the pressures in the cells on either side of the face. With face mass fluxes $F$ (interpolated linearly from neighbouring velocities) and diffusion conductances $D_e = \mu\,\Delta y/\Delta x$ and $D_n = \mu\,\Delta x/\Delta y$, the first-order upwind coefficients are
 
-$$a_E = D_e + \max(-F_e, 0), \quad a_W = D_w + \max(F_w, 0), \quad a_N = D_n + \max(-F_n, 0), \quad a_S = D_s + \max(F_s, 0)$$
+$$
+a_E = D_e + \max(-F_e, 0), \quad a_W = D_w + \max(F_w, 0), \quad a_N = D_n +
+\max(-F_n, 0), \quad a_S = D_s + \max(F_s, 0)
+$$
 
-$$a_P = a_E + a_W + a_N + a_S + (F_e - F_w + F_n - F_s)$$
+$$
+a_P = a_E + a_W + a_N + a_S + (F_e - F_w + F_n - F_s)
+$$
 
 Where a no-slip wall lies half a cell from a velocity node, its conductance is doubled and the neighbour link removed. The $v$ equation is assembled the same way. Under-relaxation replaces $a_P$ by $a_P/\alpha_u$ and adds $\frac{1-\alpha_u}{\alpha_u} a_P u_P^{\text{old}}$ to the source term.
 
@@ -47,9 +68,13 @@ Where a no-slip wall lies half a cell from a velocity node, its conductance is d
 1. Solve the momentum equations with the current pressure to get $u^*$ and $v^*$.
 2. The velocity correction is $u'_e = d_e (p'_P - p'_E)$ with $d_e = \Delta y / a_e$. Substituting into continuity gives the pressure-correction equation
 
-$$a_P p'_P = \sum_{nb} a_{nb} p'_{nb} + b, \qquad a_E = \rho\,d_e\,\Delta y, \quad a_N = \rho\,d_n\,\Delta x, \qquad b = -\rho\left[(u^*_e - u^*_w)\Delta y + (v^*_n - v^*_s)\Delta x\right]$$
+$$
+a_P p'_P = \sum_{nb} a_{nb} p'_{nb} + b,
+\qquad a_E = \rho\, d_e\,\Delta y, \quad a_N = \rho\, d_n\,\Delta x,
+\qquad b = -\rho\left[(u^*_e - u^*_w)\Delta y + (v^*_n - v^*_s)\Delta x\right]
+$$
 
-   with $p' = 0$ in the outlet column and no correction through solid or inlet faces.
+with $p' = 0$ in the outlet column and no correction through solid or inlet faces.
 3. Correct the velocities, $u = u^* + d_e(p'_P - p'_E)$, and the pressure, $p = p + \alpha_p p'$.
 
 ### Convergence Criterion

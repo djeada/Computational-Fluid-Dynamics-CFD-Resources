@@ -321,9 +321,9 @@ $\mathbf{X}\mathbf{X}^T$ would be a $10^6 \times 10^6$ matrix of $8 \times 10^{1
 
 The 11 transitions are counted as AA: 2, AB: 3, BB: 1, BC: 2, CA: 2, CC: 1. Normalizing each row gives
 
-$$
+```math
 \mathbf{P} = \begin{bmatrix} 0.4 & 0.6 & 0 \\ 0 & 1/3 & 2/3 \\ 2/3 & 0 & 1/3 \end{bmatrix}
-$$
+```
 
 with rows and columns ordered A, B, C.
 

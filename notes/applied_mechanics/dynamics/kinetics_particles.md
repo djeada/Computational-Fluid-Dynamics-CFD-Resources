@@ -311,9 +311,9 @@ $N - mg = ma$, so $N = m(g + a) = 70(9.81 + 1.5) = 792$ N (equivalent to an 80.7
 
 $N = mg\cos 25^\circ = 177.8$ N, so friction is $0.3 \times 177.8 = 53.3$ N down the slope. The weight component along the slope is $mg\sin 25^\circ = 82.9$ N.
 
-$$
+```math
 a = \frac{200 - 82.9 - 53.3}{20} = 3.19 \text{ m/s}^2 \text{ (up the slope)}
-$$
+```
 
 </details>
 
@@ -324,9 +324,9 @@ $$
 
 At the maximum speed, friction $\mu_s N$ acts down the bank. Vertical: $N\cos\beta - \mu_s N\sin\beta = mg$. Radial: $N\sin\beta + \mu_s N\cos\beta = mv^2/R$. Dividing:
 
-$$
+```math
 v_{max} = \sqrt{Rg\,\frac{\sin\beta + \mu_s\cos\beta}{\cos\beta - \mu_s\sin\beta}} = \sqrt{150 \times 9.81 \times \frac{0.342 + 0.282}{0.940 - 0.103}} = 33.1 \text{ m/s}
-$$
+```
 
 This is about 119 km/h, compared with 83 km/h for the friction-free design speed.
 
@@ -339,10 +339,10 @@ This is about 119 km/h, compared with 83 km/h for the friction-free design speed
 
 For a circular orbit $v = 2\pi r/T$ and $v^2 = GM/r$, so
 
-$$
+```math
 r = \left(\frac{GM\,T^2}{4\pi^2}\right)^{1/3} = 4.216 \times 10^7 \text{ m} = 42\,164
 \text{ km}
-$$
+```
 
 The altitude is $42\,164 - 6371 = 35\,793$ km and the speed is $v = 2\pi r/T = 3.07$ km/s.
 
@@ -355,9 +355,9 @@ The altitude is $42\,164 - 6371 = 35\,793$ km and the speed is $v = 2\pi r/T = 3
 
 The frictionless rod exerts no radial force, so $\sum F_r = m(\ddot{r} - r\omega^2) = 0$. With $r(0) = r_0$ and $\dot{r}(0) = 0$:
 
-$$
+```math
 r(t) = r_0\cosh(\omega t), \quad \dot{r}(t) = r_0\omega\sinh(\omega t)
-$$
+```
 
 At $t = 0.5$ s: $r = 0.1\cosh(1.5) = 0.235$ m and $\dot{r} = 0.3\sinh(1.5) = 0.639$ m/s.
 

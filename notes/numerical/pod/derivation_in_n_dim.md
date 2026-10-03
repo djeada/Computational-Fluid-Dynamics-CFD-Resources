@@ -386,9 +386,9 @@ Compute $\mathbf{C}$, its eigenvalues and energy fractions, the first two modes,
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \mathbf{C} = \frac{1}{2}\mathbf{U}^T\mathbf{U} = \begin{pmatrix} 1 & 0.5 & -0.5 & 1.5 \\ 0.5 & 1 & 0.5 & 0 \\ -0.5 & 0.5 & 1 & -1.5 \\ 1.5 & 0 & -1.5 & 3 \end{pmatrix}
-$$
+```
 
 The eigenvalues are $4.5, 1.5, 0, 0$, giving energy fractions of 75% and 25%. The modes (up to sign) are $\mathbf{\phi}_1 = (1, 0, -1, 2)/\sqrt{6}$ and $\mathbf{\phi}_2 = (1, 2, 1, 0)/\sqrt{6}$. You can check directly that $\mathbf{C}\mathbf{\phi}_1 = 4.5\,\mathbf{\phi}_1$ and $\mathbf{C}\mathbf{\phi}_2 = 1.5\,\mathbf{\phi}_2$.
 
@@ -407,10 +407,10 @@ $\frac{1}{m-1}\mathbf{A}^T\mathbf{A} = \mathbf{\Phi}^T\left(\frac{1}{m-1}\mathbf
 
 From $\mathbf{U} = \mathbf{A}\mathbf{\Phi}^T = \sum_k \mathbf{a}_k\mathbf{\phi}_k^T$, the error is $\mathbf{E} = \sum_{k > r}\mathbf{a}_k\mathbf{\phi}_k^T$. Therefore
 
-$$
+```math
 \|\mathbf{E}\|_F^2 = \text{tr}(\mathbf{E}^T\mathbf{E}) = \sum_{k,l > r}
 (\mathbf{a}_k^T\mathbf{a}_l)(\mathbf{\phi}_l^T\mathbf{\phi}_k) = \sum_{k > r}\mathbf{a}_k^T\mathbf{a}_k = (m - 1)\sum_{k > r}\lambda_k
-$$
+```
 
 Check with Exercise 3: $\|\mathbf{U}\|_F^2 = 12 = 2(4.5 + 1.5)$. The rank-1 residual has squared norm $\|\mathbf{a}_2\|^2 = 3 = 2 \times 1.5$.
 

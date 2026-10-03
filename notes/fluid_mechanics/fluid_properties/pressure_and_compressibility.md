@@ -245,16 +245,16 @@ The compressible solver needs about $1 + 1/\mathrm{Ma} = 341$ times more steps. 
 
 $\nabla \cdot \mathbf{u}^* = \varepsilon \cos x$, so $\partial^2 \hat{P}/\partial x^2 = \varepsilon \cos x/\Delta t$. A periodic solution, up to an additive constant, is
 
-$$
+```math
 \hat{P}^{\,n+1} = -\frac{\varepsilon}{\Delta t}\cos x
-$$
+```
 
 The corrector gives
 
-$$
+```math
 u^{n+1} = u^* - \Delta t \frac{\partial \hat{P}}{\partial x} = U_0 + \varepsilon \sin
 x - \Delta t \cdot \frac{\varepsilon}{\Delta t}\sin x = U_0
-$$
+```
 
 and $v^{n+1} = 0$. The result is uniform, so $\nabla \cdot \mathbf{u}^{n+1} = 0$. The pressure removed exactly the compressive part of the predicted velocity, acting as the Lagrange multiplier for incompressibility.
 

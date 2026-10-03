@@ -183,15 +183,15 @@ The layer is only a few millimetres thick after half a metre, which justifies th
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \frac{\delta^*}{\delta} = \int_0^1 (1 - 2\eta + \eta^2)\, d\eta = \frac{1}{3}
-$$
+```
 
-$$
+```math
 \frac{\theta}{\delta} = \int_0^1 (2\eta - \eta^2)(1 - \eta)^2\, d\eta = \int_0^1
 (2\eta - 5\eta^2 + 4\eta^3 - \eta^4)\, d\eta = 1 - \frac{5}{3} + 1 -
 \frac{1}{5} = \frac{2}{15}
-$$
+```
 
 $H = (1/3)/(2/15) = 2.5$, close to the Blasius value of 2.59.
 
@@ -204,17 +204,17 @@ $H = (1/3)/(2/15) = 2.5$, close to the Blasius value of 2.59.
 
 The wall shear is $\tau_w = \mu\,\partial u/\partial y|_0 = 2\mu U_\infty/\delta$, and $\theta = 2\delta/15$. Substituting,
 
-$$
+```math
 \rho U_\infty^2 \frac{2}{15} \frac{d\delta}{dx} = \frac{2\mu U_\infty}{\delta} \quad
 \Rightarrow \quad \delta\, d\delta = \frac{15\nu}{U_\infty}dx \quad \Rightarrow \quad
 \delta^2 = \frac{30\nu x}{U_\infty}
-$$
+```
 
 so
 
-$$
+```math
 \frac{\delta}{x} = \frac{\sqrt{30}}{\sqrt{Re_x}} = \frac{5.48}{\sqrt{Re_x}}
-$$
+```
 
 Then $C_f = 4\nu/(U_\infty\delta) = 0.730/\sqrt{Re_x}$. Blasius gives 5.0 (or 4.91) and 0.664. A simple assumed profile therefore captures the $x^{1/2}$ growth and gets the coefficients within about 10%.
 

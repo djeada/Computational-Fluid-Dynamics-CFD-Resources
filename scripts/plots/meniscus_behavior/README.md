@@ -17,7 +17,8 @@ This script sketches the meniscus of water and of mercury in a glass tube, showi
 Inside the tube the free surface is $y(x) = \pm c\,x^2$ with $c = 0.5$. The wall is vertical at $x = x_w = 1$, so the contact angle, measured through the liquid between the wall and the free surface, is
 
 $$
-\theta_c = 90^\circ - \arctan\left(\frac{dy}{dx}\bigg|_{x_w}\right) = 90^\circ - \arctan\left(\pm 2 c\, x_w\right)
+\theta_c = 90^\circ - \arctan\left(\frac{dy}{dx}\bigg|_{x_w}\right) = 90^\circ -
+\arctan\left(\pm 2 c\, x_w\right)
 $$
 
 This gives $\theta_c = 45^\circ$ for the upward parabola and $\theta_c = 135^\circ$ for the downward one.
@@ -59,7 +60,7 @@ python main.py --no-show --output . # save meniscus_behavior.png without opening
 ```
 
 | Flag | Effect |
-|------|--------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save `meniscus_behavior.png` in it |
 

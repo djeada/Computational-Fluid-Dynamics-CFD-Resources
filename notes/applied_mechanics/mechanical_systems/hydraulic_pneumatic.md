@@ -359,16 +359,16 @@ Work per stroke: input $500 \times 0.050 = 25$ J, output $50\,000 \times 0.0005 
 
 (a)
 
-$$
+```math
 D_{min} = \sqrt{\frac{4F}{\pi p}} = \sqrt{\frac{4 \times 40\,000}{\pi \times 12 \times 10^6}} = 0.0651 \text{ m} = 65.1 \text{ mm}
-$$
+```
 
 (b) $A = \pi(0.070)^2/4 = 3.848 \times 10^{-3}$ m², so $F = pA = 46.2$ kN, a margin of about 15% for seal friction and back-pressure.
 
-$$
+```math
 Q = vA = 0.1 \times 3.848 \times 10^{-3} = 3.85 \times 10^{-4} \text{ m}^3
 \text{/s} = 23.1 \text{ L/min}
-$$
+```
 
 </details>
 
@@ -377,14 +377,14 @@ $$
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 T = \frac{\Delta p\, V_d}{2\pi}\eta_m = \frac{18 \times 10^6 \times 40 \times 10^{-6}}{2\pi} \times 0.90 = 103.1 \text{ N}\cdot \text{m}
-$$
+```
 
-$$
+```math
 n = \frac{Q}{V_d}\eta_v = \frac{50\,000 \text{ cm}^3\text{/min}}{40 \text{ cm}^3} \times
 0.94 = 1175 \text{ rpm}
-$$
+```
 
 Output power: $T\omega = 103.1 \times (1175 \times 2\pi/60) = 12.69$ kW. Hydraulic input: $\Delta p\, Q = 18 \times 10^6 \times 8.333 \times 10^{-4} = 15.0$ kW. Overall efficiency: $12.69/15.0 = 0.846$, which equals $\eta_v \eta_m$.
 
@@ -397,11 +397,11 @@ Output power: $T\omega = 103.1 \times (1175 \times 2\pi/60) = 12.69$ kW. Hydraul
 
 (a) $A = \pi(0.0025)^2/4 = 4.909 \times 10^{-6}$ m²:
 
-$$
+```math
 Q = C_d A \sqrt{\frac{2\Delta p}{\rho}} = 0.62 \times 4.909 \times 10^{-6} \times
 \sqrt{\frac{2 \times 4 \times 10^6}{870}} = 2.92 \times 10^{-4} \text{ m}^3
 \text{/s} = 17.5 \text{ L/min}
-$$
+```
 
 (b) $Q \propto \sqrt{\Delta p}$, so halving the flow needs a quarter of the pressure drop: 1 MPa.
 
@@ -416,20 +416,20 @@ $$
 
 Pressure ratio: $700/101.3 = 6.910$.
 
-$$
+```math
 W_{iso} = p_1 V_1 \ln \frac{p_2}{p_1} = 101\,300 \times 1 \times \ln 6.910 = 195.8
 \text{ kJ}
-$$
+```
 
-$$
+```math
 W_{ad} = \frac{1.4}{0.4} \times 101\,300 \times \left(6.910^{0.2857} - 1\right) = 261.4
 \text{ kJ}
-$$
+```
 
-$$
+```math
 T_2 = T_1\left(\frac{p_2}{p_1}\right)^{(\gamma-1)/\gamma} = 293.15 \times
 6.910^{0.2857} = 509 \text{ K} \approx 236\ ^\circ \text{C}
-$$
+```
 
 Adiabatic compression needs about 33% more work. Staged compression with intercooling brings the process closer to isothermal, which saves work and keeps the delivery temperature within what oil and seals can tolerate.
 

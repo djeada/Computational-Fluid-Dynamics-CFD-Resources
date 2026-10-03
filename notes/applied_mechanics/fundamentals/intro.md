@@ -82,15 +82,15 @@ Study of fluid behavior and its interaction with solid boundaries:
 
 2. **Second Law**: The acceleration of a body is proportional to the net force and inversely proportional to its mass:
 
-   $$
+   ```math
    \mathbf{F} = m\mathbf{a}
-   $$
+   ```
 
 3. **Third Law**: For every action, there is an equal and opposite reaction:
 
-   $$
+   ```math
    \mathbf{F}_{AB} = -\mathbf{F}_{BA}
-   $$
+   ```
 
 ### Conservation Laws
 
@@ -283,15 +283,15 @@ The subsequent chapters will delve deeper into each area, providing the detailed
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 A = \frac{\pi(0.02)^2}{4} = 3.14 \times 10^{-4} \text{ m}^2, \quad
 \sigma = \frac{50\,000}{3.14 \times 10^{-4}} = 159 \text{ MPa}
-$$
+```
 
-$$
+```math
 \epsilon = \frac{\sigma}{E} = 7.96 \times 10^{-4}, \quad \Delta L = \epsilon L_0 = 1.59
 \text{ mm}
-$$
+```
 
 </details>
 
@@ -313,9 +313,9 @@ Deflection is linear in $w$ but proportional to $L^4$. Doubling the load doubles
 
 $\delta_{allow} = 6000/360 = 16.7$ mm. Rearranging the deflection formula:
 
-$$
+```math
 I_{req} = \frac{5wL^4}{384E\delta_{allow}} = \frac{5 \times 10^4 \times 6^4}{384 \times 200 \times 10^9 \times 0.01667} = 5.06 \times 10^{-5} \text{ m}^4
-$$
+```
 
 This is about 6.1 times the $I$ of the section in the example, consistent with its computed deflection of about $L/59$.
 

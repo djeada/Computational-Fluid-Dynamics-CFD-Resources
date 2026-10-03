@@ -297,14 +297,14 @@ Understanding centroids and moments of inertia is indispensable for structural a
 
 Use polar coordinates, with $dA = \rho\,d\rho\,d\theta$ and $y = \rho\sin\theta$:
 
-$$
+```math
 Q_x = \int_0^{\pi}\int_0^{r} \rho\sin\theta\,\rho\, d\rho\,
 d\theta = \frac{r^3}{3}\left[-\cos\theta\right]_0^{\pi} = \frac{2r^3}{3}
-$$
+```
 
-$$
+```math
 \bar{y} = \frac{Q_x}{A} = \frac{2r^3/3}{\pi r^2/2} = \frac{4r}{3\pi} \approx 0.424\, r
-$$
+```
 
 </details>
 
@@ -315,10 +315,10 @@ $$
 
 $A_{rect} = 24\,000$ mm² at $(100, 60)$; $A_{hole} = \pi(20)^2 = 1256.6$ mm² at $(150, 60)$.
 
-$$
+```math
 \bar{x} = \frac{24\,000(100) - 1256.6(150)}{24\,000 - 1256.6} = 97.2 \text{ mm}, \quad
 \bar{y} = 60 \text{ mm}
-$$
+```
 
 Here $\bar{y}$ follows from symmetry about $y = 60$ mm. The hole is right of centre, so the centroid shifts left.
 
@@ -331,15 +331,15 @@ Here $\bar{y}$ follows from symmetry about $y = 60$ mm. The hole is right of cen
 
 (a) Revolve a right triangle (legs $r$ and $h$) about the leg $h$. Its centroid is $r/3$ from the axis:
 
-$$
+```math
 V = 2\pi \frac{r}{3}\cdot \frac{rh}{2} = \frac{\pi r^2 h}{3}
-$$
+```
 
 (b) Revolve a semicircular arc of length $\pi r$ about its diameter. The centroid of the arc is $2r/\pi$ from the axis:
 
-$$
+```math
 A = 2\pi \frac{2r}{\pi}\cdot\pi r = 4\pi r^2
-$$
+```
 
 </details>
 
@@ -353,9 +353,9 @@ Using the parallel axis theorem:
 - Flange: $\dfrac{120(20)^3}{12} + 2400(90 - 70)^2 = 80\,000 + 960\,000 = 1\,040\,000$ mm⁴
 - Web: $\dfrac{20(80)^3}{12} + 1600(70 - 40)^2 = 853\,333 + 1\,440\,000 = 2\,293\,333$ mm⁴
 
-$$
+```math
 I_x = 3.333 \times 10^6 \text{ mm}^4
-$$
+```
 
 Section moduli: $S_{top} = I/30 = 1.11 \times 10^5$ mm³ and $S_{bottom} = I/70 = 4.76 \times 10^4$ mm³. The bottom of the web is the critical fibre in bending.
 
@@ -368,14 +368,14 @@ Section moduli: $S_{top} = I/30 = 1.11 \times 10^5$ mm³ and $S_{bottom} = I/70 
 
 The centroid depth is $\bar{y} = 1 + 1.5 = 2.5$ m and $A = 6$ m².
 
-$$
+```math
 F = \rho g\bar{y}A = 1000 \times 9.81 \times 2.5 \times 6 = 147.2 \text{ kN}
-$$
+```
 
-$$
+```math
 I_c = \frac{bh^3}{12} = \frac{2 \times 3^3}{12} = 4.5 \text{ m}^4, \quad
 y_{cp} = \bar{y} + \frac{I_c}{A\bar{y}} = 2.5 + \frac{4.5}{6 \times 2.5} = 2.8 \text{ m}
-$$
+```
 
 The resultant acts 0.3 m below the centroid.
 

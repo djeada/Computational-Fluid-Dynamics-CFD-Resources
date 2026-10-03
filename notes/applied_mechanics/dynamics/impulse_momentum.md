@@ -388,9 +388,9 @@ Impulse-momentum methods are indispensable tools that complement Newton's second
 
 Taking the outgoing direction as positive: $\text{Imp} = m(v_2 - v_1) = 0.15(40 - (-30)) = 10.5$ N·s.
 
-$$
+```math
 \bar{F} = \frac{10.5}{0.01} = 1050 \text{ N}
-$$
+```
 
 This force acts in the outgoing direction.
 
@@ -401,13 +401,13 @@ This force acts in the outgoing direction.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \int_0^{0.5} 200t\, dt = 100(0.5)^2 = 25 \text{ N·s}
-$$
+```
 
-$$
+```math
 v_2 = \frac{25}{4} = 6.25 \text{ m/s}
-$$
+```
 
 </details>
 
@@ -424,9 +424,9 @@ and check the result against Example 1.
 
 Write the kinetic energy of two particles as the energy of the mass centre plus the energy of relative motion:
 
-$$
+```math
 T = \frac{1}{2}(m_A + m_B)v_G^2 + \frac{1}{2}\mu v_{rel}^2
-$$
+```
 
 where $\mu = \frac{m_A m_B}{m_A + m_B}$ and $v_{rel} = v_A - v_B$. Momentum conservation keeps $v_G$ unchanged, and restitution gives $v_{rel,2} = -e\,v_{rel,1}$. Hence $\Delta T = T_1 - T_2 = \frac{1}{2}\mu(1 - e^2)v_{rel,1}^2$.
 
@@ -439,9 +439,9 @@ Example 1: $\mu = \frac{2 \times 3}{5} = 1.2$ kg, so $\Delta T = 0.5 \times 1.2 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \omega_2 = \frac{I_1}{I_2}\omega_1 = \frac{3.5}{1.2} \times 2 = 5.83 \text{ rev/s}
-$$
+```
 
 $T_1 = \frac{1}{2}(3.5)(4\pi)^2 = 276$ J and $T_2 = \frac{1}{2}(1.2)(2\pi \times 5.83)^2 = 806$ J.
 
@@ -458,10 +458,10 @@ Along the line of impact ($n$): $v_{An} = 4\cos 30^\circ = 3.464$ m/s. Perpendic
 
 For equal masses the momentum and restitution equations along $n$ give
 
-$$
+```math
 v'_{An} = \frac{1 - e}{2}v_{An} = 0.173 \text{ m/s}, \quad
 v'_{Bn} = \frac{1 + e}{2}v_{An} = 3.291 \text{ m/s}
-$$
+```
 
 Ball $A$: speed $\sqrt{2.0^2 + 0.173^2} = 2.01$ m/s, almost perpendicular to the line of centres (about $4.9^\circ$ from the tangent direction). Ball $B$: 3.29 m/s along the line of centres. Check: $0.173 + 3.291 = 3.464$ m/s, so momentum along $n$ is conserved.
 

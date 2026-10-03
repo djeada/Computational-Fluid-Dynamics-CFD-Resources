@@ -15,17 +15,24 @@ This script solves the time-dependent Schrödinger equation for a free particle 
 
 ### Schrödinger Equation
 
-$$i\hbar\frac{\partial\psi}{\partial t} = \left(-\frac{\hbar^2}{2m}\nabla^2 + V(x,y)\right)\psi$$
+$$
+i\hbar
+\frac{\partial\psi}{\partial t} = \left(-\frac{\hbar^2}{2m}\nabla^2 + V(x,y)\right)\psi
+$$
 
 With $\hbar = m = 1$ this becomes $i\,\partial_t\psi = -\tfrac12\nabla^2\psi + V\psi$.
 
 ### Initial Wavefunction and Exact Free Evolution
 
-$$\psi_0(x,y) = \frac{1}{\sqrt{\pi}}\,e^{-(x^2+y^2)/2}$$
+$$
+\psi_0(x,y) = \frac{1}{\sqrt{\pi}}\, e^{-(x^2+y^2)/2}
+$$
 
 For $V = 0$ the probability density stays Gaussian and spreads as
 
-$$|\psi(x,y,t)|^2 = \frac{1}{\pi(1+t^2)}\exp\left(-\frac{x^2+y^2}{1+t^2}\right)$$
+$$
+|\psi(x,y,t)|^2 = \frac{1}{\pi(1+t^2)}\exp\left(-\frac{x^2+y^2}{1+t^2}\right)
+$$
 
 so the peak falls from $1/\pi \approx 0.318$ to $1/(2\pi) \approx 0.159$ at $t = 1$.
 
@@ -33,7 +40,11 @@ so the peak falls from $1/\pi \approx 0.318$ to $1/(2\pi) \approx 0.159$ at $t =
 
 With $\mathbf{k}$ the discrete wavenumbers from `np.fft.fftfreq` and $k^2 = k_x^2 + k_y^2$, one time step is
 
-$$\tilde\psi \leftarrow \tilde\psi\,e^{-ik^2\Delta t/4}, \qquad \psi \leftarrow \psi\,e^{-iV\Delta t}, \qquad \tilde\psi \leftarrow \tilde\psi\,e^{-ik^2\Delta t/4}$$
+$$
+\tilde\psi \leftarrow \tilde\psi\, e^{-ik^2\Delta t/4},
+\qquad \psi \leftarrow \psi\, e^{-iV\Delta t},
+\qquad \tilde\psi \leftarrow \tilde\psi\, e^{-ik^2\Delta t/4}
+$$
 
 where $\tilde\psi$ is the 2D FFT of $\psi$. Each factor has modulus one, so the scheme conserves $\iint|\psi|^2\,dA$ up to round-off. The splitting is second-order accurate in time. For $V = 0$ the kinetic factors commute with the (identity) potential step, and the scheme is exact for the band-limited, periodic problem.
 

@@ -350,10 +350,10 @@ Wave loading analysis is the cornerstone of offshore structural design, connecti
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \lambda_0 = \frac{gT^2}{2\pi} = \frac{9.81 \times 64}{2\pi} = 99.9 \text{ m}, \quad
 c = \frac{\lambda_0}{T} = 12.5 \text{ m/s}
-$$
+```
 
 $d/\lambda_0 = 60/99.9 = 0.60 > 0.5$, so the deep-water approximation is valid.
 
@@ -389,17 +389,17 @@ In deep water the factor $\cosh k(z+d)/\sinh kd \to 1$ at the surface, so $u_{ma
 
 $\dot{u}_{max} = 2\pi^2H/T^2 = 1.234$ m/s², so
 
-$$
+```math
 F_I = 1025 \times \frac{\pi}{4} \times 2 \times 1.234 = 1986 \text{ N/m}, \quad
 F_D = 0.5 \times 1025 \times 1 \times 1.571^2 = 1265 \text{ N/m}
-$$
+```
 
 For $\cos\phi > 0$, $dF/d\phi = \cos\phi\,(F_I - 2F_D\sin\phi) = 0$ gives $\sin\phi = F_I/(2F_D)$, which is only possible if $F_D \geq F_I/2$. Substituting back:
 
-$$
+```math
 F_{max} = \frac{F_I^2}{2F_D} + F_D\left(1 - \frac{F_I^2}{4F_D^2}\right) = F_D +
 \frac{F_I^2}{4F_D} = 1265 + 780 = 2045 \text{ N/m}
-$$
+```
 
 This occurs at $\phi = 51.8^\circ$. If $F_D < F_I/2$, the peak is simply $F_I$.
 
@@ -410,10 +410,10 @@ This occurs at $\phi = 51.8^\circ$. If $F_D < F_I/2$, the peak is simply $F_I$.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 F_{max} \approx 40 \sqrt{2\ln(0.15 \times 10\,800)} = 40 \sqrt{2 \times 7.39} = 40
 \times 3.84 = 154 \text{ kN}
-$$
+```
 
 The deterministic design wave is $H_{max} \approx 1.86H_s = 11.2$ m.
 

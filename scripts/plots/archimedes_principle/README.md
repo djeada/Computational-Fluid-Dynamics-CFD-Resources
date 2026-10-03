@@ -16,7 +16,8 @@ This script draws a block in a tank of fluid with its weight and buoyant force s
 ### Weight
 
 $$
-W = \rho_{\text{obj}}\, V\, g, \qquad g = 9.81\ \text{m/s}^2
+W = \rho_{\text{obj}}\, V\, g,
+\qquad g = 9.81\  \text{m/s}^2
 $$
 
 ### Buoyant Force
@@ -24,7 +25,7 @@ $$
 The buoyant force equals the weight of the displaced fluid:
 
 $$
-F_b = \rho_{\text{fluid}}\, V_{\text{sub}}\, g,
+F_b = \rho_{\text{fluid}}\, V_{\text{sub}}\, g
 $$
 
 where $V_{\text{sub}}$ is the submerged volume.
@@ -34,13 +35,13 @@ where $V_{\text{sub}}$ is the submerged volume.
 When fully submerged, $F_b = \rho_{\text{fluid}} V g$. The object floats if this is at least its weight:
 
 $$
-\rho_{\text{fluid}} V g \geq W \iff \rho_{\text{obj}} \leq \rho_{\text{fluid}}.
+\rho_{\text{fluid}} V g \geq W \iff \rho_{\text{obj}} \leq \rho_{\text{fluid}}
 $$
 
 A floating object settles where $F_b = W$, so its submerged fraction is
 
 $$
-\frac{V_{\text{sub}}}{V} = \frac{\rho_{\text{obj}}}{\rho_{\text{fluid}}}.
+\frac{V_{\text{sub}}}{V} = \frac{\rho_{\text{obj}}}{\rho_{\text{fluid}}}
 $$
 
 If $\rho_{\text{obj}} > \rho_{\text{fluid}}$, the net downward force $W - \rho_{\text{fluid}} V g$ is positive and the object sinks.

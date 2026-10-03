@@ -275,9 +275,9 @@ Integrating from the surface ($z = 0$) down to $z = -h$ gives $p = p_{atm} + \rh
 
 Expand the divergence: $\partial \rho/\partial t + \vec{v} \cdot \nabla \rho + \rho \nabla \cdot \vec{v} = 0$. Since $\nabla \rho = 0$,
 
-$$
+```math
 \nabla \cdot \vec{v} = -\frac{1}{\rho} \frac{\partial \rho}{\partial t} = \frac{1}{\tau}
-$$
+```
 
 The velocity divergence is positive, so the gas expands everywhere. The same mass spreads over a growing volume, which is why the density falls. Only when $\rho$ is constant does the equation reduce to $\nabla \cdot \vec{v} = 0$.
 

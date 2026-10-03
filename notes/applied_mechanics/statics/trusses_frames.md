@@ -285,15 +285,15 @@ By symmetry $A_y = C_y = 15$ kN. $AB = \sqrt{3^2 + 2^2} = 3.606$ m.
 
 At joint A, with members assumed in tension:
 
-$$
+```math
 \sum F_y = 15 + F_{AB} \frac{2}{3.606} = 0 \implies F_{AB} = -27.0
 \text{ kN (compression)}
-$$
+```
 
-$$
+```math
 \sum F_x = F_{AC} + F_{AB} \frac{3}{3.606} = 0 \implies F_{AC} = 22.5
 \text{ kN (tension)}
-$$
+```
 
 The tie AC keeps the rafters from spreading. A shallower roof increases both forces.
 
@@ -308,9 +308,9 @@ Consider the left portion, which carries only $A_y = 12$ kN.
 
 Bottom chord: take moments about the top joint at $x = 4$ m, which eliminates the top chord and the diagonal:
 
-$$
+```math
 -12(4) + F_{bot}(3) = 0 \implies F_{bot} = 16 \text{ kN (tension)}
-$$
+```
 
 Diagonal: $\sum F_y = 12 - F_d(3/5) = 0$, so $F_d = 20$ kN (tension), as expected for a Pratt diagonal.
 

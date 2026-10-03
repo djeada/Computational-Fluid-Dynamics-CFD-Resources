@@ -464,10 +464,10 @@ For a Newtonian fluid, $\Phi$ is a sum of squares of strain-rate combinations mu
 
 (b) With $T(0) = T(h) = T_w$, the solution is $T - T_w = \frac{\Phi}{2k}y(h - y)$. The maximum is at mid-gap:
 
-$$
+```math
 \Delta
 T_{max} = \frac{\Phi h^2}{8k} = \frac{4.64 \times 10^6 \times (5 \times 10^{-4})^2}{8 \times 0.145} = 1.0 \text{ K}
-$$
+```
 
 (c) $\Phi h = 2320$ W/m², and $\tau U = \mu (U/h) U = 0.29 \times 4000 \times 2 = 2320$ W/m². All the work done by the moving plate is dissipated as heat.
 
@@ -508,10 +508,10 @@ $Ec$ and $Br$ are tiny, so viscous dissipation is negligible compared with condu
 
 (b) $r = 1.43 \times 10^{-7} \times 2/10^{-6} = 0.286$, and
 
-$$
+```math
 T_i^{n+1} = T_i^n + r\,(T_{i+1}^n - 2T_i^n + T_{i-1}^n) = 30 + 0.286 \times
 (20 - 60 + 20) = 24.28\ ^\circ \text{C}
-$$
+```
 
 The hot spot cools toward its neighbours, as diffusion should.
 

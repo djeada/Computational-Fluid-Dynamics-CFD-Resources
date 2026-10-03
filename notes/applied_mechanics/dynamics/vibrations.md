@@ -369,10 +369,10 @@ Vibration analysis is a cornerstone of dynamic system design, ensuring that stru
 
 At static equilibrium $k\delta_{st} = mg$, so $\omega_n = \sqrt{k/m} = \sqrt{g/\delta_{st}}$:
 
-$$
+```math
 \omega_n = \sqrt{\frac{9.81}{0.005}} = 44.3 \text{ rad/s}, \quad
 f_n = \frac{44.3}{2\pi} = 7.05 \text{ Hz}
-$$
+```
 
 </details>
 
@@ -383,9 +383,9 @@ $$
 
 Over $n$ cycles, $\delta = \frac{1}{n}\ln\frac{x_0}{x_n} = \frac{1}{4}\ln 4 = 0.347$. Inverting $\delta = 2\pi\zeta/\sqrt{1 - \zeta^2}$:
 
-$$
+```math
 \zeta = \frac{\delta}{\sqrt{4\pi^2 + \delta^2}} = 0.0551
-$$
+```
 
 The small-damping approximation $\delta/(2\pi) = 0.0552$ is almost identical.
 
@@ -398,14 +398,14 @@ The small-damping approximation $\delta/(2\pi) = 0.0552$ is almost identical.
 
 $\omega_n = 20$ rad/s, $\zeta = \frac{40}{2 \times 10 \times 20} = 0.1$ and $r = 0.9$.
 
-$$
+```math
 M = \frac{1}{\sqrt{(1 - 0.81)^2 + (0.18)^2}} = 3.82, \quad X = \frac{F_0}{k}M = 0.025
 \times 3.82 = 95.5 \text{ mm}
-$$
+```
 
-$$
+```math
 \phi = \arctan \frac{0.18}{0.19} = 43.5^\circ
-$$
+```
 
 </details>
 
@@ -416,10 +416,10 @@ $$
 
 With $d = L/2$ and $I_O = mL^2/3$:
 
-$$
+```math
 \omega_n = \sqrt{\frac{mgL/2}{mL^2/3}} = \sqrt{\frac{3g}{2L}} = 3.84 \text{ rad/s},
 \quad \tau_n = \frac{2\pi}{3.84} = 1.64 \text{ s}
-$$
+```
 
 A simple pendulum with $\sqrt{g/L_{eq}} = \sqrt{3g/(2L)}$ has $L_{eq} = 2L/3 = 0.667$ m.
 
@@ -432,9 +432,9 @@ A simple pendulum with $\sqrt{g/L_{eq}} = \sqrt{3g/(2L)}$ has $L_{eq} = 2L/3 = 0
 
 With $r = 2.769$ ($r^2 = 7.667$):
 
-$$
+```math
 T_f = \frac{\sqrt{1 + (2 \times 0.1 \times 2.769)^2}}{\sqrt{(1 - 7.667)^2 + (0.554)^2}} = \frac{1.143}{6.690} = 0.171
-$$
+```
 
 The transmitted force is $0.171 \times 500 = 85$ N, compared with 75 N without damping. At resonance ($r = 1$), $T_f = \sqrt{1 + 0.04}/0.2 = 5.1$, where an undamped mount would be unbounded.
 

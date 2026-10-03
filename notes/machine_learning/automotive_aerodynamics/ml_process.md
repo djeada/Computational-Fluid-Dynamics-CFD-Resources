@@ -234,10 +234,10 @@ new vehicle shapes without running a full CFD simulation each time.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 C_D = \frac{2F_D}{\rho U^2 A} = \frac{2 \times 380}{1.2 \times 30^2 \times 2.2} \approx
 0.320
-$$
+```
 
 Power at 30 m/s: $P = F_D U = 380 \times 30 = 11.4$ kW.
 

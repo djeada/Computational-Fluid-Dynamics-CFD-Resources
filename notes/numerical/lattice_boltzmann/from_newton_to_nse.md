@@ -112,25 +112,25 @@ The power of the LBM lies in its ability to recover macroscopic fluid properties
 
 1. **Normalization (Total Mass):**
 
-   $$
+   ```math
    \int d^3\xi \int d^3x \, f(\xi, x, t) = M(t)
-   $$
+   ```
 
    where $ M(t) $ is the total mass.
 
 2. **Fluid Density:**
 
-   $$
+   ```math
    \int d^3\xi \, f(\xi, x, t) = \rho(x, t)
-   $$
+   ```
 
    which defines the density at point $ x $ and time $ t $.
 
 3. **Momentum Density:**
 
-   $$
+   ```math
    \int d^3\xi \, \xi\, f(\xi, x, t) = \rho(x, t)\, u(x, t)
-   $$
+   ```
 
    where $ u(x, t) $ is the macroscopic fluid velocity.
 
@@ -214,9 +214,9 @@ $\int (\xi - u) f \, d^3\xi = \rho u - u\rho = 0$, using the definitions of dens
 
 Expand $\xi \otimes \xi = (u + v) \otimes (u + v) = u \otimes u + u \otimes v + v \otimes u + v \otimes v$. Integrating against $f$, the two cross terms vanish by the first result, leaving
 
-$$
+```math
 \int \xi \otimes \xi \, f \, d^3\xi = \rho \, u \otimes u + P
-$$
+```
 
 In the momentum balance $\partial_t(\rho u) + \nabla \cdot \int \xi \otimes \xi \, f \, d^3\xi = \ldots$, the term $\rho \, u \otimes u$ gives the convective flux $\nabla \cdot (\rho u \otimes u)$. The tensor $P$ carries the molecular (thermal) momentum flux. Its isotropic part is the pressure, $p = \operatorname{tr}(P)/3$, and its deviatoric part is minus the viscous stress, which the Chapman–Enskog expansion relates to velocity gradients.
 

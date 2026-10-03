@@ -291,9 +291,9 @@ The concepts of moments and couples are foundational for structural analysis, ma
 
 $F_x = 500\cos 30^\circ = 433.0$ N and $F_y = 500\sin 30^\circ = 250$ N.
 
-$$
+```math
 M_O = 2(250) - 1(433.0) = 67.0 \text{ N·m (counterclockwise)}
-$$
+```
 
 </details>
 
@@ -313,10 +313,10 @@ $M = Fd = 80 \times 0.25 = 20$ N·m. An equivalent couple needs the same $Fd$: $
 
 $\hat{\mathbf{u}}_a = (2, 1, 2)/3$. Using $\mathbf{M}_O = (60, 5, -100)$ N·m from Example 3:
 
-$$
+```math
 M_a = \hat{\mathbf{u}}_a \cdot \mathbf{M}_O = \frac{2(60) + 1(5) + 2(-100)}{3} = -25
 \text{ N·m}
-$$
+```
 
 The negative sign means the moment about the axis is 25 N·m in the sense opposite to $\hat{\mathbf{u}}_a$ (by the right-hand rule).
 
@@ -344,10 +344,10 @@ About an arbitrary point $O$: $\mathbf{M} = \mathbf{r}_A \times \mathbf{F} + \ma
 
 Here $\mathbf{r}_{A/B} = (1, -2, 0)$ m:
 
-$$
+```math
 \mathbf{M} = (1, - 2, 0) \times (0, 0, 30) = (-60, - 30, 0) \text{ N·m},
 \quad |\mathbf{M}| = 67.1 \text{ N·m}
-$$
+```
 
 </details>
 

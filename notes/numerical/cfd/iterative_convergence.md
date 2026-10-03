@@ -122,9 +122,9 @@ Monitoring convergence is essential in every iterative CFD solver. This note def
 
 The differences are $(0, -1.65 \times 10^{-5}, -0.010516, -0.101059)$.
 
-$$
+```math
 R = \sqrt{\frac{0 + 2.7 \times 10^{-10} + 1.106 \times 10^{-4} + 1.0213 \times 10^{-2}}{4}} \approx 0.0508
-$$
+```
 
 The scaled residual is $R \times N / \sum u_i = 0.0508 \times 4/3.001 \approx 0.0677$.
 

@@ -260,9 +260,9 @@ The eigenvalues of $\mathbf{A}$ include a positive real value, confirming that t
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 G(s) = \frac{1}{0.02s^2 + 0.1s + 2} = \frac{50}{s^2 + 5s + 100}
-$$
+```
 
 $\omega_n = \sqrt{k_t/J} = 10$ rad/s, $\zeta = \frac{b}{2\sqrt{Jk_t}} = \frac{0.1}{2 \times 0.2} = 0.25$, and the DC gain is $1/k_t = 0.5$ rad/(N·m).
 
@@ -275,13 +275,13 @@ $\omega_n = \sqrt{k_t/J} = 10$ rad/s, $\zeta = \frac{b}{2\sqrt{Jk_t}} = \frac{0.
 
 With $a_1 = 4$, $a_0 = 5$, $b_1 = 3$, $b_0 = 2$:
 
-$$
+```math
 \mathbf{A} = \begin{bmatrix} 0 & 1 \\ -5 & -4 \end{bmatrix}, \quad \mathbf{B} = \begin{bmatrix} 0 \\ 1 \end{bmatrix}, \quad \mathbf{C} = \begin{bmatrix} 2 & 3 \end{bmatrix}
-$$
+```
 
-$$
+```math
 (s\mathbf{I} - \mathbf{A})^{-1}\mathbf{B} = \frac{1}{s^2 + 4s + 5}\begin{bmatrix} s + 4 & 1 \\ -5 & s \end{bmatrix}\begin{bmatrix} 0 \\ 1 \end{bmatrix} = \frac{1}{s^2 + 4s + 5}\begin{bmatrix} 1 \\ s \end{bmatrix}
-$$
+```
 
 so $\mathbf{C}(s\mathbf{I} - \mathbf{A})^{-1}\mathbf{B} = \frac{2 + 3s}{s^2 + 4s + 5}$, as required.
 
@@ -303,10 +303,10 @@ About $\theta = \pi$: with $\theta = \pi + \delta$, $\sin(\pi + \delta) \approx 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 G(s) \approx
 \frac{K_t/R_a}{s(Js + b + K_tK_b/R_a)} = \frac{0.05}{s(0.01s + 0.105)} = \frac{5}{s(s + 10.5)}
-$$
+```
 
 The simplified model has a pole at $s = -10.5$. The full model $\frac{20}{s(s^2 + 14s + 42)}$ has poles at $s = -4.35$ and $s = -9.65$.
 
@@ -321,9 +321,9 @@ The approximation is poor here because the electrical time constant $L_a/R_a = 0
 
 There is one forward path, $P_1 = G_1G_2$, and two loops, $L_1 = -G_2H_2$ and $L_2 = -G_1G_2$. Both loops touch each other and the forward path, so $\Delta = 1 + G_2H_2 + G_1G_2$ and $\Delta_1 = 1$:
 
-$$
+```math
 T(s) = \frac{G_1G_2}{1 + G_2H_2 + G_1G_2} = \frac{K}{s(s+1) + s + K} = \frac{K}{s^2 + 2s + K}
-$$
+```
 
 Comparing with $s^2 + 2\zeta\omega_n s + \omega_n^2$: $\zeta\omega_n = 1$, so $\zeta = 0.5$ requires $\omega_n = 2$ rad/s and $K = \omega_n^2 = 4$.
 

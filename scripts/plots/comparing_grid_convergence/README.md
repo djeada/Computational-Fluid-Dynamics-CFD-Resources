@@ -28,13 +28,14 @@ $$
 The exponent differs from the exact one by $x^2/N$, so
 
 $$
-\lim_{N \to \infty} u_N(x) = u(x).
+\lim_{N \to \infty} u_N(x) = u(x)
 $$
 
 ### Error
 
 $$
-\varepsilon_N(x) = u(x) - u_N(x) = e^{-x}\left(1 - e^{-x^2/N}\right) \approx \frac{x^2 e^{-x}}{N} \quad \text{for large } N,
+\varepsilon_N(x) = u(x) - u_N(x) = e^{-x}\left(1 - e^{-x^2/N}\right) \approx
+\frac{x^2 e^{-x}}{N} \quad \text{for large } N
 $$
 
 so the error is $O(1/N)$ and doubling $N$ roughly halves it. On $[0, 1]$ the maximum error is at $x = 1$.

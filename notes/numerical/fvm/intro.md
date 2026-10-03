@@ -142,9 +142,9 @@ The Finite Volume Method (FVM) is the dominant discretization technique in indus
 
 Cell $i$ gains $F_{i-1/2}$ and loses $F_{i+1/2}$. The same numerical flux $F_{i+1/2}$ is the gain of cell $i+1$. When all cells are summed, every interior flux appears once with each sign and cancels, leaving
 
-$$
+```math
 \frac{d}{dt}\sum_i u_i\,\Delta x = F_{1/2} - F_{N+1/2}
-$$
+```
 
 This holds exactly for any flux formula, provided both neighbours use the same face flux.
 

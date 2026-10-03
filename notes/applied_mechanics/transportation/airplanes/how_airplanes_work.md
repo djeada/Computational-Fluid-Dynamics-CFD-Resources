@@ -226,9 +226,9 @@ Flaps cut the stall speed by 13%, which shortens takeoff and landing distances r
 
 In level flight $L = W$:
 
-$$
+```math
 C_L = \frac{2W}{\rho v^2 A} = \frac{2 \times 10\,791}{1.225 \times 55^2 \times 16.2} = 0.36
-$$
+```
 
 This is less than a quarter of $C_{L_{max}} = 1.6$, leaving a wide margin above the stall. It corresponds to a small angle of attack.
 
@@ -253,10 +253,10 @@ At low speed the wing needs a higher $C_L$, and induced drag grows as $C_L^2$. $
 
 $P_{excess} = 45$ kW, so
 
-$$
+```math
 R_c = \frac{P_{excess}}{W} = \frac{45\,000}{10\,791} = 4.17 \text{ m/s} \approx 820
 \text{ ft/min}
-$$
+```
 
 $\sin\gamma = R_c/V = 4.17/40$, so $\gamma = 6.0^\circ$.
 

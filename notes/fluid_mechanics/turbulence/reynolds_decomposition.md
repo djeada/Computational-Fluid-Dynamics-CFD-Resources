@@ -333,9 +333,9 @@ The remaining components are $\overline{u'^2}$, $\overline{v'^2}$, $\overline{w'
 
 The error is bounded by $2a/(\omega T) = a/(\pi f T)$. Requiring $a/(\pi f T) \le 0.001\,U_0$ gives
 
-$$
+```math
 T \ge \frac{0.5}{\pi \times 5 \times 0.001} = 31.8\ \mathrm{s}
-$$
+```
 
 That is about 160 periods. Random turbulent signals converge in a different way, governed by the integral time scale (see [Turbulence Statistics](./statistics.md)), but the lesson is the same: finite averages are only approximately Reynolds averages.
 

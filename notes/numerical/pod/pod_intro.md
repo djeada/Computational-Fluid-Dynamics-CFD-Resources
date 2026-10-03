@@ -255,15 +255,15 @@ $M \times M$: $10^{12} \times 8 = 8 \times 10^{12}$ bytes, i.e. 8 TB. $N \times 
 
 $\bar{\mathbf{u}} = (2, 2, 2)$. The columns of $\mathbf{X}'$ are $(-1, 0, 1)$, $(0, 0, 0)$ and $(1, 0, -1)$, and
 
-$$
+```math
 \mathbf{C} = \frac{1}{3}\mathbf{X}'^T\mathbf{X}' = \frac{1}{3}\begin{pmatrix} 2 & 0 & -2 \\ 0 & 0 & 0 \\ -2 & 0 & 2 \end{pmatrix}
-$$
+```
 
 The only nonzero eigenvalue is $\lambda_1 = 4/3$, with $\mathbf{v}_1 = (1, 0, -1)/\sqrt{2}$. Then
 
-$$
+```math
 \boldsymbol{\Phi}_1 = \frac{\mathbf{X}'\mathbf{v}_1}{\sqrt{N\lambda_1}} = \frac{(-2, 0, 2)/\sqrt{2}}{2} = \frac{(-1, 0, 1)}{\sqrt{2}}
-$$
+```
 
 which has unit norm. The coefficients are $a_1(t_i) = \boldsymbol{\Phi}_1^T(\mathbf{u}_i - \bar{\mathbf{u}}) = (\sqrt{2}, 0, -\sqrt{2})$. The reconstruction $\bar{\mathbf{u}} + \sqrt{2}\,\boldsymbol{\Phi}_1 = (2,2,2) + (-1,0,1) = (1,2,3) = \mathbf{u}_1$ is exact, because one mode holds 100% of the fluctuation energy.
 
@@ -274,15 +274,15 @@ which has unit norm. The coefficients are $a_1(t_i) = \boldsymbol{\Phi}_1^T(\mat
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \boldsymbol{\Phi}_i^T\boldsymbol{\Phi}_j = \frac{\mathbf{v}_i^T\mathbf{X}'^T\mathbf{X}'\mathbf{v}_j}{N\sqrt{\lambda_i\lambda_j}} = \frac{\mathbf{v}_i^T\mathbf{C}\mathbf{v}_j}{\sqrt{\lambda_i\lambda_j}} = \frac{\lambda_j\,\mathbf{v}_i^T\mathbf{v}_j}{\sqrt{\lambda_i\lambda_j}} = \delta_{ij}
-$$
+```
 
 For the eigenvector property:
 
-$$
+```math
 \frac{1}{N}\mathbf{X}'\mathbf{X}'^T\boldsymbol{\Phi}_i = \frac{\mathbf{X}'(\mathbf{X}'^T\mathbf{X}'/N)\mathbf{v}_i}{\sqrt{N\lambda_i}} = \lambda_i \frac{\mathbf{X}'\mathbf{v}_i}{\sqrt{N\lambda_i}} = \lambda_i\boldsymbol{\Phi}_i
-$$
+```
 
 The $N \times N$ and $M \times M$ problems share their nonzero eigenvalues, which is why the snapshot method gives the same modes as the direct method.
 

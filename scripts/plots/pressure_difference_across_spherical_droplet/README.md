@@ -53,7 +53,7 @@ python main.py --no-show --output . # save pressure_difference_across_spherical_
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 

@@ -214,9 +214,9 @@ with the orthonormal basis $B = [\,(1, 0, 1)^T/\sqrt{2},\ (0, 1, 0)^T\,]$. Compu
 
 $A b_1 = (4, -2, 4)^T/\sqrt{2}$ and $A b_2 = (-1, 4, -1)^T$, so
 
-$$
+```math
 A^r = \begin{pmatrix} 4 & -\sqrt{2} \\ -\sqrt{2} & 4 \end{pmatrix}, \qquad f^r = \begin{pmatrix} \sqrt{2} \\ 2 \end{pmatrix}
-$$
+```
 
 Solving gives $u_N = (3\sqrt{2}/7, 5/7) \approx (0.6061, 0.7143)$, so $B u_N = (3/7, 5/7, 3/7) \approx (0.4286, 0.7143, 0.4286)$. This equals $A^{-1}f$, as you can check: $4 \cdot 3/7 - 5/7 = 1$ and $-3/7 + 20/7 - 3/7 = 2$. The ROM is exact because the truth solution is symmetric and $B$ spans all symmetric vectors.
 

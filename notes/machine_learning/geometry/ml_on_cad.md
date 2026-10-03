@@ -150,10 +150,10 @@ Building a text-to-CAD pipeline requires careful preparation at each stage:
 
 5. **Set up training pipelines**: Define loss functions that combine reconstruction accuracy (Chamfer distance, Earth Mover's distance) with text-alignment terms. Use learning rate schedules, gradient clipping, and checkpoint saving to stabilize long training runs. The Chamfer distance between two point sets $S_1$ and $S_2$ is defined as:
 
-   $$
+   ```math
    d_{\text{CD}}(S_1, S_2) = \frac{1}{|S_1|}\sum_{x \in S_1} \min_{y \in S_2} \| x -
    y\|^2 + \frac{1}{|S_2|}\sum_{y \in S_2} \min_{x \in S_1} \| y - x\|^2
-   $$
+   ```
 
    This bidirectional metric penalizes both missing geometry and spurious additions, making it well suited for evaluating generated CAD shapes against reference models.
 

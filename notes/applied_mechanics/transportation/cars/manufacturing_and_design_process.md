@@ -272,10 +272,10 @@ Lightweight, sustainable materials reduce vehicle weight and can enhance aerodyn
 
 $V = 33.3$ m/s.
 
-$$
+```math
 D = \tfrac{1}{2}\rho V^2 C_D A = 0.5 \times 1.225 \times 33.3^2 \times 0.30 \times
 2.2 = 449 \text{ N}, \quad P = DV = 15.0 \text{ kW}
-$$
+```
 
 Power scales with $V^3$, so at 140 km/h it is $15.0 \times (140/120)^3 = 23.8$ kW, 59% more for a 17% higher speed.
 
@@ -328,9 +328,9 @@ The downforce adds grip without adding mass (about 116 kg of equivalent load), w
 
 At 250 km/h (69.4 m/s), $M = 69.4/340 = 0.20 < 0.3$. Density changes are below about 2%, so $\rho$ can be taken as constant and continuity reduces to $\nabla \cdot \mathbf{v} = 0$.
 
-$$
+```math
 Re = \frac{1.225 \times 40 \times 4.5}{1.79 \times 10^{-5}} = 1.2 \times 10^7
-$$
+```
 
 The flow is turbulent with thin boundary layers and large separated wakes. Resolving every eddy (DNS) is out of reach, so vehicle CFD uses RANS turbulence models or, for more accurate wakes, hybrid RANS–LES methods. These need fine near-wall meshes and validation against wind tunnel data.
 

@@ -662,10 +662,10 @@ The next chapters will explore specific FSI phenomena in detail, providing the t
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 F = \frac{1}{2}\rho g H^2 w = 0.5 \times 1000 \times 9.81 \times 15^2 \times 1 = 1.10
 \text{ MN per metre}
-$$
+```
 
 The resultant acts at $2H/3 = 10$ m below the surface, i.e. $H/3 = 5$ m above the base. The overturning moment is $1.104 \times 5 = 5.52$ MN·m per metre.
 
@@ -676,13 +676,13 @@ The resultant acts at $2H/3 = 10$ m below the surface, i.e. $H/3 = 5$ m above th
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 q = \frac{1}{2}\rho V^2 = 0.5 \times 1.225 \times 40^2 = 980 \text{ Pa}
-$$
+```
 
-$$
+```math
 F = qC_DA = 980 \times 1.2 \times 6 = 7.06 \text{ kN}
-$$
+```
 
 </details>
 
@@ -691,21 +691,21 @@ $$
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 F_I = \rho \frac{\pi D^2}{4}C_M\dot{u}_{max} = 1025 \times 0.785 \times 2 \times
 0.8 = 1288 \text{ N/m}
-$$
+```
 
-$$
+```math
 F_D = \frac{1}{2}\rho D C_D u_{max}^2 = 0.5 \times 1025 \times 1 \times 1 \times
 2.25 = 1153 \text{ N/m}
-$$
+```
 
 With $F(\phi) = F_I\sin\phi + F_D|\cos\phi|\cos\phi$ and $F_D \geq F_I/2$, the maximum occurs at $\sin\phi = F_I/(2F_D)$:
 
-$$
+```math
 F_{max} = F_D + \frac{F_I^2}{4F_D} = 1153 + 360 = 1513 \text{ N/m}
-$$
+```
 
 For a fixed body in an accelerating flow, the inertia force includes the Froude-Krylov force from the pressure gradient that accelerates the fluid (coefficient 1) plus the added-mass reaction ($C_a$). Hence $C_M = 1 + C_a = 2$ for a circular cylinder in potential flow.
 

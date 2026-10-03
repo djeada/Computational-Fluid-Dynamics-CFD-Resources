@@ -30,7 +30,8 @@ In an experiment or unsteady simulation $\bar{u}$ would be a time average at eac
 ### Fluctuation
 
 $$
-u'(x,y) = u(x,y) - \bar{u}(y), \qquad \langle u' \rangle_x = 0
+u'(x,y) = u(x,y) - \bar{u}(y),
+\qquad \langle u' \rangle_x = 0
 $$
 
 ## Implementation
@@ -49,7 +50,7 @@ python main.py --no-show --output . # save time_averaged_velocity_field.png with
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 

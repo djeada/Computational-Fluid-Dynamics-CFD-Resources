@@ -458,9 +458,9 @@ Resonance is expected near $U_r \approx 1/St = 5$, and $f_{St}$ is within 10% of
 
 (a) On $r = a$: $\phi = -a\cos\theta$. With $\mathbf{n} = -\hat{e}_r$, $\partial\phi/\partial n = -\partial\phi/\partial r = -a^2\cos\theta/r^2 = -\cos\theta$. Then
 
-$$
+```math
 M_{added} = \rho_f\int_0^{2\pi}(-a\cos\theta)(-\cos\theta)\, a\, d\theta = \rho_f\pi a^2
-$$
+```
 
 This is exactly the mass of the displaced fluid (added-mass coefficient $C_a = 1$).
 
@@ -493,9 +493,9 @@ $ms^2 + (c - \beta U)s + k = 0$ gives $s = \dfrac{-(c - \beta U) \pm \sqrt{(c - 
 
 For small net damping the roots are complex, with $\Re(s) = -(c - \beta U)/(2m)$. The motion becomes unstable, $\Re(s) > 0$, once $\beta U > c$:
 
-$$
+```math
 U_{crit} = c/\beta = 4/0.8 = 5 \text{ m/s}
-$$
+```
 
 Above this speed the fluid feeds more energy into each oscillation than the structural damping removes.
 

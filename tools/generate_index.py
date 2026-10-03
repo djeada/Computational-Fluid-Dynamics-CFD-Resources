@@ -79,7 +79,7 @@ def stats_block():
         rows.append(
             (names[key], len(script_dirs(key)), f"[`scripts/{key}/`](scripts/{key}/)")
         )
-    lines = ["| Content | Count | Location |", "|---------|------:|----------|"]
+    lines = ["| Content | Count | Location |", "| --- | --: | --- |"]
     lines += [f"| {name} | {count} | {where} |" for name, count, where in rows]
     return "\n".join(lines)
 
@@ -91,7 +91,7 @@ def scripts_block():
             f"### {label}",
             "",
             "| Script | Description |",
-            "|--------|-------------|",
+            "| --- | --- |",
         ]
         for folder in script_dirs(key):
             title, summary = title_and_summary(folder / "README.md")
@@ -109,7 +109,7 @@ def replace_block(text, name, body):
     )
     if not pattern.search(text):
         raise SystemExit(f"README.md is missing the '{name}' generated-block markers")
-    return pattern.sub(lambda m: f"{m.group(1)}\n{body}\n{m.group(2)}", text)
+    return pattern.sub(lambda m: f"{m.group(1)}\n\n{body}\n\n{m.group(2)}", text)
 
 
 def main(argv=None):

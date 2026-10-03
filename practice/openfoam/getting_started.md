@@ -32,6 +32,7 @@ tree
 ```
 
 You should see:
+
 ```
 cavity/
 ├── 0/
@@ -50,6 +51,7 @@ cavity/
 ### Step 3: Understanding Initial Conditions
 
 #### Velocity Field (0/U)
+
 ```cpp
 FoamFile
 {
@@ -82,6 +84,7 @@ boundaryField
 ```
 
 #### Pressure Field (0/p)
+
 ```cpp
 FoamFile
 {
@@ -115,6 +118,7 @@ boundaryField
 ### Step 4: Physical Properties
 
 #### Transport Properties (constant/transportProperties)
+
 ```cpp
 FoamFile
 {
@@ -130,6 +134,7 @@ nu              [0 2 -1 0 0 0 0] 0.01;  // Kinematic viscosity
 ### Step 5: Mesh Generation
 
 #### View Mesh Dictionary (system/blockMeshDict)
+
 ```cpp
 FoamFile
 {
@@ -199,6 +204,7 @@ mergePatchPairs
 ```
 
 #### Generate Mesh
+
 ```bash
 # Create mesh
 blockMesh
@@ -210,6 +216,7 @@ checkMesh
 ### Step 6: Solution Control
 
 #### Control Dictionary (system/controlDict)
+
 ```cpp
 FoamFile
 {
@@ -244,6 +251,7 @@ runTimeModifiable true;
 ### Step 7: Numerical Schemes
 
 #### Schemes (system/fvSchemes)
+
 ```cpp
 FoamFile
 {
@@ -299,6 +307,7 @@ tail -f log.icoFoam
 ### Step 9: Post-Processing
 
 #### Launch ParaView
+
 ```bash
 # Generate ParaView files
 paraFoam
@@ -308,7 +317,9 @@ foamToVTK
 ```
 
 #### Sample Data Along Line
+
 Create `system/sampleDict`:
+
 ```cpp
 FoamFile
 {
@@ -342,6 +353,7 @@ fields
 ```
 
 Run sampling:
+
 ```bash
 sample
 ```
@@ -349,12 +361,14 @@ sample
 ### Step 10: Analysis and Visualization
 
 #### Key Results to Examine:
+
 1. **Velocity vectors**: Show flow circulation
 2. **Pressure contours**: Pressure distribution
 3. **Streamlines**: Flow patterns
 4. **Velocity profiles**: Compare with literature
 
 #### Expected Flow Features:
+
 - Primary vortex in the center
 - Secondary vortices in corners
 - Boundary layer near walls
@@ -365,12 +379,14 @@ sample
 Try modifying these parameters to see their effects:
 
 #### Reynolds Number
+
 ```bash
 # Edit constant/transportProperties
 # Change nu to vary Re = UL/nu
 ```
 
 #### Mesh Resolution
+
 ```bash
 # Edit system/blockMeshDict
 # Change (20 20 1) to (40 40 1) for finer mesh
@@ -378,6 +394,7 @@ blockMesh
 ```
 
 #### Time Step
+
 ```bash
 # Edit system/controlDict
 # Reduce deltaT for better accuracy
@@ -386,12 +403,14 @@ blockMesh
 ## Common Issues and Solutions
 
 ### Courant Number Too High
+
 ```
 Solution: Reduce time step in controlDict
 deltaT          0.001;  // Reduce from 0.005
 ```
 
 ### Mesh Quality Warning
+
 ```
 Solution: Improve mesh in blockMeshDict
 - Increase resolution
@@ -400,6 +419,7 @@ Solution: Improve mesh in blockMeshDict
 ```
 
 ### Slow Convergence
+
 ```
 Solution: 
 - Check boundary conditions
@@ -420,6 +440,7 @@ After completing this tutorial, try:
 ## Validation Data
 
 Compare your results with benchmark data:
+
 - Ghia et al. (1982) velocity profiles
 - Stream function contours
 - Vorticity distributions
@@ -431,7 +452,7 @@ The standard benchmark for the lid-driven cavity is Ghia, Ghia, and Shin (1982).
 #### u-velocity along vertical centerline (x = 0.05 m)
 
 | y/L | u/U |
-|-----|-----|
+| --- | --- |
 | 1.0000 | 1.00000 |
 | 0.9688 | 0.84713 |
 | 0.9609 | 0.80140 |

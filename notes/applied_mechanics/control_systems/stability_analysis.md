@@ -293,7 +293,7 @@ This gain margin is **far below the recommended 6 dB**: the Routh array for $0.1
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \begin{array}{c|ccc}
 s^4 & 1 & 3 & 5 \\
 s^3 & 2 & 4 & \\
@@ -301,7 +301,7 @@ s^2 & 1 & 5 & \\
 s^1 & -6 & & \\
 s^0 & 5 & &
 \end{array}
-$$
+```
 
 where $b_1 = (2 \cdot 3 - 1 \cdot 4)/2 = 1$, $b_2 = (2 \cdot 5)/2 = 5$ and $c_1 = (1 \cdot 4 - 2 \cdot 5)/1 = -6$. The first column $1, 2, 1, -6, 5$ changes sign twice, so there are two right-half-plane roots (numerically $s \approx 0.29 \pm 1.42j$). Positive coefficients are necessary but not sufficient.
 
@@ -325,9 +325,9 @@ At $K = 60$ the auxiliary polynomial is $6s^2 + 66 = 0$, so the crossing is at $
 
 $n = 4$ poles and $m = 1$ zero, so $n - m = 3$ asymptotes at $\phi_a = 60^\circ, 180^\circ, 300^\circ$.
 
-$$
+```math
 \sigma_a = \frac{(0 - 1 - 2 - 6) - (-4)}{3} = -\frac{5}{3} \approx - 1.67
-$$
+```
 
 A real-axis point lies on the locus if an odd number of poles and zeros lie to its right: the segments are $[-1, 0]$, $[-4, -2]$ and $(-\infty, -6]$.
 
@@ -340,15 +340,15 @@ A real-axis point lies on the locus if an odd number of poles and zeros lie to i
 
 Solving $|G(j\omega)| = 1$ numerically gives $\omega_{gc} \approx 3.01$ rad/s. Then
 
-$$
+```math
 PM = 180^\circ - 90^\circ - \arctan(3.01) - \arctan(0.301) \approx 1.6^\circ
-$$
+```
 
 A delay adds phase lag $\omega\tau$ without changing the magnitude, so instability occurs when $\omega_{gc}\tau = PM$ (in radians):
 
-$$
+```math
 \tau = \frac{1.6^\circ \times \pi/180}{3.01} \approx 0.009 \text{ s}
-$$
+```
 
 A delay of only about 9 ms destabilizes the loop, which confirms the very small margins found in the example.
 

@@ -124,11 +124,11 @@ Regression models predict continuous values. In CFD, this could involve estimati
 
 - Gaussian Process Regression: Provides probabilistic predictions along with uncertainty estimates, which is especially useful for risk assessment in engineering. Given training data $\{(\mathbf{x}_i, y_i)\}$, a GP models the output as a distribution $y^* \sim \mathcal{N}(\mu^*, \sigma^{*2})$ for a new input $\mathbf{x}^*$, where the predictive mean and variance are:
 
-  $$
+  ```math
   \mu^* = \mathbf{k}_*^T (\mathbf{K} + \sigma_n^2 \mathbf{I})^{-1} \mathbf{y},
   \qquad \sigma^{*2} = k(\mathbf{x}^*, \mathbf{x}^*) - \mathbf{k}_*^T
   (\mathbf{K} + \sigma_n^2 \mathbf{I})^{-1} \mathbf{k}_*
-  $$
+  ```
 
   Here $\mathbf{K}$ is the kernel matrix over training points, $\mathbf{k}_*$ is the kernel vector between the test point and training points, and $\sigma_n^2$ is the noise variance. The built-in uncertainty quantification makes GPR particularly valuable for adaptive sampling and Bayesian optimization in CFD design studies.
 

@@ -192,10 +192,10 @@ ASCII Diagram: Pattern Recognition
 
 Convert pixels to metres, then divide by $\Delta t = 5 \times 10^{-4}$ s:
 
-$$
+```math
 u = \frac{6.4 \times 25 \times 10^{-6}}{5 \times 10^{-4}} = 0.32 \text{ m/s},
 \qquad v = \frac{-1.2 \times 25 \times 10^{-6}}{5 \times 10^{-4}} = -0.06 \text{ m/s}
-$$
+```
 
 </details>
 
@@ -221,9 +221,9 @@ $R(0) = 1.0$, $R(1) = 5.5$, $R(2) = 10.5$, $R(3) = 9.0$, $R(4) = 3.5$. The integ
 
 With $R_- = 5.5$, $R_0 = 10.5$ and $R_+ = 9.0$:
 
-$$
+```math
 \varepsilon = \frac{\ln 5.5 - \ln 9.0}{2(\ln 5.5 - 2\ln 10.5 + \ln 9.0)} \approx 0.31
-$$
+```
 
 so $s^* \approx 2.31$ px.
 

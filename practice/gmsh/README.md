@@ -5,7 +5,7 @@ Gmsh is a versatile open-source 3D finite element mesh generator with a built-in
 ## Table of Contents
 
 | Guide | Description | Level |
-|-------|-------------|-------|
+| --- | --- | --- |
 | [Introduction to Gmsh](intro.md) | Installation, basic workflow, scripting fundamentals, and the `.geo` language | Beginner |
 | [Volume Mesh Generation](generate_volume_mesh.md) | Generating 3D volume meshes from STL files, quality control, and Python API usage | Intermediate |
 | [Boolean Operations](boolean_operations.md) | Combining, cutting, and fragmenting geometries using OpenCASCADE boolean operations | Intermediate |
@@ -79,7 +79,7 @@ See [Volume Mesh Generation](generate_volume_mesh.md) for a full walkthrough.
 ## Useful Command-Line Flags
 
 | Flag | Purpose |
-|------|---------|
+| --- | --- |
 | `-1`, `-2`, `-3` | Generate 1D, 2D, or 3D mesh |
 | `-o <file>` | Specify output file |
 | `-format msh2` | Force MSH version 2 output (OpenFOAM compatible) |

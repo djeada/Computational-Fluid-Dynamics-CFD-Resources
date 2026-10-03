@@ -402,11 +402,11 @@ Energy enters only the streamwise component. Pressure–strain redistributes it 
 
 **Derivation.** Boussinesq gives $-\overline{u'v'} = \nu_t\,dU/dy$. With $dU/dy = u_\tau/(\kappa y)$, this becomes $u_\tau^2 = \nu_t\,u_\tau/(\kappa y)$, so
 
-$$
+```math
 \nu_t = \kappa\, u_\tau\, y
 \qquad \Longrightarrow
 \qquad \frac{\nu_t}{\nu} = \kappa\, y^ +
-$$
+```
 
 **Values.** $\nu_t/\nu = 41$ at $y^+ = 100$ and $410$ at $y^+ = 1{,}000$.
 

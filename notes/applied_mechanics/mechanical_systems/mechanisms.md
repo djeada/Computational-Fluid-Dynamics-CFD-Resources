@@ -530,16 +530,16 @@ Position: $x = 0.05\cos 60^\circ + 0.1953 = 0.2203$ m. The approximate formula g
 
 Velocity:
 
-$$
+```math
 v = -r\omega\sin\theta - \frac{r^2\omega\cos\theta\sin\theta}{l\cos\phi} = -13.60 -
 1.74 = -15.35 \text{ m/s}
-$$
+```
 
 Acceleration, term by term:
 
-$$
+```math
 a = -2467.4 + 631.8 - 15.5 = -1851 \text{ m/s}^2
-$$
+```
 
 At top dead centre, $\phi = 0$ and $a = -r\omega^2(1 + r/l) = -4934.8 \times 1.25 = -6169$ m/s², about 630 g. This is the source of the large inertia forces in high-speed engines.
 
@@ -568,10 +568,10 @@ The cycloidal law has the higher peak acceleration but finite jerk, which is why
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \omega_c = \frac{\omega_s + \alpha\omega_r}{1 + \alpha} = \frac{1000 + 4(-200)}{5} = 40
 \text{ rpm}
-$$
+```
 
 The carrier is stationary when $\omega_s + \alpha\omega_r = 0$, i.e. $\omega_r = -1000/4 = -250$ rpm. This two-input behaviour is the basis of power-split and differential drives.
 

@@ -310,13 +310,13 @@ Wind loading analysis links the atmospheric boundary layer physics to structural
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 V(100) = 30 \times 10^{0.22} = 49.8 \text{ m/s}
-$$
+```
 
-$$
+```math
 \frac{q(100)}{q(10)} = \left(10^{0.22}\right)^2 = 2.75
-$$
+```
 
 </details>
 
@@ -325,13 +325,13 @@ $$
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 u_* = \frac{\kappa V(10)}{\ln(10/0.3)} = \frac{0.41 \times 30}{3.51} = 3.51 \text{ m/s}
-$$
+```
 
-$$
+```math
 V(100) = \frac{3.51}{0.41}\ln \frac{100}{0.3} = 8.56 \times 5.81 = 49.7 \text{ m/s}
-$$
+```
 
 This is almost identical to the power-law result, as expected when the exponent is matched to the terrain.
 
@@ -366,15 +366,15 @@ Mode 1 locks in at 16 m/s, a wind speed that occurs frequently, so both fatigue 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 F = \int_0^H \frac{1}{2}\rho V_{ref}^2\left(\frac{z}{z_{ref}}\right)^{2\alpha}C_D B\,
 dz = \frac{\frac{1}{2}\rho V_{ref}^2 C_D B\,H^{2\alpha+1}}{(2\alpha+1)z_{ref}^{2\alpha}} = 4.11 \text{ MN}
-$$
+```
 
-$$
+```math
 M = \int_0^H z\, q(z)C_D B\,
 dz = \frac{\frac{1}{2}\rho V_{ref}^2 C_D B\,H^{2\alpha+2}}{(2\alpha+2)z_{ref}^{2\alpha}} = 243 \text{ MN·m}
-$$
+```
 
 The effective height is $M/F = 59.0$ m. It lies above mid-height (50 m) because pressure increases with height. These are mean values only; a gust effect factor must be applied for design.
 

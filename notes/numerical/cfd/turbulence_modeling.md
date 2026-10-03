@@ -281,9 +281,9 @@ The mean-flow kinetic energy is $\tfrac{1}{2}\overline{u}^2 = 50$ m²/s², so $k
 
 Integrating $\frac{d}{dy}\overline{u'v'} + \frac{1}{\rho}\frac{dp}{dx} = \nu\frac{d^2\overline{u}}{dy^2}$ from 0 to $y$, and using $d\overline{u}/dy = 0$ and $\overline{u'v'} = 0$ at the centreline (symmetry):
 
-$$
+```math
 \nu \frac{d\overline{u}}{dy} - \overline{u'v'} = \frac{y}{\rho} \frac{dp}{dx}
-$$
+```
 
 The total (viscous plus turbulent) shear stress varies linearly across the channel.
 

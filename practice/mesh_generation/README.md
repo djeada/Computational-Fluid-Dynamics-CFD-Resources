@@ -20,8 +20,9 @@ This guide covers various tools and methodologies for generating high-quality 3D
 ## Mesh Types
 
 ### Structured Meshes
+
 - **Definition**: Regular grid with clear i,j,k indexing
-- **Advantages**: 
+- **Advantages**:
   - Higher accuracy per cell
   - Better convergence properties
   - Memory efficient
@@ -31,6 +32,7 @@ This guide covers various tools and methodologies for generating high-quality 3D
 - **Applications**: Simple geometries, high-accuracy requirements
 
 ### Unstructured Meshes
+
 - **Definition**: Irregular connectivity, typically tetrahedral/triangular
 - **Advantages**:
   - Handle complex geometries easily
@@ -42,6 +44,7 @@ This guide covers various tools and methodologies for generating high-quality 3D
 - **Applications**: Complex geometries, rapid prototyping
 
 ### Hybrid Meshes
+
 - **Definition**: Combination of structured and unstructured elements
 - **Advantages**:
   - Best of both worlds
@@ -54,7 +57,7 @@ This guide covers various tools and methodologies for generating high-quality 3D
 ### Essential Metrics
 
 | Metric | Good Range | Description |
-|--------|------------|-------------|
+| --- | --- | --- |
 | **Aspect Ratio** | < 100 | Length/width ratio |
 | **Skewness** | < 0.85 | Deviation from ideal shape |
 | **Orthogonality** | > 30° | Angle between face normal and edge |
@@ -77,13 +80,16 @@ gmsh -check mesh.msh
 ## Open Source Tools
 
 ### 1. Gmsh
-**Strengths**: 
+
+**Strengths**:
+
 - Excellent 3D meshing algorithms
 - CAD integration
 - Scripting capabilities
 - Free and cross-platform
 
 **Installation**:
+
 ```bash
 # Ubuntu/Debian
 sudo apt install gmsh
@@ -99,6 +105,7 @@ sudo make install
 ```
 
 **Basic Usage**:
+
 ```bash
 # Interactive GUI
 gmsh
@@ -111,13 +118,16 @@ python3 -c "import gmsh; gmsh.initialize(); gmsh.open('model.step'); gmsh.model.
 ```
 
 ### 2. Salome Platform
+
 **Strengths**:
+
 - Complete CAD-to-mesh workflow
 - Advanced meshing algorithms
 - Python scripting
 - Integration with multiple solvers
 
 **Installation**:
+
 ```bash
 # Download from https://www.salome-platform.org/
 wget https://files.salome-platform.org/Salome/Salome9.9.0/SALOME-9.9.0-native-UB20.04-SRC.tar.gz
@@ -127,12 +137,15 @@ cd SALOME-9.9.0-native-UB20.04-SRC
 ```
 
 ### 3. Netgen/NGSolve
+
 **Strengths**:
+
 - Excellent tetrahedral meshing
 - Automatic mesh generation
 - Integration with FEniCS
 
 **Installation**:
+
 ```bash
 # Ubuntu/Debian
 sudo apt install netgen
@@ -142,25 +155,32 @@ pip3 install netgen-mesher
 ```
 
 ### 4. TetGen
+
 **Strengths**:
+
 - Robust tetrahedral meshing
 - Delaunay triangulation
 - Quality mesh generation
 
 **Usage**:
+
 ```bash
 # Generate mesh from .poly file
 tetgen -pq1.2a0.1 geometry.poly
 ```
 
 ### 5. CGAL Mesh Generation
+
 **Strengths**:
+
 - High-quality algorithms
 - C++ library
 - 2D/3D meshing
 
 ### 6. Meshlab
+
 **Strengths**:
+
 - Mesh processing and repair
 - STL manipulation
 - Surface reconstruction
@@ -168,6 +188,7 @@ tetgen -pq1.2a0.1 geometry.poly
 ## Commercial Tools (for Reference)
 
 ### High-End Solutions
+
 - **ANSYS Meshing**: Industry standard, excellent automation
 - **Altair HyperMesh**: Preprocessing powerhouse
 - **Hexagon MSC Apex**: Modern meshing platform
@@ -177,6 +198,7 @@ tetgen -pq1.2a0.1 geometry.poly
 ## Meshing Workflows
 
 ### Basic Workflow
+
 ```mermaid
 graph TD
     A[CAD Geometry] --> B[Geometry Cleanup]
@@ -192,6 +214,7 @@ graph TD
 ### Example: Gmsh Workflow
 
 #### 1. Geometry Creation
+
 ```cpp
 // geometry.geo
 Point(1) = {0, 0, 0, 0.1};
@@ -213,6 +236,7 @@ Extrude {0, 0, 1} {
 ```
 
 #### 2. Mesh Generation
+
 ```bash
 # Generate 3D mesh
 gmsh -3 geometry.geo
@@ -226,6 +250,7 @@ gmsh geometry.msh -o mesh.unv
 ```
 
 #### 3. Quality Assessment
+
 ```bash
 # Check in Gmsh
 gmsh mesh.msh -check
@@ -237,6 +262,7 @@ gmsh mesh.msh -info
 ## Boundary Layer Meshing
 
 ### Why Boundary Layers Matter
+
 - Capture near-wall gradients
 - Resolve viscous effects
 - Critical for CFD accuracy
@@ -244,6 +270,7 @@ gmsh mesh.msh -info
 ### Prismatic Layer Generation
 
 #### Gmsh Approach
+
 ```cpp
 // In .geo file
 Field[1] = BoundaryLayer;
@@ -257,17 +284,20 @@ Background Field = 1;
 ```
 
 #### Layer Parameters
+
 - **First layer height**: y+ ≈ 1 for wall-resolved
 - **Growth ratio**: 1.1-1.3 typical
 - **Number of layers**: 10-20 for good resolution
 
 ### y+ Calculation
+
 ```
 y+ = (y * u_tau) / nu
 u_tau = sqrt(tau_wall / rho)
 ```
 
 For y+ = 1:
+
 ```
 y = nu / u_tau ≈ nu / (0.05 * U_inf) for flat plate
 ```
@@ -275,6 +305,7 @@ y = nu / u_tau ≈ nu / (0.05 * U_inf) for flat plate
 ## Advanced Techniques
 
 ### Adaptive Mesh Refinement (AMR)
+
 ```cpp
 // OpenFOAM refinement
 refineMesh -dict system/refineMeshDict
@@ -285,6 +316,7 @@ refineMesh -overwrite
 ```
 
 ### Mesh Morphing
+
 ```bash
 # OpenFOAM mesh motion
 moveDynamicMesh
@@ -294,6 +326,7 @@ gmsh -setnumber param 0.5 geometry.geo
 ```
 
 ### Parallel Meshing
+
 ```bash
 # Gmsh parallel
 mpirun -np 4 gmsh -3 -part 4 geometry.geo
@@ -305,6 +338,7 @@ decomposePar -force
 ## Best Practices
 
 ### General Guidelines
+
 1. **Start Simple**: Begin with coarse mesh, refine as needed
 2. **Quality First**: Prioritize mesh quality over quantity
 3. **Gradual Transitions**: Avoid sudden size changes
@@ -312,13 +346,15 @@ decomposePar -force
 5. **Validation**: Always verify mesh independence
 
 ### Size Guidelines
+
 | Application | Typical Cell Count | y+ Range |
-|-------------|-------------------|----------|
+| --- | --- | --- |
 | Simple validation | 10K - 100K | 30-300 |
 | Engineering analysis | 100K - 1M | 1-30 |
 | Research/detailed | 1M+ | < 1 |
 
 ### Common Pitfalls
+
 - **Over-meshing**: More cells ≠ better results
 - **Poor transitions**: Sudden size changes cause errors
 - **Neglecting boundaries**: Poor wall resolution
@@ -327,6 +363,7 @@ decomposePar -force
 ## Mesh Generation Scripts
 
 ### Python Automation (Gmsh)
+
 ```python
 import gmsh
 import sys
@@ -366,6 +403,7 @@ gmsh.finalize()
 ```
 
 ### Bash Automation
+
 ```bash
 #!/bin/bash
 # mesh_study.sh

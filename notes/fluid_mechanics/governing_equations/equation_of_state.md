@@ -498,11 +498,11 @@ Ideal gas: $p = R_u T/v_m = 8.314 \times 300/(5 \times 10^{-4}) = 4.99$ MPa.
 
 Van der Waals:
 
-$$
+```math
 p = \frac{R_u T}{v_m - b} - \frac{a}{v_m^2} = \frac{2494.2}{4.573 \times 10^{-4}} -
 \frac{0.364}{2.5 \times 10^{-7}} = 5.454 \times 10^6 - 1.456 \times 10^6 = 4.00
 \text{ MPa}
-$$
+```
 
 $z = p v_m/(R_u T) = 0.80$. With $z < 1$, attraction dominates, and the ideal gas law overpredicts the pressure by about 25%.
 
@@ -527,10 +527,10 @@ Helium's small molar mass (large $R$) and larger $\gamma$ give it almost three t
 
 Quality is a mass fraction, so specific volumes add:
 
-$$
+```math
 v = x v_g + (1 - x) v_l = 0.1 \times 1.672 + 0.9 \times 0.001043 = 0.1681 \text{ m}^3/
 \text{kg}
-$$
+```
 
 giving $\rho = 1/v = 5.95$ kg/m³.
 

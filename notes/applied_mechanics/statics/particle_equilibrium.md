@@ -361,9 +361,9 @@ The principles learned here extend directly to rigid body equilibrium, where mom
 
 By symmetry, vertical equilibrium gives $2T\sin 15^\circ = mg = 196.2$ N, so
 
-$$
+```math
 T = \frac{196.2}{2\sin 15^\circ} = 379 \text{ N}
-$$
+```
 
 This is almost twice the weight. As the angle tends to zero, $T \to \infty$, so a cable can never be pulled perfectly straight under a transverse load.
 
@@ -376,17 +376,17 @@ This is almost twice the weight. As the angle tends to zero, $T \to \infty$, so 
 
 From $\sum F_x = 0$: $T_1 = T_2\cos\theta_2/\cos\theta_1$. Substituting into $\sum F_y = 0$:
 
-$$
+```math
 T_2\left(\frac{\cos\theta_2\sin\theta_1}{\cos\theta_1} + \sin\theta_2\right) = W
 \implies T_2\, \frac{\sin(\theta_1 + \theta_2)}{\cos\theta_1} = W
-$$
+```
 
 This gives the stated results. With $W = 981$ N, $\theta_1 = 30^\circ$ and $\theta_2 = 45^\circ$:
 
-$$
+```math
 T_1 = \frac{981\cos 45^\circ}{\sin 75^\circ} = 718 \text{ N}, \quad
 T_2 = \frac{981\cos 30^\circ}{\sin 75^\circ} = 880 \text{ N}
-$$
+```
 
 The steeper cable carries more load.
 
@@ -397,10 +397,10 @@ The steeper cable carries more load.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 k_{eq} = \left(\frac{1}{1000} + \frac{1}{1500}\right)^{-1} = 600 \text{ N/m}, \quad
 x = \frac{50 \times 9.81}{600} = 0.818 \text{ m}
-$$
+```
 
 This is more than four times the parallel deflection of 0.196 m. In series each spring carries the full weight; in parallel the springs share it.
 
@@ -413,9 +413,9 @@ This is more than four times the parallel deflection of 0.196 m. In series each 
 
 Solving the linear system, for instance with a matrix solve:
 
-$$
+```math
 T_A = 103.1 \text{ N}, \quad T_B = 266.5 \text{ N}, \quad T_C = 209.8 \text{ N}
-$$
+```
 
 Check for $x$: $0.6(103.1) - 2(266.5)/\sqrt{33} + 209.8/\sqrt{46} = 61.9 - 92.8 + 30.9 \approx 0$.
 

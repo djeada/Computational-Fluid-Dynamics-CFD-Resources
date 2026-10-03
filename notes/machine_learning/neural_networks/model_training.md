@@ -163,10 +163,10 @@ Relative MAE depends on the chosen baseline, so the reference value must be repo
 
 With zero-mean errors, MSE $\approx 0.0115^2 = 1.32 \times 10^{-4}$. Since $R^2 = 1 - \text{MSE}/\text{Var}(y)$:
 
-$$
+```math
 \text{Var}(y) = \frac{1.32 \times 10^{-4}}{1 - 0.61} \approx 3.39 \times 10^{-4},
 \qquad \text{std}(y) \approx 0.0184
-$$
+```
 
 The test designs differ in $C_d$ by only about 0.018, so an error spread of 0.0115 (62% of that) leaves much of the variance unexplained, even though it is small relative to $C_d$ itself. $R^2$ measures the ability to rank and separate designs; relative MAE measures absolute accuracy. Design studies usually care about the former.
 

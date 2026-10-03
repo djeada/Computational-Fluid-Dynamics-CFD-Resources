@@ -14,26 +14,27 @@ $ python -m pip install --user virtualenv
 - If you’re on Windows and have multiple Python versions, ensure you’re invoking the correct Python executable.
 
 ### Create a Virtual Environment
+
 Next, create a new virtual environment in a directory of your choice. The example below places it into a folder named `venv`.
 
 ```sh
 $ python -m virtualenv venv
 ```
 
-- You can name the environment directory anything you like (e.g., `myenv`, `ParaViewEnv`).  
+- You can name the environment directory anything you like (e.g., `myenv`, `ParaViewEnv`).
 - This command will create a folder (`venv`) that contains a standalone Python installation and all its dependencies.
 
 ### Activate the Virtual Environment
 
 Once the environment is created, **activate** it so that installations happen inside this isolated environment.
 
-  ```sh
-  $ source ./venv/bin/activate
-  ```
+```sh
+$ source ./venv/bin/activate
+```
 
-  ```powershell
-  > .\venv\Scripts\activate
-  ```
+```powershell
+> .\venv\Scripts\activate
+```
 
 You should now see your shell prompt prefixed with `(venv)` or a similar indicator.
 
@@ -45,10 +46,11 @@ With the virtual environment active, install any needed packages (e.g., `pandas`
 (venv) $ pip install pandas
 (venv) $ pip install matplotlib
 ```
+
 These packages will remain isolated to the `venv` directory and will not interfere with system-wide installations or ParaView’s built-in environment.
 
-
 ### Deactivate the Virtual Environment
+
 When you have finished installing the necessary packages, you can **deactivate** the environment:
 
 ```sh
@@ -90,19 +92,19 @@ from paraview.simple import *
 
 The script works as follows:
 
-I. We look for a command-line argument `--virtual-env <path_to_env>`.  
-II. We build the path to `activate_this.py`, which is an internal script that sets up `sys.path` and environment variables to include packages from your `venv`.  
+I. We look for a command-line argument `--virtual-env <path_to_env>`.\
+II. We build the path to `activate_this.py`, which is an internal script that sets up `sys.path` and environment variables to include packages from your `venv`.\
 III. We call `exec(open(virtualEnv).read(), ...)` (or `execfile` for Python 2) to dynamically run the activation script before importing external packages.
 
-
 ### Run Your Script with `pvpython`
+
 Now you can invoke **ParaView**’s Python interpreter `pvpython` with your script, passing it the path to your environment:
 
 ```sh
 $ pvpython my_script.py --virtual-env venv
 ```
 
-- `my_script.py` is your Python file containing both the environment activation logic and your ParaView code.  
+- `my_script.py` is your Python file containing both the environment activation logic and your ParaView code.
 - `--virtual-env venv` is the command-line argument that points to your virtual environment directory.
 
 ParaView will load your script, detect the `--virtual-env` argument, activate the environment, and then proceed to import modules from within that environment, such as `pandas`.
@@ -158,8 +160,8 @@ ParaView’s interpreter will now recognize and import modules like `pandas` or 
 
 ### Troubleshooting Tips
 
-- The path to *venv* must be verified to ensure that the location of `activate_this.py` is accurate and that the virtual environment has been properly created.  
-- Binary incompatibilities may occur if ParaView’s internal Python was built with a differing set of *libraries*, which can lead to issues particularly with C-compiled packages such as `numpy` or `scipy`.  
-- A mismatch in the Python *version* can lead to conflicts, so it is advisable to create the virtual environment using the same Python version that ParaView utilizes internally.  
-- Installation challenges related to *permissions* might require administrative rights or the use of user-space directories, such as installing with the `--user` flag, to prevent any restrictions.  
+- The path to *venv* must be verified to ensure that the location of `activate_this.py` is accurate and that the virtual environment has been properly created.
+- Binary incompatibilities may occur if ParaView’s internal Python was built with a differing set of *libraries*, which can lead to issues particularly with C-compiled packages such as `numpy` or `scipy`.
+- A mismatch in the Python *version* can lead to conflicts, so it is advisable to create the virtual environment using the same Python version that ParaView utilizes internally.
+- Installation challenges related to *permissions* might require administrative rights or the use of user-space directories, such as installing with the `--user` flag, to prevent any restrictions.
 - Adjustments for different *operating systems* are necessary, as the activation file’s path structure varies between Windows (e.g., `/Scripts/activate_this.py`) and Linux/macOS (e.g., `/bin/activate_this.py`).

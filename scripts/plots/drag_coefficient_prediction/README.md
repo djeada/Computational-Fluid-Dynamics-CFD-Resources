@@ -16,19 +16,27 @@ This script compares two synthetic drag-coefficient predictors with reference va
 
 The drag coefficient non-dimensionalises the drag force $F_D$ on a body:
 
-$$C_d = \frac{F_D}{\frac{1}{2}\rho U^2 A}$$
+$$
+C_d = \frac{F_D}{\frac{1}{2}\rho U^2 A}
+$$
 
 where $\rho$ is the fluid density, $U$ the free-stream velocity, and $A$ the reference area.
 
 ### Synthetic Data
 
-$$C_{d,i} = 0.15 + 0.2\, r_i, \qquad C_{d,pred,i} = C_{d,i} + 0.025\,(2 s_i - 1), \qquad r_i, s_i \sim \mathcal{U}(0, 1)$$
+$$
+C_{d,i} = 0.15 + 0.2\, r_i,
+\qquad C_{d,pred,i} = C_{d,i} + 0.025\,(2 s_i - 1),
+\qquad r_i, s_i \sim \mathcal{U}(0, 1)
+$$
 
 ### Linear Regression
 
 For each predictor the slope $m$ and intercept $b$ minimise the residual sum of squares:
 
-$$\min_{m,\,b}\sum_{i=1}^{N}\left(C_{d,pred,i} - m\,C_{d,i} - b\right)^2$$
+$$
+\min_{m,\,b}\sum_{i=1}^{N}\left(C_{d,pred,i} - m\, C_{d,i} - b\right)^2
+$$
 
 which gives $m = \dfrac{\sum_i (C_{d,i} - \bar{C}_d)(C_{d,pred,i} - \bar{C}_{d,pred})}{\sum_i (C_{d,i} - \bar{C}_d)^2}$ and $b = \bar{C}_{d,pred} - m\,\bar{C}_d$.
 
@@ -36,7 +44,9 @@ which gives $m = \dfrac{\sum_i (C_{d,i} - \bar{C}_d)(C_{d,pred,i} - \bar{C}_{d,p
 
 A perfect model has slope 1 and intercept 0. The legend reports $R^2$ measured about that identity line, not about the fitted line:
 
-$$R^2 = 1 - \frac{\sum_i (C_{d,pred,i} - C_{d,i})^2}{\sum_i (C_{d,i} - \bar{C}_d)^2}$$
+$$
+R^2 = 1 - \frac{\sum_i (C_{d,pred,i} - C_{d,i})^2}{\sum_i (C_{d,i} - \bar{C}_d)^2}
+$$
 
 With uniform errors of half-width 0.025 and reference values spread over a range of 0.2, the expected value is $R^2 \approx 1 - (0.05^2/12)/(0.2^2/12) = 0.9375$.
 
@@ -55,7 +65,7 @@ python main.py --no-show --output out   # save drag_coefficient_prediction.png i
 ```
 
 | Flag | Meaning |
-|------|---------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure as a PNG |
 

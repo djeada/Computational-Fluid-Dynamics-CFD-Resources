@@ -379,9 +379,9 @@ General guidance:
 
 **Stress-to-energy ratio.** With $\mathcal{P}_k = \varepsilon$ and $-\overline{u'v'} = \nu_t\,dU/dy$:
 
-$$
+```math
 (\overline{u'v'})^2 = \nu_t\cdot\nu_t\left(\frac{dU}{dy}\right)^2 = \nu_t\,\varepsilon = C_\mu k^2
-$$
+```
 
 so $-\overline{u'v'}/k = C_\mu^{1/2} = 0.3$.
 

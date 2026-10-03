@@ -191,9 +191,9 @@ Halving the cell size multiplies the count by 8 in 3D. Uniform meshes are unaffo
 
 At each interior node, $-T_{i-1} + 2T_i - T_{i+1} = h^2 = 0.0625$, giving
 
-$$
+```math
 \begin{bmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{bmatrix}\begin{bmatrix} T_1 \\ T_2 \\ T_3 \end{bmatrix} = \begin{bmatrix} 0.0625 \\ 0.0625 \\ 0.0625 \end{bmatrix}
-$$
+```
 
 The solution is $T = (0.09375, 0.125, 0.09375)$.
 

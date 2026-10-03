@@ -235,14 +235,14 @@ From $\delta_e = -(C_{m_0} + C_{m_\alpha}\alpha)/C_{m_{\delta_e}}$: raising $\al
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 V_H = \frac{S_{tail}\,l_{tail}}{Sc} = \frac{3.6 \times 4.5}{16 \times 1.5} = 0.675
-$$
+```
 
-$$
+```math
 C_{m_{\delta_e}} = -\eta_e V_H C_{L_{\alpha_{tail}}} = -0.45 \times 0.675 \times
 4.3 = -1.31 \text{ per rad}
-$$
+```
 
 </details>
 
@@ -253,9 +253,9 @@ $$
 
 $\alpha = 0.0873$ rad, so $C_{m_0} + C_{m_\alpha}\alpha = 0.06 - 0.0873 = -0.0273$.
 
-$$
+```math
 \delta_e = -\frac{-0.0273}{-1.31} = -0.0209 \text{ rad} = -1.20^\circ
-$$
+```
 
 That is 1.2° trailing edge up, consistent with Exercise 1.
 
@@ -266,9 +266,9 @@ That is 1.2° trailing edge up, consistent with Exercise 1.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 SM = \frac{0.62 - 0.45}{1.5} = 0.113 \ (11.3\%), \quad C_{m_\alpha} = -5.2 \times 0.113 = -0.59 \text{ per rad}
-$$
+```
 
 For $SM \geq 0.05$: $x_{CG} \leq 0.62 - 0.05 \times 1.5 = 0.545$ m. The aft CG limit is therefore 0.545 m, and loading must keep the CG ahead of it.
 
@@ -279,9 +279,9 @@ For $SM \geq 0.05$: $x_{CG} \leq 0.62 - 0.05 \times 1.5 = 0.545$ m. The aft CG l
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 T \approx \pi \sqrt{2} \times \frac{60}{9.81} = 27 \text{ s}
-$$
+```
 
 The phugoid is a slow exchange of height and speed at nearly constant angle of attack, so a pilot has plenty of time to correct it even when it is lightly damped. The short-period mode involves angle of attack and pitch rate over about a second, faster than a pilot can respond without risking pilot-induced oscillation. It therefore needs good natural damping ($C_{m_q}$) or a stability augmentation system.
 

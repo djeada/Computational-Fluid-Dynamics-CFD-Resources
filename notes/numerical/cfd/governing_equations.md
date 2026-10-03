@@ -138,9 +138,9 @@ $$
 
 - Lagrangian conservation law: mass is conserved, or the rate of change of a given mass is zero:
 
-  $$
+  ```math
   \frac{dm}{dt} = 0
-  $$
+  ```
 
 - Substitute into the RTT and swap the right and left sides of the equality:
 
@@ -158,9 +158,9 @@ $$
 
   - We have surface forces $\vec{F}$, and body forces (denoted with external field $\vec{g}$, nominally gravitational acceleration):
 
-    $$
+    ```math
     \frac{dm\vec{v}}{dt} = \int_A \vec{F}dA + \int_V\vec{g}\rho dV
-    $$
+    ```
 
   - Consider viscous and pressure forces, so that $\vec{F} = -\boldsymbol{\tau}\cdot\vec{n} - P\boldsymbol{\delta}\cdot{\vec{n}}$, where $\boldsymbol{\tau}$ is the viscous stress tensor, and $\boldsymbol{\delta}$ is the unit tensor.
 
@@ -168,10 +168,10 @@ $$
 
   - This gives
 
-    $$
+    ```math
     \frac{dm\vec{v}}{dt} = -\int_A\boldsymbol{\tau}\cdot\vec{n}dA -
     \int_AP\boldsymbol{\delta}\cdot\vec{n}dA + \int_V\vec{g}\rho dV
-    $$
+    ```
 
 - Substitute into the RTT and swap the right and left sides of the equality:
 
@@ -191,10 +191,10 @@ $$
 
 - Lagrangian conservation law: the rate of change of energy of a given mass is the sum of the heat transfered to the mass and the work performed on the mass:
 
-  $$
+  ```math
   \frac{dE}{dt} = -\int_A\vec{q}\cdot\vec{n}dA + \int_A\vec{F}\cdot\vec{v}dA +
   \int_V\rho\vec{g}\cdot\vec{v}dV
-  $$
+  ```
 
   - Here, $\vec{q}$ is the heat flux vector. As before, $\vec{F} = -\boldsymbol{\tau}\cdot\vec{n} - P\boldsymbol{\delta}\cdot{\vec{n}}$.
   - The symmetry of $\boldsymbol{\tau}$ and $\boldsymbol{\delta}$ let us write $\boldsymbol{\tau}\cdot\vec{n}\cdot\vec{v} = \boldsymbol{\tau}\cdot\vec{v}\cdot\vec{n}$ and $P\boldsymbol{\delta}\cdot\vec{n}\cdot\vec{v} = P\boldsymbol{\delta}\cdot\vec{v}\cdot\vec{n}$.
@@ -216,9 +216,9 @@ $$
 
   - Replace integrals over the surface area with volume integrals by applying the Gauss Divergence Theorem:
 
-    $$
+    ```math
     \int_A\vec{v}\cdot\vec{n}\, dA = \int_V \nabla\cdot\vec{v}\, dV
-    $$
+    ```
 
     where $\vec{v}$ is some vector (not necessarily velocity).
 
@@ -285,9 +285,9 @@ This note presents the three governing equations of fluid dynamics—continuity,
 
 In steady flow the volume integral does not change, so $\int_A \rho\vec{v}\cdot\vec{n}\,dA = 0$. With $\vec{n}$ pointing outward, the inlet contributes $-\rho_1 V_1 A_1$ and the outlet $+\rho_2 V_2 A_2$:
 
-$$
+```math
 V_2 = \frac{\rho_1 V_1 A_1}{\rho_2 A_2} = \frac{1.2 \times 10 \times 0.05}{1.5 \times 0.02} = 20 \text{ m/s}
-$$
+```
 
 with a mass flow rate of 0.6 kg/s.
 
@@ -315,10 +315,10 @@ $du/dy = 5/10^{-3} = 5000$ s$^{-1}$, so $\Phi = 0.1 \times 5000^2 = 2.5 \times 1
 
 With no conduction and no convective temperature change, $\rho c_p\, \partial T/\partial t = \Phi$:
 
-$$
+```math
 \frac{\partial T}{\partial t} = \frac{2.5 \times 10^6}{870 \times 1900} \approx 1.5
 \text{ K/s}
-$$
+```
 
 In lubrication and high-shear flows $\Phi$ cannot be neglected.
 
@@ -331,11 +331,11 @@ In lubrication and high-shear flows $\Phi$ cannot be neglected.
 
 Using $\nabla\cdot(\nabla\vec{v}) = \nabla^2\vec{v}$ and $\nabla\cdot(\nabla\vec{v}^T) = \nabla(\nabla\cdot\vec{v})$:
 
-$$
+```math
 \nabla\cdot\boldsymbol{\tau} = \mu\nabla^2\vec{v} + \mu\nabla(\nabla\cdot\vec{v}) +
 \left(\mu_v - \tfrac{2}{3}\mu\right)\nabla(\nabla\cdot\vec{v}) = \mu\nabla^2\vec{v} +
 \left(\tfrac{\mu}{3} + \mu_v\right)\nabla(\nabla\cdot\vec{v})
-$$
+```
 
 This matches the compressible form. For incompressible flow $\nabla\cdot\vec{v} = 0$, so only $\mu\nabla^2\vec{v}$ remains.
 

@@ -119,9 +119,9 @@ Here's a simple table comparing some common airfoils based on their general char
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 C_{D_i} = \frac{C_L^2}{\pi e\,AR} = \frac{0.64}{\pi \times 0.9 \times 20} = 0.0113
-$$
+```
 
 $C_D \approx 0.008 + 0.0113 = 0.0193$, so $L/D \approx 0.8/0.0193 = 41$.
 

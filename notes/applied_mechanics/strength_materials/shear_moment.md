@@ -334,10 +334,10 @@ The total load is $w_0L/2 = 36$ kN, acting at $2L/3 = 4$ m from A. Hence $R_B = 
 
 With $w(x) = 2x$ kN/m, $V(x) = 12 - x^2$, which is zero at $x = \sqrt{12} = 3.46$ m.
 
-$$
+```math
 M(x) = 12x - \frac{x^3}{3} \implies M_{max} = 12(3.46) - \frac{3.46^3}{3} = 27.7
 \text{ kN}\cdot \text{m}
-$$
+```
 
 This agrees with the formula $w_0L^2/(9\sqrt{3})$.
 
@@ -365,9 +365,9 @@ $\sum M_A$: $6R_B = 80(4)$, so $R_B = 53.3$ kN and $R_A = 26.7$ kN.
 
 In AB, $V = 26.7 - 10x$, which is zero at $x = 2.67$ m:
 
-$$
+```math
 M_{max}^+ = 26.7(2.67) - 5(2.67)^2 = 35.6 \text{ kN}\cdot\text{m}
-$$
+```
 
 At B, $M_B = -10(2)^2/2 = -20$ kN·m (hogging, from the overhang).
 
@@ -386,9 +386,9 @@ Vertical equilibrium: $V - w\,dx - (V + dV) = 0$, so $dV/dx = -w$.
 
 Moments about the right face:
 
-$$
+```math
 -M + (M + dM) - V\, dx + w\, dx\, \frac{dx}{2} = 0
-$$
+```
 
 Dropping the second-order term gives $dM/dx = V$.
 

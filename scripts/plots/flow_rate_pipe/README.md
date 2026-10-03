@@ -14,11 +14,15 @@ This script computes the volumetric flow rate $Q = \pi r^2 v$ of a circular pipe
 
 ### Cross-Sectional Area
 
-$$A = \pi r^2$$
+$$
+A = \pi r^2
+$$
 
 ### Volumetric Flow Rate
 
-$$Q = A\, v = \pi r^2 v \quad [\text{m}^3/\text{s}]$$
+$$
+Q = A\, v = \pi r^2 v \quad [\text{m}^3/ \text{s}]
+$$
 
 For the defaults, $A = \pi (0.1)^2 = 0.0314\ \text{m}^2$ and $Q = 0.0628\ \text{m}^3/\text{s}$.
 
@@ -26,7 +30,9 @@ For the defaults, $A = \pi (0.1)^2 = 0.0314\ \text{m}^2$ and $Q = 0.0628\ \text{
 
 The script treats $v$ as the same across the whole section:
 
-$$u(r') = v \quad \text{for } 0 \le r' \le r$$
+$$
+u(r') = v \quad \text{for } 0 \le r' \le r
+$$
 
 For a real, non-uniform profile the same formula holds if $v$ is the area-averaged velocity $\bar{u} = \frac{1}{A}\int_A u\, dA$. A laminar Hagen–Poiseuille profile, for example, has $\bar{u} = u_{\max}/2$. If the density $\rho$ is known, the mass flow rate is $\dot{m} = \rho Q$; the script does not compute it.
 
@@ -44,7 +50,7 @@ python main.py --no-show --output out   # save flow_rate_pipe.png into out/
 ```
 
 | Flag | Meaning |
-|------|---------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure as a PNG |
 

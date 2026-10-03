@@ -5,6 +5,7 @@ This section contains hands-on CFD projects that demonstrate real-world applicat
 ## 🚀 Featured Projects
 
 ### Aerospace Applications
+
 - [Drone Project](https://youtu.be/X-Q08HQq7fM?si=n_5W2VJY9BvWjr4a) - Complete drone design and analysis
 - [Small Rocket Computer](https://youtu.be/5TTcbMv5tDc?si=XUwWln8Km-Z_V0T-) - Guidance and control systems
 - [Actively Stabilized Rocket](https://youtu.be/4xEx2EQIPD4?si=8Vg7Im0T49_BTtTc) - Advanced stability analysis
@@ -12,24 +13,28 @@ This section contains hands-on CFD projects that demonstrate real-world applicat
 ## 📋 Project Categories
 
 ### 🏢 Industrial Applications
+
 - **HVAC System Analysis**: Building ventilation and air conditioning
 - **Heat Exchanger Design**: Thermal performance optimization
 - **Pump and Fan Design**: Turbomachinery applications
 - **Mixing Vessel Analysis**: Chemical process equipment
 
 ### 🚗 Automotive Projects
+
 - **External Aerodynamics**: Drag and lift analysis
 - **Engine Cooling**: Thermal management systems
 - **Brake Cooling**: Thermal analysis of brake discs
 - **Underhood Airflow**: Component cooling optimization
 
 ### 🌊 Environmental Flows
+
 - **Wind Farm Analysis**: Turbine wake interactions
 - **River and Ocean Flows**: Environmental fluid mechanics
 - **Atmospheric Boundary Layer**: Weather and climate modeling
 - **Pollution Dispersion**: Environmental impact assessment
 
 ### 🏭 Process Industries
+
 - **Chemical Reactor Design**: Mixing and reaction optimization
 - **Fluidized Bed Analysis**: Particle-fluid interactions
 - **Spray and Injection**: Atomization and mixing
@@ -38,6 +43,7 @@ This section contains hands-on CFD projects that demonstrate real-world applicat
 ## 🛠️ Project Structure
 
 Each project follows this standardized structure:
+
 ```
 project_name/
 ├── README.md              # Project overview and objectives
@@ -57,6 +63,7 @@ project_name/
 ## 🎯 Getting Started Guide
 
 ### Prerequisites
+
 - Basic CFD knowledge
 - Familiarity with Linux command line
 - OpenFOAM or other CFD solver installed
@@ -64,6 +71,7 @@ project_name/
 - Python for data analysis
 
 ### Project Workflow
+
 1. **Problem Definition**: Understanding the physics and objectives
 2. **Geometry Preparation**: CAD cleanup and simplification
 3. **Mesh Generation**: Creating appropriate computational grid
@@ -77,18 +85,21 @@ project_name/
 ## 📊 Difficulty Levels
 
 ### Beginner Projects (🟢)
+
 - [Lid-Driven Cavity](lid_driven_cavity.md) — complete benchmark tutorial with validation ⭐
 - [Flow Over Cylinder](flow_over_cylinder.md) — vortex shedding and Strouhal number analysis ⭐
 - Simple pipe flow
 - Natural convection
 
 ### Intermediate Projects (🟡)
+
 - External vehicle aerodynamics
 - Heat exchanger analysis
 - Turbulent mixing
 - Multiphase flows
 
 ### Advanced Projects (🔴)
+
 - Turbomachinery design
 - Combustion systems
 - Fluid-structure interaction
@@ -97,6 +108,7 @@ project_name/
 ## 💡 Learning Objectives
 
 By completing these projects, you will:
+
 - Understand complete CFD workflow
 - Learn mesh generation techniques
 - Master boundary condition setup
@@ -107,18 +119,21 @@ By completing these projects, you will:
 ## 📚 Additional Resources
 
 ### Validation Databases
+
 - NASA Turbulence Modeling Resource
 - ERCOFTAC Database
 - NIST Flow Database
 - Experimental Fluid Mechanics Papers
 
 ### Industry Standards
+
 - AIAA Guidelines for CFD
 - ASME Verification and Validation
 - ISO Standards for CFD
 - Best Practice Guidelines
 
 ### Software Resources
+
 - OpenFOAM User Guide
 - ParaView Documentation
 - Gmsh Manual
@@ -127,6 +142,7 @@ By completing these projects, you will:
 ## 🤝 Contributing
 
 To contribute a new project:
+
 1. Follow the standard project structure
 2. Include comprehensive documentation
 3. Provide validation data where possible
@@ -136,6 +152,7 @@ To contribute a new project:
 ## 📞 Support
 
 For project-specific questions:
+
 - Check project README files
 - Review documentation folders
 - Examine validation data

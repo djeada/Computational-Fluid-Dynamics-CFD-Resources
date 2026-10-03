@@ -134,9 +134,9 @@ Techniques:
 - Bayesian Optimization:\
   A particularly effective surrogate-based strategy that models the cost function using a Gaussian process (GP) and selects new evaluation points by maximizing an acquisition function such as Expected Improvement (EI):
 
-  $$
+  ```math
   \text{EI}(\mathbf{x}) = \mathbb{E}\bigl[\max(f_{\min} - f(\mathbf{x}),\; 0)\bigr]
-  $$
+  ```
 
   where $f_{\min}$ is the best objective value observed so far. The GP provides both a predicted mean and an uncertainty estimate at each candidate point, allowing the optimizer to balance exploitation (evaluating near known good regions) with exploration (sampling where uncertainty is high). This makes Bayesian optimization highly sample-efficient, often converging in tens of evaluations rather than the hundreds needed by gradient-free methods.
 

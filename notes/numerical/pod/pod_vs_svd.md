@@ -170,9 +170,9 @@ $\mathbf{R} = \mathbf{I}$, so the spatial modes are $(1, 0)$ and $(0, 1)$. The l
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \mathbf{C}_s = \frac{1}{2}\begin{pmatrix} 2 & 0 & -2 \\ 0 & 2 & -2 \\ -2 & -2 & 4 \end{pmatrix} = \begin{pmatrix} 1 & 0 & -1 \\ 0 & 1 & -1 \\ -1 & -1 & 2 \end{pmatrix}
-$$
+```
 
 - $\mathbf{C}_s(1, 1, -2) = (3, 3, -6)$, eigenvalue 3.
 - $\mathbf{C}_s(1, -1, 0) = (1, -1, 0)$, eigenvalue 1.

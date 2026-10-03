@@ -253,10 +253,10 @@ $\mathrm{Kn} = 6.9 \times 10^{-8} / 5 \times 10^{-5} \approx 1.4 \times 10^{-3}$
 
 Because $\nabla \cdot u = 0$, the divergence of $\partial u/\partial t$ and of $\eta \nabla^2 u$ both vanish. For the convective term,
 
-$$
+```math
 \partial_i \left(u_j \partial_j u_i \right) = \partial_i u_j \, \partial_j u_i + u_j
 \partial_j \left(\partial_i u_i \right) = \partial_i u_j \, \partial_j u_i
-$$
+```
 
 so $\rho \, \partial_i u_j \, \partial_j u_i = -\nabla^2 p$.
 

@@ -37,7 +37,8 @@ so the profile can be written as $u(r) = u_{max}\left(1 - (r/R)^2\right)$, which
 The velocity gradient $du/dr = -2u_{max}r/R^2$ is zero on the centreline and steepest at the wall, so the shear stress is largest there:
 
 $$
-\tau_w = -\mu\frac{du}{dr}\bigg|_{r=R} = \frac{2\mu u_{max}}{R} = \frac{\Delta p\, R}{2L}
+\tau_w = -\mu
+\frac{du}{dr}\bigg|_{r=R} = \frac{2\mu u_{max}}{R} = \frac{\Delta p\, R}{2L}
 $$
 
 ### No-Slip Condition
@@ -61,7 +62,7 @@ python main.py --no-show --output . # save wall_shear_pipe_cross_section.png wit
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 

@@ -135,9 +135,9 @@ Compares inertial forces to surface tension (important in droplet breakup or spr
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 h = \frac{2\sigma\cos\theta}{\rho g r} = \frac{2 \times 0.0728 \times 1}{998 \times 9.81 \times 0.0005} = 0.0297 \text{ m}
-$$
+```
 
 The water rises about 29.7 mm. Halving the radius would double the rise.
 
@@ -163,9 +163,9 @@ The tiny droplet carries a pressure excess large enough to matter in cavitation 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 h = \frac{2 \times 0.485 \times \cos 140^\circ}{13534 \times 9.81 \times 0.001} = -0.0056 \text{ m}
-$$
+```
 
 The negative sign means the level is depressed by about 5.6 mm, with a convex meniscus, as expected for $\theta > 90^\circ$.
 

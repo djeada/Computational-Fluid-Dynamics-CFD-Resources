@@ -16,7 +16,9 @@ This script solves a randomly generated maze by computing a potential that satis
 
 Each open cell $c$ that is not the entrance or exit satisfies the graph Laplace equation over its open neighbours $\mathcal{N}(c)$:
 
-$$\sum_{n\in\mathcal{N}(c)} \left(\phi_c - \phi_n\right) = 0$$
+$$
+\sum_{n\in\mathcal{N}(c)} \left(\phi_c - \phi_n\right) = 0
+$$
 
 This is the 5-point finite-difference form of $\nabla^2\phi = 0$. Neighbours that are walls are left out of the sum, which imposes the zero-flux condition $\partial\phi/\partial n = 0$. The Dirichlet values $\phi_{\text{entrance}} = 0$ and $\phi_{\text{exit}} = 1$ move to the right-hand side, giving a symmetric positive-definite system $A\boldsymbol{\phi} = \mathbf{b}$.
 
@@ -28,7 +30,13 @@ Think of the maze as an electrical network with a unit voltage applied between t
 
 Starting from $\mathbf{r}_0 = \mathbf{b} - A\boldsymbol{\phi}_0$ and $\mathbf{d}_0 = \mathbf{r}_0$, each iteration computes
 
-$$\alpha_k = \frac{\mathbf{r}_k^\top\mathbf{r}_k}{\mathbf{d}_k^\top A\mathbf{d}_k}, \quad \boldsymbol{\phi}_{k+1} = \boldsymbol{\phi}_k + \alpha_k\mathbf{d}_k, \quad \mathbf{r}_{k+1} = \mathbf{r}_k - \alpha_k A\mathbf{d}_k, \quad \mathbf{d}_{k+1} = \mathbf{r}_{k+1} + \frac{\mathbf{r}_{k+1}^\top\mathbf{r}_{k+1}}{\mathbf{r}_k^\top\mathbf{r}_k}\mathbf{d}_k$$
+$$
+\alpha_k = \frac{\mathbf{r}_k^\top\mathbf{r}_k}{\mathbf{d}_k^\top A\mathbf{d}_k}, \quad
+\boldsymbol{\phi}_{k+1} = \boldsymbol{\phi}_k + \alpha_k\mathbf{d}_k, \quad
+\mathbf{r}_{k+1} = \mathbf{r}_k - \alpha_k A\mathbf{d}_k, \quad
+\mathbf{d}_{k+1} = \mathbf{r}_{k+1} +
+\frac{\mathbf{r}_{k+1}^\top\mathbf{r}_{k+1}}{\mathbf{r}_k^\top\mathbf{r}_k}\mathbf{d}_k
+$$
 
 and stops when $\lVert\mathbf{r}_k\rVert \le 10^{-10}\,\lVert\mathbf{b}\rVert$.
 

@@ -385,14 +385,14 @@ Hydroelasticity extends classical structural analysis into the fluid domain, rev
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 m_a = C_a\rho \frac{\pi D^2}{4} = 1025 \times \frac{\pi \times 0.25}{4} = 201
 \text{ kg/m}
-$$
+```
 
-$$
+```math
 \frac{f_{n,fluid}}{f_{n,vacuum}} = \sqrt{\frac{150}{150 + 201}} = 0.653
-$$
+```
 
 The natural frequency drops by about 35%.
 
@@ -414,10 +414,10 @@ In a staggered scheme the fluid force is computed from the previous structural a
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 L = \frac{\pi}{U_{cr}} \sqrt{\frac{EI}{m_f}} = \frac{\pi}{10} \times 414.0 = 130
 \text{ m}
-$$
+```
 
 A 130 m unsupported steel span is unrealistic, so divergence is not a practical concern for stiff steel piping at normal flow speeds. It becomes relevant for soft hoses, where $EI$ is orders of magnitude smaller.
 
@@ -430,15 +430,15 @@ A 130 m unsupported steel span is unrealistic, so divergence is not a practical 
 
 At resonance the inertia and stiffness terms cancel, so the velocity amplitude is $V = |F_{exc}|/(b_{rad} + b_{pto})$. The mean absorbed power is
 
-$$
+```math
 P = \frac{1}{2}b_{pto}V^2 = \frac{1}{2} \frac{b_{pto}|F_{exc}|^2}{(b_{rad} + b_{pto})^2}
-$$
+```
 
 Setting $dP/db_{pto} = 0$ gives $b_{pto} = b_{rad}$, and then $P_{max} = \frac{|F_{exc}|^2}{8b_{rad}}$.
 
-$$
+```math
 P_{max} = \frac{(5 \times 10^5)^2}{8 \times 2 \times 10^5} = 156 \text{ kW}
-$$
+```
 
 </details>
 
@@ -447,9 +447,9 @@ $$
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 k \geq \frac{4\pi^2 m_{eff}}{T_n^2} = 39.48 \times 27\,546 = 1.09 \text{ MN/m}
-$$
+```
 
 Using only the dry mass (15 000 kg) would suggest that 0.59 MN/m is enough. With that stiffness the real submerged system would have a period of about 1.36 s, closer to the range excited by vessel motion and waves. Added mass nearly doubles the inertia, so resonance checks, heave-compensator tuning and snap-load assessments must use wet properties.
 

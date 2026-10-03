@@ -62,7 +62,7 @@ python main.py --no-show --output out --steps 10  # stop after at most 10 iterat
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 | `--steps N` | Maximum number of iterations (default 50000) |

@@ -298,11 +298,11 @@ The boundary integral $\int_\Gamma v D\,\partial u/\partial n\,d\gamma$ then van
 
 The boundary term no longer vanishes. It becomes $\int_\Gamma v\,q\,d\gamma$, so the diffusion term is $\int_\Gamma q v\,d\gamma - \int_\Omega D\nabla u\cdot\nabla v\,d\omega$. Following the same steps:
 
-$$
+```math
 \int_\Omega u^{n+1}v\, d\omega + \Delta t\int_\Omega D\nabla u^{n+1}\cdot\nabla v\,
 d\omega + \Delta t\int_\Omega s\, u^{n+1}v\, d\omega = \int_\Omega u^n v\, d\omega +
 \Delta t\int_\Gamma q^{n+1}v\, d\gamma
-$$
+```
 
 The prescribed flux appears only on the right-hand side, as a load term.
 
@@ -318,9 +318,9 @@ The prescribed flux appears only on the right-hand side, as a load term.
 
 After assembly, the weak form becomes
 
-$$
+```math
 \left[(1 + \Delta t\, s)M + \Delta t\, K\right]U^{n+1} = M U^n
-$$
+```
 
 The system matrix is symmetric positive definite, so a linear solve is needed at every step.
 
@@ -333,10 +333,10 @@ The system matrix is symmetric positive definite, so a linear solve is needed at
 
 With $h = 1$, $M$ has diagonal $1/3$ and off-diagonal $1/6$, and $K$ has diagonal $1$ and off-diagonal $-1$. The system $(M + 0.1K)U^1 = MU^0$ reads
 
-$$
+```math
 \frac{13}{30}U_1 + \frac{1}{15}U_2 = \frac{1}{3},
 \qquad \frac{1}{15}U_1 + \frac{13}{30}U_2 = \frac{1}{6}
-$$
+```
 
 Adding the equations gives $U_1 + U_2 = 1$. Subtracting gives $U_1 - U_2 = 5/11$. So $U^1 = (8/11, 3/11) = (0.727, 0.273)$.
 
@@ -351,10 +351,10 @@ For one linear element, $\int u_h\,dx = (U_1 + U_2)/2$, which is $0.5$ both befo
 
 With $v = u^{n+1}$,
 
-$$
+```math
 \| u^{n+1}\|^2 + \Delta t\int_\Omega D|\nabla u^{n+1}|^2 d\omega + \Delta t\int_\Omega
 s\,(u^{n+1})^2 d\omega = (u^n, u^{n+1}) \le \| u^n\|\,\| u^{n+1}\|
-$$
+```
 
 The last step uses the Cauchy–Schwarz inequality. The two integrals on the left are non-negative, so $\|u^{n+1}\|^2 \le \|u^n\|\,\|u^{n+1}\|$, which gives $\|u^{n+1}\| \le \|u^n\|$ for any $\Delta t > 0$. The discrete solution can never grow, unlike the explicit scheme with its $\Delta t \le h^2/(2D)$ limit.
 

@@ -169,10 +169,10 @@ Direct POD: $\mathbf{C} = \begin{pmatrix} 5 & 4 & 1 \\ 4 & 5 & 2 \\ 1 & 2 & 1 \e
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \mathbf{C}\,(\mathbf{U}^T a) = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}\mathbf{U}^T
 a = \mathbf{U}^T\mathbf{C}_s a = \lambda\,\mathbf{U}^T a
-$$
+```
 
 $\mathbf{U}^T a \neq 0$ because $\|\mathbf{U}^T a\|^2 = a^T\mathbf{U}\mathbf{U}^T a = (m-1)\,a^T\mathbf{C}_s a = (m-1)\lambda > 0$. Dividing by the square root of this norm gives a unit spatial mode, $\phi = \mathbf{U}^T a/\sqrt{(m-1)\lambda}$. In Exercise 2, $m - 1 = 1$ and the norms were $\sqrt{\lambda}$.
 
@@ -187,9 +187,9 @@ $A_s$ is an orthogonal $m \times m$ matrix, so $A_s\mathbf{\Phi}_s^T = A_s A_s^T
 
 With $\phi_k = \mathbf{U}^T a_k/\sqrt{(m-1)\lambda_k}$:
 
-$$
+```math
 \mathbf{U}\phi_k = \frac{\mathbf{U}\mathbf{U}^T a_k}{\sqrt{(m-1)\lambda_k}} = \frac{(m-1)\lambda_k\,a_k}{\sqrt{(m-1)\lambda_k}} = \sqrt{(m-1)\lambda_k}\; a_k
-$$
+```
 
 So the snapshot eigenvectors are the time coefficients rescaled to unit norm; this is the scaling step mentioned in the note. For Exercise 2, $\mathbf{U}\phi_1 = 3.0873 \times (0.6618, 0.7497) = (2.0432, 2.3144)$.
 

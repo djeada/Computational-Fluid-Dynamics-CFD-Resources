@@ -318,10 +318,10 @@ Rigid body kinematics provides the motion description needed for kinetics, where
 
 $\omega_0 = 1800 \times 2\pi/60 = 188.5$ rad/s, so $\alpha = -188.5/30 = -6.28$ rad/s².
 
-$$
+```math
 \theta = \frac{\omega_0 t}{2} = \frac{188.5 \times 30}{2} = 2827 \text{ rad} = 450
 \text{ rev}
-$$
+```
 
 </details>
 
@@ -332,9 +332,9 @@ $$
 
 $\omega = v_C/R = 10$ rad/s (clockwise), with the IC at the contact point. The point is at $(R, R)$ relative to the IC, a distance $\sqrt{2}R = 0.424$ m away.
 
-$$
+```math
 v = \omega \sqrt{2}R = 10 \times 0.424 = 4.24 \text{ m/s}
-$$
+```
 
 It is directed perpendicular to the line from the IC: $45^\circ$ below the horizontal, forward and down. Its components are $(3, -3)$ m/s.
 
@@ -372,10 +372,10 @@ The contact point has zero velocity but not zero acceleration, which is why the 
 
 Differentiating with $\dot{\theta} = \omega$ and $r = OA$, $l = AB$:
 
-$$
+```math
 v_B = -r\omega\sin\theta -
 \frac{r^2\omega\sin\theta\cos\theta}{\sqrt{l^2 - r^2\sin^2\theta}}
-$$
+```
 
 At $\theta = 60^\circ$: $\sqrt{0.09 - 0.0075} = 0.2872$ m, so $v_B = -0.866 - 0.151 = -1.017$ m/s, i.e. 1.02 m/s toward $O$.
 

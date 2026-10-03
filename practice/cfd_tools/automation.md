@@ -15,6 +15,7 @@ This guide covers automated workflows, scripting techniques, and best practices 
 ## Automation Philosophy
 
 ### Why Automate CFD?
+
 - **Reproducibility**: Consistent results across runs
 - **Efficiency**: Reduce manual effort and errors
 - **Scalability**: Handle large parameter studies
@@ -22,6 +23,7 @@ This guide covers automated workflows, scripting techniques, and best practices 
 - **Quality**: Standardized procedures and checks
 
 ### Automation Levels
+
 1. **Basic**: Shell scripts for common tasks
 2. **Intermediate**: Python frameworks for workflows
 3. **Advanced**: Complete automation with monitoring
@@ -30,6 +32,7 @@ This guide covers automated workflows, scripting techniques, and best practices 
 ## Scripting Frameworks
 
 ### Python CFD Framework
+
 ```python
 #!/usr/bin/env python3
 """
@@ -394,6 +397,7 @@ if __name__ == "__main__":
 ### Bash Automation Scripts
 
 #### Mesh Convergence Study
+
 ```bash
 #!/bin/bash
 # mesh_convergence.sh
@@ -504,6 +508,7 @@ echo "Plot saved as: mesh_convergence.png"
 ```
 
 #### Automated Quality Checks
+
 ```bash
 #!/bin/bash
 # quality_check.sh
@@ -604,6 +609,7 @@ echo "Quality check completed!"
 ## Best Practices Summary
 
 ### Workflow Organization
+
 ```
 project/
 ├── config/                 # Configuration files
@@ -617,6 +623,7 @@ project/
 ```
 
 ### Version Control Integration
+
 ```bash
 # Git hooks for CFD projects
 # pre-commit hook
@@ -628,6 +635,7 @@ done
 ```
 
 ### Continuous Integration
+
 ```yaml
 # .github/workflows/cfd-tests.yml
 name: CFD Validation Tests

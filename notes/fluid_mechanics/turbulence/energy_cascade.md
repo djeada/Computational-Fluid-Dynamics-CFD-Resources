@@ -277,9 +277,9 @@ A tenfold increase in $\varepsilon$ reduces $\eta$ only by $10^{1/4} = 1.78$. Su
 
 **Dissipation.** Invert $E_{11} = C_1\varepsilon^{2/3}\kappa_1^{-5/3}$:
 
-$$
+```math
 \varepsilon = \left(\frac{E_{11}\,\kappa_1^{5/3}}{C_1}\right)^{3/2} = \left(\frac{2.0 \times 10^{-4} \times 100^{5/3}}{0.49}\right)^{3/2} = 0.82\ \mathrm{m^2/s^3}
-$$
+```
 
 **Frequency.** By Taylor's hypothesis, $f = \kappa_1 U/(2\pi) = 159$ Hz.
 
@@ -307,10 +307,10 @@ This is why DNS Reynolds numbers grow only slowly with hardware.
 
 Integrate the inertial-range spectrum from $\kappa$ upward:
 
-$$
+```math
 \int_\kappa^\infty C\varepsilon^{2/3}\kappa'^{-5/3}\,
 d\kappa' = \frac{3}{2}C\,\varepsilon^{2/3}\kappa^{-2/3}
-$$
+```
 
 With $\ell = 1/\kappa$ this becomes $\frac{3}{2}C\,(\varepsilon\ell)^{2/3} \sim u(\ell)^2$. The coefficient is $\frac{3}{2}(1.5) = 2.25$, of order one. The kinetic energy of eddies of size $\ell$ and smaller scales as $(\varepsilon\ell)^{2/3}$, exactly as the dimensional argument in physical space predicts.
 

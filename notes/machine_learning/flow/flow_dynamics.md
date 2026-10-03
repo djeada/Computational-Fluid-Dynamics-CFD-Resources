@@ -190,9 +190,9 @@ The eigenvalues are $0.9 \pm 0.2i$, with $|\lambda| \approx 0.922$ and phase $\a
 
 Take $\mathbf{z} = (x, y, x^2)$. Then $x^2_{k+1} = \lambda^2 x_k^2$, so
 
-$$
+```math
 \mathbf{z}_{k+1} = \begin{bmatrix} \lambda & 0 & 0 \\ 0 & \mu & c \\ 0 & 0 & \lambda^2 \end{bmatrix} \mathbf{z}_k
-$$
+```
 
 The matrix is upper triangular, so its eigenvalues are $\lambda$, $\mu$ and $\lambda^2$.
 
@@ -218,11 +218,11 @@ With two bias vectors per gate (as in PyTorch) the LSTM part becomes $4(640 + 40
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \frac{\partial u}{\partial x} +
 \frac{\partial v}{\partial y} = \frac{\partial^2 \psi}{\partial x \partial y} -
 \frac{\partial^2 \psi}{\partial y \partial x} = 0
-$$
+```
 
 because mixed partial derivatives commute for a smooth $\psi$.
 

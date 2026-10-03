@@ -313,9 +313,9 @@ Advancements in technology are driving significant changes in the design, effici
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 S = \frac{2mg}{\rho V^2 C_L} = \frac{2 \times 75\,000 \times 9.81}{0.38 \times 230^2 \times 0.5} = 146 \text{ m}^2
-$$
+```
 
 Low-speed requirements usually decide the final size: the stall and approach speed for a given $C_{L_{max}}$ with flaps, and the takeoff field length. Initial cruise altitude capability and fuel volume in the wing also play a part. A larger wing lowers these speeds but adds weight and friction drag in cruise.
 
@@ -326,10 +326,10 @@ Low-speed requirements usually decide the final size: the stall and approach spe
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 C_{D_i}(AR = 9) = \frac{0.25}{\pi \times 0.8 \times 9} = 0.0111, \quad
 C_{D_i}(AR = 11) = 0.0090
-$$
+```
 
 That is an 18% reduction. A longer, slenderer wing has a larger root bending moment and a thinner structural box, which means more structural weight, more flexibility (aeroelastic and flutter concerns) and less fuel volume. Airport gate span limits also apply, which is one reason for folding wingtips on some recent designs.
 
@@ -340,9 +340,9 @@ That is an 18% reduction. A longer, slenderer wing has a larger root bending mom
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 T = 300 \times (330 - 230) = 30 \text{ kN}, \quad \eta_p = \frac{2}{1 + 330/230} = 0.82
-$$
+```
 
 For a given thrust, accelerating a large mass flow by a small velocity increment wastes less kinetic energy in the jet than accelerating a small mass flow by a large one. High bypass ratios exploit this, at the cost of larger fan diameter, nacelle drag and weight.
 
@@ -353,10 +353,10 @@ For a given thrust, accelerating a large mass flow by a small velocity increment
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 2N_f = \left(\frac{250}{1000}\right)^{1/b} = 0.25^{-10} = 1.05 \times 10^6 \implies
 N_f = 5.2 \times 10^5 \text{ cycles}
-$$
+```
 
 At 225 MPa: $2N_f = 0.225^{-10} = 3.0 \times 10^6$, so $N_f = 1.5 \times 10^6$ cycles.
 
@@ -369,9 +369,9 @@ Life increases by $(250/225)^{10} = 2.87$. Because the exponent is small in magn
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 SM_{fwd} = \frac{2.2 - 0.9}{4} = 0.325, \quad SM_{aft} = \frac{2.2 - 1.8}{4} = 0.10
-$$
+```
 
 - Forward CG: very stable, but a large nose-down moment must be trimmed by tail down-load. This adds trim drag and requires enough elevator authority to rotate at takeoff and flare at landing; it usually sizes the horizontal tail.
 - Aft CG: lower trim drag and lighter control forces, but reduced stability and damping. It sets the minimum acceptable static margin.

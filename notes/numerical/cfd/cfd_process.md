@@ -372,10 +372,10 @@ $p$ approaches 1, the formal order of the backward difference. This is what a gr
 
 $f_3 = 0.409600$ (coarse), $f_2 \approx 0.389744$ and $f_1 \approx 0.379085$ (fine).
 
-$$
+```math
 p = \frac{\ln\left((f_3 - f_2)/(f_2 - f_1)\right)}{\ln 2} \approx 0.90,
 \qquad f_{\text{ext}} = f_1 + \frac{f_1 - f_2}{2^p - 1} \approx 0.36673
-$$
+```
 
 This is within $-0.0011$ of $e^{-1} = 0.367879$, whereas the finest grid alone is off by $+0.0112$.
 

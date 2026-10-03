@@ -79,27 +79,27 @@ When acceleration is constant ($a = $ constant), we have:
 
 1. **Velocity as function of time:**
 
-   $$
+   ```math
    v(t) = v_0 + at
-   $$
+   ```
 
 2. **Position as function of time:**
 
-   $$
+   ```math
    x(t) = x_0 + v_0 t + \frac{1}{2}at^2
-   $$
+   ```
 
 3. **Velocity-position relationship:**
 
-   $$
+   ```math
    v^2 = v_0^2 + 2a(x - x_0)
-   $$
+   ```
 
 4. **Average velocity:**
 
-   $$
+   ```math
    v_{avg} = \frac{v_0 + v}{2}
-   $$
+   ```
 
 ### Example 1: Projectile Motion (Vertical)
 
@@ -522,9 +522,9 @@ This foundation in describing motion prepares for the next step: understanding w
 
 $t = \frac{v_0}{a} = \frac{25}{6} = 4.17$ s. From $v^2 = v_0^2 + 2a(x - x_0)$ with $v = 0$:
 
-$$
+```math
 x - x_0 = \frac{25^2}{2 \times 6} = 52.1 \text{ m}
-$$
+```
 
 </details>
 
@@ -568,15 +568,15 @@ The particle stops ($v = 0$) at $x = v_0/k = 40$ m. It approaches this distance 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 \rho = \frac{\left[1 + (dy/dx)^2\right]^{3/2}}{|d^2y/dx^2|} = \frac{(1 + 0)^{3/2}}{1/100} = 100 \text{ m}
-$$
+```
 
 $a_n = v^2/\rho = 400/100 = 4$ m/s², directed upward toward the centre of curvature. With $a_t = 2$ m/s²:
 
-$$
+```math
 a = \sqrt{2^2 + 4^2} = 4.47 \text{ m/s}^2
-$$
+```
 
 </details>
 

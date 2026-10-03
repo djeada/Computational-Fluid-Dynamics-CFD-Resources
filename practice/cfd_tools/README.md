@@ -17,7 +17,7 @@ This directory contains detailed information about open-source computational flu
 ### Major Open Source CFD Solvers
 
 | Solver | License | Language | Strengths | Applications |
-|--------|---------|----------|-----------|--------------|
+| --- | --- | --- | --- | --- |
 | **OpenFOAM** | GPL | C++ | General purpose, large community | All CFD applications |
 | **SU2** | LGPL | C++ | Optimization, adjoint methods | Design optimization |
 | **Code_Saturne** | GPL | C/Fortran | Industrial applications | Power, nuclear, HVAC |
@@ -28,6 +28,7 @@ This directory contains detailed information about open-source computational flu
 ### Detailed Solver Profiles
 
 #### OpenFOAM
+
 ```yaml
 Website: https://www.openfoam.org/
 Repository: https://github.com/OpenFOAM/OpenFOAM-dev
@@ -53,6 +54,7 @@ Solvers:
 ```
 
 #### SU2
+
 ```yaml
 Website: https://su2code.github.io/
 Repository: https://github.com/su2code/SU2
@@ -76,6 +78,7 @@ Strengths:
 ```
 
 #### Code_Saturne
+
 ```yaml
 Website: https://www.code-saturne.org/
 Developer: EDF (Électricité de France)
@@ -104,6 +107,7 @@ Applications:
 ### OpenFOAM Installation
 
 #### Ubuntu/Debian
+
 ```bash
 # Official repository method
 sudo sh -c "wget -O - https://dl.openfoam.org/gpg.key | apt-key add -"
@@ -117,6 +121,7 @@ source ~/.bashrc
 ```
 
 #### Docker Installation
+
 ```bash
 # Pull image
 docker pull openfoam/openfoam11-paraview510
@@ -126,6 +131,7 @@ docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pw
 ```
 
 #### Compilation from Source
+
 ```bash
 # Dependencies
 sudo apt-get install build-essential cmake git ca-certificates
@@ -183,6 +189,7 @@ sudo make install
 ### Geometry and CAD
 
 #### FreeCAD
+
 ```yaml
 Purpose: Parametric 3D CAD modeler
 License: LGPL
@@ -192,6 +199,7 @@ CFD Integration: Direct export to mesh generators
 ```
 
 #### OpenSCAD
+
 ```yaml
 Purpose: Script-based 3D CAD
 License: GPL
@@ -201,6 +209,7 @@ Usage: Geometric primitives via scripting
 ```
 
 #### Salome Platform
+
 ```yaml
 Purpose: Complete CAD-to-simulation platform
 License: LGPL
@@ -214,6 +223,7 @@ Installation: Download from salome-platform.org
 ### Meshing Tools Detailed
 
 #### Gmsh
+
 ```bash
 # Installation
 sudo apt install gmsh
@@ -233,6 +243,7 @@ gmsh.finalize()
 ```
 
 #### Netgen
+
 ```bash
 # Installation
 sudo apt install netgen
@@ -254,6 +265,7 @@ mesh.Export('sphere.msh', 'Gmsh2 Format')
 ## Post-Processing Tools
 
 ### ParaView
+
 ```yaml
 Installation: sudo apt install paraview
 Capabilities:
@@ -270,6 +282,7 @@ OpenFOAM Integration:
 ```
 
 ### VisIt
+
 ```yaml
 Installation: Download from visit.llnl.gov
 Strengths:
@@ -283,6 +296,7 @@ Usage:
 ```
 
 ### Matplotlib (Python)
+
 ```python
 # CFD-specific plotting
 import matplotlib.pyplot as plt
@@ -303,6 +317,7 @@ def plot_residuals(logfile):
 ## Workflow Automation
 
 ### Python Workflow Framework
+
 ```python
 #!/usr/bin/env python3
 """
@@ -401,6 +416,7 @@ if __name__ == "__main__":
 ### Bash Automation Scripts
 
 #### Parametric Study Script
+
 ```bash
 #!/bin/bash
 # parametric_study.sh
@@ -451,6 +467,7 @@ python3 plot_results.py
 ### OpenFOAM Performance Tips
 
 #### Parallel Scaling
+
 ```bash
 # Domain decomposition methods
 decomposePar -method scotch        # Good load balancing
@@ -460,6 +477,7 @@ decomposePar -method manual        # Manual specification
 ```
 
 #### Linear Solver Settings
+
 ```cpp
 // system/fvSolution - optimized for performance
 solvers
@@ -489,6 +507,7 @@ solvers
 ```
 
 ### Memory Optimization
+
 ```bash
 # Reduce memory usage
 export FOAM_SIGFPE=false           # Disable floating point exceptions
@@ -499,6 +518,7 @@ ulimit -s unlimited                # Unlimited stack size
 ## Integration Examples
 
 ### OpenFOAM + Python Integration
+
 ```python
 # PyFoam integration
 from PyFoam.RunDictionary.SolutionDirectory import SolutionDirectory
@@ -518,6 +538,7 @@ print(f"Max pressure: {p_field.max()}")
 ```
 
 ### Automated Optimization Loop
+
 ```python
 import scipy.optimize as opt
 

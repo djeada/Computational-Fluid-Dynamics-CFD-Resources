@@ -334,16 +334,16 @@ For the same torque and outer radius, $\tau \propto 1/J$, so the hollow shaft is
 
 $J = \pi(0.030)^4/32 = 7.95 \times 10^{-8}$ m⁴:
 
-$$
+```math
 \phi = \frac{TL}{GJ} = \frac{318.3 \times 1.2}{80 \times 10^9 \times 7.95 \times 10^{-8}} = 0.0600 \text{ rad} = 3.44^\circ
-$$
+```
 
 That is $2.87^\circ$/m, too much. For $1^\circ$/m $= 0.01745$ rad/m:
 
-$$
+```math
 J \geq \frac{318.3}{80 \times 10^9 \times 0.01745} = 2.28 \times 10^{-7} \text{ m}^4
 \implies d \geq \left(\frac{32J}{\pi}\right)^{1/4} = 39.0 \text{ mm}
-$$
+```
 
 Stiffness, not strength, governs here, so use a 40 mm shaft.
 
@@ -358,9 +358,9 @@ $T_A = T_0 L_2/L = 1500 \times 0.7 = 1050$ N·m and $T_B = 450$ N·m. The shorte
 
 Shear stress $16T/(\pi d^3)$: 42.8 MPa in AC and 18.3 MPa in CB.
 
-$$
+```math
 \phi_C = \frac{T_A L_1}{GJ} = \frac{1050 \times 0.3}{80 \times 10^9 \times 6.14 \times 10^{-7}} = 6.42 \times 10^{-3} \text{ rad} = 0.37^\circ
-$$
+```
 
 </details>
 
@@ -371,9 +371,9 @@ $$
 
 $A_m = 0.1^2 = 0.01$ m²:
 
-$$
+```math
 \tau = \frac{T}{2A_m t} = \frac{3000}{2 \times 0.01 \times 0.004} = 37.5 \text{ MPa}
-$$
+```
 
 Corners concentrate stress in practice, so generous corner radii are used.
 

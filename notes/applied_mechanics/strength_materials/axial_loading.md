@@ -317,10 +317,10 @@ Cutting each segment and looking at the free end:
 - BC carries the load at C: $N_{BC} = -20$ kN (compression)
 - AB carries both loads: $N_{AB} = 50 - 20 = 30$ kN (tension)
 
-$$
+```math
 \delta_C = \frac{30\,000 \times 1000}{400 \times 200\,000} +
 \frac{-20\,000 \times 500}{200 \times 200\,000} = 0.375 - 0.250 = 0.125 \text{ mm}
-$$
+```
 
 C moves 0.125 mm to the right.
 
@@ -333,10 +333,10 @@ C moves 0.125 mm to the right.
 
 From the formula in the notes:
 
-$$
+```math
 R_A = P \frac{L_2}{L_1 + L_2} = 60 \times 0.6 = 36 \text{ kN}, \quad R_B = 60 \times
 0.4 = 24 \text{ kN}
-$$
+```
 
 The shorter, stiffer segment takes more load. Segment A is in tension, $36\,000/300 = 120$ MPa; segment B is in compression, $24\,000/300 = 80$ MPa.
 
@@ -349,9 +349,9 @@ The shorter, stiffer segment takes more load. Segment A is in tension, $36\,000/
 
 Free expansion: $\alpha\Delta T L = 23 \times 10^{-6} \times 60 \times 500 = 0.69$ mm. The gap absorbs 0.2 mm, so the walls suppress the remaining 0.49 mm:
 
-$$
+```math
 \sigma = -E \frac{0.49}{500} = -70\,000 \times 9.8 \times 10^{-4} = -68.6 \text{ MPa}
-$$
+```
 
 The stress is compressive. A small gap removes 29% of the thermal stress, which is the idea behind expansion joints.
 
@@ -364,10 +364,10 @@ The stress is compressive. A small gap removes 29% of the thermal stress, which 
 
 Both materials share the same strain $\epsilon = \sigma_s/E_s = 1.25 \times 10^{-3}$, so
 
-$$
+```math
 P = \epsilon\,(A_s E_s + A_c E_c) = 1.25 \times
 10^{-3}\,(863.9 \times 200\,000 + 1963.5 \times 25\,000) = 277 \text{ kN}
-$$
+```
 
 The concrete stress is $\sigma_c = E_c\epsilon = 31.3$ MPa. That is close to or above the compressive strength of ordinary concrete, so the concrete may govern before the steel yields. The confinement provided by the pipe raises the concrete's effective strength.
 
@@ -378,10 +378,10 @@ The concrete stress is $\sigma_c = E_c\epsilon = 31.3$ MPa. That is close to or 
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 P_{max} = \frac{\sigma_{allow}A_{net}}{K_t} = \frac{180 \times 400}{2.5} = 28.8
 \text{ kN}
-$$
+```
 
 Under a single static load a ductile material yields locally at the hole edge and redistributes the stress, so the net-section stress $P/A_{net}$ governs failure. Under cyclic loading, fatigue cracks start at the stress peak, so the concentration (through $K_f$) directly shortens life.
 

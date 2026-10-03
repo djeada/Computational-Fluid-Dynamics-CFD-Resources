@@ -318,9 +318,9 @@ Advancements in technology continue to enhance the capabilities and applications
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 T_s = 2\pi \sqrt{\frac{6.371 \times 10^6}{9.81}} = 5063 \text{ s} = 84.4 \text{ min}
-$$
+```
 
 It is the period of a pendulum whose length equals the Earth's radius, which is also the orbital period of a satellite skimming the surface. A platform tuned to this period stays level as the vehicle moves over the curved Earth.
 
@@ -335,10 +335,10 @@ It is the period of a pendulum whose length equals the Earth's radius, which is 
 
 (b) $\omega_s = \sqrt{g/R_e} = 1.24 \times 10^{-3}$ rad/s:
 
-$$
+```math
 \delta
 x_{max} = \frac{2b}{\omega_s^2} = \frac{2bR_e}{g} = \frac{2 \times 10^{-3} \times 6.371 \times 10^6}{9.81} = 1.30 \text{ km}
-$$
+```
 
 The maximum is reached after half a Schuler period (about 42 min). Schuler tuning bounds the error caused by accelerometer bias; gyro drift still makes errors grow with time.
 
@@ -351,9 +351,9 @@ The maximum is reached after half a Schuler period (about 42 min). Schuler tunin
 
 $a_{err} = g\sin 0.05^\circ = 9.81 \times 8.73 \times 10^{-4} = 8.56 \times 10^{-3}$ m/s², about 870 μg.
 
-$$
+```math
 \delta x = \tfrac{1}{2}(8.56 \times 10^{-3})(600)^2 = 1.54 \text{ km}
-$$
+```
 
 A tiny tilt is as harmful as a large accelerometer bias, which is why alignment and levelling matter so much.
 
@@ -379,13 +379,13 @@ Accelerometers cannot distinguish gravitation from acceleration. The INS must th
 
 Only the vertical component of Earth rate, $\Omega\sin\phi$, is perpendicular to a northward velocity in the horizontal plane:
 
-$$
+```math
 |2\boldsymbol{\Omega} \times \mathbf{v}| = 2 \times 7.292 \times 10^{-5} \times 250 \times \sin 45^\circ = 0.0258 \text{ m/s}^2
-$$
+```
 
-$$
+```math
 \delta x = \tfrac{1}{2}(0.0258)(600)^2 = 4.6 \text{ km}
-$$
+```
 
 The error is directed east-west. The term is small compared with $g$ but far larger than the bias of a navigation-grade accelerometer, so it must be included in the velocity update.
 

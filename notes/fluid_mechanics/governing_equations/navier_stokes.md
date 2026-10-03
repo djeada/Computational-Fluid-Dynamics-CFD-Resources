@@ -442,11 +442,11 @@ The shear stress is uniform: $\tau = \mu\, du/dy = \mu U/h$.
 <details>
 <summary>Answer</summary>
 
-$$
+```math
 Q = \int_0^R u\, 2\pi r\,
 dr = \frac{\pi \Delta p}{2\mu L}\left(\frac{R^4}{2} -
 \frac{R^4}{4}\right) = \frac{\pi R^4 \Delta p}{8\mu L}
-$$
+```
 
 Since $u_{max} = \Delta p R^2/(4\mu L)$, the mean velocity is $\bar{V} = Q/(\pi R^2) = \Delta p R^2/(8\mu L) = u_{max}/2$.
 
@@ -471,9 +471,9 @@ $\partial u/\partial x + \partial v/\partial y = a - a = 0$, and $\omega_z = \pa
 
 Integrating both,
 
-$$
+```math
 p = p_0 - \frac{\rho a^2}{2}(x^2 + y^2)
-$$
+```
 
 which is Bernoulli's equation with $p_0$ the stagnation pressure. This field does not satisfy no-slip on the wall $y = 0$. Hiemenz's solution adds a thin viscous layer there.
 
@@ -486,15 +486,15 @@ which is Bernoulli's equation with $p_0$ the stagnation pressure. This field doe
 
 For fully developed flow, $v = 0$ and $u = u(y)$, so the convective terms vanish and $0 = G + \mu\, d^2u/dy^2$. With $u(\pm h) = 0$:
 
-$$
+```math
 u(y) = \frac{G}{2\mu}(h^2 - y^2)
-$$
+```
 
 The flow rate per unit width is
 
-$$
+```math
 q = \int_{-h}^{h} u\, dy = \frac{2 G h^3}{3\mu}
-$$
+```
 
 The maximum is $u_{max} = Gh^2/(2\mu)$ and the mean is $\bar{u} = q/(2h) = Gh^2/(3\mu)$, so $\bar{u}/u_{max} = 2/3$. For a round pipe the ratio is $1/2$.
 

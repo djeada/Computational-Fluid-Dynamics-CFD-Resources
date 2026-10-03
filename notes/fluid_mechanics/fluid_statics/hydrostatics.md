@@ -181,16 +181,16 @@ In reality compressibility makes the water slightly denser at depth, so the true
 
 Force:
 
-$$
+```math
 F = \rho g b \frac{h_2^2 - h_1^2}{2} = 1000 \times 9.81 \times 2 \times
 \frac{9 - 1}{2} = 78480 \text{ N}
-$$
+```
 
 Center of pressure, from the moment balance:
 
-$$
+```math
 h_{cp} = \frac{\int_{h_1}^{h_2} h \, (\rho g h) \, b \, dh}{\int_{h_1}^{h_2} \rho g h \, b \, dh} = \frac{2}{3} \frac{h_2^3 - h_1^3}{h_2^2 - h_1^2} = \frac{2}{3}\cdot \frac{26}{8} = 2.167 \text{ m}
-$$
+```
 
 This is below the centroid at 2 m, as expected.
 

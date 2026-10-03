@@ -15,7 +15,7 @@ This script draws a schematic of three stacked fluid layers moving at different 
 ### Newton's Law of Viscosity
 
 $$
-\tau = \mu\frac{du}{dy}
+\tau = \mu \frac{du}{dy}
 $$
 
 where $\tau$ is the shear stress (Pa), $\mu$ the dynamic viscosity (Pa·s) and $du/dy$ the velocity gradient normal to the flow direction.
@@ -59,7 +59,7 @@ python main.py --no-show --output . # save velocity_layers_viscosity.png without
 ```
 
 | Flag | Description |
-|------|-------------|
+| --- | --- |
 | `--no-show` | Do not open a plot window |
 | `--output DIR` | Create `DIR` and save the figure there as a PNG |
 

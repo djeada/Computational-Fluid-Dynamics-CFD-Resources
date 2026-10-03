@@ -14,7 +14,8 @@ This script plots the one-seventh power-law velocity profile of a turbulent boun
 ### One-Seventh Power Law
 
 $$
-\frac{u}{U_\infty} = \left(\frac{y}{\delta}\right)^{1/7}, \qquad 0 \leq y \leq \delta
+\frac{u}{U_\infty} = \left(\frac{y}{\delta}\right)^{1/7},
+\qquad 0 \leq y \leq \delta
 $$
 
 where $y$ is the distance from the wall, $\delta$ the boundary layer thickness and $U_\infty$ the free-stream velocity. The law is an empirical fit to the outer part of turbulent flat-plate boundary layers. It gives a fuller profile than a laminar layer.
@@ -22,7 +23,8 @@ where $y$ is the distance from the wall, $\delta$ the boundary layer thickness a
 ### Boundary Values
 
 $$
-u(0) = 0, \qquad u(\delta) = U_\infty
+u(0) = 0,
+\qquad u(\delta) = U_\infty
 $$
 
 In this profile $u$ equals $U_\infty$ exactly at $y = \delta$. This differs from the usual $u = 0.99\,U_\infty$ definition of $\delta$.

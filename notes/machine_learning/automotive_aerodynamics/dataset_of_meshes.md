@@ -178,10 +178,10 @@ Second cell: $\frac{120 - 60}{180 - 60} = 0.5$ and $\frac{60 - 8}{60} = 0.867$, 
 
 The layer heights form a geometric series, so the total thickness is
 
-$$
+```math
 H = h_1 \frac{r^N - 1}{r - 1} = 2 \times 10^{-5} \cdot \frac{1.2^{15} - 1}{0.2} \approx
 1.44 \times 10^{-3} \text{ m}
-$$
+```
 
 The last layer has height $h_1 r^{N-1} \approx 2.57 \times 10^{-4}$ m.
 

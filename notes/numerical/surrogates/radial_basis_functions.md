@@ -134,9 +134,9 @@ RBF interpolation provides a flexible, mesh-free surrogate that can handle scatt
 
 $R = \begin{pmatrix} 1 & e^{-1} \\ e^{-1} & 1 \end{pmatrix}$ with $\det R = 1 - e^{-2} = 0.8647$. Then
 
-$$
+```math
 w = R^{-1}Y = \frac{1}{1 - e^{-2}}\begin{pmatrix} 1 - 2e^{-1} \\ 2 - e^{-1} \end{pmatrix} = \begin{pmatrix} 0.3056 \\ 1.8876 \end{pmatrix}
-$$
+```
 
 and $\hat{y}(0.5) = e^{-0.25}(w_1 + w_2) = 0.7788 \times 2.1932 = 1.7080$. Far from the data every Gaussian decays, so $\hat{y} \to 0$. Adding a regression term $f(x)^T\beta$ (e.g. a constant or linear trend) gives sensible behaviour away from the samples.
 
@@ -162,9 +162,9 @@ Without the polynomial, the weights are $w \approx (9.010, -15.179, 3.447, 1.392
 
 With the polynomial, the augmented system
 
-$$
+```math
 \begin{pmatrix} R & P \\ P^T & 0 \end{pmatrix}\begin{pmatrix} w \\ c \end{pmatrix} = \begin{pmatrix} Y \\ 0 \end{pmatrix}, \qquad P = [\mathbf{1}, X]
-$$
+```
 
 gives $w = 0$ and $(c_0, c_1) = (0, 2)$, so $\hat{y}(x) = 2x$ exactly and $\hat{y}(0.1) = 0.2$. The cubic RBF is only conditionally positive definite, so a low-degree polynomial tail is the standard way to guarantee solvability and to reproduce polynomial trends.
 
@@ -177,11 +177,11 @@ gives $w = 0$ and $(c_0, c_1) = (0, 2)$, so $\hat{y}(x) = 2x$ exactly and $\hat{
 
 For any real $w \ne 0$,
 
-$$
+```math
 w^T R w = \sum_{j,k} w_j w_k
 e^{-\theta^2(x_j - x_k)^2} = \frac{1}{2\theta\sqrt{\pi}}\int_{-\infty}^{\infty}
 e^{-\omega^2/(4\theta^2)}\left|\sum_j w_j e^{i\omega x_j}\right|^2 d\omega \ge 0
-$$
+```
 
 The weight $e^{-\omega^2/(4\theta^2)}$ is strictly positive, so the integral vanishes only if $\sum_j w_j e^{i\omega x_j} = 0$ for all $\omega$. For distinct $x_j$ the exponentials are linearly independent, which forces $w = 0$. Hence $w^T R w > 0$ for all $w \ne 0$, and $R$ is nonsingular. The same argument (Bochner's theorem) holds in $\mathbb{R}^d$.
 

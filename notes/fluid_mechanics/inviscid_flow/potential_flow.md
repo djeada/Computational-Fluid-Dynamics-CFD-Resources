@@ -556,9 +556,9 @@ The distribution is symmetric front-to-back and top-to-bottom, so the net force 
 
 On the negative $x$-axis, $u = U_\infty + \frac{m}{2\pi x}$. This is zero at
 
-$$
+```math
 x_s = -\frac{m}{2\pi U_\infty} = -\frac{2}{2\pi \times 5} = -0.0637 \text{ m}
-$$
+```
 
 Far downstream, all the source flow $m$ passes between the two dividing streamlines at speed $U_\infty$. The body width is therefore $m/U_\infty = 0.4$ m, with half-width $m/(2U_\infty) = 0.2$ m.
 
@@ -571,9 +571,9 @@ Far downstream, all the source flow $m$ passes between the two dividing streamli
 
 On the surface, $u_\theta = -2U_\infty\sin\theta + \frac{\Gamma}{2\pi a}$. Setting this to zero:
 
-$$
+```math
 \sin\theta_s = \frac{\Gamma}{4\pi U_\infty a} = \frac{20}{4\pi \times 10 \times 0.5} = 0.318
-$$
+```
 
 so $\theta_s = 18.6^\circ$ and $161.4^\circ$.
 
@@ -590,10 +590,10 @@ Counterclockwise circulation slows the flow over the top ($\theta = 90^\circ$) a
 
 $w = dF/dz = U_\infty(1 - a^2/z^2)$. On $z = a e^{i\theta}$,
 
-$$
+```math
 w = U_\infty(1 - e^{-2i\theta}) = U_\infty
 e^{-i\theta}(e^{i\theta} - e^{-i\theta}) = 2iU_\infty\sin\theta\, e^{-i\theta}
-$$
+```
 
 so $|w| = 2U_\infty|\sin\theta|$.
 

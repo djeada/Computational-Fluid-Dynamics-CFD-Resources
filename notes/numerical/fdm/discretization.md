@@ -154,9 +154,9 @@ The error ratio is $0.0540/0.0287 = 1.88$, close to 2. Halving $\Delta x$ roughl
 
 (a) $u_{i-1} = u_i - \Delta x\,u'_i + \frac{\Delta x^2}{2}u''_i - \dots$, so
 
-$$
+```math
 \frac{u_i - u_{i-1}}{\Delta x} = u'_i - \frac{\Delta x}{2}u''_i + O(\Delta x^2)
-$$
+```
 
 The leading error is $-\frac{\Delta x}{2}u''$.
 
@@ -173,9 +173,9 @@ If $\Delta x > 2$, then $|1 - \Delta x| > 1$ and the forward solution oscillates
 
 Each step is a quadratic, $\Delta x\,u_i^2 + u_i - u_{i-1} = 0$. Its positive root is
 
-$$
+```math
 u_i = \frac{-1 + \sqrt{1 + 4\Delta x\,u_{i-1}}}{2\Delta x}
-$$
+```
 
 | $x$ | numerical | exact $1/(1+x)$ |
 | --- | --- | --- |

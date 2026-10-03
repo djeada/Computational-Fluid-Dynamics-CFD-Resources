@@ -31,7 +31,10 @@ $$
 ### Thickness Distribution
 
 $$
-y_t = \frac{t}{0.2}\,c\left(0.2969\sqrt{\frac{x}{c}} - 0.1260\frac{x}{c} - 0.3516\left(\frac{x}{c}\right)^2 + 0.2843\left(\frac{x}{c}\right)^3 - 0.1015\left(\frac{x}{c}\right)^4\right)
+y_t = \frac{t}{0.2}\,
+c\left(0.2969 \sqrt{\frac{x}{c}} - 0.1260 \frac{x}{c} -
+0.3516\left(\frac{x}{c}\right)^2 + 0.2843\left(\frac{x}{c}\right)^3 -
+0.1015\left(\frac{x}{c}\right)^4\right)
 $$
 
 With these coefficients the trailing edge has a small finite thickness.
@@ -41,11 +44,13 @@ With these coefficients the trailing edge has a small finite thickness.
 With $\theta = \arctan(dy_c/dx)$:
 
 $$
-x_u = x - y_t\sin\theta, \qquad y_u = y_c + y_t\cos\theta
+x_u = x - y_t\sin\theta,
+\qquad y_u = y_c + y_t\cos\theta
 $$
 
 $$
-x_l = x + y_t\sin\theta, \qquad y_l = y_c - y_t\cos\theta
+x_l = x + y_t\sin\theta,
+\qquad y_l = y_c - y_t\cos\theta
 $$
 
 ## Implementation
