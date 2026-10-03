@@ -22,18 +22,18 @@ A **boundary layer** is a thin region adjacent to a solid surface where viscous 
 
 ### Formation and Features
 
-I. **No-Slip Condition**  
+I. **No-Slip Condition**
 
-- At a solid boundary, the fluid velocity exactly matches the wall velocity (zero if the wall is stationary).  
+- At a solid boundary, the fluid velocity exactly matches the wall velocity (zero if the wall is stationary).
 - This demands a large velocity gradient near the wall if free-stream velocity $U_\infty$ is significant.
 
-II. **Thin Region**  
+II. **Thin Region**
 
 - Because viscosity is typically small, the layer where viscous stresses matter is thin compared to the overall flow domain (e.g., a small fraction of an aircraft wing chord).
 
-III. **Transition from Wall to Free Stream**  
+III. **Transition from Wall to Free Stream**
 
-- Within the boundary layer, the velocity gradually increases from $0$ at the wall to $U_\infty$ in the outer region.  
+- Within the boundary layer, the velocity gradually increases from $0$ at the wall to $U_\infty$ in the outer region.
 - This gradient sets up shear stresses that dominate flow friction (skin friction drag).
 
 ### Boundary-Layer Thickness Definitions
@@ -42,19 +42,23 @@ Because velocity changes continuously, there is no single abrupt boundary. Engin
 
 I. **$\delta$ (Boundary-Layer Thickness)**
 
-Commonly the distance from the wall to where the local velocity is about $0.99U_\infty$.  
+Commonly the distance from the wall to where the local velocity is about $0.99U_\infty$.
 
-II. **$\delta^*$ (Displacement Thickness)**  
+II. **$\delta^*$ (Displacement Thickness)**
 
-A measure of how much the external inviscid flow is “displaced” by the presence of the boundary layer.  
+A measure of how much the external inviscid flow is “displaced” by the presence of the boundary layer.
 
-$$\delta^* = \int_0^\delta \left(1 - \frac{u(y)}{U_\infty}\right) \, dy.$$
+$$
+\delta^* = \int_0^\delta \left(1 - \frac{u(y)}{U_\infty}\right) \, dy
+$$
 
-III. **$\theta$ (Momentum Thickness)**  
+III. **$\theta$ (Momentum Thickness)**
 
-Relates to the lost momentum flux due to the boundary layer.  
+Relates to the lost momentum flux due to the boundary layer.
 
-$$\theta = \int_0^\delta \frac{u(y)}{U_\infty}\left(1 - \frac{u(y)}{U_\infty}\right)\, dy.$$
+$$
+\theta = \int_0^\delta \frac{u(y)}{U_\infty}\left(1 - \frac{u(y)}{U_\infty}\right)\, dy
+$$
 
 Velocity Profile & Thicknesses
 
@@ -76,9 +80,11 @@ Velocity Profile & Thicknesses
 
 #### Example: Blasius (Flat Plate) Boundary Layer Growth
 
-$$\delta \sim \sqrt{\frac{\nu x}{U_\infty}}$$
+$$
+\delta \sim \sqrt{\frac{\nu x}{U_\infty}}
+$$
 
-- $\nu$ = kinematic viscosity,  
+- $\nu$ = kinematic viscosity,
 - $x$ = distance along the plate from the leading edge.
 
 #### Turbulent Boundary Layer
@@ -100,15 +106,20 @@ Prandtl devised simplified **boundary-layer equations** under assumptions of:
 
 For steady, incompressible flow over a flat plate (in x-direction), the boundary-layer momentum equation is often written as:
 
-$$u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y} = \nu \frac{\partial^2 u}{\partial y^2},$$
+$$
+u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial y} = \nu
+\frac{\partial^2 u}{\partial y^2}
+$$
 
 with continuity:
 
-$$\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} = 0.$$
+$$
+\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} = 0
+$$
 
-- $u$ = streamwise velocity (dominant),  
-- $v$ = normal velocity (much smaller),  
-- $\nu$ = kinematic viscosity,  
+- $u$ = streamwise velocity (dominant),
+- $v$ = normal velocity (much smaller),
+- $\nu$ = kinematic viscosity,
 - $y$ = normal distance from wall.
 
 **Pressure gradient** $\frac{\partial p}{\partial x}$ is often specified by the external (inviscid) flow solution.
@@ -172,9 +183,15 @@ The layer is only a few millimetres thick after half a metre, which justifies th
 <details>
 <summary>Answer</summary>
 
-$$\frac{\delta^*}{\delta} = \int_0^1 (1 - 2\eta + \eta^2)\,d\eta = \frac{1}{3}$$
+$$
+\frac{\delta^*}{\delta} = \int_0^1 (1 - 2\eta + \eta^2)\, d\eta = \frac{1}{3}
+$$
 
-$$\frac{\theta}{\delta} = \int_0^1 (2\eta - \eta^2)(1 - \eta)^2\,d\eta = \int_0^1 (2\eta - 5\eta^2 + 4\eta^3 - \eta^4)\,d\eta = 1 - \frac{5}{3} + 1 - \frac{1}{5} = \frac{2}{15}$$
+$$
+\frac{\theta}{\delta} = \int_0^1 (2\eta - \eta^2)(1 - \eta)^2\, d\eta = \int_0^1
+(2\eta - 5\eta^2 + 4\eta^3 - \eta^4)\, d\eta = 1 - \frac{5}{3} + 1 -
+\frac{1}{5} = \frac{2}{15}
+$$
 
 $H = (1/3)/(2/15) = 2.5$, close to the Blasius value of 2.59.
 
@@ -187,11 +204,17 @@ $H = (1/3)/(2/15) = 2.5$, close to the Blasius value of 2.59.
 
 The wall shear is $\tau_w = \mu\,\partial u/\partial y|_0 = 2\mu U_\infty/\delta$, and $\theta = 2\delta/15$. Substituting,
 
-$$\rho U_\infty^2\frac{2}{15}\frac{d\delta}{dx} = \frac{2\mu U_\infty}{\delta} \quad \Rightarrow \quad \delta\,d\delta = \frac{15\nu}{U_\infty}dx \quad \Rightarrow \quad \delta^2 = \frac{30\nu x}{U_\infty}$$
+$$
+\rho U_\infty^2 \frac{2}{15} \frac{d\delta}{dx} = \frac{2\mu U_\infty}{\delta} \quad
+\Rightarrow \quad \delta\, d\delta = \frac{15\nu}{U_\infty}dx \quad \Rightarrow \quad
+\delta^2 = \frac{30\nu x}{U_\infty}
+$$
 
 so
 
-$$\frac{\delta}{x} = \frac{\sqrt{30}}{\sqrt{Re_x}} = \frac{5.48}{\sqrt{Re_x}}$$
+$$
+\frac{\delta}{x} = \frac{\sqrt{30}}{\sqrt{Re_x}} = \frac{5.48}{\sqrt{Re_x}}
+$$
 
 Then $C_f = 4\nu/(U_\infty\delta) = 0.730/\sqrt{Re_x}$. Blasius gives 5.0 (or 4.91) and 0.664. A simple assumed profile therefore captures the $x^{1/2}$ growth and gets the coefficients within about 10%.
 

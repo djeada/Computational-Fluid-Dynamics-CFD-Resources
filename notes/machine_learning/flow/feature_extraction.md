@@ -3,9 +3,8 @@
 Raw CFD and experimental flow data is typically high-dimensional—spanning three spatial dimensions, time, and multiple physical variables—making direct analysis and interpretation extremely challenging. The core problem is to extract compact, meaningful representations from these massive datasets that preserve the essential physics while being amenable to analysis, prediction, and control. Flow feature extraction applies dimensionality reduction, clustering, classification, and sparse methods to transform unwieldy fluid data into actionable insights.
 
 Flow feature extraction lies at the intersection of fluid mechanics and machine learning, aiming to identify and characterize meaningful patterns within complex, high-dimensional fluid datasets. While fields like computer vision benefit from massive curated datasets such as ImageNet, fluid mechanics currently lacks similarly extensive labeled collections. This scarcity of large annotated datasets presents a challenge. However, there is significant potential in efforts to create curated, **large-scale fluid databases** that can fuel the application of **deep learning** and other advanced machine learning algorithms. As these resources develop, machine learning’s strengths in pattern recognition and data mining will become increasingly central to understanding and predicting fluid behavior.
-  
-Beyond the challenge of data availability, a key objective in flow feature extraction is to distill complicated fluid fields into more manageable representations. These representations should capture essential structures and dynamics without losing critical information. The methods employed draw on a range of techniques, from **dimensionality reduction** to **clustering and classification**, as well as emerging methods that leverage **sparse optimization**, **randomized linear algebra**, and **compressed sensing**. Together, these approaches create a powerful toolkit for transforming raw, often unwieldy fluid data into insights that guide research and engineering applications.
 
+Beyond the challenge of data availability, a key objective in flow feature extraction is to distill complicated fluid fields into more manageable representations. These representations should capture essential structures and dynamics without losing critical information. The methods employed draw on a range of techniques, from **dimensionality reduction** to **clustering and classification**, as well as emerging methods that leverage **sparse optimization**, **randomized linear algebra**, and **compressed sensing**. Together, these approaches create a powerful toolkit for transforming raw, often unwieldy fluid data into insights that guide research and engineering applications.
 
 ```
 ASCII Diagram: Large-Scale Fluid Data vs. Machine Learning Methods
@@ -38,18 +37,18 @@ ASCII Diagram: Large-Scale Fluid Data vs. Machine Learning Methods
 
 Dimensionality reduction is fundamental to flow feature extraction, seeking to represent high-dimensional, spatiotemporal fluid data in a lower-dimensional space that is easier to interpret. Traditional linear methods provide valuable first steps, while nonlinear embeddings promise to uncover richer, more intricate structures hidden in the flow.
 
-  
 For linear reduction, **proper orthogonal decomposition (POD)** stands as a cornerstone, introduced to turbulence research by Lumley in 1967 and made practical for large datasets by Sirovich's method of snapshots in 1987. POD identifies an **orthogonal basis** of modes extracted directly from empirical data, capturing the most energetic structures in descending order of importance. Its snapshot-based formulation uses singular value decomposition to transform a large set of measured or computed flow states into a small number of modes that retain most of the kinetic energy.
 
 Concretely, given $m$ flow snapshots $\mathbf{x}_1, \dots, \mathbf{x}_m \in \mathbb{R}^n$ arranged column-wise into a data matrix $\mathbf{X} \in \mathbb{R}^{n \times m}$, POD computes the singular value decomposition
 
-$$\mathbf{X} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^*,$$
+$$
+\mathbf{X} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^*
+$$
 
 where the columns of $\mathbf{U}$ are the POD modes (spatial basis functions), $\boldsymbol{\Sigma} = \text{diag}(\sigma_1, \sigma_2, \dots)$ contains the singular values in descending order, and $\mathbf{V}^*$ holds the temporal coefficients. Truncating to the first $r$ modes gives a rank-$r$ approximation $\mathbf{X} \approx \mathbf{U}_r \boldsymbol{\Sigma}_r \mathbf{V}_r^*$ that captures the fraction of total energy $E_r / E_{\text{total}} = \sum_{i=1}^{r} \sigma_i^2 / \sum_{i=1}^{m} \sigma_i^2$. Typically, $r \ll m$ modes suffice to represent over 90–99% of the flow energy, yielding a dramatic dimensionality reduction.
 
 By applying this methodology, researchers have not only simplified complex fluid analyses but have also connected it to other domains. For example, Sirovich’s application of POD to human face classification in images helped illustrate how these data-driven basis functions can transcend disciplinary boundaries.
 
-  
 Closely related is **principal component analysis (PCA)**, a technique widely used in statistics and machine learning to identify directions of maximal variance. PCA and POD share mathematical foundations, and in some cases, POD can be regarded as PCA applied specifically to flow fields. PCA has a deep connection to linear autoencoders, which reduce dimensionality by encoding data into a small set of features and then decoding them back. With purely linear transformations, PCA or POD offer straightforward, interpretable decompositions.
 
 ```
@@ -76,7 +75,7 @@ ASCII Diagram: Dimensionality Reduction (POD/PCA)
     |_______________________________________|
        Low dimensions: (Mode 1, Mode 2,...)
 ```
-  
+
 Moving beyond linear transformations, **nonlinear embeddings** leverage **deep neural networks (DNNs)**. Rooted in the universal approximation theorem, DNNs can in principle represent very complex mappings, opening the door to more flexible coordinates that capture subtle nonlinear relationships in fluid data. Early studies have shown how deep networks can reconstruct near-wall velocity fields from wall measurements of pressure and shear, effectively learning complex correlations. Although these powerful methods require extensive training data and can struggle with extrapolation, their ability to produce highly compact, nonlinear feature spaces holds immense promise. Incorporating **nonlinear activation functions** into autoencoders extends PCA-like approaches into regimes where fluid patterns are not well described by linear subspaces, potentially yielding more efficient and faithful low-dimensional representations of turbulence and other complex phenomena.
 
 ```
@@ -106,7 +105,7 @@ ASCII Diagram: Nonlinear Embeddings (Deep Neural Networks)
              
 By introducing nonlinear activations, the network learns a curved, flexible manifold that better captures complex flow features.
 ```
-  
+
 ## Sparse and Randomized Methods
 
 As fluid datasets grow larger and more intricate, computational efficiency and scalability become essential. Sparse optimization, compressed sensing, and randomized linear algebra techniques complement machine learning by reducing the computational burden and focusing on essential data features.
@@ -134,9 +133,8 @@ ASCII Diagram: Sparse and Randomized Methods
                     lower storage,
                     and quick analysis.
 ```
-  
-**Sparse optimization** selects solutions or features with many zero coefficients, stripping away unnecessary complexity and emphasizing the core elements of a dataset. In fluid applications, sparse methods can yield simpler models that retain accuracy, reduce memory requirements, and enhance interpretability. By pinpointing a handful of key modes or measurements, engineers and scientists can gain clear insights into dominant flow structures, improving their ability to predict behavior and control processes.
 
+**Sparse optimization** selects solutions or features with many zero coefficients, stripping away unnecessary complexity and emphasizing the core elements of a dataset. In fluid applications, sparse methods can yield simpler models that retain accuracy, reduce memory requirements, and enhance interpretability. By pinpointing a handful of key modes or measurements, engineers and scientists can gain clear insights into dominant flow structures, improving their ability to predict behavior and control processes.
 
 ```
 ASCII Diagram: Compressed Sensing in Flows
@@ -167,10 +165,8 @@ ASCII Diagram: Compressed Sensing in Flows
 
 **Compressed sensing** revolutionizes how data are sampled and reconstructed. Instead of collecting enormous numbers of measurements, compressed sensing shows that a small number of cleverly chosen samples can reconstruct signals if they are sparse or compressible in some basis. Applying this to flows means drastically cutting down on the data collection needed to capture essential dynamics, which is invaluable when measurements are expensive or time-consuming to obtain. In complex environments like wall-bounded turbulence, compressed sensing and sparse reconstruction techniques enable rapid decision-making and flow state estimation, vital for closed-loop control and optimization.
 
-  
 **Randomized linear algebra** introduces probabilistic methods to approximate matrix decompositions and other operations. By drawing random samples from large datasets, these techniques speed up computations like the singular value decomposition, critical for PCA or POD. While approximation is involved, the essential structure of the data is preserved, making it possible to handle previously intractable problems. This synergy between sparse methods, randomized approaches, and machine learning drastically expands the range of flows that can be analyzed within practical time and resource limits.
 
-  
 ## Clustering and Classification
 
 Where dimensionality reduction and sparse methods simplify data, **clustering and classification** techniques identify and label patterns within it. Understanding flow structures or regimes often involves recognizing when a flow transitions from one type of behavior to another, such as from laminar to turbulent, or detecting distinct vortical patterns in a wake.
@@ -189,7 +185,7 @@ ASCII Diagram: Classification of Flow Regimes
 
 By training on known examples, the classifier can quickly categorize new flow states, aiding in diagnostics and real-time decisions.
 ```
-  
+
 Clustering methods like **k-means** group snapshots of the flow field into clusters that share common features. By discretizing the high-dimensional phase space of a fluid system into a finite number of representative states, researchers can construct Markov models that describe transitions between these states over time. Kaiser et al. (2014) demonstrated this approach for complex mixing processes, translating chaotic behavior into a structured sequence of states. Similarly, Amsallem et al. (2012) leveraged clustering to stabilize reduced-order models under parameter variations. Linking each cluster centroid to a physically interpretable flow field helps ensure that data-driven results remain meaningful in practical contexts.
 
 ```
@@ -210,7 +206,7 @@ ASCII Diagram: Clustering (K-means)
 
 Each cluster centroid corresponds to a representative flow pattern. This transforms continuous, high-dimensional phase space into a small set of discrete, interpretable states.
 ```
-  
+
 Classification tasks, supported by supervised learning, distinguish between known categories or labels. For example, neural networks have been applied to classify wake topologies based on vorticity measurements, revealing underlying flow structures that correspond to specific aerodynamic behaviors. Techniques like k-nearest neighbors combined with dynamical systems models help estimate disturbance parameters in flows, guiding control strategies to mitigate unwanted fluctuations. Graph-based approaches, as used by Nair & Taira (2015) and Meena et al. (2018), model fluid elements as nodes in a network, allowing community detection algorithms to identify coherent structures and gain insights into wake evolution.
 
 ```
@@ -325,7 +321,9 @@ $\mathbf{X}\mathbf{X}^T$ would be a $10^6 \times 10^6$ matrix of $8 \times 10^{1
 
 The 11 transitions are counted as AA: 2, AB: 3, BB: 1, BC: 2, CA: 2, CC: 1. Normalizing each row gives
 
-$$\mathbf{P} = \begin{bmatrix} 0.4 & 0.6 & 0 \\ 0 & 1/3 & 2/3 \\ 2/3 & 0 & 1/3 \end{bmatrix},$$
+$$
+\mathbf{P} = \begin{bmatrix} 0.4 & 0.6 & 0 \\ 0 & 1/3 & 2/3 \\ 2/3 & 0 & 1/3 \end{bmatrix}
+$$
 
 with rows and columns ordered A, B, C.
 

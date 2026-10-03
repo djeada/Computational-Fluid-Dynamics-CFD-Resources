@@ -14,7 +14,7 @@ This **inward attraction** makes the surface behave like a stretched elastic mem
 
 Surface tension $\sigma$ (or $\gamma$) has units of **force per unit length** (N/m) or equivalently **energy per unit area** (J/m$^2$). It can be interpreted in two equivalent ways:
 
-I. **Force-based View**: The force required to create or stretch a line of unit length at the interface.  
+I. **Force-based View**: The force required to create or stretch a line of unit length at the interface.
 
 II. **Energy-based View**: The energy cost to increase the fluid’s surface area by one square meter.
 
@@ -54,28 +54,39 @@ When a **narrow tube** (capillary) is inserted into a liquid, the combination of
 
 For a liquid that wets the tube (like water in glass), the **capillary rise** $h$ can be approximated by:
 
-$$h = \frac{2 \cdot \sigma \cdot \cos \theta}{\rho \cdot g \cdot r},$$
+$$
+h = \frac{2 \cdot \sigma \cdot \cos \theta}{\rho \cdot g \cdot r}
+$$
 
 - $\sigma$: surface tension
+
 - $\theta$: contact angle (liquid-solid interface)
+
 - $\rho$: liquid density
+
 - $g$: gravitational acceleration
+
 - $r$: capillary radius
 
-- If $\theta < 90^\circ$, fluid rises (concave meniscus).  
+- If $\theta < 90^\circ$, fluid rises (concave meniscus).
+
 - If $\theta > 90^\circ$, fluid is depressed (convex meniscus).
 
 ### Young-Laplace Equation
 
 The **Young-Laplace equation** relates the pressure difference $\Delta p$ across a curved interface to its curvatures and surface tension:
 
-$$\Delta p = \sigma \left( \frac{1}{R_1} + \frac{1}{R_2} \right).$$
+$$
+\Delta p = \sigma \left(\frac{1}{R_1} + \frac{1}{R_2} \right)
+$$
 
 - $R_1$, $R_2$: principal radii of curvature of the interface.
 
 For a spherical droplet of radius $R$ ($R_1 = R_2 = R$):
 
-$$\Delta p = \frac{2 \, \sigma}{R}.$$
+$$
+\Delta p = \frac{2 \, \sigma}{R}
+$$
 
 A smaller droplet (smaller $R$) has a **larger** internal pressure difference, which explains why tiny bubbles/droplets are more unstable and why they tend to coalesce into larger ones to reduce overall surface energy.
 
@@ -89,15 +100,19 @@ While the **Reynolds number** is often used for inertial vs. viscous forces, **s
 
 I. **Bond Number** $Bo$:
 
-$$Bo = \frac{\rho \cdot g \cdot L^2}{\sigma}$$
+$$
+Bo = \frac{\rho \cdot g \cdot L^2}{\sigma}
+$$
 
-- Compares gravitational forces to surface tension.  
+- Compares gravitational forces to surface tension.
 - $Bo \ll 1$: surface tension dominates (tiny droplets, strong curvature).
 - $Bo \gg 1$: gravity dominates (large droplets, flattened shapes).
 
 II. **Weber Number** $We$:
 
-$$We = \frac{\rho \cdot U^2 \cdot L}{\sigma}$$
+$$
+We = \frac{\rho \cdot U^2 \cdot L}{\sigma}
+$$
 
 Compares inertial forces to surface tension (important in droplet breakup or sprays).
 
@@ -120,7 +135,9 @@ Compares inertial forces to surface tension (important in droplet breakup or spr
 <details>
 <summary>Answer</summary>
 
-$$h = \frac{2\sigma\cos\theta}{\rho g r} = \frac{2 \times 0.0728 \times 1}{998 \times 9.81 \times 0.0005} = 0.0297 \text{ m}$$
+$$
+h = \frac{2\sigma\cos\theta}{\rho g r} = \frac{2 \times 0.0728 \times 1}{998 \times 9.81 \times 0.0005} = 0.0297 \text{ m}
+$$
 
 The water rises about 29.7 mm. Halving the radius would double the rise.
 
@@ -146,7 +163,9 @@ The tiny droplet carries a pressure excess large enough to matter in cavitation 
 <details>
 <summary>Answer</summary>
 
-$$h = \frac{2 \times 0.485 \times \cos 140^\circ}{13534 \times 9.81 \times 0.001} = -0.0056 \text{ m}$$
+$$
+h = \frac{2 \times 0.485 \times \cos 140^\circ}{13534 \times 9.81 \times 0.001} = -0.0056 \text{ m}
+$$
 
 The negative sign means the level is depressed by about 5.6 mm, with a convex meniscus, as expected for $\theta > 90^\circ$.
 

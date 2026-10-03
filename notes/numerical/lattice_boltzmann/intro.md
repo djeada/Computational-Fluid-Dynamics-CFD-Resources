@@ -11,7 +11,10 @@ I. **Non-Linearity:**
 - The NSE are **non-linear** due to the convective term $(u \cdot \nabla)u$.
 - Non-linearity complicates finding closed-form solutions.
 
-$$\rho \left( \frac{\partial u}{\partial t} + (u \cdot \nabla)u \right) = -\nabla p + \eta \nabla^2 u + f$$
+$$
+\rho \left(\frac{\partial u}{\partial t} + (u \cdot \nabla)u \right) = -\nabla p + \eta
+\nabla^2 u + f
+$$
 
 II. **Partial Differential Equations (PDEs):**
 
@@ -87,7 +90,9 @@ III. **Poisson Pressure Equation:**
 
 - The pressure field often emerges from a **Poisson equation**:
 
- $$\nabla^2 p = f(u)$$
+$$
+\nabla^2 p = f(u)
+$$
 
 - Making sure stable, accurate pressure solutions can be challenging, especially in complicated flows.
 
@@ -109,7 +114,7 @@ Geometry -> Meshing -> Solve PDEs (NSE) -> Extract Pressure, Velocity
 - Enables a continuum description.
 - **Fluid Particle:**
 - Focuses on an infinitesimal element of fluid, capturing local variations.
-From microscopic scales (where molecular dynamics might apply) to macroscopic scales (NSE-based modeling), different viewpoints and averaging processes help effective modeling strategies.
+  From microscopic scales (where molecular dynamics might apply) to macroscopic scales (NSE-based modeling), different viewpoints and averaging processes help effective modeling strategies.
 
 ```
 ASCII Diagram: Scales of Analysis
@@ -122,14 +127,14 @@ MD/DSMC               LBM               NSE/CFD
 
 On a molecular level:
 
-- **Thermal Motion:**  
-Molecules like argon at room temperature move at ~400 m/s.  
+- **Thermal Motion:**\
+  Molecules like argon at room temperature move at ~400 m/s.
 
-- **Mean Free Path (MFP):**  
-The average distance a molecule travels between collisions (~70 nm for a gas at atmospheric pressure; the mean spacing between molecules is only ~3 nm).
+- **Mean Free Path (MFP):**\
+  The average distance a molecule travels between collisions (~70 nm for a gas at atmospheric pressure; the mean spacing between molecules is only ~3 nm).
 
-- **Collision Times:**  
-Times between collisions (~$10^{-10}$ s at atmospheric pressure) far smaller than macroscopic flow timescales.
+- **Collision Times:**\
+  Times between collisions (~$10^{-10}$ s at atmospheric pressure) far smaller than macroscopic flow timescales.
 
 These microscopic properties underlie the **continuum assumption**, where macroscopic fields (velocity, pressure) represent averaged effects of countless molecular interactions.
 
@@ -138,19 +143,20 @@ These microscopic properties underlie the **continuum assumption**, where macros
 **Continuum Hypothesis:**
 
 - Macroscopic properties vary smoothly and are well-defined at every point in the fluid domain.
+
 - Large separation of scales between molecular mean free path and engineering scales justifies treating fluids as continuous.
-**Conservation Equations:**
+  **Conservation Equations:**
 
 - Continuity and NSE form the backbone of continuum fluid mechanics.
 
 ## Scale Comparison: Micro, Meso, Macro
 
-|          | **Micro** (Molecular)     | **Meso** (Relating to motion)            | **Macro** (Continuum)          |
-|----------|---------------------------|-------------------------------|--------------------------------|
-| **Scale**| ~10^-9 m                 | 10^-9 to 10^-6 m             | >10^-6 m                       |
-| **Physics** | Molecular Interactions | Probabilistic (Boltzmann)     | Continuous Fields (NSE)        |
-| **Equations** | Newton's Laws (MD)  | Boltzmann Equation            | Navier–Stokes Equations         |
-| **Methods** | Molecular Dynamics     | Direct Simulation Monte Carlo | CFD (FDM, FVM, FEM, etc.)      |
+|  | **Micro** (Molecular) | **Meso** (Relating to motion) | **Macro** (Continuum) |
+| --- | --- | --- | --- |
+| **Scale** | ~10^-9 m | 10^-9 to 10^-6 m | >10^-6 m |
+| **Physics** | Molecular Interactions | Probabilistic (Boltzmann) | Continuous Fields (NSE) |
+| **Equations** | Newton's Laws (MD) | Boltzmann Equation | Navier–Stokes Equations |
+| **Methods** | Molecular Dynamics | Direct Simulation Monte Carlo | CFD (FDM, FVM, FEM, etc.) |
 
 This table highlights the hierarchy of modeling approaches. The **lattice Boltzmann method (LBM)** occupies a mesoscopic niche. It models fluid at a kinetic level using distribution functions, bridging microscopic molecular interactions and macroscopic flow fields.
 
@@ -197,7 +203,7 @@ This note motivates the Lattice Boltzmann Method (LBM) by reviewing the challeng
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Physical domain, flow regime (Reynolds number), choice of modeling scale, boundary complexity assessment |
 | **Outputs** | Justification for choosing LBM vs. traditional CFD, understanding of scale hierarchy (molecular → Boltzmann → Navier–Stokes) |
 
@@ -248,7 +254,8 @@ $\mathrm{Kn} = 6.9 \times 10^{-8} / 5 \times 10^{-5} \approx 1.4 \times 10^{-3}$
 Because $\nabla \cdot u = 0$, the divergence of $\partial u/\partial t$ and of $\eta \nabla^2 u$ both vanish. For the convective term,
 
 $$
-\partial_i \left( u_j \partial_j u_i \right) = \partial_i u_j \, \partial_j u_i + u_j \partial_j \left( \partial_i u_i \right) = \partial_i u_j \, \partial_j u_i,
+\partial_i \left(u_j \partial_j u_i \right) = \partial_i u_j \, \partial_j u_i + u_j
+\partial_j \left(\partial_i u_i \right) = \partial_i u_j \, \partial_j u_i
 $$
 
 so $\rho \, \partial_i u_j \, \partial_j u_i = -\nabla^2 p$.

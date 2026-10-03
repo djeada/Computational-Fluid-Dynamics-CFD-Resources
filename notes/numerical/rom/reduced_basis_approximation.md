@@ -4,10 +4,12 @@ In computational engineering and sciences, it is common to face parameterized pr
 
 ### Solution Manifold
 
-**Definition**  
+**Definition**\
 Consider a parameterized PDE problem that depends on a parameter $\mu$ drawn from a parameter set $\mathcal{P}$. For each $\mu \in \mathcal{P}$, let $u(\mu)$ be the exact solution to the PDE. The set of all such solutions, as $\mu$ varies, is called the **solution manifold**:
 
-$$\mathcal{M} = \{\,u(\mu) : \mu \in \mathcal{P}\} \subset V$$
+$$
+\mathcal{M} = \{\, u(\mu): \mu \in \mathcal{P}\} \subset V
+$$
 
 where $V$ is a suitable (often infinite-dimensional) function space—such as a Hilbert or Banach space of continuous or differentiable functions—depending on the PDE’s regularity requirements.
 
@@ -23,20 +25,20 @@ $$
 a\bigl(u(\mu), v; \mu\bigr) = f\bigl(v; \mu\bigr), \quad \forall v \in V
 $$
 
-where  
+where
 
-- $a(\cdot,\cdot;\mu)$ is a **bilinear (or nonlinear) form** that depends on the parameter $\mu$,  
-- $f(\cdot;\mu)$ is a **linear functional** (or more generally, a nonlinear functional) encoding source terms or boundary data,  
+- $a(\cdot,\cdot;\mu)$ is a **bilinear (or nonlinear) form** that depends on the parameter $\mu$,
+- $f(\cdot;\mu)$ is a **linear functional** (or more generally, a nonlinear functional) encoding source terms or boundary data,
 - $u(\mu) \in V$ is the parameter-dependent **exact solution**.
-In many practical applications, solving for $u(\mu)$ in an infinite-dimensional space $V$ directly is not feasible, prompting a finite-dimensional **discretization**.
+  In many practical applications, solving for $u(\mu)$ in an infinite-dimensional space $V$ directly is not feasible, prompting a finite-dimensional **discretization**.
 
 ### Finite Element/Volume Discretization: The Truth Problem
 
 To handle the infinite-dimensional problem, we introduce a high-fidelity **discretization** of dimension $N_h$. For instance, we may use:
 
-I. **Finite Element Method (FEM)**: Construct a mesh of the domain, choose polynomial shape functions, and assemble global matrices.  
+I. **Finite Element Method (FEM)**: Construct a mesh of the domain, choose polynomial shape functions, and assemble global matrices.
 
-II. **Finite Volume Method (FVM)**: Subdivide the domain into control volumes and enforce integral conservation laws at each cell.  
+II. **Finite Volume Method (FVM)**: Subdivide the domain into control volumes and enforce integral conservation laws at each cell.
 
 Let $V_h \subset V$ be this finite-dimensional approximation space of dimension $N_h$. The **truth problem** becomes:
 
@@ -44,9 +46,9 @@ $$
 a\bigl(u_h(\mu), v_h; \mu\bigr) = f\bigl(v_h; \mu\bigr), \quad \forall v_h \in V_h
 $$
 
-where $u_h(\mu) \in V_h$ is the **high-fidelity (truth) solution**.  
+where $u_h(\mu) \in V_h$ is the **high-fidelity (truth) solution**.
 
-- **High Dimensionality**: In realistic 3D problems, $N_h$ can be in the millions.  
+- **High Dimensionality**: In realistic 3D problems, $N_h$ can be in the millions.
 - **Computational Cost**: Each new $\mu$ requires solving a large linear or nonlinear system. This can be extremely expensive if one needs many parameter evaluations (e.g., optimization, real-time control, uncertainty quantification).
 
 ### Discrete Solution Manifold
@@ -54,10 +56,10 @@ where $u_h(\mu) \in V_h$ is the **high-fidelity (truth) solution**.
 Correspondingly, the set of all truth solutions lives in $V_h$:
 
 $$
-\mathcal{M}_{d_s} = \{ u_h(\mu) : \mu \in \mathcal{P} \} \subset V_h
+\mathcal{M}_{d_s} = \{ u_h(\mu): \mu \in \mathcal{P} \} \subset V_h
 $$
 
-- **Potentially Complicated Geometry**: $\mathcal{M}_{d_s}$ may be curved or nonlinear in the high-dimensional space $V_h$.  
+- **Potentially Complicated Geometry**: $\mathcal{M}_{d_s}$ may be curved or nonlinear in the high-dimensional space $V_h$.
 - **Approximate Low Rank**: Often, $\mathcal{M}_{d_s}$ can be approximated well by a low-dimensional subspace, thanks to the physical nature of the PDE or correlations in parameter variations.
 
 ### Reduced Basis Method: Outline
@@ -68,9 +70,9 @@ $$
 u_{N_h}(\mu) = \sum_{i=1}^N a_i(\mu) \, \xi_i
 $$
 
-where:  
+where:
 
-- $\{\xi_i\}$ is called the **reduced basis (RB)**, and  
+- $\{\xi_i\}$ is called the **reduced basis (RB)**, and
 - $\mathcal{V}_{N_h} = \text{span}\{\xi_1,\ldots,\xi_N\} \subset V_h$ is the corresponding **reduced space**.
 
 Once we have $\mathcal{V}_{N_h}$, we **project** the PDE onto this small subspace, yielding an $N \times N$ system for the coefficients $\{a_i(\mu)\}$. The computational cost then **scales with** $N$, not the large $N_h$.
@@ -79,43 +81,43 @@ Once we have $\mathcal{V}_{N_h}$, we **project** the PDE onto this small subspac
 
 The reduced basis approach typically follows a **two-phase** methodology:
 
-I. **Offline Phase**  
+I. **Offline Phase**
 
-   - **High-Fidelity Sampling**: Select a set of “training” parameters $\{\mu_1, \ldots, \mu_{N_s}\}$.  
-   - **Solve** the truth problem for each $\mu_j$ to obtain snapshots $u_h(\mu_j)$. This is computationally expensive but done only once.  
-   - **Basis Construction**: Use techniques such as **POD** (Proper Orthogonal Decomposition) to extract the low-dimensional subspace from the snapshot set.  
-   - **Precomputation**: Compute data structures (reduced matrices, vectors) necessary for fast evaluation in the online phase.  
+- **High-Fidelity Sampling**: Select a set of “training” parameters $\{\mu_1, \ldots, \mu_{N_s}\}$.
+- **Solve** the truth problem for each $\mu_j$ to obtain snapshots $u_h(\mu_j)$. This is computationally expensive but done only once.
+- **Basis Construction**: Use techniques such as **POD** (Proper Orthogonal Decomposition) to extract the low-dimensional subspace from the snapshot set.
+- **Precomputation**: Compute data structures (reduced matrices, vectors) necessary for fast evaluation in the online phase.
 
-II. **Online Phase**  
+II. **Online Phase**
 
-   - For a **new** parameter $\mu\not\in\{\mu_j\}$, **solve** the much smaller reduced system in dimension $N$.  
-   - Quickly obtain $u_{N_h}(\mu)$ as $\sum_{i=1}^N a_i(\mu)\,\xi_i$.  
-   - Achieve speedups of orders of magnitude if $N$ is small and if the parameter dependency is **affine** or can be efficiently handled.
-**Remark**: The offline phase can be expensive, but its cost is amortized over many online queries.
+- For a **new** parameter $\mu\not\in\{\mu_j\}$, **solve** the much smaller reduced system in dimension $N$.
+- Quickly obtain $u_{N_h}(\mu)$ as $\sum_{i=1}^N a_i(\mu)\,\xi_i$.
+- Achieve speedups of orders of magnitude if $N$ is small and if the parameter dependency is **affine** or can be efficiently handled.
+  **Remark**: The offline phase can be expensive, but its cost is amortized over many online queries.
 
 ### POD for Reduced Basis Construction
 
 A common method to build the reduced basis from snapshots is **Proper Orthogonal Decomposition (POD)**:
 
-I. **Snapshot Matrix**  
+I. **Snapshot Matrix**
 
-   - Suppose we have $N_s$ snapshots $\{u_h(\mu_j)\}_{j=1}^{N_s}$. Each $u_h(\mu_j)$ is a vector in $\mathbb{R}^{N_h}$.  
-   - Form a snapshot matrix $\mathbf{U} \in \mathbb{R}^{N_h \times N_s}$, where columns are these snapshots (possibly after removing mean if desired).
+- Suppose we have $N_s$ snapshots $\{u_h(\mu_j)\}_{j=1}^{N_s}$. Each $u_h(\mu_j)$ is a vector in $\mathbb{R}^{N_h}$.
+- Form a snapshot matrix $\mathbf{U} \in \mathbb{R}^{N_h \times N_s}$, where columns are these snapshots (possibly after removing mean if desired).
 
-II. **Correlation Matrix / SVD**  
+II. **Correlation Matrix / SVD**
 
-   - Compute the correlation matrix $\mathbf{C} = \frac{1}{N_s}\,\mathbf{U}^\top \mathbf{U}$, or directly apply an **SVD** to $\mathbf{U}$.  
-   - The singular values $\sigma_1 \geq \sigma_2 \geq \cdots$ indicate the **energy** captured by each mode.
+- Compute the correlation matrix $\mathbf{C} = \frac{1}{N_s}\,\mathbf{U}^\top \mathbf{U}$, or directly apply an **SVD** to $\mathbf{U}$.
+- The singular values $\sigma_1 \geq \sigma_2 \geq \cdots$ indicate the **energy** captured by each mode.
 
-III. **POD Modes**  
+III. **POD Modes**
 
-   - The POD modes (or left singular vectors) corresponding to the largest singular values form an **orthonormal basis** $\{\xi_1,\ldots,\xi_N\}$.  
-   - Truncating at $N$ modes captures the bulk of the energy (variance) in the snapshot set.
+- The POD modes (or left singular vectors) corresponding to the largest singular values form an **orthonormal basis** $\{\xi_1,\ldots,\xi_N\}$.
+- Truncating at $N$ modes captures the bulk of the energy (variance) in the snapshot set.
 
-IV. **Choosing $N$**  
+IV. **Choosing $N$**
 
-   - Typically, choose $N$ so that $\sum_{i=1}^N \sigma_i^2$ is a high percentage (e.g., $> 99\%$) of $\sum_{i=1}^{N_s} \sigma_i^2$.  
-   - The reduced space dimension $N$ is often **orders of magnitude** smaller than $N_h$.
+- Typically, choose $N$ so that $\sum_{i=1}^N \sigma_i^2$ is a high percentage (e.g., $> 99\%$) of $\sum_{i=1}^{N_s} \sigma_i^2$.
+- The reduced space dimension $N$ is often **orders of magnitude** smaller than $N_h$.
 
 ### Reduced Basis Approximation
 
@@ -128,7 +130,8 @@ $$
 as an approximation of the truth solution $u_h(\mu)$. We enforce a **Galerkin** (or Petrov–Galerkin) condition in the subspace $\mathcal{V}_{N_h}$:
 
 $$
-a\bigl(u_{N_h}(\mu), v_{N_h}; \mu\bigr) = f\bigl(v_{N_h}; \mu\bigr), \quad \forall v_{N_h} \in \mathcal{V}_{N_h}
+a\bigl(u_{N_h}(\mu), v_{N_h}; \mu\bigr) = f\bigl(v_{N_h}; \mu\bigr), \quad \forall
+v_{N_h} \in \mathcal{V}_{N_h}
 $$
 
 This gives a **small** system of $N$ equations in the unknown coefficients $\{a_n(\mu)\}$. For linear PDEs, this is an $N \times N$ linear system; for nonlinear PDEs, it might require iterative solvers but still in dimension $N$.
@@ -138,7 +141,8 @@ This gives a **small** system of $N$ equations in the unknown coefficients $\{a_
 **Efficiency** in the online phase hinges on **precomputing** key operators once and reusing them. For example, if the high-fidelity discretization yields matrices $\mathbf{A}(\mu)$, $\mathbf{F}(\mu)$, then in the reduced space we only need:
 
 $$
-\mathbf{A}_r(\mu) = \mathbf{Z}^\top \mathbf{A}(\mu) \mathbf{Z}, \quad \mathbf{F}_r(\mu) = \mathbf{Z}^\top \mathbf{F}(\mu)
+\mathbf{A}_r(\mu) = \mathbf{Z}^\top \mathbf{A}(\mu) \mathbf{Z}, \quad
+\mathbf{F}_r(\mu) = \mathbf{Z}^\top \mathbf{F}(\mu)
 $$
 
 where $\mathbf{Z}$ is the matrix whose columns are the **discrete** reduced basis vectors. In an **affine** parameter dependence scenario,
@@ -170,14 +174,12 @@ and evaluating $s_{N_h}(\mu)$ is typically very cheap once $u_{N_h}(\mu)$ is kno
 The final reduced order solution $u_{N_h}(\mu)$ differs from the exact infinite-dimensional solution $u(\mu)$. We can decompose this error as:
 
 $$
-\|u(\mu) - u_{N_h}(\mu)\|_V
-\leq
-\underbrace{\|u(\mu) - u_h(\mu)\|_V}_{\text{Discretization Error}}
-+
+\| u(\mu) - u_{N_h}(\mu)\|_V \leq
+\underbrace{\|u(\mu) - u_h(\mu)\|_V}_{\text{Discretization Error}} +
 \underbrace{\|u_h(\mu) - u_{N_h}(\mu)\|_V}_{\text{ROM Truncation Error}}
 $$
 
-I. **Discretization Error**: The difference $\|u(\mu) - u_h(\mu)\|_V$ can be controlled by mesh refinement or higher-order elements in the truth model.  
+I. **Discretization Error**: The difference $\|u(\mu) - u_h(\mu)\|_V$ can be controlled by mesh refinement or higher-order elements in the truth model.
 
 II. **ROM Truncation Error**: The difference $\|u_h(\mu) - u_{N_h}(\mu)\|_V$ depends on how well $\{\xi_i\}$ captures the solution manifold. Increasing $N$ typically decreases this error.
 
@@ -190,7 +192,7 @@ This note explains how the solution manifold $\mathcal{M} = \{u_h(\mu) : \mu \in
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | High-fidelity snapshots $\{u_h(\mu_i)\}$, desired basis size $N$, error tolerance |
 | **Outputs** | Reduced basis $\{\zeta_1, \dots, \zeta_N\}$, reduced system matrices, approximate solution $u_N(\mu) = \sum c_j \zeta_j$, error estimates |
 
@@ -213,7 +215,7 @@ The squares are $100, 16, 2.25, 0.25, 0.04$, with total $118.54$. Cumulative fra
 **Exercise 2.** Consider the affine truth problem $\mathbf{A}(\mu)\mathbf{u} = \mathbf{F}$ with $\mathbf{A}(\mu) = \mathbf{A}_1 + \mu\mathbf{I}$, where
 
 $$
-\mathbf{A}_1 = \begin{pmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{pmatrix}, \qquad \mathbf{F} = (1, 1, 1)^\top,
+\mathbf{A}_1 = \begin{pmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{pmatrix}, \qquad \mathbf{F} = (1, 1, 1)^\top
 $$
 
 and the one-vector basis $\mathbf{Z} = (1, 1, 1)^\top/\sqrt{3}$. Precompute $\mathbf{Z}^\top\mathbf{A}_1\mathbf{Z}$, $\mathbf{Z}^\top\mathbf{Z}$ and $\mathbf{F}_r = \mathbf{Z}^\top\mathbf{F}$. Find the reduced solution at $\mu = 1$ and compare it with the truth.
@@ -246,7 +248,10 @@ $\mathbf{A}(\mu)$ and $\mathbf{F}$ are unchanged by reversing the node order, so
 Galerkin orthogonality: $\mathbf{Z}^\top\mathbf{A}(u_h - \mathbf{Z}a) = \mathbf{Z}^\top\mathbf{F} - \mathbf{Z}^\top\mathbf{A}\mathbf{Z}a = 0$. For any $b$, write $u_h - \mathbf{Z}b = (u_h - \mathbf{Z}a) + \mathbf{Z}(a - b)$. Then
 
 $$
-\|u_h - \mathbf{Z}b\|_{\mathbf{A}}^2 = \|u_h - \mathbf{Z}a\|_{\mathbf{A}}^2 + 2(a - b)^\top\mathbf{Z}^\top\mathbf{A}(u_h - \mathbf{Z}a) + \|\mathbf{Z}(a - b)\|_{\mathbf{A}}^2 = \|u_h - \mathbf{Z}a\|_{\mathbf{A}}^2 + \|\mathbf{Z}(a - b)\|_{\mathbf{A}}^2.
+\| u_h - \mathbf{Z}b\|_{\mathbf{A}}^2 = \| u_h - \mathbf{Z}a\|_{\mathbf{A}}^2 +
+2(a - b)^\top\mathbf{Z}^\top\mathbf{A}(u_h - \mathbf{Z}a) +
+\|\mathbf{Z}(a - b)\|_{\mathbf{A}}^2 = \| u_h - \mathbf{Z}a\|_{\mathbf{A}}^2 +
+\|\mathbf{Z}(a - b)\|_{\mathbf{A}}^2
 $$
 
 The last term is non-negative, which proves the claim. This is Céa's lemma with constant 1 in the energy norm, and it explains why the RB solution in Exercise 3 is exact.

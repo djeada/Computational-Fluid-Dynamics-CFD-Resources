@@ -7,22 +7,26 @@ Flow kinematics studies the motion of fluid particles without considering the fo
 ## Topics Covered
 
 ### Fundamental Concepts
+
 - **[Flow Kinematics](flow_kinematics.md)**: Basic kinematic concepts, velocity fields, and acceleration
 - **[Eulerian vs Lagrangian Flows](eulerian_lagrangian_flows.md)**: Different approaches to describing fluid motion
 
 ### Kinematic Analysis
+
 - Velocity field description and visualization
 - Acceleration in flowing fluids
 - Streamlines, pathlines, and streaklines
 - Material derivatives and substantial derivatives
 
 ### Flow Classification
+
 - Steady vs. unsteady flows
 - Uniform vs. non-uniform flows
 - One-, two-, and three-dimensional flows
 - Rotational vs. irrotational flows
 
 ### Deformation Analysis
+
 - Rate of strain tensor
 - Vorticity and circulation
 - Flow visualization techniques
@@ -31,21 +35,25 @@ Flow kinematics studies the motion of fluid particles without considering the fo
 ## Mathematical Framework
 
 ### Vector Field Description
+
 ```
 Velocity field: V⃗(x,y,z,t) = u(x,y,z,t)î + v(x,y,z,t)ĵ + w(x,y,z,t)k̂
 ```
 
 ### Material Derivative
+
 ```
 DΦ/Dt = ∂Φ/∂t + (V⃗ · ∇)Φ
 ```
 
 ### Vorticity
+
 ```
 ω⃗ = ∇ × V⃗
 ```
 
 ### Rate of Strain
+
 ```
 εᵢⱼ = ½(∂uᵢ/∂xⱼ + ∂uⱼ/∂xᵢ)
 ```
@@ -53,18 +61,21 @@ DΦ/Dt = ∂Φ/∂t + (V⃗ · ∇)Φ
 ## Lagrangian vs Eulerian Perspectives
 
 ### Lagrangian Approach
+
 - Follows individual fluid particles
 - Particle trajectories and pathlines
 - Material properties of fluid elements
 - Advantages for particle tracking and mixing
 
 ### Eulerian Approach
+
 - Fixed observation points in space
 - Local flow properties at field points
 - Streamlines and flow patterns
 - Advantages for field analysis and CFD
 
 ### Relationship and Conversions
+
 - Coordinate transformations between frames
 - Time derivatives in different frameworks
 - Applications of each approach
@@ -72,12 +83,14 @@ DΦ/Dt = ∂Φ/∂t + (V⃗ · ∇)Φ
 ## Visualization and Analysis
 
 ### Flow Visualization
+
 - Experimental techniques (dye injection, particle tracking)
 - Computational visualization (streamlines, vector plots)
 - Contour plots and isosurfaces
 - Animation and time-dependent visualization
 
 ### Kinematic Properties
+
 - Streamline patterns and topology
 - Stagnation points and critical points
 - Separation and attachment lines
@@ -86,18 +99,21 @@ DΦ/Dt = ∂Φ/∂t + (V⃗ · ∇)Φ
 ## Applications
 
 ### Engineering Design
+
 - Flow field analysis in design processes
 - Optimization of flow patterns
 - Mixing and transport analysis
 - Flow control strategies
 
 ### Environmental Flows
+
 - Atmospheric and oceanic circulation patterns
 - Pollutant transport and dispersion
 - Weather pattern analysis
 - Climate modeling applications
 
 ### Industrial Processes
+
 - Reactor design and mixing analysis
 - Heat and mass transfer enhancement
 - Flow distribution in manifolds
@@ -106,18 +122,21 @@ DΦ/Dt = ∂Φ/∂t + (V⃗ · ∇)Φ
 ## Advanced Topics
 
 ### Unsteady Flow Kinematics
+
 - Time-dependent velocity fields
 - Acceleration analysis in unsteady flows
 - Phase-averaged and ensemble-averaged properties
 - Periodic and aperiodic flow patterns
 
 ### Complex Flow Patterns
+
 - Three-dimensional flow structures
 - Helical and spiral flows
 - Secondary flow phenomena
 - Flow instabilities and transition
 
 ### Computational Aspects
+
 - Numerical differentiation for kinematic quantities
 - Grid generation and flow field discretization
 - Post-processing techniques for flow analysis
@@ -126,11 +145,13 @@ DΦ/Dt = ∂Φ/∂t + (V⃗ · ∇)Φ
 ## Learning Path
 
 ### Prerequisites
+
 - Vector calculus and differential equations
 - Basic physics and mechanics concepts
 - Mathematical analysis and visualization tools
 
 ### Core Concepts
+
 1. Velocity field description and properties
 2. Lagrangian vs Eulerian perspectives
 3. Streamlines, pathlines, and streaklines
@@ -138,6 +159,7 @@ DΦ/Dt = ∂Φ/∂t + (V⃗ · ∇)Φ
 5. Vorticity and rotation in flows
 
 ### Advanced Applications
+
 1. Complex flow pattern analysis
 2. Unsteady flow kinematics
 3. Computational flow visualization

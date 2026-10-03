@@ -1,10 +1,12 @@
-## The Reynolds Number 
+## The Reynolds Number
 
 The Reynolds number (Re) is a fundamental concept in aerodynamics, as it tells us whether the airflow around an object is smooth (laminar) or turbulent. In simpler terms, it’s a way to measure how different forces (like speed, size, and air viscosity) affect how air flows around something, whether that’s an insect, bird, or airplane.
 
 The formula for calculating the Reynolds number is:
 
-$$Re = \frac{\rho \cdot V \cdot L}{\mu}$$
+$$
+Re = \frac{\rho \cdot V \cdot L}{\mu}
+$$
 
 Where:
 
@@ -25,7 +27,9 @@ The right side shows the **Mach number (M)**, which represents the speed of an o
 
 The Mach number is calculated as:
 
-$$M = \frac{V}{a}$$
+$$
+M = \frac{V}{a}
+$$
 
 Where:
 
@@ -38,19 +42,19 @@ For instance, an airliner typically cruises at Mach 0.8, just below the speed of
 
 Different types of aircraft or objects fit into certain regions on the chart, depending on their speed and size. These regions help us understand the unique challenges and characteristics of their flight. Here are some examples:
 
-I. **Insects and Dust Particles**  
+I. **Insects and Dust Particles**
 
 Found at the lower left part of the chart, insects and dust particles have low Reynolds numbers because they are small and fly slowly. Their motion is dominated by laminar, smooth airflow. They experience minimal turbulence, and air behaves more like a thick fluid to them.
 
-II. **Birds and Hang Gliders**  
+II. **Birds and Hang Gliders**
 
 Moving toward the middle of the chart, birds and hang gliders operate at slightly higher speeds (5–20 m/s) and higher Reynolds numbers, roughly from $10^4$ (small birds) to $10^6$ (hang gliders). While their flight still involves laminar flow, they might experience some transition to turbulence, especially at higher speeds.
 
-III. **General Aviation and Airliners**  
+III. **General Aviation and Airliners**
 
 Aircraft like small planes and airliners occupy the region where speeds are much higher (around 100–300 m/s) and Reynolds numbers exceed $10^6$. This is where airflow becomes much more turbulent, and aerodynamic forces like lift and drag become critical to maintaining stable flight.
 
-IV. **Supersonic and Hypersonic Flight**  
+IV. **Supersonic and Hypersonic Flight**
 
 Military jets and the Concorde are shown at the top right, with Mach numbers greater than 1. In this region, the air becomes compressible, meaning the plane is moving so fast that it pushes air into shock waves. This is where advanced aerodynamics is necessary to overcome the effects of drag and heat from air compression.
 
@@ -58,15 +62,15 @@ Military jets and the Concorde are shown at the top right, with Mach numbers gre
 
 The chart also includes horizontal lines that mark the boundaries between key flight regimes:
 
-I. **Incompressible Flow**  
+I. **Incompressible Flow**
 
 At low speeds (below Mach 0.3), air behaves as if its density remains constant. This regime is where most general aviation and birds fly.
 
-II. **Transonic Flow**  
+II. **Transonic Flow**
 
 As speeds approach Mach 1 (around 343 m/s), the flow becomes compressible, and shock waves can form. This can cause instability, and it’s the regime where most airliners fly.
 
-III. **Supersonic and Hypersonic Flow**  
+III. **Supersonic and Hypersonic Flow**
 
 Beyond Mach 1, the air compresses significantly, leading to shock waves. Hypersonic flow occurs when speeds exceed Mach 5, and this is relevant for certain military and space vehicles.
 
@@ -87,9 +91,14 @@ Similarly, if you’re studying insects, you’d see that they exist in a low-sp
 <details>
 <summary>Answer</summary>
 
-$$Re = \frac{0.364 \times 230 \times 5}{1.42 \times 10^{-5}} = 2.9 \times 10^7$$
+$$
+Re = \frac{0.364 \times 230 \times 5}{1.42 \times 10^{-5}} = 2.9 \times 10^7
+$$
 
-$$a = \sqrt{\gamma RT} = \sqrt{1.4 \times 287 \times 216.65} = 295 \text{ m/s}, \quad M = \frac{230}{295} = 0.78$$
+$$
+a = \sqrt{\gamma RT} = \sqrt{1.4 \times 287 \times 216.65} = 295 \text{ m/s}, \quad
+M = \frac{230}{295} = 0.78
+$$
 
 The flow is fully turbulent over most of the wing and is in the lower transonic regime.
 
@@ -100,7 +109,9 @@ The flow is fully turbulent over most of the wing and is in the lower transonic 
 <details>
 <summary>Answer</summary>
 
-$$Re = \frac{1.225 \times 10 \times 0.10}{1.79 \times 10^{-5}} = 6.8 \times 10^4$$
+$$
+Re = \frac{1.225 \times 10 \times 0.10}{1.79 \times 10^{-5}} = 6.8 \times 10^4
+$$
 
 This is about 430 times smaller than the airliner's. At this Reynolds number the boundary layer is largely laminar and prone to laminar separation, so bird and small-drone airfoils are thin and highly cambered rather than scaled-down airliner sections.
 
@@ -133,7 +144,9 @@ Real facilities raise $\rho/\mu$ instead: pressurized tunnels increase the densi
 <details>
 <summary>Answer</summary>
 
-$$x_{tr} = \frac{Re_x\,\mu}{\rho V} = \frac{5 \times 10^5 \times 1.79 \times 10^{-5}}{1.225 \times 60} = 0.12 \text{ m}$$
+$$
+x_{tr} = \frac{Re_x\,\mu}{\rho V} = \frac{5 \times 10^5 \times 1.79 \times 10^{-5}}{1.225 \times 60} = 0.12 \text{ m}
+$$
 
 That is only about 8% of a 1.5 m chord. On a real wing the transition location depends strongly on the pressure gradient (a favourable gradient delays it, which is how laminar-flow airfoils work), on surface roughness, insect debris and free-stream turbulence. The flat-plate value is only a rough guide.
 

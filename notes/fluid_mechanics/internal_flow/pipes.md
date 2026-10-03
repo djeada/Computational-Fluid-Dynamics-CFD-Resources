@@ -13,11 +13,13 @@ Pipes are ubiquitous in industrial and municipal infrastructure, serving to **tr
 
 The volumetric flow rate $Q$ is given by:
 
-$$Q = A \, V_{\text{avg}},$$
+$$
+Q = A \, V_{\text{avg}}
+$$
 
 where:
 
-- $A$ = cross-sectional area of the pipe ($\pi D^2/4$ for a circular pipe of diameter $D$).  
+- $A$ = cross-sectional area of the pipe ($\pi D^2/4$ for a circular pipe of diameter $D$).
 - $V_{\text{avg}}$ = average fluid velocity through the cross section.
 
 ![flow_rate](../../../scripts/plots/flow_rate_pipe/flow_rate_pipe.png)
@@ -30,9 +32,11 @@ Because of **viscous effects** and the **no-slip condition** at the pipe wall, f
 
 **Laminar flow:** smooth, orderly layers. Velocity profile is **parabolic**:
 
-$$v(r) = v_{\text{max}} \left(1 - \left(\frac{r}{R}\right)^2\right),$$
+$$
+v(r) = v_{\text{max}} \left(1 - \left(\frac{r}{R}\right)^2\right)
+$$
 
-where $r$ is the radial distance from the center and $R$ is the pipe radius.  
+where $r$ is the radial distance from the center and $R$ is the pipe radius.
 
 **Turbulent flow:** chaotic eddies and mixing. The velocity profile is **flatter** in the core, with steep gradients near the wall.
 
@@ -47,7 +51,9 @@ Here is the plot comparing Laminar vs. Turbulent Flow Velocity Profiles:
 
 The **Reynolds number** $(Re)$ helps classify flow as laminar or turbulent:
 
-$$Re = \frac{\rho \, V_{\text{avg}} \, D}{\mu},$$
+$$
+Re = \frac{\rho \, V_{\text{avg}} \, D}{\mu}
+$$
 
 - $\rho$: fluid density
 - $V_{\text{avg}}$: average velocity
@@ -61,7 +67,9 @@ $$Re = \frac{\rho \, V_{\text{avg}} \, D}{\mu},$$
 
 ### Wall Shear Stress ($\tau_w$)
 
-$$\tau_w = -\mu \left.\frac{dv}{dr}\right|_{r=R} \quad (\text{laminar}),$$
+$$
+\tau_w = -\mu \left. \frac{dv}{dr}\right|_{r=R} \quad (\text{laminar})
+$$
 
 but is more often related to the **pressure drop** via engineering correlations.
 
@@ -73,16 +81,18 @@ Here is the plot illustrating Wall Shear in Pipe Cross-Section:
 
 ![wall_shear_pipe_cross_section](../../../scripts/plots/wall_shear_pipe_cross_section/wall_shear_pipe_cross_section.png)
 
-- The velocity vectors illustrate a parabolic velocity profile with maximum speed at the center ($r=0$) and a gradual decrease toward the pipe walls, resulting in a parabolic flow structure.  
-- The no-slip condition is observed at the pipe wall where the fluid velocity drops to zero.  
-- The high shear region is located near the wall where the velocity gradient is steep and the shear stress reaches its peak.  
+- The velocity vectors illustrate a parabolic velocity profile with maximum speed at the center ($r=0$) and a gradual decrease toward the pipe walls, resulting in a parabolic flow structure.
+- The no-slip condition is observed at the pipe wall where the fluid velocity drops to zero.
+- The high shear region is located near the wall where the velocity gradient is steep and the shear stress reaches its peak.
 - The wall shear is defined as the frictional force exerted by the fluid on the pipe walls, and it is measured to assess material wear and energy losses.
 
 #### Pressure Drop and Energy Considerations
 
 As fluid moves through the pipe, friction converts mechanical energy into heat, causing a **pressure drop** $\Delta P$. Engineers often use the **Darcy-Weisbach equation**:
 
-$$\Delta P = f \frac{L}{D} \, \frac{\rho \, V_{\text{avg}}^2}{2},$$
+$$
+\Delta P = f \frac{L}{D} \, \frac{\rho \, V_{\text{avg}}^2}{2}
+$$
 
 where:
 
@@ -115,32 +125,32 @@ Minimizing $\Delta P$ reduces **pumping power** and operational costs. Strategie
 
 ### Industrial Pipe Systems and Applications
 
-I. **Oil & Gas Transmission** 
+I. **Oil & Gas Transmission**
 
-- **High pressures**, long distances.  
+- **High pressures**, long distances.
 - Must control frictional losses, ensure pipeline integrity, handle multiphase flows, or high-temperature conditions.
 
-II. **Municipal Water Supply**  
+II. **Municipal Water Supply**
 
-- Delivering water at acceptable pressure to residences.  
-- Low friction losses for energy efficiency.  
+- Delivering water at acceptable pressure to residences.
+- Low friction losses for energy efficiency.
 - Typically handle moderate pressures, large diameters.
 
-III. **Chemical & Process Industries**  
+III. **Chemical & Process Industries**
 
-- Often require precise flow control to maintain reaction stoichiometry.  
-- Material compatibility with corrosive or reactive fluids (e.g., stainless steel, lined pipes).  
+- Often require precise flow control to maintain reaction stoichiometry.
+- Material compatibility with corrosive or reactive fluids (e.g., stainless steel, lined pipes).
 - CIP (clean-in-place) for sanitary conditions in food/pharma.
 
-IV. **Cooling Water Systems in Power Plants**  
+IV. **Cooling Water Systems in Power Plants**
 
-- Large-diameter pipes for **massive** flow rates.  
-- Minimal head loss is critical to avoid excessive pumping energy.  
+- Large-diameter pipes for **massive** flow rates.
+- Minimal head loss is critical to avoid excessive pumping energy.
 - Sometimes use open channels vs. closed piping.
 
-V. **Sanitary Piping (Food/Pharmaceutical)**  
+V. **Sanitary Piping (Food/Pharmaceutical)**
 
-- Smooth surfaces to prevent bacterial growth.  
+- Smooth surfaces to prevent bacterial growth.
 - Must withstand cleaning/sterilization protocols without corroding or contaminating products.
 
 ### Pipe Material and Roughness
@@ -179,7 +189,10 @@ $Re = \rho V_{\text{avg}} D/\mu = 998 \times 0.509 \times 0.05/1.002 \times 10^{
 
 $Re = 900 \times 0.5 \times 0.02/0.1 = 90$, which is laminar, so $f = 64/90 = 0.711$.
 
-$$\Delta P = f\frac{L}{D}\frac{\rho V_{\text{avg}}^2}{2} = 0.711 \times 500 \times 112.5 = 40000 \text{ Pa}$$
+$$
+\Delta P = f \frac{L}{D} \frac{\rho V_{\text{avg}}^2}{2} = 0.711 \times 500 \times
+112.5 = 40000 \text{ Pa}
+$$
 
 Hagen–Poiseuille gives $32 \times 0.1 \times 10 \times 0.5/0.02^2 = 40000$ Pa. The two agree exactly.
 
@@ -196,7 +209,9 @@ Hagen–Poiseuille gives $32 \times 0.1 \times 10 \times 0.5/0.02^2 = 40000$ Pa.
 
 (c) A force balance on a fluid cylinder of length $L$ gives $\Delta P\, \pi R^2 = \tau_w\, 2\pi R L$, so $\Delta P = 4L\tau_w/D$. Setting this equal to Darcy–Weisbach, $f\frac{L}{D}\frac{\rho V_{\text{avg}}^2}{2}$, gives
 
-$$f = \frac{8\tau_w}{\rho V_{\text{avg}}^2} = \frac{64\mu}{\rho V_{\text{avg}} D} = \frac{64}{Re}$$
+$$
+f = \frac{8\tau_w}{\rho V_{\text{avg}}^2} = \frac{64\mu}{\rho V_{\text{avg}} D} = \frac{64}{Re}
+$$
 
 </details>
 

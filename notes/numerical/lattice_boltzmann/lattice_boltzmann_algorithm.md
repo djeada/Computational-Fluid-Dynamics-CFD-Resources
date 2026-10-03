@@ -4,15 +4,15 @@ The **Lattice-Boltzmann method (LBM)** is a computational approach for simulatin
 
 ## Principles of LBM
 
-I. **Kinetic Origin**:  
+I. **Kinetic Origin**:
 
 LBM originates from the Boltzmann equation of kinetic theory, which describes the evolution of a particle distribution function $f(\xi, x, t)$. Instead of solving the continuous Boltzmann equation directly, LBM discretizes space, time, and velocity space into a finite set of discrete velocities and moves “particles” along a lattice.
 
-II. **Mesoscopic Approach**:  
+II. **Mesoscopic Approach**:
 
 LBM operates at an intermediate scale: it does not simulate individual molecules (like molecular dynamics) nor solve continuum PDEs (like the Navier-Stokes equations) directly. Instead, it uses distribution functions and collision models that, through proper averaging (Chapman-Enskog analysis), recover macroscopic fluid behavior.
 
-III. **Discrete Velocities and Lattice Grids**:  
+III. **Discrete Velocities and Lattice Grids**:
 
 The method discretizes the domain into a lattice (grid) and assigns a finite set of discrete velocities $\{c_i\}$. At each lattice point, we track distribution functions $f_i(x,t)$ corresponding to each discrete velocity $c_i$.
 
@@ -20,7 +20,10 @@ The method discretizes the domain into a lattice (grid) and assigns a finite set
 
 The fundamental equation in LBM is the discrete Boltzmann equation with a simple relaxation collision model (BGK model):
 
-$$f_i(x + c_i \Delta t, t + \Delta t) = f_i(x, t) - \frac{\Delta t}{\tau} [ f_i(x,t) - f_i^{\text{eq}}(x,t) ].$$
+$$
+f_i(x + c_i \Delta t, t + \Delta t) = f_i(x, t) - \frac{\Delta t}{\tau}
+[f_i(x,t) - f_i^{\text{eq}}(x,t)]
+$$
 
 **Key Definitions**:
 
@@ -33,15 +36,15 @@ $$f_i(x + c_i \Delta t, t + \Delta t) = f_i(x, t) - \frac{\Delta t}{\tau} [ f_i(
 
 **Discretization Steps**:
 
-I. **Spatial Discretization**:  
+I. **Spatial Discretization**:
 
 Divide the domain $\Omega$ into a lattice of points separated by $\Delta x$.
 
-II. **Temporal Discretization**:  
+II. **Temporal Discretization**:
 
 Evolve the solution in discrete time steps $\Delta t$.
 
-III. **Velocity Space Discretization**:  
+III. **Velocity Space Discretization**:
 
 Replace the continuous velocity space with a finite, discrete set of velocities $\{c_i\}_{i=1}^Q$. Typical sets are chosen to ensure isotropy and correct recovery of Navier-Stokes equations.
 
@@ -53,7 +56,7 @@ Replace the continuous velocity space with a finite, discrete set of velocities 
 Each discrete velocity set is chosen so that moments of $f_i$ reproduce the required macroscopic flow equations.
 
 For the D2Q9 model:
-  
+
 $$
 (c_i) = \begin{pmatrix}
 0 & 1 & 0 & -1 & 0 & 1 & -1 & 1 & -1 \\
@@ -75,7 +78,9 @@ $$
 
 From the distribution functions, macroscopic quantities are obtained via moments:
 
-$$\rho(x,t) = \sum_i f_i(x,t), \quad \rho u(x,t) = \sum_i f_i(x,t) c_i.$$
+$$
+\rho(x,t) = \sum_i f_i(x,t), \quad \rho u(x,t) = \sum_i f_i(x,t) c_i
+$$
 
 Here:
 
@@ -93,13 +98,17 @@ I. **Collision Step**:
 - Locally relax the distribution functions $f_i$ towards an equilibrium $f_i^{\text{eq}}$.
 - The post-collision distributions $f_i^*(x,t)$ are computed as:
 
- $$f_i^*(x,t) = f_i(x,t) - \frac{\Delta t}{\tau} [f_i(x,t)-f_i^{\text{eq}}(x,t)].$$
+$$
+f_i^*(x,t) = f_i(x,t) - \frac{\Delta t}{\tau} [f_i(x,t) - f_i^{\text{eq}}(x,t)]
+$$
 
 II. **Streaming Step**:
 
 Move the post-collision distributions along their respective discrete velocities to adjacent lattice sites:
 
-$$f_i(x+c_i\Delta t, t+\Delta t) = f_i^*(x,t).$$
+$$
+f_i(x + c_i\Delta t, t + \Delta t) = f_i^*(x,t)
+$$
 
 - **Boundary Conditions**: Implement boundary conditions (no-slip, inflow/outflow, moving walls) by prescribing suitable bounce-back or interpolation methods. LBM makes it straightforward to handle complex boundaries.
 - **Macroscopic Variables Calculation**: After collision and streaming, compute $\rho$ and $\rho u$ at each lattice point.
@@ -114,13 +123,17 @@ Repeat the collision and streaming steps until the desired time is reached.
 - Gauss-Hermite quadrature approximates continuous velocity integrals by discrete sums, ensuring that the chosen discrete velocities and weights produce correct low-order moments.
 
 **Key Idea**:
+
 - Approximate integrals:
 
-$$\int_{-\infty}^{\infty} f(\xi) e^{-\xi^2} d\xi \approx \sum_i w_i f(x_i),$$
+$$
+\int_{-\infty}^{\infty} f(\xi) e^{-\xi^2} d\xi \approx \sum_i w_i f(x_i)
+$$
 
 where $x_i, w_i$ come from Hermite polynomial roots and weights.
 
 **Benefit**:
+
 - Ensures correct recovery of isothermal Navier-Stokes equations up to a certain order in Mach number and Knudsen number.
 
 ## Physical Interpretations and Parameters
@@ -131,7 +144,9 @@ where $x_i, w_i$ come from Hermite polynomial roots and weights.
 
 From Chapman-Enskog analysis:
 
-$$\nu = c_s^2 \left( \tau - \frac{\Delta t}{2} \right),$$
+$$
+\nu = c_s^2 \left(\tau - \frac{\Delta t}{2} \right)
+$$
 
 where $c_s = \frac{1}{\sqrt{3}}(\frac{\Delta x}{\Delta t})$ is the LBM speed of sound.
 
@@ -143,7 +158,11 @@ $c_s$ is a model-dependent quantity and relates the lattice spacing $\Delta x$ a
 
 The equilibrium distribution function:
 
-$$f_i^{\text{eq}} = w_i \rho \left[1 + \frac{c_i \cdot u}{c_s^2} + \frac{(c_i \cdot u)^2}{2c_s^4} - \frac{u \cdot u}{2c_s^2}\right],$$
+$$
+f_i^{\text{eq}} = w_i \rho
+\left[1 + \frac{c_i \cdot u}{c_s^2} + \frac{(c_i \cdot u)^2}{2c_s^4} -
+\frac{u \cdot u}{2c_s^2}\right]
+$$
 
 ensures correct mass, momentum, and pressure representation.
 
@@ -175,17 +194,19 @@ IV. **Flexible Extensions**:
 ## Limitations and Ongoing Research
 
 **Knudsen and Mach Numbers**:
+
 - LBM works best at low Mach and Knudsen numbers. High-speed or rarefied flows require either more sophisticated collision models or extended velocity sets.
-**Turbulence Modeling**:
+  **Turbulence Modeling**:
 - High-Reynolds number flows necessitate turbulence models or large-eddy simulation techniques integrated within the LBM framework.
-**Compressible and High-Ma Flows**:
+  **Compressible and High-Ma Flows**:
 - Extended lattice sets or multiple distribution functions are needed to handle compressible regimes accurately.
-**Hybrid Methods**:
+  **Hybrid Methods**:
 - Combining LBM with finite volume or finite element approaches, or using dimensional reduction methods (such as Reduced Order Modeling), can improve flexibility and performance.
 
 ## LBM and Reduced Order Modeling (ROM)
 
 While LBM itself is a simulation method, it can also benefit from Reduced Order Modeling techniques:
+
 - **ROM Integration**:
 - Run LBM for multiple parameter sets (geometry changes, Reynolds number variations).
 - Collect snapshots of velocity and pressure fields.
@@ -236,13 +257,18 @@ Below, we detail each step with a focus on hands-on implementation aspects, assu
 
 For a 2D simulation, the D2Q9 model is common. The discrete velocities $\{c_i\}$ for D2Q9 are:
 
-$$c_i \in \{(0,0), (1,0), (-1,0), (0,1), (0,-1), (1,1), (-1,1), (1,-1), (-1,-1)\} \times c_l$$
+$$
+c_i \in \{(0,0), (1,0), (-1,0), (0,1), (0, - 1), (1,1), (-1,1), (1, - 1), (-1, - 1)\}
+\times c_l
+$$
 
 with $c_l = \Delta x/\Delta t$. This gives 9 discrete directions (including rest).
 
 **Weights $w_i$** for D2Q9:
 
-$$w_0 = 4/9, \quad w_{1,2,3,4} = 1/9, \quad w_{5,6,7,8} = 1/36.$$
+$$
+w_0 = 4/9, \quad w_{1,2,3,4} = 1/9, \quad w_{5,6,7,8} = 1/36
+$$
 
 #### 3. Initialize Data Structures
 
@@ -257,12 +283,16 @@ $$w_0 = 4/9, \quad w_{1,2,3,4} = 1/9, \quad w_{5,6,7,8} = 1/36.$$
 - `double uy[N_x][N_y];`
 
 **Initialization**:
-  
+
 - Set initial density $\rho_0 = 1.0$ (commonly used).
 - Set initial velocity field $(u_{x}, u_{y}) = (0,0)$ or a desired initial flow (e.g., a uniform inflow at the left boundary).
 - Compute initial equilibrium distributions $f_i^{\text{eq}}(\rho_0, u_x, u_y)$ at each cell using:
 
-$$f_i^{\text{eq}} = w_i \rho_0 \left[ 1 + \frac{c_i \cdot u}{c_s^2} + \frac{(c_i \cdot u)^2}{2c_s^4} - \frac{u \cdot u}{2 c_s^2} \right].$$
+$$
+f_i^{\text{eq}} = w_i \rho_0
+\left[1 + \frac{c_i \cdot u}{c_s^2} + \frac{(c_i \cdot u)^2}{2c_s^4} -
+\frac{u \cdot u}{2 c_s^2} \right]
+$$
 
 - Set $f_i(x,y,0) = f_i^{\text{eq}}$.
 
@@ -277,7 +307,9 @@ I. **Collision Step**:
 - Compute equilibrium distributions $f_i^{\text{eq}}$.
 - Relax towards equilibrium:
 
-$$f_i^*(x,y) = f_i(x,y) - \frac{\Delta t}{\tau} [f_i(x,y) - f_i^{\text{eq}}(x,y)].$$
+$$
+f_i^*(x,y) = f_i(x,y) - \frac{\Delta t}{\tau} [f_i(x,y) - f_i^{\text{eq}}(x,y)]
+$$
 
 II. **Streaming Step**:
 
@@ -286,7 +318,9 @@ II. **Streaming Step**:
 - Compute new coordinates: $x' = x + c_{ix}, y' = y + c_{iy}$.
 - If $(x',y')$ is within the domain, set:
 
-$$f_i(x',y',t+\Delta t) = f_i^*(x,y,t).$$
+$$
+f_i(x',y',t + \Delta t) = f_i^*(x,y,t)
+$$
 
 - Else handle boundary conditions if stream crosses boundary.
 
@@ -299,7 +333,9 @@ Boundary conditions ensure the correct physical behavior. Examples:
 - **No-Slip Walls (Bounce-Back)**:
 - If a lattice node lies on a wall, invert the direction of incoming velocities to simulate a no-slip condition:
 
-$$f_{\bar{i}}(x,y) = f_i(x,y)$$
+$$
+f_{\bar{i}}(x,y) = f_i(x,y)
+$$
 
 where $\bar{i}$ is the opposite velocity direction of $i$.
 
@@ -320,7 +356,10 @@ After streaming (and before the next collision step):
 
 Then:
 
-$$u_x(x,y) = \frac{\sum_i f_i(x,y) c_{ix}}{\rho(x,y)}, \quad u_y(x,y) = \frac{\sum_i f_i(x,y) c_{iy}}{\rho(x,y)}.$$
+$$
+u_x(x,y) = \frac{\sum_i f_i(x,y) c_{ix}}{\rho(x,y)}, \quad
+u_y(x,y) = \frac{\sum_i f_i(x,y) c_{iy}}{\rho(x,y)}
+$$
 
 #### 7. Run the Time Loop
 
@@ -395,7 +434,7 @@ This note is a comprehensive implementation guide for the LBM algorithm. It cove
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Domain size $N_x \times N_y$, lattice spacing $\Delta x$, time step $\Delta t$, relaxation time $\tau$, initial density $\rho_0$ and velocity $\mathbf{u}_0$, boundary condition types, maximum iterations $T_{\max}$ |
 | **Outputs** | Density field $\rho(x,t)$, velocity field $\mathbf{u}(x,t)$, pressure (from $\rho$), vorticity, residual/convergence history, saved fields for visualization (VTK/HDF5) |
 
@@ -447,7 +486,7 @@ For $\mathrm{Re} = 1000$: $\nu_{\text{lb}} = 0.002$ and $\tau = 0.506$, too clos
 With $c_s^2 = 1/3$, the bracket is $1 + 3(c_i \cdot u) + 4.5(c_i \cdot u)^2 - 1.5\,u \cdot u$, and $u \cdot u = 0.01$.
 
 | $c_i$ | $w_i$ | $c_i \cdot u$ | $f_i^{\text{eq}}$ |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | $(0,0)$ | 4/9 | 0 | 0.437778 |
 | $(1,0)$ | 1/9 | 0.1 | 0.147778 |
 | $(-1,0)$ | 1/9 | -0.1 | 0.081111 |

@@ -42,7 +42,8 @@ A **calorically perfect gas** is a thermally perfect gas whose specific heats $c
 For a thermally perfect gas the specific heats are defined by
 
 $$
-de = c_v\, dT, \qquad dh = c_p\, dT
+de = c_v\, dT,
+\qquad dh = c_p\, dT
 $$
 
 Since $h = e + p/\rho = e + RT$, differentiating gives $dh = de + R\, dT$, so
@@ -54,7 +55,8 @@ $$
 With the ratio of specific heats $\gamma = c_p/c_v$:
 
 $$
-c_v = \frac{R}{\gamma - 1}, \qquad c_p = \frac{\gamma R}{\gamma - 1}
+c_v = \frac{R}{\gamma - 1},
+\qquad c_p = \frac{\gamma R}{\gamma - 1}
 $$
 
 For air this gives $c_v = 717.5\ \text{J/(kg K)}$ and $c_p = 1004.5\ \text{J/(kg K)}$.
@@ -62,7 +64,7 @@ For air this gives $c_v = 717.5\ \text{J/(kg K)}$ and $c_p = 1004.5\ \text{J/(kg
 Kinetic theory explains the value of $\gamma$. Each fully excited molecular degree of freedom stores $\tfrac{1}{2}RT$ per unit mass, so a gas with $f$ active degrees of freedom has $c_v = \tfrac{f}{2}R$ and $\gamma = (f + 2)/f$.
 
 | Gas type | Active degrees of freedom | $\gamma$ |
-|---|---|---|
+| --- | --- | --- |
 | Monatomic (He, Ar) | 3 translational | $5/3 \approx 1.667$ |
 | Diatomic (N$_2$, O$_2$, air near room temperature) | 3 translational + 2 rotational | $7/5 = 1.4$ |
 
@@ -80,7 +82,8 @@ These conditions appear behind strong shocks in hypersonic flight and in combust
 With the reference energy set to zero at $T = 0$, a calorically perfect gas has
 
 $$
-e = c_v T, \qquad h = c_p T
+e = c_v T,
+\qquad h = c_p T
 $$
 
 **Internal energy** $e$ is the energy stored in the random motion of the molecules: translation plus rotation for air near room temperature. **Enthalpy** $h = e + p/\rho$ adds the flow work $p/\rho$, the energy needed to push a unit mass of fluid into or out of a control volume. This is why $h$, not $e$, appears in energy balances for open systems such as nozzles, ducts and turbomachines.
@@ -102,7 +105,8 @@ For a reversible process the work is $\delta w = p\, dv$, where $v = 1/\rho$ is 
 For a control volume in steady flow with one inlet (1) and one outlet (2),
 
 $$
-q - w_s = \left(h_2 + \frac{V_2^2}{2} + g z_2\right) - \left(h_1 + \frac{V_1^2}{2} + g z_1\right)
+q - w_s = \left(h_2 + \frac{V_2^2}{2} + g z_2\right) -
+\left(h_1 + \frac{V_1^2}{2} + g z_1\right)
 $$
 
 Here $q$ is the heat added and $w_s$ the shaft work done by the fluid, both per unit mass. In gas flows the gravity term is usually negligible: a height change of 1 m corresponds to $9.81\ \text{J/kg}$, while a temperature change of 1 K corresponds to $1004.5\ \text{J/kg}$.
@@ -124,7 +128,8 @@ with equality only when the process is reversible. For an **adiabatic** process 
 Combining the first law for a reversible process ($\delta q = T\, ds$, $\delta w = p\, dv$) with $h = e + pv$ gives the **Gibbs relations**:
 
 $$
-T\, ds = de + p\, dv, \qquad T\, ds = dh - v\, dp
+T\, ds = de + p\, dv,
+\qquad T\, ds = dh - v\, dp
 $$
 
 They are derived along a reversible path, but they relate only state properties. They therefore hold between any two equilibrium states, whatever process connects them.
@@ -140,19 +145,19 @@ $$
 Integrating with constant $c_p$:
 
 $$
-s_2 - s_1 = c_p \ln\frac{T_2}{T_1} - R \ln\frac{p_2}{p_1}
+s_2 - s_1 = c_p \ln \frac{T_2}{T_1} - R \ln \frac{p_2}{p_1}
 $$
 
 The first Gibbs relation gives an equivalent form in terms of density:
 
 $$
-s_2 - s_1 = c_v \ln\frac{T_2}{T_1} - R \ln\frac{\rho_2}{\rho_1}
+s_2 - s_1 = c_v \ln \frac{T_2}{T_1} - R \ln \frac{\rho_2}{\rho_1}
 $$
 
 Entropy is a state function, so the same formula applies between the stagnation states defined below. These have the same entropy as their static states:
 
 $$
-s_2 - s_1 = c_p \ln\frac{T_{02}}{T_{01}} - R \ln\frac{p_{02}}{p_{01}}
+s_2 - s_1 = c_p \ln \frac{T_{02}}{T_{01}} - R \ln \frac{p_{02}}{p_{01}}
 $$
 
 In adiabatic flow $T_{02} = T_{01}$, which leaves
@@ -174,7 +179,8 @@ $$
 Using $p = \rho R T$ to eliminate temperature or pressure:
 
 $$
-\frac{p_2}{p_1} = \left(\frac{\rho_2}{\rho_1}\right)^{\gamma}, \qquad \frac{T_2}{T_1} = \left(\frac{\rho_2}{\rho_1}\right)^{\gamma - 1}
+\frac{p_2}{p_1} = \left(\frac{\rho_2}{\rho_1}\right)^{\gamma},
+\qquad \frac{T_2}{T_1} = \left(\frac{\rho_2}{\rho_1}\right)^{\gamma - 1}
 $$
 
 Equivalently, $p/\rho^\gamma$ is constant along an isentrope, as stated in [equation_of_state.md](../governing_equations/equation_of_state.md).
@@ -188,13 +194,14 @@ Air at $T_1 = 288.15\ \text{K}$ and $p_1 = 101.325\ \text{kPa}$ is compressed ad
 **Ideal (isentropic) compressor.**
 
 $$
-T_{2s} = 288.15 \times 10^{0.2857} = 556.3\ \text{K}, \qquad \frac{\rho_2}{\rho_1} = 10^{1/1.4} = 5.179
+T_{2s} = 288.15 \times 10^{0.2857} = 556.3\  \text{K},
+\qquad \frac{\rho_2}{\rho_1} = 10^{1/1.4} = 5.179
 $$
 
 The steady-flow energy equation with $q = 0$ gives the work input
 
 $$
--w_s = c_p (T_{2s} - T_1) = 1004.5 \times 268.2 = 269.4\ \text{kJ/kg}
+-w_s = c_p (T_{2s} - T_1) = 1004.5 \times 268.2 = 269.4\  \text{kJ/kg}
 $$
 
 **Real compressor.** Suppose the measured exit temperature is $T_2 = 600\ \text{K}$. The work input is $c_p(600 - 288.15) = 313.3\ \text{kJ/kg}$, and the isentropic efficiency is
@@ -206,7 +213,8 @@ $$
 The entropy change is
 
 $$
-s_2 - s_1 = 1004.5 \ln\frac{600}{288.15} - 287 \ln 10 = 736.7 - 660.8 = 75.9\ \text{J/(kg K)}
+s_2 - s_1 = 1004.5 \ln \frac{600}{288.15} - 287 \ln 10 = 736.7 - 660.8 = 75.9\
+\text{J/(kg K)}
 $$
 
 It is positive, as the second law requires for an adiabatic process. The extra 43.9 kJ/kg of work was dissipated into heat by friction and turbulence inside the machine.
@@ -225,7 +233,8 @@ The fluid does not actually have to stop. Stagnation properties are local proper
 From the steady-flow energy equation with $q = w_s = 0$:
 
 $$
-h_0 = h + \frac{V^2}{2}, \qquad T_0 = T + \frac{V^2}{2 c_p}
+h_0 = h + \frac{V^2}{2},
+\qquad T_0 = T + \frac{V^2}{2 c_p}
 $$
 
 ### In Terms of Mach Number
@@ -239,7 +248,8 @@ $$
 The deceleration to $p_0$ is isentropic by definition, so the isentropic relations give
 
 $$
-\frac{p_0}{p} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{\gamma/(\gamma - 1)}, \qquad \frac{\rho_0}{\rho} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{1/(\gamma - 1)}
+\frac{p_0}{p} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{\gamma/(\gamma - 1)},
+\qquad \frac{\rho_0}{\rho} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{1/(\gamma - 1)}
 $$
 
 The state where the flow is exactly sonic is a second reference, marked with an asterisk: $T^*/T_0 = 2/(\gamma + 1) = 0.8333$ and $p^*/p_0 = 0.5283$ for air. These ratios and their role in nozzle design are developed in [isentropic_flow.md](isentropic_flow.md).
@@ -247,7 +257,7 @@ The state where the flow is exactly sonic is a second reference, marked with an 
 ### What Changes Stagnation Properties
 
 | Process | $T_0$ | $p_0$ |
-|---|---|---|
+| --- | --- | --- |
 | Isentropic flow (nozzle, expansion fan) | constant | constant |
 | Adiabatic with friction or shocks | constant | **decreases** |
 | Heat addition | increases, $q = c_p (T_{02} - T_{01})$ | decreases |
@@ -263,15 +273,16 @@ Two further consequences:
 Air flows at $V = 250\ \text{m/s}$ with $T = 250\ \text{K}$ and $p = 50\ \text{kPa}$.
 
 $$
-T_0 = 250 + \frac{250^2}{2 \times 1004.5} = 281.1\ \text{K}
+T_0 = 250 + \frac{250^2}{2 \times 1004.5} = 281.1\  \text{K}
 $$
 
 $$
-a = \sqrt{1.4 \times 287 \times 250} = 316.9\ \text{m/s}, \qquad M = 0.789
+a = \sqrt{1.4 \times 287 \times 250} = 316.9\  \text{m/s},
+\qquad M = 0.789
 $$
 
 $$
-p_0 = 50 \left(\frac{281.1}{250}\right)^{3.5} = 75.38\ \text{kPa}
+p_0 = 50 \left(\frac{281.1}{250}\right)^{3.5} = 75.38\  \text{kPa}
 $$
 
 The static density is $\rho = p/(RT) = 0.6969\ \text{kg/m}^3$, and the stagnation density is $\rho_0 = 0.9343\ \text{kg/m}^3$.

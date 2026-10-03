@@ -67,7 +67,7 @@ $$
 $$
 
 $$
-\frac{T_2}{T_1} = \frac{p_2}{p_1}\frac{\rho_1}{\rho_2}
+\frac{T_2}{T_1} = \frac{p_2}{p_1} \frac{\rho_1}{\rho_2}
 $$
 
 $$
@@ -89,7 +89,7 @@ $$
 For the same pressure ratio, a shock compresses the gas *less* than an isentropic process. At $p_2/p_1 = 4.5$ the shock gives $\rho_2/\rho_1 = 2.667$, while an isentropic compression gives $4.5^{1/1.4} = 2.928$. The difference appears as extra temperature rise and entropy. As $M_1 \to \infty$ the density ratio tends to $(\gamma + 1)/(\gamma - 1) = 6$ and $M_2 \to \sqrt{(\gamma - 1)/(2\gamma)} = 0.378$, while pressure and temperature grow without bound.
 
 | $M_1$ | $M_2$ | $p_2/p_1$ | $\rho_2/\rho_1$ | $T_2/T_1$ | $p_{02}/p_{01}$ | $(s_2 - s_1)/R$ |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | 1.2 | 0.8422 | 1.5133 | 1.3416 | 1.1280 | 0.9928 | 0.0072 |
 | 1.5 | 0.7011 | 2.4583 | 1.8621 | 1.3202 | 0.9298 | 0.0728 |
 | 2.0 | 0.5774 | 4.5000 | 2.6667 | 1.6875 | 0.7209 | 0.3273 |
@@ -101,7 +101,8 @@ For the same pressure ratio, a shock compresses the gas *less* than an isentropi
 The shock is adiabatic, so the entropy change follows from the stagnation-pressure ratio (see [thermodynamics.md](thermodynamics.md)):
 
 $$
-s_2 - s_1 = c_p \ln\frac{T_2}{T_1} - R \ln\frac{p_2}{p_1} = -R \ln\frac{p_{02}}{p_{01}}
+s_2 - s_1 = c_p \ln \frac{T_2}{T_1} - R \ln \frac{p_2}{p_1} = -R \ln
+\frac{p_{02}}{p_{01}}
 $$
 
 The jump conditions are purely algebraic and have solutions for $M_1 < 1$ as well. At $M_1 = 0.8$ they predict a rarefaction "shock" with $p_2/p_1 = 0.58$. They also give $p_{02}/p_{01} = 1.0165$, which means $s_2 - s_1 = -0.0164\, R < 0$. **Entropy would decrease in an adiabatic process, which violates the second law.** Only the $M_1 > 1$ branch is physical, so every normal shock:
@@ -179,7 +180,8 @@ When supersonic flow meets a concave corner or a wedge of half-angle $\theta$, i
 Split the velocity into components normal and tangential to the shock. There is no pressure gradient along the shock, so the tangential momentum equation gives **equal tangential velocity on both sides**. The normal components obey exactly the normal-shock relations, with the normal Mach numbers
 
 $$
-M_{n1} = M_1 \sin\beta, \qquad M_{n2} = M_2 \sin(\beta - \theta)
+M_{n1} = M_1 \sin\beta,
+\qquad M_{n2} = M_2 \sin(\beta - \theta)
 $$
 
 Every ratio in the normal-shock table (pressure, density, temperature, total pressure) applies with $M_1$ replaced by $M_{n1}$. The downstream Mach number is $M_2 = M_{n2}/\sin(\beta - \theta)$.
@@ -206,9 +208,9 @@ For a given $M_1$, $\theta$ is zero at two wave angles: at the Mach angle $\beta
 - **$\theta > \theta_{max}$**: no straight attached shock can turn the flow. The shock **detaches** and stands ahead of the body as a curved **bow shock**. It is locally normal on the axis, with subsonic flow behind that part, and it weakens toward a Mach wave far from the body.
 
 | $M_1$ | 1.5 | 2 | 3 | 5 | 10 | $\to \infty$ |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | $\theta_{max}$ | $12.11^\circ$ | $22.97^\circ$ | $34.07^\circ$ | $41.12^\circ$ | $44.43^\circ$ | $45.58^\circ$ |
-| $\beta$ at $\theta_{max}$ | $66.6^\circ$ | $64.7^\circ$ | $65.2^\circ$ | $66.6^\circ$ | $67.5^\circ$ | |
+| $\beta$ at $\theta_{max}$ | $66.6^\circ$ | $64.7^\circ$ | $65.2^\circ$ | $66.6^\circ$ | $67.5^\circ$ |  |
 
 The $\theta$–$\beta$–$M$ relation is explicit only for $\theta$. To find $\beta$ from $\theta$, bracket the weak root on $(\mu, \beta_{\theta_{max}})$ and the strong root on $(\beta_{\theta_{max}}, 90^\circ)$, and solve each with a scalar root finder. This is how the numbers below were computed.
 
@@ -247,13 +249,14 @@ When supersonic flow turns *away* from itself around a convex corner, the area a
 Across one Mach wave that turns the flow by $d\theta$, the geometry of the wave gives $dV/V = d\theta/\sqrt{M^2 - 1}$. Using $V = M a$ and $a/a_0 = (1 + \tfrac{\gamma - 1}{2}M^2)^{-1/2}$,
 
 $$
-d\theta = \frac{\sqrt{M^2 - 1}}{1 + \frac{\gamma - 1}{2} M^2}\frac{dM}{M}
+d\theta = \frac{\sqrt{M^2 - 1}}{1 + \frac{\gamma - 1}{2} M^2} \frac{dM}{M}
 $$
 
 Integrating from $M = 1$ defines the **Prandtl–Meyer function**:
 
 $$
-\nu(M) = \sqrt{\frac{\gamma + 1}{\gamma - 1}} \arctan\sqrt{\frac{\gamma - 1}{\gamma + 1}\left(M^2 - 1\right)} - \arctan\sqrt{M^2 - 1}
+\nu(M) = \sqrt{\frac{\gamma + 1}{\gamma - 1}} \arctan
+\sqrt{\frac{\gamma - 1}{\gamma + 1}\left(M^2 - 1\right)} - \arctan \sqrt{M^2 - 1}
 $$
 
 A turn through $\theta$ changes the Mach number according to
@@ -265,7 +268,7 @@ $$
 The static properties then follow from the isentropic ratios with constant $p_0$ and $T_0$, for example $p_2/p_1 = (p_0/p)_{M_1}/(p_0/p)_{M_2}$.
 
 | $M$ | 1.5 | 2.0 | 2.5 | 3.0 |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | $\nu$ | $11.91^\circ$ | $26.38^\circ$ | $39.12^\circ$ | $49.76^\circ$ |
 
 The function has a maximum $\nu_{max} = \tfrac{\pi}{2}\left(\sqrt{(\gamma + 1)/(\gamma - 1)} - 1\right) = 130.45^\circ$. This is the largest turn a sonic stream can make, expanding all the way to zero pressure.
@@ -281,7 +284,8 @@ $$
 $$
 
 $$
-\frac{p_2}{p_1} = \frac{7.8244}{(1 + 0.2 \times 2.385^2)^{3.5}} = 0.5480, \qquad \frac{T_2}{T_1} = \frac{1.8}{1 + 0.2 \times 2.385^2} = 0.8421
+\frac{p_2}{p_1} = \frac{7.8244}{(1 + 0.2 \times 2.385^2)^{3.5}} = 0.5480,
+\qquad \frac{T_2}{T_1} = \frac{1.8}{1 + 0.2 \times 2.385^2} = 0.8421
 $$
 
 The fan starts at $\mu_1 = 30.0^\circ$ to the upstream flow. It ends at $\mu_2 = 24.79^\circ$ to the turned flow, which is $14.79^\circ$ to the original flow direction.

@@ -3,6 +3,7 @@
 ## Overview
 
 Compressible flow is flow in which density changes are large enough to affect the velocity, pressure and temperature fields. This occurs with:
+
 - **High velocities**: Mach number $Ma > 0.3$, where density changes exceed about 5%
 - **Large pressure or temperature differences**: for example gas pipelines, combustors and blow-down tanks
 - **High-speed phenomena**: shock waves and expansion fans
@@ -11,7 +12,7 @@ Compressible flow is flow in which density changes are large enough to affect th
 ## Contents
 
 | Page | What it covers |
-|------|----------------|
+| --- | --- |
 | [Thermodynamics of Compressible Flow](thermodynamics.md) | Calorically perfect gas, internal energy and enthalpy, first and second laws, entropy change, isentropic relations, stagnation conditions |
 | [Speed of Sound and Mach Number](speed_of_sound.md) | Derivation of $a = \sqrt{\gamma R T}$ from a weak pressure wave, Mach number and flow regimes, Mach cone, the $Ma \approx 0.3$ compressibility criterion |
 | [Isentropic Flow](isentropic_flow.md) | Stagnation-to-static ratios, area–Mach relation, converging and converging–diverging nozzles, choking, over- and under-expanded operation |
@@ -26,15 +27,21 @@ A suggested reading order is the order of the table.
 
 **Density variation**: Unlike incompressible flow, where $\rho = \text{constant}$, compressible flow has
 
-$$\frac{D\rho}{Dt} \neq 0$$
+$$
+\frac{D\rho}{Dt} \neq 0
+$$
 
 **Speed of sound**: the speed at which small pressure disturbances propagate. For an ideal gas it is
 
-$$a = \sqrt{\left(\frac{\partial p}{\partial \rho}\right)_s} = \sqrt{\gamma R T}$$
+$$
+a = \sqrt{\left(\frac{\partial p}{\partial \rho}\right)_s} = \sqrt{\gamma R T}
+$$
 
 **Mach number**: the ratio of flow speed to sound speed,
 
-$$Ma = \frac{V}{a}$$
+$$
+Ma = \frac{V}{a}
+$$
 
 Along a streamline in isentropic flow, $d\rho/\rho = -Ma^2\, dV/V$. The derivation, the flow regimes and the Mach cone are in [speed_of_sound.md](speed_of_sound.md).
 
@@ -42,7 +49,10 @@ Along a streamline in isentropic flow, $d\rho/\rho = -Ma^2\, dV/V$. The derivati
 
 Compressible-flow theory normally uses a calorically perfect gas: $p = \rho R T$, $c_p - c_v = R$, $\gamma = c_p/c_v$. For air $\gamma \approx 1.4$ and $R \approx 287$ J/(kg K). Along an isentrope
 
-$$\frac{T_2}{T_1} = \left(\frac{p_2}{p_1}\right)^{(\gamma-1)/\gamma}, \qquad \frac{\rho_2}{\rho_1} = \left(\frac{p_2}{p_1}\right)^{1/\gamma}$$
+$$
+\frac{T_2}{T_1} = \left(\frac{p_2}{p_1}\right)^{(\gamma-1)/\gamma},
+\qquad \frac{\rho_2}{\rho_1} = \left(\frac{p_2}{p_1}\right)^{1/\gamma}
+$$
 
 Entropy change, stagnation conditions and the limits of the perfect-gas model are covered in [thermodynamics.md](thermodynamics.md).
 
@@ -52,15 +62,24 @@ Entropy change, stagnation conditions and the limits of the perfect-gas model ar
 
 #### Continuity Equation
 
-$$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{V}) = 0$$
+$$
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{V}) = 0
+$$
 
 #### Momentum Equation
 
-$$\frac{\partial (\rho \vec{V})}{\partial t} + \nabla \cdot (\rho \vec{V} \vec{V}) = -\nabla p + \nabla \cdot \boldsymbol{\tau} + \rho \vec{g}$$
+$$
+\frac{\partial (\rho \vec{V})}{\partial t} + \nabla \cdot
+(\rho \vec{V} \vec{V}) = -\nabla p + \nabla \cdot \boldsymbol{\tau} + \rho \vec{g}
+$$
 
 #### Energy Equation
 
-$$\frac{\partial E}{\partial t} + \nabla \cdot ((E + p)\vec{V}) = \nabla \cdot (\boldsymbol{\tau} \cdot \vec{V}) + \nabla \cdot (k \nabla T) + \rho \vec{g} \cdot \vec{V}$$
+$$
+\frac{\partial E}{\partial t} + \nabla \cdot ((E + p)\vec{V}) = \nabla \cdot
+(\boldsymbol{\tau} \cdot \vec{V}) + \nabla \cdot (k \nabla T) + \rho \vec{g} \cdot
+\vec{V}
+$$
 
 where $E = \rho(e + \frac{1}{2}V^2)$ is total energy per unit volume. See [continuity.md](../governing_equations/continuity.md), [energy.md](../governing_equations/energy.md) and [equation_of_state.md](../governing_equations/equation_of_state.md) for derivations.
 
@@ -80,9 +99,14 @@ where $h = c_p T$ is specific enthalpy.
 
 ### Isentropic Flow
 
-$$\frac{T_0}{T} = 1 + \frac{\gamma-1}{2}Ma^2, \qquad \frac{p_0}{p} = \left(1 + \frac{\gamma-1}{2}Ma^2\right)^{\gamma/(\gamma-1)}$$
+$$
+\frac{T_0}{T} = 1 + \frac{\gamma-1}{2}Ma^2,
+\qquad \frac{p_0}{p} = \left(1 + \frac{\gamma-1}{2}Ma^2\right)^{\gamma/(\gamma-1)}
+$$
 
-$$\frac{dA}{A} = \left(Ma^2 - 1\right)\frac{dV}{V}$$
+$$
+\frac{dA}{A} = \left(Ma^2 - 1\right) \frac{dV}{V}
+$$
 
 - Subsonic flow accelerates in a converging duct, and supersonic flow accelerates in a diverging duct.
 - $Ma = 1$ can occur only at a throat.
@@ -120,11 +144,13 @@ See [rayleigh_fanno.md](rayleigh_fanno.md).
 ### Aerospace Engineering
 
 **Aircraft engines**:
+
 - Inlet design for supersonic aircraft
 - Turbine nozzle flows
 - Afterburner analysis
 
 **Rocket nozzles**:
+
 - De Laval nozzle design
 - Thrust optimization
 - Altitude compensation
@@ -132,11 +158,13 @@ See [rayleigh_fanno.md](rayleigh_fanno.md).
 ### Gas Turbines
 
 **Compressor design**:
+
 - Blade passage flows
 - Shock formation and control
 - Efficiency optimization
 
 **Turbine analysis**:
+
 - Expansion through blade rows
 - Cooling air ejection
 - Performance prediction
@@ -144,11 +172,13 @@ See [rayleigh_fanno.md](rayleigh_fanno.md).
 ### Industrial Applications
 
 **Steam turbines**:
+
 - Nozzle and blade design
 - Condensation effects
 - Two-phase flow considerations
 
 **Process equipment**:
+
 - Pressure relief valves
 - Pipeline rupture disks
 - Gas metering devices (choked nozzles and sonic venturis)
@@ -159,18 +189,22 @@ See [rayleigh_fanno.md](rayleigh_fanno.md).
 
 For one-dimensional unsteady flow, information travels along **characteristic lines**
 
-$$\frac{dx}{dt} = u \pm a$$
+$$
+\frac{dx}{dt} = u \pm a
+$$
 
 In steady two-dimensional supersonic flow the characteristics are Mach lines inclined at $\pm\mu$ to the local flow direction. The method tracks disturbances and is used to design supersonic nozzle contours.
 
 ### Shock-Capturing Methods
 
 **Finite volume schemes**:
+
 - Total variation diminishing (TVD)
 - Essentially non-oscillatory (ENO)
 - Weighted ENO (WENO)
 
 **Techniques for handling shocks**:
+
 - Artificial viscosity
 - Flux limiters
 - Adaptive mesh refinement near discontinuities
@@ -178,11 +212,13 @@ In steady two-dimensional supersonic flow the characteristics are Mach lines inc
 ### Modern CFD
 
 **Commercial and open-source codes**:
+
 - ANSYS Fluent
 - STAR-CCM+
 - OpenFOAM
 
 **Specialized codes**:
+
 - US3D (hypersonics)
 - OVERFLOW (aerospace)
 
@@ -192,7 +228,9 @@ In steady two-dimensional supersonic flow the characteristics are Mach lines inc
 
 **Pitot tubes**: In **subsonic** flow the probe measures the isentropic stagnation pressure:
 
-$$\frac{p_0}{p} = \left(1 + \frac{\gamma-1}{2}Ma^2\right)^{\gamma/(\gamma-1)}$$
+$$
+\frac{p_0}{p} = \left(1 + \frac{\gamma-1}{2}Ma^2\right)^{\gamma/(\gamma-1)}
+$$
 
 In **supersonic** flow a bow shock stands in front of the probe, and the Rayleigh pitot-tube formula must be used instead (see [shock_waves.md](shock_waves.md)).
 
@@ -221,11 +259,13 @@ In **supersonic** flow a bow shock stands in front of the probe, and the Rayleig
 ## Learning Strategy
 
 ### Prerequisites
+
 - Thermodynamics and ideal gas relations
 - Differential equations and mathematical methods
 - Basic fluid mechanics and inviscid flow theory
 
 ### Key Concepts
+
 1. Mach number and its physical significance ([speed_of_sound.md](speed_of_sound.md))
 2. Isentropic flow relations and stagnation properties ([thermodynamics.md](thermodynamics.md), [isentropic_flow.md](isentropic_flow.md))
 3. Area-velocity relationships and choked flow ([isentropic_flow.md](isentropic_flow.md))
@@ -234,6 +274,7 @@ In **supersonic** flow a bow shock stands in front of the probe, and the Rayleig
 6. One-dimensional flow with friction or heat addition ([rayleigh_fanno.md](rayleigh_fanno.md))
 
 ### Problem-Solving Approach
+
 1. Identify flow regime (subsonic, transonic, supersonic)
 2. Determine relevant assumptions (isentropic, adiabatic, etc.)
 3. Apply appropriate relations (isentropic, shock, expansion)

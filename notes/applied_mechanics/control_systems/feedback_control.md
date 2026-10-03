@@ -8,17 +8,23 @@ Feedback control uses measured output information to correct the control action 
 
 The sensor transfer function is $H(s) = 1$. The closed-loop transfer function is:
 
-$$T(s) = \frac{G(s)}{1 + G(s)}$$
+$$
+T(s) = \frac{G(s)}{1 + G(s)}
+$$
 
 and the error transfer function is:
 
-$$E(s) = \frac{R(s)}{1 + G(s)}$$
+$$
+E(s) = \frac{R(s)}{1 + G(s)}
+$$
 
 ### Non-Unity Feedback
 
 When $H(s) \neq 1$, the closed-loop transfer function becomes:
 
-$$T(s) = \frac{G(s)}{1 + G(s)H(s)}$$
+$$
+T(s) = \frac{G(s)}{1 + G(s)H(s)}
+$$
 
 The error measured at the output differs from the error at the plant input. To analyze steady-state error, it is often convenient to convert to an equivalent unity-feedback form.
 
@@ -26,20 +32,24 @@ The error measured at the output differs from the error at the plant input. To a
 
 The steady-state error for a unity-feedback system with open-loop transfer function $G(s)$ is:
 
-$$e_{ss} = \lim_{s \to 0} \frac{sR(s)}{1 + G(s)}$$
+$$
+e_{ss} = \lim_{s \to 0} \frac{sR(s)}{1 + G(s)}
+$$
 
 ### System Type
 
 The **system type** is the number of free integrators in the open-loop transfer function:
 
-$$G(s) = \frac{K \prod(s + z_i)}{s^N \prod(s + p_j)}$$
+$$
+G(s) = \frac{K \prod(s + z_i)}{s^N \prod(s + p_j)}
+$$
 
 $N$ is the system type.
 
 ### Error Constants and Steady-State Errors
 
 | Input | Error Constant | Formula | Type 0 | Type 1 | Type 2 |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | Step $R/s$ | Position $K_p$ | $\lim_{s\to 0} G(s)$ | $\frac{R}{1+K_p}$ | 0 | 0 |
 | Ramp $R/s^2$ | Velocity $K_v$ | $\lim_{s\to 0} sG(s)$ | $\infty$ | $R/K_v$ | 0 |
 | Parabola $R/s^3$ | Acceleration $K_a$ | $\lim_{s\to 0} s^2G(s)$ | $\infty$ | $\infty$ | $R/K_a$ |
@@ -50,17 +60,23 @@ $N$ is the system type.
 
 A major advantage of feedback is reduced sensitivity to plant parameter changes. The **sensitivity function** of the closed-loop transfer function $T$ with respect to the plant $G$ is:
 
-$$S_G^T = \frac{\partial T / T}{\partial G / G} = \frac{1}{1 + G(s)H(s)}$$
+$$
+S_G^T = \frac{\partial T / T}{\partial G / G} = \frac{1}{1 + G(s)H(s)}
+$$
 
 For large loop gain $|G(s)H(s)| \gg 1$:
 
-$$S_G^T \approx \frac{1}{G(s)H(s)} \approx 0$$
+$$
+S_G^T \approx \frac{1}{G(s)H(s)} \approx 0
+$$
 
 This means that at frequencies where the loop gain is high, the closed-loop transfer function is **insensitive** to changes in the plant.
 
 ### Complementary Sensitivity
 
-$$T(s) + S(s) = 1$$
+$$
+T(s) + S(s) = 1
+$$
 
 where $T(s) = \frac{G(s)H(s)}{1 + G(s)H(s)}$ is the complementary sensitivity function. This constraint implies a fundamental trade-off: you cannot achieve both perfect tracking ($|T| = 1$) and perfect disturbance/noise rejection ($|S| = 0$) at the same frequency.
 
@@ -68,11 +84,15 @@ where $T(s) = \frac{G(s)H(s)}{1 + G(s)H(s)}$ is the complementary sensitivity fu
 
 For a system with disturbance $D(s)$ entering at the plant input:
 
-$$Y(s) = \frac{G(s)}{1 + G(s)C(s)} D(s) + \frac{G(s)C(s)}{1 + G(s)C(s)} R(s)$$
+$$
+Y(s) = \frac{G(s)}{1 + G(s)C(s)} D(s) + \frac{G(s)C(s)}{1 + G(s)C(s)} R(s)
+$$
 
 The transfer function from disturbance to output is:
 
-$$\frac{Y(s)}{D(s)} = \frac{G(s)}{1 + G(s)C(s)} = G(s) S(s)$$
+$$
+\frac{Y(s)}{D(s)} = \frac{G(s)}{1 + G(s)C(s)} = G(s) S(s)
+$$
 
 High loop gain at the disturbance frequency makes $|S(j\omega)|$ small, thereby rejecting the disturbance. This is the fundamental mechanism of feedback control.
 
@@ -80,11 +100,15 @@ High loop gain at the disturbance frequency makes $|S(j\omega)|$ small, thereby 
 
 A lead compensator adds phase lead near the gain crossover frequency to improve phase margin and transient response.
 
-$$C_{lead}(s) = K_c \frac{s + z}{s + p}, \quad p > z > 0$$
+$$
+C_{lead}(s) = K_c \frac{s + z}{s + p}, \quad p > z > 0
+$$
 
 or equivalently:
 
-$$C_{lead}(s) = K_c \frac{T s + 1}{\alpha T s + 1}, \quad 0 < \alpha < 1$$
+$$
+C_{lead}(s) = K_c \frac{T s + 1}{\alpha T s + 1}, \quad 0 < \alpha < 1
+$$
 
 **Maximum phase lead**: $\phi_{max} = \sin^{-1}\frac{1 - \alpha}{1 + \alpha}$ at frequency $\omega_m = \frac{1}{T\sqrt{\alpha}}$
 
@@ -101,11 +125,15 @@ $$C_{lead}(s) = K_c \frac{T s + 1}{\alpha T s + 1}, \quad 0 < \alpha < 1$$
 
 A lag compensator improves steady-state accuracy by boosting low-frequency gain without significantly affecting the phase margin.
 
-$$C_{lag}(s) = K_c \frac{s + z}{s + p}, \quad z > p > 0$$
+$$
+C_{lag}(s) = K_c \frac{s + z}{s + p}, \quad z > p > 0
+$$
 
 or equivalently:
 
-$$C_{lag}(s) = K_c \frac{T s + 1}{\beta T s + 1}, \quad \beta > 1$$
+$$
+C_{lag}(s) = K_c \frac{T s + 1}{\beta T s + 1}, \quad \beta > 1
+$$
 
 ### Design Procedure (Bode Method)
 
@@ -119,7 +147,9 @@ $$C_{lag}(s) = K_c \frac{T s + 1}{\beta T s + 1}, \quad \beta > 1$$
 
 When both transient response improvement and steady-state accuracy are needed, a **lead-lag** compensator combines both:
 
-$$C(s) = K_c \frac{(s + z_1)(s + z_2)}{(s + p_1)(s + p_2)}$$
+$$
+C(s) = K_c \frac{(s + z_1)(s + z_2)}{(s + p_1)(s + p_2)}
+$$
 
 where the lead section ($z_1, p_1$ with $p_1 > z_1$) improves phase margin and the lag section ($z_2, p_2$ with $z_2 > p_2$) boosts low-frequency gain.
 
@@ -136,7 +166,9 @@ Compensators can also be designed using the root locus:
 
 The compensator zero and pole must contribute the correct angle at the desired pole location $s_d$:
 
-$$\angle C(s_d) = \angle(s_d + z) - \angle(s_d + p) = \theta_{required}$$
+$$
+\angle C(s_d) = \angle(s_d + z) - \angle(s_d + p) = \theta_{required}
+$$
 
 where $\theta_{required} = 180^\circ - \angle G(s_d)H(s_d)$.
 
@@ -154,11 +186,15 @@ System type = 1 (one free integrator).
 
 Velocity error constant:
 
-$$K_v = \lim_{s \to 0} sG(s) = \lim_{s \to 0} \frac{50s}{s(s+5)} = \frac{50}{5} = 10$$
+$$
+K_v = \lim_{s \to 0} sG(s) = \lim_{s \to 0} \frac{50s}{s(s+5)} = \frac{50}{5} = 10
+$$
 
 Steady-state error for a ramp of magnitude 3:
 
-$$e_{ss} = \frac{3}{K_v} = \frac{3}{10} = 0.3$$
+$$
+e_{ss} = \frac{3}{K_v} = \frac{3}{10} = 0.3
+$$
 
 ### Example 2: Lead Compensator Design
 
@@ -170,7 +206,9 @@ $$e_{ss} = \frac{3}{K_v} = \frac{3}{10} = 0.3$$
 
 **Step 1** — Set gain for steady-state requirement. Use the form $C(s) = K_c \frac{Ts+1}{\alpha Ts+1}$, whose DC gain is $K_c$:
 
-$$K_v = \lim_{s\to 0} s \cdot K_c \frac{Ts+1}{\alpha Ts+1} \cdot \frac{4}{s(s+2)} = 2K_c$$
+$$
+K_v = \lim_{s\to 0} s \cdot K_c \frac{Ts+1}{\alpha Ts+1} \cdot \frac{4}{s(s+2)} = 2K_c
+$$
 
 so $K_c = 10$ gives $K_v = 20\;\text{s}^{-1}$. (In the pole-zero form $K_c' \frac{s+z}{s+p}$ the DC gain is $K_c' z/p$, so the gain must be raised to $K_c' = K_c/\alpha$.)
 
@@ -182,13 +220,17 @@ At the gain crossover $|G(j\omega)| = 1$: solving $\omega\sqrt{\omega^2 + 4} = 4
 
 **Step 4** — Compute $\alpha$:
 
-$$\alpha = \frac{1 - \sin 39^\circ}{1 + \sin 39^\circ} = \frac{1 - 0.629}{1 + 0.629} = \frac{0.371}{1.629} \approx 0.228$$
+$$
+\alpha = \frac{1 - \sin 39^\circ}{1 + \sin 39^\circ} = \frac{1 - 0.629}{1 + 0.629} = \frac{0.371}{1.629} \approx 0.228
+$$
 
 **Step 5** — Place maximum phase at the new crossover. The lead compensator adds a gain of $1/\sqrt{\alpha}$ at $\omega_m$, so the new crossover is where the uncompensated magnitude equals $\sqrt{\alpha}$: $\frac{40}{\omega_m\sqrt{\omega_m^2 + 4}} = \sqrt{0.228} = 0.477$, giving $\omega_m \approx 9.05$ rad/s. Then $T = \frac{1}{9.05\sqrt{0.228}} \approx 0.232$ s.
 
 Zero: $z = 1/T \approx 4.3$, Pole: $p = 1/(\alpha T) \approx 19.0$.
 
-$$C(s) = 10 \cdot \frac{0.232s + 1}{0.0527s + 1} = 44.0 \cdot \frac{s + 4.3}{s + 19.0}$$
+$$
+C(s) = 10 \cdot \frac{0.232s + 1}{0.0527s + 1} = 44.0 \cdot \frac{s + 4.3}{s + 19.0}
+$$
 
 Check: the compensated loop crosses over at about 9.05 rad/s with $PM \approx 51^\circ$, meeting the specification.
 
@@ -200,11 +242,16 @@ Check: the compensated loop crosses over at about 9.05 rad/s with $PM \approx 51
 
 **Solution**:
 
-$$Y_d(s) = \frac{G(s)}{1 + C(s)G(s)} D(s) = \frac{1/(s+1)}{1 + K/(s+1)} \cdot \frac{1}{s} = \frac{1}{s(s + 1 + K)}$$
+$$
+Y_d(s) = \frac{G(s)}{1 + C(s)G(s)} D(s) = \frac{1/(s+1)}{1 + K/(s+1)} \cdot
+\frac{1}{s} = \frac{1}{s(s + 1 + K)}
+$$
 
 By the final value theorem:
 
-$$y_{d,ss} = \lim_{s\to 0} s \cdot \frac{1}{s(s+1+K)} = \frac{1}{1+K}$$
+$$
+y_{d,ss} = \lim_{s\to 0} s \cdot \frac{1}{s(s+1+K)} = \frac{1}{1+K}
+$$
 
 Increasing $K$ reduces the disturbance effect. For $K = 99$, $y_{d,ss} = 0.01$.
 
@@ -254,9 +301,13 @@ Exact: $T(0) = 10/11 = 0.9091$ before and $11/12 = 0.9167$ after, a change of $0
 <details>
 <summary>Answer</summary>
 
-$$\phi_{max} = \sin^{-1}\frac{1 - 0.1}{1 + 0.1} = \sin^{-1}(0.818) = 54.9^\circ$$
+$$
+\phi_{max} = \sin^{-1} \frac{1 - 0.1}{1 + 0.1} = \sin^{-1}(0.818) = 54.9^\circ
+$$
 
-$$\omega_m = \frac{1}{T\sqrt{\alpha}} = \frac{1}{0.5\sqrt{0.1}} = 6.32 \text{ rad/s}$$
+$$
+\omega_m = \frac{1}{T\sqrt{\alpha}} = \frac{1}{0.5\sqrt{0.1}} = 6.32 \text{ rad/s}
+$$
 
 At $\omega_m$ the gain is $1/\sqrt{\alpha} = 3.16$, i.e. 10 dB. At high frequency the gain tends to $1/\alpha = 10$ (20 dB), so sensor noise above the crossover is amplified tenfold. This is why lead compensation is usually limited to $\alpha \gtrsim 0.05$–$0.1$.
 
@@ -267,11 +318,15 @@ At $\omega_m$ the gain is $1/\sqrt{\alpha} = 3.16$, i.e. 10 dB. At high frequenc
 <details>
 <summary>Answer</summary>
 
-$$\frac{Y_d(s)}{D(s)} = \frac{G}{1 + CG} = \frac{\frac{1}{s+1}}{1 + \frac{Ks + K_i}{s(s+1)}} = \frac{s}{s^2 + (1+K)s + K_i}$$
+$$
+\frac{Y_d(s)}{D(s)} = \frac{G}{1 + CG} = \frac{\frac{1}{s+1}}{1 + \frac{Ks + K_i}{s(s+1)}} = \frac{s}{s^2 + (1+K)s + K_i}
+$$
 
 With $D(s) = 1/s$, the final value theorem gives
 
-$$y_{d,ss} = \lim_{s \to 0} s \cdot \frac{s}{s^2 + (1+K)s + K_i} \cdot \frac{1}{s} = 0$$
+$$
+y_{d,ss} = \lim_{s \to 0} s \cdot \frac{s}{s^2 + (1+K)s + K_i} \cdot \frac{1}{s} = 0
+$$
 
 The integrator in the controller makes the loop gain infinite at DC, so a constant disturbance is fully rejected. The final value theorem only applies if the closed loop is stable, which for this second-order polynomial requires $1 + K > 0$ and $K_i > 0$.
 
@@ -286,9 +341,14 @@ The zero is at $z = \omega_{gc}/10 = 0.05$ rad/s, so $T = 1/z = 20$ s. The pole 
 
 At $\omega = 0.5$ rad/s:
 
-$$\angle C_{lag} = \arctan(0.5 \times 20) - \arctan(0.5 \times 200) = 84.29^\circ - 89.43^\circ = -5.1^\circ$$
+$$
+\angle C_{lag} = \arctan(0.5 \times 20) - \arctan(0.5 \times 200) = 84.29^\circ -
+89.43^\circ = -5.1^\circ
+$$
 
-$$|C_{lag}| = \frac{\sqrt{1 + 10^2}}{\sqrt{1 + 100^2}} = 0.1005 \approx 1/\beta$$
+$$
+|C_{lag}| = \frac{\sqrt{1 + 10^2}}{\sqrt{1 + 100^2}} = 0.1005 \approx 1/\beta
+$$
 
 At crossover the network gain has already dropped to about $1/\beta$ of its DC value, so the low-frequency loop gain is $\beta = 10$ times (20 dB) larger relative to crossover, which improves the error constants. The network still costs about $5^\circ$ of phase at crossover, so the phase margin target in the design is increased by a few degrees to compensate.
 

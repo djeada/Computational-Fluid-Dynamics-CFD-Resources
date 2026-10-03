@@ -22,7 +22,9 @@ Below is a diagram showing fluid layers with different speeds. Viscosity acts to
 
 For **Newtonian fluids**, shear stress $\tau$ is proportional to shear rate $\dot{\gamma}$:
 
-$$\tau = \mu \, \dot{\gamma},$$
+$$
+\tau = \mu \, \dot{\gamma}
+$$
 
 where $\mu$ is the **dynamic viscosity**, assumed constant under fixed temperature and pressure. Examples include water, air, many oils, and other “simple” fluids.
 
@@ -50,11 +52,12 @@ Below is a rough  representation comparing a **Newtonian** fluid curve (straight
 For **Non-Newtonian fluids**, the effective viscosity changes depending on shear rate. Common examples:
 
 I. **Shear-Thinning (Pseudoplastic)**:
-   - Viscosity **decreases** with increasing shear rate (e.g., paint, ketchup).  
-II. **Shear-Thickening (Dilatant)**:
-   - Viscosity **increases** with increasing shear rate (e.g., cornstarch in water).  
-III. **Bingham Plastic**:
-   - Needs a **yield stress** to flow (like toothpaste).
+
+- Viscosity **decreases** with increasing shear rate (e.g., paint, ketchup).\
+  II. **Shear-Thickening (Dilatant)**:
+- Viscosity **increases** with increasing shear rate (e.g., cornstarch in water).\
+  III. **Bingham Plastic**:
+- Needs a **yield stress** to flow (like toothpaste).
 
 ### Temperature Effects
 
@@ -63,23 +66,25 @@ III. **Bingham Plastic**:
 
 ### Pressure Effects
 
-- **Higher pressure** typically squeezes molecules closer, slightly increasing viscosity.  
+- **Higher pressure** typically squeezes molecules closer, slightly increasing viscosity.
 - However, for most common fluids (under moderate pressures), temperature changes often overshadow pressure effects.
 
 ### Laminar vs. Turbulent Flow
 
 Viscosity helps determine whether flow is **laminar** (smooth layers) or **turbulent** (chaotic, swirling eddies). The **Reynolds number** ($Re$) is a dimensionless group used to predict flow regime:
 
-$$Re = \frac{\rho \, U \, L}{\mu},$$
+$$
+Re = \frac{\rho \, U \, L}{\mu}
+$$
 
-- $\rho$ = fluid density  
-- $U$ = characteristic velocity  
-- $L$ = characteristic length scale (e.g., diameter of a pipe)  
+- $\rho$ = fluid density
+- $U$ = characteristic velocity
+- $L$ = characteristic length scale (e.g., diameter of a pipe)
 - $\mu$ = dynamic viscosity
 - Low $Re$: laminar flow (viscous forces dominate).
 - High $Re$: turbulent flow (inertial forces dominate).
 
- Diagram for Flow Regimes
+Diagram for Flow Regimes
 
 ```
 Low Re (Laminar)          High Re (Turbulent)
@@ -100,11 +105,12 @@ Low Re (Laminar)          High Re (Turbulent)
 When a fluid encounters a solid boundary, the **no-slip condition** dictates that fluid directly in contact with the surface is at rest relative to that surface. This forces a transition region called the **boundary layer**, where velocity increases from near-zero at the wall to the free-stream velocity in the bulk flow.
 
 #### Boundary Layer Basics
+
 - Boundary-layer thickness $\delta$: the distance from the wall to where the velocity is ~99% of the free-stream value.
 - **High Viscosity** $\rightarrow$ thicker boundary layer (slower development of velocity profile).
 - **Low Viscosity** $\rightarrow$ thinner boundary layer (velocity transitions quickly).
 
- Boundary Layer Diagram
+Boundary Layer Diagram
 
 ```
    Free-stream velocity (U∞)
@@ -182,7 +188,10 @@ The paint is ten times thinner while being brushed, so it spreads easily, and th
 <details>
 <summary>Answer</summary>
 
-$$\mu = 1.716 \times 10^{-5}\left(\frac{373}{273}\right)^{3/2}\frac{273 + 111}{373 + 111} = 2.17 \times 10^{-5} \text{ Pa s}$$
+$$
+\mu = 1.716 \times 10^{-5}\left(\frac{373}{273}\right)^{3/2}
+\frac{273 + 111}{373 + 111} = 2.17 \times 10^{-5} \text{ Pa s}
+$$
 
 The ratio is about 1.27, so heating air by 100 K raises its viscosity by roughly 27%. Liquids behave the opposite way: the viscosity of water falls by about a factor of 3.5 between 0 °C and 100 °C.
 

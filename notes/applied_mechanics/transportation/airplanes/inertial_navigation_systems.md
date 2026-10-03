@@ -22,21 +22,25 @@ Imagine being blindfolded in a moving vehicle; you can sense acceleration, decel
 
 An Inertial Navigation System consists of several key components that work together to calculate navigation information:
 
-I. **Accelerometers**: 
+I. **Accelerometers**:
 
 These sensors measure linear acceleration along the X, Y, and Z axes. The data provided by accelerometers are the acceleration components $a_x, a_y, a_z$. By integrating these accelerations over time, the system computes velocity and position.
 
 **Velocity Integration**:
 
-$$v_i(t) = v_{i0} + \int_{t_0}^{t} a_i(\tau) \, d\tau$$
+$$
+v_i(t) = v_{i0} + \int_{t_0}^{t} a_i(\tau) \, d\tau
+$$
 
 **Position Integration**:
 
-$$r_i(t) = r_{i0} + \int_{t_0}^{t} v_i(\tau) \, d\tau$$
+$$
+r_i(t) = r_{i0} + \int_{t_0}^{t} v_i(\tau) \, d\tau
+$$
 
 In these equations, $i$ represents each axis (X, Y, Z), $v_{i0}$ is the initial velocity, and $r_{i0}$ is the initial position.
 
-II. **Gyroscopes**: 
+II. **Gyroscopes**:
 
 Gyroscopes measure the angular velocity $\omega$ around the X, Y, and Z axes. There are various types of gyroscopes:
 
@@ -45,7 +49,7 @@ Gyroscopes measure the angular velocity $\omega$ around the X, Y, and Z axes. Th
 
 Gyroscopes are necessary for determining the vehicle's orientation and maintaining the reference frame for acceleration measurements.
 
-III. **Stabilized Platform and Gimbals**: 
+III. **Stabilized Platform and Gimbals**:
 
 To make sure that the accelerometers and gyroscopes remain properly oriented, they are often mounted on a stabilized platform supported by gimbals. Gimbals are mechanical rings that allow rotation about the roll, pitch, and yaw axes. This setup isolates the sensors from the vehicle's rotations, ensuring that they measure inertial motion rather than rotations induced by the vehicle.
 
@@ -63,33 +67,40 @@ Before the INS can provide accurate navigation data, it must be initialized with
 
 #### Measurement Process
 
-I. **Acceleration Sensing**: 
+I. **Acceleration Sensing**:
 
 Accelerometers measure the **specific force** $\mathbf{f}$, which is the true acceleration minus the gravitational acceleration:
 
-$$\mathbf{f} = \mathbf{a} - \mathbf{g}$$
+$$
+\mathbf{f} = \mathbf{a} - \mathbf{g}
+$$
 
 Here, $\mathbf{a}$ is the true (kinematic) acceleration relative to inertial space, and $\mathbf{g}$ is the local gravitational acceleration.
 
-II. **Rotation Sensing**: 
+II. **Rotation Sensing**:
 
 Gyroscopes measure the angular velocity $\boldsymbol{\omega}$ of the vehicle. This information is used to update the vehicle's orientation over time.
 
-III. **Coordinate Transformation**: 
+III. **Coordinate Transformation**:
 
 The accelerations measured in the body frame (attached to the vehicle) need to be transformed into the navigation frame (aligned with the Earth) using the updated orientation. This is done using a **direction cosine matrix** $\mathbf{C}_{b}^{n}$:
 
-$$\mathbf{f}^{n} = \mathbf{C}_{b}^{n} \cdot \mathbf{f}^{b}$$
+$$
+\mathbf{f}^{n} = \mathbf{C}_{b}^{n} \cdot \mathbf{f}^{b}
+$$
 
 where $\mathbf{f}^{b}$ is the specific force measured in the body frame, and $\mathbf{f}^{n}$ is the specific force in the navigation frame.
 
-IV. **Velocity and Position Integration**: 
+IV. **Velocity and Position Integration**:
 
 The transformed accelerations are integrated over time to update the velocity and position:
 
 **Velocity Update**:
 
-$$v^n(t) = v^n(t_0) + \int_{t_0}^t \left( f^n + g^n - \left( 2\Omega_{ie}^n + \Omega_{en}^n \right) \times v^n \right) d\tau$$
+$$
+v^n(t) = v^n(t_0) + \int_{t_0}^t
+\left(f^n + g^n - \left(2\Omega_{ie}^n + \Omega_{en}^n \right) \times v^n \right) d\tau
+$$
 
 In this equation:
 
@@ -99,7 +110,9 @@ In this equation:
 
 **Position Update**:
 
-$$\mathbf{r}(t) = \mathbf{r}(t_0) + \int_{t_0}^{t} \mathbf{v}^{n}(\tau) \, d\tau$$
+$$
+\mathbf{r}(t) = \mathbf{r}(t_0) + \int_{t_0}^{t} \mathbf{v}^{n}(\tau) \, d\tau
+$$
 
 #### Feedback Control
 
@@ -150,7 +163,8 @@ Transformations between these frames are performed using rotation matrices, such
 **Angular Velocity Transformation**:
 
 $$
-\omega_{nb}^b = \omega_{ib}^b - C_n^b \omega_{in}^n, \quad \omega_{in}^n = \omega_{ie}^n + \omega_{en}^n
+\omega_{nb}^b = \omega_{ib}^b - C_n^b \omega_{in}^n, \quad
+\omega_{in}^n = \omega_{ie}^n + \omega_{en}^n
 $$
 
 where:
@@ -164,7 +178,9 @@ where:
 
 The gravitational acceleration varies with latitude ($\phi$) and altitude ($h$). A simplified model is:
 
-$$g = g_0 \left( 1 - 2\frac{h}{R_e} + 5.2885 \times 10^{-3} \sin^2 \phi \right)$$
+$$
+g = g_0 \left(1 - 2 \frac{h}{R_e} + 5.2885 \times 10^{-3} \sin^2 \phi \right)
+$$
 
 where:
 
@@ -177,7 +193,9 @@ When navigating over the Earth's surface, additional forces come into play:
 
 **Coriolis Acceleration**:
 
-$$\mathbf{a}_c = -2 \boldsymbol{\Omega}_{ie}^{n} \times \mathbf{v}^{n}$$
+$$
+\mathbf{a}_c = -2 \boldsymbol{\Omega}_{ie}^{n} \times \mathbf{v}^{n}
+$$
 
 This accounts for the apparent deflection of moving objects due to the Earth's rotation.
 
@@ -187,7 +205,9 @@ This accounts for the apparent deflection of moving objects due to the Earth's r
 
 The **Schuler period** is defined as:
 
-$$T_s = 2\pi \sqrt{\frac{R_e}{g}}$$
+$$
+T_s = 2\pi \sqrt{\frac{R_e}{g}}
+$$
 
 This period is approximately 84.4 minutes. By tuning the INS to oscillate at this period, the system naturally corrects for errors due to the Earth's curvature, preventing them from growing over time.
 
@@ -298,7 +318,9 @@ Advancements in technology continue to enhance the capabilities and applications
 <details>
 <summary>Answer</summary>
 
-$$T_s = 2\pi\sqrt{\frac{6.371 \times 10^6}{9.81}} = 5063 \text{ s} = 84.4 \text{ min}$$
+$$
+T_s = 2\pi \sqrt{\frac{6.371 \times 10^6}{9.81}} = 5063 \text{ s} = 84.4 \text{ min}
+$$
 
 It is the period of a pendulum whose length equals the Earth's radius, which is also the orbital period of a satellite skimming the surface. A platform tuned to this period stays level as the vehicle moves over the curved Earth.
 
@@ -313,7 +335,10 @@ It is the period of a pendulum whose length equals the Earth's radius, which is 
 
 (b) $\omega_s = \sqrt{g/R_e} = 1.24 \times 10^{-3}$ rad/s:
 
-$$\delta x_{max} = \frac{2b}{\omega_s^2} = \frac{2bR_e}{g} = \frac{2 \times 10^{-3} \times 6.371 \times 10^6}{9.81} = 1.30 \text{ km}$$
+$$
+\delta
+x_{max} = \frac{2b}{\omega_s^2} = \frac{2bR_e}{g} = \frac{2 \times 10^{-3} \times 6.371 \times 10^6}{9.81} = 1.30 \text{ km}
+$$
 
 The maximum is reached after half a Schuler period (about 42 min). Schuler tuning bounds the error caused by accelerometer bias; gyro drift still makes errors grow with time.
 
@@ -326,7 +351,9 @@ The maximum is reached after half a Schuler period (about 42 min). Schuler tunin
 
 $a_{err} = g\sin 0.05^\circ = 9.81 \times 8.73 \times 10^{-4} = 8.56 \times 10^{-3}$ m/s², about 870 μg.
 
-$$\delta x = \tfrac{1}{2}(8.56 \times 10^{-3})(600)^2 = 1.54 \text{ km}$$
+$$
+\delta x = \tfrac{1}{2}(8.56 \times 10^{-3})(600)^2 = 1.54 \text{ km}
+$$
 
 A tiny tilt is as harmful as a large accelerometer bias, which is why alignment and levelling matter so much.
 
@@ -352,9 +379,13 @@ Accelerometers cannot distinguish gravitation from acceleration. The INS must th
 
 Only the vertical component of Earth rate, $\Omega\sin\phi$, is perpendicular to a northward velocity in the horizontal plane:
 
-$$|2\boldsymbol{\Omega} \times \mathbf{v}| = 2 \times 7.292 \times 10^{-5} \times 250 \times \sin 45^\circ = 0.0258 \text{ m/s}^2$$
+$$
+|2\boldsymbol{\Omega} \times \mathbf{v}| = 2 \times 7.292 \times 10^{-5} \times 250 \times \sin 45^\circ = 0.0258 \text{ m/s}^2
+$$
 
-$$\delta x = \tfrac{1}{2}(0.0258)(600)^2 = 4.6 \text{ km}$$
+$$
+\delta x = \tfrac{1}{2}(0.0258)(600)^2 = 4.6 \text{ km}
+$$
 
 The error is directed east-west. The term is small compared with $g$ but far larger than the bias of a navigation-grade accelerometer, so it must be included in the velocity update.
 

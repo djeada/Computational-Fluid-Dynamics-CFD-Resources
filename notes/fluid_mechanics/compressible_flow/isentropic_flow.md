@@ -21,7 +21,8 @@ $$
 Because the flow is isentropic, the pressure and density follow from $p \propto T^{\gamma/(\gamma-1)}$ and $\rho \propto T^{1/(\gamma-1)}$:
 
 $$
-\frac{p_0}{p} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{\gamma/(\gamma - 1)}, \qquad \frac{\rho_0}{\rho} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{1/(\gamma - 1)}
+\frac{p_0}{p} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{\gamma/(\gamma - 1)},
+\qquad \frac{\rho_0}{\rho} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{1/(\gamma - 1)}
 $$
 
 In isentropic flow $T_0$, $p_0$ and $\rho_0$ stay the same along the whole duct. So the Mach number fixes every static property, and the geometry decides only where each Mach number appears.
@@ -29,13 +30,17 @@ In isentropic flow $T_0$, $p_0$ and $\rho_0$ stay the same along the whole duct.
 The **sonic** (starred) state at $M = 1$ is a second fixed reference:
 
 $$
-\frac{T^*}{T_0} = \frac{2}{\gamma + 1} = 0.8333, \qquad \frac{p^*}{p_0} = \left(\frac{2}{\gamma + 1}\right)^{\gamma/(\gamma - 1)} = 0.5283, \qquad \frac{\rho^*}{\rho_0} = \left(\frac{2}{\gamma + 1}\right)^{1/(\gamma - 1)} = 0.6339
+\frac{T^*}{T_0} = \frac{2}{\gamma + 1} = 0.8333,
+\qquad
+\frac{p^*}{p_0} = \left(\frac{2}{\gamma + 1}\right)^{\gamma/(\gamma - 1)} = 0.5283,
+\qquad
+\frac{\rho^*}{\rho_0} = \left(\frac{2}{\gamma + 1}\right)^{1/(\gamma - 1)} = 0.6339
 $$
 
 Selected values (the last column is derived below):
 
 | $M$ | $T_0/T$ | $p_0/p$ | $\rho_0/\rho$ | $A/A^*$ |
-|-----|---------|---------|---------------|---------|
+| --- | --- | --- | --- | --- |
 | 0.5 | 1.0500 | 1.1862 | 1.1297 | 1.3398 |
 | 0.8 | 1.1280 | 1.5243 | 1.3514 | 1.0382 |
 | 1.0 | 1.2000 | 1.8929 | 1.5774 | 1.0000 |
@@ -56,13 +61,13 @@ Take logarithmic derivatives of the three governing equations for steady quasi-o
 The last two combine to give $d\rho/\rho = -M^2\, dV/V$, the same relation used in [speed_of_sound.md](speed_of_sound.md) for the compressibility criterion. Putting this into continuity:
 
 $$
-\frac{dA}{A} = \left(M^2 - 1\right)\frac{dV}{V}
+\frac{dA}{A} = \left(M^2 - 1\right) \frac{dV}{V}
 $$
 
 This short equation explains the de Laval nozzle:
 
-| | Subsonic, $M < 1$ | Supersonic, $M > 1$ |
-|---|---|---|
+|  | Subsonic, $M < 1$ | Supersonic, $M > 1$ |
+| --- | --- | --- |
 | Converging duct, $dA < 0$ | $V$ increases, $p$ decreases (nozzle) | $V$ decreases, $p$ increases (diffuser) |
 | Diverging duct, $dA > 0$ | $V$ decreases, $p$ increases (diffuser) | $V$ increases, $p$ decreases (nozzle) |
 
@@ -75,13 +80,16 @@ At $M = 1$ the equation needs $dA = 0$. **Sonic flow can occur only at an area m
 Write the mass flow in terms of stagnation conditions. With $\rho = p/(RT)$ and $V = M\sqrt{\gamma R T}$:
 
 $$
-\dot m = \rho V A = \frac{p}{RT} M \sqrt{\gamma R T} A = \frac{p_0 A}{\sqrt{T_0}} \sqrt{\frac{\gamma}{R}}\, M \left(1 + \frac{\gamma - 1}{2} M^2\right)^{-\frac{\gamma + 1}{2(\gamma - 1)}}
+\dot m = \rho V A = \frac{p}{RT} M \sqrt{\gamma R T} A = \frac{p_0 A}{\sqrt{T_0}}
+\sqrt{\frac{\gamma}{R}}\, M
+\left(1 + \frac{\gamma - 1}{2} M^2\right)^{-\frac{\gamma + 1}{2(\gamma - 1)}}
 $$
 
 For fixed $p_0$ and $T_0$, the mass flow per unit area $\dot m/A$ is largest at $M = 1$. Since $\dot m$ is the same at every section, compare a general section with a (possibly imaginary) section where the flow would be sonic, of area $A^*$. This gives the **area–Mach relation**:
 
 $$
-\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma + 1}\left(1 + \frac{\gamma - 1}{2} M^2\right)\right]^{\frac{\gamma + 1}{2(\gamma - 1)}}
+\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma + 1}\left(1 + \frac{\gamma - 1}{2}
+M^2\right)\right]^{\frac{\gamma + 1}{2(\gamma - 1)}}
 $$
 
 Key properties:
@@ -97,7 +105,9 @@ The area–Mach relation cannot be inverted in closed form. In practice $M$ is f
 At $M = 1$ in the throat the mass flow reaches its maximum:
 
 $$
-\dot m_{max} = \frac{p_0 A^*}{\sqrt{T_0}} \sqrt{\frac{\gamma}{R}} \left(\frac{2}{\gamma + 1}\right)^{\frac{\gamma + 1}{2(\gamma - 1)}} = 0.04042\,\frac{p_0 A^*}{\sqrt{T_0}} \quad \text{(air, SI units)}
+\dot m_{max} = \frac{p_0 A^*}{\sqrt{T_0}} \sqrt{\frac{\gamma}{R}}
+\left(\frac{2}{\gamma + 1}\right)^{\frac{\gamma + 1}{2(\gamma - 1)}} = 0.04042\,
+\frac{p_0 A^*}{\sqrt{T_0}} \quad \text{(air, SI units)}
 $$
 
 Once the throat is sonic, the nozzle is **choked**. Lowering the back pressure further cannot increase the mass flow. Pressure signals travel upstream at speed $a - V$ relative to the duct, and at a sonic throat that speed is zero, so the flow upstream of the throat never finds out that the back pressure has changed. A choked nozzle's flow rate depends only on $p_0$, $T_0$ and $A^*$. This makes a choked orifice or sonic venturi a simple and accurate flow meter and flow limiter.
@@ -137,7 +147,7 @@ A converging–diverging (de Laval) nozzle with exit-to-throat ratio $A_e/A_t$ h
 The regimes, from high to low back pressure:
 
 | Back pressure | Flow in the nozzle | Exit and jet |
-|---|---|---|
+| --- | --- | --- |
 | $p_{b1} < p_b < p_0$ | subsonic everywhere, not choked | $p_e = p_b$ |
 | $p_b = p_{b1}$ | sonic throat, subsonic elsewhere | $p_e = p_b$, choked |
 | $p_{b2} < p_b < p_{b1}$ | supersonic after throat, **normal shock in diverging part**, subsonic after it | $p_e = p_b$ |
@@ -180,7 +190,8 @@ A nozzle has throat area $A_t = 10\ \text{cm}^2$ and exit area $A_e = 20\ \text{
 **Mass flow when choked.**
 
 $$
-\dot m = 0.04042 \times \frac{(1.0 \times 10^6)(1.0 \times 10^{-3})}{\sqrt{500}} = 1.808\ \text{kg/s}
+\dot m = 0.04042 \times
+\frac{(1.0 \times 10^6)(1.0 \times 10^{-3})}{\sqrt{500}} = 1.808\  \text{kg/s}
 $$
 
 At the throat, $T^* = 0.8333 \times 500 = 416.7\ \text{K}$, $p^* = 528.3\ \text{kPa}$, $V^* = a^* = \sqrt{1.4 \times 287 \times 416.7} = 409.2\ \text{m/s}$, and $\rho^* = 4.418\ \text{kg/m}^3$. As a check, $\rho^* V^* A_t = 1.808\ \text{kg/s}$.
@@ -198,7 +209,8 @@ At the throat, $T^* = 0.8333 \times 500 = 416.7\ \text{K}$, $p^* = 528.3\ \text{
 **Shock position at $p_b = 800\ \text{kPa}$.** Now $p_{b2} < p_b < p_{b1}$, so a normal shock stands inside the diverging section and the exit is subsonic with $p_e = p_b$. Since $p_{01} A_t = p_{02} A_2^*$ and $A_e/A_t = 2$,
 
 $$
-\frac{p_e}{p_{02}}\frac{A_e}{A_2^*} = \frac{p_b}{p_{01}}\frac{A_e}{A_t} = 0.8 \times 2 = 1.6
+\frac{p_e}{p_{02}} \frac{A_e}{A_2^*} = \frac{p_b}{p_{01}} \frac{A_e}{A_t} = 0.8 \times
+2 = 1.6
 $$
 
 The left side depends only on $M_e$. Solving on the subsonic branch gives $M_e = 0.3572$, so $p_{02} = p_e (p_0/p)_{M_e} = 873.7\ \text{kPa}$ and $p_{02}/p_{01} = 0.8737$. From the normal-shock relations, this total-pressure ratio corresponds to $M_1 = 1.656$. The isentropic relation then puts the shock at $A/A_t = (A/A^*)_{M_1} = 1.297$, and just behind it $M_2 = 0.652$.

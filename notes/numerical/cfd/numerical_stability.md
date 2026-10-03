@@ -40,12 +40,13 @@ $$
 \frac{\partial u}{\partial t} + c \frac{\partial u}{\partial x} = 0
 $$
 
-  where $c$ is the wave speed.
+where $c$ is the wave speed.
 
 - **Discretization at Grid Point $i$ and Time-Level $n$:**
 
 $$
-\frac{u_i^n - u_i^{n-1}}{\Delta t} + c \frac{u_i^n - u_{i-1}^n}{\Delta x} = O(\Delta t, \Delta x)
+\frac{u_i^n - u_i^{n-1}}{\Delta t} + c
+\frac{u_i^n - u_{i-1}^n}{\Delta x} = O(\Delta t, \Delta x)
 $$
 
 - **Solution for $u_i^n$:**
@@ -55,49 +56,59 @@ u_i^n = \frac{u_i^{n-1} + \left(\frac{c \Delta t}{\Delta x}\right) u_{i-1}^n}{1 
 $$
 
 ### Explicit Scheme
+
 - **Definition:**
   - An explicit expression allows the value of $u_i^n$ at any grid point to be calculated directly without matrix inversion.
-  - Example scheme: 
+  - Example scheme:
 
 $$
-\frac{u_i^n - u_i^{n-1}}{\Delta t} + c \frac{u_i^{n-1} - u_{i-1}^{n-1}}{\Delta x} = O(\Delta t, \Delta x)
+\frac{u_i^n - u_i^{n-1}}{\Delta t} + c
+\frac{u_i^{n-1} - u_{i-1}^{n-1}}{\Delta x} = O(\Delta t, \Delta x)
 $$
 
-  - Solving for $u_i^n$:
+- Solving for $u_i^n$:
 
 $$
-u_i^n = \left[1 - \left(\frac{c \Delta t}{\Delta x}\right)\right] u_i^{n-1} + \left(\frac{c \Delta t}{\Delta x}\right) u_{i-1}^{n-1}
+u_i^n = \left[1 - \left(\frac{c \Delta t}{\Delta x}\right)\right] u_i^{n-1} +
+\left(\frac{c \Delta t}{\Delta x}\right) u_{i-1}^{n-1}
 $$
 
 - **Advantages:**
+
   - Easy to implement on a computer.
   - Each grid point can be updated independently.
 
 - **Stability Condition:**
+
   - Stable only when the Courant number $C$ satisfies:
 
-$$ 
+$$
 C = \frac{c \Delta t}{\Delta x} \leq 1
 $$
 
-  - This condition is known as the Courant-Friedrichs-Lewy (CFL) condition.
-  - The CFL condition imposes a severe limitation on $\Delta t_{max}$.
+- This condition is known as the Courant-Friedrichs-Lewy (CFL) condition.
+- The CFL condition imposes a severe limitation on $\Delta t_{max}$.
 
 ### Implicit Scheme
+
 - **Definition:**
   - Evaluates the spatial derivative term at the $n$ time-level:
 
 $$
-\frac{u_i^n - u_i^{n-1}}{\Delta t} + c \frac{u_i^n - u_{i-1}^n}{\Delta x} = O(\Delta t, \Delta x)
+\frac{u_i^n - u_i^{n-1}}{\Delta t} + c
+\frac{u_i^n - u_{i-1}^n}{\Delta x} = O(\Delta t, \Delta x)
 $$
 
 - **Implementation:**
+
   - Requires solving a system of algebraic equations to calculate values at all grid points simultaneously.
 
 - **Advantages:**
+
   - Unconditionally stable for the wave equation, meaning numerical errors are damped regardless of the time-step size.
 
 ### Stability Comparison for Wave Equation
+
 - **Explicit Scheme:**
   - Stability limited by CFL condition.
 - **Implicit Scheme:**
@@ -115,15 +126,18 @@ $$
 ## Key Points on Numerical Stability
 
 1. **Setting the Courant Number:**
+
    - CFD codes allow setting the Courant number (CFL number) for time-stepping.
    - Larger time-steps lead to faster convergence to a steady state.
    - Set the Courant number as large as possible within stability limits for steady problems.
 
 2. **Adjusting Courant Number During Simulation:**
+
    - Lower Courant numbers might be needed during startup due to high nonlinearity.
    - Increase the Courant number as the solution progresses towards steady state.
 
 3. **Numerical Stability and Scheme Choice:**
+
    - **Explicit Schemes:**
      - Simpler to implement.
      - Strict stability constraints (CFL condition).
@@ -138,7 +152,7 @@ Choosing a time step that is too large can cause exponential error growth and so
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Wave speed $c$, grid spacing $\Delta x$, time step $\Delta t$, choice of explicit or implicit scheme |
 | **Outputs** | Maximum allowable time step $\Delta t_{\max}$, Courant number $C$, stable or unstable solution behavior |
 
@@ -172,7 +186,9 @@ The number of steps is $0.01/2.94 \times 10^{-6} = 3400$.
 
 $G = 1 - C + C e^{-\mathrm{i}\theta}$, and
 
-$$|G|^2 = (1 - C + C\cos\theta)^2 + C^2\sin^2\theta = 1 - 2C(1 - C)(1 - \cos\theta).$$
+$$
+|G|^2 = (1 - C + C\cos\theta)^2 + C^2\sin^2\theta = 1 - 2C(1 - C)(1 - \cos\theta)
+$$
 
 At $\theta = \pi$: $G = 1 - 2C$. For $C = 0.5$, $|G| = 0$ (the shortest wave is removed in one step). For $C = 1.2$, $|G| = 1.4$, so errors grow by 40% per step.
 
@@ -187,7 +203,9 @@ $|G| \le 1$ for every $\theta$ requires $C(1 - C) \ge 0$, that is $0 \le C \le 1
 
 $G(1 + C - Ce^{-\mathrm{i}\theta}) = 1$, so
 
-$$|G|^2 = \frac{1}{1 + 2C(1 + C)(1 - \cos\theta)} \le 1 \quad \text{for all } C \ge 0,$$
+$$
+|G|^2 = \frac{1}{1 + 2C(1 + C)(1 - \cos\theta)} \le 1 \quad \text{for all } C \ge 0
+$$
 
 and the scheme is unconditionally stable.
 

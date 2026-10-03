@@ -46,10 +46,10 @@ filling in missing detail learned from training.
 
 In fluid mechanics, superresolution and denoising help achieve better clarity in both measurements and simulations:
 
-1. **Particle Image Velocimetry (PIV):**  
+1. **Particle Image Velocimetry (PIV):**\
    PIV measures velocity fields by tracking particle movements. There’s often a trade-off between local flow resolution and imaging domain size. By applying superresolution, large imaging domains can be enhanced using patterns learned from smaller, higher-resolution measurements. This yields more detailed flow structures without capturing them initially at high resolution.
 
-2. **Large-Eddy Simulations (LES):**  
+2. **Large-Eddy Simulations (LES):**\
    LES simulates fluid flow by resolving large-scale structures and modeling the smaller-scale turbulence. Superresolution aids in inferring small-scale structures within coarse simulation cells, refining boundary conditions and improving accuracy. This can lead to more faithful representations of turbulence and better predictive capabilities.
 
 ```
@@ -95,11 +95,16 @@ Trade-off between the cost of direct high-resolution imaging and ML-driven enhan
 
 **Quantitative Metrics:** Two widely used metrics for evaluating reconstruction quality are peak signal-to-noise ratio (PSNR) and structural similarity index (SSIM). PSNR measures the ratio of maximum possible signal power to noise power:
 
-$$\text{PSNR} = 10 \cdot \log_{10}\!\left(\frac{\text{MAX}^2}{\text{MSE}}\right)$$
+$$
+\text{PSNR} = 10 \cdot \log_{10}\!\left(\frac{\text{MAX}^2}{\text{MSE}}\right)
+$$
 
 where MAX is the maximum possible value of the field variable and MSE is the mean squared error between the reconstructed and reference fields. SSIM evaluates structural similarity through luminance, contrast, and structure comparisons:
 
-$$\text{SSIM}(x, y) = \frac{(2\mu_x \mu_y + c_1)(2\sigma_{xy} + c_2)}{(\mu_x^2 + \mu_y^2 + c_1)(\sigma_x^2 + \sigma_y^2 + c_2)}$$
+$$
+\text{SSIM}(x,
+y) = \frac{(2\mu_x \mu_y + c_1)(2\sigma_{xy} + c_2)}{(\mu_x^2 + \mu_y^2 + c_1)(\sigma_x^2 + \sigma_y^2 + c_2)}
+$$
 
 where $\mu_x, \mu_y$ are local means, $\sigma_x, \sigma_y$ are local standard deviations, $\sigma_{xy}$ is the cross-covariance, and $c_1, c_2$ are small stabilization constants. SSIM ranges from $-1$ to $1$ in theory but is typically between $0$ and $1$ for real data, with $1$ indicating perfect structural agreement. For flow fields, these pixel-level metrics should be complemented by physics-based measures such as energy-spectrum agreement and divergence error.
 
@@ -197,4 +202,3 @@ Coarsening is many-to-one, so recovering the fine field is ill-posed. The networ
 - Wang, Z., Bovik, A. C., Sheikh, H. R., & Simoncelli, E. P., "Image quality assessment: from error visibility to structural similarity", *IEEE Transactions on Image Processing* 13(4), 2004.
 - Dong, C., Loy, C. C., He, K., & Tang, X., "Image Super-Resolution Using Deep Convolutional Networks", *IEEE Transactions on Pattern Analysis and Machine Intelligence* 38(2), 2016.
 - Goodfellow, I., et al., "Generative Adversarial Nets", *Advances in Neural Information Processing Systems* 27, 2014.
-

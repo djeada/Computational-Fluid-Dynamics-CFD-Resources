@@ -20,10 +20,10 @@ ASCII Diagram: Traditional vs. ML-Augmented PIV Workflow
 
 **Objective:** Identify and follow evolving fluid structures, like **vortices**, **shear layers**, or **coherent patterns**, as they move through the flow field.
 
-**Approach:**  
+**Approach:**\
 Automated detection techniques use ML algorithms trained to recognize characteristic flow features in sequential PIV images. These algorithms learn to distinguish meaningful structures from background noise or random particle distributions. Once a structure is identified, the algorithm can track it over time, revealing patterns in how it moves, forms, and dissipates.
 
-**Benefit:**  
+**Benefit:**\
 This automation saves researchers from manually inspecting large volumes of data and provides a richer picture of flow dynamics, allowing for quick identification of phenomena like vortex shedding or boundary layer development.
 
 ```
@@ -41,16 +41,19 @@ ASCII Diagram: Feature Tracking in PIV
 
 **Objective:** Retrieve **velocity fields** directly from raw particle images without following traditional cross-correlation steps.
 
-**Approach:**  
+**Approach:**\
 ML models, often deep neural networks, are trained on pairs of input images and their known velocity fields. Once trained, these networks can infer velocity fields from new images in a fraction of the time required by classical methods. This approach sidesteps traditional multi-step correlation analysis, potentially improving robustness and speed.
 
 In conventional PIV, the displacement between two successive images is estimated by computing the cross-correlation function $R(\mathbf{s})$ over interrogation windows:
 
-$$R(\mathbf{s}) = \int_{\Omega} I_1(\mathbf{x}) \, I_2(\mathbf{x} + \mathbf{s}) \, d\mathbf{x}$$
+$$
+R(\mathbf{s}) = \int_{\Omega} I_1(\mathbf{x}) \, I_2(\mathbf{x} + \mathbf{s}) \,
+d\mathbf{x}
+$$
 
 where $I_1$ and $I_2$ are the image intensity fields from two frames separated by a known time interval $\Delta t$, and $\mathbf{s}$ is the displacement vector. The peak of $R$ gives the most probable particle displacement $\mathbf{s}^*$, and the local velocity is then $\mathbf{u} = \mathbf{s}^*/\Delta t$. ML-based approaches learn to approximate this mapping end-to-end, predicting $\mathbf{u}$ directly from the image pair without explicit correlation computation.
 
-**Benefit:**  
+**Benefit:**\
 Faster reconstruction enables near-instantaneous flow analysis, paving the way for real-time feedback and control in experimental setups.
 
 ```
@@ -69,20 +72,20 @@ ASCII Diagram: Direct Velocity Prediction
 
 **Objective:** Provide **uncertainty estimates** for each vector in the velocity field, informing researchers about the reliability of measurements.
 
-**Approach:**  
+**Approach:**\
 By training ML models to predict both velocities and their corresponding confidence levels, scientists know which regions are measured accurately and which might be less reliable. This might involve probabilistic layers in neural networks or ensembles of models that gauge variability.
 
-**Benefit:**  
+**Benefit:**\
 Understanding uncertainty guides more cautious interpretation of results and helps optimize measurement strategies.
 
 ### Optimization of PIV Parameters
 
 **Objective:** Choose optimal **experimental parameters**, like interrogation window size or particle density, to improve measurement quality.
 
-**Approach:**  
+**Approach:**\
 ML can analyze historical data to learn what parameter settings yield the best velocity fields under given conditions. For instance, if certain window sizes reduce noise in high-speed flows, the model suggests those settings from the outset.
 
-**Benefit:**  
+**Benefit:**\
 Experimenters save time and resources, achieving better data on the first try and reducing trial-and-error efforts.
 
 ```
@@ -101,20 +104,20 @@ ASCII Diagram: Parameter Tuning
 
 **Objective:** Combine PIV data with measurements from other instruments (e.g., temperature, pressure probes) to form a **multi-modal view** of the flow.
 
-**Approach:**  
+**Approach:**\
 ML algorithms learn correlations between PIV data and signals from other sensors. They integrate diverse data sources, helping uncover complex relationships, like how temperature gradients influence vortex strength or how pressure fluctuations correlate with velocity distributions.
 
-**Benefit:**  
+**Benefit:**\
 A holistic picture of fluid dynamics emerges, enabling more comprehensive studies of flow behavior.
 
 ### Noise Reduction and Error Correction
 
 **Objective:** Improve data quality by removing **noise and spurious vectors**, common issues in PIV analysis.
 
-**Approach:**  
+**Approach:**\
 ML models trained on labeled datasets (where some vectors are known to be incorrect) learn to detect and correct these errors. They can distinguish real flow structures from camera artifacts, outliers, or random particle clustering that may skew results.
 
-**Benefit:**  
+**Benefit:**\
 Cleaner data leads to more accurate velocity fields and more reliable conclusions.
 
 ```
@@ -133,20 +136,20 @@ ASCII Diagram: Noise and Error Filtering
 
 **Objective:** Enable **real-time analysis** and visualization of velocity fields during experiments, helping researchers adjust setups on the fly.
 
-**Approach:**  
+**Approach:**\
 Efficient ML algorithms, possibly running on GPUs or parallel architectures, process incoming PIV data streams and deliver immediate velocity maps. This allows experimenters to change parameters mid-experiment, like altering flow speed or adjusting seeding density, to focus on particular phenomena.
 
-**Benefit:**  
+**Benefit:**\
 Adaptive experimentation saves time and can lead to deeper insights with fewer trial runs.
 
 ### Advanced Flow Pattern Recognition
 
 **Objective:** Identify and categorize **complex flow patterns** beyond simple vortices or jets.
 
-**Approach:**  
+**Approach:**\
 ML can cluster and classify intricate flow topologies, recognizing patterns like swirling motions, turbulent eddies, or mixing layers. By learning from large datasets, ML can help categorize flow states that may be too subtle or complicated for manual classification.
 
-**Benefit:**  
+**Benefit:**\
 Deeper understanding of complex and previously hard-to-describe fluid phenomena supports advanced fluid dynamics research and engineering design.
 
 ```
@@ -189,7 +192,10 @@ ASCII Diagram: Pattern Recognition
 
 Convert pixels to metres, then divide by $\Delta t = 5 \times 10^{-4}$ s:
 
-$$u = \frac{6.4 \times 25 \times 10^{-6}}{5 \times 10^{-4}} = 0.32 \text{ m/s}, \qquad v = \frac{-1.2 \times 25 \times 10^{-6}}{5 \times 10^{-4}} = -0.06 \text{ m/s}.$$
+$$
+u = \frac{6.4 \times 25 \times 10^{-6}}{5 \times 10^{-4}} = 0.32 \text{ m/s},
+\qquad v = \frac{-1.2 \times 25 \times 10^{-6}}{5 \times 10^{-4}} = -0.06 \text{ m/s}
+$$
 
 </details>
 
@@ -215,7 +221,9 @@ $R(0) = 1.0$, $R(1) = 5.5$, $R(2) = 10.5$, $R(3) = 9.0$, $R(4) = 3.5$. The integ
 
 With $R_- = 5.5$, $R_0 = 10.5$ and $R_+ = 9.0$:
 
-$$\varepsilon = \frac{\ln 5.5 - \ln 9.0}{2(\ln 5.5 - 2\ln 10.5 + \ln 9.0)} \approx 0.31,$$
+$$
+\varepsilon = \frac{\ln 5.5 - \ln 9.0}{2(\ln 5.5 - 2\ln 10.5 + \ln 9.0)} \approx 0.31
+$$
 
 so $s^* \approx 2.31$ px.
 

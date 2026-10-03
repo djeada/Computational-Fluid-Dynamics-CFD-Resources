@@ -41,11 +41,16 @@ The resulting algebraic equations involve the values of unknowns at the cell cen
 
 2) Integrate the governing equations over each control volume. The starting point is usually a conservation law in differential form, such as
 
-$$\frac{\partial \phi}{\partial t} + \nabla \cdot \mathbf{F} = 0$$
+$$
+\frac{\partial \phi}{\partial t} + \nabla \cdot \mathbf{F} = 0
+$$
 
 where $\phi$ might be mass density or another conserved quantity, and $\mathbf{F}$ is the flux vector. By integrating over a control volume $V_i$, one obtains
 
-$$\int_{V_i} \frac{\partial \phi}{\partial t}\, dV + \int_{\partial V_i} \mathbf{F} \cdot \mathbf{n} \, dS = 0$$
+$$
+\int_{V_i} \frac{\partial \phi}{\partial t}\, dV + \int_{\partial V_i} \mathbf{F} \cdot
+\mathbf{n} \, dS = 0
+$$
 
 where $\partial V_i$ denotes the boundary (surface) of the control volume and $\mathbf{n}$ is the outward-facing unit normal.
 
@@ -63,20 +68,27 @@ where $\partial V_i$ denotes the boundary (surface) of the control volume and $\
 
 It can be insightful to see how the finite volume steps come together in a simple 1D setting. Consider the convection-diffusion equation,
 
-$$\frac{\partial u}{\partial t} + v \frac{\partial u}{\partial x} = D \frac{\partial^2 u}{\partial x^2}$$
+$$
+\frac{\partial u}{\partial t} + v \frac{\partial u}{\partial x} = D
+\frac{\partial^2 u}{\partial x^2}
+$$
 
 where $u = u(x,t)$ might represent a scalar quantity such as temperature, $v$ is a constant flow velocity, and $D$ is the diffusion coefficient.
 
 Suppose the domain $x \in [0, L]$ is subdivided into $N$ control volumes, each centered at $x_i$, with edges at $x_{i-1/2}$ and $x_{i+1/2}$. Integrating the equation over the control volume from $x_{i-1/2}$ to $x_{i+1/2}$ and applying the divergence theorem gives
 
-$$\int_{x_{i-1/2}}^{x_{i+1/2}} \frac{\partial u}{\partial t}\,dx 
-+ \int_{x_{i-1/2}}^{x_{i+1/2}} v \frac{\partial u}{\partial x}\,dx
-= \int_{x_{i-1/2}}^{x_{i+1/2}} D \frac{\partial^2 u}{\partial x^2}\,dx$$
+$$
+\int_{x_{i-1/2}}^{x_{i+1/2}} \frac{\partial u}{\partial t}\, dx +
+\int_{x_{i-1/2}}^{x_{i+1/2}} v \frac{\partial u}{\partial x}\,
+dx = \int_{x_{i-1/2}}^{x_{i+1/2}} D \frac{\partial^2 u}{\partial x^2}\, dx
+$$
 
 The middle term involving convection can be expressed as the net flux of $u$ through the boundaries:
 
-$$\int_{x_{i-1/2}}^{x_{i+1/2}} v \frac{\partial u}{\partial x}\,dx 
-= v\,u \Big|_{x_{i+1/2}} - v\,u \Big|_{x_{i-1/2}}$$
+$$
+\int_{x_{i-1/2}}^{x_{i+1/2}} v \frac{\partial u}{\partial x}\, dx = v\, u
+\Big|_{x_{i+1/2}} - v\, u \Big|_{x_{i-1/2}}
+$$
 
 and similarly for the diffusion term by considering its gradient at each boundary. After approximating $u$ and its derivatives or fluxes at $x_{i-1/2}$ and $x_{i+1/2}$ through suitable interpolation schemes, one obtains a discretized equation relating $u_i$ (the cell-average or center value in cell $i$) to its neighboring values. The complete set of discrete equations for $i = 1,\dots,N$ can then be solved at each time step, ensuring that each control volume properly accounts for convection and diffusion fluxes across its boundaries.
 
@@ -112,7 +124,7 @@ The Finite Volume Method (FVM) is the dominant discretization technique in indus
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Control-volume mesh (structured or unstructured), conservation law $\partial\phi/\partial t + \nabla\cdot\mathbf{F}=0$, flux interpolation scheme, boundary conditions, diffusion coefficient $D$, velocity $v$ |
 | **Outputs** | Cell-averaged values $\phi_i$, face fluxes $F_{i\pm 1/2}$, assembled algebraic system, converged field solution |
 
@@ -130,7 +142,9 @@ The Finite Volume Method (FVM) is the dominant discretization technique in indus
 
 Cell $i$ gains $F_{i-1/2}$ and loses $F_{i+1/2}$. The same numerical flux $F_{i+1/2}$ is the gain of cell $i+1$. When all cells are summed, every interior flux appears once with each sign and cancels, leaving
 
-$$\frac{d}{dt}\sum_i u_i\,\Delta x = F_{1/2} - F_{N+1/2}$$
+$$
+\frac{d}{dt}\sum_i u_i\,\Delta x = F_{1/2} - F_{N+1/2}
+$$
 
 This holds exactly for any flux formula, provided both neighbours use the same face flux.
 
@@ -176,7 +190,7 @@ $\Delta x = 0.2$, so $D/\Delta x = 0.5$ and $Pe_\Delta = 0.2$. The coefficients 
 - Cell 5: $1.45\,u_5 - 0.55\,u_4 = 0.9\,u(1) = 0$.
 
 | $x$ | FVM (central) | exact |
-|-----|---------------|-------|
+| --- | --- | --- |
 | 0.1 | 0.9421 | 0.9388 |
 | 0.3 | 0.8006 | 0.7964 |
 | 0.5 | 0.6276 | 0.6225 |

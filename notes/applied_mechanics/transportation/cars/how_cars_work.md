@@ -207,7 +207,9 @@ More cylinders mean power pulses that are more frequent, smaller and overlapping
 <details>
 <summary>Answer</summary>
 
-$$F = \frac{T\,i_g\,i_f\,\eta}{r} = \frac{200 \times 3.5 \times 4.1 \times 0.90}{0.31} = 8330 \text{ N}, \quad a = \frac{8330}{1400} = 5.95 \text{ m/s}^2$$
+$$
+F = \frac{T\,i_g\,i_f\,\eta}{r} = \frac{200 \times 3.5 \times 4.1 \times 0.90}{0.31} = 8330 \text{ N}, \quad a = \frac{8330}{1400} = 5.95 \text{ m/s}^2
+$$
 
 In practice tyre grip limits this: for a front-driven car with about 60% of its weight on the driven wheels and $\mu \approx 0.9$, the limit is about 7.4 kN.
 
@@ -222,9 +224,13 @@ The engine produces useful torque only over a limited speed range. Low gears mul
 
 The force on the master cylinder is $300 \times 4 = 1200$ N, so
 
-$$p = \frac{1200}{\pi(0.010)^2} = 3.82 \text{ MPa}$$
+$$
+p = \frac{1200}{\pi(0.010)^2} = 3.82 \text{ MPa}
+$$
 
-$$F_{clamp} = p \times \pi(0.025)^2 = 7.5 \text{ kN}$$
+$$
+F_{clamp} = p \times \pi(0.025)^2 = 7.5 \text{ kN}
+$$
 
 This is a hydraulic advantage of $(50/20)^2 = 6.25$. The same pressure reaches every caliper, and a vacuum or electric booster multiplies the pedal force further in a real car.
 

@@ -23,7 +23,7 @@ This page covers the model hierarchy, the equations and standard constants of th
 ```
 
 | Approach | Resolved | Modeled | Grid scaling for a flat-plate boundary layer | Typical use |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | DNS | All scales down to $\eta$ | Nothing | $Re_{L_x}^{37/14}$ | Physics research, model calibration |
 | Wall-resolved LES | Energy-containing eddies, including near-wall streaks | Subgrid scales | $Re_{L_x}^{13/7}$ | Moderate-$Re$ research, aeroacoustics |
 | Wall-modeled LES | Outer-layer eddies | Subgrid scales and the inner layer | $Re_{L_x}$ | High-$Re$ flows, increasingly industrial |
@@ -52,7 +52,10 @@ On dimensional grounds $\nu_t$ is a velocity times a length, $\nu_t \sim u^\ast 
 Prandtl (1925) pictured fluid lumps travelling a distance $\ell_m$ before mixing with their surroundings. The resulting eddy viscosity is
 
 $$
-\nu_t = \ell_m^2\left\lvert\frac{\partial U}{\partial y}\right\rvert \qquad \text{(thin shear layers)}, \qquad \nu_t = \ell_m^2\,S \qquad \text{(general)}
+\nu_t = \ell_m^2\left\lvert \frac{\partial U}{\partial y}\right\rvert
+\qquad \text{(thin shear layers)},
+\qquad \nu_t = \ell_m^2\, S
+\qquad \text{(general)}
 $$
 
 For wall boundary layers the mixing length is:
@@ -68,25 +71,38 @@ Algebraic models of this kind, notably Cebeci–Smith and Baldwin–Lomax, were 
 The Spalart–Allmaras (SA) model (1992) solves a single transport equation for a working variable $\tilde{\nu}$, which equals $\nu_t$ away from walls. It was built for external aerodynamics and calibrated on mixing layers, wakes and flat-plate boundary layers. The standard form, without the rarely used trip term, is
 
 $$
-\frac{\partial \tilde{\nu}}{\partial t} + U_j\frac{\partial \tilde{\nu}}{\partial x_j} = c_{b1}(1 - f_{t2})\tilde{S}\tilde{\nu} - \left(c_{w1}f_w - \frac{c_{b1}}{\kappa^2}f_{t2}\right)\left(\frac{\tilde{\nu}}{d}\right)^2 + \frac{1}{\sigma}\left[\frac{\partial}{\partial x_j}\left((\nu + \tilde{\nu})\frac{\partial \tilde{\nu}}{\partial x_j}\right) + c_{b2}\frac{\partial \tilde{\nu}}{\partial x_i}\frac{\partial \tilde{\nu}}{\partial x_i}\right]
+\frac{\partial \tilde{\nu}}{\partial t} + U_j
+\frac{\partial \tilde{\nu}}{\partial x_j} = c_{b1}(1 - f_{t2})\tilde{S}\tilde{\nu} -
+\left(c_{w1}f_w -
+\frac{c_{b1}}{\kappa^2}f_{t2}\right)\left(\frac{\tilde{\nu}}{d}\right)^2 +
+\frac{1}{\sigma}\left[\frac{\partial}{\partial x_j}\left((\nu + \tilde{\nu})
+\frac{\partial \tilde{\nu}}{\partial x_j}\right) + c_{b2}
+\frac{\partial \tilde{\nu}}{\partial x_i}
+\frac{\partial \tilde{\nu}}{\partial x_i}\right]
 $$
 
 Here $d$ is the distance to the nearest wall and $\Omega$ is the vorticity magnitude. The eddy viscosity and auxiliary functions are
 
 $$
-\nu_t = \tilde{\nu}f_{v1}, \qquad f_{v1} = \frac{\chi^3}{\chi^3 + c_{v1}^3}, \qquad \chi = \frac{\tilde{\nu}}{\nu}
+\nu_t = \tilde{\nu}f_{v1},
+\qquad f_{v1} = \frac{\chi^3}{\chi^3 + c_{v1}^3},
+\qquad \chi = \frac{\tilde{\nu}}{\nu}
 $$
 
 $$
-\tilde{S} = \Omega + \frac{\tilde{\nu}}{\kappa^2 d^2}f_{v2}, \qquad f_{v2} = 1 - \frac{\chi}{1 + \chi f_{v1}}, \qquad f_{t2} = c_{t3}\exp(-c_{t4}\chi^2)
+\tilde{S} = \Omega + \frac{\tilde{\nu}}{\kappa^2 d^2}f_{v2},
+\qquad f_{v2} = 1 - \frac{\chi}{1 + \chi f_{v1}},
+\qquad f_{t2} = c_{t3}\exp(-c_{t4}\chi^2)
 $$
 
 $$
-f_w = g\left(\frac{1 + c_{w3}^6}{g^6 + c_{w3}^6}\right)^{1/6}, \qquad g = r + c_{w2}(r^6 - r), \qquad r = \min\left(\frac{\tilde{\nu}}{\tilde{S}\kappa^2 d^2},\ 10\right)
+f_w = g\left(\frac{1 + c_{w3}^6}{g^6 + c_{w3}^6}\right)^{1/6},
+\qquad g = r + c_{w2}(r^6 - r),
+\qquad r = \min\left(\frac{\tilde{\nu}}{\tilde{S}\kappa^2 d^2},\ 10\right)
 $$
 
 | $c_{b1}$ | $c_{b2}$ | $\sigma$ | $\kappa$ | $c_{w1}$ | $c_{w2}$ | $c_{w3}$ | $c_{v1}$ | $c_{t3}$ | $c_{t4}$ |
-|---|---|---|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 0.1355 | 0.622 | 2/3 | 0.41 | $c_{b1}/\kappa^2 + (1 + c_{b2})/\sigma \approx 3.239$ | 0.3 | 2 | 7.1 | 1.2 | 0.5 |
 
 The equation reads as production proportional to $\tilde{S}\tilde{\nu}$, destruction proportional to $(\tilde{\nu}/d)^2$ (walls damp turbulence through the distance $d$), and diffusion. Many codes set $f_{t2} = 0$ (the "SA-noft2" variant). Boundary conditions are $\tilde{\nu} = 0$ at walls and a small free-stream value, typically $\tilde{\nu}/\nu \approx 3$–5.
@@ -100,17 +116,21 @@ SA is robust, cheap, and accurate for attached and mildly separated aerodynamic 
 The standard model of Launder and Spalding (1974) transports $k$ and $\varepsilon$ and forms $\nu_t = C_\mu k^2/\varepsilon$:
 
 $$
-\frac{\partial k}{\partial t} + U_j\frac{\partial k}{\partial x_j} = \frac{\partial}{\partial x_j}\left[\left(\nu + \frac{\nu_t}{\sigma_k}\right)\frac{\partial k}{\partial x_j}\right] + \mathcal{P}_k - \varepsilon
+\frac{\partial k}{\partial t} + U_j
+\frac{\partial k}{\partial x_j} = \frac{\partial}{\partial x_j}\left[\left(\nu +
+\frac{\nu_t}{\sigma_k}\right) \frac{\partial k}{\partial x_j}\right] + \mathcal{P}_k -
+\varepsilon
 $$
 
 $$
-\frac{\partial \varepsilon}{\partial t} + U_j\frac{\partial \varepsilon}{\partial x_j} = \frac{\partial}{\partial x_j}\left[\left(\nu + \frac{\nu_t}{\sigma_\varepsilon}\right)\frac{\partial \varepsilon}{\partial x_j}\right] + C_{\varepsilon 1}\frac{\varepsilon}{k}\mathcal{P}_k - C_{\varepsilon 2}\frac{\varepsilon^2}{k}
+\frac{\partial \varepsilon}{\partial t} + U_j
+\frac{\partial \varepsilon}{\partial x_j} = \frac{\partial}{\partial x_j}\left[\left(\nu + \frac{\nu_t}{\sigma_\varepsilon}\right) \frac{\partial \varepsilon}{\partial x_j}\right] + C_{\varepsilon 1} \frac{\varepsilon}{k}\mathcal{P}_k - C_{\varepsilon 2} \frac{\varepsilon^2}{k}
 $$
 
 Production is $\mathcal{P}_k = \nu_t S^2$. The $k$ equation is a modeled version of the exact TKE equation, with gradient-diffusion transport. The $\varepsilon$ equation is largely empirical.
 
 | $C_\mu$ | $C_{\varepsilon 1}$ | $C_{\varepsilon 2}$ | $\sigma_k$ | $\sigma_\varepsilon$ |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 0.09 | 1.44 | 1.92 | 1.0 | 1.3 |
 
 The constants are not arbitrary.
@@ -127,17 +147,23 @@ In use, $\varepsilon$ is ill-behaved at walls. The model is therefore used with 
 Wilcox's model replaces $\varepsilon$ with the specific dissipation rate $\omega \sim \varepsilon/k$, a turbulence frequency. In its 1988 form:
 
 $$
-\frac{\partial k}{\partial t} + U_j\frac{\partial k}{\partial x_j} = \mathcal{P}_k - \beta^\ast k\omega + \frac{\partial}{\partial x_j}\left[(\nu + \sigma^\ast\nu_t)\frac{\partial k}{\partial x_j}\right]
+\frac{\partial k}{\partial t} + U_j \frac{\partial k}{\partial x_j} = \mathcal{P}_k -
+\beta^\ast k\omega +
+\frac{\partial}{\partial x_j}\left[(\nu + \sigma^\ast\nu_t)
+\frac{\partial k}{\partial x_j}\right]
 $$
 
 $$
-\frac{\partial \omega}{\partial t} + U_j\frac{\partial \omega}{\partial x_j} = \alpha\frac{\omega}{k}\mathcal{P}_k - \beta\omega^2 + \frac{\partial}{\partial x_j}\left[(\nu + \sigma\nu_t)\frac{\partial \omega}{\partial x_j}\right]
+\frac{\partial \omega}{\partial t} + U_j \frac{\partial \omega}{\partial x_j} = \alpha
+\frac{\omega}{k}\mathcal{P}_k - \beta\omega^2 +
+\frac{\partial}{\partial x_j}\left[(\nu + \sigma\nu_t)
+\frac{\partial \omega}{\partial x_j}\right]
 $$
 
 with $\nu_t = k/\omega$ and $\varepsilon = \beta^\ast k\omega$.
 
 | $\alpha$ | $\beta$ | $\beta^\ast$ | $\sigma$ | $\sigma^\ast$ |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 5/9 | 3/40 | 9/100 | 1/2 | 1/2 |
 
 The log-layer consistency condition is $\alpha = \beta/\beta^\ast - \sigma\kappa^2/\sqrt{\beta^\ast}$, which with these values gives $\kappa = 0.408$. Decaying turbulence follows $k \propto t^{-\beta^\ast/\beta} = t^{-1.2}$.
@@ -151,11 +177,20 @@ The main weakness of the 1988 model is a strong sensitivity to the free-stream v
 The shear-stress transport (SST) model (Menter, 1994) blends the two approaches. It uses $k$–$\omega$ near walls, where it performs well, and switches to a $k$–$\varepsilon$ model rewritten in $\omega$ form away from walls, which removes the free-stream sensitivity. It also limits the eddy viscosity in adverse pressure gradients.
 
 $$
-\frac{\partial k}{\partial t} + U_j\frac{\partial k}{\partial x_j} = \tilde{\mathcal{P}}_k - \beta^\ast k\omega + \frac{\partial}{\partial x_j}\left[(\nu + \sigma_k\nu_t)\frac{\partial k}{\partial x_j}\right]
+\frac{\partial k}{\partial t} + U_j
+\frac{\partial k}{\partial x_j} = \tilde{\mathcal{P}}_k - \beta^\ast k\omega +
+\frac{\partial}{\partial x_j}\left[(\nu + \sigma_k\nu_t)
+\frac{\partial k}{\partial x_j}\right]
 $$
 
 $$
-\frac{\partial \omega}{\partial t} + U_j\frac{\partial \omega}{\partial x_j} = \frac{\gamma}{\nu_t}\mathcal{P}_k - \beta\omega^2 + \frac{\partial}{\partial x_j}\left[(\nu + \sigma_\omega\nu_t)\frac{\partial \omega}{\partial x_j}\right] + 2(1 - F_1)\frac{\sigma_{\omega 2}}{\omega}\frac{\partial k}{\partial x_j}\frac{\partial \omega}{\partial x_j}
+\frac{\partial \omega}{\partial t} + U_j
+\frac{\partial \omega}{\partial x_j} = \frac{\gamma}{\nu_t}\mathcal{P}_k -
+\beta\omega^2 +
+\frac{\partial}{\partial x_j}\left[(\nu + \sigma_\omega\nu_t)
+\frac{\partial \omega}{\partial x_j}\right] + 2(1 - F_1)
+\frac{\sigma_{\omega 2}}{\omega} \frac{\partial k}{\partial x_j}
+\frac{\partial \omega}{\partial x_j}
 $$
 
 $$
@@ -165,17 +200,25 @@ $$
 The blending functions use the wall distance $y$:
 
 $$
-F_1 = \tanh\left(\mathrm{arg}_1^4\right), \qquad \mathrm{arg}_1 = \min\left[\max\left(\frac{\sqrt{k}}{\beta^\ast\omega y},\ \frac{500\nu}{y^2\omega}\right),\ \frac{4\sigma_{\omega 2}k}{CD_{k\omega}\,y^2}\right]
+F_1 = \tanh\left(\mathrm{arg}_1^4\right),
+\qquad
+\mathrm{arg}_1 = \min\left[\max\left(\frac{\sqrt{k}}{\beta^\ast\omega y},\
+\frac{500\nu}{y^2\omega}\right),\  \frac{4\sigma_{\omega 2}k}{CD_{k\omega}\,y^2}\right]
 $$
 
 $$
-CD_{k\omega} = \max\left(\frac{2\sigma_{\omega 2}}{\omega}\frac{\partial k}{\partial x_j}\frac{\partial \omega}{\partial x_j},\ 10^{-20}\right), \qquad F_2 = \tanh\left(\mathrm{arg}_2^2\right), \qquad \mathrm{arg}_2 = \max\left(\frac{2\sqrt{k}}{\beta^\ast\omega y},\ \frac{500\nu}{y^2\omega}\right)
+CD_{k\omega} = \max\left(\frac{2\sigma_{\omega 2}}{\omega}
+\frac{\partial k}{\partial x_j} \frac{\partial \omega}{\partial x_j},\ 10^{-20}\right),
+\qquad F_2 = \tanh\left(\mathrm{arg}_2^2\right),
+\qquad
+\mathrm{arg}_2 = \max\left(\frac{2\sqrt{k}}{\beta^\ast\omega y},\
+\frac{500\nu}{y^2\omega}\right)
 $$
 
 Each coefficient $\phi$ is blended as $\phi = F_1\phi_1 + (1 - F_1)\phi_2$, where set 1 applies near the wall ($F_1 \to 1$) and set 2 in the free stream ($F_1 \to 0$). Common constants are $\beta^\ast = 0.09$, $\kappa = 0.41$ and $a_1 = 0.31$, with $\gamma_i = \beta_i/\beta^\ast - \sigma_{\omega i}\kappa^2/\sqrt{\beta^\ast}$.
 
 | Set | $\sigma_k$ | $\sigma_\omega$ | $\beta$ | $\gamma$ |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | 1 (inner, $k$–$\omega$) | 0.85 | 0.5 | 0.075 | 0.553 |
 | 2 (outer, $k$–$\varepsilon$) | 1.0 | 0.856 | 0.0828 | 0.440 |
 
@@ -199,7 +242,9 @@ The LRR-IP model uses $C_1 = 1.8$ and $C_2 = 0.6$. RSMs naturally capture normal
 LES computes the large, geometry-dependent eddies directly and models only the small, more universal ones. The velocity is **filtered** with a kernel $G$ of width $\Delta$:
 
 $$
-\overline{u}_i(\mathbf{x},t) = \int G(\mathbf{r};\Delta)\,u_i(\mathbf{x} - \mathbf{r},t)\,d\mathbf{r}, \qquad \int G(\mathbf{r};\Delta)\,d\mathbf{r} = 1
+\overline{u}_i(\mathbf{x},t) = \int G(\mathbf{r};\Delta)\,
+u_i(\mathbf{x} - \mathbf{r},t)\, d\mathbf{r},
+\qquad \int G(\mathbf{r};\Delta)\, d\mathbf{r} = 1
 $$
 
 Common kernels are the box (top-hat), the Gaussian, and the sharp spectral cutoff at $\kappa_c = \pi/\Delta$. Many codes filter implicitly, through the grid and discretization. Here the overbar denotes filtering, which is not a Reynolds average. In general $\overline{\overline{u}} \ne \overline{u}$, and the residual $u' = u - \overline{u}$ does not filter to zero, except for the sharp spectral filter.
@@ -207,7 +252,12 @@ Common kernels are the box (top-hat), the Gaussian, and the sharp spectral cutof
 Filtering the incompressible Navier–Stokes equations, and assuming the filter commutes with derivatives, gives
 
 $$
-\frac{\partial \overline{u}_i}{\partial t} + \frac{\partial (\overline{u}_i\overline{u}_j)}{\partial x_j} = -\frac{1}{\rho}\frac{\partial \overline{p}}{\partial x_i} + \nu\frac{\partial^2 \overline{u}_i}{\partial x_j\partial x_j} - \frac{\partial \tau_{ij}^r}{\partial x_j}, \qquad \tau_{ij}^r = \overline{u_iu_j} - \overline{u}_i\overline{u}_j
+\frac{\partial \overline{u}_i}{\partial t} +
+\frac{\partial (\overline{u}_i\overline{u}_j)}{\partial x_j} = -\frac{1}{\rho}
+\frac{\partial \overline{p}}{\partial x_i} + \nu
+\frac{\partial^2 \overline{u}_i}{\partial x_j\partial x_j} -
+\frac{\partial \tau_{ij}^r}{\partial x_j},
+\qquad \tau_{ij}^r = \overline{u_iu_j} - \overline{u}_i\overline{u}_j
 $$
 
 The **subgrid-scale (SGS) stress** $\tau_{ij}^r$ plays the role of the Reynolds stress. It drains energy from the resolved field at the rate $\Pi = -\tau_{ij}^r\overline{S}_{ij}$. If the filter lies in the inertial range, the mean of $\Pi$ equals $\varepsilon$.
@@ -219,7 +269,9 @@ Pope suggests that a well-resolved LES should resolve at least about 80% of the 
 Smagorinsky (1963) proposed an eddy viscosity built from the filter width and the resolved strain rate:
 
 $$
-\tau_{ij}^r - \frac{1}{3}\tau_{kk}^r\,\delta_{ij} = -2\nu_r\overline{S}_{ij}, \qquad \nu_r = (C_s\Delta)^2\,\lvert \overline{S} \rvert, \qquad \lvert \overline{S} \rvert = \sqrt{2\,\overline{S}_{ij}\overline{S}_{ij}}
+\tau_{ij}^r - \frac{1}{3}\tau_{kk}^r\,\delta_{ij} = -2\nu_r\overline{S}_{ij},
+\qquad \nu_r = (C_s\Delta)^2\,\lvert \overline{S} \rvert,
+\qquad \lvert \overline{S} \rvert = \sqrt{2\,\overline{S}_{ij}\overline{S}_{ij}}
 $$
 
 The SGS dissipation is then $\Pi = \nu_r\lvert \overline{S} \rvert^2 \ge 0$. The model always removes energy from the resolved scales and cannot represent backscatter.
@@ -227,7 +279,8 @@ The SGS dissipation is then $\Pi = \nu_r\lvert \overline{S} \rvert^2 \ge 0$. The
 **Lilly's estimate** of $C_s$ assumes a sharp cutoff inside a Kolmogorov inertial range $E = C_K\varepsilon^{2/3}\kappa^{-5/3}$ and requires $\langle \Pi \rangle = \varepsilon$. This gives
 
 $$
-C_s = \frac{1}{\pi}\left(\frac{2}{3C_K}\right)^{3/4} \approx 0.17 \qquad (C_K = 1.5)
+C_s = \frac{1}{\pi}\left(\frac{2}{3C_K}\right)^{3/4} \approx 0.17
+\qquad (C_K = 1.5)
 $$
 
 In practice $C_s \approx 0.1$ works better in shear flows such as channels. The model is too dissipative near walls, where $\lvert \overline{S} \rvert$ is large but turbulence is damped. Standard remedies are:
@@ -243,7 +296,9 @@ If SGS dissipation balances $\varepsilon$, the Smagorinsky viscosity can be esti
 Detached-eddy simulation (DES) was introduced by Spalart and co-workers in 1997. It uses one model that acts as RANS in attached boundary layers and as an LES subgrid model in separated regions. In the SA-based version, the wall distance $d$ in the destruction term is replaced by
 
 $$
-\tilde{d} = \min(d,\ C_{DES}\Delta), \qquad \Delta = \max(\Delta x, \Delta y, \Delta z), \qquad C_{DES} = 0.65
+\tilde{d} = \min(d,\  C_{DES}\Delta),
+\qquad \Delta = \max(\Delta x, \Delta y, \Delta z),
+\qquad C_{DES} = 0.65
 $$
 
 Close to walls, $d < C_{DES}\Delta$ and the model is plain SA. Far from walls, the length scale becomes proportional to $\Delta$ and the model behaves like a Smagorinsky-type SGS model.
@@ -261,11 +316,14 @@ k = \frac{3}{2}(IU)^2 = 0.375\ \mathrm{m^2/s^2}
 $$
 
 $$
-\varepsilon = C_\mu^{3/4}\frac{k^{3/2}}{\ell} = 2.70\ \mathrm{m^2/s^3}, \qquad \omega = \frac{k^{1/2}}{C_\mu^{1/4}\ell} = 79.9\ \mathrm{s^{-1}}
+\varepsilon = C_\mu^{3/4} \frac{k^{3/2}}{\ell} = 2.70\ \mathrm{m^2/s^3},
+\qquad \omega = \frac{k^{1/2}}{C_\mu^{1/4}\ell} = 79.9\ \mathrm{s^{-1}}
 $$
 
 $$
-\nu_t = C_\mu\frac{k^2}{\varepsilon} = \frac{k}{\omega} = 4.70 \times 10^{-3}\ \mathrm{m^2/s}, \qquad \frac{\nu_t}{\nu} = 313
+\nu_t = C_\mu \frac{k^2}{\varepsilon} = \frac{k}{\omega} = 4.70 \times
+10^{-3}\ \mathrm{m^2/s},
+\qquad \frac{\nu_t}{\nu} = 313
 $$
 
 The two routes to $\nu_t$ agree, and $\varepsilon = \beta^\ast k\omega$ holds, which confirms consistency. Viscosity ratios of hundreds at the inlet are normal for internal flows. For external aerodynamics much lower values (order 1–10) are typical. Uncertain inlet values should be tested for their influence on the result.
@@ -275,7 +333,7 @@ The two routes to $\nu_t$ agree, and $\varepsilon = \beta^\ast k\omega$ holds, w
 For the water pipe of the [Energy Cascade](./energy_cascade.md) worked example, $\varepsilon \approx 0.63\ \mathrm{W/kg}$ and $\eta \approx 36\ \mu\mathrm{m}$. Take a filter width $\Delta = 2$ mm, about $56\eta$, which lies in the inertial range.
 
 | $C_s$ | $\Delta$ (mm) | $\nu_r = (C_s\Delta)^{4/3}\varepsilon^{1/3}$ ($\mathrm{m^2/s}$) | $\nu_r/\nu$ |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 0.17 | 2 | $2.1 \times 10^{-5}$ | 21 |
 | 0.17 | 1 | $8.3 \times 10^{-6}$ | 8.3 |
 | 0.10 | 2 | $1.0 \times 10^{-5}$ | 10 |
@@ -285,7 +343,7 @@ The SGS viscosity exceeds the molecular viscosity by an order of magnitude and s
 ## Choosing a Model
 
 | Flow | Reasonable starting point | Watch out for |
-|---|---|---|
+| --- | --- | --- |
 | Attached external aerodynamics (wings, bodies) | SA or SST | Transition location if not fully turbulent |
 | Adverse pressure gradients, smooth-surface separation | SST | Every RANS model is uncertain for separation and reattachment |
 | Internal flows, ducts, industrial equipment without strong swirl | Realizable $k$–$\varepsilon$ or SST, with matching wall treatment | $y^+$ consistent with the wall treatment |

@@ -12,9 +12,12 @@ The Navier-Stokes equations are based on the principle that the rate of change o
 
 The general form of the Navier-Stokes equations for a Newtonian fluid is:
 
-$$\boxed{\rho \frac{D\vec{v}}{Dt} = -\nabla p + \nabla \cdot \boldsymbol{\tau} + \rho \vec{f}}$$
+$$
+\boxed{\rho \frac{D\vec{v}}{Dt} = -\nabla p + \nabla \cdot \boldsymbol{\tau} + \rho \vec{f}}
+$$
 
 where:
+
 - $\rho$ = fluid density
 - $\vec{v}$ = velocity vector
 - $\frac{D}{Dt}$ = material derivative
@@ -26,9 +29,13 @@ where:
 
 The material derivative represents the total rate of change following a fluid particle:
 
-$$\frac{D\vec{v}}{Dt} = \frac{\partial \vec{v}}{\partial t} + (\vec{v} \cdot \nabla)\vec{v}$$
+$$
+\frac{D\vec{v}}{Dt} = \frac{\partial \vec{v}}{\partial t} +
+(\vec{v} \cdot \nabla)\vec{v}
+$$
 
 This includes:
+
 - **Local acceleration**: $\frac{\partial \vec{v}}{\partial t}$ (time-dependent changes)
 - **Convective acceleration**: $(\vec{v} \cdot \nabla)\vec{v}$ (spatial changes due to particle motion)
 
@@ -36,26 +43,37 @@ This includes:
 
 For a **Newtonian fluid**, the viscous stress tensor is:
 
-$$\boldsymbol{\tau} = \mu \left[\nabla \vec{v} + (\nabla \vec{v})^T\right] + \lambda (\nabla \cdot \vec{v})\boldsymbol{I}$$
+$$
+\boldsymbol{\tau} = \mu \left[\nabla \vec{v} + (\nabla \vec{v})^T\right] + \lambda
+(\nabla \cdot \vec{v})\boldsymbol{I}
+$$
 
 where:
+
 - $\mu$ = dynamic viscosity
 - $\lambda$ = second viscosity coefficient (Stokes' hypothesis $\lambda = -\frac{2}{3}\mu$ corresponds to zero bulk viscosity $\lambda + \frac{2}{3}\mu$)
 - $\boldsymbol{I}$ = identity tensor
 
 For incompressible flow ($\nabla \cdot \vec{v} = 0$), this simplifies to:
 
-$$\boldsymbol{\tau} = \mu \left[\nabla \vec{v} + (\nabla \vec{v})^T\right]$$
+$$
+\boldsymbol{\tau} = \mu \left[\nabla \vec{v} + (\nabla \vec{v})^T\right]
+$$
 
 ## Incompressible Form
 
 For **incompressible flow** with constant density and viscosity:
 
-$$\boxed{\rho \left(\frac{\partial \vec{v}}{\partial t} + (\vec{v} \cdot \nabla)\vec{v}\right) = -\nabla p + \mu \nabla^2 \vec{v} + \rho \vec{f}}$$
+$$
+\boxed{\rho \left(\frac{\partial \vec{v}}{\partial t} + (\vec{v} \cdot \nabla)\vec{v}\right) = -\nabla p + \mu \nabla^2 \vec{v} + \rho \vec{f}}
+$$
 
 This can be written in terms of kinematic viscosity $\nu = \mu/\rho$:
 
-$$\frac{\partial \vec{v}}{\partial t} + (\vec{v} \cdot \nabla)\vec{v} = -\frac{1}{\rho}\nabla p + \nu \nabla^2 \vec{v} + \vec{f}$$
+$$
+\frac{\partial \vec{v}}{\partial t} +
+(\vec{v} \cdot \nabla)\vec{v} = -\frac{1}{\rho}\nabla p + \nu \nabla^2 \vec{v} + \vec{f}
+$$
 
 ## Component Forms
 
@@ -65,15 +83,27 @@ In Cartesian coordinates $(x, y, z)$ with velocity components $(u, v, w)$:
 
 **x-momentum:**
 
-$$\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} + v\frac{\partial u}{\partial y} + w\frac{\partial u}{\partial z} = -\frac{1}{\rho}\frac{\partial p}{\partial x} + \nu\nabla^2 u + f_x$$
+$$
+\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x} + v
+\frac{\partial u}{\partial y} + w \frac{\partial u}{\partial z} = -\frac{1}{\rho}
+\frac{\partial p}{\partial x} + \nu\nabla^2 u + f_x
+$$
 
 **y-momentum:**
 
-$$\frac{\partial v}{\partial t} + u\frac{\partial v}{\partial x} + v\frac{\partial v}{\partial y} + w\frac{\partial v}{\partial z} = -\frac{1}{\rho}\frac{\partial p}{\partial y} + \nu\nabla^2 v + f_y$$
+$$
+\frac{\partial v}{\partial t} + u \frac{\partial v}{\partial x} + v
+\frac{\partial v}{\partial y} + w \frac{\partial v}{\partial z} = -\frac{1}{\rho}
+\frac{\partial p}{\partial y} + \nu\nabla^2 v + f_y
+$$
 
 **z-momentum:**
 
-$$\frac{\partial w}{\partial t} + u\frac{\partial w}{\partial x} + v\frac{\partial w}{\partial y} + w\frac{\partial w}{\partial z} = -\frac{1}{\rho}\frac{\partial p}{\partial z} + \nu\nabla^2 w + f_z$$
+$$
+\frac{\partial w}{\partial t} + u \frac{\partial w}{\partial x} + v
+\frac{\partial w}{\partial y} + w \frac{\partial w}{\partial z} = -\frac{1}{\rho}
+\frac{\partial p}{\partial z} + \nu\nabla^2 w + f_z
+$$
 
 where $\nabla^2 = \frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} + \frac{\partial^2}{\partial z^2}$ is the Laplacian operator.
 
@@ -83,15 +113,34 @@ In cylindrical coordinates $(r, \theta, z)$:
 
 **r-momentum:**
 
-$$\frac{\partial v_r}{\partial t} + v_r\frac{\partial v_r}{\partial r} + \frac{v_\theta}{r}\frac{\partial v_r}{\partial \theta} + v_z\frac{\partial v_r}{\partial z} - \frac{v_\theta^2}{r} = -\frac{1}{\rho}\frac{\partial p}{\partial r} + \nu\left(\nabla^2 v_r - \frac{v_r}{r^2} - \frac{2}{r^2}\frac{\partial v_\theta}{\partial \theta}\right) + f_r$$
+$$
+\frac{\partial v_r}{\partial t} + v_r \frac{\partial v_r}{\partial r} +
+\frac{v_\theta}{r} \frac{\partial v_r}{\partial \theta} + v_z
+\frac{\partial v_r}{\partial z} - \frac{v_\theta^2}{r} = -\frac{1}{\rho}
+\frac{\partial p}{\partial r} +
+\nu\left(\nabla^2 v_r - \frac{v_r}{r^2} - \frac{2}{r^2}
+\frac{\partial v_\theta}{\partial \theta}\right) + f_r
+$$
 
 **θ-momentum:**
 
-$$\frac{\partial v_\theta}{\partial t} + v_r\frac{\partial v_\theta}{\partial r} + \frac{v_\theta}{r}\frac{\partial v_\theta}{\partial \theta} + v_z\frac{\partial v_\theta}{\partial z} + \frac{v_r v_\theta}{r} = -\frac{1}{\rho r}\frac{\partial p}{\partial \theta} + \nu\left(\nabla^2 v_\theta - \frac{v_\theta}{r^2} + \frac{2}{r^2}\frac{\partial v_r}{\partial \theta}\right) + f_\theta$$
+$$
+\frac{\partial v_\theta}{\partial t} + v_r \frac{\partial v_\theta}{\partial r} +
+\frac{v_\theta}{r} \frac{\partial v_\theta}{\partial \theta} + v_z
+\frac{\partial v_\theta}{\partial z} + \frac{v_r v_\theta}{r} = -\frac{1}{\rho r}
+\frac{\partial p}{\partial \theta} +
+\nu\left(\nabla^2 v_\theta - \frac{v_\theta}{r^2} + \frac{2}{r^2}
+\frac{\partial v_r}{\partial \theta}\right) + f_\theta
+$$
 
 **z-momentum:**
 
-$$\frac{\partial v_z}{\partial t} + v_r\frac{\partial v_z}{\partial r} + \frac{v_\theta}{r}\frac{\partial v_z}{\partial \theta} + v_z\frac{\partial v_z}{\partial z} = -\frac{1}{\rho}\frac{\partial p}{\partial z} + \nu\nabla^2 v_z + f_z$$
+$$
+\frac{\partial v_z}{\partial t} + v_r \frac{\partial v_z}{\partial r} +
+\frac{v_\theta}{r} \frac{\partial v_z}{\partial \theta} + v_z
+\frac{\partial v_z}{\partial z} = -\frac{1}{\rho} \frac{\partial p}{\partial z} +
+\nu\nabla^2 v_z + f_z
+$$
 
 ## Special Cases
 
@@ -99,13 +148,18 @@ $$\frac{\partial v_z}{\partial t} + v_r\frac{\partial v_z}{\partial r} + \frac{v
 
 For **inviscid flow** ($\mu = 0$):
 
-$$\frac{\partial \vec{v}}{\partial t} + (\vec{v} \cdot \nabla)\vec{v} = -\frac{1}{\rho}\nabla p + \vec{f}$$
+$$
+\frac{\partial \vec{v}}{\partial t} +
+(\vec{v} \cdot \nabla)\vec{v} = -\frac{1}{\rho}\nabla p + \vec{f}
+$$
 
 ### Stokes Equations (Creeping Flow)
 
 For **very low Reynolds number flow** (inertial terms negligible):
 
-$$0 = -\nabla p + \mu \nabla^2 \vec{v} + \rho \vec{f}$$
+$$
+0 = -\nabla p + \mu \nabla^2 \vec{v} + \rho \vec{f}
+$$
 
 This is linear in velocity and much easier to solve.
 
@@ -113,11 +167,14 @@ This is linear in velocity and much easier to solve.
 
 For **steady flow** ($\frac{\partial}{\partial t} = 0$):
 
-$$(\vec{v} \cdot \nabla)\vec{v} = -\frac{1}{\rho}\nabla p + \nu \nabla^2 \vec{v} + \vec{f}$$
+$$
+(\vec{v} \cdot \nabla)\vec{v} = -\frac{1}{\rho}\nabla p + \nu \nabla^2 \vec{v} + \vec{f}
+$$
 
 ## Dimensionless Form
 
 The equations are often non-dimensionalized using characteristic scales:
+
 - Length scale: $L$
 - Velocity scale: $U$
 - Time scale: $T = L/U$
@@ -125,11 +182,17 @@ The equations are often non-dimensionalized using characteristic scales:
 
 This introduces the **Reynolds number**:
 
-$$Re = \frac{\rho U L}{\mu} = \frac{UL}{\nu}$$
+$$
+Re = \frac{\rho U L}{\mu} = \frac{UL}{\nu}
+$$
 
 The dimensionless Navier-Stokes equations become:
 
-$$\frac{\partial \vec{v}^*}{\partial t^*} + (\vec{v}^* \cdot \nabla^*)\vec{v}^* = -\nabla^* p^* + \frac{1}{Re}\nabla^{*2} \vec{v}^* + \frac{1}{Fr^2}\vec{g}^*$$
+$$
+\frac{\partial \vec{v}^*}{\partial t^*} +
+(\vec{v}^* \cdot \nabla^*)\vec{v}^* = -\nabla^* p^* + \frac{1}{Re}\nabla^{*2}
+\vec{v}^* + \frac{1}{Fr^2}\vec{g}^*
+$$
 
 where asterisks denote dimensionless variables and $Fr = U/\sqrt{gL}$ is the Froude number.
 
@@ -137,7 +200,9 @@ where asterisks denote dimensionless variables and $Fr = U/\sqrt{gL}$ is the Fro
 
 ### Pressure Force
 
-$$-\nabla p$$
+$$
+-\nabla p
+$$
 
 - Represents force due to pressure gradients
 - Always points from high to low pressure
@@ -145,7 +210,10 @@ $$-\nabla p$$
 
 ### Viscous Force
 
-$$\nabla \cdot \boldsymbol{\tau} = \mu \nabla^2 \vec{v} \quad \text{(incompressible flow, constant } \mu \text{)}$$
+$$
+\nabla \cdot \boldsymbol{\tau} = \mu \nabla^2 \vec{v} \quad
+\text{(incompressible flow, constant } \mu \text{)}
+$$
 
 - Represents internal friction effects
 - Tends to smooth out velocity gradients
@@ -153,7 +221,9 @@ $$\nabla \cdot \boldsymbol{\tau} = \mu \nabla^2 \vec{v} \quad \text{(incompressi
 
 ### Convective Acceleration
 
-$$(\vec{v} \cdot \nabla)\vec{v}$$
+$$
+(\vec{v} \cdot \nabla)\vec{v}
+$$
 
 - Represents acceleration due to spatial velocity changes
 - **Nonlinear term** that makes the equations complex
@@ -161,7 +231,9 @@ $$(\vec{v} \cdot \nabla)\vec{v}$$
 
 ### Body Forces
 
-$$\rho \vec{f}$$
+$$
+\rho \vec{f}
+$$
 
 - External forces acting on fluid volume
 - Most common: gravity ($\vec{f} = \vec{g}$)
@@ -173,7 +245,9 @@ $$\rho \vec{f}$$
 
 At solid walls:
 
-$$\vec{v} = \vec{v}_{wall}$$
+$$
+\vec{v} = \vec{v}_{wall}
+$$
 
 For stationary walls: $\vec{v} = 0$
 
@@ -181,7 +255,9 @@ For stationary walls: $\vec{v} = 0$
 
 At free surfaces or symmetry planes:
 
-$$\vec{v} \cdot \vec{n} = 0, \quad \frac{\partial v_t}{\partial n} = 0$$
+$$
+\vec{v} \cdot \vec{n} = 0, \quad \frac{\partial v_t}{\partial n} = 0
+$$
 
 where $v_t$ is tangential velocity and $n$ is normal direction.
 
@@ -198,7 +274,9 @@ Several exact solutions exist for simplified geometries:
 
 Flow between parallel plates, one moving:
 
-$$u(y) = \frac{U y}{h}$$
+$$
+u(y) = \frac{U y}{h}
+$$
 
 where $U$ is the plate velocity and $h$ is the gap height.
 
@@ -206,7 +284,9 @@ where $U$ is the plate velocity and $h$ is the gap height.
 
 Pressure-driven flow in a circular pipe:
 
-$$u(r) = \frac{\Delta p}{4\mu L}(R^2 - r^2)$$
+$$
+u(r) = \frac{\Delta p}{4\mu L}(R^2 - r^2)
+$$
 
 where $\Delta p$ is pressure drop, $L$ is pipe length, and $R$ is pipe radius.
 
@@ -214,24 +294,30 @@ where $\Delta p$ is pressure drop, $L$ is pipe length, and $R$ is pipe radius.
 
 Flow near a stagnation point:
 
-$$u = ax, \quad v = -ay$$
+$$
+u = ax, \quad v = -ay
+$$
 
 where $a$ is a constant related to the strain rate.
 
 ## Turbulence and Reynolds Number
 
 ### Laminar Flow
+
 - Low $Re$: viscous forces dominate
 - Smooth, ordered motion
 - Predictable behavior
 
 ### Turbulent Flow
+
 - High $Re$: inertial forces dominate
 - Chaotic, irregular motion
 - Requires statistical treatment (RANS, LES, DNS)
 
 ### Critical Reynolds Number
+
 The transition occurs around:
+
 - Pipe flow: $Re_c \approx 2300$
 - Flat plate: $Re_c \approx 5 \times 10^5$
 
@@ -240,33 +326,41 @@ The transition occurs around:
 The Navier-Stokes equations are typically solved numerically using:
 
 ### Finite Difference Method (FDM)
+
 - Approximates derivatives using difference formulas
 - Good for structured grids
 
 ### Finite Volume Method (FVM)
+
 - Based on conservation principles
 - Widely used in commercial CFD codes
 
 ### Finite Element Method (FEM)
+
 - Uses variational formulation
 - Good for complex geometries
 
 ### Spectral Methods
+
 - Uses global basis functions
 - High accuracy for smooth solutions
 
 ## Computational Challenges
 
 ### Nonlinearity
+
 The convective term makes the equations nonlinear, requiring iterative solution methods.
 
 ### Pressure-Velocity Coupling
+
 Pressure doesn't appear explicitly in continuity equation for incompressible flow, requiring special algorithms (SIMPLE, PISO, etc.).
 
 ### Turbulence
+
 High Reynolds number flows require turbulence modeling or very fine grids (DNS).
 
 ### Stiffness
+
 Multiple time scales can make the equations stiff, requiring implicit time integration.
 
 ## Historical Development
@@ -280,6 +374,7 @@ Multiple time scales can make the equations stiff, requiring implicit time integ
 ## Applications
 
 The Navier-Stokes equations enable analysis of:
+
 - **Aerodynamics**: Aircraft and vehicle design
 - **Hydrodynamics**: Ship hulls and propellers
 - **Internal flows**: Pipe networks and turbomachinery
@@ -289,10 +384,13 @@ The Navier-Stokes equations enable analysis of:
 ## Mathematical Properties
 
 ### Existence and Uniqueness
+
 The question of existence and uniqueness of solutions to the Navier-Stokes equations remains one of the **Clay Millennium Problems** in mathematics.
 
 ### Conservation Properties
+
 The equations conserve:
+
 - Mass (when coupled with continuity)
 - Momentum
 - Angular momentum
@@ -344,7 +442,11 @@ The shear stress is uniform: $\tau = \mu\, du/dy = \mu U/h$.
 <details>
 <summary>Answer</summary>
 
-$$Q = \int_0^R u\, 2\pi r\, dr = \frac{\pi \Delta p}{2\mu L}\left(\frac{R^4}{2} - \frac{R^4}{4}\right) = \frac{\pi R^4 \Delta p}{8\mu L}$$
+$$
+Q = \int_0^R u\, 2\pi r\,
+dr = \frac{\pi \Delta p}{2\mu L}\left(\frac{R^4}{2} -
+\frac{R^4}{4}\right) = \frac{\pi R^4 \Delta p}{8\mu L}
+$$
 
 Since $u_{max} = \Delta p R^2/(4\mu L)$, the mean velocity is $\bar{V} = Q/(\pi R^2) = \Delta p R^2/(8\mu L) = u_{max}/2$.
 
@@ -369,7 +471,9 @@ $\partial u/\partial x + \partial v/\partial y = a - a = 0$, and $\omega_z = \pa
 
 Integrating both,
 
-$$p = p_0 - \frac{\rho a^2}{2}(x^2 + y^2)$$
+$$
+p = p_0 - \frac{\rho a^2}{2}(x^2 + y^2)
+$$
 
 which is Bernoulli's equation with $p_0$ the stagnation pressure. This field does not satisfy no-slip on the wall $y = 0$. Hiemenz's solution adds a thin viscous layer there.
 
@@ -382,11 +486,15 @@ which is Bernoulli's equation with $p_0$ the stagnation pressure. This field doe
 
 For fully developed flow, $v = 0$ and $u = u(y)$, so the convective terms vanish and $0 = G + \mu\, d^2u/dy^2$. With $u(\pm h) = 0$:
 
-$$u(y) = \frac{G}{2\mu}(h^2 - y^2)$$
+$$
+u(y) = \frac{G}{2\mu}(h^2 - y^2)
+$$
 
 The flow rate per unit width is
 
-$$q = \int_{-h}^{h} u\, dy = \frac{2 G h^3}{3\mu}$$
+$$
+q = \int_{-h}^{h} u\, dy = \frac{2 G h^3}{3\mu}
+$$
 
 The maximum is $u_{max} = Gh^2/(2\mu)$ and the mean is $\bar{u} = q/(2h) = Gh^2/(3\mu)$, so $\bar{u}/u_{max} = 2/3$. For a round pipe the ratio is $1/2$.
 

@@ -7,7 +7,7 @@
 When a fluid is at rest:
 
 - There is **no velocity** field to track.
-- All fluid parcels experience **no net acceleration**.  
+- All fluid parcels experience **no net acceleration**.
 - Gravitational forces are balanced by **pressure gradients** (and possibly other body forces, if present).
 
 ### Variation with Depth
@@ -18,11 +18,15 @@ Consider a fluid of **constant density** $\rho$ at rest under gravity $g$. Let $
 
 From static equilibrium, the **hydrostatic equation** arises:
 
-$$\frac{dp}{dz} = -\rho g.$$
+$$
+\frac{dp}{dz} = -\rho g
+$$
 
 Integrating from $z=0$ (where $p = p_0$) down to depth $z = -h$, we get:
 
-$$p = p_0 + \rho g h.$$
+$$
+p = p_0 + \rho g h
+$$
 
 Thus, at depth $h$ below the free surface, the pressure exceeds the surface pressure by $\rho g h$.
 
@@ -38,7 +42,7 @@ Free surface (z=0)
 ```
 
 - As depth **increases**, pressure **increases** linearly.
-* Each **10 m** depth of water adds roughly **1 atmosphere** of pressure ($\approx 101{,}325 \text{ Pa}$).
+- Each **10 m** depth of water adds roughly **1 atmosphere** of pressure ($\approx 101{,}325 \text{ Pa}$).
 
 ### Forces on Submerged Surfaces
 
@@ -46,13 +50,13 @@ When a surface (like a dam wall or plate) is submerged, the fluid pressure **pus
 
 #### Vertical or Horizontal Plates
 
-
 **Horizontal plate:** the pressure is the **same** across it (assuming negligible fluid density changes), simplifying force calculations to $F = p \times A$.
-
 
 **Vertical (or inclined) plate:** pressure **varies with depth**, so the force must be found via integration:
 
-$$F = \int_{A} p \, dA.$$
+$$
+F = \int_{A} p \, dA
+$$
 
 #### Example: Vertical Rectangular Plate
 
@@ -69,19 +73,27 @@ Water
  V
 ```
 
-- Width of plate = $b$ (into the page).  
-- Extends from depth $h_1$ to $h_2$.  
-- Pressure at any depth $h$ = $p(h) = p_0 + \rho g h$ 
+- Width of plate = $b$ (into the page).
+- Extends from depth $h_1$ to $h_2$.
+- Pressure at any depth $h$ = $p(h) = p_0 + \rho g h$
 
-$$dF = (p_0 + \rho g h) \cdot b dh$$
+$$
+dF = (p_0 + \rho g h) \cdot b dh
+$$
 
 Taking $p_0$ as atmospheric pressure, which also acts on the dry side of the plate and cancels, only the gauge pressure $\rho g h$ contributes:
 
-$$F = \int_{h_1}^{h_2} \rho g h \, b \, dh$$
+$$
+F = \int_{h_1}^{h_2} \rho g h \, b \, dh
+$$
 
-$$F = \rho g b \left[\frac{h^2}{2}\right]_{h_1}^{h_2}$$
+$$
+F = \rho g b \left[\frac{h^2}{2}\right]_{h_1}^{h_2}
+$$
 
-$$F = \rho g b \frac{(h_2^2 - h_1^2)}{2}$$
+$$
+F = \rho g b \frac{(h_2^2 - h_1^2)}{2}
+$$
 
 #### Center of Pressure
 
@@ -95,13 +107,15 @@ Since the fluid pressure **increases with depth**, the resultant force is not at
 
 > *The buoyant force on a body is equal to the weight of the fluid it displaces.*
 
-$$F_b = \rho_{\text{fluid}} g V$$
+$$
+F_b = \rho_{\text{fluid}} g V
+$$
 
 ![archimedes_principle](../../../scripts/plots/archimedes_principle/archimedes_principle.png)
 
-- Compare with the object’s weight $W = \rho_{\text{object}} \cdot g \cdot V$.  
-- If $\rho_{\text{object}} < \rho_{\text{fluid}}$, it **floats**.  
-- If $\rho_{\text{object}} > \rho_{\text{fluid}}$, it **sinks**.  
+- Compare with the object’s weight $W = \rho_{\text{object}} \cdot g \cdot V$.
+- If $\rho_{\text{object}} < \rho_{\text{fluid}}$, it **floats**.
+- If $\rho_{\text{object}} > \rho_{\text{fluid}}$, it **sinks**.
 - If densities match, it is **neutrally buoyant**.
 
 ### Stability of Floating Bodies
@@ -117,29 +131,29 @@ When the body tilts, **B** may shift. If **B** moves in such a way that a **rest
 
 For many ship-like objects, we analyze stability via the **metacentric height (GM)**:
 
-- A large positive $GM$ implies strong stability.  
+- A large positive $GM$ implies strong stability.
 - A small or negative $GM$ means the object can easily tip or capsize.
 
 ### Hydrostatics Applications
 
-I. **Dams & Retaining Walls**  
+I. **Dams & Retaining Walls**
 
-- Must handle large lateral forces from water.  
+- Must handle large lateral forces from water.
 - Structural design relies on the integrated force distribution and center of pressure.
 
-II. **Submarines & ROVs**  
+II. **Submarines & ROVs**
 
-- Operate by adjusting **buoyancy** to dive or surface.  
+- Operate by adjusting **buoyancy** to dive or surface.
 - Hulls must withstand high external pressures at depth.
 
-III. **Ships & Floating Vessels**  
+III. **Ships & Floating Vessels**
 
-- Must maintain suitable **stability** and **draft**.  
+- Must maintain suitable **stability** and **draft**.
 - Designers ensure that under loading conditions, the vessel floats safely without capsizing.
 
-IV. **Hydraulic Systems**  
+IV. **Hydraulic Systems**
 
-- Static fluid columns transmit force (e.g., car brakes, lifts).  
+- Static fluid columns transmit force (e.g., car brakes, lifts).
 - Pressure differences $\Delta p = \rho g \Delta h$ are used to create mechanical advantages.
 
 ### Related Scripts
@@ -167,11 +181,16 @@ In reality compressibility makes the water slightly denser at depth, so the true
 
 Force:
 
-$$F = \rho g b \frac{h_2^2 - h_1^2}{2} = 1000 \times 9.81 \times 2 \times \frac{9 - 1}{2} = 78480 \text{ N}$$
+$$
+F = \rho g b \frac{h_2^2 - h_1^2}{2} = 1000 \times 9.81 \times 2 \times
+\frac{9 - 1}{2} = 78480 \text{ N}
+$$
 
 Center of pressure, from the moment balance:
 
-$$h_{cp} = \frac{\int_{h_1}^{h_2} h \, (\rho g h) \, b \, dh}{\int_{h_1}^{h_2} \rho g h \, b \, dh} = \frac{2}{3}\frac{h_2^3 - h_1^3}{h_2^2 - h_1^2} = \frac{2}{3}\cdot\frac{26}{8} = 2.167 \text{ m}$$
+$$
+h_{cp} = \frac{\int_{h_1}^{h_2} h \, (\rho g h) \, b \, dh}{\int_{h_1}^{h_2} \rho g h \, b \, dh} = \frac{2}{3} \frac{h_2^3 - h_1^3}{h_2^2 - h_1^2} = \frac{2}{3}\cdot \frac{26}{8} = 2.167 \text{ m}
+$$
 
 This is below the centroid at 2 m, as expected.
 

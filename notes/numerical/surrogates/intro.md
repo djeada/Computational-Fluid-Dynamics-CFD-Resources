@@ -10,9 +10,15 @@ As high-fidelity CFD simulations—such as those solving the Navier-Stokes equat
 
 CFD involves discretizing and numerically approximating the governing partial differential equations (PDEs) of fluid flow, typically the Navier-Stokes equations (for Newtonian fluids) or more specialized sets of equations depending on the flow physics. For incompressible, Newtonian flows, the Navier-Stokes equations are:
 
-$$\nabla \cdot \mathbf{u} = 0,$$
+$$
+\nabla \cdot \mathbf{u} = 0
+$$
 
-$$\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} = -\frac{1}{\rho}\nabla p + \nu \nabla^2 \mathbf{u} + \mathbf{f},$$
+$$
+\frac{\partial \mathbf{u}}{\partial t} +
+(\mathbf{u} \cdot \nabla)\mathbf{u} = -\frac{1}{\rho}\nabla p + \nu \nabla^2
+\mathbf{u} + \mathbf{f}
+$$
 
 where $\mathbf{u}$ is the velocity field, $p$ is pressure, $\rho$ is fluid density, $\nu$ is kinematic viscosity, and $\mathbf{f}$ are body forces. The complexity escalates for turbulent flows, reacting flows, multiphase flows, and flows through complex geometries. High-fidelity simulations (e.g., Direct Numerical Simulation, Large Eddy Simulation) involve fine spatial-temporal resolutions and advanced turbulence modeling, making single runs expensive.
 
@@ -20,13 +26,16 @@ where $\mathbf{u}$ is the velocity field, $p$ is pressure, $\rho$ is fluid densi
 
 In engineering design and analysis, the fluid’s behavior may depend on numerous parameters, such as boundary conditions, geometric parameters (shape of an airfoil, configuration of a heat exchanger), operating conditions (Reynolds number, Mach number), and material properties. Exploring this high-dimensional design space with brute-force CFD is prohibitive. Instead, a limited set of carefully chosen CFD runs is used to build a surrogate model that approximates the relationship:
 
-$$x \in \mathbb{R}^d \rightarrow y(x) \in \mathbb{R}^m,$$
+$$
+x \in \mathbb{R}^d \rightarrow y(x) \in \mathbb{R}^m
+$$
 
 where $x$ is the input parameter vector (e.g., geometric shape parameters, inflow velocity) and $y(x)$ represents the output of interest (e.g., lift and drag coefficients, pressure drop, flow rate, heat transfer coefficient, or even an entire field distribution).
 
 ### Accelerating Engineering Workflows
 
 Once a surrogate is constructed, it can be evaluated in milliseconds rather than hours or days. This acceleration enables:
+
 - Rapid optimization loops using gradient-based or evolutionary algorithms.
 - Robust uncertainty quantification and probabilistic analysis.
 - Real-time predictions for digital twins and operational monitoring systems.
@@ -36,30 +45,34 @@ Once a surrogate is constructed, it can be evaluated in milliseconds rather than
 A wide range of surrogate modeling techniques can be employed, each with its strengths and limitations. Common classes include:
 
 I. **Polynomial Response Surfaces**:
-- Approximate $y(x)$ with low-order polynomials (e.g., linear or quadratic forms).  
+
+- Approximate $y(x)$ with low-order polynomials (e.g., linear or quadratic forms).
 - Advantage: Simplicity and interpretability.
 - Disadvantage: May struggle with complex, nonlinear responses and high-dimensionality.
-II. **Kriging or Gaussian Process Regression (GPR)**:
+  II. **Kriging or Gaussian Process Regression (GPR)**:
 - Model responses as realizations of a Gaussian process with mean and covariance functions.
 - Provides not only predictions but also estimates of predictive uncertainty.
 - Often used in global optimization frameworks (e.g., Efficient Global Optimization).
 - Well-suited for moderate dimensions and smoothly varying functions.
-III. **Radial Basis Functions (RBF)**:
+  III. **Radial Basis Functions (RBF)**:
 - Use basis functions centered on training points. For a set $\{x^{(i)}, y^{(i)}\}_{i=1}^N$, the RBF surrogate is:
 
- $$\hat{y}(x) = \sum_{i=1}^N w_i R(\|x - x^{(i)}\|),$$
+$$
+\hat{y}(x) = \sum_{i=1}^N w_i R(\| x - x^{(i)}\|)
+$$
 
- where $R$ is a radially symmetric kernel (e.g., Gaussian, multiquadric).
+where $R$ is a radially symmetric kernel (e.g., Gaussian, multiquadric).
+
 - Flexible and can handle scattered data in any dimension.
 - Hyperparameter tuning (e.g., scaling factors) is essential.
-IV. **Neural Networks (NNs)**:
+  IV. **Neural Networks (NNs)**:
 - Universal function approximators. Deep neural networks can capture highly nonlinear and complex relationships.
 - Convolutional neural networks (CNNs) or graph-based NNs may be used if dealing with field data on a mesh.
 - Require more training data and careful architecture selection and regularization.
-V. **Support Vector Regression (SVR)**:
+  V. **Support Vector Regression (SVR)**:
 - Forms a sparse kernel-based model. Good for moderate-sized datasets.
 - May be outperformed by GPR or NNs in certain complex scenarios.
-VI. **Surrogate Models from Reduced-Order Modeling (ROM)**:
+  VI. **Surrogate Models from Reduced-Order Modeling (ROM)**:
 - Use techniques like Proper Orthogonal Decomposition (POD), Dynamic Mode Decomposition (DMD), or Autoencoders to build reduced-order representations of the flow fields.
 - Then fit a simpler mapping from parameters to the reduced coefficients, enabling fast reconstructions of flow fields.
 
@@ -93,11 +106,15 @@ VI. **Surrogate Models from Reduced-Order Modeling (ROM)**:
 - Polynomial regression: Solve a least-squares problem.
 - Kriging: Estimate hyperparameters $\theta$ by maximizing the likelihood:
 
-$$\hat{\theta} = \arg\max_{\theta} L(\theta | Y).$$
+$$
+\hat{\theta} = \arg\max_{\theta} L(\theta | Y)
+$$
 
 - Neural networks: Use stochastic gradient descent to minimize a loss function (e.g., mean squared error):
 
-$$\min_{w,b} \sum_{i=1}^N \|y^{(i)} - \hat{y}(x^{(i)}; w,b)\|^2,$$
+$$
+\min_{w,b} \sum_{i=1}^N \| y^{(i)} - \hat{y}(x^{(i)}; w,b)\|^2
+$$
 
 where $w,b$ are weights and biases.
 
@@ -123,51 +140,59 @@ where $w,b$ are weights and biases.
 Consider an airfoil shape characterized by a set of parameters $x \in \mathbb{R}^d$ that control the thickness, camber, or leading-edge radius. We want to predict the lift and drag coefficients $(C_L, C_D)$.
 
 I. **Sampling**:
+
 - Let $d=5$ parameters define the airfoil shape.
 - Generate $N=50$ samples using Latin Hypercube Sampling in $[0,1]^5$.
-II. **CFD Data Generation**:
+  II. **CFD Data Generation**:
 - For each $x^{(i)}$, run a steady-state RANS solver with a chosen turbulence model (e.g., $k-\omega$ SST).
 - Extract $C_L^{(i)}$ and $C_D^{(i)}$.
-III. **Model Selection**:
+  III. **Model Selection**:
 - Pick Kriging as it can handle moderate datasets well and provides uncertainty estimates.
-IV. **Model Fitting**:
+  IV. **Model Fitting**:
 - Estimate Kriging hyperparameters $\theta$ by maximizing the log-likelihood. Solve:
 
- $$\hat{\theta} = \arg\max_{\theta} \left(-\frac{N}{2}\log(2\pi\sigma^2(\theta)) - \frac{1}{2}\log(\det(R(\theta))) - \frac{1}{2\sigma^2(\theta)}(Y - F\beta)^TR(\theta)^{-1}(Y - F\beta)\right),$$
+$$
+\hat{\theta} = \arg\max_{\theta}
+\left(-\frac{N}{2}\log(2\pi\sigma^2(\theta)) - \frac{1}{2}\log(\det(R(\theta))) -
+\frac{1}{2\sigma^2(\theta)}(Y - F\beta)^TR(\theta)^{-1}(Y - F\beta)\right)
+$$
 
- where $R(\theta)$ is the correlation matrix, $F$ is the regression matrix, and $Y$ contains $[C_L, C_D]$ values.
+where $R(\theta)$ is the correlation matrix, $F$ is the regression matrix, and $Y$ contains $[C_L, C_D]$ values.
 
 V. **Validation**:
+
 - Reserve 10% of data for validation.
 - Compute error metrics: Suppose RMSE in $C_L$ is 0.005, and in $C_D$ is 0.001—both acceptable for preliminary design purposes.
-VI. **Use**:
+  VI. **Use**:
 - Use the surrogate in an optimization loop (e.g., genetic algorithm) to find the shape $x$ that maximizes $C_L/C_D$ ratio.
 - Since evaluations are now instantaneous, thousands of trial configurations can be tested within minutes rather than days.
 
 ## Comparisons with Other Numerical Methods
 
 I. **Direct CFD vs. Surrogate**:
+
 - Direct CFD: Highly accurate but computationally expensive per evaluation.
 - Surrogates: Fast but approximate. Accuracy depends on training data quality and chosen model.
-II. **Reduced-Order Models (ROMs)**:
+  II. **Reduced-Order Models (ROMs)**:
 - ROMs focus on reducing the PDE system dimension itself, whereas surrogates directly approximate input-output mappings.
 - Often combined: ROM can supply low-dimensional features that a surrogate can quickly map to parameters.
-III. **Adjoint-Based Methods**:
+  III. **Adjoint-Based Methods**:
 - For design optimization, adjoint methods compute gradients efficiently.
 - Surrogates facilitate global exploration, not just local gradients. They can complement adjoint methods by guiding initial search directions or supporting robust optimization under uncertainty.
 
 ## Advanced Topics and Current Research Directions
 
 I. **Multi-Fidelity Surrogate Modeling**:
+
 - Combine data from high-fidelity (expensive) and low-fidelity (cheaper but less accurate) simulations.
 - Co-Kriging or hierarchical surrogate models leverage correlations between fidelity levels to improve accuracy at reduced cost.
-II. **Active Learning and Adaptive Sampling**:
+  II. **Active Learning and Adaptive Sampling**:
 - Instead of fixed one-stage sampling, adaptively choose new sample points where the surrogate is uncertain or potentially inaccurate.
 - Iterative improvement leads to better surrogates with fewer samples.
-III. **Physics-Informed Surrogates**:
+  III. **Physics-Informed Surrogates**:
 - Embed known physical constraints or PDE residual information into the surrogate.
 - Physics-informed neural networks or constrained Kriging ensure predictions respect fundamental fluid equations, improving reliability.
-IV. **High-Dimensional Parameter Spaces and Dimensionality Reduction**:
+  IV. **High-Dimensional Parameter Spaces and Dimensionality Reduction**:
 - Use manifold learning or POD to reduce parameter dimensionality.
 - Simplify the surrogate construction by approximating $y(x)$ on a low-dimensional subspace of the design space.
 
@@ -197,7 +222,7 @@ Surrogate models replace expensive CFD evaluations with fast-to-evaluate approxi
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Design parameter vector $x \in \mathbb{R}^d$ (e.g., geometric shape, inflow velocity), sampled CFD results $\{(x^{(i)}, y^{(i)})\}_{i=1}^N$, surrogate model type and hyperparameters |
 | **Outputs** | Surrogate prediction $\hat{y}(x)$ (e.g., drag coefficient, pressure drop), prediction uncertainty (for Kriging), validation metrics (RMSE, $R^2$) |
 

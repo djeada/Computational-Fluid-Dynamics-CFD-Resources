@@ -84,13 +84,16 @@ The small eddies are called *universal* because their turnover times are much sh
 If the smallest scales depend only on $\nu$ ($\mathrm{m^2/s}$) and $\varepsilon$ ($\mathrm{m^2/s^3}$), there is exactly one length, one velocity and one time that can be formed from them:
 
 $$
-\eta = \left(\frac{\nu^3}{\varepsilon}\right)^{1/4}, \qquad u_\eta = (\nu\varepsilon)^{1/4}, \qquad \tau_\eta = \left(\frac{\nu}{\varepsilon}\right)^{1/2}
+\eta = \left(\frac{\nu^3}{\varepsilon}\right)^{1/4},
+\qquad u_\eta = (\nu\varepsilon)^{1/4},
+\qquad \tau_\eta = \left(\frac{\nu}{\varepsilon}\right)^{1/2}
 $$
 
 Two identities confirm that these are the dissipative scales:
 
 $$
-\frac{u_\eta\,\eta}{\nu} = 1, \qquad \varepsilon = \nu\left(\frac{u_\eta}{\eta}\right)^2 = \frac{\nu}{\tau_\eta^2}
+\frac{u_\eta\,\eta}{\nu} = 1,
+\qquad \varepsilon = \nu\left(\frac{u_\eta}{\eta}\right)^2 = \frac{\nu}{\tau_\eta^2}
 $$
 
 The Reynolds number at the Kolmogorov scale is one, and the dissipation equals viscosity times the square of the Kolmogorov velocity gradient $1/\tau_\eta$.
@@ -100,13 +103,14 @@ The Reynolds number at the Kolmogorov scale is one, and the dissipation equals v
 Substituting $\varepsilon \sim u_0^3/\ell_0$ and $Re = u_0\ell_0/\nu$:
 
 $$
-\frac{\eta}{\ell_0} = \left(\frac{\nu^3\ell_0}{u_0^3}\right)^{1/4}\frac{1}{\ell_0} = Re^{-3/4}, \qquad
-\frac{u_\eta}{u_0} = Re^{-1/4}, \qquad
-\frac{\tau_\eta}{\tau_0} = Re^{-1/2}
+\frac{\eta}{\ell_0} = \left(\frac{\nu^3\ell_0}{u_0^3}\right)^{1/4}
+\frac{1}{\ell_0} = Re^{-3/4},
+\qquad \frac{u_\eta}{u_0} = Re^{-1/4},
+\qquad \frac{\tau_\eta}{\tau_0} = Re^{-1/2}
 $$
 
 | $Re$ | $\ell_0/\eta$ | $u_0/u_\eta$ | $\tau_0/\tau_\eta$ |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | $10^3$ | 178 | 5.6 | 32 |
 | $10^4$ | 1,000 | 10 | 100 |
 | $10^5$ | 5,620 | 17.8 | 316 |
@@ -117,7 +121,8 @@ The smallest eddies are slow compared with the large ones, but they are so small
 In the inertial range the second similarity hypothesis gives the velocity and time scale of an eddy of size $\ell$:
 
 $$
-u(\ell) \sim (\varepsilon\ell)^{1/3} = u_0\left(\frac{\ell}{\ell_0}\right)^{1/3}, \qquad \tau(\ell) \sim \left(\frac{\ell^2}{\varepsilon}\right)^{1/3}
+u(\ell) \sim (\varepsilon\ell)^{1/3} = u_0\left(\frac{\ell}{\ell_0}\right)^{1/3},
+\qquad \tau(\ell) \sim \left(\frac{\ell^2}{\varepsilon}\right)^{1/3}
 $$
 
 Both decrease with decreasing $\ell$. Smaller eddies are faster to adjust, which is the physical basis of their universality.
@@ -127,7 +132,8 @@ Both decrease with decreasing $\ell$. Smaller eddies are faster to adjust, which
 In spectral terms, the second similarity hypothesis says that in the inertial range the energy spectrum $E(\kappa)$ can depend only on $\varepsilon$ and $\kappa$. Write $E = C\varepsilon^a\kappa^b$ and match dimensions, using $[E] = \mathrm{m^3/s^2}$, $[\varepsilon] = \mathrm{m^2/s^3}$ and $[\kappa] = \mathrm{m^{-1}}$. The seconds require $-2 = -3a$, so $a = 2/3$. The metres require $3 = 2a - b$, so $b = -5/3$. The result is the **Kolmogorov spectrum**:
 
 $$
-E(\kappa) = C\,\varepsilon^{2/3}\kappa^{-5/3}, \qquad C \approx 1.5
+E(\kappa) = C\,\varepsilon^{2/3}\kappa^{-5/3},
+\qquad C \approx 1.5
 $$
 
 Experiments usually measure the one-dimensional spectrum. In the inertial range it follows $E_{11}(\kappa_1) = C_1\varepsilon^{2/3}\kappa_1^{-5/3}$, with $C_1 = \frac{18}{55}C \approx 0.49$ (see [Turbulence Statistics](./statistics.md)).
@@ -135,13 +141,14 @@ Experiments usually measure the one-dimensional spectrum. In the inertial range 
 In physical space, the equivalent statement concerns the second-order structure function of velocity differences $\Delta u_L = u_1(\mathbf{x} + r\mathbf{e}_1) - u_1(\mathbf{x})$:
 
 $$
-\langle (\Delta u_L)^2 \rangle = C_2\,(\varepsilon r)^{2/3}, \qquad C_2 \approx 2.0
+\langle (\Delta u_L)^2 \rangle = C_2\,(\varepsilon r)^{2/3},
+\qquad C_2 \approx 2.0
 $$
 
 The third-order structure function obeys **Kolmogorov's four-fifths law**, which is exact for homogeneous isotropic turbulence at high Reynolds number:
 
 $$
-\langle (\Delta u_L)^3 \rangle = -\frac{4}{5}\,\varepsilon\,r
+\langle (\Delta u_L)^3 \rangle = -\frac{4}{5}\,\varepsilon\, r
 $$
 
 It follows from the Kármán–Howarth equation without any similarity assumption. Its negative sign encodes the net transfer of energy from large to small scales, which also explains the negative skewness of velocity derivatives.
@@ -180,7 +187,8 @@ Water ($\nu = 1.0 \times 10^{-6}\ \mathrm{m^2/s}$) flows through a smooth pipe w
 **Mean dissipation.** In fully developed flow, all the pumping power ends up as heat. The pressure gradient is $\Delta p/L = f\rho U_b^2/(2D)$, and dividing the power per unit volume by $\rho$ gives the power per unit mass:
 
 $$
-\varepsilon \approx \frac{(\Delta p/L)\,U_b}{\rho} = \frac{f\,U_b^3}{2D} = \frac{0.0156 \times 8}{0.2} = 0.63\ \mathrm{W/kg}
+\varepsilon \approx
+\frac{(\Delta p/L)\,U_b}{\rho} = \frac{f\,U_b^3}{2D} = \frac{0.0156 \times 8}{0.2} = 0.63\ \mathrm{W/kg}
 $$
 
 This is a volume average. The local dissipation is much larger near the wall and smaller on the centreline, and a small part of it is direct viscous dissipation of the mean flow.
@@ -188,9 +196,10 @@ This is a volume average. The local dissipation is much larger near the wall and
 **Kolmogorov scales.**
 
 $$
-\eta = \left(\frac{(10^{-6})^3}{0.63}\right)^{1/4} = 3.6 \times 10^{-5}\ \mathrm{m} = 36\ \mu\mathrm{m}, \qquad
-u_\eta = 0.028\ \mathrm{m/s}, \qquad
-\tau_\eta = 1.26\ \mathrm{ms}
+\eta = \left(\frac{(10^{-6})^3}{0.63}\right)^{1/4} = 3.6 \times
+10^{-5}\ \mathrm{m} = 36\ \mu\mathrm{m},
+\qquad u_\eta = 0.028\ \mathrm{m/s},
+\qquad \tau_\eta = 1.26\ \mathrm{ms}
 $$
 
 **Scale separation.** $D/\eta \approx 2{,}800$, whereas $Re^{3/4} \approx 9{,}500$. The difference arises because the energy-containing eddies are smaller and slower than $D$ and $U_b$. Taking $u_0 \approx 0.1\,U_b = 0.2$ m/s gives $\ell_0 \sim u_0^3/\varepsilon \approx 13$ mm. The eddy Reynolds number is then $Re_{\ell_0} \approx 2{,}600$, and $\ell_0/\eta \approx 360 = Re_{\ell_0}^{3/4}$. That equality is an identity once $\varepsilon = u_0^3/\ell_0$ is adopted. The point is that scale separation is governed by the Reynolds number of the energy-containing eddies, not the bulk Reynolds number.
@@ -210,7 +219,7 @@ DNS resolves every scale, so its grid must span a domain of several integral sca
 - **Total cost.** $Re^{9/4} \times Re^{3/4} = Re^3$.
 
 | $Re$ | Grid points $\sim Re^{9/4}$ | Relative cost $\sim Re^3$ |
-|---|---|---|
+| --- | --- | --- |
 | $10^3$ | $5.6 \times 10^6$ | $10^9$ |
 | $10^4$ | $10^9$ | $10^{12}$ |
 | $10^5$ | $1.8 \times 10^{11}$ | $10^{15}$ |
@@ -299,7 +308,8 @@ This is why DNS Reynolds numbers grow only slowly with hardware.
 Integrate the inertial-range spectrum from $\kappa$ upward:
 
 $$
-\int_\kappa^\infty C\varepsilon^{2/3}\kappa'^{-5/3}\,d\kappa' = \frac{3}{2}C\,\varepsilon^{2/3}\kappa^{-2/3}
+\int_\kappa^\infty C\varepsilon^{2/3}\kappa'^{-5/3}\,
+d\kappa' = \frac{3}{2}C\,\varepsilon^{2/3}\kappa^{-2/3}
 $$
 
 With $\ell = 1/\kappa$ this becomes $\frac{3}{2}C\,(\varepsilon\ell)^{2/3} \sim u(\ell)^2$. The coefficient is $\frac{3}{2}(1.5) = 2.25$, of order one. The kinetic energy of eddies of size $\ell$ and smaller scales as $(\varepsilon\ell)^{2/3}$, exactly as the dimensional argument in physical space predicts.

@@ -6,15 +6,21 @@ The highly nonlinear nature of the governing equations for fluid flow makes obta
 
 Consider a simple one-dimensional (1D) example with a nonlinear term. The governing differential equation is given by:
 
-$$\frac{du}{dx} + u^2 = 0; \quad 0 \le x \le 1; \quad u(0) = 1$$
+$$
+\frac{du}{dx} + u^2 = 0; \quad 0 \le x \le 1; \quad u(0) = 1
+$$
 
 This equation is nonlinear due to the $u^2$ term. When discretizing the problem using a finite-difference method, we approximate the derivative at a grid point $x_i$ by
 
-$$\frac{u_i - u_{i-1}}{\Delta x}$$
+$$
+\frac{u_i - u_{i-1}}{\Delta x}
+$$
 
 resulting in the discrete equation
 
-$$\frac{u_i - u_{i-1}}{\Delta x} + u_i^2 = 0$$
+$$
+\frac{u_i - u_{i-1}}{\Delta x} + u_i^2 = 0
+$$
 
 The presence of $u_i^2$ makes this a nonlinear algebraic equation at each grid point, meaning that standard linear solution techniques cannot be applied directly. Instead, we must handle the nonlinearity—typically via linearization—before proceeding with an iterative solution.
 
@@ -32,33 +38,45 @@ II. Define the Perturbation:
 
 - Define the difference between the true solution $u_i$ and the guess $u_{ig}$ as:
 
-  $$\Delta u_i = u_i - u_{ig}$$
+  $$
+  \Delta u_i = u_i - u_{ig}
+  $$
 
 III. Expand and Approximate:
 
 - Substitute $u_i = u_{ig} + \Delta u_i$ into the nonlinear term. Squaring the expression yields:
 
-  $$u_i^2 = (u_{ig} + \Delta u_i)^2 = u_{ig}^2 + 2u_{ig}\Delta u_i + (\Delta u_i)^2$$
+  $$
+  u_i^2 = (u_{ig} + \Delta u_i)^2 = u_{ig}^2 + 2u_{ig}\Delta u_i + (\Delta u_i)^2
+  $$
 
 - If the perturbation $\Delta u_i$ is small compared to $u_{ig}$, then $(\Delta u_i)^2$ is insignificant. This is a standard assumption in linearization procedures, which leads to:
 
-  $$u_i^2 \approx u_{ig}^2 + 2u_{ig}\Delta u_i$$
+  $$
+  u_i^2 \approx u_{ig}^2 + 2u_{ig}\Delta u_i
+  $$
 
 - Expressing $\Delta u_i$ in terms of $u_i$ and $u_{ig}$ gives:
 
-  $$u_i^2 \approx u_{ig}^2 + 2u_{ig}(u_i - u_{ig})$$
+  $$
+  u_i^2 \approx u_{ig}^2 + 2u_{ig}(u_i - u_{ig})
+  $$
 
 IV. Simplify the Expression:
 
 - Simplify the expression further to obtain a linear form in $u_i$:
 
-  $$u_i^2 \approx 2u_{ig} u_i - u_{ig}^2$$
+  $$
+  u_i^2 \approx 2u_{ig} u_i - u_{ig}^2
+  $$
 
 V. Linearized Finite-Difference Approximation:
 
 - Substitute the linearized expression for $u_i^2$ back into the finite-difference approximation:
 
-  $$\frac{u_i - u_{i-1}}{\Delta x} + 2u_{ig} u_i - u_{ig}^2 = 0$$
+  $$
+  \frac{u_i - u_{i-1}}{\Delta x} + 2u_{ig} u_i - u_{ig}^2 = 0
+  $$
 
 This linearization transforms the originally nonlinear finite-difference equation into a linear equation in terms of $u_i$, which can then be solved using standard linear solvers.
 
@@ -72,78 +90,82 @@ Since the linearization is based on an initial guess, the solution must be refin
 
 ### Iterative Scheme
 
-I. Iteration 1:  
+I. Iteration 1:
 
 - Start with an initial guess $u_i^{(1)}$ for each grid point.
 
-II. Iteration 2:  
+II. Iteration 2:
 
 - Use the solution from the previous iteration as the new guess: $u_{ig}^{(2)} = u_i^{(1)}$.
 
-III. Iteration 3 and Beyond:  
+III. Iteration 3 and Beyond:
 
 - Continue updating the guess using:
 
-  $$u_{ig}^{(n)} = u_i^{(n-1)}$$
+  $$
+  u_{ig}^{(n)} = u_i^{(n-1)}
+  $$
 
- while re-linearizing the nonlinear term around the latest guess at each iteration.
+while re-linearizing the nonlinear term around the latest guess at each iteration.
 
-IV. Convergence Check:  
+IV. Convergence Check:
 
 - After each iteration, compare the new solution $u_i^{(n)}$ with the previous one $u_i^{(n-1)}$. If the difference (measured by an appropriate norm) is less than a specified tolerance, the solution is considered converged.
-The iterative process makes sure that the approximation gradually improves, reducing the error introduced by the initial linearization and finally providing a solution that satisfies the nonlinear equation.
+  The iterative process makes sure that the approximation gradually improves, reducing the error introduced by the initial linearization and finally providing a solution that satisfies the nonlinear equation.
 
 ## Convergence
 
 Convergence is an important aspect of the iterative solution process. It makes sure that the numerical solution becomes both stable and accurate as the iterations progress.
 
-- Convergence Check:  
-A common practice is to compute the residual (the difference between the left- and right-hand sides of the equation) or the difference between successive iterates. When these quantities fall below a predefined threshold, the solution is deemed converged.
+- Convergence Check:\
+  A common practice is to compute the residual (the difference between the left- and right-hand sides of the equation) or the difference between successive iterates. When these quantities fall below a predefined threshold, the solution is deemed converged.
 
-- Criteria for Convergence:  
-Convergence is typically assessed using norms (e.g., the $L_2$ norm) of the error:
+- Criteria for Convergence:\
+  Convergence is typically assessed using norms (e.g., the $L_2$ norm) of the error:
 
-$$\|u^{(n)} - u^{(n-1)}\| < \epsilon$$
+$$
+\| u^{(n)} - u^{(n-1)}\| < \epsilon
+$$
 
 where $\epsilon$ is the tolerance level.
 
-- Importance of Convergence:  
+- Importance of Convergence:
 - Accuracy: Convergence guarantees that the computed solution accurately represents the physical problem and satisfies the governing equations.
 - Efficiency: Setting up a clear convergence criterion prevents unnecessary iterations, saving computational resources.
 - Stability: A well-converged solution is generally more stable and reliable, reducing the risk of numerical instabilities in further calculations or coupled simulations.
 
 ### Steps in the Iterative Solution Process
 
-I. Initial Guess:  
+I. Initial Guess:
 
 - Begin with an initial guess $u_i^{(1)}$ that is as close as possible to the expected solution. A good initial guess can greatly reduce the number of iterations needed.
 
-II. Linearization:  
+II. Linearization:
 
 - Linearize the nonlinear term around the current guess $u_{ig}$ using the steps outlined above.
 
-III. Update the Solution:  
+III. Update the Solution:
 
 - Solve the resulting linear equation to obtain an updated solution $u_i^{(n)}$.
 
-IV. Check Convergence:  
+IV. Check Convergence:
 
 - Compare the new solution with the previous iteration. If the difference is below the specified tolerance, the solution has converged.
 
-V. Iterate:  
+V. Iterate:
 
 - If convergence is not achieved, use $u_i^{(n)}$ as the new guess and repeat the linearization and solution process.
 
 ### Importance of Convergence
 
-- Accuracy:  
-A converged solution means that the linearization error is minimized and the numerical solution accurately reflects the underlying physical phenomena.
+- Accuracy:\
+  A converged solution means that the linearization error is minimized and the numerical solution accurately reflects the underlying physical phenomena.
 
-- Efficiency:  
-By setting up strong convergence criteria, the iterative process avoids unnecessary computations, thereby optimizing the use of computational resources.
+- Efficiency:\
+  By setting up strong convergence criteria, the iterative process avoids unnecessary computations, thereby optimizing the use of computational resources.
 
-- Stability:  
-Convergence is often associated with numerical stability. A solution that has converged within a tight tolerance is less likely to exhibit erratic behavior, making sure that the results are both reliable and reproducible.
+- Stability:\
+  Convergence is often associated with numerical stability. A solution that has converged within a tight tolerance is less likely to exhibit erratic behavior, making sure that the results are both reliable and reproducible.
 
 ## Purpose in CFD
 
@@ -152,7 +174,7 @@ The convective term $(\mathbf{v} \cdot \nabla)\mathbf{v}$ in the Navier–Stokes
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Nonlinear discrete system $A(u_g)u = b(u_g)$, initial guess $u_g$, grid spacing $\Delta x$, convergence tolerance |
 | **Outputs** | Converged solution vector $u$, iteration count, residual history |
 
@@ -200,7 +222,9 @@ The number of correct digits roughly doubles each iteration: quadratic convergen
 
 Newton's method gives $u^{\text{new}} = u_g - F(u_g)/F'(u_g)$, with $F'(u) = 1/\Delta x + 2u$. Then
 
-$$u^{\text{new}} = \frac{u_g\left(\frac{1}{\Delta x} + 2u_g\right) - \frac{u_g - u_{i-1}}{\Delta x} - u_g^2}{\frac{1}{\Delta x} + 2u_g} = \frac{\frac{u_{i-1}}{\Delta x} + u_g^2}{\frac{1}{\Delta x} + 2u_g},$$
+$$
+u^{\text{new}} = \frac{u_g\left(\frac{1}{\Delta x} + 2u_g\right) - \frac{u_g - u_{i-1}}{\Delta x} - u_g^2}{\frac{1}{\Delta x} + 2u_g} = \frac{\frac{u_{i-1}}{\Delta x} + u_g^2}{\frac{1}{\Delta x} + 2u_g}
+$$
 
 which is the same expression as solving the linearized equation for $u_i$. Dropping $(\Delta u_i)^2$ is the same as keeping the first-order Taylor term that Newton's method uses, which is why the error is $O((\Delta u_i)^2)$.
 
@@ -226,7 +250,9 @@ The error changes sign and shrinks by a constant factor of about $u^*/(1/\Delta 
 
 The change is $e^{(n-1)} - e^{(n)} \approx (1 - \rho)e^{(n-1)}$, so
 
-$$e^{(n)} \approx \frac{\rho}{1 - \rho}\,\|u^{(n)} - u^{(n-1)}\|.$$
+$$
+e^{(n)} \approx \frac{\rho}{1 - \rho}\,\| u^{(n)} - u^{(n-1)}\|
+$$
 
 For $\rho = 0.9$: $9 \times 10^{-6}$. For $\rho = 0.99$: $9.9 \times 10^{-5}$.
 

@@ -5,18 +5,25 @@ Kinetics relates the forces acting on a particle to its resulting motion. Buildi
 ## Newton's Laws of Motion
 
 ### First Law (Inertia)
+
 A particle remains at rest or in uniform rectilinear motion unless acted upon by an unbalanced force.
 
 ### Second Law (Fundamental Equation)
+
 The acceleration of a particle is proportional to the net force and inversely proportional to its mass:
 
-$$\sum \mathbf{F} = m\mathbf{a}$$
+$$
+\sum \mathbf{F} = m\mathbf{a}
+$$
 
 In component form:
 
-$$\sum F_x = m a_x, \quad \sum F_y = m a_y, \quad \sum F_z = m a_z$$
+$$
+\sum F_x = m a_x, \quad \sum F_y = m a_y, \quad \sum F_z = m a_z
+$$
 
 ### Third Law (Action-Reaction)
+
 For every action there is an equal and opposite reaction: $\mathbf{F}_{AB} = -\mathbf{F}_{BA}$.
 
 ## Equations of Motion in Different Coordinate Systems
@@ -25,15 +32,21 @@ For every action there is an equal and opposite reaction: $\mathbf{F}_{AB} = -\m
 
 Best suited for problems where forces align naturally with rectangular axes:
 
-$$\sum F_x = m\ddot{x}, \quad \sum F_y = m\ddot{y}, \quad \sum F_z = m\ddot{z}$$
+$$
+\sum F_x = m\ddot{x}, \quad \sum F_y = m\ddot{y}, \quad \sum F_z = m\ddot{z}
+$$
 
 ### Normal-Tangential Coordinates
 
 Ideal for curved-path motion where the path geometry is known:
 
-$$\sum F_t = m a_t = m\frac{dv}{dt}$$
+$$
+\sum F_t = m a_t = m \frac{dv}{dt}
+$$
 
-$$\sum F_n = m a_n = m\frac{v^2}{\rho}$$
+$$
+\sum F_n = m a_n = m \frac{v^2}{\rho}
+$$
 
 where $\rho$ is the radius of curvature. The tangential component changes the speed, while the normal component changes the direction.
 
@@ -41,9 +54,13 @@ where $\rho$ is the radius of curvature. The tangential component changes the sp
 
 Useful for problems with radial symmetry, such as orbital or rotating-arm motion:
 
-$$\sum F_r = m(\ddot{r} - r\dot{\theta}^2)$$
+$$
+\sum F_r = m(\ddot{r} - r\dot{\theta}^2)
+$$
 
-$$\sum F_\theta = m(r\ddot{\theta} + 2\dot{r}\dot{\theta})$$
+$$
+\sum F_\theta = m(r\ddot{\theta} + 2\dot{r}\dot{\theta})
+$$
 
 The term $-mr\dot{\theta}^2$ is the centripetal acceleration contribution, and $2m\dot{r}\dot{\theta}$ is the Coriolis acceleration contribution.
 
@@ -51,7 +68,9 @@ The term $-mr\dot{\theta}^2$ is the centripetal acceleration contribution, and $
 
 D'Alembert's principle rewrites Newton's second law in an equilibrium-like form by introducing an **inertia force** $\mathbf{F}^* = -m\mathbf{a}$:
 
-$$\sum \mathbf{F} + \mathbf{F}^* = \mathbf{0}$$
+$$
+\sum \mathbf{F} + \mathbf{F}^* = \mathbf{0}
+$$
 
 This allows static-equilibrium techniques (free-body diagrams, moment equations) to be applied to dynamic problems. The inertia force acts through the mass center in the direction opposite to acceleration.
 
@@ -59,9 +78,12 @@ This allows static-equilibrium techniques (free-body diagrams, moment equations)
 
 A **central force** is always directed toward or away from a fixed point, with magnitude depending only on distance:
 
-$$\mathbf{F} = f(r)\mathbf{e}_r$$
+$$
+\mathbf{F} = f(r)\mathbf{e}_r
+$$
 
 Key properties:
+
 - Angular momentum is conserved: $h = r^2\dot{\theta} = \text{constant}$
 - Motion is confined to a plane
 
@@ -69,11 +91,15 @@ Key properties:
 
 For a mass $m$ orbiting a body of mass $M$:
 
-$$F = -\frac{GMm}{r^2}$$
+$$
+F = -\frac{GMm}{r^2}
+$$
 
 The orbit equation is:
 
-$$\frac{1}{r} = \frac{GM}{h^2}(1 + e\cos\theta)$$
+$$
+\frac{1}{r} = \frac{GM}{h^2}(1 + e\cos\theta)
+$$
 
 where $e$ is the eccentricity ($e = 0$ circle, $0 < e < 1$ ellipse, $e = 1$ parabola, $e > 1$ hyperbola).
 
@@ -84,6 +110,7 @@ where $e$ is the eccentricity ($e = 0$ circle, $0 < e < 1$ ellipse, $e = 1$ para
 A 10 kg block slides down a 30° incline with coefficient of kinetic friction $\mu_k = 0.2$.
 
 **Given:**
+
 - Mass: $m = 10$ kg
 - Incline angle: $\theta = 30^\circ$
 - Coefficient of friction: $\mu_k = 0.2$
@@ -96,25 +123,38 @@ Apply Newton's second law along and perpendicular to the incline.
 
 **Normal direction** (perpendicular to incline, no acceleration):
 
-$$N - mg\cos\theta = 0$$
+$$
+N - mg\cos\theta = 0
+$$
 
-$$N = 10(9.81)\cos 30^\circ = 84.96 \text{ N}$$
+$$
+N = 10(9.81)\cos 30^\circ = 84.96 \text{ N}
+$$
 
 **Along the incline** (positive down the slope):
 
-$$mg\sin\theta - \mu_k N = ma$$
+$$
+mg\sin\theta - \mu_k N = ma
+$$
 
-$$10(9.81)\sin 30^\circ - 0.2(84.96) = 10a$$
+$$
+10(9.81)\sin 30^\circ - 0.2(84.96) = 10a
+$$
 
-$$49.05 - 16.99 = 10a$$
+$$
+49.05 - 16.99 = 10a
+$$
 
-$$a = 3.21 \text{ m/s}^2$$
+$$
+a = 3.21 \text{ m/s}^2
+$$
 
 ### Example 2: Banked Curve
 
 A car travels at constant speed around a banked curve of radius $R = 150$ m with banking angle $\beta = 20^\circ$. Find the speed at which no friction is needed.
 
 **Given:**
+
 - $R = 150$ m, $\beta = 20^\circ$, friction not required
 
 **Find:** Ideal speed $v$.
@@ -125,23 +165,33 @@ Using normal-tangential coordinates with the normal direction toward the center 
 
 **Vertical equilibrium:**
 
-$$N\cos\beta = mg$$
+$$
+N\cos\beta = mg
+$$
 
 **Radial equation (toward center):**
 
-$$N\sin\beta = \frac{mv^2}{R}$$
+$$
+N\sin\beta = \frac{mv^2}{R}
+$$
 
 Dividing the second equation by the first:
 
-$$\tan\beta = \frac{v^2}{Rg}$$
+$$
+\tan\beta = \frac{v^2}{Rg}
+$$
 
-$$v = \sqrt{Rg\tan\beta} = \sqrt{150(9.81)\tan 20^\circ} = \sqrt{535.6} = 23.1 \text{ m/s} \approx 83.3 \text{ km/h}$$
+$$
+v = \sqrt{Rg\tan\beta} = \sqrt{150(9.81)\tan 20^\circ} = \sqrt{535.6} = 23.1 \text{ m/s}
+\approx 83.3 \text{ km/h}
+$$
 
 ### Example 3: Satellite Orbit
 
 A satellite orbits Earth at an altitude of 400 km. Find its orbital speed and period.
 
 **Given:**
+
 - Earth radius: $R_E = 6371$ km
 - Altitude: $h = 400$ km
 - $GM_E = 3.986 \times 10^{14}$ m³/s²
@@ -154,18 +204,26 @@ Orbital radius: $r = R_E + h = 6771$ km $= 6.771 \times 10^6$ m
 
 For a circular orbit, gravitational force provides centripetal acceleration:
 
-$$\frac{GMm}{r^2} = \frac{mv^2}{r}$$
+$$
+\frac{GMm}{r^2} = \frac{mv^2}{r}
+$$
 
-$$v = \sqrt{\frac{GM}{r}} = \sqrt{\frac{3.986 \times 10^{14}}{6.771 \times 10^6}} = 7672 \text{ m/s} \approx 7.67 \text{ km/s}$$
+$$
+v = \sqrt{\frac{GM}{r}} = \sqrt{\frac{3.986 \times 10^{14}}{6.771 \times 10^6}} = 7672
+\text{ m/s} \approx 7.67 \text{ km/s}
+$$
 
 **Period:**
 
-$$T = \frac{2\pi r}{v} = \frac{2\pi(6.771 \times 10^6)}{7672} = 5545 \text{ s} \approx 92.4 \text{ min}$$
+$$
+T = \frac{2\pi r}{v} = \frac{2\pi(6.771 \times 10^6)}{7672} = 5545 \text{ s} \approx
+92.4 \text{ min}
+$$
 
 ## Common Force Models
 
 | Force | Expression | Notes |
-|-------|-----------|-------|
+| --- | --- | --- |
 | Gravity (near surface) | $W = mg$ | $g \approx 9.81$ m/s² |
 | Gravity (general) | $F = \frac{GMm}{r^2}$ | Inverse-square law |
 | Spring | $F = -kx$ | Hooke's law, $x$ from natural length |
@@ -175,21 +233,25 @@ $$T = \frac{2\pi r}{v} = \frac{2\pi(6.771 \times 10^6)}{7672} = 5545 \text{ s} \
 ## Applications in Engineering
 
 ### Aerospace Engineering
+
 - Orbital mechanics and satellite deployment
 - Launch vehicle trajectory analysis
 - Re-entry dynamics and heat shield design
 
 ### Automotive Engineering
+
 - Vehicle acceleration and braking performance
 - Tire-road interaction on curves
 - Suspension response to road inputs
 
 ### Biomechanics
+
 - Human gait analysis and joint forces
 - Prosthetic limb design
 - Sports equipment optimization
 
 ### Marine Engineering
+
 - Ship propulsion and resistance calculations
 - Mooring line tension under wave loads
 - Submarine depth control dynamics
@@ -197,26 +259,31 @@ $$T = \frac{2\pi r}{v} = \frac{2\pi(6.771 \times 10^6)}{7672} = 5545 \text{ s} \
 ## Practical Problem-Solving Tips
 
 ### 1. Draw a Complete Free-Body Diagram
+
 - Isolate the particle and show all external forces
 - Include weight, normal forces, friction, springs, and applied loads
 - Indicate the assumed positive direction for acceleration
 
 ### 2. Choose the Right Coordinate System
+
 - Cartesian for rectilinear or projectile motion
 - Normal-tangential for known curved paths
 - Polar for radial or orbital motion
 
 ### 3. Count Equations and Unknowns
+
 - Two-dimensional problems yield two scalar equations
 - Ensure you have enough equations before solving
 - Use constraint equations for connected systems
 
 ### 4. Check Limiting Cases
+
 - Verify results reduce to known solutions (e.g., zero friction, zero angle)
 - Ensure forces balance when acceleration is zero
 - Confirm direction of friction opposes motion
 
 ### 5. Validate with Energy or Momentum
+
 - Cross-check answers using work-energy or impulse-momentum methods
 - These scalar methods often catch sign or algebra errors
 
@@ -244,7 +311,9 @@ $N - mg = ma$, so $N = m(g + a) = 70(9.81 + 1.5) = 792$ N (equivalent to an 80.7
 
 $N = mg\cos 25^\circ = 177.8$ N, so friction is $0.3 \times 177.8 = 53.3$ N down the slope. The weight component along the slope is $mg\sin 25^\circ = 82.9$ N.
 
-$$a = \frac{200 - 82.9 - 53.3}{20} = 3.19 \text{ m/s}^2 \text{ (up the slope)}$$
+$$
+a = \frac{200 - 82.9 - 53.3}{20} = 3.19 \text{ m/s}^2 \text{ (up the slope)}
+$$
 
 </details>
 
@@ -255,7 +324,9 @@ $$a = \frac{200 - 82.9 - 53.3}{20} = 3.19 \text{ m/s}^2 \text{ (up the slope)}$$
 
 At the maximum speed, friction $\mu_s N$ acts down the bank. Vertical: $N\cos\beta - \mu_s N\sin\beta = mg$. Radial: $N\sin\beta + \mu_s N\cos\beta = mv^2/R$. Dividing:
 
-$$v_{max} = \sqrt{Rg\,\frac{\sin\beta + \mu_s\cos\beta}{\cos\beta - \mu_s\sin\beta}} = \sqrt{150 \times 9.81 \times \frac{0.342 + 0.282}{0.940 - 0.103}} = 33.1 \text{ m/s}$$
+$$
+v_{max} = \sqrt{Rg\,\frac{\sin\beta + \mu_s\cos\beta}{\cos\beta - \mu_s\sin\beta}} = \sqrt{150 \times 9.81 \times \frac{0.342 + 0.282}{0.940 - 0.103}} = 33.1 \text{ m/s}
+$$
 
 This is about 119 km/h, compared with 83 km/h for the friction-free design speed.
 
@@ -268,7 +339,10 @@ This is about 119 km/h, compared with 83 km/h for the friction-free design speed
 
 For a circular orbit $v = 2\pi r/T$ and $v^2 = GM/r$, so
 
-$$r = \left(\frac{GM\,T^2}{4\pi^2}\right)^{1/3} = 4.216 \times 10^7 \text{ m} = 42\,164 \text{ km}$$
+$$
+r = \left(\frac{GM\,T^2}{4\pi^2}\right)^{1/3} = 4.216 \times 10^7 \text{ m} = 42\,164
+\text{ km}
+$$
 
 The altitude is $42\,164 - 6371 = 35\,793$ km and the speed is $v = 2\pi r/T = 3.07$ km/s.
 
@@ -281,7 +355,9 @@ The altitude is $42\,164 - 6371 = 35\,793$ km and the speed is $v = 2\pi r/T = 3
 
 The frictionless rod exerts no radial force, so $\sum F_r = m(\ddot{r} - r\omega^2) = 0$. With $r(0) = r_0$ and $\dot{r}(0) = 0$:
 
-$$r(t) = r_0\cosh(\omega t), \quad \dot{r}(t) = r_0\omega\sinh(\omega t)$$
+$$
+r(t) = r_0\cosh(\omega t), \quad \dot{r}(t) = r_0\omega\sinh(\omega t)
+$$
 
 At $t = 0.5$ s: $r = 0.1\cosh(1.5) = 0.235$ m and $\dot{r} = 0.3\sinh(1.5) = 0.639$ m/s.
 

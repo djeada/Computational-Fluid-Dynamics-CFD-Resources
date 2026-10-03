@@ -34,18 +34,22 @@ Example of a triangular mesh:
 
 - Nodes are at intersections of lines (the asterisks).
 - Each triangle is a finite element, and shape functions are defined locally.
- 
+
 ### OVERVIEW AND PHILOSOPHY
 
 Finite element analysis focuses on approximating a solution by combining local shape functions that live on small subdomains, or elements, of the overall problem domain. Each element is typically associated with a set of nodes at which the unknown quantities are explicitly stored. The method often starts by writing the problem in its variational or weak form, which allows one to consider integrals of products involving the unknown function and specified test functions. These integrals make it possible to capture the behavior of the solution without requiring explicit finite-difference-style approximations of derivatives. Instead, integration by parts and standard function space arguments are used to make sure that the solution respects the underlying physics.
 
 Mathematically speaking, if the differential equation is written in the form
 
-$$\mathcal{L}(u) = 0$$
+$$
+\mathcal{L}(u) = 0
+$$
 
 then the finite element method tries to solve the integral condition
 
-$$\int_{\Omega} w(x)\,\mathcal{L}(u)\,dx = 0$$
+$$
+\int_{\Omega} w(x)\,\mathcal{L}(u)\, dx = 0
+$$
 
 for all test functions $w$ in a suitable function space, sometimes with additional boundary terms if integration by parts is applied. The unknown $u$ and the test functions $w$ are expanded in terms of local basis functions that have support only over a small portion of the domain.
 
@@ -67,15 +71,24 @@ for all test functions $w$ in a suitable function space, sometimes with addition
 
 1) Derive the Weak Form. Consider a boundary value problem like
 
-$$- \frac{d}{dx} \Big( p(x) \frac{du}{dx} \Big) = f(x), \quad x \in [0,L]$$
+$$
+-\frac{d}{dx} \Big(p(x) \frac{du}{dx} \Big) = f(x), \quad x \in [0,L]
+$$
 
 with boundary conditions on $u$. The weak form is obtained by multiplying by a test function $w(x)$ and integrating over $[0,L]$:
 
-$$\int_0^L w(x) \Big( - \frac{d}{dx}\big( p(x)\,u'(x) \big) \Big) \,dx = \int_0^L w(x)\, f(x)\,dx$$
+$$
+\int_0^L w(x) \Big(-\frac{d}{dx}\big(p(x)\, u'(x) \big) \Big) \, dx = \int_0^L w(x)\,
+f(x)\, dx
+$$
 
 By applying integration by parts, one obtains
 
-$$\int_0^L p(x)\,w'(x)\,u'(x)\,dx - \Big[\underbrace{p(x)\,w(x)\,u'(x)}_{\text{boundary term}} \Big]_0^L = \int_0^L w(x)\, f(x)\,dx$$
+$$
+\int_0^L p(x)\, w'(x)\, u'(x)\, dx -
+\Big[\underbrace{p(x)\,w(x)\,u'(x)}_{\text{boundary term}} \Big]_0^L = \int_0^L w(x)\,
+f(x)\, dx
+$$
 
 and boundary conditions help determine how to handle the boundary term.
 
@@ -83,21 +96,27 @@ and boundary conditions help determine how to handle the boundary term.
 
 3) Choose Shape Functions. Let each element have local shape functions $\phi_j^e(x)$, defined only within element $e$. Over the entire domain, the approximate solution $u_h$ is
 
-$$u_h(x) = \sum_{i=1}^{\text{TotalNodes}} U_i\,\Phi_i(x)$$
+$$
+u_h(x) = \sum_{i=1}^{\text{TotalNodes}} U_i\,\Phi_i(x)
+$$
 
 where each global basis function $\Phi_i$ is built from the local shape functions. The coefficient $U_i$ represents the unknown value at node $i$.
 
 4) Form Local Stiffness Matrices and Load Vectors. For each element $e$, define
 
-$$K^e_{ij} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} p(x)\,\phi_i^e{}'(x)\,\phi_j^e{}'(x)\, dx, 
-\quad 
-F^e_{i} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} \phi_i^e(x)\,f(x)\,dx$$
+$$
+K^e_{ij} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}}
+p(x)\,\phi_i^e{}'(x)\,\phi_j^e{}'(x)\, dx, \quad
+F^e_{i} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} \phi_i^e(x)\, f(x)\, dx
+$$
 
 These integrals capture how each pair of shape functions interacts under the problem’s differential operator and forcing term.
 
 5) Assemble the Global System. The local element stiffness matrices $K^e$ and load vectors $F^e$ are added into global matrices $K$ and global vectors $F$. This leads to a large system of equations
 
-$$K\,U = F$$
+$$
+K\, U = F
+$$
 
 where $U$ is the vector of unknown nodal values.
 
@@ -105,27 +124,31 @@ where $U$ is the vector of unknown nodal values.
 
 7) Solve the System. Use direct solvers (e.g., LU decomposition) for small or moderate problems. Use iterative solvers (e.g., Conjugate Gradient, GMRES) with suitable preconditioners for larger systems.
 
-
-
-
-
 ### EXAMPLE: 1D POISSON EQUATION
 
 A classic application in one dimension is solving
 
-$$- \frac{d^2 u}{dx^2} = f(x), \quad x \in [0,1]$$
+$$
+-\frac{d^2 u}{dx^2} = f(x), \quad x \in [0,1]
+$$
 
 with boundary conditions $u(0) = 0$ and $u(1) = 0$ for simplicity. The weak form is found by multiplying by a test function $w(x)$ and integrating:
 
-$$\int_0^1 w(x) \Big( -\frac{d^2 u}{dx^2} \Big)\,dx = \int_0^1 w(x)\,f(x)\,dx$$
+$$
+\int_0^1 w(x) \Big(-\frac{d^2 u}{dx^2} \Big)\, dx = \int_0^1 w(x)\, f(x)\, dx
+$$
 
 Integration by parts yields
 
-$$\int_0^1 w'(x)\,u'(x)\,dx = \int_0^1 w(x)\,f(x)\,dx$$
+$$
+\int_0^1 w'(x)\, u'(x)\, dx = \int_0^1 w(x)\, f(x)\, dx
+$$
 
 assuming homogeneous Dirichlet boundary conditions eliminate boundary terms. The domain is divided into elements $[x_{i-1}, x_i]$ for $i=1,\dots,N$. On each element, approximate $u$ by a linear combination of local shape functions. Compute the local stiffness matrices and load vectors, and assemble them into
 
-$$K\,U = F$$
+$$
+K\, U = F
+$$
 
 where $K$ is an $(N+1)\times(N+1)$ matrix (one row per node, before boundary conditions are applied), $U$ is the vector of nodal unknowns, and $F$ is the load vector. After applying the boundary conditions $u(0)=0$ and $u(1)=0$, the resulting system can be solved for the interior nodes.
 
@@ -144,7 +167,7 @@ The Finite Element Method (FEM) divides the domain into elements (triangles, qua
 ## Input / Output
 
 | Aspect | Details |
-|---|---|
+| --- | --- |
 | **Inputs** | Domain $\Omega$, element mesh, polynomial degree, forcing function $f(x)$, boundary conditions (Dirichlet, Neumann), material properties $p(x)$ |
 | **Outputs** | Nodal solution vector $U$, global stiffness matrix $K$, load vector $F$, approximate solution $u_h(x)$ |
 
@@ -182,7 +205,10 @@ The global load vector is $F = (1/6, 1/3, 1/3, 1/6)$.
 
 Deleting the rows and columns of the Dirichlet nodes 0 and 3 leaves
 
-$$6U_1 - 3U_2 = \frac{1}{3}, \qquad -3U_1 + 6U_2 = \frac{1}{3}$$
+$$
+6U_1 - 3U_2 = \frac{1}{3},
+\qquad - 3U_1 + 6U_2 = \frac{1}{3}
+$$
 
 so $U_1 = U_2 = 1/9$.
 
@@ -210,7 +236,10 @@ The weak form is $\int_0^1 w'u'\,dx - [w u']_0^1 = 0$. Since $w(0) = 0$ at the D
 
 With $h = 0.5$ (so $1/h = 2$), deleting node 0 leaves
 
-$$4U_1 - 2U_2 = 0, \qquad -2U_1 + 2U_2 = g$$
+$$
+4U_1 - 2U_2 = 0,
+\qquad - 2U_1 + 2U_2 = g
+$$
 
 so $U_1 = g/2$ and $U_2 = g$. This matches the exact solution $u = gx$.
 

@@ -6,15 +6,20 @@
 
 Potential flow is **irrotational flow** where the vorticity is zero everywhere:
 
-$$\vec{\omega} = \nabla \times \vec{V} = 0$$
+$$
+\vec{\omega} = \nabla \times \vec{V} = 0
+$$
 
 This allows us to define a **scalar velocity potential** $\phi$ such that:
 
-$$\vec{V} = \nabla \phi$$
+$$
+\vec{V} = \nabla \phi
+$$
 
 ### Conditions for Irrotational Flow
 
 For a flow to be irrotational initially:
+
 1. **Inviscid fluid** (no viscous torques)
 2. **Conservative body forces** (e.g., gravity)
 3. **Initially irrotational** conditions
@@ -26,13 +31,16 @@ For a flow to be irrotational initially:
 
 For incompressible potential flow, substituting $\vec{V} = \nabla \phi$ into continuity:
 
-$$\nabla \cdot \vec{V} = \nabla \cdot (\nabla \phi) = \nabla^2 \phi = 0$$
+$$
+\nabla \cdot \vec{V} = \nabla \cdot (\nabla \phi) = \nabla^2 \phi = 0
+$$
 
 This is **Laplace's equation** - a linear, elliptic PDE.
 
 #### Linearity and Superposition
 
 Since Laplace's equation is linear:
+
 - If $\phi_1$ and $\phi_2$ are solutions, then $c_1\phi_1 + c_2\phi_2$ is also a solution
 - This enables building complex flows from elementary solutions
 
@@ -42,7 +50,9 @@ Since Laplace's equation is linear:
 
 For 2D incompressible flow, we can define a **stream function** $\psi$ such that:
 
-$$u = \frac{\partial \psi}{\partial y}, \quad v = -\frac{\partial \psi}{\partial x}$$
+$$
+u = \frac{\partial \psi}{\partial y}, \quad v = -\frac{\partial \psi}{\partial x}
+$$
 
 This automatically satisfies continuity.
 
@@ -50,7 +60,10 @@ This automatically satisfies continuity.
 
 For irrotational flow:
 
-$$\frac{\partial \phi}{\partial x} = \frac{\partial \psi}{\partial y}, \quad \frac{\partial \phi}{\partial y} = -\frac{\partial \psi}{\partial x}$$
+$$
+\frac{\partial \phi}{\partial x} = \frac{\partial \psi}{\partial y}, \quad
+\frac{\partial \phi}{\partial y} = -\frac{\partial \psi}{\partial x}
+$$
 
 These are the **Cauchy-Riemann equations**, indicating that $\phi$ and $\psi$ are harmonic conjugates.
 
@@ -67,35 +80,50 @@ These are the **Cauchy-Riemann equations**, indicating that $\phi$ and $\psi$ ar
 
 **Velocity potential**:
 
-$$\phi = U_\infty x \cos \alpha + U_\infty y \sin \alpha$$
+$$
+\phi = U_\infty x \cos \alpha + U_\infty y \sin \alpha
+$$
 
 **Stream function**:
 
-$$\psi = U_\infty y \cos \alpha - U_\infty x \sin \alpha$$
+$$
+\psi = U_\infty y \cos \alpha - U_\infty x \sin \alpha
+$$
 
 **Velocity components**:
 
-$$u = U_\infty \cos \alpha, \quad v = U_\infty \sin \alpha$$
+$$
+u = U_\infty \cos \alpha, \quad v = U_\infty \sin \alpha
+$$
 
 For flow parallel to x-axis ($\alpha = 0$):
 
-$$\phi = U_\infty x, \quad \psi = U_\infty y$$
+$$
+\phi = U_\infty x, \quad \psi = U_\infty y
+$$
 
 ### 2. Source/Sink
 
 **Velocity potential**:
 
-$$\phi = \frac{m}{2\pi} \ln r$$
+$$
+\phi = \frac{m}{2\pi} \ln r
+$$
 
 **Stream function**:
 
-$$\psi = \frac{m}{2\pi} \theta$$
+$$
+\psi = \frac{m}{2\pi} \theta
+$$
 
 **Velocity components**:
 
-$$u_r = \frac{m}{2\pi r}, \quad u_\theta = 0$$
+$$
+u_r = \frac{m}{2\pi r}, \quad u_\theta = 0
+$$
 
 where:
+
 - $m > 0$: **source** (outward flow)
 - $m < 0$: **sink** (inward flow)
 - $m$ has units of $[L^2/T]$ (volume flow rate per unit depth)
@@ -106,15 +134,22 @@ A doublet is the limit of a source-sink pair as their separation approaches zero
 
 **Velocity potential**:
 
-$$\phi = -\frac{\mu}{2\pi} \frac{\cos \theta}{r}$$
+$$
+\phi = -\frac{\mu}{2\pi} \frac{\cos \theta}{r}
+$$
 
 **Stream function**:
 
-$$\psi = \frac{\mu}{2\pi} \frac{\sin \theta}{r}$$
+$$
+\psi = \frac{\mu}{2\pi} \frac{\sin \theta}{r}
+$$
 
 **Velocity components**:
 
-$$u_r = \frac{\mu}{2\pi r^2} \cos \theta, \quad u_\theta = \frac{\mu}{2\pi r^2} \sin \theta$$
+$$
+u_r = \frac{\mu}{2\pi r^2} \cos \theta, \quad u_\theta = \frac{\mu}{2\pi r^2} \sin
+\theta
+$$
 
 where $\mu$ is the **doublet strength**.
 
@@ -122,15 +157,21 @@ where $\mu$ is the **doublet strength**.
 
 **Velocity potential**:
 
-$$\phi = \frac{\Gamma}{2\pi} \theta$$
+$$
+\phi = \frac{\Gamma}{2\pi} \theta
+$$
 
 **Stream function**:
 
-$$\psi = -\frac{\Gamma}{2\pi} \ln r$$
+$$
+\psi = -\frac{\Gamma}{2\pi} \ln r
+$$
 
 **Velocity components**:
 
-$$u_r = 0, \quad u_\theta = \frac{\Gamma}{2\pi r}$$
+$$
+u_r = 0, \quad u_\theta = \frac{\Gamma}{2\pi r}
+$$
 
 where $\Gamma$ is the **circulation** (positive for counterclockwise rotation).
 
@@ -142,7 +183,9 @@ where $\Gamma$ is the **circulation** (positive for counterclockwise rotation).
 
 For 2D flows, define the **complex potential**:
 
-$$F(z) = \phi + i\psi$$
+$$
+F(z) = \phi + i\psi
+$$
 
 where $z = x + iy$ is the complex coordinate.
 
@@ -150,7 +193,9 @@ where $z = x + iy$ is the complex coordinate.
 
 The complex velocity is:
 
-$$w = \frac{dF}{dz} = u - iv$$
+$$
+w = \frac{dF}{dz} = u - iv
+$$
 
 This follows from the Cauchy-Riemann equations.
 
@@ -158,19 +203,27 @@ This follows from the Cauchy-Riemann equations.
 
 **Uniform flow**:
 
-$$F(z) = U_\infty z$$
+$$
+F(z) = U_\infty z
+$$
 
 **Source/sink**:
 
-$$F(z) = \frac{m}{2\pi} \ln z$$
+$$
+F(z) = \frac{m}{2\pi} \ln z
+$$
 
 **Doublet**:
 
-$$F(z) = -\frac{\mu}{2\pi z}$$
+$$
+F(z) = -\frac{\mu}{2\pi z}
+$$
 
 **Vortex**:
 
-$$F(z) = -i\frac{\Gamma}{2\pi} \ln z$$
+$$
+F(z) = -i \frac{\Gamma}{2\pi} \ln z
+$$
 
 ## Flow Past Simple Bodies
 
@@ -178,34 +231,45 @@ $$F(z) = -i\frac{\Gamma}{2\pi} \ln z$$
 
 Combining uniform flow and doublet:
 
-$$F(z) = U_\infty z + \frac{U_\infty a^2}{z}$$
+$$
+F(z) = U_\infty z + \frac{U_\infty a^2}{z}
+$$
 
 This represents flow past a cylinder of radius $a$.
 
 **Velocity on surface** ($r = a$):
 
-$$u_\theta = -2U_\infty \sin \theta$$
+$$
+u_\theta = -2U_\infty \sin \theta
+$$
 
 **Stagnation points**: $\theta = 0, \pi$ where $u_\theta = 0$
 
 **Pressure distribution** (from Bernoulli):
 
-$$C_p = \frac{p - p_\infty}{\frac{1}{2}\rho U_\infty^2} = 1 - 4\sin^2 \theta$$
+$$
+C_p = \frac{p - p_\infty}{\frac{1}{2}\rho U_\infty^2} = 1 - 4\sin^2 \theta
+$$
 
 ### Flow Past Cylinder with Circulation
 
 Adding circulation to the cylinder flow:
 
-$$F(z) = U_\infty z + \frac{U_\infty a^2}{z} - i\frac{\Gamma}{2\pi} \ln z$$
+$$
+F(z) = U_\infty z + \frac{U_\infty a^2}{z} - i \frac{\Gamma}{2\pi} \ln z
+$$
 
 **Effects of circulation**:
+
 - Moves stagnation points
 - Creates asymmetric pressure distribution
 - Generates lift (Kutta-Joukowsky theorem)
 
 **Stagnation points** located at:
 
-$$\sin \theta_s = \frac{\Gamma}{4\pi U_\infty a}$$
+$$
+\sin \theta_s = \frac{\Gamma}{4\pi U_\infty a}
+$$
 
 For $|\Gamma| > 4\pi U_\infty a$, stagnation points move off the cylinder.
 
@@ -215,11 +279,14 @@ For $|\Gamma| > 4\pi U_\infty a$, stagnation points move off the cylinder.
 
 The Joukowsky transformation:
 
-$$z = \zeta + \frac{c^2}{4\zeta}$$
+$$
+z = \zeta + \frac{c^2}{4\zeta}
+$$
 
 maps a circle in the $\zeta$-plane to an airfoil-like shape in the $z$-plane.
 
 **Process**:
+
 1. Solve for flow past circle in $\zeta$-plane
 2. Apply circulation for lift
 3. Transform to $z$-plane using Joukowsky mapping
@@ -228,6 +295,7 @@ maps a circle in the $\zeta$-plane to an airfoil-like shape in the $z$-plane.
 ### Kutta Condition
 
 For physically realistic airfoil flows:
+
 - Flow must leave the **trailing edge smoothly**
 - No infinite velocities at trailing edge
 - Determines the circulation automatically
@@ -238,11 +306,15 @@ For physically realistic airfoil flows:
 
 For a cylinder with circulation in crossflow:
 
-$$\vec{L} = \rho \vec{V}_\infty \times \vec{\Gamma}$$
+$$
+\vec{L} = \rho \vec{V}_\infty \times \vec{\Gamma}
+$$
 
 In 2D (magnitude per unit span):
 
-$$L = \rho U_\infty \Gamma$$
+$$
+L = \rho U_\infty \Gamma
+$$
 
 **Physical interpretation**: Circulation around a body in crossflow generates lift.
 
@@ -250,13 +322,16 @@ $$L = \rho U_\infty \Gamma$$
 
 The complex force per unit depth is:
 
-$$F_x - iF_y = \frac{i\rho}{2} \oint w^2 dz$$
+$$
+F_x - iF_y = \frac{i\rho}{2} \oint w^2 dz
+$$
 
 where the integral is around the body surface.
 
 ### D'Alembert's Paradox
 
 For a body without circulation in potential flow:
+
 - **Drag = 0** (impossible in reality)
 - **Lift = 0** (unless circulation is present)
 
@@ -267,6 +342,7 @@ This paradox shows the limitation of inviscid theory for predicting drag.
 ### Flow Past Plane Boundary
 
 To satisfy no-penetration condition at a plane boundary:
+
 1. Place image sources/sinks across boundary
 2. Image strength equals original but opposite sign
 3. Boundary becomes a streamline
@@ -283,20 +359,26 @@ To satisfy no-penetration condition at a plane boundary:
 
 The Green's function for 2D Laplace equation:
 
-$$G(x,y;x',y') = \frac{1}{2\pi} \ln r$$
+$$
+G(x,y;x',y') = \frac{1}{2\pi} \ln r
+$$
 
 where $r = \sqrt{(x-x')^2 + (y-y')^2}$.
 
 ### Panel Methods
 
 Discretize body surface into panels with:
+
 - **Source distributions**: $\sigma(s)$
 - **Vortex distributions**: $\gamma(s)$
 - **Doublet distributions**: $\mu(s)$
 
 Solve integral equation:
 
-$$\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\partial n'} ds'$$
+$$
+\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\partial n'}
+ds'
+$$
 
 ## Limitations of Potential Flow
 
@@ -319,11 +401,13 @@ $$\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\pa
 ### Aerodynamics
 
 **Initial design phases**:
+
 - Airfoil shape optimization
 - Lift curve slope estimation
 - Pressure distribution prediction
 
 **Panel methods**:
+
 - Computational implementation of potential theory
 - Fast calculation for preliminary design
 - Coupling with boundary layer methods
@@ -331,11 +415,13 @@ $$\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\pa
 ### Hydrodynamics
 
 **Ship design**:
+
 - Wave resistance calculations
 - Hull form optimization
 - Seakeeping analysis
 
 **Marine propulsors**:
+
 - Propeller design
 - Lifting line theory
 - Cavitation prediction
@@ -343,6 +429,7 @@ $$\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\pa
 ### Turbomachinery
 
 **Blade design**:
+
 - Cascade flow analysis
 - Loss coefficient estimation
 - Performance prediction
@@ -350,11 +437,13 @@ $$\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\pa
 ### Environmental Flows
 
 **Groundwater flow**:
+
 - Well hydraulics
 - Aquifer modeling
 - Contamination transport
 
 **Atmospheric flows**:
+
 - Building aerodynamics
 - Wind energy assessment
 - Pollutant dispersion
@@ -371,11 +460,13 @@ $$\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\pa
 ### Numerical Methods
 
 **Panel methods**:
+
 - Boundary element discretization
 - Linear system solution
 - Post-processing for forces
 
 **Finite difference/element**:
+
 - Domain discretization
 - Iterative solvers
 - Grid generation challenges
@@ -398,11 +489,13 @@ $$\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\pa
 ## Learning Strategy
 
 ### Prerequisites
+
 - Vector calculus and partial differential equations
 - Complex analysis for 2D problems
 - Basic understanding of fluid mechanics
 
 ### Key Concepts
+
 1. Irrotational flow and velocity potential
 2. Elementary solutions and superposition
 3. Complex potential and conformal mapping
@@ -411,6 +504,7 @@ $$\phi(x,y) = \int \sigma(s') G(x,y;s') ds' + \int \mu(s') \frac{\partial G}{\pa
 6. Limitations and connection to viscous flow
 
 ### Problem-Solving Approach
+
 1. Identify the geometry and boundary conditions
 2. Select appropriate elementary solutions
 3. Apply superposition principle
@@ -462,7 +556,9 @@ The distribution is symmetric front-to-back and top-to-bottom, so the net force 
 
 On the negative $x$-axis, $u = U_\infty + \frac{m}{2\pi x}$. This is zero at
 
-$$x_s = -\frac{m}{2\pi U_\infty} = -\frac{2}{2\pi \times 5} = -0.0637 \text{ m}$$
+$$
+x_s = -\frac{m}{2\pi U_\infty} = -\frac{2}{2\pi \times 5} = -0.0637 \text{ m}
+$$
 
 Far downstream, all the source flow $m$ passes between the two dividing streamlines at speed $U_\infty$. The body width is therefore $m/U_\infty = 0.4$ m, with half-width $m/(2U_\infty) = 0.2$ m.
 
@@ -475,7 +571,9 @@ Far downstream, all the source flow $m$ passes between the two dividing streamli
 
 On the surface, $u_\theta = -2U_\infty\sin\theta + \frac{\Gamma}{2\pi a}$. Setting this to zero:
 
-$$\sin\theta_s = \frac{\Gamma}{4\pi U_\infty a} = \frac{20}{4\pi \times 10 \times 0.5} = 0.318$$
+$$
+\sin\theta_s = \frac{\Gamma}{4\pi U_\infty a} = \frac{20}{4\pi \times 10 \times 0.5} = 0.318
+$$
 
 so $\theta_s = 18.6^\circ$ and $161.4^\circ$.
 
@@ -492,7 +590,10 @@ Counterclockwise circulation slows the flow over the top ($\theta = 90^\circ$) a
 
 $w = dF/dz = U_\infty(1 - a^2/z^2)$. On $z = a e^{i\theta}$,
 
-$$w = U_\infty(1 - e^{-2i\theta}) = U_\infty e^{-i\theta}(e^{i\theta} - e^{-i\theta}) = 2iU_\infty\sin\theta\, e^{-i\theta}$$
+$$
+w = U_\infty(1 - e^{-2i\theta}) = U_\infty
+e^{-i\theta}(e^{i\theta} - e^{-i\theta}) = 2iU_\infty\sin\theta\, e^{-i\theta}
+$$
 
 so $|w| = 2U_\infty|\sin\theta|$.
 

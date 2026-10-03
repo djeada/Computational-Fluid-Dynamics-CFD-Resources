@@ -4,8 +4,8 @@ Accurately describing how **pressure** behaves in compressible fluids is importa
 
 This distinction is important in many applications:
 
-- **Aeronautics:** Aircraft speeds relative to the speed of sound (Mach number) dictate whether compressibility effects (like shocks) must be accounted for.  
-- **Industrial flows and pipelines:** Gases moving at high speed can generate shock waves, influencing safety and efficiency.  
+- **Aeronautics:** Aircraft speeds relative to the speed of sound (Mach number) dictate whether compressibility effects (like shocks) must be accounted for.
+- **Industrial flows and pipelines:** Gases moving at high speed can generate shock waves, influencing safety and efficiency.
 - **Acoustics and noise control:** The propagation of pressure waves in gases depends on the speed of sound and compressibility.
 
 ### Visualizing Compressible Flow
@@ -22,36 +22,47 @@ At **low Mach numbers**, acoustic waves have minimal influence on bulk flow prop
 
 When modeling a **compressible** fluid (such as air at higher speeds), **density** $\rho$, **pressure** $p$, and **temperature** $T$ can all vary. The primary equations include:
 
-I. **Continuity (Mass Conservation)**  
+I. **Continuity (Mass Conservation)**
 
-$$\frac{\partial \rho}{\partial t} + \nabla \cdot \bigl(\rho\,\mathbf{u}\bigr) = 0$$  
+$$
+\frac{\partial \rho}{\partial t} + \nabla \cdot \bigl(\rho\,\mathbf{u}\bigr) = 0
+$$
 
 where $\mathbf{u} = (u, v, w)$ is the velocity vector. This equation enforces overall mass conservation.
 
-II. **Momentum (Navier–Stokes)**  
+II. **Momentum (Navier–Stokes)**
 
-$$\frac{\partial (\rho\,\mathbf{u})}{\partial t} + \nabla \cdot \bigl(\rho\,\mathbf{u}\,\mathbf{u} + p\,\mathbf{I} - \boldsymbol{\tau}\bigr) = \rho\,\mathbf{f}$$  
+$$
+\frac{\partial (\rho\,\mathbf{u})}{\partial t} + \nabla \cdot
+\bigl(\rho\,\mathbf{u}\,\mathbf{u} + p\,\mathbf{I} -
+\boldsymbol{\tau}\bigr) = \rho\,\mathbf{f}
+$$
 
-- $\mathbf{u}\mathbf{u}$ is the outer product of the velocity vector with itself.  
-- $p\,\mathbf{I}$ is the isotropic pressure term ($\mathbf{I}$ = identity tensor).  
-- $\boldsymbol{\tau}$ is the viscous stress tensor.  
+- $\mathbf{u}\mathbf{u}$ is the outer product of the velocity vector with itself.
+- $p\,\mathbf{I}$ is the isotropic pressure term ($\mathbf{I}$ = identity tensor).
+- $\boldsymbol{\tau}$ is the viscous stress tensor.
 - $\mathbf{f}$ is a body force per unit volume, such as $\rho\,\mathbf{g}$ for gravity.
 
-III. **Energy Equation**  
+III. **Energy Equation**
 
 A common form for the total energy $E$ (internal + relating to motion) is:
 
-$$\frac{\partial (\rho\,E)}{\partial t} + \nabla \cdot \Bigl[\mathbf{u}\,(\rho\,E + p) - \mathbf{q}\Bigr] = \rho\,\mathbf{f}\cdot\mathbf{u}$$  
+$$
+\frac{\partial (\rho\,E)}{\partial t} + \nabla \cdot
+\Bigl[\mathbf{u}\,(\rho\, E + p) - \mathbf{q}\Bigr] = \rho\,\mathbf{f}\cdot\mathbf{u}
+$$
 
-- $E = e + \tfrac{1}{2}|\mathbf{u}|^2$, with $e$ the internal energy per unit mass.  
-- $\mathbf{q}$ is the heat flux (e.g., $\mathbf{q} = -k\,\nabla T$).  
+- $E = e + \tfrac{1}{2}|\mathbf{u}|^2$, with $e$ the internal energy per unit mass.
+- $\mathbf{q}$ is the heat flux (e.g., $\mathbf{q} = -k\,\nabla T$).
 - The right-hand side represents work done by body forces.
 
-IV. **Equation of State**  
+IV. **Equation of State**
 
 For an ideal gas,
 
-$$p = \rho\,R\,T$$
+$$
+p = \rho\, R\, T
+$$
 
 linking pressure, density, and temperature. The gas constant $R$ is specific to the fluid in question (e.g., for air, $R \approx 287\,\text{J/(kg K)}$).
 
@@ -59,41 +70,47 @@ linking pressure, density, and temperature. The gas constant $R$ is specific to 
 
 A key hallmark of **compressible** flow is the presence of **acoustic waves**, traveling at the local speed of sound $a$. For an ideal gas:
 
-$$a = \sqrt{\gamma\,\frac{p}{\rho}} = \sqrt{\gamma\,R\,T}$$
+$$
+a = \sqrt{\gamma\,\frac{p}{\rho}} = \sqrt{\gamma\,R\,T}
+$$
 
 where $\gamma = \tfrac{C_p}{C_v}$ is the ratio of specific heats. At standard atmospheric conditions ($1\text{ atm}$ and $300\text{ K}$), the speed of sound in air is about **347 m/s**.
 
-- In **compressible** flow, these pressure waves strongly influence how the fluid responds to changes.  
+- In **compressible** flow, these pressure waves strongly influence how the fluid responds to changes.
 - In **incompressible** flow, we effectively set $a \to \infty$, ignoring acoustic wave propagation since density is (nearly) constant.
 
 ### Compressible vs. Incompressible Flow
 
 Whether a flow is treated as compressible or incompressible often depends on the **Mach number**:
 
-$$\mathrm{Ma} = \frac{\|\mathbf{u}\|}{a}$$
+$$
+\mathrm{Ma} = \frac{\|\mathbf{u}\|}{a}
+$$
 
 where $\|\mathbf{u}\|$ is the flow velocity magnitude and $a$ is the local speed of sound.
 
-- **Incompressible Flow ($\mathrm{Ma} \ll 1$)**  
-  - Density $\rho$ is nearly constant.  
-  - Simplifies to $\nabla \cdot \mathbf{u} = 0$.  
+- **Incompressible Flow ($\mathrm{Ma} \ll 1$)**
+  - Density $\rho$ is nearly constant.
+  - Simplifies to $\nabla \cdot \mathbf{u} = 0$.
   - Pressure adjusts to enforce mass conservation rather than carrying significant compressibility effects.
-- **Compressible Flow ($\mathrm{Ma} \approx 1$ or higher)**  
-  - Density varies with changes in pressure and temperature.  
-  - Must account for shocks, expansion waves, and other high-speed phenomena.  
+- **Compressible Flow ($\mathrm{Ma} \approx 1$ or higher)**
+  - Density varies with changes in pressure and temperature.
+  - Must account for shocks, expansion waves, and other high-speed phenomena.
   - Requires specialized numerical schemes (finite-volume, Riemann solvers, etc.).
-A practical **rule of thumb** in engineering is that if $\mathrm{Ma} < 0.3$, compressibility effects are insignificant, and an incompressible approximation is usually valid.
+    A practical **rule of thumb** in engineering is that if $\mathrm{Ma} < 0.3$, compressibility effects are insignificant, and an incompressible approximation is usually valid.
 
 #### Quantifying Pressure Changes with Mach Number
 
 A simplified Bernoulli-like relation suggests:
 
-$$\frac{\Delta P}{P} \approx \frac{\gamma}{2}\,\mathrm{Ma}^2$$
+$$
+\frac{\Delta P}{P} \approx \frac{\gamma}{2}\,\mathrm{Ma}^2
+$$
 
-- At $\mathrm{Ma} = 0.1$: $\Delta P / P$ is around 0.7%, often considered insignificant.  
-- At $\mathrm{Ma} = 0.3$: $\Delta P / P$ grows to a few percent—still small but not always trivial.  
+- At $\mathrm{Ma} = 0.1$: $\Delta P / P$ is around 0.7%, often considered insignificant.
+- At $\mathrm{Ma} = 0.3$: $\Delta P / P$ grows to a few percent—still small but not always trivial.
 - Approaching $\mathrm{Ma} = 1$: $\Delta P$ becomes a significant fraction of $P$.
-When speeds reach a substantial fraction of the speed of sound, treating the flow as incompressible can yield large errors; **density changes matter** and must be included.
+  When speeds reach a substantial fraction of the speed of sound, treating the flow as incompressible can yield large errors; **density changes matter** and must be included.
 
 #### Example: Air Moving Through a Pipe
 
@@ -101,24 +118,23 @@ Below is a schematic illustrating how **incompressible** vs. **compressible** fl
 
 ![compressible_vs_incompressible](../../../scripts/plots/compressible_vs_incompressible/compressible_vs_incompressible.png)
 
-**Incompressible Flow (Low Speed):**  
+**Incompressible Flow (Low Speed):**
 
-- Pressure primarily adapts to satisfy $\nabla \cdot \mathbf{u} = 0$.  
+- Pressure primarily adapts to satisfy $\nabla \cdot \mathbf{u} = 0$.
 - No need to model fast acoustic waves; density changes are ignored.
 
-**Compressible Flow (High Speed):**  
+**Compressible Flow (High Speed):**
 
-- Density and pressure are closely coupled.  
-- Speed of sound governs the propagation of waves and shocks.  
+- Density and pressure are closely coupled.
+- Speed of sound governs the propagation of waves and shocks.
 - Numerical modeling grows more complicated, requiring explicit treatment of compressibility.
 
 ### Low-Mach Flows and Numerical Stiffness
 
 When $\mathrm{Ma}$ is small, a **fully compressible** solver must still resolve **acoustic waves**, which travel at speed $a \gg \|\mathbf{u}\|$. For explicit time-integration methods, the **timestep** $\Delta t$ is limited by the highest wave speed present (the **Courant–Friedrichs–Lewy (CFL)** condition). Consequently:
 
-- **Stability Constraint:** $\Delta t$ must be small enough to capture acoustic waves.  
-- **Accuracy Constraint:** $\Delta t$ also must resolve the slower convective flow speed $\|\mathbf{u}\|$.  
-
+- **Stability Constraint:** $\Delta t$ must be small enough to capture acoustic waves.
+- **Accuracy Constraint:** $\Delta t$ also must resolve the slower convective flow speed $\|\mathbf{u}\|$.
 
 Because $\|\mathbf{u}\| / a = \mathrm{Ma} \ll 1$, **acoustic waves** can force **very small** $\Delta t$. This introduces **numerical stiffness**, drastically increasing computational cost.
 
@@ -126,11 +142,11 @@ Because $\|\mathbf{u}\| / a = \mathrm{Ma} \ll 1$, **acoustic waves** can force *
 
 To avoid solving for extremely fast acoustic waves at small Mach numbers, many simulations use an **incompressible** flow model:
 
-I. **Assume $\rho \approx \text{constant}$** throughout the domain.  
+I. **Assume $\rho \approx \text{constant}$** throughout the domain.
 
-II. **Drop the equation of state** for $\rho$.  
+II. **Drop the equation of state** for $\rho$.
 
-III. **Continuity equation** becomes $\nabla \cdot \mathbf{u} = 0$.  
+III. **Continuity equation** becomes $\nabla \cdot \mathbf{u} = 0$.
 
 IV. **Pressure** enforces $\nabla \cdot \mathbf{u} = 0$, rather than evolving from acoustic considerations.
 
@@ -140,27 +156,35 @@ This removes the large disparity in wave speeds and allows larger timesteps, **g
 
 In an **incompressible** flow solver, one typically uses a **pressure projection** or **pressure correction** approach:
 
-I. **Predictor Step (Momentum Update):**  
+I. **Predictor Step (Momentum Update):**
 
-$$\mathbf{u}^* = \mathbf{u}^n + \Delta t \Bigl[-\nabla \cdot (\mathbf{u}\mathbf{u}) + \nabla \cdot \hat{\boldsymbol{\tau}}\Bigr]^n$$
+$$
+\mathbf{u}^* = \mathbf{u}^n + \Delta t
+\Bigl[-\nabla \cdot (\mathbf{u}\mathbf{u}) + \nabla \cdot
+\hat{\boldsymbol{\tau}}\Bigr]^n
+$$
 
 ignoring the new-time pressure term (or using an old-time guess).
 
-II. **Enforce Continuity:**  
+II. **Enforce Continuity:**
 
-$\nabla \cdot \mathbf{u}^{n+1} = 0$  
+$\nabla \cdot \mathbf{u}^{n+1} = 0$
 
 Since $\mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t\,\nabla \hat{P}^{\,n+1}$,
 
 applying $\nabla \cdot$ to both sides yields:
 
-$$\nabla^2 \hat{P}^{\,n+1} = \frac{1}{\Delta t}\,\nabla \cdot \mathbf{u}^*$$
+$$
+\nabla^2 \hat{P}^{\,n+1} = \frac{1}{\Delta t}\,\nabla \cdot \mathbf{u}^*
+$$
 
-III. **Corrector Step (Pressure Update):**  
+III. **Corrector Step (Pressure Update):**
 
-Solve this **Poisson equation** for $\hat{P}^{\,n+1} = P^{n+1}/\rho$. Then update  
+Solve this **Poisson equation** for $\hat{P}^{\,n+1} = P^{n+1}/\rho$. Then update
 
-$$\mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t\,\nabla \hat{P}^{\,n+1}$$
+$$
+\mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t\,\nabla \hat{P}^{\,n+1}
+$$
 
 The result is a divergence-free velocity field.
 
@@ -193,7 +217,7 @@ This is just below the rule-of-thumb limit of 0.3. Density changes are a few per
 <summary>Answer</summary>
 
 | Ma | $(\gamma/2)\mathrm{Ma}^2$ | $p_0/p - 1$ (exact) |
-|----|---------------------------|---------------------|
+| --- | --- | --- |
 | 0.1 | 0.0070 | 0.0070 |
 | 0.3 | 0.0630 | 0.0644 |
 
@@ -221,11 +245,16 @@ The compressible solver needs about $1 + 1/\mathrm{Ma} = 341$ times more steps. 
 
 $\nabla \cdot \mathbf{u}^* = \varepsilon \cos x$, so $\partial^2 \hat{P}/\partial x^2 = \varepsilon \cos x/\Delta t$. A periodic solution, up to an additive constant, is
 
-$$\hat{P}^{\,n+1} = -\frac{\varepsilon}{\Delta t}\cos x$$
+$$
+\hat{P}^{\,n+1} = -\frac{\varepsilon}{\Delta t}\cos x
+$$
 
 The corrector gives
 
-$$u^{n+1} = u^* - \Delta t \frac{\partial \hat{P}}{\partial x} = U_0 + \varepsilon \sin x - \Delta t \cdot \frac{\varepsilon}{\Delta t}\sin x = U_0$$
+$$
+u^{n+1} = u^* - \Delta t \frac{\partial \hat{P}}{\partial x} = U_0 + \varepsilon \sin
+x - \Delta t \cdot \frac{\varepsilon}{\Delta t}\sin x = U_0
+$$
 
 and $v^{n+1} = 0$. The result is uniform, so $\nabla \cdot \mathbf{u}^{n+1} = 0$. The pressure removed exactly the compressive part of the predicted velocity, acting as the Lagrange multiplier for incompressibility.
 
