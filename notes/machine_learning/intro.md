@@ -122,7 +122,7 @@ Regression models predict continuous values. In CFD, this could involve estimati
 
 - Generalized Linear Models: Extend linear regression to accommodate non-normal error distributions.
 
-- Gaussian Process Regression: Provides probabilistic predictions along with uncertainty estimates, which is especially useful for risk assessment in engineering. Given training data $\{(\mathbf{x}_i, y_i)\}$, a GP models the output as a distribution $y^* \sim \mathcal{N}(\mu^*, \sigma^{*2})$ for a new input $\mathbf{x}^*$, where the predictive mean and variance are:
+- Gaussian Process Regression: Provides probabilistic predictions along with uncertainty estimates, which is especially useful for risk assessment in engineering. Given training data $`\{(\mathbf{x}_i, y_i)\}`$, a GP models the output as a distribution $`y^* \sim \mathcal{N}(\mu^*, \sigma^{*2})`$ for a new input $`\mathbf{x}^*`$, where the predictive mean and variance are:
 
   ```math
   \mu^* = \mathbf{k}_*^T (\mathbf{K} + \sigma_n^2 \mathbf{I})^{-1} \mathbf{y},
@@ -283,12 +283,12 @@ Far from the data the GP falls back to its prior (mean 0, variance 1) and says s
 
 </details>
 
-**Exercise 4.** Apply one iteration of k-means with $k = 2$ to the 1D points $\{1, 2, 8, 9, 10\}$, starting from centroids 2 and 9. Give the assignments, new centroids and within-cluster sum of squares, and state whether the algorithm has converged.
+**Exercise 4.** Apply one iteration of k-means with $k = 2$ to the 1D points $`\{1, 2, 8, 9, 10\}`$, starting from centroids 2 and 9. Give the assignments, new centroids and within-cluster sum of squares, and state whether the algorithm has converged.
 
 <details>
 <summary>Answer</summary>
 
-Assignments: $\{1, 2\}$ to centroid 2 and $\{8, 9, 10\}$ to centroid 9.
+Assignments: $`\{1, 2\}`$ to centroid 2 and $`\{8, 9, 10\}`$ to centroid 9.
 
 New centroids: 1.5 and 9.
 

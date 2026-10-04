@@ -50,9 +50,9 @@ $$
 
 For a rigid body, the work done by a couple moment $M$ through an angular displacement is:
 
-$$
+```math
 U_{1 \to 2} = \int_{\theta_1}^{\theta_2} M \, d\theta
-$$
+```
 
 For a constant couple:
 
@@ -270,13 +270,13 @@ $$
 
 **Power:**
 
-$$
+```math
 P = F_{engine} \cdot v = 1335.75(25) = 33\,394 \text{ W} = 33.4 \text{ kW}
-$$
+```
 
-$$
+```math
 P = \frac{33\,394}{745.7} = 44.8 \text{ hp}
-$$
+```
 
 ### Example 4: Pendulum with Friction at Pivot
 
@@ -390,7 +390,7 @@ h = \frac{0.5 \times 500 \times 0.01}{0.2 \times 9.81} = \frac{2.5}{1.962} = 1.2
 <details>
 <summary>Answer</summary>
 
-$T_1 + U_f = 0$ gives $\frac{1}{2}mv^2 = \mu_k mg\,d$, so the mass cancels:
+$T_1 + U_f = 0$ gives $`\frac{1}{2}mv^2 = \mu_k mg\,d`$, so the mass cancels:
 
 ```math
 d = \frac{v^2}{2\mu_k g} = \frac{36}{2 \times 0.25 \times 9.81} = 7.34 \text{ m}

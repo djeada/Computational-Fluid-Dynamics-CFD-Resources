@@ -56,9 +56,9 @@ For high Scruton numbers ($Sc > 10$ in air), VIV amplitudes are small. For low S
 
 An empirical fit for the maximum cross-flow amplitude is:
 
-$$
+```math
 \frac{A}{D} \approx \frac{1}{1 + 0.43 \, (2\pi St^2 Sc)}
-$$
+```
 
 ## Galloping Instability
 
@@ -98,10 +98,10 @@ $$
 
 For a bridge deck with vertical (heave) frequency $f_h$ and torsional frequency $f_\alpha$, the critical flutter speed is estimated using the Selberg formula (for a flat plate):
 
-$$
+```math
 U_f = 0.44 \, f_\alpha B \sqrt{\frac{r_\alpha}{\mu}}
 \sqrt{1 - \left(\frac{f_h}{f_\alpha}\right)^2}
-$$
+```
 
 where:
 
@@ -111,13 +111,13 @@ where:
 
 ### Flutter Derivatives
 
-For real bridge deck sections, the aerodynamic forces are expressed using experimentally determined **flutter derivatives** $H_i^*$ and $A_i^*$ ($i = 1 \ldots 4$):
+For real bridge deck sections, the aerodynamic forces are expressed using experimentally determined **flutter derivatives** $`H_i^*`$ and $`A_i^*`$ ($i = 1 \ldots 4$):
 
-$$
+```math
 L_h = \frac{1}{2}\rho U^2 B
 \left[K H_1^* \frac{\dot{h}}{U} + K H_2^* \frac{B\dot{\alpha}}{U} + K^2 H_3^* \alpha +
 K^2 H_4^* \frac{h}{B} \right]
-$$
+```
 
 These derivatives are obtained from wind tunnel section model tests.
 
@@ -146,9 +146,9 @@ where $u'$ and $w'$ are the longitudinal and vertical turbulence components, and
 
 The response is computed spectrally:
 
-$$
+```math
 S_x(\omega) = |H(\omega)|^2 \, S_F(\omega)
-$$
+```
 
 where $|H(\omega)|^2$ is the mechanical admittance of the structure.
 
@@ -207,9 +207,9 @@ Feedback-controlled actuators (e.g., blowing/suction, oscillating surfaces) can 
 
 Shedding frequency:
 
-$$
+```math
 f_s = \frac{St \, U}{D} = \frac{0.20 \times 15}{3} = 1.0 \text{ Hz}
-$$
+```
 
 Since $f_s = 1.0$ Hz $\neq f_n = 0.5$ Hz, lock-in does **not** occur at $U = 15$ m/s.
 
@@ -355,7 +355,7 @@ Because water is about 840 times denser than air, the same structure has a very 
 <details>
 <summary>Answer</summary>
 
-(a) The transverse force per unit length is $F_y = \frac{1}{2}\rho U^2 D\,C_y = -\frac{1}{2}\rho U D\left(\frac{dC_L}{d\alpha} + C_D\right)\dot{y}$. Moving it to the left-hand side of $m\ddot{y} + 2m\omega_n\zeta\dot{y} + ky = F_y$ gives a total damping coefficient
+(a) The transverse force per unit length is $`F_y = \frac{1}{2}\rho U^2 D\,C_y = -\frac{1}{2}\rho U D\left(\frac{dC_L}{d\alpha} + C_D\right)\dot{y}`$. Moving it to the left-hand side of $m\ddot{y} + 2m\omega_n\zeta\dot{y} + ky = F_y$ gives a total damping coefficient
 
 ```math
 c_{tot} = 2m\omega_n\zeta + \frac{1}{2}\rho U D\left(\frac{dC_L}{d\alpha} + C_D\right)
@@ -380,7 +380,7 @@ U_{cr} = \frac{4 \times 100 \times 12.57 \times 0.005}{1.225 \times 0.5 \times 2
 <details>
 <summary>Answer</summary>
 
-$m_{TMD} = 0.02 \times 20\,000 = 400$ kg and $f_{TMD} = 0.5/1.02 = 0.490$ Hz, so $\omega_{TMD} = 3.08$ rad/s.
+$`m_{TMD} = 0.02 \times 20\,000 = 400`$ kg and $f_{TMD} = 0.5/1.02 = 0.490$ Hz, so $\omega_{TMD} = 3.08$ rad/s.
 
 ```math
 k_{TMD} = m_{TMD}\omega_{TMD}^2 = 400 \times 3.08^2 = 3.79 \text{ kN/m}
@@ -398,7 +398,7 @@ c_{TMD} = 2m_{TMD}\omega_{TMD}\zeta_{opt} = 207 \text{ N·s/m}
 <details>
 <summary>Answer</summary>
 
-Cycles per year: $n = 0.5 \times 3600 \times 50 = 90\,000$. Cycles to failure: $N = 10^{12}/60^3 = 4.63 \times 10^6$.
+Cycles per year: $`n = 0.5 \times 3600 \times 50 = 90\,000`$. Cycles to failure: $N = 10^{12}/60^3 = 4.63 \times 10^6$.
 
 Annual damage: $D = n/N = 0.0194$. The life is $0.33/0.0194 = 17$ years with the safety factor, or $1/0.0194 = 51$ years to $D = 1$. The cubic S-N slope means a 20% reduction in stress range (for example from strakes) would extend the life by a factor of about $1/0.8^3 \approx 2$.
 

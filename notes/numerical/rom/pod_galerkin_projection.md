@@ -12,10 +12,10 @@ We consider the **incompressible** Navier–Stokes equations, which, in their im
 
 I. **Laminar (Viscous Incompressible)**
 
-$$
+```math
 \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} = -\,\nabla
 p + \nu \,\Delta \mathbf{u}
-$$
+```
 
 $$
 \nabla \cdot \mathbf{u} = 0
@@ -27,10 +27,10 @@ II. **RANS Equations (Turbulent Flow)**
 
 For turbulent, time-averaged flows, the Reynolds-Averaged Navier–Stokes (RANS) equations introduce a **turbulent viscosity** $\nu_{t}$ to model the Reynolds stresses:
 
-$$
+```math
 \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} = -\,\nabla
 p + \nabla \cdot \Bigl[\bigl(\nu + \nu_t\bigr)\,\nabla \mathbf{u}\Bigr]
-$$
+```
 
 $$
 \nabla \cdot \mathbf{u} = 0
@@ -46,7 +46,7 @@ The **Proper Orthogonal Decomposition (POD)** is a data-driven strategy to ident
 
 I. **Finite Volume Discretization**
 
-- Suppose the domain $\Omega$ is partitioned into $n$ cells $\{V_1, V_2, \ldots, V_n\}$.
+- Suppose the domain $\Omega$ is partitioned into $n$ cells $`\{V_1, V_2, \ldots, V_n\}`$.
 - The **finite volume solver** (e.g., OpenFOAM) outputs velocity fields (and possibly pressure fields or other quantities) at cell centers or nodes for discrete times $t_1, t_2, \ldots, t_{N_s}$.
 
 II. **Snapshot Collection**
@@ -69,9 +69,9 @@ III. **Correlation Matrix and Eigenvalue Problem**
   \mathbf{u}_{\ell}\,\mathbf{v}_{\ell}\,\Delta V_{\ell}
   ```
 
-  where $\Delta V_{\ell}$ is the volume of cell $\ell$, and $\mathbf{u}_\ell \cdot \mathbf{v}_\ell$ is the dot product of velocity components.
+  where $\Delta V_{\ell}$ is the volume of cell $\ell$, and $`\mathbf{u}_\ell \cdot \mathbf{v}_\ell`$ is the dot product of velocity components.
 
-- Solve the eigenvalue problem $C\,g_i = \lambda_i \,g_i$. The eigenvalues $\lambda_i$ measure the “energy” captured by the corresponding eigenvectors $g_i$.
+- Solve the eigenvalue problem $`C\,g_i = \lambda_i \,g_i`$. The eigenvalues $\lambda_i$ measure the “energy” captured by the corresponding eigenvectors $g_i$.
 
 IV. **POD Modes**
 
@@ -81,7 +81,7 @@ IV. **POD Modes**
   \phi_i = \frac{1}{\sqrt{N_s \, \lambda_i}} \sum_{k=1}^{N_s} g_{ik}\,\mathbf{u}_k
   ```
 
-- Choose the first $N$ modes $\{\phi_1, \ldots, \phi_N\}$ with the largest eigenvalues, ensuring $\sum_{i=1}^{N}\lambda_i$ retains a high percentage (e.g., 90-99%) of the total energy $\sum_{i=1}^{N_s}\lambda_i$.
+- Choose the first $N$ modes $`\{\phi_1, \ldots, \phi_N\}`$ with the largest eigenvalues, ensuring $\sum_{i=1}^{N}\lambda_i$ retains a high percentage (e.g., 90-99%) of the total energy $\sum_{i=1}^{N_s}\lambda_i$.
 
 - The velocity field is then approximated by
 
@@ -99,11 +99,11 @@ In a classical **finite element** framework, one would take the weak form of the
 
 For a single cell $V_p$ with boundary $\partial V_p$, the integral form of the laminar Navier–Stokes equations reads:
 
-$$
+```math
 \int_{V_p} \frac{\partial \mathbf{u}}{\partial t}\, dV + \int_{\partial V_p}
 (\mathbf{u}\cdot \mathbf{n})\,\mathbf{u}\, dS = -\,\int_{V_p} \nabla p\, dV + \nu
 \int_{\partial V_p} \nabla \mathbf{u}\cdot \mathbf{n}\, dS
-$$
+```
 
 where $\mathbf{n}$ is the outward unit normal on $\partial V_p$. For a RANS model, the term $\nu$ becomes $\nu + \nu_t$, and there may be additional modeled stress terms.
 
@@ -133,13 +133,13 @@ Here, $\phi_i(x)$, $\chi_i(x)$, and $\xi_i(x)$ are the POD modes for velocity, p
 
 ### III. Inserting the Reduced Expansions
 
-Substitute the expansions into the finite volume integral equations. Each term—convective flux, diffusive flux, and pressure gradient—becomes a function of $\{a_i(t)\}$. For instance, the **nonlinear convection** term in cell $V_p$ can be written as:
+Substitute the expansions into the finite volume integral equations. Each term—convective flux, diffusive flux, and pressure gradient—becomes a function of $`\{a_i(t)\}`$. For instance, the **nonlinear convection** term in cell $V_p$ can be written as:
 
-$$
+```math
 \int_{\partial V_p} (\mathbf{u}\cdot \mathbf{n})\,\mathbf{u}\, dS \approx
 \int_{\partial V_p} \Bigl(\sum_{i=1}^N a_i(t)\,\phi_i\Bigr)\,\cdot \mathbf{n}
 \Bigl(\sum_{j=1}^N a_j(t)\,\phi_j\Bigr)\, dS
-$$
+```
 
 Such products yield **bilinear** or higher-order combinations in the coefficients $a_i(t)$. In practice, one often assembles these flux integrals offline using the known POD modes to create “projection” tensors or matrices.
 
@@ -147,24 +147,24 @@ Such products yield **bilinear** or higher-order combinations in the coefficient
 
 To derive the final **reduced** system of ODEs in time, we perform an additional projection (or inner product) with each POD mode, typically the same discrete $L^2$-type product used in the POD generation. Formally, for each mode $\phi_m$,
 
-$$
+```math
 \int_{V_p} \phi_m^\top \frac{\partial \mathbf{u}}{\partial t} \, dV + \int_{V_p}
 \phi_m^\top \nabla \cdot (\mathbf{u} \otimes \mathbf{u}) \, dV = -\int_{V_p} \phi_m^\top
 \nabla p \, dV + \nu \int_{V_p} \phi_m^\top \nabla \cdot (\nabla \mathbf{u}) \, dV
-$$
+```
 
 summing over all cells in practice. Numerically, we replace volume integrals by discrete cell-based sums and face-based flux computations:
 
-$$
+```math
 \sum_{p=1}^{n} \phi_m^\top(p) \, \Delta V_p \,
 \frac{\partial \mathbf{u}(p,t)}{\partial t} + \sum_{\text{faces}} \cdots = \ldots
-$$
+```
 
-After collecting terms in $\{a_i(t)\}$, we obtain a **nonlinear ODE system** for the time evolution of the modal coefficients $a_i(t)$:
+After collecting terms in $`\{a_i(t)\}`$, we obtain a **nonlinear ODE system** for the time evolution of the modal coefficients $a_i(t)$:
 
-$$
+```math
 \frac{d a_j(t)}{dt} = F_j\bigl(\{ a_i(t)\}\bigr), \quad j = 1, \ldots, N
-$$
+```
 
 where $F_j(\cdot)$ represents the combination of **convective**, **diffusive**, and **pressure** effects (and turbulence if RANS). The result is a system of dimension $N \ll n$, allowing faster simulations once it has been assembled.
 
@@ -173,7 +173,7 @@ where $F_j(\cdot)$ represents the combination of **convective**, **diffusive**, 
 ### Pressure Treatment
 
 - **Divergence-Free Modes**: In some FE-based POD-Galerkin approaches, the velocity modes are chosen to be **divergence-free**, which can simplify the pressure term. However, in an FVM approach, velocity fields often only satisfy $\nabla \cdot \mathbf{u} = 0$ in an integral sense across faces.
-- **Pressure Modes**: One approach is to include **pressure** in the reduced basis. Then we expand $p$ in its own set of POD modes $\{\chi_i\}$. This can be important for open domains or strongly varying pressure fields.
+- **Pressure Modes**: One approach is to include **pressure** in the reduced basis. Then we expand $p$ in its own set of POD modes $`\{\chi_i\}`$. This can be important for open domains or strongly varying pressure fields.
 - **Pressure Correction Step**: Some implementations adopt a fractional-step or pressure-correction scheme in the high-fidelity code. Adapting these steps in the reduced model can be tricky but sometimes necessary for stability and consistency.
 
 ### Boundary Conditions
@@ -186,16 +186,16 @@ where $F_j(\cdot)$ represents the combination of **convective**, **diffusive**, 
 
 In an FVM code, the nonlinear convection term is typically computed as a flux:
 
-$$
+```math
 \int_{V_p} (\mathbf{u} \cdot \nabla)\mathbf{u} \,
 dV = \sum_{\text{faces} \in \partial V_p} \mathbf{F}_{\text{face}}
-$$
+```
 
 where $\mathbf{F}_{face}$ is evaluated using an **upwind**, **central differencing**, or another flux-limiting scheme. For the reduced model:
 
-I. **Flux Approximation**: Each $\mathbf{F}_{face}$ must be approximated in terms of the POD coefficients $\{a_i\}$.
+I. **Flux Approximation**: Each $\mathbf{F}_{face}$ must be approximated in terms of the POD coefficients $`\{a_i\}`$.
 
-II. **Quadratic Terms**: Because $\mathbf{F}_{face}$ depends on $\mathbf{u}^2$ (schematically) through $(\mathbf{u}\cdot \mathbf{n})\mathbf{u}$, the resulting expression will have **quadratic** dependence on $\{a_i\}$.
+II. **Quadratic Terms**: Because $\mathbf{F}_{face}$ depends on $\mathbf{u}^2$ (schematically) through $(\mathbf{u}\cdot \mathbf{n})\mathbf{u}$, the resulting expression will have **quadratic** dependence on $`\{a_i\}`$.
 
 III. **Pre-Computed Operators**: Often, one pre-computes certain integrals or flux evaluations offline using the known POD modes, then assembles them into a smaller operator or tensor to expedite the online solution phase.
 
@@ -209,10 +209,10 @@ $$
 
 One may generate snapshots of $\nu_t(x,t)$ from the high-fidelity simulations (e.g., from a $k\text{-}\epsilon$ solver) and then compute POD modes for $\nu_t$ similarly. The final reduced model might look like:
 
-$$
+```math
 \frac{d a_j(t)}{dt} = -(\text{nonlinear convection in } \{ a_i\}) +
 (\text{diffusion with } \nu + \nu_t(\{ a_i\})) + \ldots
-$$
+```
 
 Because $\nu_t$ depends on the same or an additional set of modes, the resulting system may exhibit **higher-order nonlinearities**, requiring careful treatment (e.g., **empirical interpolation** or other hyper-reduction strategies) for computational efficiency.
 
@@ -276,7 +276,7 @@ This note specializes POD-Galerkin projection to the finite-volume discretizatio
 
 ## Exercises
 
-**Exercise 1.** A finite volume mesh has three cells with volumes $\Delta V = (1, 2, 1)$. For the cell-centred fields $\mathbf{u} = (1, 2, 1)$ and $\mathbf{v} = (1, -1, 1)$, compute the volume-weighted inner product $(\mathbf{u}, \mathbf{v})_{L^2} \approx \sum_\ell u_\ell v_\ell \Delta V_\ell$ and the unweighted dot product. Are the fields orthogonal?
+**Exercise 1.** A finite volume mesh has three cells with volumes $\Delta V = (1, 2, 1)$. For the cell-centred fields $\mathbf{u} = (1, 2, 1)$ and $\mathbf{v} = (1, -1, 1)$, compute the volume-weighted inner product $`(\mathbf{u}, \mathbf{v})_{L^2} \approx \sum_\ell u_\ell v_\ell \Delta V_\ell`$ and the unweighted dot product. Are the fields orthogonal?
 
 <details>
 <summary>Answer</summary>
@@ -285,14 +285,14 @@ Weighted: $1 \cdot 1 \cdot 1 + 2 \cdot (-1) \cdot 2 + 1 \cdot 1 \cdot 1 = -2$. U
 
 </details>
 
-**Exercise 2.** On the mesh of Exercise 1, take $N_s = 2$ snapshots $\mathbf{u}_1 = (1, 1, 0)$ and $\mathbf{u}_2 = (0, 1, 1)$. Compute $C_{ij} = \frac{1}{N_s}(\mathbf{u}_i, \mathbf{u}_j)_{L^2}$, its eigenpairs, and the first POD mode $\phi_1 = \frac{1}{\sqrt{N_s\lambda_1}}\sum_k g_{1k}\mathbf{u}_k$. Verify that $(\phi_1, \phi_1)_{L^2} = 1$, and find the norm obtained if the factor were $1/\sqrt{\lambda_1}$.
+**Exercise 2.** On the mesh of Exercise 1, take $N_s = 2$ snapshots $\mathbf{u}_1 = (1, 1, 0)$ and $`\mathbf{u}_2 = (0, 1, 1)`$. Compute $`C_{ij} = \frac{1}{N_s}(\mathbf{u}_i, \mathbf{u}_j)_{L^2}`$, its eigenpairs, and the first POD mode $`\phi_1 = \frac{1}{\sqrt{N_s\lambda_1}}\sum_k g_{1k}\mathbf{u}_k`$. Verify that $`(\phi_1, \phi_1)_{L^2} = 1`$, and find the norm obtained if the factor were $1/\sqrt{\lambda_1}$.
 
 <details>
 <summary>Answer</summary>
 
-$(\mathbf{u}_1, \mathbf{u}_1) = 1 + 2 = 3$, $(\mathbf{u}_2, \mathbf{u}_2) = 2 + 1 = 3$ and $(\mathbf{u}_1, \mathbf{u}_2) = 2$. So $C = \begin{pmatrix} 1.5 & 1 \\ 1 & 1.5 \end{pmatrix}$, with $\lambda_1 = 2.5$, $g_1 = (1, 1)/\sqrt{2}$ and $\lambda_2 = 0.5$.
+$(\mathbf{u}_1, \mathbf{u}_1) = 1 + 2 = 3$, $(\mathbf{u}_2, \mathbf{u}_2) = 2 + 1 = 3$ and $(\mathbf{u}_1, \mathbf{u}_2) = 2$. So $`C = \begin{pmatrix} 1.5 & 1 \\ 1 & 1.5 \end{pmatrix}`$, with $\lambda_1 = 2.5$, $g_1 = (1, 1)/\sqrt{2}$ and $\lambda_2 = 0.5$.
 
-$\sum_k g_{1k}\mathbf{u}_k = (1, 2, 1)/\sqrt{2}$, whose weighted squared norm is $(1 + 8 + 1)/2 = 5 = N_s\lambda_1$. Hence $\phi_1 = (1, 2, 1)/\sqrt{10}$ and $(\phi_1, \phi_1)_{L^2} = (1 + 8 + 1)/10 = 1$. With the factor $1/\sqrt{\lambda_1}$ the squared norm would be $5/2.5 = 2 = N_s$, so the modes would not be normalized.
+$`\sum_k g_{1k}\mathbf{u}_k = (1, 2, 1)/\sqrt{2}`$, whose weighted squared norm is $`(1 + 8 + 1)/2 = 5 = N_s\lambda_1`$. Hence $`\phi_1 = (1, 2, 1)/\sqrt{10}`$ and $`(\phi_1, \phi_1)_{L^2} = (1 + 8 + 1)/10 = 1`$. With the factor $1/\sqrt{\lambda_1}$ the squared norm would be $5/2.5 = 2 = N_s$, so the modes would not be normalized.
 
 </details>
 
@@ -307,9 +307,9 @@ The tensor has $N^3$ entries: $10^3 = 1000$, $50^3 = 1.25 \times 10^5$ and $200^
 
 **Exercise 4.** Apply Galerkin projection to the linear system $d\mathbf{u}/dt = A\mathbf{u}$ with
 
-$$
+```math
 A = \begin{pmatrix} -2 & 1 & 0 \\ 1 & -2 & 1 \\ 0 & 1 & -2 \end{pmatrix}, \qquad \mathbf{u}(0) = (1, 2, 1)
-$$
+```
 
 using the orthonormal (Euclidean) basis $\phi_1 = (1, 1, 1)/\sqrt{3}$ and $\phi_2 = (1, 0, -1)/\sqrt{2}$. Compute $A_r = \Phi^T A\Phi$ and $a(0) = \Phi^T\mathbf{u}(0)$, solve the reduced system, and compare $\Phi a(1)$ with the exact solution $e^{A}\mathbf{u}(0)$.
 

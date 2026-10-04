@@ -31,19 +31,19 @@ $$
 
 Averaging over the cross-section gives
 
-$$
+```math
 \frac{\bar{u}}{u_{\max}} = \frac{2}{u_{\max} R^2}\int_0^R u(r)\, r\,
 dr = \frac{2n^2}{(n+1)(2n+1)} = \frac{49}{60} \approx 0.817 \quad (n = 7)
-$$
+```
 
 so the turbulent profile is much fuller than the parabola. The power law has an infinite slope at the wall, so it does not describe the viscous sublayer.
 
 ### Reynolds Number
 
-$$
+```math
 Re = \frac{\rho\, \bar{u}\, D}{\mu},
 \qquad D = 2R
-$$
+```
 
 Transition from laminar to turbulent pipe flow typically occurs in the range $2300 < Re < 4000$. The script does not compute $Re$; it just draws one profile of each type.
 

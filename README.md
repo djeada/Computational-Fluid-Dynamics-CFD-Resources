@@ -169,7 +169,7 @@ Each script lives in its own folder with a `main.py` and a README covering the m
 | --- | --- |
 | [Condition Number of the Correlation Matrix](scripts/algorithms/condition_number_of_the_correlation_matrix/) | This script plots how the condition number of a kriging correlation matrix changes with the correlation parameter $\theta$ for the linear, exponential, Gaussian and cubic spline correlation functions. |
 | [Correlation Functions](scripts/algorithms/correlation_functions/) | This script plots four correlation functions used in kriging surrogate models (linear, exponential, Gaussian and cubic spline) for several values of the correlation parameter $\theta$. |
-| [Image Compression Using SVD](scripts/algorithms/image_compression_using_svd/) | This script compresses a grayscale image by keeping only its $r$ largest singular values and the matching singular vectors, then compares the rank-$r$ reconstructions with the original. |
+| [Image Compression Using SVD](scripts/algorithms/image_compression_using_svd/) | This script compresses a grayscale image by keeping only its $r$ largest singular values and the matching singular vectors, then compares the rank-$`r`$ reconstructions with the original. |
 | [Kriging Interpolation](scripts/algorithms/kriging_interpolation/) | This script interpolates 11 samples of $y(x) = (3x-3)^2 \sin(2x-10)$ with a kriging-type predictor built on the cubic spline correlation function, for four values of the correlation parameter $\theta$. |
 | [Proper Orthogonal Decomposition (POD)](scripts/algorithms/pod/) | This script performs Proper Orthogonal Decomposition on a synthetic spatio-temporal field by taking the singular value decomposition of the mean-subtracted snapshot matrix. |
 | [Radial Basis Functions](scripts/algorithms/radial_basis_functions/) | This script fits a multiquadric radial basis function (RBF) interpolant through 11 data points on $[0, 1]$ using SciPy's `Rbf` class and plots it on a fine grid. |
@@ -212,7 +212,7 @@ Each script lives in its own folder with a `main.py` and a README covering the m
 | [Time-Averaged Velocity Field](scripts/plots/time_averaged_velocity_field/) | This script generates a synthetic noisy longitudinal velocity field on a 200 × 60 grid and compares it with its mean field, the first step of a Reynolds decomposition. |
 | [Turbulent Flow: Reynolds Decomposition](scripts/plots/turbulent_flow/) | This script splits a synthetic velocity signal into its time mean and fluctuation, following the Reynolds decomposition used in turbulence modelling. |
 | [Variation of Residual with Iteration](scripts/plots/variation_of_residual/) | This script solves the 1D Laplace equation with Gauss-Seidel iteration on a 100-point grid and plots the normalised residual against iteration number on a logarithmic scale. |
-| [Velocity Layers and Viscosity](scripts/plots/velocity_layers_viscosity/) | This script draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $\tau = \mu\, du/dy$. |
+| [Velocity Layers and Viscosity](scripts/plots/velocity_layers_viscosity/) | This script draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $`\tau = \mu\, du/dy`$. |
 | [Wall Shear in Pipe Cross-Section](scripts/plots/wall_shear_pipe_cross_section/) | This script sketches fully developed laminar (Hagen-Poiseuille) flow in a circular pipe, with velocity arrows whose lengths follow the parabolic profile $u(r) = u_{max}(1 - (r/R)^2)$. |
 
 ### Simulations

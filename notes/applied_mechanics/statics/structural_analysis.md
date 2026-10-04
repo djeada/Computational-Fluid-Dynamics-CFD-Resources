@@ -166,17 +166,17 @@ where $x$ is the position of the unit load measured from A.
 
 The influence line for the bending moment at a section located at distance $a$ from A is:
 
-$$
+```math
 M(x) = \begin{cases} \frac{(L - a)}{L}x & \text{for } 0 \le x \le a \\ \frac{a}{L}(L - x) & \text{for } a \le x \le L \end{cases}
-$$
+```
 
 ### Using Influence Lines
 
 To find the effect of a distributed load $w(x)$ on a response quantity, integrate the product of the load and the influence line ordinate:
 
-$$
+```math
 R = \int w(x) \cdot \eta(x) \, dx
-$$
+```
 
 where $\eta(x)$ is the influence line ordinate.
 

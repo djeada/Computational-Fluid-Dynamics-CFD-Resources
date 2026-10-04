@@ -43,9 +43,9 @@ $$
 
 In three dimensions, the moment is computed using the determinant form of the cross product:
 
-$$
+```math
 \mathbf{M}_O = \mathbf{r} \times \mathbf{F} = \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ r_x & r_y & r_z \\ F_x & F_y & F_z \end{vmatrix}
-$$
+```
 
 Expanding the determinant:
 
@@ -70,9 +70,9 @@ $$
 
 where $\hat{\mathbf{u}}_a$ is the unit vector along the axis. This is evaluated using the scalar triple product:
 
-$$
+```math
 M_a = \begin{vmatrix} u_{a_x} & u_{a_y} & u_{a_z} \\ r_x & r_y & r_z \\ F_x & F_y & F_z \end{vmatrix}
-$$
+```
 
 Only the component of the force perpendicular to the axis and perpendicular to the position vector contributes to the moment about that axis.
 
@@ -217,9 +217,9 @@ $$
 
 Computing the cross product:
 
-$$
+```math
 \mathbf{M}_O = \mathbf{r} \times \mathbf{F} = \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ 0.3 & 0.4 & 0.2 \\ 100 & -200 & 50 \end{vmatrix}
-$$
+```
 
 $$
 M_x = (0.4)(50) - (0.2)(-200) = 20 + 40 = 60 \text{ N·m}
@@ -340,7 +340,7 @@ A single 12 kN downward force at distance $x$ from $A$ produces a clockwise mome
 <details>
 <summary>Answer</summary>
 
-About an arbitrary point $O$: $\mathbf{M} = \mathbf{r}_A \times \mathbf{F} + \mathbf{r}_B \times (-\mathbf{F}) = (\mathbf{r}_A - \mathbf{r}_B) \times \mathbf{F}$. This depends only on the relative position $\mathbf{r}_{A/B}$, not on $O$, so the couple moment is a free vector.
+About an arbitrary point $O$: $`\mathbf{M} = \mathbf{r}_A \times \mathbf{F} + \mathbf{r}_B \times (-\mathbf{F}) = (\mathbf{r}_A - \mathbf{r}_B) \times \mathbf{F}`$. This depends only on the relative position $`\mathbf{r}_{A/B}`$, not on $O$, so the couple moment is a free vector.
 
 Here $\mathbf{r}_{A/B} = (1, -2, 0)$ m:
 

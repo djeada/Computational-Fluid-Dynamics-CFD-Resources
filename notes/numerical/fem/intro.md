@@ -47,9 +47,9 @@ $$
 
 then the finite element method tries to solve the integral condition
 
-$$
+```math
 \int_{\Omega} w(x)\,\mathcal{L}(u)\, dx = 0
-$$
+```
 
 for all test functions $w$ in a suitable function space, sometimes with additional boundary terms if integration by parts is applied. The unknown $u$ and the test functions $w$ are expanded in terms of local basis functions that have support only over a small portion of the domain.
 
@@ -77,18 +77,18 @@ $$
 
 with boundary conditions on $u$. The weak form is obtained by multiplying by a test function $w(x)$ and integrating over $[0,L]$:
 
-$$
+```math
 \int_0^L w(x) \Big(-\frac{d}{dx}\big(p(x)\, u'(x) \big) \Big) \, dx = \int_0^L w(x)\,
 f(x)\, dx
-$$
+```
 
 By applying integration by parts, one obtains
 
-$$
+```math
 \int_0^L p(x)\, w'(x)\, u'(x)\, dx -
 \Big[\underbrace{p(x)\,w(x)\,u'(x)}_{\text{boundary term}} \Big]_0^L = \int_0^L w(x)\,
 f(x)\, dx
-$$
+```
 
 and boundary conditions help determine how to handle the boundary term.
 
@@ -96,27 +96,27 @@ and boundary conditions help determine how to handle the boundary term.
 
 3) Choose Shape Functions. Let each element have local shape functions $\phi_j^e(x)$, defined only within element $e$. Over the entire domain, the approximate solution $u_h$ is
 
-$$
+```math
 u_h(x) = \sum_{i=1}^{\text{TotalNodes}} U_i\,\Phi_i(x)
-$$
+```
 
 where each global basis function $\Phi_i$ is built from the local shape functions. The coefficient $U_i$ represents the unknown value at node $i$.
 
 4) Form Local Stiffness Matrices and Load Vectors. For each element $e$, define
 
-$$
+```math
 K^e_{ij} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}}
 p(x)\,\phi_i^e{}'(x)\,\phi_j^e{}'(x)\, dx, \quad
 F^e_{i} = \int_{x_{e,\text{start}}}^{x_{e,\text{end}}} \phi_i^e(x)\, f(x)\, dx
-$$
+```
 
 These integrals capture how each pair of shape functions interacts under the problem’s differential operator and forcing term.
 
 5) Assemble the Global System. The local element stiffness matrices $K^e$ and load vectors $F^e$ are added into global matrices $K$ and global vectors $F$. This leads to a large system of equations
 
-$$
+```math
 K\, U = F
-$$
+```
 
 where $U$ is the vector of unknown nodal values.
 
@@ -134,21 +134,21 @@ $$
 
 with boundary conditions $u(0) = 0$ and $u(1) = 0$ for simplicity. The weak form is found by multiplying by a test function $w(x)$ and integrating:
 
-$$
+```math
 \int_0^1 w(x) \Big(-\frac{d^2 u}{dx^2} \Big)\, dx = \int_0^1 w(x)\, f(x)\, dx
-$$
+```
 
 Integration by parts yields
 
-$$
+```math
 \int_0^1 w'(x)\, u'(x)\, dx = \int_0^1 w(x)\, f(x)\, dx
-$$
+```
 
 assuming homogeneous Dirichlet boundary conditions eliminate boundary terms. The domain is divided into elements $[x_{i-1}, x_i]$ for $i=1,\dots,N$. On each element, approximate $u$ by a linear combination of local shape functions. Compute the local stiffness matrices and load vectors, and assemble them into
 
-$$
+```math
 K\, U = F
-$$
+```
 
 where $K$ is an $(N+1)\times(N+1)$ matrix (one row per node, before boundary conditions are applied), $U$ is the vector of nodal unknowns, and $F$ is the load vector. After applying the boundary conditions $u(0)=0$ and $u(1)=0$, the resulting system can be solved for the interior nodes.
 
@@ -182,12 +182,12 @@ There are no dedicated FEM simulation scripts in this repository. For hands-on F
 <details>
 <summary>Answer</summary>
 
-$\phi_1' = -1/h$ and $\phi_2' = 1/h$, so $K^e_{ij} = \int_{x_a}^{x_b}\phi_i'\phi_j'\,dx$ gives:
+$\phi_1' = -1/h$ and $\phi_2' = 1/h$, so $`K^e_{ij} = \int_{x_a}^{x_b}\phi_i'\phi_j'\,dx`$ gives:
 
 - diagonal entries $K^e_{11} = K^e_{22} = 1/h$
 - off-diagonal entries $K^e_{12} = K^e_{21} = -1/h$
 
-Since $\int\phi_i\,dx = h/2$, the load vector is $F^e_1 = F^e_2 = fh/2$.
+Since $`\int\phi_i\,dx = h/2`$, the load vector is $F^e_1 = F^e_2 = fh/2$.
 
 </details>
 
@@ -221,7 +221,7 @@ The exact value is $u(1/3) = \frac{1}{3}\cdot\frac{2}{3}/2 = 1/9$. The nodal val
 <details>
 <summary>Answer</summary>
 
-The shape-function derivatives are $\pm 1/h$ with $h = 0.5$, so every entry equals $\pm\frac{1}{h^2}\int_{0.5}^{1}(1 + x)\,dx$. The integral is $0.5 + (1 - 0.25)/2 = 0.875$, and dividing by $h^2 = 0.25$ gives 3.5.
+The shape-function derivatives are $\pm 1/h$ with $h = 0.5$, so every entry equals $`\pm\frac{1}{h^2}\int_{0.5}^{1}(1 + x)\,dx`$. The integral is $0.5 + (1 - 0.25)/2 = 0.875$, and dividing by $h^2 = 0.25$ gives 3.5.
 
 $K^e$ has diagonal entries $3.5$ and off-diagonal entries $-3.5$. For linear elements, $K^e$ is just the constant-coefficient matrix multiplied by the average of $p$ over the element ($1.75/0.5 = 3.5$).
 
@@ -232,7 +232,7 @@ $K^e$ has diagonal entries $3.5$ and off-diagonal entries $-3.5$. For linear ele
 <details>
 <summary>Answer</summary>
 
-The weak form is $\int_0^1 w'u'\,dx - [w u']_0^1 = 0$. Since $w(0) = 0$ at the Dirichlet node and $u'(1) = g$, the boundary term becomes $g\,w(1)$ and adds $g$ to the load entry of the last node.
+The weak form is $`\int_0^1 w'u'\,dx - [w u']_0^1 = 0`$. Since $w(0) = 0$ at the Dirichlet node and $u'(1) = g$, the boundary term becomes $`g\,w(1)`$ and adds $g$ to the load entry of the last node.
 
 With $h = 0.5$ (so $1/h = 2$), deleting node 0 leaves
 

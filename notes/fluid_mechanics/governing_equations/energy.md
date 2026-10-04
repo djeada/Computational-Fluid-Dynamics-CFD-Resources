@@ -215,10 +215,10 @@ Characteristic scales:
 
 ### Dimensionless Energy Equation
 
-$$
+```math
 \frac{D\Theta}{Dt^*} = \frac{1}{Pe} \nabla^{*2} \Theta + \frac{Ec}{Re} \Phi^* +
 \dot{Q}^*
-$$
+```
 
 where $\Theta = (T - T_\infty)/\Delta T$ is dimensionless temperature, $t^* = tU/L$, $\Phi^* = \Phi L^2/(\mu U^2)$, and the dissipation coefficient $Ec/Re$ equals $Br/Pe$.
 
@@ -444,7 +444,7 @@ The energy equation is fundamental to understanding thermal effects in fluid flo
 
 ## Exercises
 
-**Exercise 1.** In the internal energy equation $\rho\, De/Dt = -p\nabla\cdot\vec{V} + \nabla\cdot(k\nabla T) + \Phi + \rho\dot{q}$, which terms are reversible and which are irreversible? Why is $\Phi$ never negative?
+**Exercise 1.** In the internal energy equation $`\rho\, De/Dt = -p\nabla\cdot\vec{V} + \nabla\cdot(k\nabla T) + \Phi + \rho\dot{q}`$, which terms are reversible and which are irreversible? Why is $\Phi$ never negative?
 
 <details>
 <summary>Answer</summary>
@@ -455,7 +455,7 @@ For a Newtonian fluid, $\Phi$ is a sum of squares of strain-rate combinations mu
 
 </details>
 
-**Exercise 2.** In Couette flow, $u = Uy/h$, of oil ($\mu = 0.29$ Pa s, $k = 0.145$ W/(m K)) with $U = 2$ m/s and $h = 0.5$ mm, both walls are held at $T_w$. (a) Compute $\Phi$. (b) Solve the steady energy equation $0 = k\, d^2T/dy^2 + \Phi$ for the maximum temperature rise. (c) Check that the dissipation per unit wall area equals the power $\tau U$ supplied by the moving plate.
+**Exercise 2.** In Couette flow, $u = Uy/h$, of oil ($\mu = 0.29$ Pa s, $k = 0.145$ W/(m K)) with $U = 2$ m/s and $h = 0.5$ mm, both walls are held at $T_w$. (a) Compute $\Phi$. (b) Solve the steady energy equation $`0 = k\, d^2T/dy^2 + \Phi`$ for the maximum temperature rise. (c) Check that the dissipation per unit wall area equals the power $\tau U$ supplied by the moving plate.
 
 <details>
 <summary>Answer</summary>
@@ -473,7 +473,7 @@ T_{max} = \frac{\Phi h^2}{8k} = \frac{4.64 \times 10^6 \times (5 \times 10^{-4})
 
 </details>
 
-**Exercise 3.** Air ($c_p = 1005$ J/(kg K)) at $T = 250$ K flows at $V = 250$ m/s. Using $h_0 = c_p T + V^2/2 = $ constant for steady adiabatic flow, find the stagnation temperature.
+**Exercise 3.** Air ($c_p = 1005$ J/(kg K)) at $T = 250$ K flows at $V = 250$ m/s. Using $h_0 = c_p T + V^2/2 = \text{constant}$ for steady adiabatic flow, find the stagnation temperature.
 
 <details>
 <summary>Answer</summary>

@@ -57,9 +57,9 @@ $$
 
 Applying Kirchhoff's voltage law around a series RLC loop driven by voltage $v_{in}(t)$, with output taken across the capacitor:
 
-$$
+```math
 L \frac{di}{dt} + Ri + \frac{1}{C}\int i\, dt = v_{in}(t)
-$$
+```
 
 The transfer function from input voltage to capacitor voltage is:
 
@@ -145,9 +145,9 @@ $$
 
 For a transfer function $G(s) = \frac{b_1 s + b_0}{s^2 + a_1 s + a_0}$, the **controllable canonical form** is:
 
-$$
+```math
 \mathbf{A} = \begin{bmatrix} 0 & 1 \\ -a_0 & -a_1 \end{bmatrix}, \quad \mathbf{B} = \begin{bmatrix} 0 \\ 1 \end{bmatrix}, \quad \mathbf{C} = \begin{bmatrix} b_0 & b_1 \end{bmatrix}, \quad D = 0
-$$
+```
 
 ### Converting State-Space to Transfer Function
 
@@ -189,7 +189,7 @@ where:
 
 ### Example 1: DC Motor Transfer Function
 
-**Given**: A DC motor with $R_a = 2\;\Omega$, $L_a = 0.5\;\text{H}$, $K_t = K_b = 0.1\;\text{N·m/A}$, $J = 0.01\;\text{kg·m}^2$, $b = 0.1\;\text{N·m·s/rad}$.
+**Given**: A DC motor with $`R_a = 2\;\Omega`$, $`L_a = 0.5\;\text{H}`$, $`K_t = K_b = 0.1\;\text{N·m/A}`$, $`J = 0.01\;\text{kg·m}^2`$, $`b = 0.1\;\text{N·m·s/rad}`$.
 
 **Find**: Transfer function $\Theta(s)/V_a(s)$.
 
@@ -225,15 +225,15 @@ $$
 
 **Solution**:
 
-Define states $\mathbf{x} = [x,\;\dot{x},\;\theta,\;\dot{\theta}]^T$ where $x$ is cart position and $\theta$ is pendulum angle from vertical. The linearized equations of motion yield:
+Define states $`\mathbf{x} = [x,\;\dot{x},\;\theta,\;\dot{\theta}]^T`$ where $x$ is cart position and $\theta$ is pendulum angle from vertical. The linearized equations of motion yield:
 
-$$
+```math
 \mathbf{A} = \begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & -mg/M & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & (M+m)g/(Ml) & 0 \end{bmatrix}, \quad \mathbf{B} = \begin{bmatrix} 0 \\ 1/M \\ 0 \\ -1/(Ml) \end{bmatrix}
-$$
+```
 
-$$
+```math
 \mathbf{C} = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}, \quad \mathbf{D} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}
-$$
+```
 
 The eigenvalues of $\mathbf{A}$ include a positive real value, confirming that the inverted pendulum is **open-loop unstable** and requires active feedback control.
 
@@ -294,7 +294,7 @@ so $\mathbf{C}(s\mathbf{I} - \mathbf{A})^{-1}\mathbf{B} = \frac{2 + 3s}{s^2 + 4s
 
 About $\theta = 0$: $\sin\theta \approx \theta$, so $\ddot{\theta} = -\frac{g}{l}\theta + \frac{\tau}{ml^2}$. The eigenvalues are $\pm j\sqrt{g/l} = \pm 4.43j$ rad/s: an undamped oscillation (marginally stable).
 
-About $\theta = \pi$: with $\theta = \pi + \delta$, $\sin(\pi + \delta) \approx -\delta$, so $\ddot{\delta} = +\frac{g}{l}\delta + \frac{\tau}{ml^2}$. The eigenvalues are $\pm\sqrt{g/l} = \pm 4.43\;\text{s}^{-1}$; the positive one makes the inverted position unstable.
+About $\theta = \pi$: with $\theta = \pi + \delta$, $\sin(\pi + \delta) \approx -\delta$, so $\ddot{\delta} = +\frac{g}{l}\delta + \frac{\tau}{ml^2}$. The eigenvalues are $`\pm\sqrt{g/l} = \pm 4.43\;\text{s}^{-1}`$; the positive one makes the inverted position unstable.
 
 </details>
 

@@ -16,8 +16,8 @@ Compressible flow is flow in which density changes are large enough to affect th
 | [Thermodynamics of Compressible Flow](thermodynamics.md) | Calorically perfect gas, internal energy and enthalpy, first and second laws, entropy change, isentropic relations, stagnation conditions |
 | [Speed of Sound and Mach Number](speed_of_sound.md) | Derivation of $a = \sqrt{\gamma R T}$ from a weak pressure wave, Mach number and flow regimes, Mach cone, the $Ma \approx 0.3$ compressibility criterion |
 | [Isentropic Flow](isentropic_flow.md) | Stagnation-to-static ratios, area–Mach relation, converging and converging–diverging nozzles, choking, over- and under-expanded operation |
-| [Shock Waves and Expansion Fans](shock_waves.md) | Normal shocks (Rankine–Hugoniot), entropy rise and total-pressure loss, oblique shocks ($\theta$–$\beta$–$M$), Prandtl–Meyer expansion fans |
-| [Fanno and Rayleigh Flow](rayleigh_fanno.md) | Adiabatic duct flow with friction, frictionless flow with heat addition, frictional and thermal choking, $T$–$s$ diagrams |
+| [Shock Waves and Expansion Fans](shock_waves.md) | Normal shocks (Rankine–Hugoniot), entropy rise and total-pressure loss, oblique shocks ($\theta$–$`\beta`$–$`M`$), Prandtl–Meyer expansion fans |
+| [Fanno and Rayleigh Flow](rayleigh_fanno.md) | Adiabatic duct flow with friction, frictionless flow with heat addition, frictional and thermal choking, $T$–$`s`$ diagrams |
 
 A suggested reading order is the order of the table.
 
@@ -43,7 +43,7 @@ $$
 Ma = \frac{V}{a}
 $$
 
-Along a streamline in isentropic flow, $d\rho/\rho = -Ma^2\, dV/V$. The derivation, the flow regimes and the Mach cone are in [speed_of_sound.md](speed_of_sound.md).
+Along a streamline in isentropic flow, $`d\rho/\rho = -Ma^2\, dV/V`$. The derivation, the flow regimes and the Mach cone are in [speed_of_sound.md](speed_of_sound.md).
 
 ### Thermodynamic Relations
 
@@ -111,7 +111,7 @@ $$
 - Subsonic flow accelerates in a converging duct, and supersonic flow accelerates in a diverging duct.
 - $Ma = 1$ can occur only at a throat.
 - Every area ratio $A/A^* > 1$ has one subsonic and one supersonic solution.
-- For air at the sonic state, $T^*/T_0 = 0.8333$, $p^*/p_0 = 0.5283$ and $\rho^*/\rho_0 = 0.6339$.
+- For air at the sonic state, $`T^*/T_0 = 0.8333`$, $`p^*/p_0 = 0.5283`$ and $\rho^*/\rho_0 = 0.6339$.
 
 Full treatment, including choked mass flow and nozzle operating regimes: [isentropic_flow.md](isentropic_flow.md).
 
@@ -127,14 +127,14 @@ See [isentropic_flow.md](isentropic_flow.md).
 
 - Normal shocks take supersonic flow to subsonic flow. They raise $p$, $\rho$, $T$ and entropy, conserve $T_0$, and reduce $p_0$. At $Ma_1 = 2$: $Ma_2 = 0.5774$, $p_2/p_1 = 4.5$, $p_{02}/p_{01} = 0.7209$.
 - Expansion shocks would decrease entropy and cannot exist.
-- Oblique shocks follow the $\theta$–$\beta$–$M$ relation and have weak and strong solutions. Above the maximum deflection angle the shock detaches.
+- Oblique shocks follow the $\theta$–$`\beta`$–$`M`$ relation and have weak and strong solutions. Above the maximum deflection angle the shock detaches.
 - Convex corners produce isentropic Prandtl–Meyer fans with $\nu(Ma_2) = \nu(Ma_1) + \theta$.
 
 See [shock_waves.md](shock_waves.md).
 
 ### Fanno and Rayleigh Flow
 
-- **Fanno flow** (adiabatic, friction): friction drives $Ma$ toward 1. Subsonic flow accelerates while its static temperature *falls*, and supersonic flow decelerates while its temperature rises. The duct chokes when its length reaches $L^*$, given by $4fL^*/D$ with $f$ the Fanning friction factor.
+- **Fanno flow** (adiabatic, friction): friction drives $Ma$ toward 1. Subsonic flow accelerates while its static temperature *falls*, and supersonic flow decelerates while its temperature rises. The duct chokes when its length reaches $`L^*`$, given by $`4fL^*/D`$ with $f$ the Fanning friction factor.
 - **Rayleigh flow** (frictionless, heat addition): heating drives $Ma$ toward 1 and always lowers $p_0$. **Thermal choking occurs at $Ma = 1$**, where $T_0$ reaches its maximum $T_0^*$. The point $Ma = 1/\sqrt{\gamma}$ is where the static temperature peaks.
 
 See [rayleigh_fanno.md](rayleigh_fanno.md).

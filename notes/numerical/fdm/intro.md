@@ -64,14 +64,14 @@ $$
 \frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}
 $$
 
-where $u = u(x,t)$ is the temperature, $\alpha$ is the thermal diffusivity, and $x \in [0, L]$. To use the finite difference method, discretize the spatial domain into $N+1$ points $x_0, x_1, \ldots, x_N$ with $x_i = i\,h$ and $h = \frac{L}{N}$. For time discretization, choose a time step $\Delta t$ and denote time levels by $t^n = n\,\Delta t$.
+where $u = u(x,t)$ is the temperature, $\alpha$ is the thermal diffusivity, and $x \in [0, L]$. To use the finite difference method, discretize the spatial domain into $N+1$ points $x_0, x_1, \ldots, x_N$ with $`x_i = i\,h`$ and $h = \frac{L}{N}$. For time discretization, choose a time step $\Delta t$ and denote time levels by $`t^n = n\,\Delta t`$.
 
 Let $u_i^n \approx u(x_i, t^n)$. A standard explicit finite difference approximation replaces the second spatial derivative by
 
-$$
+```math
 \frac{\partial^2 u}{\partial x^2}\Big|_{x_i, t^n} \approx
 \frac{u_{i+1}^n - 2\,u_i^n + u_{i-1}^n}{h^2}
-$$
+```
 
 The time derivative is approximated using a forward difference:
 
@@ -81,17 +81,17 @@ $$
 
 Putting these together gives the discrete heat equation
 
-$$
+```math
 \frac{u_i^{n+1} - u_i^n}{\Delta t} = \alpha \,
 \frac{u_{i+1}^n - 2\,u_i^n + u_{i-1}^n}{h^2}
-$$
+```
 
 Rearrange to solve for the new time level:
 
-$$
+```math
 u_i^{n+1} = u_i^n +
 \frac{\alpha\,\Delta t}{h^2}\,\Big(u_{i+1}^n - 2\, u_i^n + u_{i-1}^n\Big)
-$$
+```
 
 Boundary conditions, such as $u(0, t) = u_L$ and $u(L, t) = u_R$, are enforced by setting $u_0^n = u_L$ and $u_N^n = u_R$ for all time levels $n$. This yields a straightforward update formula to march the solution in time.
 
@@ -99,9 +99,9 @@ Boundary conditions, such as $u(0, t) = u_L$ and $u(L, t) = u_R$, are enforced b
 
 When using explicit time-stepping schemes like the one above, there is often a restriction on the size of $\Delta t$ relative to $h$. This restriction is necessary for stability. In the example of the 1D heat equation, a common condition for stability is
 
-$$
+```math
 \Delta t \le \frac{h^2}{2\,\alpha}
-$$
+```
 
 More generally, partial differential equations with significant advection or wave-like behavior have stricter CFL-type constraints linking time step size to spatial grid spacing and wave speeds. If these conditions are not satisfied, the numerical solution might oscillate wildly and diverge from the actual solution.
 
@@ -115,15 +115,15 @@ $$
 
 and approximate partial derivatives like
 
-$$
+```math
 \frac{\partial^2 u}{\partial x^2}\Big|_{(x_i, y_j, t^n)} \approx
 \frac{u_{i+1,j}^n - 2\,u_{i,j}^n + u_{i-1,j}^n}{h_x^2}
-$$
+```
 
-$$
+```math
 \frac{\partial^2 u}{\partial y^2}\Big|_{(x_i, y_j, t^n)} \approx
 \frac{u_{i,j+1}^n - 2\,u_{i,j}^n + u_{i,j-1}^n}{h_y^2}
-$$
+```
 
 The updates for time stepping or solving stationary equations follow a similar pattern, just applied across a 2D or 3D mesh.
 

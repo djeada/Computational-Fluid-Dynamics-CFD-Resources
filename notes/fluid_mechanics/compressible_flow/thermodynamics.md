@@ -41,12 +41,12 @@ A **calorically perfect gas** is a thermally perfect gas whose specific heats $c
 
 For a thermally perfect gas the specific heats are defined by
 
-$$
+```math
 de = c_v\, dT,
 \qquad dh = c_p\, dT
-$$
+```
 
-Since $h = e + p/\rho = e + RT$, differentiating gives $dh = de + R\, dT$, so
+Since $h = e + p/\rho = e + RT$, differentiating gives $`dh = de + R\, dT`$, so
 
 $$
 c_p - c_v = R
@@ -66,7 +66,7 @@ Kinetic theory explains the value of $\gamma$. Each fully excited molecular degr
 | Gas type | Active degrees of freedom | $\gamma$ |
 | --- | --- | --- |
 | Monatomic (He, Ar) | 3 translational | $5/3 \approx 1.667$ |
-| Diatomic (N$_2$, O$_2$, air near room temperature) | 3 translational + 2 rotational | $7/5 = 1.4$ |
+| Diatomic (N$`_2`$, O$`_2`$, air near room temperature) | 3 translational + 2 rotational | $7/5 = 1.4$ |
 
 ### When the Model Fails
 
@@ -98,7 +98,7 @@ $$
 de = \delta q - \delta w
 $$
 
-For a reversible process the work is $\delta w = p\, dv$, where $v = 1/\rho$ is the specific volume.
+For a reversible process the work is $`\delta w = p\, dv`$, where $v = 1/\rho$ is the specific volume.
 
 ### Steady-Flow Energy Equation
 
@@ -125,18 +125,18 @@ with equality only when the process is reversible. For an **adiabatic** process 
 
 ### Gibbs Relations
 
-Combining the first law for a reversible process ($\delta q = T\, ds$, $\delta w = p\, dv$) with $h = e + pv$ gives the **Gibbs relations**:
+Combining the first law for a reversible process ($`\delta q = T\, ds`$, $`\delta w = p\, dv`$) with $h = e + pv$ gives the **Gibbs relations**:
 
-$$
+```math
 T\, ds = de + p\, dv,
 \qquad T\, ds = dh - v\, dp
-$$
+```
 
 They are derived along a reversible path, but they relate only state properties. They therefore hold between any two equilibrium states, whatever process connects them.
 
 ## Entropy Change for a Perfect Gas
 
-Substitute $dh = c_p\, dT$ and $v = RT/p$ into the second Gibbs relation:
+Substitute $`dh = c_p\, dT`$ and $v = RT/p$ into the second Gibbs relation:
 
 $$
 ds = c_p \frac{dT}{T} - R \frac{dp}{p}
@@ -170,7 +170,7 @@ $$
 
 ## Isentropic Relations
 
-An isentropic process is both adiabatic and reversible. Setting $ds = 0$ in the entropy equation gives $c_p\, dT/T = R\, dp/p$, and with $R/c_p = (\gamma - 1)/\gamma$:
+An isentropic process is both adiabatic and reversible. Setting $ds = 0$ in the entropy equation gives $`c_p\, dT/T = R\, dp/p`$, and with $R/c_p = (\gamma - 1)/\gamma$:
 
 $$
 \frac{T_2}{T_1} = \left(\frac{p_2}{p_1}\right)^{(\gamma - 1)/\gamma}
@@ -189,19 +189,19 @@ Isentropic relations apply wherever dissipation is negligible: the core flow in 
 
 ### Worked Example 1: Ideal and Real Compression
 
-Air at $T_1 = 288.15\ \text{K}$ and $p_1 = 101.325\ \text{kPa}$ is compressed adiabatically to $p_2 = 10\, p_1$ in a steady-flow compressor. Kinetic-energy changes are negligible.
+Air at $T_1 = 288.15\ \text{K}$ and $p_1 = 101.325\ \text{kPa}$ is compressed adiabatically to $`p_2 = 10\, p_1`$ in a steady-flow compressor. Kinetic-energy changes are negligible.
 
 **Ideal (isentropic) compressor.**
 
 $$
-T_{2s} = 288.15 \times 10^{0.2857} = 556.3\  \text{K},
+T_{2s} = 288.15 \times 10^{0.2857} = 556.3\ \text{K},
 \qquad \frac{\rho_2}{\rho_1} = 10^{1/1.4} = 5.179
 $$
 
 The steady-flow energy equation with $q = 0$ gives the work input
 
 $$
--w_s = c_p (T_{2s} - T_1) = 1004.5 \times 268.2 = 269.4\  \text{kJ/kg}
+-w_s = c_p (T_{2s} - T_1) = 1004.5 \times 268.2 = 269.4\ \text{kJ/kg}
 $$
 
 **Real compressor.** Suppose the measured exit temperature is $T_2 = 600\ \text{K}$. The work input is $c_p(600 - 288.15) = 313.3\ \text{kJ/kg}$, and the isentropic efficiency is
@@ -213,8 +213,8 @@ $$
 The entropy change is
 
 $$
-s_2 - s_1 = 1004.5 \ln \frac{600}{288.15} - 287 \ln 10 = 736.7 - 660.8 = 75.9\
-\text{J/(kg K)}
+s_2 - s_1 = 1004.5 \ln \frac{600}{288.15} - 287 \ln 10 = 736.7 -
+660.8 = 75.9\ \text{J/(kg K)}
 $$
 
 It is positive, as the second law requires for an adiabatic process. The extra 43.9 kJ/kg of work was dissipated into heat by friction and turbulence inside the machine.
@@ -252,7 +252,7 @@ $$
 \qquad \frac{\rho_0}{\rho} = \left(1 + \frac{\gamma - 1}{2} M^2\right)^{1/(\gamma - 1)}
 $$
 
-The state where the flow is exactly sonic is a second reference, marked with an asterisk: $T^*/T_0 = 2/(\gamma + 1) = 0.8333$ and $p^*/p_0 = 0.5283$ for air. These ratios and their role in nozzle design are developed in [isentropic_flow.md](isentropic_flow.md).
+The state where the flow is exactly sonic is a second reference, marked with an asterisk: $`T^*/T_0 = 2/(\gamma + 1) = 0.8333`$ and $`p^*/p_0 = 0.5283`$ for air. These ratios and their role in nozzle design are developed in [isentropic_flow.md](isentropic_flow.md).
 
 ### What Changes Stagnation Properties
 
@@ -273,16 +273,16 @@ Two further consequences:
 Air flows at $V = 250\ \text{m/s}$ with $T = 250\ \text{K}$ and $p = 50\ \text{kPa}$.
 
 $$
-T_0 = 250 + \frac{250^2}{2 \times 1004.5} = 281.1\  \text{K}
+T_0 = 250 + \frac{250^2}{2 \times 1004.5} = 281.1\ \text{K}
 $$
 
 $$
-a = \sqrt{1.4 \times 287 \times 250} = 316.9\  \text{m/s},
+a = \sqrt{1.4 \times 287 \times 250} = 316.9\ \text{m/s},
 \qquad M = 0.789
 $$
 
 $$
-p_0 = 50 \left(\frac{281.1}{250}\right)^{3.5} = 75.38\  \text{kPa}
+p_0 = 50 \left(\frac{281.1}{250}\right)^{3.5} = 75.38\ \text{kPa}
 $$
 
 The static density is $\rho = p/(RT) = 0.6969\ \text{kg/m}^3$, and the stagnation density is $\rho_0 = 0.9343\ \text{kg/m}^3$.
@@ -299,7 +299,7 @@ The incompressible Bernoulli equation would predict $p_0 = p + \tfrac{1}{2}\rho 
 
 ## Related Scripts
 
-- [probability_distribution_function_of_nitrogen_molecules](../../../scripts/plots/probability_distribution_function_of_nitrogen_molecules/): plots the Maxwell–Boltzmann speed distribution of N$_2$ at several temperatures. It shows temperature as a measure of random molecular kinetic energy, which is the physical content of $e = c_v T$.
+- [probability_distribution_function_of_nitrogen_molecules](../../../scripts/plots/probability_distribution_function_of_nitrogen_molecules/): plots the Maxwell–Boltzmann speed distribution of N$`_2`$ at several temperatures. It shows temperature as a measure of random molecular kinetic energy, which is the physical content of $e = c_v T$.
 
 ## Exercises
 

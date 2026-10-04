@@ -14,9 +14,9 @@ This script plots quasi-one-dimensional isentropic flow through a converging-div
 
 ### Wall geometry
 
-$$
+```math
 h(x) = \begin{cases} 0.8 - 0.4x, & 0 \le x \le 1 \\ 0.4 + 0.3(x-1), & 1 < x \le 2 \end{cases}
-$$
+```
 
 ### Isentropic area–Mach relation
 
@@ -45,9 +45,9 @@ $$
 
 In the quasi-1-D model $u$ is uniform across each section. For the plot, streamlines are made to follow the walls, $y/h(x) = \text{const}$, which gives
 
-$$
+```math
 v = u\, \frac{y\,h'(x)}{h(x)}
-$$
+```
 
 ## Implementation
 

@@ -26,9 +26,9 @@ where $\mu$ is the dynamic viscosity and $R$ the pipe radius.
 
 The velocity is largest on the centreline ($r = 0$):
 
-$$
+```math
 u_{max} = \frac{\Delta p\, R^2}{4\mu L}
-$$
+```
 
 so the profile can be written as $u(r) = u_{max}\left(1 - (r/R)^2\right)$, which is the form the script uses.
 
@@ -36,10 +36,10 @@ so the profile can be written as $u(r) = u_{max}\left(1 - (r/R)^2\right)$, which
 
 The velocity gradient $du/dr = -2u_{max}r/R^2$ is zero on the centreline and steepest at the wall, so the shear stress is largest there:
 
-$$
+```math
 \tau_w = -\mu
 \frac{du}{dr}\bigg|_{r=R} = \frac{2\mu u_{max}}{R} = \frac{\Delta p\, R}{2L}
-$$
+```
 
 ### No-Slip Condition
 

@@ -14,10 +14,10 @@ This script generates noisy synthetic velocity samples across a boundary layer f
 
 ### Velocity Profile
 
-$$
+```math
 U_0(y) = U_\infty \sqrt{\min\left(\frac{y}{\delta},\, 1\right)} + \epsilon,
 \qquad \epsilon \sim \mathcal{N}(0, \sigma^2)
-$$
+```
 
 where $U_\infty$ is the free-stream velocity and $\delta$ the boundary layer thickness. The profile meets the no-slip condition $U_0(0) = 0$ and reaches $U_\infty$ at $y = \delta$. Unlike the Blasius profile, it has an infinite velocity gradient at the wall.
 

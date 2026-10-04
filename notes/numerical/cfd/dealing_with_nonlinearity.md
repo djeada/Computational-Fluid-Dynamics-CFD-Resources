@@ -123,9 +123,9 @@ Convergence is an important aspect of the iterative solution process. It makes s
 - Criteria for Convergence:\
   Convergence is typically assessed using norms (e.g., the $L_2$ norm) of the error:
 
-$$
+```math
 \| u^{(n)} - u^{(n-1)}\| < \epsilon
-$$
+```
 
 where $\epsilon$ is the tolerance level.
 
@@ -198,7 +198,7 @@ The error is $0.0025$, and $\Delta u_i = 0.75 - 0.8 = -0.05$ gives $(\Delta u_i)
 
 </details>
 
-**Exercise 2.** At grid point 2 of the example ($\Delta x = 1/3$, $u_1 = 1$), solve the linearized equation $\frac{u_2 - u_1}{\Delta x} + 2u_{g}u_2 - u_{g}^2 = 0$ repeatedly, starting from $u_g = 1$ and using each result as the next guess. Give the first three iterates and their errors relative to the exact root of $\Delta x\, u_2^2 + u_2 - 1 = 0$.
+**Exercise 2.** At grid point 2 of the example ($\Delta x = 1/3$, $u_1 = 1$), solve the linearized equation $\frac{u_2 - u_1}{\Delta x} + 2u_{g}u_2 - u_{g}^2 = 0$ repeatedly, starting from $u_g = 1$ and using each result as the next guess. Give the first three iterates and their errors relative to the exact root of $`\Delta x\, u_2^2 + u_2 - 1 = 0`$.
 
 <details>
 <summary>Answer</summary>
@@ -239,11 +239,11 @@ The update is $u_2 = \dfrac{u_1/\Delta x}{1/\Delta x + u_g} = \dfrac{3}{3 + u_g}
 
 The iterates are $0.75$, $0.8$, $0.78947$, $0.79167$, $0.79121$ and $0.79130$, with errors $-4.1 \times 10^{-2}$, $8.7 \times 10^{-3}$, $-1.8 \times 10^{-3}$, $3.8 \times 10^{-4}$, $-7.9 \times 10^{-5}$ and $1.65 \times 10^{-5}$.
 
-The error changes sign and shrinks by a constant factor of about $u^*/(1/\Delta x + u^*) \approx 0.21$ per iteration: linear convergence. Picard needs six iterations to reach the accuracy Newton reaches in two. Picard is simpler and often more robust far from the solution, which is why codes sometimes start with Picard and switch to Newton.
+The error changes sign and shrinks by a constant factor of about $`u^*/(1/\Delta x + u^*) \approx 0.21`$ per iteration: linear convergence. Picard needs six iterations to reach the accuracy Newton reaches in two. Picard is simpler and often more robust far from the solution, which is why codes sometimes start with Picard and switch to Newton.
 
 </details>
 
-**Exercise 5.** An iteration converges linearly with $e^{(n)} \approx \rho\, e^{(n-1)}$. The change between successive iterates is $\|u^{(n)} - u^{(n-1)}\| = 10^{-6}$. Estimate the remaining error for $\rho = 0.9$ and $\rho = 0.99$, and explain what this means for the convergence criterion $\|u^{(n)} - u^{(n-1)}\| < \epsilon$.
+**Exercise 5.** An iteration converges linearly with $`e^{(n)} \approx \rho\, e^{(n-1)}`$. The change between successive iterates is $`\|u^{(n)} - u^{(n-1)}\| = 10^{-6}`$. Estimate the remaining error for $\rho = 0.9$ and $\rho = 0.99$, and explain what this means for the convergence criterion $`\|u^{(n)} - u^{(n-1)}\| < \epsilon`$.
 
 <details>
 <summary>Answer</summary>

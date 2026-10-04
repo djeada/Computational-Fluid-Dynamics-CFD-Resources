@@ -54,9 +54,9 @@ where:
 
 For a shaft with varying torque or cross-section:
 
-$$
+```math
 \phi = \int_0^L \frac{T(x)}{G(x) J(x)} \, dx
-$$
+```
 
 For multiple segments:
 
@@ -170,10 +170,10 @@ A motor delivers 50 kW at 1500 rpm through a solid steel shaft. The allowable sh
 
 **Torque:**
 
-$$
+```math
 T = \frac{60P}{2\pi n} = \frac{60 \times 50\,000}{2\pi \times 1500} = 318.3
 \text{ N}\cdot \text{m}
-$$
+```
 
 **Required diameter:**
 
@@ -256,10 +256,10 @@ $$
 \phi = \frac{T_1 L_1}{G J_1} + \frac{T_2 L_2}{G J_2}
 $$
 
-$$
+```math
 \phi = \frac{500 \times 600}{80\,000 \times 2.513 \times 10^5} +
 \frac{200 \times 400}{80\,000 \times 7.952 \times 10^4}
-$$
+```
 
 $$
 \phi = 0.01493 + 0.01257 = 0.0275 \text{ rad} = 1.58^\circ
@@ -384,7 +384,7 @@ Corners concentrate stress in practice, so generous corner radii are used.
 <details>
 <summary>Answer</summary>
 
-- At 300 rpm: $T = 20\,000/31.42 = 636.6$ N·m, so $d = (16T/\pi\tau)^{1/3} = 37.8$ mm.
+- At 300 rpm: $`T = 20\,000/31.42 = 636.6`$ N·m, so $d = (16T/\pi\tau)^{1/3} = 37.8$ mm.
 - At 3000 rpm: $T = 63.7$ N·m, so $d = 17.5$ mm.
 
 For the same power, torque scales as $1/n$ and diameter as $n^{-1/3}$. High-speed shafts are therefore light, and the speed reduction is best placed as close to the driven machine as possible.

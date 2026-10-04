@@ -14,10 +14,10 @@ The finite-volume method (FVM) is a widely used technique for solving partial di
 
 The starting point in FVM is the integral formulation of a conservation law over an arbitrary control volume $V$ with boundary surface $S$:
 
-$$
+```math
 \frac{\partial}{\partial t}\int_V \phi \, dV + \int_S \vec{F} \cdot \hat{n} \,
 dS = \int_V S_\phi \, dV
-$$
+```
 
 where:
 
@@ -30,9 +30,9 @@ where:
 
 For steady, incompressible flow (i.e., time-independent with constant density), the continuity equation simplifies to:
 
-$$
+```math
 \int_S \vec{V} \cdot \hat{n} \, dS = 0
-$$
+```
 
 where $\vec{V}$ is the velocity vector. This equation implies that the net volumetric flow into the control volume is zero.
 
@@ -60,27 +60,27 @@ A schematic of the rectangular cell is as follows:
 
 Face 1 (Left):
 
-$$
+```math
 \vec{V}_1 = u_1 \, \hat{i} + v_1 \, \hat{j}
-$$
+```
 
 Face 2 (Top):
 
-$$
+```math
 \vec{V}_2 = u_2 \, \hat{i} + v_2 \, \hat{j}
-$$
+```
 
 Face 3 (Right):
 
-$$
+```math
 \vec{V}_3 = u_3 \, \hat{i} + v_3 \, \hat{j}
-$$
+```
 
 Face 4 (Bottom):
 
-$$
+```math
 \vec{V}_4 = u_4 \, \hat{i} + v_4 \, \hat{j}
-$$
+```
 
 *Note:* In many practical applications, one assumes that the primary contributions come from the normal components of the velocity at each face. For instance, on the left and right faces, the $u$-component is dominant, and on the top and bottom faces, the $v$-component is dominant.
 
@@ -120,9 +120,9 @@ $$
 
 Rearranging the terms:
 
-$$
+```math
 -u_1 \, \Delta y - v_4 \, \Delta x + u_3 \, \Delta y + v_2 \, \Delta x = 0
-$$
+```
 
 This expression states that the net mass flux through the cell faces must sum to zero, thus preserving mass conservation within the control volume.
 
@@ -132,10 +132,10 @@ This expression states that the net mass flux through the cell faces must sum to
 
 For the momentum equations, the same approach is used. For example, the $x$-momentum conservation in its integral form is:
 
-$$
+```math
 \int_S \rho u \, \vec{V} \cdot \hat{n} \, dS = \int_S
 (\text{Pressure and viscous forces}) \cdot \hat{i} \, dS
-$$
+```
 
 After discretizing the surface integrals over the cell faces (and including any body forces or source terms), one obtains an algebraic equation for the $x$-momentum at the cell center. A similar procedure applies to the $y$-momentum.
 
@@ -143,10 +143,10 @@ After discretizing the surface integrals over the cell faces (and including any 
 
 Similarly, the energy conservation equation is integrated over the control volume:
 
-$$
+```math
 \int_S \left(\rho E \, \vec{V} + p \, \vec{V} \right) \cdot \hat{n} \, dS = \int_S
 \text{Heat flux} \, dS
-$$
+```
 
 and then discretized by approximating the fluxes across each cell face.
 
@@ -217,7 +217,7 @@ The net volume flow out through the right face ($0.2 \times 0.05 = 0.01$ m²/s) 
 
 </details>
 
-**Exercise 2.** Divide the discrete continuity equation by the cell area $\Delta x\,\Delta y$ and show that it is a consistent approximation of $\partial u/\partial x + \partial v/\partial y = 0$ at the cell centre. What is its order of accuracy on a uniform grid?
+**Exercise 2.** Divide the discrete continuity equation by the cell area $`\Delta x\,\Delta y`$ and show that it is a consistent approximation of $\partial u/\partial x + \partial v/\partial y = 0$ at the cell centre. What is its order of accuracy on a uniform grid?
 
 <details>
 <summary>Answer</summary>
@@ -254,9 +254,9 @@ Upwinding takes the upstream value, $u_f = u_P = 2$.
 
 $\delta x = 0.1$ m and the neighbour coefficient is $a = kA/\delta x = 100$ W/K. A boundary face lies half a cell from the cell centre, so its coefficient is $2a = 200$ W/K.
 
-- Interior cells 2 to 4: $200\,T_P = 100\,T_W + 100\,T_E$.
-- Cell 1: $300\,T_1 = 100\,T_2 + 200\,T_A$.
-- Cell 5: $300\,T_5 = 100\,T_4 + 200\,T_B$.
+- Interior cells 2 to 4: $`200\,T_P = 100\,T_W + 100\,T_E`$.
+- Cell 1: $`300\,T_1 = 100\,T_2 + 200\,T_A`$.
+- Cell 5: $`300\,T_5 = 100\,T_4 + 200\,T_B`$.
 
 Solving gives $T = (140, 220, 300, 380, 460)$ °C, which matches the exact linear profile $T = 100 + 800x$ at the cell centres.
 

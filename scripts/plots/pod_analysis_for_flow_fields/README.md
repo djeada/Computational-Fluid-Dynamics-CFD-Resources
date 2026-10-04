@@ -24,9 +24,9 @@ with $(a_k, \omega_k) = (1, 2),\ (0.5, 5),\ (0.25, 9)$, $x_j, t_i \in [0, 2\pi)$
 
 With the temporal mean removed, the fluctuation matrix $\mathbf{U}' \in \mathbb{R}^{M \times N}$ is factorised as
 
-$$
+```math
 \mathbf{U}' = \mathbf{W}\,\boldsymbol{\Sigma}\,\boldsymbol{\Phi}^T
-$$
+```
 
 The rows of $\boldsymbol{\Phi}^T$ are the spatial POD modes. The columns of $\mathbf{A} = \mathbf{W}\boldsymbol{\Sigma} = \mathbf{U}'\boldsymbol{\Phi}$ are the temporal coefficients. $\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1, \sigma_2, \ldots)$ holds the singular values.
 
@@ -41,9 +41,9 @@ $$
 
 ### Percentage of turbulent kinetic energy
 
-$$
+```math
 \%\text{TKE}_i = 100\,\frac{\lambda_i}{\sum_j \lambda_j}, \qquad \text{cumulative}_n = \sum_{i=1}^{n} \%\text{TKE}_i
-$$
+```
 
 ## Implementation
 

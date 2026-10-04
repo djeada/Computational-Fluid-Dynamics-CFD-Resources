@@ -33,7 +33,7 @@ Derivation of the Reynolds-averaged equations, the closure problem, Reynolds-str
 
 ### 5. [Turbulence Modeling](./modeling.md)
 
-The DNS/LES/DES/RANS hierarchy, the mixing-length, Spalart–Allmaras, $k$–$\varepsilon$, $k$–$\omega$ and SST models with their constants, LES and the Smagorinsky model, and how to choose a model.
+The DNS/LES/DES/RANS hierarchy, the mixing-length, Spalart–Allmaras, $k$–$`\varepsilon`$, $k$–$`\omega`$ and SST models with their constants, LES and the Smagorinsky model, and how to choose a model.
 
 For how turbulence models are used inside a CFD workflow, see [Turbulence Modeling in CFD](../../numerical/cfd/turbulence_modeling.md).
 
@@ -224,7 +224,7 @@ DNS, LES and hybrid RANS–LES methods, and their cost scalings, are compared in
 - **1925**: Prandtl's mixing length theory
 - **1941**: Kolmogorov's similarity theory
 - **1945**: von Kármán and Howarth equations
-- **1970s**: Development of k-ε model
+- **1970s**: Development of $k$-$`\varepsilon`$ model
 - **1980s**: Large Eddy Simulation
 - **1990s**: Direct Numerical Simulation
 

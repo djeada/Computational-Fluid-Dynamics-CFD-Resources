@@ -71,7 +71,7 @@ The governing equations are **strongly coupled**, meaning they must be solved si
 
 ### Incompressible Flow
 
-- $\\rho = $ constant
+- $\rho = \text{constant}$
 - Continuity becomes: $\nabla \cdot \vec{v} = 0$
 - Momentum equation decouples from energy equation
 

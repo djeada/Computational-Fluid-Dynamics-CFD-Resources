@@ -528,7 +528,7 @@ Potential flow theory provides powerful analytical tools for understanding invis
 
 (a) $u_r = \partial\phi/\partial r = 0$ and $\frac{1}{r}\partial\psi/\partial\theta = 0$. Also $u_\theta = \frac{1}{r}\cdot\frac{\Gamma}{2\pi} = \frac{\Gamma}{2\pi r}$ and $-\partial\psi/\partial r = \frac{\Gamma}{2\pi r}$. Both relations hold.
 
-(b) $\oint u_\theta\, r\, d\theta = \int_0^{2\pi}\frac{\Gamma}{2\pi r}\, r\, d\theta = \Gamma$, independent of $r$.
+(b) $`\oint u_\theta\, r\, d\theta = \int_0^{2\pi}\frac{\Gamma}{2\pi r}\, r\, d\theta = \Gamma`$, independent of $r$.
 
 The vorticity is $\omega = \frac{1}{r}\frac{d(r u_\theta)}{dr} = 0$ for $r > 0$. By Stokes' theorem, all the circulation must therefore come from a singular concentration of vorticity at $r = 0$.
 

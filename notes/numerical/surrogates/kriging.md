@@ -14,16 +14,16 @@ $$
 y(x) = \sum_{j=1}^{K} \beta_j f_j(x) + z(x)
 $$
 
-where the functions $f_j(x)$ are known and capture the global or trend-like behavior, and the coefficients $\beta_j \in \mathbb{R}$ are unknown parameters. The term $z(x)$ represents the more complex, nonlinear part of the function, and is assumed to be a realization of a Gaussian process with zero mean, variance $\sigma^2$, and a correlation structure defined by a chosen correlation function $R(\|x-\tilde{x}\|)$.
+where the functions $f_j(x)$ are known and capture the global or trend-like behavior, and the coefficients $\beta_j \in \mathbb{R}$ are unknown parameters. The term $z(x)$ represents the more complex, nonlinear part of the function, and is assumed to be a realization of a Gaussian process with zero mean, variance $\sigma^2$, and a correlation structure defined by a chosen correlation function $`R(\|x-\tilde{x}\|)`$.
 
 A key assumption is second-order stationarity, meaning that the covariance depends only on the distance between points, not on their absolute position. Formally,
 
-$$
+```math
 \mathbb{E}[z(x)] = 0, \quad \text{Cov}[z(x), z(\tilde{x})] = \sigma^2
 R(\| x - \tilde{x}\|)
-$$
+```
 
-Here, $\sigma^2$ is the process variance and $R(\|\cdot\|)$ is a spatial autocorrelation function. This correlation function must be symmetric and positive definite, ensuring a well-posed problem that leads to a unique and stable solution.
+Here, $\sigma^2$ is the process variance and $`R(\|\cdot\|)`$ is a spatial autocorrelation function. This correlation function must be symmetric and positive definite, ensuring a well-posed problem that leads to a unique and stable solution.
 
 In practice, this implies that points closer together are more strongly correlated, and as the distance between points grows large, their correlation approaches zero. The Kriging model often includes a linear regression part $f(x)^T \beta$ to represent large-scale trends, while $z(x)$ models complex departures from these trends through the Gaussian process framework.
 
@@ -45,7 +45,7 @@ $$
 
 From the Gaussian process assumptions, it follows that there exist weights $\lambda(x) = (\lambda_1(x), \ldots, \lambda_N(x))^T \in \mathbb{R}^N$ and a vector $\mu(x) \in \mathbb{R}^K$ such that the Kriging weights and the Lagrange multipliers $\mu(x)$ solve the system:
 
-$$
+```math
 \begin{pmatrix}
 R & F \\
 F^T & 0
@@ -56,7 +56,7 @@ F^T & 0
 \begin{pmatrix}
 r(x) \\ f(x)
 \end{pmatrix}
-$$
+```
 
 Here, $R$ is the correlation matrix constructed from all sample points, and $r(x)$ is the vector of correlations between the new point $x$ and each sample point $x^{(i)}$. The matrix $F$ contains the regression basis functions evaluated at each sample point. Solving this system provides the Kriging weights $\lambda(x)$ and ensures unbiasedness and optimality of the prediction.
 
@@ -113,13 +113,13 @@ If the trend $f(x)$ is chosen to be a constant function, the resulting method is
 
 ## Correlation Functions and Anisotropy
 
-The correlation function $R(\| x - \tilde{x} \|)$ lies at the heart of Kriging. Popular choices include exponential, Gaussian, and cubic spline-based correlations. Each correlation function has its own smoothness properties, affecting how the interpolant behaves, especially in regions with fewer sample points.
+The correlation function $`R(\| x - \tilde{x} \|)`$ lies at the heart of Kriging. Popular choices include exponential, Gaussian, and cubic spline-based correlations. Each correlation function has its own smoothness properties, affecting how the interpolant behaves, especially in regions with fewer sample points.
 
 For instance, the Gaussian correlation function
 
-$$
+```math
 R(h) = \exp\{ - \theta h^2 \}
-$$
+```
 
 produces very smooth interpolants but can be ill-conditioned if the data are highly correlated.
 
@@ -137,7 +137,7 @@ Another figure reference (do not remove):
 
 ## Hyperparameter Estimation
 
-Determining the correlation parameters $\theta$ is crucial. One typically uses maximum likelihood estimation (MLE) to find $\beta \in \mathbb{R}^K$, $\sigma^2 \in \mathbb{R}_+$, and $\theta \in \mathbb{R}^d_+$. The likelihood function measures how probable it is to observe the given data $Y$ under the chosen model. Maximizing the likelihood leads to optimal parameter estimates in a statistical sense.
+Determining the correlation parameters $\theta$ is crucial. One typically uses maximum likelihood estimation (MLE) to find $\beta \in \mathbb{R}^K$, $`\sigma^2 \in \mathbb{R}_+`$, and $`\theta \in \mathbb{R}^d_+`$. The likelihood function measures how probable it is to observe the given data $Y$ under the chosen model. Maximizing the likelihood leads to optimal parameter estimates in a statistical sense.
 
 The log-likelihood function involves the determinant and inverse of the correlation matrix $R(\theta)$, making the optimization a challenging nonlinear problem. With well-chosen optimization algorithms and correlation functions, one can successfully determine $\theta$ and achieve a high-quality surrogate.
 
@@ -157,9 +157,9 @@ Let us demonstrate how to build a Kriging surrogate step-by-step, including the 
 
 I. Choose sample points $x^{(i)}$, for $i = 1, \ldots, 9$. For example, let:
 
-$$
+```math
 X = \{0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 \}
-$$
+```
 
 Compute $y_i = y(x^{(i)})$ at these points. Since the function is known, we can directly evaluate:
 
@@ -229,7 +229,7 @@ Kriging (Gaussian-process regression) is the most widely used surrogate in simul
 
 | Aspect | Details |
 | --- | --- |
-| **Inputs** | Sample points $\{x^{(i)}\}_{i=1}^N$, observations $Y = (y_1,\dots,y_N)^T$, correlation function $R(\cdot)$, hyperparameters $\theta$ |
+| **Inputs** | Sample points $`\{x^{(i)}\}_{i=1}^N`$, observations $Y = (y_1,\dots,y_N)^T$, correlation function $R(\cdot)$, hyperparameters $\theta$ |
 | **Outputs** | Kriging predictor $\hat{y}(x)$, mean squared error $\hat{s}^2(x)$, confidence interval, optimized hyperparameters $\hat{\theta}$ via MLE |
 
 ## Related Scripts
@@ -240,7 +240,7 @@ Kriging (Gaussian-process regression) is the most widely used surrogate in simul
 
 ## Exercises
 
-**Exercise 1.** Evaluate the test function $y(x) = (6x - 2)^2\sin(12x - 4)$ at the nine sample points $X = \{0, 0.125, \ldots, 1\}$ of the worked example (four decimals).
+**Exercise 1.** Evaluate the test function $y(x) = (6x - 2)^2\sin(12x - 4)$ at the nine sample points $`X = \{0, 0.125, \ldots, 1\}`$ of the worked example (four decimals).
 
 <details>
 <summary>Answer</summary>
@@ -283,7 +283,7 @@ Only lags of up to three spacings are nonzero, so $R$ is banded with half-bandwi
 <details>
 <summary>Answer</summary>
 
-$R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}$ with $\rho = e^{-1} = 0.3679$. By symmetry $R^{-1}\mathbf{1} \propto \mathbf{1}$, so $\hat{\beta} = \mathbf{1}^T R^{-1} Y/\mathbf{1}^T R^{-1}\mathbf{1} = 2$. Then $Y - \hat{\beta} = (-1, 1)$ and $R^{-1}(-1, 1)^T = (-1, 1)^T/(1 - \rho)$, so
+$`R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}`$ with $\rho = e^{-1} = 0.3679$. By symmetry $R^{-1}\mathbf{1} \propto \mathbf{1}$, so $\hat{\beta} = \mathbf{1}^T R^{-1} Y/\mathbf{1}^T R^{-1}\mathbf{1} = 2$. Then $Y - \hat{\beta} = (-1, 1)$ and $R^{-1}(-1, 1)^T = (-1, 1)^T/(1 - \rho)$, so
 
 ```math
 \hat{y}(x) = 2 + \frac{r_2(x) - r_1(x)}{1 - e^{-1}}

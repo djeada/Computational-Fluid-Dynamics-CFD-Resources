@@ -24,9 +24,9 @@ where $\mathbf{v}_G$ is the velocity of the mass center.
 
 The **linear impulse** of a force over a time interval is:
 
-$$
+```math
 \mathbf{Imp} = \int_{t_1}^{t_2} \mathbf{F} \, dt
-$$
+```
 
 For a constant force: $\mathbf{Imp} = \mathbf{F}(t_2 - t_1) = \mathbf{F}\Delta t$
 
@@ -34,21 +34,21 @@ For a constant force: $\mathbf{Imp} = \mathbf{F}(t_2 - t_1) = \mathbf{F}\Delta t
 
 Newton's second law in integral form gives the **impulse-momentum theorem**:
 
-$$
+```math
 m\mathbf{v}_1 + \sum \int_{t_1}^{t_2} \mathbf{F} \, dt = m\mathbf{v}_2
-$$
+```
 
 In words: initial momentum plus the total impulse equals final momentum.
 
 In component form:
 
-$$
+```math
 mv_{1x} + \sum \int_{t_1}^{t_2} F_x \, dt = mv_{2x}
-$$
+```
 
-$$
+```math
 mv_{1y} + \sum \int_{t_1}^{t_2} F_y \, dt = mv_{2y}
-$$
+```
 
 ## Conservation of Linear Momentum
 
@@ -94,9 +94,9 @@ where $d$ is the distance from $O$ to $G$.
 
 ### Angular Impulse-Momentum Theorem
 
-$$
+```math
 (H_O)_1 + \sum \int_{t_1}^{t_2} M_O \, dt = (H_O)_2
-$$
+```
 
 If no net external moment acts about $O$, angular momentum is conserved:
 
@@ -272,9 +272,9 @@ A 1000 kg rocket in space exhausts propellant at 50 kg/s with an exhaust velocit
 
 **Thrust (force from exhaust):**
 
-$$
+```math
 F_{thrust} = \dot{m}_e v_e = 50(3000) = 150\,000 \text{ N} = 150 \text{ kN}
-$$
+```
 
 **Tsiolkovsky rocket equation:**
 
@@ -428,7 +428,7 @@ Write the kinetic energy of two particles as the energy of the mass centre plus 
 T = \frac{1}{2}(m_A + m_B)v_G^2 + \frac{1}{2}\mu v_{rel}^2
 ```
 
-where $\mu = \frac{m_A m_B}{m_A + m_B}$ and $v_{rel} = v_A - v_B$. Momentum conservation keeps $v_G$ unchanged, and restitution gives $v_{rel,2} = -e\,v_{rel,1}$. Hence $\Delta T = T_1 - T_2 = \frac{1}{2}\mu(1 - e^2)v_{rel,1}^2$.
+where $\mu = \frac{m_A m_B}{m_A + m_B}$ and $v_{rel} = v_A - v_B$. Momentum conservation keeps $v_G$ unchanged, and restitution gives $`v_{rel,2} = -e\,v_{rel,1}`$. Hence $\Delta T = T_1 - T_2 = \frac{1}{2}\mu(1 - e^2)v_{rel,1}^2$.
 
 Example 1: $\mu = \frac{2 \times 3}{5} = 1.2$ kg, so $\Delta T = 0.5 \times 1.2 \times (1 - 0.49) \times 36 = 11.02$ J, which matches.
 

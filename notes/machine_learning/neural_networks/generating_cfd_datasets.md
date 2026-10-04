@@ -16,7 +16,7 @@ Popular commercial codes (e.g., Star-CCM+, ANSYS Fluent) and open-source alterna
 
 II. **Governing Equations**
 
-Most automotive simulations solve the 3D, steady or unsteady Reynolds-Averaged Navier–Stokes (RANS) equations, possibly supplemented by turbulence transport equations. For instance, the k–$\omega$ SST model adds the following two PDEs:
+Most automotive simulations solve the 3D, steady or unsteady Reynolds-Averaged Navier–Stokes (RANS) equations, possibly supplemented by turbulence transport equations. For instance, the $k$–$`\omega`$ SST model adds the following two PDEs:
 
 $$
 \frac{\partial ( \rho k )}{\partial t} + \nabla \cdot (\rho k \mathbf{u}) = P_k -
@@ -30,7 +30,7 @@ $$
 \frac{\rho \sigma_{\omega 2}}{\omega} \nabla k \cdot \nabla \omega
 $$
 
-where $P_k$ is the turbulence production term, $\mu_t$ is the turbulent eddy viscosity, $\omega$ is the specific dissipation rate, and $F_1$ is the blending function that switches the model coefficients from $k$–$\omega$ values near the wall to $k$–$\epsilon$-derived values in the free stream (the last term is the cross-diffusion term that this blending introduces). Choosing the turbulence model (e.g., Spalart–Allmaras, k–$\epsilon$ variants, etc.) depends on whether the objective is capturing mean forces or more complex flow structures.
+where $P_k$ is the turbulence production term, $\mu_t$ is the turbulent eddy viscosity, $\omega$ is the specific dissipation rate, and $F_1$ is the blending function that switches the model coefficients from $k$–$`\omega`$ values near the wall to $k$–$`\epsilon`$-derived values in the free stream (the last term is the cross-diffusion term that this blending introduces). Choosing the turbulence model (e.g., Spalart–Allmaras, $k$–$`\epsilon`$ variants, etc.) depends on whether the objective is capturing mean forces or more complex flow structures.
 
 III. **Boundary Conditions and Domain Setup**
 
@@ -46,7 +46,7 @@ III. **Boundary Conditions and Domain Setup**
 
 I. **RANS Models**
 
-- **k–ω SST (Shear Stress Transport)**: Balances near-wall resolution (from the k–$\omega$ formulation) with free-stream stability (from the k–$\epsilon$ adaptation). Widely used in automotive design for body- and underbody-flow predictions.
+- **$k$–$`\omega`$ SST (Shear Stress Transport)**: Balances near-wall resolution (from the $k$–$`\omega`$ formulation) with free-stream stability (from the $k$–$`\epsilon`$ adaptation). Widely used in automotive design for body- and underbody-flow predictions.
 - **Spalart–Allmaras**: Simplified single-equation model often used for external aerodynamics due to its good compromise between accuracy and computational cost.
   II. **Scale-Resolving Simulations**
 - **Large Eddy Simulation (LES)**: Partially resolves the large turbulent eddies in 3D, requiring a very fine mesh in critical regions (e.g., around wheels, in separated wakes). This can drastically increase computational requirements, sometimes by one or two orders of magnitude compared to RANS.
@@ -174,7 +174,7 @@ If wind-tunnel or on-road measurement data is available:
 
 ### Setting Up the Problem
 
-When preparing a CFD-based dataset pipeline, begin by selecting a solver and turbulence model that match your application. For external aerodynamics a RANS approach (e.g., k–$\omega$ SST) in OpenFOAM or a commercial code is a common starting point. Define boundary conditions—inlet velocity or mass-flow rate, outlet pressure, no-slip walls, and symmetry planes—that faithfully represent the target operating environment.
+When preparing a CFD-based dataset pipeline, begin by selecting a solver and turbulence model that match your application. For external aerodynamics a RANS approach (e.g., $k$–$`\omega`$ SST) in OpenFOAM or a commercial code is a common starting point. Define boundary conditions—inlet velocity or mass-flow rate, outlet pressure, no-slip walls, and symmetry planes—that faithfully represent the target operating environment.
 
 Plan your mesh resolution around the regions that govern the quantities of interest: refine near walls to achieve $y^+ \approx 1$ where boundary-layer accuracy matters, and use coarser cells in the far field. Performing a brief grid-independence study on a representative case helps establish a mesh density that balances accuracy against cost.
 
@@ -195,14 +195,14 @@ To build a large dataset, automate simulation runs using HPC job schedulers (e.g
 
 ### Exercises
 
-**Exercise 1.** The inlet of a k–$\omega$ SST case has $U = 40$ m/s, turbulence intensity $I = 1\%$ and turbulence length scale $\ell = 0.01$ m. Using $k = \tfrac{3}{2}(IU)^2$ and $\omega = k^{1/2}/(C_\mu^{1/4}\ell)$ with $C_\mu = 0.09$, compute $k$, $\omega$, the eddy viscosity $\nu_t = k/\omega$, and the ratio $\nu_t/\nu$ for air ($\nu = 1.5 \times 10^{-5}$ m²/s).
+**Exercise 1.** The inlet of a $k$–$`\omega`$ SST case has $`U = 40`$ m/s, turbulence intensity $`I = 1\%`$ and turbulence length scale $`\ell = 0.01`$ m. Using $`k = \tfrac{3}{2}(IU)^2`$ and $`\omega = k^{1/2}/(C_\mu^{1/4}\ell)`$ with $`C_\mu = 0.09`$, compute $`k`$, $`\omega`$, the eddy viscosity $\nu_t = k/\omega$, and the ratio $\nu_t/\nu$ for air ($\nu = 1.5 \times 10^{-5}$ m²/s).
 
 <details>
 <summary>Answer</summary>
 
 $k = 1.5 \times (0.4)^2 = 0.24$ m²/s².
 
-$\omega = \sqrt{0.24}/(0.09^{1/4} \times 0.01) = 0.490/0.005477 \approx 89.4$ s$^{-1}$.
+$\omega = \sqrt{0.24}/(0.09^{1/4} \times 0.01) = 0.490/0.005477 \approx 89.4$ s$`^{-1}`$.
 
 $\nu_t = 0.24/89.4 \approx 2.68 \times 10^{-3}$ m²/s, so $\nu_t/\nu \approx 179$.
 
@@ -210,7 +210,7 @@ An eddy-viscosity ratio of order 100 at the inlet is high. The value reaching th
 
 </details>
 
-**Exercise 2.** Air flows at $U = 30$ m/s ($\rho = 1.2$ kg/m³, $\nu = 1.5 \times 10^{-5}$ m²/s) over the roof, $x = 2$ m from the leading edge. Use the turbulent flat-plate estimate $C_f = 0.0576\,\mathrm{Re}_x^{-1/5}$ to find $\tau_w$, $u_\tau$, and the wall distance $\Delta y$ for $y^+ = 1$ and for $y^+ = 50$.
+**Exercise 2.** Air flows at $U = 30$ m/s ($\rho = 1.2$ kg/m³, $\nu = 1.5 \times 10^{-5}$ m²/s) over the roof, $x = 2$ m from the leading edge. Use the turbulent flat-plate estimate $`C_f = 0.0576\,\mathrm{Re}_x^{-1/5}`$ to find $`\tau_w`$, $`u_\tau`$, and the wall distance $\Delta y$ for $y^+ = 1$ and for $y^+ = 50$.
 
 <details>
 <summary>Answer</summary>
@@ -227,7 +227,7 @@ Because the note defines $\Delta y$ as the distance to the first cell centre, th
 
 </details>
 
-**Exercise 3.** A side mirror with $D = 0.15$ m sheds vortices at a Strouhal number $St = fD/U = 0.2$ in a $U = 40$ m/s flow. Find the shedding frequency and period. With 50 time steps per period, what is $\Delta t$, and what CFL number does that give in 2 mm cells at 40 m/s? What $\Delta t$ gives CFL = 1, and how many steps per period is that?
+**Exercise 3.** A side mirror with $D = 0.15$ m sheds vortices at a Strouhal number $St = fD/U = 0.2$ in a $U = 40$ m/s flow. Find the shedding frequency and period. With 50 time steps per period, what is $\Delta t$, and what CFL number does that give in 2 mm cells at 40 m/s? What $\Delta t$ gives $\text{CFL} = 1$, and how many steps per period is that?
 
 <details>
 <summary>Answer</summary>
@@ -236,7 +236,7 @@ $f = 0.2 \times 40/0.15 \approx 53.3$ Hz and $T = 1/f = 18.75$ ms.
 
 With 50 steps per period, $\Delta t = 3.75 \times 10^{-4}$ s and $\text{CFL} = 40 \times 3.75 \times 10^{-4}/0.002 = 7.5$.
 
-For CFL = 1, $\Delta t = 0.002/40 = 5 \times 10^{-5}$ s, which is 375 steps per period.
+For $\text{CFL} = 1$, $\Delta t = 0.002/40 = 5 \times 10^{-5}$ s, which is 375 steps per period.
 
 The frequency requirement alone would allow a much larger step. In the refined mirror region the CFL limit is the binding constraint for LES and DES accuracy, so it sets the cost.
 
@@ -266,7 +266,7 @@ p = \frac{\ln\left(\frac{0.3350 - 0.3210}{0.3210 - 0.3170}\right)}{\ln 2} = \fra
 
 Since $r^p - 1 = 2.5$, the extrapolated value is $C_{d,\text{ext}} = 0.3170 + (0.3170 - 0.3210)/2.5 = 0.3154$.
 
-The relative fine–medium difference is $|0.3170 - 0.3210|/0.3170 \approx 0.0126$, so $\text{GCI}_{\text{fine}} = 1.25 \times 0.0126/2.5 \approx 0.63\%$.
+The relative fine–medium difference is $|0.3170 - 0.3210|/0.3170 \approx 0.0126$, so $`\text{GCI}_{\text{fine}} = 1.25 \times 0.0126/2.5 \approx 0.63\%`$.
 
 An observed order close to the formal second order and a GCI below 1% suggest the fine mesh is adequate for the dataset.
 

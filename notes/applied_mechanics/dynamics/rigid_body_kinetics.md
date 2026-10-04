@@ -6,9 +6,9 @@ Rigid body kinetics extends Newton's laws from particles to bodies with finite s
 
 The **mass moment of inertia** quantifies a body's resistance to angular acceleration about a given axis:
 
-$$
+```math
 I = \int_m r^2 \, dm
-$$
+```
 
 where $r$ is the perpendicular distance from the axis to the element $dm$.
 
@@ -83,9 +83,9 @@ $$
 
 where $I_O = I_G + md^2$ and $d$ is the distance from $O$ to $G$. The mass center has both tangential and normal acceleration:
 
-$$
+```math
 (\mathbf{a}_G)_t = \alpha \, d, \quad (\mathbf{a}_G)_n = \omega^2 d
-$$
+```
 
 ### General Plane Motion
 
@@ -348,7 +348,7 @@ k = \sqrt{I/m} = \sqrt{0.25} = 0.5 \text{ m}
 <details>
 <summary>Answer</summary>
 
-Along the slope: $mg\sin\theta - f = ma_G$. About $G$: $fR = mk_G^2\,a_G/R$, so $f = mk_G^2a_G/R^2$. Substituting gives the stated result.
+Along the slope: $mg\sin\theta - f = ma_G$. About $G$: $`fR = mk_G^2\,a_G/R`$, so $f = mk_G^2a_G/R^2$. Substituting gives the stated result.
 
 - Hoop ($k_G^2/R^2 = 1$): $a_G = 2.07$ m/s².
 - Solid cylinder ($1/2$): $a_G = 2.76$ m/s² (matches Example 1).

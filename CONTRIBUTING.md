@@ -91,11 +91,14 @@ If the output image is not already hosted, generate it with `python main.py --no
 
 ## Note conventions
 
-- Math must render on GitHub:
+- Math must render on GitHub, which reads the TeX inside `$` and `$$` as Markdown before rendering it:
   - put `$$` display math on its own lines with a blank line before and after;
+  - write display math as a ` ```math ` fence instead when it sits in a list item or a `<details>` block, or holds an escape such as `\,`, `\{` or `\%`, or two `*`: GitHub would drop the backslashes and turn `T^*` and `p^*` into `T^_` and `p^_`;
+  - write inline math as `` $`...`$ `` when GitHub would not render `$...$` as written: it holds an escape such as `\,`, a `*` or `_` pairs with another in the same paragraph (`$\mathbf{u}_i$ ... $u_{j}$`), the `$` does not follow a space or `(` (`moderate-$Re$`), or it sits inside `*italics*` or link text;
   - write degrees as `^\circ` inside math, not `°`;
   - put spaces around `<` and `>` in inline math (`$a < b$`);
-  - use LaTeX commands rather than Unicode symbols inside math.
+  - use LaTeX commands rather than Unicode symbols inside math, and `\mathrm{...}` rather than `\operatorname{...}`, which GitHub does not allow.
+- [marklign](https://github.com/djeada/marklign) applies the `$$`, fence and `` $`...`$ `` rules for you: run `marklign notes practice` before opening a pull request.
 - End each note with these sections, at the same heading level as the note's other top-level sections:
   - **Related Scripts**: links to scripts in `scripts/` that demonstrate the topic (omit if none).
   - **Exercises**: three to five problems of increasing difficulty, each with a worked answer inside a `<details><summary>Answer</summary> ... </details>` block. Check numerical answers by computing them.

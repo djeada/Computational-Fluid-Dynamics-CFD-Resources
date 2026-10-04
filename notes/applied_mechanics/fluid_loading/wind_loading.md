@@ -57,9 +57,9 @@ where $I_v(z)$ is turbulence intensity and $g_v \approx 3.5$ is the peak factor.
 
 The wind pressure on any surface of a building is expressed using a pressure coefficient:
 
-$$
+```math
 p = C_p \, q_{ref}
-$$
+```
 
 where $C_p$ is determined experimentally (wind tunnel) or from code tables.
 
@@ -80,9 +80,9 @@ where $C_p$ is determined experimentally (wind tunnel) or from code tables.
 
 Buildings are not sealed; openings create internal pressure. The net design pressure on a cladding panel is:
 
-$$
+```math
 p_{net} = (C_{p,ext} - C_{p,int}) \, q_{ref}
-$$
+```
 
 Internal pressure coefficients depend on the dominant opening configuration ($C_{p,int}$ typically $\pm 0.2$ to $\pm 0.6$).
 
@@ -92,9 +92,9 @@ Internal pressure coefficients depend on the dominant opening configuration ($C_
 
 The mean along-wind base shear is obtained by integrating the mean pressure over the building height:
 
-$$
+```math
 F_{mean} = \int_0^H q(z) \, C_D \, B \, dz
-$$
+```
 
 where $B$ is the building width and $C_D$ is the drag coefficient for the overall cross-section.
 
@@ -131,9 +131,9 @@ $$
 
 Wind flowing past a bluff body generates alternating vortices at the **Strouhal frequency**:
 
-$$
+```math
 f_s = \frac{St \, V}{D}
-$$
+```
 
 where $St \approx 0.12$ for rectangular buildings and $D$ is the across-wind dimension.
 
@@ -196,10 +196,10 @@ $$
 
 Using a simplified uniform pressure over the height:
 
-$$
+```math
 F = q_H \, C_D \, B \, H = 1240 \times 1.3 \times 20 \times 10 = 322{,}400 \text{ N}
 \approx 322 \text{ kN}
-$$
+```
 
 ## Worked Example 2: Across-Wind Vibration Check
 
@@ -215,9 +215,9 @@ $$
 
 Shedding frequency at design wind speed:
 
-$$
+```math
 f_s = \frac{St \, V_H}{D} = \frac{0.12 \times 55}{30} = 0.22 \text{ Hz}
-$$
+```
 
 Critical wind speed for lock-in:
 

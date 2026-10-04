@@ -170,7 +170,7 @@ Building a text-to-CAD pipeline requires careful preparation at each stage:
 
 ## Exercises
 
-**Exercise 1.** A generated 2D shape is sampled as $S_2 = \{(0, 0.1), (1, 0), (2, 0)\}$ and the reference as $S_1 = \{(0, 0), (1, 0)\}$. Compute the Chamfer distance $d_{\text{CD}}(S_1, S_2)$ as defined in the note, and each one-sided term. Which term detects the spurious point?
+**Exercise 1.** A generated 2D shape is sampled as $`S_2 = \{(0, 0.1), (1, 0), (2, 0)\}`$ and the reference as $`S_1 = \{(0, 0), (1, 0)\}`$. Compute the Chamfer distance $d_{\text{CD}}(S_1, S_2)$ as defined in the note, and each one-sided term. Which term detects the spurious point?
 
 <details>
 <summary>Answer</summary>

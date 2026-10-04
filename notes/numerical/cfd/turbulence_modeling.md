@@ -56,10 +56,10 @@ III. Ensemble Average
 
 - Definition:
 
-$$
+```math
 \overline{u}(y) \equiv \lim_{\tau \to \infty} \frac{1}{2\tau} \int_{-\tau}^{\tau} u(y,t)
 \, dt
-$$
+```
 
 - This formula represents the mean value of a flow variable over a long period and is particularly applicable to statistically stationary flows where the statistics do not change with time.
 
@@ -170,7 +170,7 @@ where:
 
 Turbulence models often involve additional transport equations for turbulence quantities, which provide insight into the state of the turbulent flow and help close the RANS equations.
 
-I. Turbulent Kinetic Energy (k)
+I. Turbulent Kinetic Energy ($k$)
 
 - Definition:
 
@@ -184,16 +184,16 @@ $$
 - Typical Magnitudes:\
   In highly turbulent flows, $k$ may account for a few percent (often up to 5%) of the kinetic energy of the mean flow.
 
-II. Turbulent Energy Dissipation Rate (ε)
+II. Turbulent Energy Dissipation Rate ($\epsilon$)
 
 - Definition (with summation over $i, j = 1, 2, 3$):
 
-$$
+```math
 \epsilon = \nu \,
 \overline{\frac{\partial u_i'}{\partial x_j} \frac{\partial u_i'}{\partial x_j}}
-$$
+```
 
-Strictly, this is the pseudo-dissipation. The true dissipation is $2\nu \, \overline{s_{ij}' s_{ij}'}$ with $s_{ij}' = \frac{1}{2}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)$; the two are equal in homogeneous turbulence.
+Strictly, this is the pseudo-dissipation. The true dissipation is $`2\nu \, \overline{s_{ij}' s_{ij}'}`$ with $s_{ij}' = \frac{1}{2}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)$; the two are equal in homogeneous turbulence.
 
 - Role:\
   Measures the rate at which turbulent kinetic energy is dissipated into heat due to viscosity.
@@ -203,7 +203,7 @@ Strictly, this is the pseudo-dissipation. The true dissipation is $2\nu \, \over
 
 ## Turbulence Modeling in CFD
 
-- k-ε Models:
+- $k$-$`\epsilon`$ Models:
 
 - These models are among the most widely used in industrial CFD simulations.
 
@@ -217,7 +217,7 @@ Strictly, this is the pseudo-dissipation. The true dissipation is $2\nu \, \over
 
 - Other Models:
 
-- k-ω Models:\
+- $k$-$`\omega`$ Models:\
   Often provide improved performance in the near-wall region.
 
 - Reynolds Stress Models (RSM):\
@@ -230,13 +230,13 @@ Turbulence modeling remains an active area of research, with ongoing efforts to 
 
 ## Purpose in CFD
 
-Most engineering flows are turbulent. Because resolving every eddy (DNS) is prohibitively expensive, CFD relies on turbulence models. This note explains laminar vs. turbulent regimes, Reynolds decomposition ($u = \overline{u} + u'$), the RANS closure problem, key turbulence parameters ($k$, $\epsilon$), and widely used model families (k-ε, k-ω, RSM, LES). Selecting and tuning a turbulence model is one of the most impactful decisions in a CFD simulation.
+Most engineering flows are turbulent. Because resolving every eddy (DNS) is prohibitively expensive, CFD relies on turbulence models. This note explains laminar vs. turbulent regimes, Reynolds decomposition ($u = \overline{u} + u'$), the RANS closure problem, key turbulence parameters ($k$, $\epsilon$), and widely used model families ($k$-$`\epsilon`$, $k$-$`\omega`$, RSM, LES). Selecting and tuning a turbulence model is one of the most impactful decisions in a CFD simulation.
 
 ## Input / Output
 
 | Aspect | Details |
 | --- | --- |
-| **Inputs** | Mean velocity field $\overline{u}$, Reynolds number, turbulence model choice (k-ε, k-ω, etc.), wall treatment, boundary values for $k$ and $\epsilon$ |
+| **Inputs** | Mean velocity field $\overline{u}$, Reynolds number, turbulence model choice ($k$-$`\epsilon`$, $`k`$-$`\omega`$, etc.), wall treatment, boundary values for $`k`$ and $`\epsilon`$ |
 | **Outputs** | Reynolds stress tensor $\overline{u'_i u'_j}$, turbulent kinetic energy $k$, dissipation rate $\epsilon$, eddy viscosity $\nu_t$, mean velocity profile |
 
 ## Related Scripts
@@ -245,7 +245,7 @@ Most engineering flows are turbulent. Because resolving every eddy (DNS) is proh
 - [Laminar vs. Turbulent Boundary Layer Profiles](../../../scripts/plots/laminar_vs_turbulent_boundary_layer/): plots normalised laminar and turbulent boundary-layer velocity profiles on the same axes to show how much fuller the turbulent profile is.
 - [Mean Pressure Coefficient Along Vehicle Centreline](../../../scripts/plots/mean_pressure_coefficient/): plots a mock validation figure of mean pressure coefficient $C_P$ against streamwise position, comparing "experimental" data with a "CFD SRS" (scale-resolving simulation) curve that under-predicts a separation plateau.
 - [Mean Velocity Magnitude: Experiment vs CFD Comparison](../../../scripts/plots/mean_velocity_magnitude/): plots a mock experimental profile and a mock CFD scale-resolving simulation (SRS) profile of the normalised mean velocity magnitude $|U|/U_0$ along an under-body centreline.
-- [Time-Averaged Velocity Field](../../../scripts/plots/time_averaged_velocity_field/): generates a synthetic noisy longitudinal velocity field on a 200 × 60 grid and compares it with its mean field, the first step of a Reynolds decomposition.
+- [Time-Averaged Velocity Field](../../../scripts/plots/time_averaged_velocity_field/): generates a synthetic noisy longitudinal velocity field on a $200 \times 60$ grid and compares it with its mean field, the first step of a Reynolds decomposition.
 - [Turbulent Flow: Reynolds Decomposition](../../../scripts/plots/turbulent_flow/): splits a synthetic velocity signal into its time mean and fluctuation, following the Reynolds decomposition used in turbulence modelling.
 
 ## Exercises
@@ -270,11 +270,11 @@ $u_{\text{rms}} \approx 0.289$ m/s, so the turbulence intensity is about 2.9%.
 
 $k = \tfrac{1}{2}(0.25 + 0.25 + 0.25) = 0.375$ m²/s².
 
-The mean-flow kinetic energy is $\tfrac{1}{2}\overline{u}^2 = 50$ m²/s², so $k$ is $0.375/50 = 0.75\%$ of it, within the "few percent" range quoted in the note.
+The mean-flow kinetic energy is $\tfrac{1}{2}\overline{u}^2 = 50$ m²/s², so $k$ is $`0.375/50 = 0.75\%`$ of it, within the "few percent" range quoted in the note.
 
 </details>
 
-**Exercise 3.** Integrate the averaged channel momentum equation of the note from the centreline $y = 0$ to $y$ to obtain a relation for the total shear stress. Evaluate it at the wall $y = H$ to show that $\tau_w = -H\, dp/dx$.
+**Exercise 3.** Integrate the averaged channel momentum equation of the note from the centreline $y = 0$ to $y$ to obtain a relation for the total shear stress. Evaluate it at the wall $y = H$ to show that $`\tau_w = -H\, dp/dx`$.
 
 <details>
 <summary>Answer</summary>
@@ -287,7 +287,7 @@ Integrating $\frac{d}{dy}\overline{u'v'} + \frac{1}{\rho}\frac{dp}{dx} = \nu\fra
 
 The total (viscous plus turbulent) shear stress varies linearly across the channel.
 
-At the wall the fluctuations vanish (no-slip), so $\overline{u'v'} = 0$ and $\mu\, d\overline{u}/dy|_H = H\, dp/dx$. Since $dp/dx < 0$, the velocity gradient is negative at the upper wall, and the magnitude of the wall shear stress is $\tau_w = -H\, dp/dx$.
+At the wall the fluctuations vanish (no-slip), so $\overline{u'v'} = 0$ and $`\mu\, d\overline{u}/dy|_H = H\, dp/dx`$. Since $dp/dx < 0$, the velocity gradient is negative at the upper wall, and the magnitude of the wall shear stress is $`\tau_w = -H\, dp/dx`$.
 
 </details>
 
@@ -304,7 +304,7 @@ $y^+ = 1$ corresponds to $y = \nu/u_\tau = 10^{-4}$ m, or 0.1 mm. A wall-resolve
 
 </details>
 
-**Exercise 5.** A k–ε model gives $k = 0.375$ m²/s² and $\epsilon = 0.5$ m²/s³ in air ($\nu = 1.5 \times 10^{-5}$ m²/s). Compute the eddy viscosity $\nu_t = C_\mu k^2/\epsilon$ with $C_\mu = 0.09$ and its ratio to $\nu$. Then estimate the Kolmogorov length scale $\eta = (\nu^3/\epsilon)^{1/4}$. What does $\eta$ imply about DNS of this flow?
+**Exercise 5.** A $k$–$`\epsilon`$ model gives $k = 0.375$ m²/s² and $\epsilon = 0.5$ m²/s³ in air ($\nu = 1.5 \times 10^{-5}$ m²/s). Compute the eddy viscosity $\nu_t = C_\mu k^2/\epsilon$ with $C_\mu = 0.09$ and its ratio to $\nu$. Then estimate the Kolmogorov length scale $\eta = (\nu^3/\epsilon)^{1/4}$. What does $\eta$ imply about DNS of this flow?
 
 <details>
 <summary>Answer</summary>

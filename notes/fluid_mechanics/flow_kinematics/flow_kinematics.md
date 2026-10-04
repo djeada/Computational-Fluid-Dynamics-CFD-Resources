@@ -77,7 +77,7 @@ Flow kinematics also characterizes how fluid elements deform. Consider a small f
 
 The velocity gradients $\partial u/\partial x$, $\partial v/\partial y$, etc., determine these deformation characteristics. By examining the velocity gradient tensor $\nabla \vec{v}$, one can split it into symmetric and antisymmetric parts. The antisymmetric part relates to rotation (vorticity), while the symmetric part relates to strain rates.
 
-Vorticity $\vec{\omega} = \nabla \times \vec{v}$ measures the fluid’s local spinning motion. Regions of high vorticity often correspond to vortices, which are common flow structures. The strain rate tensor measures how fluid elements stretch or compress. For instance, a flow accelerating in the x-direction and decelerating in the y-direction would stretch fluid elements in one direction and compress them in another.
+Vorticity $\vec{\omega} = \nabla \times \vec{v}$ measures the fluid’s local spinning motion. Regions of high vorticity often correspond to vortices, which are common flow structures. The strain rate tensor measures how fluid elements stretch or compress. For instance, a flow accelerating in the $x$-direction and decelerating in the $y$-direction would stretch fluid elements in one direction and compress them in another.
 
 ```
 Deformation of a Fluid Element:

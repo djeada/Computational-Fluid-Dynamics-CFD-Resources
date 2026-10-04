@@ -14,22 +14,22 @@ The continuity equation is based on the principle that the rate of mass accumula
 
 Consider a fixed control volume $V$ bounded by surface $S$. The mass within the volume is:
 
-$$
+```math
 M = \int_V \rho \, dV
-$$
+```
 
 The rate of change of mass within the volume is:
 
-$$
+```math
 \frac{dM}{dt} = \frac{d}{dt}\int_V \rho \, dV = \int_V \frac{\partial \rho}{\partial t}
 \, dV
-$$
+```
 
 The net mass flow rate into the volume through the surface is:
 
-$$
+```math
 \text{Net inflow} = -\int_S \rho \vec{v} \cdot \vec{n} \, dS
-$$
+```
 
 where $\vec{n}$ is the outward unit normal vector.
 
@@ -37,16 +37,16 @@ where $\vec{n}$ is the outward unit normal vector.
 
 For mass conservation:
 
-$$
+```math
 \int_V \frac{\partial \rho}{\partial t} \, dV + \int_S \rho \vec{v} \cdot \vec{n} \,
 dS = 0
-$$
+```
 
 Using the divergence theorem:
 
-$$
+```math
 \int_S \rho \vec{v} \cdot \vec{n} \, dS = \int_V \nabla \cdot (\rho \vec{v}) \, dV
-$$
+```
 
 Therefore:
 
@@ -103,7 +103,7 @@ $$
 
 ### Incompressible Flow
 
-For **incompressible flow**, density is constant ($\\rho = $ constant), so:
+For **incompressible flow**, density is constant ($\rho = \text{constant}$), so:
 
 $$
 \frac{\partial \rho}{\partial t} = 0 \quad \text{and} \quad \nabla \rho = 0
@@ -160,9 +160,9 @@ where $\dot{m}$ is the mass flow rate.
 
 The **mass flow rate** through a surface $S$ is:
 
-$$
+```math
 \dot{m} = \int_S \rho \vec{v} \cdot \vec{n} \, dS
-$$
+```
 
 For incompressible flow through a pipe with uniform velocity:
 
@@ -176,9 +176,9 @@ where $V$ is the average velocity and $A$ is the cross-sectional area.
 
 For incompressible flow, the **volume flow rate** (or discharge) is:
 
-$$
+```math
 Q = \int_S \vec{v} \cdot \vec{n} \, dS = VA
-$$
+```
 
 ### Stream Function
 
@@ -259,10 +259,10 @@ In computational fluid dynamics, the continuity equation is typically discretize
 
 ### Finite Volume Method
 
-$$
+```math
 \frac{\partial}{\partial t}\int_V \rho \, dV + \sum_{\text{faces}}
 (\rho \vec{v} \cdot \vec{n} A)_f = 0
-$$
+```
 
 ### Finite Difference Method
 
@@ -327,14 +327,14 @@ The stream function is $\psi = 3xy + \frac{1}{2}y^2 - x^2$, up to a constant.
 
 </details>
 
-**Exercise 3.** A steady, incompressible, two-dimensional flow is purely radial, $\vec{v} = v_r(r)\,\hat{e}_r$. Use the cylindrical form of the continuity equation to find $v_r(r)$, and relate the constant to the volume flow rate $Q$ per unit depth leaving a circle of radius $r$.
+**Exercise 3.** A steady, incompressible, two-dimensional flow is purely radial, $`\vec{v} = v_r(r)\,\hat{e}_r`$. Use the cylindrical form of the continuity equation to find $v_r(r)$, and relate the constant to the volume flow rate $Q$ per unit depth leaving a circle of radius $r$.
 
 <details>
 <summary>Answer</summary>
 
 With $\rho$ constant and only $v_r(r)$ nonzero, $\frac{1}{r}\frac{d}{dr}(r v_r) = 0$, so $r v_r = C$ and $v_r = C/r$.
 
-The flow rate through a circle is $Q = \oint v_r \, r\,d\theta = 2\pi C$, so
+The flow rate through a circle is $`Q = \oint v_r \, r\,d\theta = 2\pi C`$, so
 
 ```math
 v_r = \frac{Q}{2\pi r}
@@ -349,7 +349,7 @@ This is the potential-flow line source. The velocity is singular at $r = 0$, whe
 <details>
 <summary>Answer</summary>
 
-(a) Since $\partial\rho/\partial x = 0$, continuity gives $d\rho/dt + \rho\,\partial u/\partial x = 0$. With $\partial u/\partial x = -V_p/L$, this becomes $d\rho/dt = \rho V_p/L = -\rho\,(dL/dt)/L$. Therefore $d(\ln\rho + \ln L)/dt = 0$ and $\rho L$ is constant, which is just the statement that the mass per unit piston area is fixed.
+(a) Since $\partial\rho/\partial x = 0$, continuity gives $`d\rho/dt + \rho\,\partial u/\partial x = 0`$. With $\partial u/\partial x = -V_p/L$, this becomes $`d\rho/dt = \rho V_p/L = -\rho\,(dL/dt)/L`$. Therefore $d(\ln\rho + \ln L)/dt = 0$ and $\rho L$ is constant, which is just the statement that the mass per unit piston area is fixed.
 
 (b) $\rho = \rho_0 L_0/L = 1.2 \times 0.2/0.1 = 2.4$ kg/m³, and $d\rho/dt = \rho V_p/L = 2.4 \times 0.5/0.1 = 12$ kg/(m³ s).
 

@@ -47,10 +47,10 @@ $$
 
 where $\phi$ might be mass density or another conserved quantity, and $\mathbf{F}$ is the flux vector. By integrating over a control volume $V_i$, one obtains
 
-$$
+```math
 \int_{V_i} \frac{\partial \phi}{\partial t}\, dV + \int_{\partial V_i} \mathbf{F} \cdot
 \mathbf{n} \, dS = 0
-$$
+```
 
 where $\partial V_i$ denotes the boundary (surface) of the control volume and $\mathbf{n}$ is the outward-facing unit normal.
 
@@ -77,18 +77,18 @@ where $u = u(x,t)$ might represent a scalar quantity such as temperature, $v$ is
 
 Suppose the domain $x \in [0, L]$ is subdivided into $N$ control volumes, each centered at $x_i$, with edges at $x_{i-1/2}$ and $x_{i+1/2}$. Integrating the equation over the control volume from $x_{i-1/2}$ to $x_{i+1/2}$ and applying the divergence theorem gives
 
-$$
+```math
 \int_{x_{i-1/2}}^{x_{i+1/2}} \frac{\partial u}{\partial t}\, dx +
 \int_{x_{i-1/2}}^{x_{i+1/2}} v \frac{\partial u}{\partial x}\,
 dx = \int_{x_{i-1/2}}^{x_{i+1/2}} D \frac{\partial^2 u}{\partial x^2}\, dx
-$$
+```
 
 The middle term involving convection can be expressed as the net flux of $u$ through the boundaries:
 
-$$
+```math
 \int_{x_{i-1/2}}^{x_{i+1/2}} v \frac{\partial u}{\partial x}\, dx = v\, u
 \Big|_{x_{i+1/2}} - v\, u \Big|_{x_{i-1/2}}
-$$
+```
 
 and similarly for the diffusion term by considering its gradient at each boundary. After approximating $u$ and its derivatives or fluxes at $x_{i-1/2}$ and $x_{i+1/2}$ through suitable interpolation schemes, one obtains a discretized equation relating $u_i$ (the cell-average or center value in cell $i$) to its neighboring values. The complete set of discrete equations for $i = 1,\dots,N$ can then be solved at each time step, ensuring that each control volume properly accounts for convection and diffusion fluxes across its boundaries.
 
@@ -150,7 +150,7 @@ This holds exactly for any flux formula, provided both neighbours use the same f
 
 </details>
 
-**Exercise 2.** For steady convection-diffusion, $v\,du/dx = D\,d^2u/dx^2$, central differencing on a uniform grid gives $a_P u_P = a_W u_W + a_E u_E$ with $a_W = D/\Delta x + v/2$, $a_E = D/\Delta x - v/2$ and $a_P = a_W + a_E$. Find the cell Péclet number above which $a_E$ becomes negative, and evaluate it for $v = 2$ m/s, $D = 0.01$ m²/s and $\Delta x = 0.02$ m.
+**Exercise 2.** For steady convection-diffusion, $`v\,du/dx = D\,d^2u/dx^2`$, central differencing on a uniform grid gives $a_P u_P = a_W u_W + a_E u_E$ with $a_W = D/\Delta x + v/2$, $a_E = D/\Delta x - v/2$ and $a_P = a_W + a_E$. Find the cell Péclet number above which $a_E$ becomes negative, and evaluate it for $v = 2$ m/s, $D = 0.01$ m²/s and $\Delta x = 0.02$ m.
 
 <details>
 <summary>Answer</summary>
@@ -174,11 +174,11 @@ Two fixes: refine to $\Delta x < 0.01$ m, or use an upwind (or bounded high-reso
 - $u_2 = 0 - 0.5(0 - 1) = 0.5$
 - $u_3 = 0 - 0.5(0 - 0) = 0$
 
-(b) Over cells 1 to 3, the content changes by $\Delta x\sum\Delta u = 0.1 \times 0.5 = 0.05$. The net flux is $\Delta t\,(v u_0 - v u_3) = 0.05 \times (1 - 0) = 0.05$. The two agree.
+(b) Over cells 1 to 3, the content changes by $\Delta x\sum\Delta u = 0.1 \times 0.5 = 0.05$. The net flux is $`\Delta t\,(v u_0 - v u_3) = 0.05 \times (1 - 0) = 0.05`$. The two agree.
 
 </details>
 
-**Exercise 4.** Solve $v\,du/dx = D\,d^2u/dx^2$ on $[0, 1]$ with $u(0) = 1$, $u(1) = 0$, $v = 0.1$ m/s and $D = 0.1$ m²/s, using 5 cells and central differencing. Boundary faces use the boundary value for convection and a half-cell distance for diffusion. Compare with the exact solution $u = 1 - (e^{vx/D} - 1)/(e^{vL/D} - 1)$.
+**Exercise 4.** Solve $`v\,du/dx = D\,d^2u/dx^2`$ on $[0, 1]$ with $u(0) = 1$, $u(1) = 0$, $v = 0.1$ m/s and $D = 0.1$ m²/s, using 5 cells and central differencing. Boundary faces use the boundary value for convection and a half-cell distance for diffusion. Compare with the exact solution $u = 1 - (e^{vx/D} - 1)/(e^{vL/D} - 1)$.
 
 <details>
 <summary>Answer</summary>
@@ -186,8 +186,8 @@ Two fixes: refine to $\Delta x < 0.01$ m, or use an upwind (or bounded high-reso
 $\Delta x = 0.2$, so $D/\Delta x = 0.5$ and $Pe_\Delta = 0.2$. The coefficients are:
 
 - Interior cells: $a_W = 0.55$, $a_E = 0.45$, $a_P = 1.0$.
-- Cell 1: $1.55\,u_1 - 0.45\,u_2 = 1.1\,u(0)$.
-- Cell 5: $1.45\,u_5 - 0.55\,u_4 = 0.9\,u(1) = 0$.
+- Cell 1: $`1.55\,u_1 - 0.45\,u_2 = 1.1\,u(0)`$.
+- Cell 5: $`1.45\,u_5 - 0.55\,u_4 = 0.9\,u(1) = 0`$.
 
 | $x$ | FVM (central) | exact |
 | --- | --- | --- |

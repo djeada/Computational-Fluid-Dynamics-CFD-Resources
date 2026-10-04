@@ -80,17 +80,17 @@ $$
 
 **General distributed load** $w(x)$:
 
-$$
+```math
 R = \int_0^L w(x)\, dx, \quad \bar{x} = \frac{\int_0^L x\,w(x)\,dx}{\int_0^L w(x)\,dx}
-$$
+```
 
 ### Applied Moments (Couples)
 
 External torques or couples applied directly to the body:
 
-$$
+```math
 \mathbf{M} = M\,\hat{\mathbf{k}}
-$$
+```
 
 These appear as curved arrows on the FBD and represent pure rotational effects without a net force.
 

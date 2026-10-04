@@ -27,7 +27,7 @@ u(0) = 0,
 \qquad u(\delta) = U_\infty
 $$
 
-In this profile $u$ equals $U_\infty$ exactly at $y = \delta$. This differs from the usual $u = 0.99\,U_\infty$ definition of $\delta$.
+In this profile $u$ equals $U_\infty$ exactly at $y = \delta$. This differs from the usual $`u = 0.99\,U_\infty`$ definition of $\delta$.
 
 ### Limitation at the Wall
 
@@ -37,7 +37,7 @@ $$
 \frac{\partial u}{\partial y} = \frac{U_\infty}{7\delta}\left(\frac{y}{\delta}\right)^{-6/7}
 $$
 
-is infinite at $y = 0$, so the power law cannot give the wall shear stress $\tau_w = \mu\,(\partial u/\partial y)_{y=0}$. In practice $\tau_w$ comes from an empirical skin-friction correlation used together with the power law, for example $C_f \approx 0.0592\,\mathrm{Re}_x^{-1/5}$. The script does not compute this. The steep rise near the wall is why the script samples the profile at 1000 points.
+is infinite at $y = 0$, so the power law cannot give the wall shear stress $`\tau_w = \mu\,(\partial u/\partial y)_{y=0}`$. In practice $\tau_w$ comes from an empirical skin-friction correlation used together with the power law, for example $`C_f \approx 0.0592\,\mathrm{Re}_x^{-1/5}`$. The script does not compute this. The steep rise near the wall is why the script samples the profile at 1000 points.
 
 ## Implementation
 

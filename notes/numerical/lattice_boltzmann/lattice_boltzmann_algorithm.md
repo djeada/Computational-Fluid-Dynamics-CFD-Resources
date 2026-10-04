@@ -14,7 +14,7 @@ LBM operates at an intermediate scale: it does not simulate individual molecules
 
 III. **Discrete Velocities and Lattice Grids**:
 
-The method discretizes the domain into a lattice (grid) and assigns a finite set of discrete velocities $\{c_i\}$. At each lattice point, we track distribution functions $f_i(x,t)$ corresponding to each discrete velocity $c_i$.
+The method discretizes the domain into a lattice (grid) and assigns a finite set of discrete velocities $`\{c_i\}`$. At each lattice point, we track distribution functions $f_i(x,t)$ corresponding to each discrete velocity $c_i$.
 
 ## Lattice-Boltzmann Equation
 
@@ -46,7 +46,7 @@ Evolve the solution in discrete time steps $\Delta t$.
 
 III. **Velocity Space Discretization**:
 
-Replace the continuous velocity space with a finite, discrete set of velocities $\{c_i\}_{i=1}^Q$. Typical sets are chosen to ensure isotropy and correct recovery of Navier-Stokes equations.
+Replace the continuous velocity space with a finite, discrete set of velocities $`\{c_i\}_{i=1}^Q`$. Typical sets are chosen to ensure isotropy and correct recovery of Navier-Stokes equations.
 
 **Common Discrete Velocity Sets**:
 
@@ -255,12 +255,12 @@ Below, we detail each step with a focus on hands-on implementation aspects, assu
 
 #### 2. Choose a Discrete Velocity Set
 
-For a 2D simulation, the D2Q9 model is common. The discrete velocities $\{c_i\}$ for D2Q9 are:
+For a 2D simulation, the D2Q9 model is common. The discrete velocities $`\{c_i\}`$ for D2Q9 are:
 
-$$
+```math
 c_i \in \{(0,0), (1,0), (-1,0), (0,1), (0, - 1), (1,1), (-1,1), (1, - 1), (-1, - 1)\}
 \times c_l
-$$
+```
 
 with $c_l = \Delta x/\Delta t$. This gives 9 discrete directions (including rest).
 
@@ -302,7 +302,7 @@ At each time step:
 
 I. **Collision Step**:
 
-- For each lattice cell (x,y):
+- For each lattice cell $(x,y)$:
 - Compute local $\rho, u_x, u_y$.
 - Compute equilibrium distributions $f_i^{\text{eq}}$.
 - Relax towards equilibrium:
@@ -314,7 +314,7 @@ $$
 II. **Streaming Step**:
 
 - Move the post-collision distributions along $c_i$:
-- For each $i$, for each cell (x,y):
+- For each $i$, for each cell $(x,y)$:
 - Compute new coordinates: $x' = x + c_{ix}, y' = y + c_{iy}$.
 - If $(x',y')$ is within the domain, set:
 
@@ -349,7 +349,7 @@ where $\bar{i}$ is the opposite velocity direction of $i$.
 
 After streaming (and before the next collision step):
 
-- For each cell (x,y):
+- For each cell $(x,y)$:
 - $\rho(x,y) = \sum_i f_i(x,y)$
 - $\rho u_x(x,y) = \sum_i f_i(x,y) c_{ix}$
 - $\rho u_y(x,y) = \sum_i f_i(x,y) c_{iy}$
@@ -435,7 +435,7 @@ This note is a comprehensive implementation guide for the LBM algorithm. It cove
 
 | Aspect | Details |
 | --- | --- |
-| **Inputs** | Domain size $N_x \times N_y$, lattice spacing $\Delta x$, time step $\Delta t$, relaxation time $\tau$, initial density $\rho_0$ and velocity $\mathbf{u}_0$, boundary condition types, maximum iterations $T_{\max}$ |
+| **Inputs** | Domain size $N_x \times N_y$, lattice spacing $\Delta x$, time step $\Delta t$, relaxation time $\tau$, initial density $\rho_0$ and velocity $`\mathbf{u}_0`$, boundary condition types, maximum iterations $`T_{\max}`$ |
 | **Outputs** | Density field $\rho(x,t)$, velocity field $\mathbf{u}(x,t)$, pressure (from $\rho$), vorticity, residual/convergence history, saved fields for visualization (VTK/HDF5) |
 
 ## Related Scripts
@@ -461,9 +461,9 @@ This note is a comprehensive implementation guide for the LBM algorithm. It cove
 <details>
 <summary>Answer</summary>
 
-$\nu_{\text{lb}} = c_s^2(\tau/\Delta t - 1/2) = (0.8 - 0.5)/3 = 0.1$. Since $\nu = \nu_{\text{lb}} \, \Delta x^2/\Delta t$, this corresponds to $\nu = 0.1 \times 10^{-6}/10^{-4} = 1.0 \times 10^{-3}$ m²/s.
+$\nu_{\text{lb}} = c_s^2(\tau/\Delta t - 1/2) = (0.8 - 0.5)/3 = 0.1$. Since $`\nu = \nu_{\text{lb}} \, \Delta x^2/\Delta t`$, this corresponds to $\nu = 0.1 \times 10^{-6}/10^{-4} = 1.0 \times 10^{-3}$ m²/s.
 
-For water, $\nu_{\text{lb}} = \nu \, \Delta t/\Delta x^2 = 10^{-6} \times 10^{-4}/10^{-6} = 10^{-4}$, so $\tau/\Delta t = 0.5 + 3 \times 10^{-4} = 0.5003$. This is extremely close to the BGK stability limit of $1/2$. In practice one refines $\Delta x$, changes $\Delta t$ (which also changes the lattice Mach number), or uses a more robust collision operator.
+For water, $`\nu_{\text{lb}} = \nu \, \Delta t/\Delta x^2 = 10^{-6} \times 10^{-4}/10^{-6} = 10^{-4}`$, so $\tau/\Delta t = 0.5 + 3 \times 10^{-4} = 0.5003$. This is extremely close to the BGK stability limit of $1/2$. In practice one refines $\Delta x$, changes $\Delta t$ (which also changes the lattice Mach number), or uses a more robust collision operator.
 
 </details>
 
@@ -483,7 +483,7 @@ For $\mathrm{Re} = 1000$: $\nu_{\text{lb}} = 0.002$ and $\tau = 0.506$, too clos
 <details>
 <summary>Answer</summary>
 
-With $c_s^2 = 1/3$, the bracket is $1 + 3(c_i \cdot u) + 4.5(c_i \cdot u)^2 - 1.5\,u \cdot u$, and $u \cdot u = 0.01$.
+With $c_s^2 = 1/3$, the bracket is $`1 + 3(c_i \cdot u) + 4.5(c_i \cdot u)^2 - 1.5\,u \cdot u`$, and $u \cdot u = 0.01$.
 
 | $c_i$ | $w_i$ | $c_i \cdot u$ | $f_i^{\text{eq}}$ |
 | --- | --- | --- | --- |
@@ -500,7 +500,7 @@ With $c_s^2 = 1/3$, the bracket is $1 + 3(c_i \cdot u) + 4.5(c_i \cdot u)^2 - 1.
 
 </details>
 
-**Exercise 5.** A body-force-driven channel (plane Poiseuille flow) has width $H = 50$ lattice units, $\tau = 0.8$ and body acceleration $g = 10^{-5}$ (lattice units). Solving $\nu \, d^2u/dy^2 = -g$ with no-slip walls gives $u(y) = g\,y(H - y)/(2\nu)$. Compute $u_{\max}$, the lattice Mach number based on $u_{\max}$, and the Reynolds number based on the mean velocity and $H$. Is this a good validation case for the scheme?
+**Exercise 5.** A body-force-driven channel (plane Poiseuille flow) has width $H = 50$ lattice units, $\tau = 0.8$ and body acceleration $g = 10^{-5}$ (lattice units). Solving $`\nu \, d^2u/dy^2 = -g`$ with no-slip walls gives $`u(y) = g\,y(H - y)/(2\nu)`$. Compute $u_{\max}$, the lattice Mach number based on $u_{\max}$, and the Reynolds number based on the mean velocity and $H$. Is this a good validation case for the scheme?
 
 <details>
 <summary>Answer</summary>

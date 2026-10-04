@@ -54,9 +54,9 @@ When a surface (like a dam wall or plate) is submerged, the fluid pressure **pus
 
 **Vertical (or inclined) plate:** pressure **varies with depth**, so the force must be found via integration:
 
-$$
+```math
 F = \int_{A} p \, dA
-$$
+```
 
 #### Example: Vertical Rectangular Plate
 
@@ -83,9 +83,9 @@ $$
 
 Taking $p_0$ as atmospheric pressure, which also acts on the dry side of the plate and cancels, only the gauge pressure $\rho g h$ contributes:
 
-$$
+```math
 F = \int_{h_1}^{h_2} \rho g h \, b \, dh
-$$
+```
 
 $$
 F = \rho g b \left[\frac{h^2}{2}\right]_{h_1}^{h_2}
@@ -122,14 +122,14 @@ $$
 
 Beyond buoyancy, **stability** addresses whether a floating body will **return** to equilibrium when tilted or disturbed.
 
-- **Center of gravity (G)**: where an object’s mass is concentrated.
-- **Center of buoyancy (B)**: the centroid of the displaced fluid volume.
+- **Center of gravity ($G$)**: where an object’s mass is concentrated.
+- **Center of buoyancy ($B$)**: the centroid of the displaced fluid volume.
 
-When the body tilts, **B** may shift. If **B** moves in such a way that a **restoring moment** forms (i.e., tries to push the body upright), the body is stable.
+When the body tilts, **$B$** may shift. If **$B$** moves in such a way that a **restoring moment** forms (i.e., tries to push the body upright), the body is stable.
 
 ##### Metacentric Height
 
-For many ship-like objects, we analyze stability via the **metacentric height (GM)**:
+For many ship-like objects, we analyze stability via the **metacentric height ($GM$)**:
 
 - A large positive $GM$ implies strong stability.
 - A small or negative $GM$ means the object can easily tip or capsize.

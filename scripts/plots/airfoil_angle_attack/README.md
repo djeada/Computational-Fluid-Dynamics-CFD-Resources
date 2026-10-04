@@ -15,18 +15,18 @@ This script draws a NACA 2412 airfoil pitched nose-up about its leading edge to 
 
 ### Camber Line
 
-$$
+```math
 y_c = \begin{cases} \dfrac{m c}{p^2}\left(2p\dfrac{x}{c} - \left(\dfrac{x}{c}\right)^2\right), & x < pc, \\ \dfrac{m c}{(1-p)^2}\left((1-2p) + 2p\dfrac{x}{c} - \left(\dfrac{x}{c}\right)^2\right), & x \geq pc. \end{cases}
-$$
+```
 
 ### Thickness Distribution
 
-$$
+```math
 y_t = \frac{t}{0.2}\,
 c\left(0.2969 \sqrt{\frac{x}{c}} - 0.1260 \frac{x}{c} -
 0.3516\left(\frac{x}{c}\right)^{2} + 0.2843\left(\frac{x}{c}\right)^{3} -
 0.1015\left(\frac{x}{c}\right)^{4}\right)
-$$
+```
 
 ### Surfaces
 
@@ -41,11 +41,11 @@ $$
 
 The free stream flows in the $+x$ direction. A positive angle of attack $\alpha$ is therefore a clockwise rotation about the leading edge at the origin:
 
-$$
+```math
 \begin{pmatrix}x'\\ y'\end{pmatrix} = \begin{pmatrix}\cos\alpha & \sin\alpha\\ -\sin\alpha & \cos\alpha\end{pmatrix}\begin{pmatrix}x\\ y\end{pmatrix}
-$$
+```
 
-This moves the trailing edge to $(c\cos\alpha,\, -c\sin\alpha)$.
+This moves the trailing edge to $`(c\cos\alpha,\, -c\sin\alpha)`$.
 
 ### Context
 

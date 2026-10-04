@@ -5,7 +5,7 @@ This script computes the volumetric flow rate $Q = \pi r^2 v$ of a circular pipe
 ## Overview
 
 - Takes the pipe radius $r$ (0.1 m), velocity $v$ (2 m/s), and length $L$ (5 m) as function arguments
-- Computes the cross-sectional area $A = \pi r^2$ and the flow rate $Q = A\,v$
+- Computes the cross-sectional area $A = \pi r^2$ and the flow rate $`Q = A\,v`$
 - Draws the pipe as a grey rectangle of height $2r$ and length $L$, labelled "Inlet" and "Outlet" at its ends
 - Fills the pipe with a grid of blue arrows (8 columns × 5 rows) whose length is proportional to $v$
 - Lists $r$, $L$, $v$, $A$, and $Q$ in a text block below the pipe
@@ -20,9 +20,9 @@ $$
 
 ### Volumetric Flow Rate
 
-$$
+```math
 Q = A\, v = \pi r^2 v \quad [\text{m}^3/ \text{s}]
-$$
+```
 
 For the defaults, $A = \pi (0.1)^2 = 0.0314\ \text{m}^2$ and $Q = 0.0628\ \text{m}^3/\text{s}$.
 
@@ -34,7 +34,7 @@ $$
 u(r') = v \quad \text{for } 0 \le r' \le r
 $$
 
-For a real, non-uniform profile the same formula holds if $v$ is the area-averaged velocity $\bar{u} = \frac{1}{A}\int_A u\, dA$. A laminar Hagen–Poiseuille profile, for example, has $\bar{u} = u_{\max}/2$. If the density $\rho$ is known, the mass flow rate is $\dot{m} = \rho Q$; the script does not compute it.
+For a real, non-uniform profile the same formula holds if $v$ is the area-averaged velocity $`\bar{u} = \frac{1}{A}\int_A u\, dA`$. A laminar Hagen–Poiseuille profile, for example, has $\bar{u} = u_{\max}/2$. If the density $\rho$ is known, the mass flow rate is $\dot{m} = \rho Q$; the script does not compute it.
 
 ## Implementation
 

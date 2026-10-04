@@ -6,9 +6,9 @@ The Proportional-Integral-Derivative (PID) controller is the most widely used co
 
 The standard (parallel) PID controller is:
 
-$$
+```math
 u(t) = K_p e(t) + K_i \int_0^t e(\tau)\, d\tau + K_d \frac{de(t)}{dt}
-$$
+```
 
 where $e(t) = r(t) - y(t)$ is the error signal.
 
@@ -79,11 +79,11 @@ $$
 
 | Controller | $K_p$ | $T_i$ | $T_d$ |
 | --- | --- | --- | --- |
-| P | $0.50\, K_u$ | — | — |
-| PI | $0.45\, K_u$ | $T_u / 1.2$ | — |
-| PID | $0.60\, K_u$ | $T_u / 2$ | $T_u / 8$ |
+| P | $`0.50\, K_u`$ | — | — |
+| PI | $`0.45\, K_u`$ | $T_u / 1.2$ | — |
+| PID | $`0.60\, K_u`$ | $T_u / 2$ | $T_u / 8$ |
 
-These rules give a quarter-decay ratio (overshoot decays by 75% each cycle), which is often too aggressive. A common modification is to use $K_p = 0.33\,K_u$ for less oscillatory response.
+These rules give a quarter-decay ratio (overshoot decays by 75% each cycle), which is often too aggressive. A common modification is to use $`K_p = 0.33\,K_u`$ for less oscillatory response.
 
 ### Ziegler-Nichols Step Response Method
 
@@ -98,8 +98,8 @@ where $L$ is the apparent dead time and $T$ is the time constant, both estimated
 | Controller | $K_p$ | $T_i$ | $T_d$ |
 | --- | --- | --- | --- |
 | P | $T/(K_p L)$ | — | — |
-| PI | $0.9\,T/(K_p L)$ | $3.33\,L$ | — |
-| PID | $1.2\,T/(K_p L)$ | $2\,L$ | $0.5\,L$ |
+| PI | $`0.9\,T/(K_p L)`$ | $`3.33\,L`$ | — |
+| PID | $`1.2\,T/(K_p L)`$ | $`2\,L`$ | $`0.5\,L`$ |
 
 ### Cohen-Coon Method
 
@@ -124,17 +124,17 @@ When the actuator saturates, the integrator continues to accumulate error, causi
 
 Stop integrating when the actuator is saturated:
 
-$$
+```math
 \text{If } |u| \geq u_{max}: \quad \text{freeze } \int e\, d\tau
-$$
+```
 
 ### Back-Calculation
 
 Feed back the difference between the controller output and the actual (saturated) actuator output:
 
-$$
+```math
 \frac{d}{dt}\int e\, d\tau = e(t) + \frac{1}{T_t}\big(u_{sat} - u\big)
-$$
+```
 
 where $T_t$ is the tracking time constant, typically $T_t = \sqrt{T_i T_d}$.
 
@@ -148,16 +148,16 @@ In a sampled-data system with sampling period $T_s$, the continuous PID is discr
 
 ### Position Form
 
-$$
+```math
 u[k] = K_p\, e[k] + K_i T_s \sum_{j=0}^{k} e[j] + K_d \frac{e[k] - e[k-1]}{T_s}
-$$
+```
 
 ### Velocity (Incremental) Form
 
-$$
+```math
 \Delta u[k] = u[k] - u[k - 1] = K_p(e[k] - e[k - 1]) + K_i T_s\, e[k] + K_d
 \frac{e[k] - 2e[k-1] + e[k-2]}{T_s}
-$$
+```
 
 **Advantages of velocity form**: bumpless transfer between manual/automatic modes, inherent anti-windup, and direct output limiting.
 
@@ -181,9 +181,9 @@ where $T_d = K_d / K_p$ and $N$ is the filter coefficient, typically $N = 8$ to 
 
 To reduce overshoot from setpoint changes while maintaining disturbance rejection:
 
-$$
+```math
 u(t) = K_p(b\, r - y) + K_i \int(r - y)\, d\tau + K_d \frac{d(c\, r - y)}{dt}
-$$
+```
 
 where $b \in [0,1]$ and $c \in [0,1]$ are weighting factors. Setting $b < 1$ reduces proportional kick; setting $c = 0$ avoids derivative kick.
 
@@ -201,7 +201,7 @@ and couple it with anti-windup to prevent integrator accumulation during saturat
 
 ### Example 1: Temperature Control
 
-**Given**: A thermal process modeled as FOPDT: $G(s) = \frac{2\, e^{-3s}}{10s + 1}$ (gain = 2 °C/%, dead time $L = 3$ s, time constant $T = 10$ s).
+**Given**: A thermal process modeled as FOPDT: $`G(s) = \frac{2\, e^{-3s}}{10s + 1}`$ (gain = 2 °C/%, dead time $L = 3$ s, time constant $T = 10$ s).
 
 **Find**: PID parameters using Ziegler-Nichols step response method.
 
@@ -209,27 +209,27 @@ and couple it with anti-windup to prevent integrator accumulation during saturat
 
 Using $K_p = 2$, $L = 3$, $T = 10$:
 
-$$
+```math
 K_p = \frac{1.2\, T}{K_p L} = \frac{1.2 \times 10}{2 \times 3} = 2.0
-$$
+```
 
-$$
+```math
 T_i = 2L = 6\; \text{s}
-$$
+```
 
-$$
+```math
 T_d = 0.5L = 1.5\; \text{s}
-$$
+```
 
 Converting to parallel form:
 
-$$
+```math
 K_i = \frac{K_p}{T_i} = \frac{2.0}{6} = 0.333\; \text{s}^{-1}
-$$
+```
 
-$$
+```math
 K_d = K_p \cdot T_d = 2.0 \times 1.5 = 3.0\; \text{s}
-$$
+```
 
 The controller is: $C(s) = 2.0 + \frac{0.333}{s} + 3.0s$.
 
@@ -245,17 +245,17 @@ Tracking time constant: $T_t = \sqrt{T_i T_d} = \sqrt{(K_p/K_i)(K_d/K_p)} = \sqr
 
 Digital implementation at $T_s = 0.01$ s:
 
-$$
+```math
 u_{raw}[k] = K_p\, e[k] + I[k] + K_d \frac{e[k] - e[k-1]}{T_s}
-$$
+```
 
-$$
+```math
 u_{sat}[k] = \text{clamp}(u_{raw}[k],\, - 12,\, 12)
-$$
+```
 
-$$
+```math
 I[k + 1] = I[k] + K_i T_s\, e[k] + \frac{T_s}{T_t}(u_{sat}[k] - u_{raw}[k])
-$$
+```
 
 The back-calculation term $\frac{T_s}{T_t}(u_{sat} - u_{raw})$ prevents the integrator from growing when the output is clamped, ensuring fast recovery from saturation.
 
@@ -271,17 +271,17 @@ Ultimate gain: $K_u = \frac{4d}{\pi a} = \frac{4 \times 1}{\pi \times 0.5} = \fr
 
 Apply Ziegler-Nichols PID rules:
 
-$$
+```math
 K_p = 0.6\, K_u = 0.6 \times 2.55 = 1.53
-$$
+```
 
-$$
+```math
 T_i = T_u / 2 = 2.0\; \text{s} \implies K_i = K_p / T_i = 0.765\; \text{s}^{-1}
-$$
+```
 
-$$
+```math
 T_d = T_u / 8 = 0.5\; \text{s} \implies K_d = K_p \cdot T_d = 0.765\; \text{s}
-$$
+```
 
 ## Applications
 
@@ -301,7 +301,7 @@ $$
 
 ## Exercises
 
-**Exercise 1.** A parallel PID controller has $K_p = 4$, $K_i = 2\;\text{s}^{-1}$ and $K_d = 0.5$ s. Convert it to the ideal form $K_p(1 + \frac{1}{T_i s} + T_d s)$. If the closed-loop response overshoots too much, which gain changes does the summary table suggest?
+**Exercise 1.** A parallel PID controller has $K_p = 4$, $`K_i = 2\;\text{s}^{-1}`$ and $K_d = 0.5$ s. Convert it to the ideal form $K_p(1 + \frac{1}{T_i s} + T_d s)$. If the closed-loop response overshoots too much, which gain changes does the summary table suggest?
 
 <details>
 <summary>Answer</summary>
@@ -317,9 +317,9 @@ To reduce overshoot: increase $K_d$ (more damping), or reduce $K_i$ and/or $K_p$
 <details>
 <summary>Answer</summary>
 
-PI: $K_p = 0.45 \times 8 = 3.6$, $T_i = T_u/1.2 = 2.08$ s, so $K_i = K_p/T_i = 1.73\;\text{s}^{-1}$.
+PI: $K_p = 0.45 \times 8 = 3.6$, $T_i = T_u/1.2 = 2.08$ s, so $`K_i = K_p/T_i = 1.73\;\text{s}^{-1}`$.
 
-PID: $K_p = 0.6 \times 8 = 4.8$, $T_i = T_u/2 = 1.25$ s, $T_d = T_u/8 = 0.3125$ s, so $K_i = 4.8/1.25 = 3.84\;\text{s}^{-1}$ and $K_d = 4.8 \times 0.3125 = 1.5$ s.
+PID: $K_p = 0.6 \times 8 = 4.8$, $T_i = T_u/2 = 1.25$ s, $T_d = T_u/8 = 0.3125$ s, so $`K_i = 4.8/1.25 = 3.84\;\text{s}^{-1}`$ and $K_d = 4.8 \times 0.3125 = 1.5$ s.
 
 </details>
 
@@ -363,7 +363,7 @@ Well below the corner the filter acts as a true derivative. At high frequency it
 
 </details>
 
-**Exercise 5.** A velocity-form PID with $K_p = 2$, $K_i = 0.5\;\text{s}^{-1}$, $K_d = 0.1$ s and $T_s = 0.1$ s has error samples $e[k-2] = 1.0$, $e[k-1] = 0.8$ and $e[k] = 0.5$. Compute $\Delta u[k]$. Explain why the velocity form has built-in protection against integral windup when the actuator saturates.
+**Exercise 5.** A velocity-form PID with $K_p = 2$, $`K_i = 0.5\;\text{s}^{-1}`$, $K_d = 0.1$ s and $T_s = 0.1$ s has error samples $e[k-2] = 1.0$, $e[k-1] = 0.8$ and $e[k] = 0.5$. Compute $\Delta u[k]$. Explain why the velocity form has built-in protection against integral windup when the actuator saturates.
 
 <details>
 <summary>Answer</summary>

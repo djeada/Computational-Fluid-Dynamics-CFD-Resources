@@ -8,11 +8,11 @@ The core idea behind RBF interpolation is to construct a surrogate model $\hat{y
 
 A general RBF surrogate takes the form:
 
-$$
+```math
 \hat{y}(x): = \sum_{i=1}^{N} w_i R(\| x - x^{(i)} \|)
-$$
+```
 
-where $\| \cdot \|$ is typically the Euclidean norm, and the centers $x^{(i)}$ correspond to the known sample locations. In principle, one could also choose different centers $c^{(i)}$ not coinciding with the sample points, but the standard approach sets centers equal to sample locations for simplicity.
+where $`\| \cdot \|`$ is typically the Euclidean norm, and the centers $x^{(i)}$ correspond to the known sample locations. In principle, one could also choose different centers $c^{(i)}$ not coinciding with the sample points, but the standard approach sets centers equal to sample locations for simplicity.
 
 ## Interpolation Conditions and Solving for the Weights
 
@@ -24,9 +24,9 @@ $$
 
 Substituting into the surrogate model yields a system of linear equations:
 
-$$
+```math
 \sum_{j=1}^{N} w_j R(\| x^{(i)} - x^{(j)} \|) = y_i, \quad i = 1,\ldots,N
-$$
+```
 
 which can be written in matrix form as:
 
@@ -36,16 +36,16 @@ $$
 
 where:
 
-$$
+```math
 R: = [R(\| x^{(i)} - x^{(j)} \|)]_{i,j=1}^{N,N} \quad \text{and} \quad
 w: = (w_1, \ldots, w_N)^T, \quad Y: = (y_1, \ldots, y_N)^T
-$$
+```
 
 Provided that $R$ is nonsingular, this system can be solved for the weights $w$. Nonsingularity typically requires distinct sample points $(x^{(i)} \neq x^{(j)} \text{ for } i \neq j)$.
 
 ## Types of Radial Basis Functions
 
-RBF methods allow great flexibility through the choice of the radial function $R(h)$, where $h = \|x - x'\|$.
+RBF methods allow great flexibility through the choice of the radial function $R(h)$, where $`h = \|x - x'\|`$.
 
 Some popular choices include:
 
@@ -110,13 +110,13 @@ The figure shows an RBF interpolation using polyharmonic splines on a set of dat
 
 ## Purpose in CFD
 
-RBF interpolation provides a flexible, mesh-free surrogate that can handle scattered sample points in high-dimensional design spaces. This note defines the RBF model $\hat{y}(x) = \sum w_i R(\|x - x^{(i)}\|)$, catalogs common basis functions (Gaussian, multiquadric, inverse multiquadric, polyharmonic splines), discusses the scaling parameter and its effect, and explains how to solve for the weights. RBF surrogates are widely used for aerodynamic shape optimization and response-surface modeling in CFD.
+RBF interpolation provides a flexible, mesh-free surrogate that can handle scattered sample points in high-dimensional design spaces. This note defines the RBF model $`\hat{y}(x) = \sum w_i R(\|x - x^{(i)}\|)`$, catalogs common basis functions (Gaussian, multiquadric, inverse multiquadric, polyharmonic splines), discusses the scaling parameter and its effect, and explains how to solve for the weights. RBF surrogates are widely used for aerodynamic shape optimization and response-surface modeling in CFD.
 
 ## Input / Output
 
 | Aspect | Details |
 | --- | --- |
-| **Inputs** | Sample points $\{x^{(i)}\}_{i=1}^N$, observations $Y$, choice of radial function $R(\cdot)$, scaling parameter $c$ |
+| **Inputs** | Sample points $`\{x^{(i)}\}_{i=1}^N`$, observations $Y$, choice of radial function $R(\cdot)$, scaling parameter $c$ |
 | **Outputs** | Weight vector $w = R^{-1}Y$, surrogate prediction $\hat{y}(x)$ at new points, interpolation system matrix $R$ |
 
 ## Related Scripts
@@ -132,7 +132,7 @@ RBF interpolation provides a flexible, mesh-free surrogate that can handle scatt
 <details>
 <summary>Answer</summary>
 
-$R = \begin{pmatrix} 1 & e^{-1} \\ e^{-1} & 1 \end{pmatrix}$ with $\det R = 1 - e^{-2} = 0.8647$. Then
+$`R = \begin{pmatrix} 1 & e^{-1} \\ e^{-1} & 1 \end{pmatrix}`$ with $\det R = 1 - e^{-2} = 0.8647$. Then
 
 ```math
 w = R^{-1}Y = \frac{1}{1 - e^{-2}}\begin{pmatrix} 1 - 2e^{-1} \\ 2 - e^{-1} \end{pmatrix} = \begin{pmatrix} 0.3056 \\ 1.8876 \end{pmatrix}
@@ -170,7 +170,7 @@ gives $w = 0$ and $(c_0, c_1) = (0, 2)$, so $\hat{y}(x) = 2x$ exactly and $\hat{
 
 </details>
 
-**Exercise 4.** Show that the Gaussian RBF matrix $R_{ij} = \exp(-\theta^2(x_i - x_j)^2)$ is positive definite for distinct points $x_1, \ldots, x_N \in \mathbb{R}$, so the interpolation system always has a unique solution. Use the Fourier representation $e^{-\theta^2 h^2} = \frac{1}{2\theta\sqrt{\pi}}\int_{-\infty}^{\infty} e^{-\omega^2/(4\theta^2)}\,e^{i\omega h}\,d\omega$.
+**Exercise 4.** Show that the Gaussian RBF matrix $R_{ij} = \exp(-\theta^2(x_i - x_j)^2)$ is positive definite for distinct points $x_1, \ldots, x_N \in \mathbb{R}$, so the interpolation system always has a unique solution. Use the Fourier representation $`e^{-\theta^2 h^2} = \frac{1}{2\theta\sqrt{\pi}}\int_{-\infty}^{\infty} e^{-\omega^2/(4\theta^2)}\,e^{i\omega h}\,d\omega`$.
 
 <details>
 <summary>Answer</summary>

@@ -348,7 +348,7 @@ Hydraulic and pneumatic systems provide versatile, powerful, and controllable me
 
 Volume conservation $A_1 x_1 = A_2 x_2$ with $A_2/A_1 = 100$ gives $x_2 = 50/100 = 0.5$ mm per stroke, so a 20 mm rise takes $20/0.5 = 40$ strokes.
 
-Work per stroke: input $500 \times 0.050 = 25$ J, output $50\,000 \times 0.0005 = 25$ J. The hundredfold force gain is paid for with a hundredfold loss of displacement.
+Work per stroke: input $500 \times 0.050 = 25$ J, output $`50\,000 \times 0.0005 = 25`$ J. The hundredfold force gain is paid for with a hundredfold loss of displacement.
 
 </details>
 
@@ -386,7 +386,7 @@ n = \frac{Q}{V_d}\eta_v = \frac{50\,000 \text{ cm}^3\text{/min}}{40 \text{ cm}^3
 0.94 = 1175 \text{ rpm}
 ```
 
-Output power: $T\omega = 103.1 \times (1175 \times 2\pi/60) = 12.69$ kW. Hydraulic input: $\Delta p\, Q = 18 \times 10^6 \times 8.333 \times 10^{-4} = 15.0$ kW. Overall efficiency: $12.69/15.0 = 0.846$, which equals $\eta_v \eta_m$.
+Output power: $T\omega = 103.1 \times (1175 \times 2\pi/60) = 12.69$ kW. Hydraulic input: $`\Delta p\, Q = 18 \times 10^6 \times 8.333 \times 10^{-4} = 15.0`$ kW. Overall efficiency: $12.69/15.0 = 0.846$, which equals $\eta_v \eta_m$.
 
 </details>
 

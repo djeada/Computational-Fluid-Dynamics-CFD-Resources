@@ -1,12 +1,12 @@
 # Velocity Layers and Viscosity
 
-This script draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $\tau = \mu\, du/dy$. Each layer is a horizontal bar whose length equals its velocity, so the bars form a stepped velocity profile, and the velocity gradient between neighbouring layers is labelled at each interface.
+This script draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $`\tau = \mu\, du/dy`$. Each layer is a horizontal bar whose length equals its velocity, so the bars form a stepped velocity profile, and the velocity gradient between neighbouring layers is labelled at each interface.
 
 ## Overview
 
 - Draws three layers, slow (bottom), medium (middle) and fast (top), with velocities 0, 5 and 10 in arbitrary units, as bars of matching length in three shades of blue.
 - Labels each bar with its velocity ("V = ...") using an arrow to the end of the bar.
-- Draws the two layer interfaces as dashed lines and labels each with its velocity gradient $\Delta V/\Delta y = 5$ (from layer centre to layer centre) and the relation $\tau = \mu\, du/dy$.
+- Draws the two layer interfaces as dashed lines and labels each with its velocity gradient $\Delta V/\Delta y = 5$ (from layer centre to layer centre) and the relation $`\tau = \mu\, du/dy`$.
 - Points to the upper interface with a red "Velocity gradient (viscous forces)" label.
 - Adds a legend listing each layer and its velocity.
 

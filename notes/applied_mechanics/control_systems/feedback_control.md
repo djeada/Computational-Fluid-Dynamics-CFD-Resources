@@ -198,7 +198,7 @@ $$
 
 ### Example 2: Lead Compensator Design
 
-**Given**: Plant $G(s) = \frac{4}{s(s+2)}$ in unity feedback. Desired phase margin $\geq 45^\circ$ with $K_v \geq 20\;\text{s}^{-1}$.
+**Given**: Plant $G(s) = \frac{4}{s(s+2)}$ in unity feedback. Desired phase margin $\geq 45^\circ$ with $`K_v \geq 20\;\text{s}^{-1}`$.
 
 **Find**: Lead compensator parameters.
 
@@ -210,7 +210,7 @@ $$
 K_v = \lim_{s\to 0} s \cdot K_c \frac{Ts+1}{\alpha Ts+1} \cdot \frac{4}{s(s+2)} = 2K_c
 $$
 
-so $K_c = 10$ gives $K_v = 20\;\text{s}^{-1}$. (In the pole-zero form $K_c' \frac{s+z}{s+p}$ the DC gain is $K_c' z/p$, so the gain must be raised to $K_c' = K_c/\alpha$.)
+so $K_c = 10$ gives $`K_v = 20\;\text{s}^{-1}`$. (In the pole-zero form $K_c' \frac{s+z}{s+p}$ the DC gain is $K_c' z/p$, so the gain must be raised to $K_c' = K_c/\alpha$.)
 
 **Step 2** — Evaluate uncompensated system $10 \cdot \frac{4}{s(s+2)} = \frac{40}{s(s+2)}$.
 
@@ -290,9 +290,9 @@ There is no free integrator, so the system is Type 0. The position error constan
 <details>
 <summary>Answer</summary>
 
-At DC the sensitivity is $S_G^T = \frac{1}{1 + G(0)} = \frac{1}{11} = 0.0909$, so a 10% change in $G$ gives roughly $0.0909 \times 10\% \approx 0.91\%$ change in $T$.
+At DC the sensitivity is $S_G^T = \frac{1}{1 + G(0)} = \frac{1}{11} = 0.0909$, so a 10% change in $G$ gives roughly $`0.0909 \times 10\% \approx 0.91\%`$ change in $T$.
 
-Exact: $T(0) = 10/11 = 0.9091$ before and $11/12 = 0.9167$ after, a change of $0.83\%$. The small difference arises because the sensitivity is a first-order (small-change) result. Without feedback the DC gain would change by the full 10%.
+Exact: $T(0) = 10/11 = 0.9091$ before and $11/12 = 0.9167$ after, a change of $`0.83\%`$. The small difference arises because the sensitivity is a first-order (small-change) result. Without feedback the DC gain would change by the full 10%.
 
 </details>
 
@@ -309,7 +309,7 @@ Exact: $T(0) = 10/11 = 0.9091$ before and $11/12 = 0.9167$ after, a change of $0
 \omega_m = \frac{1}{T\sqrt{\alpha}} = \frac{1}{0.5\sqrt{0.1}} = 6.32 \text{ rad/s}
 ```
 
-At $\omega_m$ the gain is $1/\sqrt{\alpha} = 3.16$, i.e. 10 dB. At high frequency the gain tends to $1/\alpha = 10$ (20 dB), so sensor noise above the crossover is amplified tenfold. This is why lead compensation is usually limited to $\alpha \gtrsim 0.05$–$0.1$.
+At $\omega_m$ the gain is $1/\sqrt{\alpha} = 3.16$, i.e. 10 dB. At high frequency the gain tends to $1/\alpha = 10$ (20 dB), so sensor noise above the crossover is amplified tenfold. This is why lead compensation is usually limited to $\alpha \gtrsim 0.05$–$`0.1`$.
 
 </details>
 

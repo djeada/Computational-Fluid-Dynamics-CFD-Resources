@@ -27,22 +27,22 @@ with $\epsilon \sim \mathcal{N}(0, 0.02^2)$. The three spatial shapes are orthog
 
 $$
 \mathbf{U}' \in \mathbb{R}^{N_x N_y \times N_t},
-\qquad N_x = 50,\  N_y = 30,\  N_t = 100
+\qquad N_x = 50,\ N_y = 30,\ N_t = 100
 $$
 
-$$
+```math
 \mathbf{U}' = \boldsymbol{\Phi}\,\boldsymbol{\Sigma}\,\boldsymbol{\Psi}^T
-$$
+```
 
 Each column $\boldsymbol{\phi}_i \in \mathbb{R}^{N_x N_y}$ of $\boldsymbol{\Phi}$ is a unit-norm spatial mode, reshaped to $(N_x, N_y)$ for plotting. The columns of $\boldsymbol{\Psi}$ are unit-norm temporal modes.
 
 ### Temporal coefficients and energy
 
-$$
+```math
 a_i(t_k) = \sigma_i\,\psi_i(t_k) = \boldsymbol{\phi}_i^T\,\mathbf{u}'(t_k), \qquad \%\text{TKE}_i = 100\,\frac{\sigma_i^2}{\sum_j \sigma_j^2}
-$$
+```
 
-$a_i(t)$ is the projection of each snapshot onto mode $i$. The field is recovered as $\mathbf{u}'(t) = \sum_i a_i(t)\,\boldsymbol{\phi}_i$.
+$a_i(t)$ is the projection of each snapshot onto mode $i$. The field is recovered as $`\mathbf{u}'(t) = \sum_i a_i(t)\,\boldsymbol{\phi}_i`$.
 
 ## Implementation
 
