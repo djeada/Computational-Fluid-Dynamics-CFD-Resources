@@ -518,6 +518,8 @@ Potential flow theory provides powerful analytical tools for understanding invis
 
 - [Laplace Equation Maze Solver](../../../scripts/simulations/laplace_equation_maze_solver/): solves a randomly generated maze by computing a potential that satisfies Laplace's equation in the maze passages and then following the potential uphill from the entrance to the exit.
 - [Steady and Unsteady Pathlines Around a Cylinder with Vortex Shedding](../../../scripts/simulations/steady_and_unsteady_pathlines_with_vortex_shedding/): compares streamlines and particle pathlines for steady potential flow past a cylinder with circulation and for an unsteady version of the same flow with a kinematic vortex-shedding model.
+- [Double Gyre Chaotic Mixing](../../../scripts/simulations/double_gyre_chaotic_mixing/): advects 720 000 passive dye tracers through the time-periodic double gyre and animates how the flow stretches and folds them into ever finer filaments.
+- [Leapfrogging Vortex Pairs](../../../scripts/simulations/point_vortex_leapfrogging/): simulates two coaxial vortex pairs, four point vortices in all, that leapfrog: the rear pair contracts, speeds up and slips through the front pair, which widens and slows down, and then the two swap roles again and again.
 
 ## Exercises
 

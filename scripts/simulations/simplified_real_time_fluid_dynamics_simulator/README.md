@@ -22,34 +22,34 @@ $$
 \qquad \nabla\cdot\mathbf{u} = 0
 $$
 
-$$
+```math
 \frac{\partial \rho}{\partial t} = -(\mathbf{u}\cdot\nabla)\rho + D\,\nabla^2\rho
-$$
+```
 
 External sources (mouse clicks or the scripted plume) are added to $\mathbf{u}$ and $\rho$ before a step.
 
 ### Implicit Diffusion
 
-$$
+```math
 (\mathbf{I} - \nu\,\Delta t\,\nabla^2)\,\mathbf{u}^{n+1} = \mathbf{u}^n
-$$
+```
 
 In `diffuse` this becomes the Jacobi update
 
-$$
+```math
 x_{i,j} \leftarrow
 \frac{x^0_{i,j} + a\,(x_{i-1,j}+x_{i+1,j}+x_{i,j-1}+x_{i,j+1})}{1+4a},
 \qquad a = \Delta t\,\nu\, N_x N_y
-$$
+```
 
-with $N_x, N_y$ the interior grid sizes (Stam's $a = \Delta t\,\nu N^2$ for a square grid of spacing $1/N$). The exact backward-Euler step is unconditionally stable. The system is diagonally dominant, so the fixed 20 Jacobi iterations converge towards it without ever amplifying the solution.
+with $N_x, N_y$ the interior grid sizes (Stam's $`a = \Delta t\,\nu N^2`$ for a square grid of spacing $1/N$). The exact backward-Euler step is unconditionally stable. The system is diagonally dominant, so the fixed 20 Jacobi iterations converge towards it without ever amplifying the solution.
 
 ### Semi-Lagrangian Advection
 
-$$
+```math
 q^{n+1}(\mathbf{x}) = q^n\!\left(\mathbf{x} - \Delta t_0\,\mathbf{u}(\mathbf{x})\right),
 \qquad \Delta t_0 = \Delta t\, N_x
-$$
+```
 
 The departure point is clamped to the interior and $q^n$ is interpolated bilinearly. The new value is a weighted average of old values, so the step is stable for any $\Delta t$.
 
@@ -61,13 +61,13 @@ $$
 \nabla^2 q = \nabla\cdot\mathbf{u}^*
 $$
 
-by Jacobi iterations of $q_{i,j} = \tfrac14\left(\text{div}_{i,j} + q_{i-1,j}+q_{i+1,j}+q_{i,j-1}+q_{i,j+1}\right)$, where $\text{div}_{i,j} = -\tfrac{h}{2}\left(V_{x,i+1}-V_{x,i-1}+V_{y,j+1}-V_{y,j-1}\right)$. It then corrects the velocity:
+by Jacobi iterations of $`q_{i,j} = \tfrac14\left(\text{div}_{i,j} + q_{i-1,j}+q_{i+1,j}+q_{i,j-1}+q_{i,j+1}\right)`$, where $`\text{div}_{i,j} = -\tfrac{h}{2}\left(V_{x,i+1}-V_{x,i-1}+V_{y,j+1}-V_{y,j-1}\right)`$. It then corrects the velocity:
 
 $$
 \mathbf{u} = \mathbf{u}^* - \nabla q
 $$
 
-Here $q = \Delta t\,p/\rho$ absorbs the time step and density.
+Here $`q = \Delta t\,p/\rho`$ absorbs the time step and density.
 
 ### Boundary Conditions (`set_bnd`)
 

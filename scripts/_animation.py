@@ -144,16 +144,21 @@ def freeze_layout(figure):
 
 
 def frame_schedule(total_steps, n_frames):
-    """Split ``total_steps`` iterations over at most ``n_frames`` video frames.
+    """Split ``total_steps`` iterations into frames of equal increments.
 
-    Increments differ by at most one, and no frame repeats the previous one:
-    a run shorter than the video gives a shorter video instead.
+    Every frame advances the same whole number of iterations (only the last
+    may advance fewer), so motion plays at a steady speed: alternating 2 and 3
+    steps per frame would judder. The increment is the one that brings the
+    frame count closest to ``n_frames``; a run shorter than the video gives
+    fewer frames, never repeated ones.
     """
     if total_steps < 0 or n_frames < 1:
         raise ValueError("need nonnegative steps and at least one frame")
-    n_frames = max(1, min(n_frames, total_steps))
-    marks = [round(k * total_steps / n_frames) for k in range(n_frames + 1)]
-    return [b - a for a, b in zip(marks, marks[1:])]
+    if total_steps == 0:
+        return [0]
+    increment = max(1, round(total_steps / n_frames))
+    full, rest = divmod(total_steps, increment)
+    return [increment] * full + ([rest] if rest else [])
 
 
 def find_ffmpeg():

@@ -22,10 +22,10 @@ $$
 
 Crank–Nicolson averages the central second difference $\delta^2 u_i = u_{i+1} - 2u_i + u_{i-1}$ between time levels $n$ and $n+1$:
 
-$$
+```math
 u_i^{n+1} - \frac{r}{2}\,\delta^2 u_i^{n+1} = u_i^n + \frac{r}{2}\,\delta^2 u_i^n,
 \qquad r = \frac{D\,\Delta t}{\Delta x^2}
-$$
+```
 
 The scheme is second-order accurate in time and space and unconditionally stable, so $r$ can be much larger than the explicit limit $r \le 1/2$. With the default grid $r \approx 45$.
 
@@ -37,12 +37,12 @@ $$
 
 The leapfrog scheme uses central differences in both time and space:
 
-$$
+```math
 u_i^{n+1} = 2u_i^n - u_i^{n-1} + C^2\,\delta^2 u_i^n,
 \qquad C = \frac{c\,\Delta t}{\Delta x}
-$$
+```
 
-It is stable for $C \le 1$ (CFL condition). For a pulse at rest ($\partial u/\partial t = 0$), the first step uses $u_i^{-1} = u_i^0 + \tfrac{1}{2}C^2\,\delta^2 u_i^0$. The exact solution is $u = \tfrac{1}{2}[f(x - ct) + f(x + ct)]$ until the halves reach the boundaries, where they reflect with inverted sign.
+It is stable for $C \le 1$ (CFL condition). For a pulse at rest ($\partial u/\partial t = 0$), the first step uses $`u_i^{-1} = u_i^0 + \tfrac{1}{2}C^2\,\delta^2 u_i^0`$. The exact solution is $u = \tfrac{1}{2}[f(x - ct) + f(x + ct)]$ until the halves reach the boundaries, where they reflect with inverted sign.
 
 ## Implementation
 

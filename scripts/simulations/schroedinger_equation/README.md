@@ -6,7 +6,7 @@ This script solves the time-dependent Schrödinger equation for a free particle 
 
 - **Equation**: the 2D time-dependent Schrödinger equation with $\hbar = m = 1$, on a periodic square of side $L = 10$ with 100 × 100 points ($\Delta x = 0.1$).
 - **Scheme**: Strang split-step Fourier method: a half kinetic step in Fourier space, a full potential step in real space, then another half kinetic step.
-- **Initial state**: a Gaussian wavepacket at rest at the origin, normalised so that $\iint|\psi|^2\,dA = 1$.
+- **Initial state**: a Gaussian wavepacket at rest at the origin, normalised so that $`\iint|\psi|^2\,dA = 1`$.
 - **Potential**: `potential(X, Y)` returns zero everywhere (free particle). Edit it to add a barrier or a well.
 - **Animation**: $|\psi|^2$ drawn as a `viridis` 3D Matplotlib surface. The height axis and colour bar are fixed from 0 to the initial peak, so the falling peak is visible. Each frame is 10 time steps of $\Delta t = 0.001$, and the default 100 frames reach $t = 1$.
 - **Norm check**: at the end the script prints the total probability and its change from the initial value. The current peak of $|\psi|^2$ is shown next to the time.
@@ -20,13 +20,13 @@ i\hbar
 \frac{\partial\psi}{\partial t} = \left(-\frac{\hbar^2}{2m}\nabla^2 + V(x,y)\right)\psi
 $$
 
-With $\hbar = m = 1$ this becomes $i\,\partial_t\psi = -\tfrac12\nabla^2\psi + V\psi$.
+With $\hbar = m = 1$ this becomes $`i\,\partial_t\psi = -\tfrac12\nabla^2\psi + V\psi`$.
 
 ### Initial Wavefunction and Exact Free Evolution
 
-$$
+```math
 \psi_0(x,y) = \frac{1}{\sqrt{\pi}}\, e^{-(x^2+y^2)/2}
-$$
+```
 
 For $V = 0$ the probability density stays Gaussian and spreads as
 
@@ -40,22 +40,22 @@ so the peak falls from $1/\pi \approx 0.318$ to $1/(2\pi) \approx 0.159$ at $t =
 
 With $\mathbf{k}$ the discrete wavenumbers from `np.fft.fftfreq` and $k^2 = k_x^2 + k_y^2$, one time step is
 
-$$
+```math
 \tilde\psi \leftarrow \tilde\psi\, e^{-ik^2\Delta t/4},
 \qquad \psi \leftarrow \psi\, e^{-iV\Delta t},
 \qquad \tilde\psi \leftarrow \tilde\psi\, e^{-ik^2\Delta t/4}
-$$
+```
 
-where $\tilde\psi$ is the 2D FFT of $\psi$. Each factor has modulus one, so the scheme conserves $\iint|\psi|^2\,dA$ up to round-off. The splitting is second-order accurate in time. For $V = 0$ the kinetic factors commute with the (identity) potential step, and the scheme is exact for the band-limited, periodic problem.
+where $\tilde\psi$ is the 2D FFT of $\psi$. Each factor has modulus one, so the scheme conserves $`\iint|\psi|^2\,dA`$ up to round-off. The splitting is second-order accurate in time. For $V = 0$ the kinetic factors commute with the (identity) potential step, and the scheme is exact for the band-limited, periodic problem.
 
 ## Implementation
 
-- `make_grid` builds the periodic grid $x_j = -L/2 + j\,\Delta x$, which has no duplicated end point, as the FFT requires.
+- `make_grid` builds the periodic grid $`x_j = -L/2 + j\,\Delta x`$, which has no duplicated end point, as the FFT requires.
 - `initial_wavefunction` builds the normalised Gaussian. `potential` defines $V$.
 - `squared_wavenumbers` returns $k^2$ on the FFT grid.
 - `evolve` provides a standalone reference implementation of one Strang step.
 - `SchrodingerSimulation(length, n, dt)` owns the wavefunction and caches the kinetic and potential propagators. `step()` performs one Strang step with them, `advance(n)` runs `n` steps without plotting, and `density`, `norm` and `time` expose the current state. It also records `initial_norm` and `initial_peak`, which fix the plot scales. A nonpositive `dt` raises `ValueError`.
-- `probability_norm` computes $\sum|\psi|^2\,\Delta x^2$.
+- `probability_norm` computes $`\sum|\psi|^2\,\Delta x^2`$.
 - `SchrodingerView` removes and re-plots the surface for each frame. In a vertical reel the colour bar sits below the surface and the 3D box is taller.
 - `ANIMATION` and `main` use the shared runner in `scripts/_animation.py`, which provides the window, headless runs, the PNG and the reel.
 - Parameters are module constants: `DOMAIN_LENGTH`, `N_POINTS`, `TIME_STEP`, `FINAL_TIME` and `STEPS_PER_FRAME` (also available under its former name `SPEED_FACTOR`).

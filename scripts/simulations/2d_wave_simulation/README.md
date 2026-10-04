@@ -24,17 +24,17 @@ $$
 
 With central differences in space and time, the explicit update is:
 
-$$
+```math
 u_{i,j}^{n+1} = 2u_{i,j}^n - u_{i,j}^{n-1} + (c\,\Delta t)^2
 \left(\frac{u_{i+1,j}^n - 2u_{i,j}^n + u_{i-1,j}^n}{\Delta x^2} +
 \frac{u_{i,j+1}^n - 2u_{i,j}^n + u_{i,j-1}^n}{\Delta y^2} \right)
-$$
+```
 
 where $i$ indexes $x$ and $j$ indexes $y$. The scheme is second-order accurate in space and time.
 
 ### Stability (CFL Condition)
 
-The scheme is stable when $c\,\Delta t\,\sqrt{1/\Delta x^2 + 1/\Delta y^2} \le 1$. For $\Delta x = \Delta y$ this becomes
+The scheme is stable when $`c\,\Delta t\,\sqrt{1/\Delta x^2 + 1/\Delta y^2} \le 1`$. For $\Delta x = \Delta y$ this becomes
 
 $$
 \Delta t \le \frac{\min(\Delta x, \Delta y)}{c\sqrt{2}}
