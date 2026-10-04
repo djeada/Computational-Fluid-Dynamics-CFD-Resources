@@ -1,52 +1,41 @@
-"""Real-time Eulerian simulation of inviscid flow past a cylinder with Pygame.
+"""Eulerian simulation of inviscid flow past a cylinder in a wind tunnel.
 
-A 2D staggered (MAC) grid holds the velocity and a passive dye ("smoke")
-field. Each frame applies gravity (off by default), makes the velocity
-divergence-free with Gauss-Seidel over-relaxation, extrapolates boundary
-velocities, and advects velocity and dye with the semi-Lagrangian method. A
-uniform inflow enters from the left; a dye streak released at mid-height shows
-the wake. The scheme follows Matthias Mueller's "Ten Minute Physics" Eulerian
-fluid demo. There is no explicit viscosity; only numerical diffusion from the
+A 2D staggered (MAC) grid holds the velocity and a passive dye field. Each
+step applies gravity (off by default), makes the velocity divergence-free with
+Gauss-Seidel over-relaxation, extrapolates boundary velocities, and advects
+velocity and dye with the semi-Lagrangian method. A uniform inflow enters from
+the left; a dye streak released at mid-height shows the wake, drawn as a
+colour map of the dye concentration with the walls and cylinder in grey. The
+scheme follows Matthias Mueller's "Ten Minute Physics" Eulerian fluid demo.
+There is no explicit viscosity; only numerical diffusion from the
 interpolation damps the flow.
-
-Keys: P pauses or resumes, M advances one frame while paused.
 """
 
-import os
 import sys
 from pathlib import Path
 
 import numpy as np
+from matplotlib import colormaps
 from numba import njit
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
-WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600  # pixels
-SIM_HEIGHT = 1.1  # visible height of the window, m
+DOMAIN_HEIGHT = 1.0  # m, between the walls (plus one boundary cell at each side)
+DOMAIN_WIDTH = 4.0 / 3.0  # m, inlet to outlet
+RESOLUTION = 100  # cells across the domain height
 GRAVITY = 0.0  # m/s^2 (turned off)
-DELTA_TIME = 1.0 / 60.0  # s per frame
-NUM_ITERATIONS = 20  # Gauss-Seidel iterations per frame
+DELTA_TIME = 1.0 / 60.0  # s per time step
+NUM_ITERATIONS = 20  # Gauss-Seidel iterations per time step
 OVER_RELAXATION = 1.9  # SOR factor for the projection
 OBSTACLE_X, OBSTACLE_Y = 0.4, 0.5  # cylinder centre, m
 OBSTACLE_RADIUS = 0.15  # m
 DENSITY = 1000.0  # kg/m^3 (only scales the pressure field)
 INLET_VELOCITY = 2.0  # m/s
-RESOLUTION = 100  # cells across the domain height
-DEFAULT_HEADLESS_STEPS = 300  # frames used with --no-show when --steps is omitted
-
-BACKGROUND = (240, 248, 255)  # Alice blue
-OBSTACLE_COLOR = (47, 79, 79)  # dark slate grey
-PALETTE = np.array(
-    [
-        (173, 216, 230),  # light blue      dye fraction 0.00-0.25
-        (100, 149, 237),  # cornflower blue 0.25-0.50
-        (70, 130, 180),  # steel blue       0.50-0.75
-        (144, 238, 144),  # light green     0.75-1.00 (clear fluid)
-    ],
-    dtype=np.uint8,
-)
+DYE_STREAK_HEIGHT = 0.1  # fraction of the grid height released as dye at the inlet
+STEPS_PER_FRAME = 2  # time steps per frame: 1/30 s of flow
+N_FRAMES = 450  # default frames of a headless run or reel -> t = 15 s
 
 
 @njit(cache=False)
@@ -178,15 +167,26 @@ def advect_dye(m, new_m, u, v, s, nx, ny, h, dt):
     m[:] = new_m
 
 
-class FluidSimulator:
-    """Staggered-grid fluid state; arrays are flat with index i * grid_height + j."""
+class EulerianCylinderSimulation(Simulation):
+    """Wind tunnel on a staggered grid; arrays are flat with index i * grid_height + j.
 
-    def __init__(self, density, grid_width, grid_height, cell_size):
+    ``u`` lives on the left face of cell (i, j), ``v`` on its bottom face,
+    pressure and dye (``density_field``: 1 = clear fluid, 0 = dye) at its
+    centre. ``solid`` is 1 for fluid and 0 for walls and the cylinder. The left
+    column is a solid inlet whose faces carry the inflow velocity, the top and
+    bottom rows are walls, and the right side is open.
+    """
+
+    dt = DELTA_TIME
+
+    def __init__(self, resolution=RESOLUTION, density=DENSITY):
+        super().__init__()
         self.density = density
-        self.grid_width = grid_width + 2  # one ghost/boundary cell on each side
-        self.grid_height = grid_height + 2
+        self.cell_size = DOMAIN_HEIGHT / resolution
+        # one ghost/boundary cell on each side
+        self.grid_width = int(DOMAIN_WIDTH / self.cell_size) + 2
+        self.grid_height = int(DOMAIN_HEIGHT / self.cell_size) + 2
         self.num_cells = self.grid_width * self.grid_height
-        self.cell_size = cell_size
         self.u = np.zeros(self.num_cells, dtype=np.float32)
         self.v = np.zeros(self.num_cells, dtype=np.float32)
         self.new_u = np.zeros(self.num_cells, dtype=np.float32)
@@ -195,6 +195,20 @@ class FluidSimulator:
         self.solid = np.ones(self.num_cells, dtype=np.float32)  # 1 fluid, 0 solid
         self.density_field = np.ones(self.num_cells, dtype=np.float32)  # dye
         self.new_density_field = np.zeros(self.num_cells, dtype=np.float32)
+
+        n = self.grid_height
+        for i in range(self.grid_width):
+            for j in range(self.grid_height):
+                inside = i != 0 and j != 0 and j != self.grid_height - 1
+                self.solid[i * n + j] = 1.0 if inside else 0.0
+                if i == 1:
+                    self.u[i * n + j] = INLET_VELOCITY
+        # dye streak entering at mid-height through the inlet column (i = 0)
+        pipe_height = DYE_STREAK_HEIGHT * self.grid_height
+        min_j = int(0.5 * self.grid_height - 0.5 * pipe_height)
+        max_j = int(0.5 * self.grid_height + 0.5 * pipe_height)
+        self.density_field[min_j:max_j] = 0.0
+        self.set_obstacle(OBSTACLE_X, OBSTACLE_Y, OBSTACLE_RADIUS)
 
     def simulate(self, delta_time, gravity, num_iterations, over_relaxation):
         nx, ny, h = self.grid_width, self.grid_height, self.cell_size
@@ -228,6 +242,9 @@ class FluidSimulator:
             delta_time,
         )
 
+    def step(self):
+        self.simulate(DELTA_TIME, GRAVITY, NUM_ITERATIONS, OVER_RELAXATION)
+
     def set_obstacle(self, x, y, radius, velocity_x=0.0, velocity_y=0.0):
         """Mark cells inside the circle as solid and set their face velocities."""
         n = self.grid_height
@@ -244,124 +261,68 @@ class FluidSimulator:
                     self.v[i * n + j] = velocity_y
                     self.v[i * n + j + 1] = velocity_y
 
+    @property
+    def dye(self):
+        """Dye concentration 1 - density_field, shape (grid_width, grid_height).
 
-def setup_scene(scene_number=1):
-    """Return a FluidSimulator for scene 0 (tank) or 1 (wind tunnel)."""
-    resolution = RESOLUTION if scene_number != 0 else RESOLUTION // 2
-    domain_height = 1.0  # m
-    domain_width = domain_height * WINDOW_WIDTH / WINDOW_HEIGHT  # m
-    cell_size = domain_height / resolution
-    grid_width = int(domain_width / cell_size)
-    grid_height = int(domain_height / cell_size)
-
-    fluid = FluidSimulator(DENSITY, grid_width, grid_height, cell_size)
-    n = fluid.grid_height
-    if scene_number == 0:  # closed tank, open at the top
-        for i in range(fluid.grid_width):
-            for j in range(fluid.grid_height):
-                inside = i != 0 and i != fluid.grid_width - 1 and j != 0
-                fluid.solid[i * n + j] = 1.0 if inside else 0.0
-    else:  # wind tunnel: solid left wall with inflow, walls at top and bottom
-        for i in range(fluid.grid_width):
-            for j in range(fluid.grid_height):
-                inside = i != 0 and j != 0 and j != fluid.grid_height - 1
-                fluid.solid[i * n + j] = 1.0 if inside else 0.0
-                if i == 1:
-                    fluid.u[i * n + j] = INLET_VELOCITY
-        # dye streak entering at mid-height through the inlet column (i = 0)
-        pipe_height = 0.1 * fluid.grid_height
-        min_j = int(0.5 * fluid.grid_height - 0.5 * pipe_height)
-        max_j = int(0.5 * fluid.grid_height + 0.5 * pipe_height)
-        fluid.density_field[min_j:max_j] = 0.0
-    return fluid
+        Solid cells (walls, inlet column and cylinder) are NaN.
+        """
+        shape = (self.grid_width, self.grid_height)
+        dye = 1.0 - self.density_field.reshape(shape).astype(float)
+        dye[self.solid.reshape(shape) == 0.0] = np.nan
+        return dye
 
 
-def draw(screen, fluid, canvas_scale):
-    """Draw the dye field (4-colour banded map) and the obstacle."""
-    import pygame
+class EulerianCylinderView(View):
+    """Dye concentration from black (clear fluid) to yellow; solid cells grey.
 
-    nx, ny = fluid.grid_width, fluid.grid_height
-    m = fluid.density_field.reshape(nx, ny)
-    solid = fluid.solid.reshape(nx, ny)
-    band = (np.clip(m, 0.0, 1.0 - 1e-4) / 0.25).astype(np.int64)
-    rgb = PALETTE[band]
-    rgb[m == 0.0] = BACKGROUND
-    rgb[solid == 0.0] = OBSTACLE_COLOR
-    # surfarray is indexed (x, y) with y pointing down; grid j points up
-    image = pygame.surfarray.make_surface(np.ascontiguousarray(rgb[:, ::-1, :]))
-    size = (
-        int(round(nx * fluid.cell_size * canvas_scale)),
-        int(round(ny * fluid.cell_size * canvas_scale)),
-    )
-    screen.fill(BACKGROUND)
-    screen.blit(pygame.transform.scale(image, size), (0, WINDOW_HEIGHT - size[1]))
+    The 4:3 tunnel already fills the nearly square reel panel, so the reel
+    keeps the flow left to right and moves the colour bar below the map.
+    """
+
+    figsize = (8.0, 5.6)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        ax = figure.subplots()
+        h = simulation.cell_size
+        extent = (0.0, simulation.grid_width * h, 0.0, simulation.grid_height * h)
+        self.image = ax.imshow(
+            simulation.dye.T, extent=extent, origin="lower", vmin=0.0, vmax=1.0,
+            cmap=colormaps["inferno"].with_extremes(bad="0.55"),
+            interpolation="bilinear",
+        )  # fmt: skip
+        figure.colorbar(
+            self.image, ax=ax, label="dye concentration",
+            location="bottom" if portrait else "right",
+        )  # fmt: skip
+        ax.set(xlabel="x [m]", ylabel="y [m]")
+
+    def draw(self):
+        self.image.set_data(self.simulation.dye.T)
+
+    def status(self):
+        return f"t = {self.simulation.time:.2f} s"
+
+
+ANIMATION = Animation(
+    title="Eulerian Cylinder Flow",
+    subtitle="Dye streak behind a cylinder in a wind tunnel",
+    filename="eulerian_cylinder_flow.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label=f"time steps of 1/{1 / DELTA_TIME:g} s",
+    endless=True,
+)
 
 
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=None,
-        help="simulate this many frames, then stop (default: run until closed; "
-        f"{DEFAULT_HEADLESS_STEPS} with --no-show)",
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, EulerianCylinderSimulation(), EulerianCylinderView)
+    print(
+        f"t = {simulation.time:.2f} s after {simulation.steps} time steps "
+        f"on a {simulation.grid_width} x {simulation.grid_height} grid"
     )
-    args = parser.parse_args(argv)
-    max_steps = args.steps
-    if args.no_show:
-        os.environ["SDL_VIDEODRIVER"] = "dummy"
-        if max_steps is None:
-            max_steps = DEFAULT_HEADLESS_STEPS
-
-    import pygame
-
-    pygame.init()
-    try:
-        screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-        pygame.display.set_caption("Eulerian Cylinder Flow")
-        clock = pygame.time.Clock()
-        canvas_scale = WINDOW_HEIGHT / SIM_HEIGHT  # pixels per metre
-
-        fluid = setup_scene(1)
-        fluid.set_obstacle(OBSTACLE_X, OBSTACLE_Y, OBSTACLE_RADIUS)
-
-        running = True
-        paused = False
-        frame_number = 0
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_p:
-                        paused = not paused
-                    elif event.key == pygame.K_m:
-                        fluid.simulate(
-                            DELTA_TIME, GRAVITY, NUM_ITERATIONS, OVER_RELAXATION
-                        )
-                        frame_number += 1
-                        paused = True
-
-            if not paused:
-                fluid.simulate(DELTA_TIME, GRAVITY, NUM_ITERATIONS, OVER_RELAXATION)
-                frame_number += 1
-
-            draw(screen, fluid, canvas_scale)
-            pygame.display.flip()
-            if max_steps is not None and frame_number >= max_steps:
-                running = False
-            if not args.no_show:
-                clock.tick(60)
-
-        print(
-            f"simulated {frame_number} frames (t = {frame_number * DELTA_TIME:.2f} s)"
-        )
-        if args.output:
-            out_dir = Path(args.output)
-            out_dir.mkdir(parents=True, exist_ok=True)
-            pygame.image.save(screen, str(out_dir / "eulerian_cylinder_flow.png"))
-    finally:
-        pygame.quit()
 
 
 if __name__ == "__main__":

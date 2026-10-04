@@ -11,7 +11,8 @@ Thanks for helping improve this repository. Corrections, new notes, new scripts,
 | `scripts/algorithms/`, `scripts/plots/`, `scripts/simulations/` | One folder per Python script, each with `main.py` and `README.md` |
 | `tests/` | Numerical correctness, import safety, figure ownership, and runner tests |
 | `scripts/_numerics.py`, `scripts/_plotting.py`, `scripts/_common.py` | Shared computation, plotting layouts, and CLI/output helpers |
-| `tools/` | Maintenance scripts used locally and in CI |
+| `scripts/_animation.py` | Base classes and runner shared by every simulation: window, headless run, PNG, and reel |
+| `tools/` | Maintenance scripts used locally and in CI, plus `make_reels.py` for Shorts/Reels videos |
 | `ROADMAP.md` | Topics that are planned but not written yet |
 
 ## Setting up
@@ -51,15 +52,16 @@ Each script lives in its own folder: `scripts/<category>/<name>/main.py` with a 
       main()
   ```
 
-- Use `create_parser(__doc__)` from `scripts/_common.py` for shared CLI options and `finish_figures({"name.png": fig}, output=args.output, show=not args.no_show)` for static examples. Animations use `save_figure` after their final redraw. Keep simulation state separate from artist callbacks; `advance(steps)` must work without a figure. Reuse the POD implementation in `scripts/_numerics.py` with spatial points in rows and snapshots in columns. The examples add the `scripts/` directory to the import path so direct execution works from any working directory without installing a package.
+- Use `create_parser(__doc__)` from `scripts/_common.py` for shared CLI options and `finish_figures({"name.png": fig}, output=args.output, show=not args.no_show)` for static examples. Reuse the POD implementation in `scripts/_numerics.py` with spatial points in rows and snapshots in columns. The examples add the `scripts/` directory to the import path so direct execution works from any working directory without installing a package.
 
 - `main(argv=None)` parses arguments with `argparse` and supports these flags:
 
   | Flag | Required | Behaviour |
   | --- | --- | --- |
-  | `--no-show` | always | Do not open plot or pygame windows |
-  | `--output DIR` | always | Create `DIR` and save every figure as a PNG in it (`dpi=100`, `bbox_inches="tight"`). Animations save their final frame; pygame scripts save a screenshot of the last frame |
-  | `--steps N` | time-stepping, animated, or interactive scripts | Use `type=positive_int` for a positive iteration/frame count |
+  | `--no-show` | always | Do not open a window |
+  | `--output DIR` | always | Create `DIR` and save every figure as a PNG in it (`dpi=100`, `bbox_inches="tight"`). Simulations save their final frame |
+  | `--steps N` | time-stepping, animated, or interactive scripts | Use `type=positive_int` for a positive iteration/frame count. In simulations it always counts animation frames |
+  | `--reel FILE`, `--reel-seconds S`, `--reel-fps FPS` | simulations (added by `Animation.parser`) | Render a 1080 × 1920 MP4 for YouTube Shorts or Instagram Reels instead of opening a window |
 
   Running with no flags keeps the original interactive behaviour.
 
@@ -67,7 +69,12 @@ Each script lives in its own folder: `scripts/<category>/<name>/main.py` with a 
 
 - Never use absolute paths. Resolve input files relative to the script with `Path(__file__).parent`.
 
-- Animation initialization functions must draw without advancing the solver. Headless runs should advance all steps and render the final state once.
+- Simulations follow the pattern in [`scripts/README.md`](scripts/README.md#simulations), with [`lid_driven_cavity`](scripts/simulations/lid_driven_cavity/main.py) as the reference:
+  - a `Simulation` subclass whose `step()` performs one solver iteration and works without a figure;
+  - a `View` subclass whose `draw()` updates its artists from the state without advancing it, and which also arranges its panels for the tall reel frame (`portrait=True`);
+  - a module-level `ANIMATION = Animation(...)` used by `main` through `ANIMATION.parser(__doc__)` and `ANIMATION.run(...)`.
+
+  Views use the figure they are given rather than `pyplot`, leave colours to the shared dark style, and keep the figure title free for the runner's title and status line. Check a new simulation's reel with `python main.py --reel reel.mp4 --reel-seconds 10` as well as its PNG.
 
 - Test numerical changes against reconstruction identities, analytical solutions, or conservation laws. A successful PNG export alone does not establish numerical correctness.
 

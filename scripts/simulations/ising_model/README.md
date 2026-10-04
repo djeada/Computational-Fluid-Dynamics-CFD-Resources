@@ -5,11 +5,11 @@ This script simulates the two-dimensional Ising model with the Metropolis Monte 
 ## Overview
 
 - Uses a 300×300 lattice (`N_ROWS`, `N_COLS`) of spins $s_i = \pm 1$ with periodic boundaries, $J = 1$ and $k_B = 1$.
-- Starts from a random configuration drawn with a seeded generator (`SEED = 0`), then runs `WARMUP_STEPS = 1` sweep before the animation.
-- Performs `TOTAL_STEPS = 3000` Metropolis sweeps at `BETA = 0.6`. Each sweep makes $N = 90{,}000$ single-spin-flip attempts at random sites.
+- Starts from a random configuration drawn with a seeded generator (`SEED = 0`, which also seeds Numba's generator), then runs `WARMUP_STEPS = 1` sweep before sweep 0.
+- Performs Metropolis sweeps at `BETA = 0.6`. Each sweep makes $N = 90{,}000$ single-spin-flip attempts at random sites. The default run is `N_FRAMES = 600` frames of `STEPS_PER_FRAME = 5` sweeps, 3000 sweeps in total.
 - Numba-compiles (`@njit`) the Metropolis sweep and the energy and magnetization sums.
-- Records $M$ and $E$ and redraws the lattice every `UPDATE_INTERVAL = 5` sweeps, plus the final sweep.
-- Optionally writes the animation to `SAVE_PATH` (GIF via Pillow, or MP4 via ffmpeg) when `SAVE_ANIMATION = True`.
+- Records $M$ and $E$ after every sweep. These sums cost about 1% of a sweep.
+- Draws the lattice and the $M$ and $E$ histories with Matplotlib after every frame.
 
 ## Mathematical Background
 
@@ -54,23 +54,22 @@ In the thermodynamic limit, the 2D Ising model on a square lattice has its criti
 - `seed_numba(seed)` seeds Numba's random generator, which is separate from NumPy's.
 - `metropolis_step_numba(lattice, beta)` performs one sweep in place.
 - `calculate_energy_numba` and `calculate_magnetization_numba` compute $E$ and $M$.
-- `run_simulation_numba(lattice, beta, steps, update_interval)` is a generator that yields `(sweep, lattice copy, M, E)` at each recorded sweep.
-- `setup_figure` builds the lattice panel (orange for $+1$, blue for $-1$) and the magnetization and energy panels.
-- `animate_simulation` feeds the generator to `FuncAnimation`. With `--no-show` it consumes the generator directly and returns the figure showing the final state.
+- `IsingSimulation` holds the lattice and the `magnetization` and `energy` lists. Its constructor seeds both generators, draws the lattice and runs the warm-up sweep; `step()` performs one sweep and appends $M$ and $E$.
+- `IsingView` draws the lattice (orange for $+1$, blue for $-1$) next to the magnetization and energy panels. In the vertical reel the lattice is on top with the two panels side by side below it.
+- `main` runs the shared animation runner from `scripts/_animation.py`: a window, a headless run with `--no-show`, or a reel with `--reel`.
 
 ## Usage
 
 ```bash
-python main.py                                   # animate 3000 sweeps
-python main.py --steps 500                       # animate 500 sweeps
-python main.py --no-show --output .              # run 3000 sweeps and save the final frame
+python main.py                                    # animate in a window (space pauses)
+python main.py --steps 100                        # a shorter run: 500 sweeps
+python main.py --no-show --output . --steps 600   # save the final frame as a PNG
+python main.py --reel reel.mp4                    # 30 s vertical video for Shorts/Reels
 ```
 
-- `--steps N` runs exactly `N` Monte Carlo sweeps.
-- `--no-show` skips the window.
-- `--output DIR` saves `ising_model.png` in `DIR`.
+`--steps N` sets the number of frames; each frame is 5 Monte Carlo sweeps.
 
-Lattice size, `BETA`, `UPDATE_INTERVAL` and the animation options are constants at the top of `main.py`. Try `BETA = 0.44` to watch critical fluctuations, or `BETA = 0.3` for a disordered lattice.
+Lattice size, `BETA` and `STEPS_PER_FRAME` are constants at the top of `main.py`. Try `BETA = 0.44` to watch critical fluctuations, or `BETA = 0.3` for a disordered lattice.
 
 ## Output
 
@@ -78,13 +77,15 @@ The frame below is from a short video of an earlier version of the script:
 
 [![Ising model animation on YouTube](https://img.youtube.com/vi/aIUKwLx_Kj8/maxresdefault.jpg)](https://youtube.com/shorts/aIUKwLx_Kj8?feature=share)
 
-The figure below shows the final frame of the default run (3000 sweeps):
+The figure below shows the final frame of the default run (600 frames, 3000 sweeps):
 
 ![Ising lattice, magnetization and energy after 3000 sweeps](ising_model.png)
 
-- **Lattice**: spin-up ($+1$) sites are orange and spin-down ($-1$) sites blue. Large domains have formed, with isolated flipped spins from thermal fluctuations inside them.
-- **Magnetization**: $M$ stays well below $\pm N$ because up and down domains coexist.
-- **Energy**: $E$ drops quickly from near 0 (random start) during the first few hundred sweeps as domains form, then decreases slowly as domain walls shorten.
+- **Lattice** (left): spin-up ($+1$) sites are orange and spin-down ($-1$) sites blue. Large domains have formed, with isolated flipped spins from thermal fluctuations inside them.
+- **Magnetization** (top right): $M$ stays well below $\pm N$ because up and down domains coexist. It ends near $0.14\,N$.
+- **Energy** (bottom right): the random start has $E \approx 0$, and the warm-up sweep already lowers it to about $-0.7\,N$ at sweep 0. $E$ then drops quickly during the first hundred sweeps as domains form, and decreases slowly afterwards as domain walls shorten. It ends near $-1.88\,N$.
+
+The title line shows $\beta$ and the sweep number. When the run ends the program prints $M/N$ and $E/N$ of the final sweep.
 
 ## Related Notes
 

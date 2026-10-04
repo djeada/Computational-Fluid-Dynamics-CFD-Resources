@@ -1,6 +1,6 @@
 # Backward-Facing Step Flow (SIMPLE Algorithm)
 
-This script solves steady 2D laminar incompressible flow over a backward-facing step with the finite volume method and the SIMPLE pressure–velocity coupling algorithm. The flow separates at the step corner, forms a recirculation zone behind the step, and reattaches downstream; the script prints the reattachment length and plots the velocity field and convergence history. The backward-facing step is a classic test case for separated flow, but this script does not compare its results with reference data.
+This script solves steady 2D laminar incompressible flow over a backward-facing step with the finite volume method and the SIMPLE pressure–velocity coupling algorithm. The flow separates at the step corner, forms a recirculation zone behind the step, and reattaches downstream; the script animates the SIMPLE iterations as they converge, showing the velocity field and the convergence history, and prints the reattachment length at the end. The backward-facing step is a classic test case for separated flow, but this script does not compare its results with reference data.
 
 ## Overview
 
@@ -10,7 +10,7 @@ This script solves steady 2D laminar incompressible flow over a backward-facing 
 - Relaxes each linear system with Gauss–Seidel/SOR sweeps compiled with Numba: 2 momentum sweeps, and 40 pressure-correction sweeps with `omega_p = 1.7`.
 - Applies a parabolic inlet profile with mean velocity 1, zero-gradient outflow with $p' = 0$ in the last cell column, and no-slip walls on the channel walls and the step.
 - Tracks momentum and continuity residuals and the global mass imbalance, and stops when the solution meets the convergence criterion described below.
-- Prints the bottom-wall reattachment length $x_r/h$, and shows the velocity magnitude with arrows, the residual history and the mass imbalance in one figure (updated live unless `--no-show` is given).
+- Animates the outer iterations in a Matplotlib window (velocity magnitude with arrows and the reattachment point, residual history, mass imbalance), or runs them headless or as a vertical video, and prints the iteration count and the bottom-wall reattachment length $x_r/h$ at the end.
 
 ## Mathematical Background
 
@@ -88,31 +88,38 @@ The momentum residual is the mean of $|b + \sum a_{nb}\phi_{nb} - a_P\phi_P|$, a
 - `apply_velocity_bcs` sets the inlet profile (`inlet_parabolic_profile`), the zero-gradient outlet $u$, wall and solid velocities, and a ±5 safety clamp.
 - `build_pressure_correction` returns the $p'$ coefficients and the $d$ factors, and `correct_uvp` applies the corrections.
 - `global_mass_imbalance` compares inlet and outlet flux. `reattachment_length` finds where $u$ in the first cell row changes sign from negative to positive behind the step.
-- `setup_plot` and `update_plot` draw the three panels. Arrows are hidden inside the step, and the colour limit and arrow scale are smoothed between live updates.
+- `BackwardStepSimulation` builds the masks, index arrays, coefficient arrays and initial fields from a `Params` instance. Its `step()` is one SIMPLE iteration (predictor, pressure correction, corrector, monitors); it appends the three residuals and the mass imbalance to the `residuals` and `imbalance` histories and marks the solver `done` once the convergence criterion holds, which stops every run. Its `time` is the iteration count.
+- `BackwardStepView` draws the three panels from the simulation state only. The colour scale runs from 0 to the inlet peak speed $1.5\,U_{avg}$, and the arrow scale is fixed by the same speed (an arrow of that speed is 0.9 arrow spacings long), so every frame uses the same scales. Arrows are hidden inside the step, which is drawn in grey as resolved by the grid, and a red triangle on the bottom wall marks the reattachment point. The history axes are logarithmic and rescale to the data on every frame.
+- The shared runner in `scripts/_animation.py` provides the window, the headless run, the PNG and the reel. In the vertical reel the 16:1 channel would be a thin strip, so the field panel is cropped to $2 \le x \le 12$ (the end of the inlet channel, the step, the recirculation zone and the recovery downstream) and stacked above the residual and mass-imbalance histories, which share the iteration axis.
 
 ## Usage
 
 ```bash
-python main.py                                  # 240×80 grid, up to 3000 iterations, live plot
-python main.py --demo                           # 120×40 grid, 400 iterations, plot every 5
-python main.py --nx 160 --ny 60 --max-iters 2000 --plot-interval 50
-python main.py --no-show --output . --steps 3000   # headless, save the final figure
+python main.py                                    # animate the iterations in a window (space pauses)
+python main.py --nx 120 --ny 40                   # quick run on a coarser grid
+python main.py --no-show --output . --steps 150   # save the converged state as a PNG
+python main.py --reel reel.mp4                    # 30 s vertical video for Shorts/Reels
 ```
 
-- `--steps N` runs at most `N` SIMPLE iterations (overriding `--max-iters`), stopping earlier if the convergence criterion is met.
-- `--no-show` skips the live window and draws the figure once at the end.
-- `--output DIR` saves `backward_facing_step.png` in `DIR`.
-- `--throttle-ms` sleeps every 5 iterations to reduce CPU load.
+`--steps N` sets the number of frames (default 150, at most 3000 iterations); each frame is 20 SIMPLE iterations, and every run stops early once the convergence criterion is met.
 
-On the default grid the solver converges after 2305 iterations (about 25 s including Numba compilation) with $x_r/h \approx 6.2$. The `--demo` run stops at 400 iterations before meeting the criterion (mass imbalance about 2.5%), giving $x_r/h \approx 5.5$ on its coarser grid.
+- `--nx` and `--ny` set the number of pressure cells along and across the channel (default 240 × 80).
+- `--no-show` runs without a window, `--output DIR` saves `backward_facing_step.png` in `DIR`, and `--reel FILE` renders a 1080 × 1920 MP4 instead of opening a window (`--reel-seconds`, `--reel-fps`).
+- In the window, space pauses and the right arrow advances one frame; the animation stops when the solver converges.
+
+On the default grid the solver converges after 2305 iterations (frame 116, about 25 s of solver time) with $x_r/h \approx 6.2$. On the 120 × 40 grid it converges after 680 iterations in a few seconds, with $x_r/h \approx 5.4$.
 
 ## Output
 
 ![Velocity magnitude, residuals and mass imbalance for the backward-facing step](backward_facing_step.png)
 
-- **Top panel**: velocity magnitude with arrows. The parabolic inlet jet (peak 1.5) leaves the step corner, spreads over the full channel height, and relaxes towards a wider parabolic profile of peak 1. The dark region behind the step is the recirculation zone, where the near-wall velocity reverses; it ends about 6 step heights downstream of the step. The step itself is masked black.
-- **Bottom left**: mean residuals of the $u$ and $v$ momentum equations and of continuity, on a log scale.
-- **Bottom right**: global mass imbalance as a percentage of the inlet flux. Its decaying oscillation reflects how slowly pressure corrections propagate along the long channel.
+The image shows the converged state after 2305 iterations; the title gives the iteration count and the current mass imbalance (0.05 %).
+
+- **Top panel**: velocity magnitude with arrows over the whole channel, with the vertical scale exaggerated about 7.5 times. The parabolic inlet jet (peak 1.5, yellow) leaves the step corner, spreads over the full channel height, and relaxes towards a wider parabolic profile of peak 1. The dark region behind the grey step is the recirculation zone, where the near-wall velocity reverses; the red triangle marks where it ends, $x_r/h = 6.16$ step heights downstream of the step, as given in the panel title.
+- **Bottom left**: mean residuals of the $u$ and $v$ momentum equations and of continuity, on a log scale. Each falls below $10^{-3}$ of its maximum over the first 10 iterations, and the label "converged" appears once the criterion is met.
+- **Bottom right**: global mass imbalance as a percentage of the inlet flux, with the 0.5 % target dashed. It stays near 100 % for the first 70 or so iterations, until the flow front reaches the outlet, and then decays in an oscillation with a period of about 200 iterations, which reflects how slowly pressure corrections propagate along the long channel.
+
+During the animation the flow front advances down the channel in the first iterations, and the reattachment point then moves back and forth (between about 3 and 7 step heights) before settling at $x_r/h = 6.16$.
 
 First-order upwind convection adds numerical diffusion, which tends to shorten the recirculation zone. Refine the grid before comparing the reattachment length with experimental or benchmark data.
 

@@ -42,3 +42,5 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python -m unittest discover -s tests -v
       - run: python tools/run_scripts.py --jobs 4 --timeout 180
+      - name: Render short reels of every simulation
+        run: python tools/make_reels.py --seconds 2 --steps 2 --jobs 4 --timeout 300 --output "$RUNNER_TEMP/reels"

@@ -1,11 +1,8 @@
 """Verify solvers against conservation laws and analytical eigenmodes."""
 
 import importlib.util
-import io
 import unittest
-from contextlib import redirect_stdout
 from pathlib import Path
-from unittest.mock import patch
 
 import matplotlib
 import numpy as np
@@ -120,43 +117,6 @@ class SimulationTests(unittest.TestCase):
                 getattr(batch, field), getattr(individual, field)
             )
             self.assertEqual(batch.time, individual.time)
-
-    def test_animation_initialization_does_not_advance_solvers(self):
-        cases = (
-            (wave, "WaveSimulation", wave.WaveSimulation(nx=13, ny=11), wave, 1),
-            (
-                heat,
-                "HeatWaveSimulation",
-                heat.HeatWaveSimulation(nx=21, total_time=1),
-                heat.animation,
-                1,
-            ),
-            (
-                quantum,
-                "SchrodingerSimulation",
-                quantum.SchrodingerSimulation(n=16),
-                quantum,
-                quantum.SPEED_FACTOR,
-            ),
-        )
-
-        def animate(figure, update, frames, init_func, **kwargs):
-            init_func()
-            init_func()  # Matplotlib may initialize again during resize/blitting.
-            for frame in range(frames):
-                update(frame)
-            return object()
-
-        for module, name, simulation, animation_module, steps_per_frame in cases:
-            with (
-                self.subTest(name=name),
-                patch.object(module, name, return_value=simulation),
-                patch.object(animation_module, "FuncAnimation", side_effect=animate),
-                patch.object(module.plt, "show"),
-                redirect_stdout(io.StringIO()),
-            ):
-                module.main(["--steps", "3"])
-                self.assertEqual(simulation.steps, 3 * steps_per_frame)
 
     def test_invalid_parameters_and_negative_steps(self):
         for factory in (

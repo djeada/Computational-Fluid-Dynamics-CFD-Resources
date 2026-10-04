@@ -1,6 +1,6 @@
 numpy>=1.24
 scipy>=1.10
-matplotlib>=3.7
+matplotlib>=3.8  # 3D pane colours in the shared dark style
 numba>=0.58
 scikit-image>=0.21
-pygame>=2.5
+imageio-ffmpeg>=0.5  # bundled ffmpeg for --reel when none is installed

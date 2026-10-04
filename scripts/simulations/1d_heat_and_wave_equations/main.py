@@ -1,32 +1,36 @@
-"""Animate the 1D heat equation (Crank-Nicolson) and 1D wave equation (leapfrog).
+"""1D heat equation (Crank-Nicolson) next to the 1D wave equation (leapfrog).
 
 Both equations start from the same Gaussian pulse on 0 <= x <= L with
 homogeneous Dirichlet boundaries. The heat equation is advanced with the
 implicit Crank-Nicolson scheme (unconditionally stable), the wave equation with
 the explicit second-order leapfrog scheme, whose Courant number c*dt/dx must
-not exceed 1. Both share one time step, set by the wave CFL limit.
+not exceed 1. Both share one time step, set by the wave CFL limit. Two stacked
+panels show the pulse diffusing away and the pulse splitting into two waves
+that reflect from the fixed ends.
 """
 
+import math
 import sys
 from pathlib import Path
 
-import matplotlib.animation as animation
-import matplotlib.pyplot as plt
 import numpy as np
 from scipy.sparse import diags, identity
 from scipy.sparse.linalg import splu
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int, save_figure  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
 L = 10.0  # domain length (nondimensional)
-T = 500.0  # total simulated time
-NX = 500  # number of grid points
 C = 1.0  # wave speed
 D = 1.0  # diffusivity of the heat equation
-COURANT = 0.9  # c*dt/dx for the leapfrog scheme (must be <= 1)
 PULSE_WIDTH = 5.0  # initial condition exp(-PULSE_WIDTH * (x - L/2)^2)
+T = 2 * L / C  # total simulated time: one wave period, the pulse is back at x = L/2
+NX = 500  # number of grid points
+COURANT = 0.9  # c*dt/dx for the leapfrog scheme (must be <= 1)
+STEPS_PER_FRAME = 1  # time steps per animation frame
+# Steps that reach t = T, as counted by make_grid (1109 for the defaults)
+N_FRAMES = math.ceil(T / (COURANT * (L / (NX - 1)) / C))
 
 
 def make_grid(length=L, nx=NX, c=C, courant=COURANT, total_time=T):
@@ -86,12 +90,13 @@ def initial_state(x, dx, dt, c=C, pulse_width=PULSE_WIDTH):
     return u0.copy(), u_prev, u0.copy()
 
 
-class HeatWaveSimulation:
-    """Coupled heat/wave state with cached Crank-Nicolson factorization."""
+class HeatWaveSimulation(Simulation):
+    """Heat and wave fields on one grid, with the Crank-Nicolson LU cached."""
 
     def __init__(
         self, length=L, nx=NX, c=C, diffusivity=D, courant=COURANT, total_time=T
     ):
+        super().__init__()
         if diffusivity < 0:
             raise ValueError("diffusivity must be nonnegative")
         self.x, self.dx, self.dt, self.default_steps = make_grid(
@@ -103,100 +108,59 @@ class HeatWaveSimulation:
         self.heat, self.wave_prev, self.wave = initial_state(
             self.x, self.dx, self.dt, c
         )
-        self.steps = 0
+        self.initial_pulse = self.wave.copy()  # both equations start from it
 
-    @property
-    def time(self):
-        return self.steps * self.dt
-
-    def advance(self, steps=1):
-        """Advance both equations exactly steps iterations, without plotting."""
-        if steps < 0:
-            raise ValueError("steps must be nonnegative")
-        for _ in range(steps):
-            heat_step(self.heat, self.lu, self.b)
-            wave_step(self.wave_prev, self.wave, self.courant2)
-            self.steps += 1
+    def step(self):
+        heat_step(self.heat, self.lu, self.b)
+        wave_step(self.wave_prev, self.wave, self.courant2)
 
 
-def setup_figure(x):
-    """Create the two-panel dark figure; return (fig, artists)."""
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), facecolor="black")
-    for ax in (ax1, ax2):
-        ax.set_facecolor("black")
-        ax.set_xlim(x[0], x[-1])
-        ax.grid(False)
-        ax.tick_params(axis="x", colors="white")
-        ax.tick_params(axis="y", colors="white")
-        ax.set_ylabel("Amplitude", fontsize=14, color="white")
-    (line_heat,) = ax1.plot(x, np.zeros_like(x), color="cyan", lw=2)
-    (line_wave,) = ax2.plot(x, np.zeros_like(x), color="magenta", lw=2)
-    ax1.set_title("Heat Equation (Crank-Nicolson)", fontsize=16, color="white")
-    ax2.set_title("Wave Equation (Leapfrog)", fontsize=16, color="white")
-    ax2.set_xlabel("Spatial Coordinate $x$", fontsize=14, color="white")
-    ax1.set_ylim(-0.1, 1.1)
-    ax2.set_ylim(-1.1, 1.1)
-    text_kw = dict(fontsize=14, color="white", bbox=dict(facecolor="black", alpha=0.5))
-    time_text1 = ax1.text(0.75, 0.85, "", transform=ax1.transAxes, **text_kw)
-    time_text2 = ax2.text(0.75, 0.85, "", transform=ax2.transAxes, **text_kw)
-    fig.tight_layout()
-    return fig, (line_heat, line_wave, time_text1, time_text2)
+class HeatWaveView(View):
+    """Heat solution above the wave solution, with the initial pulse dashed."""
+
+    figsize = (10.0, 7.0)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        x = simulation.x
+        heat_ax, wave_ax = figure.subplots(2, 1, sharex=True)
+        dashed = dict(color="0.5", lw=1.5, ls="--", label="initial pulse")
+        for ax in (heat_ax, wave_ax):
+            ax.plot(x, simulation.initial_pulse, **dashed)
+            ax.set(xlim=(x[0], x[-1]), ylabel="u")
+        (self.heat_line,) = heat_ax.plot(x, simulation.heat, color="cyan")
+        (self.wave_line,) = wave_ax.plot(x, simulation.wave, color="magenta")
+        heat_ax.set(ylim=(-0.1, 1.1), title="Heat equation (Crank-Nicolson)")
+        wave_ax.set(ylim=(-1.1, 1.1), title="Wave equation (leapfrog)", xlabel="x")
+        heat_ax.legend(loc="upper right")
+
+    def draw(self):
+        self.heat_line.set_ydata(self.simulation.heat)
+        self.wave_line.set_ydata(self.simulation.wave)
+
+    def status(self):
+        return f"t = {self.simulation.time:.2f}"
+
+
+ANIMATION = Animation(
+    title="Heat vs Wave Equation",
+    subtitle="One pulse diffuses, the other travels",
+    filename="heat_and_wave_1d.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label="time steps",
+)
 
 
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=None,
-        help="number of time steps (animation frames); default reaches t = T",
-    )
-    args = parser.parse_args(argv)
-
-    simulation = HeatWaveSimulation()
-    n_steps = simulation.default_steps if args.steps is None else args.steps
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, HeatWaveSimulation(), HeatWaveView)
     print(
-        f"dx = {simulation.dx:.4f}, dt = {simulation.dt:.4f}, "
-        f"Courant = {np.sqrt(simulation.courant2):.3f}, "
-        f"r = D dt/dx^2 = {simulation.r:.2f} (Crank-Nicolson: stable for any r)"
+        f"t = {simulation.time:.2f} after {simulation.steps} steps of "
+        f"dt = {simulation.dt:.4f} (Courant {np.sqrt(simulation.courant2):.3f}, "
+        f"r = D dt/dx^2 = {simulation.r:.1f}): heat peak "
+        f"{simulation.heat.max():.3f}, wave peak {simulation.wave.max():.3f}"
     )
-
-    fig, (line_heat, line_wave, text1, text2) = setup_figure(simulation.x)
-
-    def draw():
-        line_heat.set_ydata(simulation.heat)
-        line_wave.set_ydata(simulation.wave)
-        label = f"Time = {simulation.time:.4f} s"
-        text1.set_text(label)
-        text2.set_text(label)
-        return [line_heat, line_wave, text1, text2]
-
-    def animate(i):
-        simulation.advance()
-        return draw()
-
-    draw()
-    if args.no_show:
-        simulation.advance(n_steps)
-        draw()
-    else:
-        ani = animation.FuncAnimation(
-            fig,
-            animate,
-            frames=n_steps,
-            init_func=draw,
-            interval=20,
-            blit=True,
-            repeat=False,
-        )
-        plt.show()  # after the window closes, the figure holds the last frame
-        del ani
-
-    if args.output:
-        save_figure(
-            fig, args.output, "heat_and_wave_1d.png", facecolor=fig.get_facecolor()
-        )
-    plt.close(fig)
 
 
 if __name__ == "__main__":

@@ -39,9 +39,10 @@ pip install -r requirements.txt
 cd scripts/simulations/lid_driven_cavity
 python main.py                                  # interactive window
 python main.py --no-show --output figures       # save the figure instead
+python main.py --reel cavity.mp4                # vertical video for Shorts/Reels
 ```
 
-Every script accepts `--no-show` and `--output DIR`. Time-stepping and interactive scripts also accept `--steps N`. Each script folder has a README explaining the maths, the implementation, and the output.
+Every script accepts `--no-show` and `--output DIR`. Time-stepping and interactive scripts also accept `--steps N`. Every simulation can also render itself as a 1080 × 1920 video with `--reel FILE`, and `python tools/make_reels.py` renders all of them at once (see [`scripts/README.md`](scripts/README.md#shorts-and-reels)). Each script folder has a README explaining the maths, the implementation, and the output.
 
 ## Learning paths
 
@@ -224,15 +225,15 @@ Each script lives in its own folder with a `main.py` and a README covering the m
 | [Backward-Facing Step Flow (SIMPLE Algorithm)](scripts/simulations/backward_facing_step_simple/) | This script solves steady 2D laminar incompressible flow over a backward-facing step with the finite volume method and the SIMPLE pressure–velocity coupling algorithm. |
 | [Bak–Tang–Wiesenfeld Sandpile Model (3D)](scripts/simulations/bak_tang_wiesenfeld_sandpile_model_3d/) | This script simulates the two-dimensional Bak–Tang–Wiesenfeld (BTW) sandpile on a 20×20 lattice and animates its height field as a 3D surface. |
 | [Charged Particle Dynamics in a Magnetic Field](scripts/simulations/charged_particle_dynamics_in_a_magnetic_field_using_runge_kutta_methods/) | This script integrates the motion of a charged particle in a uniform magnetic field with the classical fourth-order Runge–Kutta (RK4) method and animates the resulting helical trajectory in 3D. |
-| [Eulerian Cylinder Flow](scripts/simulations/eulerian_cylinder_flow/) | This script simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and renders a dye tracer in real time with Pygame. |
+| [Eulerian Cylinder Flow](scripts/simulations/eulerian_cylinder_flow/) | This script simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and animates a dye tracer with Matplotlib. |
 | [Ising Model Simulation](scripts/simulations/ising_model/) | This script simulates the two-dimensional Ising model with the Metropolis Monte Carlo algorithm and animates the spin lattice together with its magnetization and energy. |
-| [Kelvin-Helmholtz Instability Simulation](scripts/simulations/kelvin_helmholtz_instability/) | This script simulates the Kelvin-Helmholtz instability, the rolling-up of a shear layer between fluid streams moving in opposite directions, in a periodic 2D incompressible flow drawn in real time with Pygame. |
+| [Kelvin-Helmholtz Instability Simulation](scripts/simulations/kelvin_helmholtz_instability/) | This script simulates the Kelvin-Helmholtz instability, the rolling-up of a shear layer between fluid streams moving in opposite directions, in a periodic 2D incompressible flow animated with Matplotlib. |
 | [Laplace Equation Maze Solver](scripts/simulations/laplace_equation_maze_solver/) | This script solves a randomly generated maze by computing a potential that satisfies Laplace's equation in the maze passages and then following the potential uphill from the entrance to the exit. |
-| [Lattice Boltzmann Cylinder Flow Simulation](scripts/simulations/lattice_boltzmann_cylinder_flow/) | This script simulates 2D flow past a circular cylinder with the lattice Boltzmann method (D2Q9 lattice, BGK collision operator) and animates the velocity magnitude with Matplotlib. |
+| [Lattice Boltzmann Cylinder Flow Simulation](scripts/simulations/lattice_boltzmann_cylinder_flow/) | This script simulates 2D flow past a circular cylinder with the lattice Boltzmann method (D2Q9 lattice, BGK collision operator) and animates the velocity magnitude and the vorticity with Matplotlib. |
 | [Lid-Driven Cavity Flow Simulation](scripts/simulations/lid_driven_cavity/) | This script solves the 2D incompressible Navier-Stokes equations for flow in a square cavity driven by a moving lid at a Reynolds number of 100 and animates the velocity field. |
-| [Rayleigh-Bénard Convection Simulation](scripts/simulations/rayleigh_benard_convection/) | This script simulates Rayleigh-Bénard convection, the buoyancy-driven flow in a fluid layer heated from below and cooled from above, and draws the temperature field in real time with Pygame. |
+| [Rayleigh-Bénard Convection Simulation](scripts/simulations/rayleigh_benard_convection/) | This script simulates Rayleigh-Bénard convection, the buoyancy-driven flow in a fluid layer heated from below and cooled from above, and animates the temperature field with Matplotlib. |
 | [2D Schrödinger Equation Simulation](scripts/simulations/schroedinger_equation/) | This script solves the time-dependent Schrödinger equation for a free particle in two dimensions with the split-step Fourier method and animates the probability density of the spreading wavepacket as a 3D surface. |
-| [Simplified Real-Time Fluid Dynamics Simulator](scripts/simulations/simplified_real_time_fluid_dynamics_simulator/) | This script is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Pygame window. |
+| [Simplified Real-Time Fluid Dynamics Simulator](scripts/simulations/simplified_real_time_fluid_dynamics_simulator/) | This script is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Matplotlib window. |
 | [Steady and Unsteady Pathlines Around a Cylinder with Vortex Shedding](scripts/simulations/steady_and_unsteady_pathlines_with_vortex_shedding/) | This script compares streamlines and particle pathlines for steady potential flow past a cylinder with circulation and for an unsteady version of the same flow with a kinematic vortex-shedding model. |
 
 <!-- END GENERATED: scripts -->

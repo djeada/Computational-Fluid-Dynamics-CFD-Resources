@@ -1,16 +1,16 @@
 # Simplified Real-Time Fluid Dynamics Simulator
 
-This script is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Pygame window. The `FluidSimulation` class advances a velocity field and a passive density field on an Eulerian grid inside a closed box, using implicit diffusion, semi-Lagrangian advection and a pressure projection. A short demonstration is on YouTube: [![Watch on YouTube](https://img.youtube.com/vi/auwaTfkpIXo/maxresdefault.jpg)](https://youtube.com/shorts/auwaTfkpIXo)
+This script is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Matplotlib window. The `FluidSimulation` class advances a velocity field and a passive density field on an Eulerian grid inside a closed box, using implicit diffusion, semi-Lagrangian advection and a pressure projection. A short demonstration is on YouTube: [![Watch on YouTube](https://img.youtube.com/vi/auwaTfkpIXo/maxresdefault.jpg)](https://youtube.com/shorts/auwaTfkpIXo)
 
 ## Overview
 
-- **Grid**: velocity components $(V_x, V_y)$ and density on a collocated 200 × 150 grid, drawn in an 800 × 600 window with 4 px cells.
+- **Grid**: velocity components $(V_x, V_y)$ and density on a collocated 200 × 150 grid (`GRID_WIDTH`, `GRID_HEIGHT`).
 - **Diffusion**: implicit (backward Euler) for velocity and density. The linear system is solved with 20 Jacobi iterations.
 - **Advection**: semi-Lagrangian back-tracing with bilinear interpolation for velocity and density.
 - **Projection**: the velocity is made divergence-free by a pressure Poisson solve (20 Jacobi iterations). It is applied after diffusion and again after advection.
 - **Walls**: `set_bnd` enforces solid walls on all four sides.
-- **Interaction**: a left click adds 1000 units of density and a random velocity kick of up to ±200 in each component, drawn from a seeded generator. With `--auto-inject`, or automatically with `--no-show`, a swaying plume is injected at the bottom centre every frame instead.
-- **Display**: density is drawn in the blue channel as $\min(1000\,\rho, 255)$.
+- **Interaction**: a left click in the window adds 1000 units of density and a random velocity kick of up to ±200 in each component at the clicked cell, drawn from a seeded generator. Clicks are ignored while the toolbar's zoom or pan mode is active. With `--auto-inject`, and always without a window (`--no-show` or `--reel`), a swaying plume is injected at the bottom centre before every solver step.
+- **Display**: the density is drawn from black through blue to white. Full blue is $\rho = 0.255$ (`DENSITY_BLUE`) and white is $\rho = 0.51$, so only the jet's core and fresh click puffs are lighter than full blue.
 
 ## Mathematical Background
 
@@ -26,7 +26,7 @@ $$
 \frac{\partial \rho}{\partial t} = -(\mathbf{u}\cdot\nabla)\rho + D\,\nabla^2\rho
 $$
 
-External sources (mouse clicks or the scripted plume) are added to $\mathbf{u}$ and $\rho$ before each step.
+External sources (mouse clicks or the scripted plume) are added to $\mathbf{u}$ and $\rho$ before a step.
 
 ### Implicit Diffusion
 
@@ -78,31 +78,33 @@ Here $q = \Delta t\,p/\rho$ absorbs the time step and density.
 ## Implementation
 
 - `FluidSimulation.vel_step` runs `diffuse` → `project` → `advect` → `project`, swapping the `Vx0`/`Vy0` scratch arrays as in Stam's reference code.
-- `FluidSimulation.dens_step` runs `diffuse` → `advect` for the density, and `step` calls both.
-- `add_density` and `add_velocity` inject sources at a grid cell.
-- `handle_events` processes window closing and left clicks. `inject_plume` adds the scripted source (`PLUME_DENSITY`, `PLUME_VELOCITY`, `PLUME_SWAY`).
-- `draw_simulation` converts the density to a scaled surface.
-- `main` parses the flags and runs one solver step per frame.
-- Parameters are module constants: `DIFFUSION`, `VISCOSITY`, `TIME_STEP` (0.1), `SOLVER_ITERATIONS`, `CELL_SIZE` and `SCREEN_SIZE`.
+- `FluidSimulation.dens_step` runs `diffuse` → `advect` for the density. `step` calls `inject_plume` when `auto_inject` is set, then `vel_step` and `dens_step`.
+- `add_density` and `add_velocity` inject sources at a grid cell. `add_click` adds a click's density and random kick, and `inject_plume` adds the scripted source (`PLUME_DENSITY`, `PLUME_VELOCITY`, `PLUME_SWAY`).
+- `FluidView` draws the density with `imshow`. Row 0 of the grid is the top of the box, so the image uses `origin="upper"` and the y axis counts cells downwards. Its `on_click` handler converts a left click to the nearest grid cell and calls `add_click`.
+- `ANIMATION` and `main` use the shared runner in `scripts/_animation.py`. `main` turns the plume on for `--auto-inject`, `--no-show` and `--reel`. A frame is `STEPS_PER_FRAME = 2` solver steps, headless runs and reels default to `N_FRAMES = 450` frames ($t = 90$), and the window runs until it is closed.
+- Parameters are module constants: `DIFFUSION`, `VISCOSITY`, `TIME_STEP` (0.1), `SOLVER_ITERATIONS`, `GRID_WIDTH` and `GRID_HEIGHT`. The generator is seeded with `SEED`.
 
 ## Usage
 
 ```bash
-python main.py                                    # interactive: left-click to add smoke, runs until closed
+python main.py                                    # interactive: left-click to add smoke (space pauses)
 python main.py --auto-inject                      # watch the scripted plume in a window
-python main.py --no-show --output . --steps 300   # headless, scripted plume, save a screenshot
+python main.py --no-show --output . --steps 150   # scripted plume, save the frame at t = 30 as a PNG
+python main.py --reel reel.mp4                    # 30 s vertical video of the plume for Shorts/Reels
 ```
 
-`--steps N` sets the number of frames, with one solver step per frame.
+`--steps N` sets the number of frames; each frame is 2 solver steps of $\Delta t = 0.1$.
 
 ## Output
 
-![Stable Fluids smoke plume after 300 frames](simplified_real_time_fluid_dynamics_simulator.png)
+![Stable Fluids smoke plume after 300 solver steps](simplified_real_time_fluid_dynamics_simulator.png)
 
-The screenshot shows the scripted plume after 300 frames:
+The image shows the scripted plume after 150 frames (300 solver steps, $t = 30$), with the density colour bar on the right:
 
-- **Jet**: a bright, swaying jet rises from the source near the bottom of the box.
-- **Smoke clouds**: the smoke rolls up into large vortices and spreads into diffuse clouds as it fills the upper part of the closed box.
+- **Jet**: a bright, swaying jet rises from the source near the bottom of the box. Only its core next to the source is dense enough ($\rho > 0.255$) to be drawn lighter than full blue.
+- **Smoke clouds**: the smoke rolls up into two large vortices and spreads into diffuse blue clouds as it fills the upper part of the closed box.
+
+Over the default 450 frames ($t = 90$) the clouds spread until most of the box is a blue haze, while the jet keeps swaying.
 
 Stable Fluids trades accuracy for robustness. Semi-Lagrangian advection and the few Jacobi iterations add strong numerical dissipation and leave a small residual divergence, so the result is visually plausible rather than a quantitative Navier-Stokes solution.
 

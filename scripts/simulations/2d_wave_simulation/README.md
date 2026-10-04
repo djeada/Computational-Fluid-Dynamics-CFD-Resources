@@ -9,7 +9,7 @@ This script solves the 2D scalar wave equation on a square domain with an explic
 - Advances the solution with the explicit leapfrog (central-in-time, central-in-space) scheme.
 - Holds $u = 0$ on all four edges (Dirichlet boundary conditions), so the ring reflects with inverted sign.
 - Takes the time step as half the 2D CFL limit.
-- Animates the wave amplitude as a 3D `plot_surface` with the viridis colormap, a fixed colour scale from $-5$ to $5$, and a dark background.
+- Animates the displacement as a 3D Matplotlib surface on a fixed height axis from $-5$ to $5$, coloured with viridis on a fixed scale from $-2$ to $2$ so the weaker reflected rings still show crests and troughs. The initial pulse, and the brief peaks where reflections focus (up to about $|u| = 4$), saturate this colour scale.
 
 ## Mathematical Background
 
@@ -56,26 +56,26 @@ with $A = 5$. The initial pulse is set to zero on all boundary nodes. Zero initi
 - `make_grid` builds the grid with `np.meshgrid`, so array axis 0 is $y$ and axis 1 is $x$, and computes `dt` from the CFL condition.
 - `initial_condition` enforces the fixed edges and returns the second-order zero-velocity starting levels.
 - `leapfrog_step` applies the update above to interior points and sets the boundary to zero.
-- `WaveSimulation(length, nx, ny, c, cfl_safety)` owns the fields and step counter. `advance(steps)` runs without a figure; `time` is derived from the completed step count. Grid and CFL parameters are validated.
-- `main` builds the figure. It either animates with `FuncAnimation`, advancing one step and redrawing the surface each frame, or, with `--no-show`, runs all the steps and draws the final surface once. Animation initialization redraws without advancing time. A shared `Normalize(-5, 5)` keeps the surface colours consistent with the colour bar.
+- `WaveSimulation(length, nx, ny, c, cfl_safety)` holds the two time levels `u_prev` and `u`. `step()` performs one leapfrog step, `advance(n)` runs `n` of them without plotting, and `time` is the completed step count times `dt`. Invalid grid and CFL parameters raise `ValueError`.
+- `WaveView` draws the state: it removes and re-plots the surface for each frame, with one shared `Normalize(-2, 2)` for the surface and the colour bar. In a vertical reel the colour bar sits below the surface and the 3D box is taller.
+- `ANIMATION` and `main` use the shared runner in `scripts/_animation.py`, which provides the window, headless runs, the PNG and the reel. One frame is `STEPS_PER_FRAME = 4` leapfrog steps, and the default `N_FRAMES = 280` frames reach `T_END = 40`.
 
 ## Usage
 
 ```bash
-python main.py                                     # animate up to t = 40 (1120 frames)
-python main.py --steps 300                         # animate the first 300 steps
-python main.py --no-show --output . --steps 45     # save the surface at t = 1.6 as a PNG
+python main.py                                    # animate in a window up to t = 40 (space pauses)
+python main.py --steps 70                         # stop at t = 10
+python main.py --no-show --output . --steps 70    # save the surface at t = 10 as a PNG
+python main.py --reel reel.mp4                    # 30 s vertical video for Shorts/Reels
 ```
 
-- `--steps N` runs exactly `N` time steps (one per frame).
-- `--no-show` skips the window.
-- `--output DIR` saves `wave_2d.png` in `DIR`.
+`--steps N` sets the number of frames; each frame is 4 leapfrog steps of $\Delta t \approx 0.0357$. `--output DIR` saves `wave_2d.png` in `DIR`.
 
 ## Output
 
-![2D wave surface at t = 1.6](wave_2d.png)
+![2D wave surface at t = 10](wave_2d.png)
 
-The surface is shown after 45 steps ($t \approx 1.6$). The initial bump has become an outward-moving circular crest with a trough at the centre. Later in the animation the ring reaches the boundary at $|x| = 5$ or $|y| = 5$, reflects with inverted sign, and the reflected waves interfere to form a changing pattern of crests and troughs.
+The surface is shown after 70 frames ($t = 10$). Early in the run the bump becomes an outward-moving circular crest with a trough at the centre. Travelling at $c = 1$, the ring reaches the edges at $|x| = 5$ and $|y| = 5$ at about $t = 5$ and reflects with inverted sign. At $t = 10$ the reflected waves have returned to the centre and add up to a deep trough ($u \approx -1.86$), surrounded by four crests ($u \approx 1.06$) on the diagonals near $(\pm 2.6, \pm 2.6)$. For the rest of the run the reflections keep interfering in a changing pattern of crests and troughs.
 
 ## Related Notes
 

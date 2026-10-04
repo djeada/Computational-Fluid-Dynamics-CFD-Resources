@@ -8,8 +8,8 @@ This script solves the time-dependent Schrödinger equation for a free particle 
 - **Scheme**: Strang split-step Fourier method: a half kinetic step in Fourier space, a full potential step in real space, then another half kinetic step.
 - **Initial state**: a Gaussian wavepacket at rest at the origin, normalised so that $\iint|\psi|^2\,dA = 1$.
 - **Potential**: `potential(X, Y)` returns zero everywhere (free particle). Edit it to add a barrier or a well.
-- **Animation**: $|\psi|^2$ drawn as a `viridis` 3D surface, with a fixed $z$ range and colour bar. Each frame is 5 time steps of $\Delta t = 0.01$, and the default 20 frames reach $t = 1$.
-- **Norm check**: at the end the script prints the total probability and its change from the initial value.
+- **Animation**: $|\psi|^2$ drawn as a `viridis` 3D Matplotlib surface. The height axis and colour bar are fixed from 0 to the initial peak, so the falling peak is visible. Each frame is 10 time steps of $\Delta t = 0.001$, and the default 100 frames reach $t = 1$.
+- **Norm check**: at the end the script prints the total probability and its change from the initial value. The current peak of $|\psi|^2$ is shown next to the time.
 
 ## Mathematical Background
 
@@ -54,29 +54,32 @@ where $\tilde\psi$ is the 2D FFT of $\psi$. Each factor has modulus one, so the 
 - `initial_wavefunction` builds the normalised Gaussian. `potential` defines $V$.
 - `squared_wavenumbers` returns $k^2$ on the FFT grid.
 - `evolve` provides a standalone reference implementation of one Strang step.
-- `SchrodingerSimulation(length, n, dt)` owns the wavefunction and caches the kinetic and potential propagators. `advance(steps)` evolves without plotting; `density`, `norm`, and `time` expose the current state.
+- `SchrodingerSimulation(length, n, dt)` owns the wavefunction and caches the kinetic and potential propagators. `step()` performs one Strang step with them, `advance(n)` runs `n` steps without plotting, and `density`, `norm` and `time` expose the current state. It also records `initial_norm` and `initial_peak`, which fix the plot scales. A nonpositive `dt` raises `ValueError`.
 - `probability_norm` computes $\sum|\psi|^2\,\Delta x^2$.
-- `main` parses the flags, draws the surface and colour bar, and advances `SPEED_FACTOR` steps per frame with `FuncAnimation`, or advances all requested steps and redraws once when `--no-show` is given.
-- Parameters are module constants: `DOMAIN_LENGTH`, `N_POINTS`, `TIME_STEP`, `FINAL_TIME` and `SPEED_FACTOR`.
+- `SchrodingerView` removes and re-plots the surface for each frame. In a vertical reel the colour bar sits below the surface and the 3D box is taller.
+- `ANIMATION` and `main` use the shared runner in `scripts/_animation.py`, which provides the window, headless runs, the PNG and the reel.
+- Parameters are module constants: `DOMAIN_LENGTH`, `N_POINTS`, `TIME_STEP`, `FINAL_TIME` and `STEPS_PER_FRAME` (also available under its former name `SPEED_FACTOR`).
+- The time step only matters once `potential` is nonzero. For $V = 0$ the result at $t = 1$ is the same, to round-off, for $\Delta t = 0.01$ and $0.001$. The small step gives the default run 1000 distinct states, enough for a smooth 30 s reel.
 
 ## Usage
 
 ```bash
-python main.py                                   # animate to t = 1 (20 frames)
-python main.py --steps 60                        # 60 frames, t = 3
-python main.py --no-show --output . --steps 20   # save the final frame as a PNG
+python main.py                                    # animate in a window to t = 1 (space pauses)
+python main.py --steps 300                        # run on to t = 3
+python main.py --no-show --output . --steps 100   # save the state at t = 1 as a PNG
+python main.py --reel reel.mp4                    # 30 s vertical video for Shorts/Reels
 ```
 
-`--steps N` sets the number of animation frames. Each frame is 5 time steps of 0.01. The domain is periodic, so for long runs ($t \gtrsim 5$) the spreading packet wraps around the edges.
+`--steps N` sets the number of frames; each frame is 10 time steps of $\Delta t = 0.001$. The domain is periodic, so for long runs ($t \gtrsim 5$) the spreading packet wraps around the edges.
 
 ## Output
 
 ![Probability density at t = 1](schroedinger_equation.png)
 
-The final frame shows $|\psi|^2$ at $t = 1$:
+The final frame shows $|\psi|^2$ at $t = 1$, on the same scales as the initial packet:
 
-- **Spreading**: the wavepacket has widened by a factor $\sqrt2$ and its peak has dropped to about 0.159, half of the initial value. This agrees with the exact solution above to within $2\times10^{-6}$.
-- **Norm**: the printed total probability is 1 to within about $10^{-15}$.
+- **Spreading**: the wavepacket has widened by a factor $\sqrt2$ and its peak has dropped to about 0.159, half of the initial value and of the height axis. This agrees with the exact solution above to within $2\times10^{-6}$.
+- **Norm**: the printed total probability is 1 to within about $10^{-13}$ (round-off accumulated over 1000 steps).
 
 ## Related Notes
 
