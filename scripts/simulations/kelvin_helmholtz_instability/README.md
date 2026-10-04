@@ -1,6 +1,6 @@
 # Kelvin-Helmholtz Instability Simulation
 
-This script simulates the Kelvin-Helmholtz instability, the rolling-up of a shear layer between fluid streams moving in opposite directions, in a periodic 2D incompressible flow drawn in real time with Pygame. A passive temperature field marks the two streams, so the growing vortices appear as curling bands of colour.
+This script simulates the Kelvin-Helmholtz instability, the rolling-up of a shear layer between fluid streams moving in opposite directions, in a periodic 2D incompressible flow animated with Matplotlib. A passive temperature field marks the two streams, so the growing vortices appear as curling bands of colour.
 
 ## Overview
 
@@ -8,7 +8,8 @@ This script simulates the Kelvin-Helmholtz instability, the rolling-up of a shea
 - **Perturbation**: a cross-stream velocity $v \propto \sin(2\pi k x/N)$ with $k = 4$ wavelengths, localised at both layers, plus seeded random noise.
 - **Solver**: semi-Lagrangian advection, a spectral (FFT) pressure projection and explicit viscous diffusion, all periodic in both directions.
 - **Passive scalar**: temperature is 1 in the central band and 0 outside; it is advected by the flow and diffuses.
-- **Display**: temperature is mapped to hue from blue (coldest) to red (hottest), normalised every frame, in a 512 × 512 Pygame window with 2 solver steps per frame.
+- **Display**: temperature is drawn with the `turbo` colour map on a fixed scale from 0 (blue, outer stream) to 1 (red, central band), with 2 solver steps per frame. The window runs until it is closed; headless runs and reels stop after 300 frames ($t = 300$).
+- **Reel**: `--reel FILE` renders the run as a 1080 × 1920 MP4 for YouTube Shorts or Instagram Reels.
 
 ## Mathematical Background
 
@@ -71,24 +72,26 @@ Semi-Lagrangian advection is stable for any time step. The script uses a Courant
 
 - `initialize_fields` builds the double shear layer, the perturbation and the temperature bands, and projects the initial velocity.
 - `advect`, `project` and `diffuse` implement the three stages above. `update_fields` combines them into one time step.
-- `temperature_to_rgb` converts temperature to an RGB array with hue running from 240° to 0°. `draw` scales the array onto the window.
-- Parameters are module constants: `GRID_SIZE`, `SHEAR_VELOCITY`, `LAYER_THICKNESS`, `PERTURBATION_AMPLITUDE`, `PERTURBATION_WAVES`, `TIME_STEP`, `VISCOSITY`, `DIFFUSION_RATE` and `STEPS_PER_FRAME`.
+- `KelvinHelmholtzSimulation(n, seed)` derives from the shared `Simulation` class in [`scripts/_animation.py`](../../_animation.py) and holds `u`, `v` and `temperature`; `step()` calls `update_fields` once.
+- `KelvinHelmholtzView` shows the temperature with `imshow` and a colour bar, and updates the image without advancing the solver. `ANIMATION.run` uses it for the window, the `--output` PNG and the `--reel` video.
+- Parameters are module constants: `GRID_SIZE`, `SHEAR_VELOCITY`, `LAYER_THICKNESS`, `PERTURBATION_AMPLITUDE`, `PERTURBATION_WAVES`, `TIME_STEP`, `VISCOSITY`, `DIFFUSION_RATE`, `STEPS_PER_FRAME` and `N_FRAMES`.
 
 ## Usage
 
 ```bash
-python main.py                                    # run until the window is closed
+python main.py                                    # run until the window is closed; space pauses
 python main.py --steps 300                        # stop after 300 frames
-python main.py --no-show --output . --steps 150   # headless, save a screenshot at t = 150
+python main.py --no-show --output . --steps 150   # headless, save the frame at t = 150
+python main.py --reel reel.mp4                    # 30 s vertical video for Shorts/Reels
 ```
 
-`--steps N` sets the number of frames. Each frame is 2 solver steps of $\Delta t = 0.5$.
+`--steps N` sets the number of frames; each frame is 2 solver steps of $\Delta t = 0.5$.
 
 ## Output
 
 ![Kelvin-Helmholtz rolls after 150 frames](kelvin_helmholtz_instability.png)
 
-The screenshot shows the temperature field after 150 frames ($t = 150$):
+The image shows the temperature field after 150 frames ($t = 150$):
 
 - **Roll-up**: both shear layers have rolled up into four Kelvin-Helmholtz vortices each, the seeded wavelength, and the spirals entrain hot (red) and cold (blue) fluid.
 - **Mixed fluid**: the green and cyan colours inside the rolls mark fluid at intermediate temperature.

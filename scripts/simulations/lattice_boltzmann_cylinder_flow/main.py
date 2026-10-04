@@ -2,20 +2,19 @@
 
 A uniform inflow (Zou/He velocity inlet) passes a circular obstacle with
 bounce-back walls; the domain is periodic in y and has a zero-gradient outlet.
-The velocity magnitude is animated with Matplotlib and shows the von Karman
-vortex street once shedding sets in.
+Two stacked colour maps show the velocity magnitude and the vorticity, in which
+the von Karman vortex street appears once shedding sets in.
 """
 
 import sys
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.animation import FuncAnimation
+from matplotlib import colormaps
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int, save_figure  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
 # Simulation parameters (lattice units: dx = dt = 1)
 REYNOLDS_NUMBER = 350.0  # Re = U * r / nu, based on the cylinder radius
@@ -25,9 +24,10 @@ CYLINDER_COORDS = (LATTICE_DIMENSIONS[0] // 4, LATTICE_DIMENSIONS[1] // 2)
 CYLINDER_RADIUS = LATTICE_DIMENSIONS[1] // 12
 VELOCITY_LATTICE_UNITS = 0.06  # inflow speed U (Mach number U / c_s = 0.10)
 STEPS_PER_FRAME = 10  # LBM time steps between animation frames
-N_FRAMES = (
-    3000  # default number of frames (30 000 time steps; shedding starts near 20 000)
-)
+N_FRAMES = 3000  # default frames: 30 000 time steps, shedding starts near 20 000
+VORTICITY_SCALE = 3.0  # vorticity colour range: -3 to 3 in units of U / r
+# Diverging map with a dark centre (Matplotlib >= 3.10); coolwarm on older versions
+VORTICITY_CMAP = "berlin" if "berlin" in colormaps else "coolwarm"
 
 # Relaxation parameter omega = 1 / tau with nu = c_s^2 (tau - 1/2), c_s^2 = 1/3
 VISCOSITY_LATTICE_UNITS = VELOCITY_LATTICE_UNITS * CYLINDER_RADIUS / REYNOLDS_NUMBER
@@ -122,104 +122,120 @@ def lbm_step(fin, obstacle, inflow_velocity, relaxation=RELAXATION_PARAMETER):
     return u
 
 
-class LatticeBoltzmannSimulation:
-    """Population state and BGK time integration, with configurable grid size."""
+class LatticeBoltzmannSimulation(Simulation):
+    """Population state and BGK time integration, with configurable grid size.
+
+    One step is one collision and streaming iteration (dt = 1 in lattice units).
+    """
 
     def __init__(self, dimensions=LATTICE_DIMENSIONS):
+        super().__init__()
         nx, ny = dimensions
         if nx < 12 or ny < 12:
             raise ValueError("at least 12 nodes per axis are required")
-        radius = ny // 12
-        self.viscosity = VELOCITY_LATTICE_UNITS * radius / REYNOLDS_NUMBER
+        self.radius = ny // 12
+        self.viscosity = VELOCITY_LATTICE_UNITS * self.radius / REYNOLDS_NUMBER
         self.relaxation = 1.0 / (3.0 * self.viscosity + 0.5)
-        self.obstacle = make_obstacle(dimensions, (nx // 4, ny // 2), radius)
+        self.obstacle = make_obstacle(dimensions, (nx // 4, ny // 2), self.radius)
         self.inflow_velocity = make_inflow_velocity(dimensions)
         self.populations = equilibrium(1.0, self.inflow_velocity)
-        self.steps = 0
+
+    def step(self):
+        lbm_step(self.populations, self.obstacle, self.inflow_velocity, self.relaxation)
+
+    @property
+    def velocity(self):
+        """Velocity (2, nx, ny) of the current, streamed populations."""
+        return compute_velocity(self.populations, compute_density(self.populations))
 
     @property
     def speed(self):
-        velocity = compute_velocity(self.populations, compute_density(self.populations))
-        speed = np.linalg.norm(velocity, axis=0)
+        """Velocity magnitude (nx, ny); NaN inside the cylinder."""
+        speed = np.linalg.norm(self.velocity, axis=0)
         speed[self.obstacle] = np.nan
         return speed
 
-    def advance(self, steps=1):
-        """Advance exactly steps collision/streaming iterations without plotting."""
-        if steps < 0:
-            raise ValueError("steps must be nonnegative")
-        for _ in range(steps):
-            lbm_step(
-                self.populations, self.obstacle, self.inflow_velocity, self.relaxation
-            )
-            self.steps += 1
+    @property
+    def vorticity(self):
+        """Vorticity dv/dx - du/dy (nx, ny) by central differences; NaN inside."""
+        u, v = self.velocity
+        vorticity = np.gradient(v, axis=0) - np.gradient(u, axis=1)
+        vorticity[self.obstacle] = np.nan
+        return vorticity
+
+
+class LatticeBoltzmannView(View):
+    """Speed above vorticity, both normalised with the inflow speed U and radius r.
+
+    The flow runs left to right in the window and the reel alike: two stacked
+    2.9:1 maps, with their colour bars below them in a reel, fill the nearly
+    square reel panel, while a single map, rotated or not, would leave two
+    thirds of it empty. The vorticity map shows the vortex street as
+    alternating red (counter-clockwise) and blue (clockwise) eddies. Grey marks
+    the cylinder.
+    """
+
+    figsize = (10.0, 7.6)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        axes = figure.subplots(2, 1, sharex=True)
+        panels = (
+            ("speed", "viridis", (0.0, 2.0), r"Speed $|\mathbf{u}|\,/\,U$"),
+            ("vorticity", VORTICITY_CMAP, (-VORTICITY_SCALE, VORTICITY_SCALE),
+             r"Vorticity $\omega\, r\,/\,U$"),
+        )  # fmt: skip
+        self.images = {}
+        for ax, (name, cmap, limits, title) in zip(axes, panels):
+            self.images[name] = ax.imshow(
+                self.field(name), cmap=colormaps[cmap].with_extremes(bad="0.55"),
+                vmin=limits[0], vmax=limits[1], origin="lower",
+                interpolation="bilinear",
+            )  # fmt: skip
+            figure.colorbar(
+                self.images[name], ax=ax, ticks=np.linspace(*limits, 5),
+                location="bottom" if portrait else "right",
+            )  # fmt: skip
+            ax.set(title=title, ylabel="y [nodes]")
+        axes[-1].set_xlabel("x [nodes]")
+
+    def field(self, name):
+        """Normalised field in image orientation: rows are y, columns x."""
+        simulation = self.simulation
+        if name == "speed":
+            field = simulation.speed / VELOCITY_LATTICE_UNITS
+        else:
+            field = simulation.vorticity * simulation.radius / VELOCITY_LATTICE_UNITS
+        return field.T
+
+    def draw(self):
+        for name, image in self.images.items():
+            image.set_data(self.field(name))
+
+    def status(self):
+        steps = self.simulation.steps
+        diameter = 2 * self.simulation.radius
+        return f"step {steps}   t U/D = {steps * VELOCITY_LATTICE_UNITS / diameter:.1f}"
+
+
+ANIMATION = Animation(
+    title="Lattice Boltzmann Cylinder Flow",
+    subtitle=f"D2Q9 BGK at Re = {2 * REYNOLDS_NUMBER:g} (diameter): vortex street",
+    filename="lattice_boltzmann_cylinder_flow.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label="lattice Boltzmann time steps",
+)
 
 
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=N_FRAMES,
-        help=f"animation frames, each {STEPS_PER_FRAME} LBM time steps "
-        f"(default: {N_FRAMES})",
-    )
-    args = parser.parse_args(argv)
-
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, LatticeBoltzmannSimulation(), LatticeBoltzmannView)
     print(
-        f"Re = {REYNOLDS_NUMBER:g}, nu = {VISCOSITY_LATTICE_UNITS:.5f}, "
-        f"omega = {RELAXATION_PARAMETER:.4f}, tau = {1 / RELAXATION_PARAMETER:.4f}"
+        f"Re = {REYNOLDS_NUMBER:g} (radius), omega = {RELAXATION_PARAMETER:.4f}, "
+        f"tau = {1 / RELAXATION_PARAMETER:.4f}: {simulation.steps} time steps, "
+        f"max |u| / U = {np.nanmax(simulation.speed) / VELOCITY_LATTICE_UNITS:.2f}"
     )
-
-    simulation = LatticeBoltzmannSimulation()
-
-    fig, ax = plt.subplots(facecolor="black")
-    ax.set_facecolor("black")
-    image = ax.imshow(
-        simulation.speed.T,
-        cmap="viridis",
-        origin="lower",
-        vmin=0.0,
-        vmax=2.0 * VELOCITY_LATTICE_UNITS,
-    )
-    colorbar = fig.colorbar(image, label="Velocity Magnitude (lattice units)", ax=ax)
-    colorbar.ax.yaxis.set_tick_params(color="white")
-    colorbar.ax.yaxis.label.set_color("white")
-    plt.setp(plt.getp(colorbar.ax.axes, "yticklabels"), color="white")
-
-    ax.set_xlabel("X (lattice units)", color="white")
-    ax.set_ylabel("Y (lattice units)", color="white")
-    title = ax.set_title("2D Flow Around a Cylinder", color="white")
-    ax.tick_params(colors="white")
-    for spine in ax.spines.values():
-        spine.set_edgecolor("white")
-
-    def redraw():
-        image.set_data(simulation.speed.T)
-        title.set_text(f"2D Flow Around a Cylinder (step {simulation.steps})")
-        return (image,)
-
-    def update(frame):
-        simulation.advance(STEPS_PER_FRAME)
-        return redraw()
-
-    if args.no_show:
-        simulation.advance(args.steps * STEPS_PER_FRAME)
-        redraw()
-    else:
-        animation = FuncAnimation(  # noqa: F841 (keep a reference while showing)
-            fig, update, frames=args.steps, init_func=lambda: (), repeat=False
-        )
-        plt.show()
-
-    if args.output:
-        save_figure(
-            fig,
-            args.output,
-            "lattice_boltzmann_cylinder_flow.png",
-            facecolor=fig.get_facecolor(),
-        )
-    plt.close(fig)
 
 
 if __name__ == "__main__":

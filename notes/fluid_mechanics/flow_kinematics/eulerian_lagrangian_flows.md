@@ -84,9 +84,9 @@ Deciding whether to use an Eulerian or Lagrangian perspective depends on the pro
 ## Related Scripts
 
 - [Eulerian and Lagrangian Flow Descriptions](../../../scripts/plots/eulerian_lagrangian_flows/): contrasts the Eulerian and Lagrangian descriptions of fluid motion using the time-dependent Double Gyre flow.
-- [Eulerian Cylinder Flow](../../../scripts/simulations/eulerian_cylinder_flow/): simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and renders a dye tracer in real time with Pygame.
-- [Kelvin-Helmholtz Instability Simulation](../../../scripts/simulations/kelvin_helmholtz_instability/): simulates the Kelvin-Helmholtz instability, the rolling-up of a shear layer between fluid streams moving in opposite directions, in a periodic 2D incompressible flow drawn in real time with Pygame.
-- [Simplified Real-Time Fluid Dynamics Simulator](../../../scripts/simulations/simplified_real_time_fluid_dynamics_simulator/): is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Pygame window.
+- [Eulerian Cylinder Flow](../../../scripts/simulations/eulerian_cylinder_flow/): simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and animates a dye tracer with Matplotlib.
+- [Kelvin-Helmholtz Instability Simulation](../../../scripts/simulations/kelvin_helmholtz_instability/): simulates the Kelvin-Helmholtz instability, the rolling-up of a shear layer between fluid streams moving in opposite directions, in a periodic 2D incompressible flow animated with Matplotlib.
+- [Simplified Real-Time Fluid Dynamics Simulator](../../../scripts/simulations/simplified_real_time_fluid_dynamics_simulator/): is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Matplotlib window.
 
 ## Exercises
 

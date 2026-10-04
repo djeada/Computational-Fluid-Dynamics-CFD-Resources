@@ -1,34 +1,49 @@
 #!/usr/bin/env python3
-"""Solve steady 2D laminar flow over a backward-facing step with SIMPLE.
+"""Steady 2D laminar flow over a backward-facing step, solved with SIMPLE.
 
 The incompressible Navier-Stokes equations are discretised with the finite
 volume method on a staggered (MAC) grid using first-order upwind convection
 and central diffusion. Pressure and velocity are coupled with Patankar's SIMPLE
 algorithm; every linear system is relaxed with Gauss-Seidel/SOR sweeps
-compiled with Numba. A live figure shows the velocity magnitude with arrows,
-the residual history and the global mass imbalance. The reattachment length of
-the recirculation zone behind the step is printed at the end.
+compiled with Numba. The animation follows the outer iterations: the velocity
+magnitude with arrows and the reattachment point behind the step, the residual
+history and the global mass imbalance. The final iteration count and
+reattachment length are printed at the end.
 """
 
 import sys
-import time
 from dataclasses import dataclass
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
-import numpy.ma as ma
+from matplotlib.patches import Rectangle
 from numba import njit
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int, save_figure  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
+from _common import positive_int  # noqa: E402
 
 DTYPE = np.float32
+
+# Animation: one frame is STEPS_PER_FRAME SIMPLE (outer) iterations.
+STEPS_PER_FRAME = 20  # SIMPLE iterations per animation frame
+N_FRAMES = 150  # default frames: at most 3000 iterations
+
+# Convergence test, checked after every iteration
+REFERENCE_ITERATIONS = 10  # residuals are scaled by their maximum over these
+RESIDUAL_DROP = 1e-3  # every residual below this fraction of its reference
+MAX_IMBALANCE = 5e-3  # and |inflow - outflow| / inflow at most 0.5 %
+
+# View
+REEL_X_RANGE = (2.0, 12.0)  # part of the channel shown in a reel (x in units of H)
+ARROW_ROWS = 16  # arrows across the channel height (fewer if ny is smaller)
 
 
 @dataclass
 class Params:
+    """Geometry, flow and solver settings; lengths in units of the inlet height."""
+
     nx: int = 240  # pressure cells in x
     ny: int = 80  # pressure cells in y
     Re: float = 200.0  # Reynolds number rho*U_avg*H/mu
@@ -45,9 +60,6 @@ class Params:
     omega_p: float = 1.7  # SOR factor for the pressure-correction sweeps
     mom_sweeps: int = 2
     pcor_sweeps: int = 40
-    max_iters: int = 3000
-    plot_interval: int = 20
-    quiver_ds: int = 3  # plot every quiver_ds-th arrow
 
 
 def build_geometry_masks(prm):
@@ -82,7 +94,7 @@ def precompute_indices(mask):
     return idx[:, 0].astype(np.int32), idx[:, 1].astype(np.int32)
 
 
-@njit(cache=True)
+@njit(cache=False)
 def gs_sor_scalar(AW, AE, AS, AN, AP, b, phi, idx_i, idx_j, omega, sweeps):
     """SOR sweeps for AP*phi = AW*phi_W + AE*phi_E + AS*phi_S + AN*phi_N + b."""
     nx, ny = phi.shape
@@ -105,7 +117,7 @@ def gs_sor_scalar(AW, AE, AS, AN, AP, b, phi, idx_i, idx_j, omega, sweeps):
             phi[i, j] += omega * ((b[i, j] + nb) / ap - phi[i, j])
 
 
-@njit(cache=True)
+@njit(cache=False)
 def build_momentum_u(
     u, v, p, mu, rho, dx, dy, fluid_P, alpha_u, AW, AE, AS, AN, AP, b, idx_i, idx_j
 ):
@@ -155,7 +167,7 @@ def build_momentum_u(
         ]
 
 
-@njit(cache=True)
+@njit(cache=False)
 def build_momentum_v(
     u, v, p, mu, rho, dx, dy, fluid_P, alpha_u, AW, AE, AS, AN, AP, b, idx_i, idx_j
 ):
@@ -204,7 +216,7 @@ def build_momentum_v(
         ]
 
 
-@njit(cache=True)
+@njit(cache=False)
 def momentum_residual(AW, AE, AS, AN, AP, b, phi, idx_i, idx_j):
     """Mean absolute residual of the assembled momentum equations."""
     nx, ny = phi.shape
@@ -329,373 +341,283 @@ def quiver_component(comp, fac, fluid_P, ds):
     return np.where(fluid_P, comp * fac, np.nan)[::ds, ::ds]
 
 
-def setup_plot(XP, YP, fluid_P, Uc, Vc, res_hist, imb_hist, params, interactive=True):
-    if interactive:
-        plt.ion()
-    fig = plt.figure(figsize=(11, 8))
-    gs = fig.add_gridspec(2, 2, height_ratios=[2.0, 1.0])
-    ax0 = fig.add_subplot(gs[0, :])  # field
-    ax1 = fig.add_subplot(gs[1, 0])  # residuals
-    ax2 = fig.add_subplot(gs[1, 1])  # mass imbalance
+class BackwardStepSimulation(Simulation):
+    """SIMPLE state on the staggered grid; one step is one outer iteration.
 
-    speed = np.sqrt(Uc**2 + Vc**2, dtype=DTYPE)
-    speed_masked = ma.array(speed.T, mask=~fluid_P.T)
-    dx_cell = float(XP[1, 0] - XP[0, 0])
-    dy_cell = float(YP[0, 1] - YP[0, 0])
-    im = ax0.imshow(
-        speed_masked,
-        origin="lower",
-        extent=[0.0, float(XP.max()) + dx_cell / 2, 0.0, float(YP.max()) + dy_cell / 2],
-        aspect="auto",
-        cmap="viridis",
-    )
-    cbar = fig.colorbar(im, ax=ax0, fraction=0.046, pad=0.04)
-    cbar.set_label("|U|")
+    ``residuals`` (u-momentum, v-momentum, continuity) and ``imbalance`` hold
+    one entry per iteration. ``time`` is the iteration count, and the solver
+    is ``done`` once the convergence test passes.
+    """
 
-    ds = params.quiver_ds
-    # pre-scale velocities so the 95th percentile arrow is ~0.7 of a cell
-    cell = min(dx_cell, dy_cell)
-    ref = float(np.nanpercentile(speed[fluid_P], 95)) if np.any(fluid_P) else 1.0
-    fac = min(max((0.7 * cell) / max(ref, 1e-6), 0.1), 1.5)  # same clamp as updates
-    qv = ax0.quiver(
-        XP[::ds, ::ds],
-        YP[::ds, ::ds],
-        quiver_component(Uc, fac, fluid_P, ds),
-        quiver_component(Vc, fac, fluid_P, ds),
-        color="white",
-        scale=1.0,
-        scale_units="xy",
-        angles="xy",
-        pivot="mid",
-        width=0.0025,
-        zorder=3,
-    )
-    ax0._qfac = fac  # remembered for the smoothed updates in update_plot
+    def __init__(self, params=None):
+        super().__init__()
+        prm = Params() if params is None else params
+        if prm.nx < 1 or prm.ny < 1:
+            raise ValueError("nx and ny must be positive")
+        self.prm = prm
+        geometry = build_geometry_masks(prm)
+        self.fluid_P, self.fluid_u, self.fluid_v = geometry[:3]  # fluid masks
+        self.dx, self.dy, self.XP, self.YP = geometry[3:]  # spacing, cell centres
+        self.mu = prm.rho * prm.U_avg * prm.H / prm.Re
+        self.p = np.zeros((prm.nx, prm.ny), dtype=DTYPE)
+        self.u = np.zeros((prm.nx + 1, prm.ny), dtype=DTYPE)
+        self.v = np.zeros((prm.nx, prm.ny + 1), dtype=DTYPE)
+        apply_velocity_bcs(self.u, self.v, prm, self.fluid_u, self.fluid_v, self.dy)
 
-    ax0.set_title("Velocity magnitude with quiver (Backward-Facing Step)")
-    ax0.set_xlabel("x")
-    ax0.set_ylabel("y")
-    ax0.set_xlim([0.0, params.Lx])
-    ax0.set_ylim([0.0, params.Ly])
-    im_vmax = max(1.0, float(speed_masked.max()))
-    im.set_clim(vmin=0.0, vmax=im_vmax)
-    ax0._im_vmax = im_vmax
+        self.idx_u = precompute_indices(self.fluid_u)
+        self.idx_v = precompute_indices(self.fluid_v)
+        self.idx_p = precompute_indices(self.fluid_P)
+        # AW, AE, AS, AN, AP, b of the momentum equations, reassembled every step
+        self.coeff_u = tuple(np.zeros_like(self.u) for _ in range(6))
+        self.coeff_v = tuple(np.zeros_like(self.v) for _ in range(6))
+        self.u_star = self.u.copy()
+        self.v_star = self.v.copy()
+        self.pcor = np.zeros_like(self.p)
 
-    ax1.set_title("Residuals")
-    ax1.set_yscale("log")
-    (line_ru,) = ax1.plot(res_hist["u"], label="u-momentum")
-    (line_rv,) = ax1.plot(res_hist["v"], label="v-momentum")
-    (line_rp,) = ax1.plot(res_hist["p"], label="continuity")
-    ax1.set_xlabel("Iteration")
-    ax1.set_ylabel("Mean |residual|")
-    ax1.legend(loc="best")
+        self.residuals = {"u": [], "v": [], "p": []}
+        self.imbalance = []  # |inflow - outflow| / inflow after each iteration
+        self.reference = None  # residual maxima over the first iterations
+        self.converged = False
 
-    ax2.set_title("Global mass imbalance")
-    imb_percent = np.clip(np.array(imb_hist, dtype=float), 1e-12, None) * 100.0
-    (line_imb,) = ax2.plot(imb_percent)
-    ax2.set_xlabel("Iteration")
-    ax2.set_ylabel("Imbalance (% of inlet)")
-    ax2.set_yscale("log")
-    set_imbalance_limits(ax2, imb_percent)
+    @property
+    def time(self):
+        return self.steps
 
-    fig.tight_layout()
-    if interactive:
-        fig.canvas.draw()
-        plt.show(block=False)
-        plt.pause(0.001)
-    return fig, (ax0, ax1, ax2), im, qv, (line_ru, line_rv, line_rp), line_imb, ds
+    @property
+    def done(self):
+        return self.converged
 
+    def step(self):
+        prm = self.prm
+        u, v, p = self.u, self.v, self.p
+        u_star, v_star, pcor = self.u_star, self.v_star, self.pcor
+        momentum = (prm.rho, self.dx, self.dy, self.fluid_P, prm.alpha_u)
 
-def set_imbalance_limits(ax, imb_percent):
-    finite = imb_percent[np.isfinite(imb_percent)]
-    if finite.size:
-        ax.set_ylim(max(1e-6, 0.5 * finite.min()), max(1e-2, 2.0 * finite.max()))
-    else:
-        ax.set_ylim(1e-6, 1e2)
-
-
-def update_plot(
-    axs, im, qv, lines_res, line_imb, XP, YP, fluid_P, Uc, Vc, res_hist, imb_hist, ds
-):
-    speed = np.sqrt(Uc**2 + Vc**2, dtype=DTYPE)
-    speed_masked = ma.array(speed.T, mask=~fluid_P.T)
-    im.set_data(speed_masked)
-
-    # smoothed (exponential moving average) colour limit
-    ax0 = axs[0]
-    new_max = max(1.0, float(speed_masked.max()))
-    ax0._im_vmax = 0.9 * ax0._im_vmax + 0.1 * new_max
-    im.set_clim(vmin=0.0, vmax=ax0._im_vmax)
-
-    cell = min(float(XP[1, 0] - XP[0, 0]), float(YP[0, 1] - YP[0, 0]))
-    ref = float(np.nanpercentile(speed[fluid_P], 95)) if np.any(fluid_P) else 1.0
-    fac_new = (0.7 * cell) / max(ref, 1e-6)
-    fac = min(max(0.9 * ax0._qfac + 0.1 * fac_new, 0.1 * cell), 1.5)
-    ax0._qfac = fac
-    qv.set_UVC(
-        quiver_component(Uc, fac, fluid_P, ds), quiver_component(Vc, fac, fluid_P, ds)
-    )
-
-    for line, key in zip(lines_res, ("u", "v", "p")):
-        line.set_data(np.arange(len(res_hist[key])), res_hist[key])
-    axs[1].relim()
-    axs[1].autoscale_view()
-
-    imb_percent = np.clip(np.array(imb_hist, dtype=float), 1e-12, None) * 100.0
-    line_imb.set_data(np.arange(len(imb_percent)), imb_percent)
-    axs[2].relim()
-    axs[2].autoscale_view()
-    set_imbalance_limits(axs[2], imb_percent)
-
-
-def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument("--nx", type=int, default=240)
-    parser.add_argument("--ny", type=int, default=80)
-    parser.add_argument("--max-iters", type=int, default=3000)
-    parser.add_argument("--plot-interval", type=int, default=20)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=None,
-        help="run at most this many SIMPLE iterations (overrides --max-iters)",
-    )
-    parser.add_argument(
-        "--throttle-ms",
-        type=int,
-        default=0,
-        help="sleep this many ms every 5 iterations",
-    )
-    parser.add_argument(
-        "--demo",
-        action="store_true",
-        help="quick demo: 120x40 grid, 400 iterations, plot every 5",
-    )
-    args = parser.parse_args(argv)
-
-    plt.style.use("dark_background")
-    if args.demo:
-        nx, ny, max_iters, plot_interval = 120, 40, 400, 5
-    else:
-        nx, ny = args.nx, args.ny
-        max_iters, plot_interval = args.max_iters, args.plot_interval
-    if args.steps is not None:
-        max_iters = args.steps
-    interactive = not args.no_show
-
-    prm = Params(nx=nx, ny=ny, max_iters=max_iters, plot_interval=plot_interval)
-    fluid_P, fluid_u, fluid_v, dx, dy, XP, YP = build_geometry_masks(prm)
-
-    p = np.zeros((prm.nx, prm.ny), dtype=DTYPE)
-    u = np.zeros((prm.nx + 1, prm.ny), dtype=DTYPE)
-    v = np.zeros((prm.nx, prm.ny + 1), dtype=DTYPE)
-    mu = prm.rho * prm.U_avg * prm.H / prm.Re
-    apply_velocity_bcs(u, v, prm, fluid_u, fluid_v, dy)
-
-    res_hist = {"u": [], "v": [], "p": []}
-    imb_hist = []
-    if interactive:
-        Uc, Vc = cell_centre_velocity(u, v)
-        fig, axs, im, qv, lines_res, line_imb, ds = setup_plot(
-            XP, YP, fluid_P, Uc, Vc, res_hist, imb_hist, prm
-        )
-
-    idx_u_i, idx_u_j = precompute_indices(fluid_u)
-    idx_v_i, idx_v_j = precompute_indices(fluid_v)
-    idx_p_i, idx_p_j = precompute_indices(fluid_P)
-
-    AWu, AEu, ASu, ANu, APu, bu = (np.zeros_like(u) for _ in range(6))
-    AWv, AEv, ASv, ANv, APv, bv = (np.zeros_like(v) for _ in range(6))
-    u_star = u.copy()
-    v_star = v.copy()
-    pcor = np.zeros_like(p)
-    ref_res = None
-    start = time.time()
-    it = 0
-
-    for it in range(1, prm.max_iters + 1):
         # --- predictor: momentum equations with the current pressure ---
-        build_momentum_u(
-            u,
-            v,
-            p,
-            mu,
-            prm.rho,
-            dx,
-            dy,
-            fluid_P,
-            prm.alpha_u,
-            AWu,
-            AEu,
-            ASu,
-            ANu,
-            APu,
-            bu,
-            idx_u_i,
-            idx_u_j,
-        )
-        build_momentum_v(
-            u,
-            v,
-            p,
-            mu,
-            prm.rho,
-            dx,
-            dy,
-            fluid_P,
-            prm.alpha_u,
-            AWv,
-            AEv,
-            ASv,
-            ANv,
-            APv,
-            bv,
-            idx_v_i,
-            idx_v_j,
-        )
-        ru = momentum_residual(AWu, AEu, ASu, ANu, APu, bu, u, idx_u_i, idx_u_j)
-        rv = momentum_residual(AWv, AEv, ASv, ANv, APv, bv, v, idx_v_i, idx_v_j)
+        build_momentum_u(u, v, p, self.mu, *momentum, *self.coeff_u, *self.idx_u)
+        build_momentum_v(u, v, p, self.mu, *momentum, *self.coeff_v, *self.idx_v)
+        ru = momentum_residual(*self.coeff_u, u, *self.idx_u)
+        rv = momentum_residual(*self.coeff_v, v, *self.idx_v)
         np.copyto(u_star, u)
         np.copyto(v_star, v)
-        gs_sor_scalar(
-            AWu,
-            AEu,
-            ASu,
-            ANu,
-            APu,
-            bu,
-            u_star,
-            idx_u_i,
-            idx_u_j,
-            prm.omega_mom,
-            prm.mom_sweeps,
-        )
-        gs_sor_scalar(
-            AWv,
-            AEv,
-            ASv,
-            ANv,
-            APv,
-            bv,
-            v_star,
-            idx_v_i,
-            idx_v_j,
-            prm.omega_mom,
-            prm.mom_sweeps,
-        )
-        apply_velocity_bcs(u_star, v_star, prm, fluid_u, fluid_v, dy)
+        sweeps = (prm.omega_mom, prm.mom_sweeps)
+        gs_sor_scalar(*self.coeff_u, u_star, *self.idx_u, *sweeps)
+        gs_sor_scalar(*self.coeff_v, v_star, *self.idx_v, *sweeps)
+        apply_velocity_bcs(u_star, v_star, prm, self.fluid_u, self.fluid_v, self.dy)
 
         # --- pressure correction (p' = 0 at the outlet) ---
+        APu, APv = self.coeff_u[4], self.coeff_v[4]
         AWp, AEp, ASp, ANp, APp, bp, du, dv = build_pressure_correction(
-            u_star, v_star, APu, APv, prm, fluid_P, fluid_u, fluid_v, dx, dy
-        )
-        rp = float(np.mean(np.abs(bp[fluid_P])))  # continuity residual of u*
+            u_star, v_star, APu, APv, prm,
+            self.fluid_P, self.fluid_u, self.fluid_v, self.dx, self.dy,
+        )  # fmt: skip
+        rp = float(np.mean(np.abs(bp[self.fluid_P])))  # continuity residual of u*
         pcor.fill(0.0)
         gs_sor_scalar(
-            AWp,
-            AEp,
-            ASp,
-            ANp,
-            APp,
-            bp,
-            pcor,
-            idx_p_i,
-            idx_p_j,
-            prm.omega_p,
-            prm.pcor_sweeps,
-        )
+            AWp, AEp, ASp, ANp, APp, bp, pcor, *self.idx_p,
+            prm.omega_p, prm.pcor_sweeps,
+        )  # fmt: skip
 
         # --- corrector ---
         np.copyto(u, u_star)
         np.copyto(v, v_star)
         correct_uvp(u, v, p, pcor, du, dv, prm.alpha_p)
-        apply_velocity_bcs(u, v, prm, fluid_u, fluid_v, dy)
+        apply_velocity_bcs(u, v, prm, self.fluid_u, self.fluid_v, self.dy)
 
-        # --- monitors ---
-        res_hist["u"].append(ru)
-        res_hist["v"].append(rv)
-        res_hist["p"].append(rp)
-        imb, _, _ = global_mass_imbalance(u, fluid_P, dy)
-        imb_hist.append(imb)
-
-        if it == 10:
-            ref_res = [max(res_hist[k]) for k in ("u", "v", "p")]
-
-        if it % 10 == 0 or it == 1:
-            print(
-                f"Iter {it:5d}: Ru={ru:.3e}, Rv={rv:.3e}, Rp={rp:.3e}, "
-                f"MassImb={imb * 100:.2f}%"
-            )
-
-        if interactive and (it % prm.plot_interval == 0 or it == 1):
-            Uc, Vc = cell_centre_velocity(u, v)
-            update_plot(
-                axs,
-                im,
-                qv,
-                lines_res,
-                line_imb,
-                XP,
-                YP,
-                fluid_P,
-                Uc,
-                Vc,
-                res_hist,
-                imb_hist,
-                ds,
-            )
-            fig.canvas.draw_idle()
-            plt.pause(0.001)
-
-        if ref_res is not None:
+        # --- monitors and convergence test ---
+        for key, value in zip("uvp", (ru, rv, rp)):
+            self.residuals[key].append(value)
+        imbalance = global_mass_imbalance(u, self.fluid_P, self.dy)[0]
+        self.imbalance.append(imbalance)
+        if len(self.imbalance) == REFERENCE_ITERATIONS:
+            self.reference = [max(self.residuals[key]) for key in "uvp"]
+        if self.reference is not None:
             drops = [
-                res_hist[k][-1] / (r + 1e-30) for k, r in zip(("u", "v", "p"), ref_res)
+                self.residuals[key][-1] / (r + 1e-30)
+                for key, r in zip("uvp", self.reference)
             ]
-            if max(drops) <= 1e-3 and imb <= 5e-3:
-                print(
-                    "Converged: residuals dropped >= 3 orders below their early "
-                    "maximum and mass imbalance <= 0.5%."
-                )
-                break
+            self.converged = max(drops) <= RESIDUAL_DROP and imbalance <= MAX_IMBALANCE
 
-        if args.throttle_ms > 0 and it % 5 == 0:
-            time.sleep(args.throttle_ms / 1000.0)
+    def mass_imbalance(self):
+        """|inflow - outflow| / inflow of the current velocity field."""
+        return global_mass_imbalance(self.u, self.fluid_P, self.dy)[0]
 
-    print(f"Finished at iter {it} in {time.time() - start:.1f}s.")
-    x_r = reattachment_length(u, prm, dx)
-    if x_r is None:
-        print("No recirculation zone found on the bottom wall.")
-    else:
-        print(f"Bottom-wall reattachment length: x_r/h = {x_r:.2f} step heights")
+    def reattachment(self):
+        """Bottom-wall reattachment length x_r / h, or None without recirculation."""
+        return reattachment_length(self.u, self.prm, self.dx)
 
-    Uc, Vc = cell_centre_velocity(u, v)
-    if interactive:
-        update_plot(
-            axs,
-            im,
-            qv,
-            lines_res,
-            line_imb,
-            XP,
-            YP,
-            fluid_P,
-            Uc,
-            Vc,
-            res_hist,
-            imb_hist,
-            ds,
+
+def log_limits(values, floor, ceiling):
+    """Log-axis limits around the positive values, at least [floor, ceiling]."""
+    values = values[np.isfinite(values) & (values > 0)]
+    if values.size == 0:
+        return floor, ceiling
+    return min(floor, 0.5 * values.min()), max(ceiling, 2.0 * values.max())
+
+
+class BackwardStepView(View):
+    """Velocity magnitude with arrows above the residual and imbalance histories.
+
+    The window shows the whole channel, with the vertical scale exaggerated,
+    above the two histories side by side. A reel crops the field to the step
+    and the recirculation zone and stacks it above the two histories, which
+    share the iteration axis. Colours and arrow lengths are fixed by the inlet
+    peak speed, so every frame uses the same scale.
+    """
+
+    figsize = (11.0, 8.0)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        sim, prm = simulation, simulation.prm
+        if portrait:
+            mosaic, heights = [["field"], ["residual"], ["imbalance"]], [1.5, 1, 1]
+        else:
+            mosaic, heights = [["field", "field"], ["residual", "imbalance"]], [2, 1]
+        axes = figure.subplot_mosaic(mosaic, height_ratios=heights)
+        self.axes = axes
+
+        # velocity magnitude, arrows and reattachment point
+        ax = axes["field"]
+        peak = 1.5 * prm.U_avg  # centreline speed of the parabolic inlet profile
+        self.image = ax.imshow(
+            self.speed(), extent=(0.0, prm.Lx, 0.0, prm.Ly), aspect="auto",
+            cmap="viridis", vmin=0.0, vmax=peak, interpolation="bilinear",
+        )  # fmt: skip
+        figure.colorbar(self.image, ax=ax, label="|U|")
+        solid = ~sim.fluid_P  # the step as resolved by the grid, drawn in grey
+        step_size = (solid.any(axis=1).sum() * sim.dx, solid.any(axis=0).sum() * sim.dy)
+        ax.add_patch(Rectangle((0.0, 0.0), *step_size, color="0.45", zorder=2))
+        self.ds = max(1, round(prm.ny / ARROW_ROWS))
+        # the inlet peak speed draws an arrow 0.9 arrow spacings long
+        self.fac = 0.9 * self.ds * float(sim.dx) / peak
+        uc, vc = cell_centre_velocity(sim.u, sim.v)
+        self.quiver = ax.quiver(
+            sim.XP[:: self.ds, :: self.ds], sim.YP[:: self.ds, :: self.ds],
+            quiver_component(uc, self.fac, sim.fluid_P, self.ds),
+            quiver_component(vc, self.fac, sim.fluid_P, self.ds),
+            color="white", scale=1.0, scale_units="xy", angles="xy", pivot="mid",
+            width=0.0025 if portrait else 0.0018, zorder=3,
+        )  # fmt: skip
+        (self.marker,) = ax.plot(
+            [], [], "v", color="#ff6b6b", markersize=14, clip_on=False, zorder=4
         )
-    else:
-        fig, axs, im, qv, lines_res, line_imb, ds = setup_plot(
-            XP, YP, fluid_P, Uc, Vc, res_hist, imb_hist, prm, interactive=False
-        )
+        self.marker.set_in_layout(False)  # an empty unclipped line sits at (0, 0)
+        ax.set(xlim=REEL_X_RANGE if portrait else (0.0, prm.Lx), ylim=(0.0, prm.Ly))
+        ax.set(xlabel="x", ylabel="y")
+        self.field_title = ax.set_title(" ")
 
-    if args.output:
-        save_figure(fig, args.output, "backward_facing_step.png")
-    if interactive:
-        plt.ioff()
-        plt.show()
-    plt.close(fig)
+        # residual and mass-imbalance histories against the iteration count
+        ax = axes["residual"]
+        self.residual_lines = {
+            key: ax.plot([], [], label=label)[0]
+            for key, label in zip("uvp", ("u-momentum", "v-momentum", "continuity"))
+        }
+        ax.set(yscale="log", ylabel="mean |residual|")
+        if portrait:  # a one-row legend above the panel doubles as its title
+            ax.legend(
+                loc="lower center", bbox_to_anchor=(0.5, 1.0), ncols=3,
+                frameon=False, borderaxespad=0.1, handlelength=1.2,
+            )  # fmt: skip
+        else:
+            ax.legend(loc="lower left")
+            ax.set_title("Residuals")
+        self.converged_label = ax.text(
+            0.98, 0.95, "", transform=ax.transAxes, ha="right", va="top",
+            color="#90be6d", fontweight="bold",
+        )  # fmt: skip
+
+        ax = axes["imbalance"]
+        ax.axhline(100 * MAX_IMBALANCE, color="0.6", linestyle="--", linewidth=1)
+        (self.imbalance_line,) = ax.plot([], [], color="#f4a261")
+        ax.set(yscale="log", xlabel="iteration", ylabel="imbalance [%]")
+        ax.set_title("Mass imbalance (dashed: 0.5 % target)")
+        if portrait:
+            ax.sharex(axes["residual"])
+            axes["residual"].tick_params(labelbottom=False)
+        else:
+            axes["residual"].set_xlabel("iteration")
+
+    def speed(self):
+        """Velocity magnitude at the cell centres (zero in the step), rows along y."""
+        uc, vc = cell_centre_velocity(self.simulation.u, self.simulation.v)
+        return np.sqrt(uc**2 + vc**2, dtype=DTYPE).T
+
+    def draw(self):
+        sim, prm = self.simulation, self.simulation.prm
+        self.image.set_data(self.speed())
+        uc, vc = cell_centre_velocity(sim.u, sim.v)
+        self.quiver.set_UVC(
+            quiver_component(uc, self.fac, sim.fluid_P, self.ds),
+            quiver_component(vc, self.fac, sim.fluid_P, self.ds),
+        )
+        x_r = sim.reattachment()
+        if x_r is None:
+            self.marker.set_data([], [])
+            self.field_title.set_text("Velocity magnitude, no recirculation")
+        else:
+            self.marker.set_data([prm.step_length + x_r * prm.h], [0.0])
+            self.field_title.set_text(
+                f"Velocity magnitude, reattachment (▼) at $x_r/h$ = {x_r:.2f}"
+            )
+
+        n = len(sim.imbalance)
+        iterations = np.arange(1, n + 1)
+        residuals = np.array([sim.residuals[key] for key in "uvp"], dtype=float)
+        for key, values in zip("uvp", residuals.reshape(3, n)):
+            self.residual_lines[key].set_data(iterations, values)
+        imbalance = 100 * np.asarray(sim.imbalance, dtype=float)
+        self.imbalance_line.set_data(iterations, imbalance)
+        for name in ("residual", "imbalance"):
+            self.axes[name].set_xlim(0, max(n, 10))
+        self.axes["residual"].set_ylim(*log_limits(residuals.ravel(), 1e-6, 1e-4))
+        self.axes["imbalance"].set_ylim(*log_limits(imbalance, 0.1, 100.0))
+        self.converged_label.set_text("converged" if sim.converged else "")
+
+    def status(self):
+        imbalance = 100 * self.simulation.mass_imbalance()
+        return f"iteration {self.simulation.time}, mass imbalance {imbalance:.2f} %"
+
+
+ANIMATION = Animation(
+    title="Backward-Facing Step",
+    subtitle=f"SIMPLE iterations to steady flow at Re = {Params.Re:g}",
+    filename="backward_facing_step.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label="SIMPLE iterations",
+)
+
+
+def main(argv=None):
+    parser = ANIMATION.parser(__doc__)
+    parser.add_argument(
+        "--nx",
+        type=positive_int,
+        default=Params.nx,
+        help="pressure cells along the channel (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--ny",
+        type=positive_int,
+        default=Params.ny,
+        help="pressure cells across the channel (default: %(default)s)",
+    )
+    args = parser.parse_args(argv)
+
+    simulation = BackwardStepSimulation(Params(nx=args.nx, ny=args.ny))
+    ANIMATION.run(args, simulation, BackwardStepView)
+    outcome = "Converged after" if simulation.converged else "Not converged after"
+    x_r = simulation.reattachment()
+    reattachment = (
+        "no recirculation on the bottom wall"
+        if x_r is None
+        else f"reattachment length x_r/h = {x_r:.2f}"
+    )
+    print(
+        f"{outcome} {simulation.steps} SIMPLE iterations "
+        f"(mass imbalance {100 * simulation.mass_imbalance():.2f} %); {reattachment}"
+    )
 
 
 if __name__ == "__main__":

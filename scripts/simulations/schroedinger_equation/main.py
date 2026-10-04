@@ -1,28 +1,31 @@
-"""Free-particle 2D time-dependent Schrödinger equation.
+"""Free-particle 2D time-dependent Schrödinger equation, split-step Fourier.
 
-A normalised Gaussian wavepacket is evolved with the Strang split-step
-Fourier method (hbar = m = 1) on a periodic grid, and the probability density
-|psi|^2 is animated as a 3D surface.
+A normalised Gaussian wavepacket at rest is evolved with the Strang split-step
+Fourier method (hbar = m = 1) on a periodic grid. The probability density
+|psi|^2 is shown as a 3D surface on fixed height and colour scales, so the
+packet visibly spreads and its peak falls while the total probability stays 1.
 """
 
 import sys
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.animation import FuncAnimation
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import Normalize
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int, save_figure  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
 # Parameters (dimensionless units with hbar = m = 1)
 DOMAIN_LENGTH = 10.0  # side length L of the periodic square domain
 N_POINTS = 100  # grid points per side
-TIME_STEP = 0.01  # dt
+TIME_STEP = 0.001  # dt; for V = 0 the result does not depend on it
 FINAL_TIME = 1.0  # total simulated time for the default run
-SPEED_FACTOR = 5  # time steps per animation frame
-N_FRAMES = int(round(FINAL_TIME / TIME_STEP)) // SPEED_FACTOR
+STEPS_PER_FRAME = 10  # time steps per animation frame
+SPEED_FACTOR = STEPS_PER_FRAME  # former name of STEPS_PER_FRAME
+N_FRAMES = int(round(FINAL_TIME / TIME_STEP)) // STEPS_PER_FRAME  # 100 frames
+COLORMAP = "viridis"
 
 
 def make_grid(length=DOMAIN_LENGTH, n=N_POINTS):
@@ -66,22 +69,21 @@ def probability_norm(psi, dx):
     return float(np.sum(np.abs(psi) ** 2) * dx**2)
 
 
-class SchrodingerSimulation:
+class SchrodingerSimulation(Simulation):
     """Wavefunction state with FFT propagators cached for the chosen time step."""
 
     def __init__(self, length=DOMAIN_LENGTH, n=N_POINTS, dt=TIME_STEP):
+        super().__init__()
         if dt <= 0:
             raise ValueError("time step must be positive")
         self.dx, self.X, self.Y = make_grid(length, n)
+        self.length = length
         self.dt = dt
         self.psi = initial_wavefunction(self.X, self.Y, self.dx)
         self.half_kinetic = np.exp(-1j * squared_wavenumbers(n, self.dx) * dt / 4)
         self.potential_phase = np.exp(-1j * potential(self.X, self.Y) * dt)
-        self.steps = 0
-
-    @property
-    def time(self):
-        return self.steps * self.dt
+        self.initial_norm = self.norm
+        self.initial_peak = float(self.density.max())  # fixes the plot scales
 
     @property
     def density(self):
@@ -91,89 +93,77 @@ class SchrodingerSimulation:
     def norm(self):
         return probability_norm(self.psi, self.dx)
 
-    def advance(self, steps=1):
-        """Advance Strang steps without rendering or rebuilding propagators."""
-        if steps < 0:
-            raise ValueError("steps must be nonnegative")
-        for _ in range(steps):
-            self.psi = np.fft.ifft2(np.fft.fft2(self.psi) * self.half_kinetic)
-            self.psi *= self.potential_phase
-            self.psi = np.fft.ifft2(np.fft.fft2(self.psi) * self.half_kinetic)
-            self.steps += 1
+    def step(self):
+        """One Strang step with the cached propagators (same as ``evolve``)."""
+        self.psi = np.fft.ifft2(np.fft.fft2(self.psi) * self.half_kinetic)
+        self.psi *= self.potential_phase
+        self.psi = np.fft.ifft2(np.fft.fft2(self.psi) * self.half_kinetic)
 
 
-def style_axes(ax, z_max, time):
-    ax.set_facecolor("black")
-    ax.set_xlim(-DOMAIN_LENGTH / 2, DOMAIN_LENGTH / 2)
-    ax.set_ylim(-DOMAIN_LENGTH / 2, DOMAIN_LENGTH / 2)
-    ax.set_zlim(0, z_max)
-    ax.set_xlabel("x", color="white")
-    ax.set_ylabel("y", color="white")
-    ax.set_zlabel(r"$|\psi|^2$", color="white")
-    ax.set_title(
-        f"Time Evolution of Schrödinger Equation in 2D (t = {time:.2f})", color="white"
-    )
-    for axis in ("x", "y", "z"):
-        ax.tick_params(axis=axis, colors="white")
+class SchrodingerView(View):
+    """Surface of |psi|^2 scaled to the initial peak, re-plotted every frame.
+
+    Fixed height and colour scales show the peak falling as the packet
+    spreads. In a reel the colour bar sits below the surface.
+    """
+
+    figsize = (8.0, 6.5)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        self.ax = figure.add_subplot(projection="3d")
+        peak = simulation.initial_peak
+        self.norm = Normalize(0.0, peak)
+        figure.colorbar(
+            ScalarMappable(self.norm, COLORMAP), ax=self.ax, shrink=0.6,
+            label=r"probability density $|\psi|^2$",
+            location="bottom" if portrait else "right",
+        )  # fmt: skip
+        half = simulation.length / 2
+        self.ax.set(
+            xlim=(-half, half), ylim=(-half, half), zlim=(0.0, peak),
+            xlabel="x", ylabel="y", zlabel=r"$|\psi|^2$",
+        )  # fmt: skip
+        # Zoom into the margin the 3D axes leaves around the box. The reel panel
+        # is nearly square, so a taller box fills it.
+        self.ax.set_box_aspect((4, 4, 4) if portrait else None, zoom=1.1)
+        if portrait:  # keep the large axis labels clear of the tick labels
+            for axis in (self.ax.xaxis, self.ax.yaxis, self.ax.zaxis):
+                axis.labelpad = 18
+        self.surface = None
+
+    def draw(self):
+        if self.surface is not None:
+            self.surface.remove()
+        simulation = self.simulation
+        self.surface = self.ax.plot_surface(
+            simulation.X, simulation.Y, simulation.density, cmap=COLORMAP,
+            norm=self.norm,
+        )  # fmt: skip
+
+    def status(self):
+        peak = self.simulation.density.max()
+        return f"t = {self.simulation.time:.2f}   peak |ψ|² = {peak:.3f}"
+
+
+ANIMATION = Animation(
+    title="2D Schrödinger Equation",
+    subtitle="A free quantum wavepacket spreads out",
+    filename="schroedinger_equation.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label=f"split-step time steps of dt = {TIME_STEP:g}",
+)
 
 
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=N_FRAMES,
-        help=f"animation frames, each {SPEED_FACTOR} time steps (default: {N_FRAMES})",
-    )
-    args = parser.parse_args(argv)
-
-    simulation = SchrodingerSimulation()
-    X, Y = simulation.X, simulation.Y
-    initial_norm = simulation.norm
-    density = simulation.density
-    z_max = density.max()  # fixed colour and z range: the peak only decreases
-
-    fig = plt.figure(facecolor="black")
-    ax = fig.add_subplot(111, projection="3d")
-    ax.plot_surface(X, Y, density, cmap="viridis", vmin=0, vmax=z_max)
-    style_axes(ax, z_max, simulation.time)
-
-    cax = fig.add_axes([0.05, 0.15, 0.02, 0.7])  # [left, bottom, width, height]
-    mappable = plt.cm.ScalarMappable(cmap="viridis", norm=plt.Normalize(0, z_max))
-    cbar = fig.colorbar(mappable, cax=cax)
-    cbar.ax.tick_params(color="white", labelcolor="white")
-    cbar.outline.set_edgecolor("white")
-
-    def redraw():
-        ax.clear()
-        ax.plot_surface(X, Y, simulation.density, cmap="viridis", vmin=0, vmax=z_max)
-        style_axes(ax, z_max, simulation.time)
-        return ()
-
-    def update(frame):
-        simulation.advance(SPEED_FACTOR)
-        return redraw()
-
-    if args.no_show:
-        simulation.advance(args.steps * SPEED_FACTOR)
-        redraw()
-    else:
-        animation = FuncAnimation(  # noqa: F841 (keep a reference while showing)
-            fig, update, frames=args.steps, init_func=lambda: (), repeat=False
-        )
-        plt.show()
-
-    final_norm = simulation.norm
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, SchrodingerSimulation(), SchrodingerView)
+    norm = simulation.norm
     print(
-        f"t = {simulation.time:.2f}: total probability {final_norm:.15f} "
-        f"(change {final_norm - initial_norm:+.2e})"
+        f"t = {simulation.time:.2f}: total probability {norm:.15f} "
+        f"(change {norm - simulation.initial_norm:+.2e})"
     )
-
-    if args.output:
-        save_figure(
-            fig, args.output, "schroedinger_equation.png", facecolor=fig.get_facecolor()
-        )
-    plt.close(fig)
 
 
 if __name__ == "__main__":

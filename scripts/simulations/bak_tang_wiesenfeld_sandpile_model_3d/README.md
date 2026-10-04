@@ -5,10 +5,10 @@ This script simulates the two-dimensional Bak–Tang–Wiesenfeld (BTW) sandpile
 ## Overview
 
 - Uses a `GRID_SIZE = 20` square lattice with critical height `CRITICAL_HEIGHT = 4` and open (dissipative) boundaries.
-- Adds one grain per frame to a site chosen uniformly at random by a seeded generator (`SEED = 0`). The default run adds `NUM_GRAINS = 1000` grains.
-- After each grain, topples unstable sites until all heights are below 4, and counts the topplings (the avalanche size).
-- Draws the height field as a 3D `plot_surface` with the plasma colormap on a dark background. The title shows the number of grains added, the size of the last avalanche, and the mean height.
-- Prints the number of avalanches and the largest avalanche size when the run ends.
+- Adds one grain per frame (`STEPS_PER_FRAME = 1`) to a site chosen uniformly at random by a seeded generator (`SEED = 0`). The default run adds `N_FRAMES = 1000` grains.
+- After each grain, topples unstable sites until all heights are below 4, and records the number of topplings (the avalanche size).
+- Draws the height field as a 3D `plot_surface` with the plasma colormap on a dark background. The title line shows the number of grains added and the size of the last avalanche.
+- Prints the mean height, the number of avalanches and the largest avalanche size when the run ends.
 
 ## Mathematical Background
 
@@ -40,26 +40,26 @@ Numerical studies of the 2D BTW model report $\tau$ of about 1.2 to 1.3. The scr
 
 - `topple(grid)` repeatedly scans the lattice, topples every site at or above `CRITICAL_HEIGHT`, and returns the number of topplings.
 - `add_grain(grid, rng)` increments one random site and calls `topple`.
-- `setup_figure(grid)` creates the 3D axes and colour bar, and returns a `draw` function that replaces the surface and updates the title.
-- `main` either animates with `FuncAnimation` (one grain per frame) or, with `--no-show`, adds all the grains and draws the final state once.
+- `SandpileSimulation` holds the height field and the list `avalanche_sizes`; `step()` adds one grain and appends the size of its avalanche.
+- `SandpileView` re-plots the 3D surface from the current height field on every frame. The colour bar is left of the surface in the window and below it in the vertical reel.
+- `main` runs the shared animation runner from `scripts/_animation.py`: a window, a headless run with `--no-show`, or a reel with `--reel`.
 
 ## Usage
 
 ```bash
-python main.py                                        # animate 1000 grains
-python main.py --steps 3000                           # animate 3000 grains
-python main.py --no-show --output . --steps 1000      # save the state after 1000 grains
+python main.py                                     # animate in a window (space pauses)
+python main.py --steps 3000                        # a longer run: 3000 grains
+python main.py --no-show --output . --steps 1000   # save the final frame as a PNG
+python main.py --reel reel.mp4                     # 30 s vertical video for Shorts/Reels
 ```
 
-- `--steps N` adds exactly `N` grains (one per frame).
-- `--no-show` skips the window.
-- `--output DIR` saves `sandpile_3d.png` in `DIR`.
+`--steps N` sets the number of frames; each frame adds one grain.
 
 ## Output
 
 ![Sandpile height field after 1000 grains](sandpile_3d.png)
 
-The surface shows the lattice after 1000 grains. All heights are between 0 and 3, with a mean of about 2.06, close to the stationary value. By this point most added grains cause no toppling, but some trigger avalanches of up to a few hundred topplings that rearrange large parts of the pile.
+The surface shows the lattice after 1000 grains, coloured by height from 0 (dark blue) to 3 (yellow). All heights are between 0 and 3, with a mean of about 2.06, close to the stationary value. By this point most added grains cause no toppling (the last one shown caused none), but some trigger avalanches of up to a few hundred topplings that rearrange large parts of the pile: the run ends with 172 avalanches, the largest with 210 topplings.
 
 ## Related Notes
 
