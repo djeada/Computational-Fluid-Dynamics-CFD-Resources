@@ -4,10 +4,9 @@ Two shear layers (a central band moving right, the surrounding fluid moving
 left) are seeded with a sinusoidal cross-stream perturbation. The velocity is
 advanced with semi-Lagrangian advection, a spectral pressure projection and
 explicit viscous diffusion, and a passive temperature field marks the two
-layers so the roll-up is visible in the Pygame window.
+layers so the roll-up is visible as curling bands of colour.
 """
 
-import os
 import sys
 from pathlib import Path
 
@@ -15,11 +14,10 @@ import numpy as np
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
 # Simulation parameters (grid units: dx = dy = 1)
 GRID_SIZE = 256  # cells per side of the periodic square domain
-WINDOW_SIZE = 512  # pixels per side
 SHEAR_VELOCITY = 1.0  # U0: the band moves at +U0, the rest at -U0 [cells / time]
 LAYER_THICKNESS = 4.0  # delta in the tanh velocity profile [cells]
 PERTURBATION_AMPLITUDE = 0.05  # cross-stream velocity perturbation, fraction of U0
@@ -30,6 +28,7 @@ TIME_STEP = 0.5  # dt; Courant number U0 dt / dx = 0.5
 VISCOSITY = 0.01  # nu [cells^2 / time]; nu dt / dx^2 = 0.005 < 0.25
 DIFFUSION_RATE = 0.01  # thermal diffusivity D [cells^2 / time]
 STEPS_PER_FRAME = 2  # solver steps between drawn frames
+N_FRAMES = 300  # frames of a headless run or reel (t = 300)
 T_HOT, T_COLD = 1.0, 0.0  # temperature of the central band and of the outer fluid
 
 
@@ -112,68 +111,60 @@ def update_fields(u, v, temperature):
     return u_new, v_new, temperature
 
 
-def temperature_to_rgb(temperature):
-    """Map temperature to hue 240 (blue, coldest) ... 0 (red, hottest) at full saturation."""
-    t_min, t_max = temperature.min(), temperature.max()
-    norm = (temperature - t_min) / (t_max - t_min) if t_max > t_min else 0 * temperature
-    h = 240 * (1 - norm) / 60.0
-    x = 1 - np.abs(h % 2 - 1)
-    sector = np.minimum(np.floor(h).astype(int), 5)
-    one, zero = np.ones_like(h), np.zeros_like(h)
-    r = np.choose(sector, [one, x, zero, zero, x, one])
-    g = np.choose(sector, [x, one, one, x, zero, zero])
-    b = np.choose(sector, [zero, zero, x, one, one, x])
-    return (255 * np.stack([r, g, b], axis=-1)).astype(np.uint8)
+class KelvinHelmholtzSimulation(Simulation):
+    """Velocity and passive temperature on the periodic grid."""
+
+    dt = TIME_STEP
+
+    def __init__(self, n=GRID_SIZE, seed=SEED):
+        super().__init__()
+        self.u, self.v, self.temperature = initialize_fields(
+            n, np.random.default_rng(seed)
+        )
+
+    def step(self):
+        self.u, self.v, self.temperature = update_fields(
+            self.u, self.v, self.temperature
+        )
 
 
-def draw(screen, pygame, temperature):
-    rgb = temperature_to_rgb(temperature[::-1])  # row 0 of the image is the top (max y)
-    surface = pygame.surfarray.make_surface(np.transpose(rgb, (1, 0, 2)))
-    screen.blit(pygame.transform.scale(surface, screen.get_size()), (0, 0))
+class KelvinHelmholtzView(View):
+    """Temperature map from blue (outer stream) to red (central band)."""
+
+    figsize = (7.0, 6.2)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        ax = figure.subplots()
+        self.image = ax.imshow(
+            simulation.temperature, cmap="turbo", vmin=T_COLD, vmax=T_HOT,
+            interpolation="bilinear",
+        )  # fmt: skip
+        figure.colorbar(self.image, ax=ax, label="temperature (passive)")
+        ax.set(xlabel="x [cells]", ylabel="y [cells]")
+
+    def draw(self):
+        self.image.set_data(self.simulation.temperature)
+
+    def status(self):
+        return f"t = {self.simulation.time:.0f}"
+
+
+ANIMATION = Animation(
+    title="Kelvin-Helmholtz Instability",
+    subtitle="Two shear layers roll up into vortices",
+    filename="kelvin_helmholtz_instability.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label=f"solver steps of dt = {TIME_STEP:g}",
+    endless=True,
+)
 
 
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=None,
-        help=f"frames to run, each {STEPS_PER_FRAME} solver steps "
-        "(default: until the window is closed)",
-    )
-    args = parser.parse_args(argv)
-
-    if args.no_show:
-        os.environ["SDL_VIDEODRIVER"] = "dummy"
-    os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
-    import pygame
-
-    u, v, temperature = initialize_fields()
-
-    pygame.init()
-    try:
-        screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
-        pygame.display.set_caption("Kelvin-Helmholtz Instability Simulation")
-        frame = 0
-        while args.steps is None or frame < args.steps:
-            if any(event.type == pygame.QUIT for event in pygame.event.get()):
-                break
-            for _ in range(STEPS_PER_FRAME):
-                u, v, temperature = update_fields(u, v, temperature)
-            draw(screen, pygame, temperature)
-            pygame.display.flip()
-            if not args.no_show:
-                pygame.time.wait(10)  # slow the animation down slightly
-            frame += 1
-
-        print(f"t = {frame * STEPS_PER_FRAME * TIME_STEP:g} after {frame} frames")
-        if args.output:
-            args.output.mkdir(parents=True, exist_ok=True)
-            pygame.image.save(
-                screen, str(args.output / "kelvin_helmholtz_instability.png")
-            )
-    finally:
-        pygame.quit()
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, KelvinHelmholtzSimulation(), KelvinHelmholtzView)
+    print(f"t = {simulation.time:g} after {simulation.steps} solver steps")
 
 
 if __name__ == "__main__":

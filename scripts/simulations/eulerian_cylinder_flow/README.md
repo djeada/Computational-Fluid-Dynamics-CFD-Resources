@@ -1,19 +1,20 @@
 # Eulerian Cylinder Flow
 
-This script simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and renders a dye tracer in real time with Pygame. It uses the staggered-grid projection and semi-Lagrangian advection scheme of Matthias Müller's "Ten Minute Physics" fluid demo. A uniform inflow enters from the left, and a dye streak released at mid-height is carried around the cylinder into the wake.
+This script simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and animates a dye tracer with Matplotlib. It uses the staggered-grid projection and semi-Lagrangian advection scheme of Matthias Müller's "Ten Minute Physics" fluid demo. A uniform inflow enters from the left, and a dye streak released at mid-height is carried around the cylinder into the wake.
 
 ## Overview
 
 - Uses a staggered (MAC) grid with velocities on cell faces, and pressure and dye at cell centres. With `RESOLUTION = 100` cells across the 1 m domain height, the grid is 135 × 102 cells including boundary cells.
 - Builds a wind tunnel: a left inlet column at `INLET_VELOCITY = 2` m/s, solid top and bottom walls, an open right boundary, and a cylinder of radius `OBSTACLE_RADIUS = 0.15` m centred at (0.4, 0.5) m.
-- Removes the velocity divergence each frame with `NUM_ITERATIONS = 20` Gauss–Seidel sweeps with over-relaxation (`OVER_RELAXATION = 1.9`).
+- Removes the velocity divergence every time step with `NUM_ITERATIONS = 20` Gauss–Seidel sweeps with over-relaxation (`OVER_RELAXATION = 1.9`).
 - Advects velocity and dye with the semi-Lagrangian (backtracking) method and bilinear interpolation.
 - Includes no viscosity term: the flow is inviscid apart from the numerical diffusion of the interpolation. Gravity is supported but set to zero.
-- Compiles the grid loops with Numba and draws the dye with a four-colour banded map. The window stays interactive: press `P` to pause or resume, and `M` to advance one frame while paused.
+- Compiles the grid loops with Numba. The dye concentration is drawn with the `inferno` colour map, from black (clear fluid) to pale yellow (pure dye), and the walls and cylinder are grey.
+- Advances $\Delta t = 1/60$ s per time step and draws a frame every 2 steps (1/30 s of flow). The window runs until it is closed; space pauses and the right arrow advances one frame while paused.
 
 ## Mathematical Background
 
-The flow is modelled by the incompressible Euler equations with a passive dye concentration $m$:
+The flow is modelled by the incompressible Euler equations with a passive dye marker $m$ (1 for clear fluid, 0 for dye):
 
 $$
 \nabla \cdot \mathbf{u} = 0,
@@ -22,7 +23,7 @@ $$
 \qquad \frac{\partial m}{\partial t} + \mathbf{u} \cdot \nabla m = 0
 $$
 
-Each frame of length $\Delta t = 1/60$ s splits these into three stages.
+Each time step of length $\Delta t = 1/60$ s splits these into three stages.
 
 ### 1. Body Forces
 
@@ -58,30 +59,27 @@ This is stable for any $\Delta t$, but the interpolation smooths the fields. Tha
 
 ## Implementation
 
-- `FluidSimulator` stores flat `float32` arrays indexed `i * grid_height + j`: `u`, `v`, `pressure`, `solid` (1 = fluid, 0 = solid) and `density_field` (the dye, 1 = clear fluid, 0 = dye).
-- `FluidSimulator.simulate` calls the Numba kernels `integrate`, `solve_incompressibility`, `extrapolate` (copies tangential velocities into boundary cells), `advect_velocity` and `advect_dye`. The last two use `sample_field` for bilinear interpolation.
-- `setup_scene(1)` builds the wind tunnel and the inlet dye streak. `setup_scene(0)` builds a closed tank, which `main` does not use. `FluidSimulator.set_obstacle` marks the cylinder cells as solid.
-- `draw` maps the dye to four colour bands and blits the scaled image; `main` runs the Pygame loop.
+- `EulerianCylinderSimulation(resolution)` builds the wind tunnel and stores flat `float32` arrays indexed `i * grid_height + j`: `u`, `v`, `pressure`, `solid` (1 = fluid, 0 = solid) and `density_field` (the dye, 1 = clear fluid, 0 = dye). The constructor marks the walls, sets the inlet velocity, releases the dye streak in the inlet column and calls `set_obstacle` for the cylinder. A smaller `resolution` gives a coarser grid for quick checks.
+- `simulate(delta_time, gravity, num_iterations, over_relaxation)` calls the Numba kernels `integrate`, `solve_incompressibility`, `extrapolate` (copies tangential velocities into boundary cells), `advect_velocity` and `advect_dye`. The last two use `sample_field` for bilinear interpolation. `step()` is one `simulate` call with the module constants.
+- `dye` returns the dye concentration $1 - m$ as a 2D array with NaN in solid cells. `EulerianCylinderView` shows it with `imshow` and a colour bar, which sits below the map in a reel.
+- Parameters are module constants: `DOMAIN_HEIGHT`, `DOMAIN_WIDTH`, `RESOLUTION`, `DELTA_TIME`, `NUM_ITERATIONS`, `OVER_RELAXATION`, the obstacle position and radius, `INLET_VELOCITY`, `STEPS_PER_FRAME` and `N_FRAMES`.
 
 ## Usage
 
 ```bash
-python main.py                                   # interactive window, runs until closed
-python main.py --steps 600                       # stop after 600 frames (10 s of flow)
-python main.py --no-show --output . --steps 300  # headless: save a screenshot after 5 s
+python main.py                                    # animate in a window until it is closed (space pauses)
+python main.py --steps 150                        # stop after 150 frames (t = 5 s)
+python main.py --no-show --output . --steps 450   # save the final frame (t = 15 s) as a PNG
+python main.py --reel reel.mp4                    # 30 s vertical video for Shorts/Reels
 ```
 
-- `--steps N` simulates exactly `N` frames and stops. Without it the window runs until closed; with `--no-show` the default is 300 frames.
-- `--no-show` uses SDL's dummy video driver, so no window opens.
-- `--output DIR` saves `eulerian_cylinder_flow.png`, a screenshot of the last frame.
-
-The first frames take a few seconds while Numba compiles the kernels.
+`--steps N` sets the number of frames; each frame is 2 time steps of 1/60 s. Without `--steps` the window runs until it is closed, while `--no-show` and `--reel` stop after 450 frames ($t = 15$ s). The first steps take a few seconds while Numba compiles the kernels.
 
 ## Output
 
-![Dye field after 300 frames](eulerian_cylinder_flow.png)
+![Dye concentration at t = 15 s](eulerian_cylinder_flow.png)
 
-The screenshot shows the flow after 300 frames (5 s). The dark disc is the cylinder, and the dark lines at the left, top and bottom are the solid boundary cells. Clear fluid is light green. The dye streak from the inlet (pale near the inlet, blue further downstream) splits around the cylinder, and the separated shear layers roll up into a wake of vortices. Numerical asymmetries make that wake break symmetry and begin shedding. A video of the earlier interactive version is on YouTube:
+The figure shows the dye after 450 frames ($t = 15$ s). The grey disc is the cylinder, and the thin grey strips at the left, top and bottom are the solid boundary cells. Clear fluid is black. The dye streak from the inlet (pale yellow) splits around the cylinder into two thin shear layers, which roll up behind it into a wake of alternating vortices. The dye inside the vortices is diluted (orange to purple) by the numerical diffusion of the interpolation. Numerical asymmetries break the symmetry of the wake within about a second, and from then on it sheds vortices periodically: the cross-stream velocity at $x = 0.9$ m on the centreline changes sign with a period of about 0.63 s, a Strouhal number $fD/U \approx 0.24$. A video of the earlier Pygame version is on YouTube:
 
 [![Watch on YouTube](https://img.youtube.com/vi/GYtn9u0awsE/maxresdefault.jpg)](https://youtube.com/shorts/GYtn9u0awsE?si=qlHDFdepFfnIFg8W)
 

@@ -1,12 +1,11 @@
-"""Rayleigh-Benard convection in a 2D Boussinesq fluid, rendered with Pygame.
+"""Rayleigh-Benard convection in a 2D Boussinesq fluid heated from below.
 
 A layer heated from below (T = 1 at the bottom wall, T = 0 at the top wall,
 periodic side boundaries) is solved in vorticity-streamfunction form in
 free-fall units. Small seeded temperature noise grows into convection rolls,
-and the temperature field is drawn as a colour map in real time.
+shown as an animated temperature map with the hot wall at the bottom.
 """
 
-import os
 import sys
 from pathlib import Path
 
@@ -15,7 +14,7 @@ from scipy import fft
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
 # Physical parameters (dimensionless)
 RAYLEIGH = 1.0e5  # Ra = g beta dT H^3 / (nu kappa)
@@ -30,42 +29,28 @@ SEED = 0
 GRID_SIZE = 128  # nodes in x (periodic) and in z (walls included)
 MAX_TIME_STEP = 2e-3  # free-fall time units; diffusion limit is about 2.4e-3
 CFL = 0.4  # advective Courant number used to shrink dt when the flow is fast
-STEPS_PER_FRAME = 20  # time steps between drawn frames
-
-# Display parameters
-WINDOW_SIZE = 400
-FPS = 60
+STEPS_PER_FRAME = 40  # time steps between drawn frames (t += 0.08 at the largest dt)
+N_FRAMES = 500  # frames of a headless run or reel: t = 40, rolls form near t = 13
 
 
-def value_to_color(values):
-    """Map values in [0, 1] to RGB: blue -> cyan -> green -> yellow -> red."""
-    v = np.clip(values, 0.0, 1.0)
-    r = np.clip(4 * v - 2, 0, 1)
-    g = np.where(v < 0.75, np.clip(4 * v, 0, 1), np.clip(4 - 4 * v, 0, 1))
-    b = np.clip(2 - 4 * v, 0, 1)
-    return (255 * np.stack([r, g, b], axis=-1)).astype(np.uint8)
-
-
-def initialize_fields(rng):
+def initialize_fields(rng, n=GRID_SIZE):
     """Conductive temperature profile plus noise; fluid at rest.
 
     Arrays are indexed [j, i] with j = 0 at the bottom wall and i along x.
     """
-    z = np.linspace(0.0, 1.0, GRID_SIZE)
-    temperature = np.tile(T_BOTTOM + (T_TOP - T_BOTTOM) * z[:, None], (1, GRID_SIZE))
-    temperature[1:-1] += NOISE_AMPLITUDE * rng.standard_normal(
-        (GRID_SIZE - 2, GRID_SIZE)
-    )
+    z = np.linspace(0.0, 1.0, n)
+    temperature = np.tile(T_BOTTOM + (T_TOP - T_BOTTOM) * z[:, None], (1, n))
+    temperature[1:-1] += NOISE_AMPLITUDE * rng.standard_normal((n - 2, n))
     vorticity = np.zeros_like(temperature)
     return temperature, vorticity
 
 
-def poisson_eigenvalues(dx, dz):
+def poisson_eigenvalues(dx, dz, n=GRID_SIZE):
     """Eigenvalues of the 5-point Laplacian for periodic x and psi = 0 walls."""
-    m = np.arange(GRID_SIZE)
-    n = np.arange(1, GRID_SIZE - 1)
-    lam_x = -((2 * np.sin(np.pi * m / GRID_SIZE) / dx) ** 2)
-    lam_z = -((2 * np.sin(np.pi * n / (2 * (GRID_SIZE - 1))) / dz) ** 2)
+    m = np.arange(n)
+    k = np.arange(1, n - 1)
+    lam_x = -((2 * np.sin(np.pi * m / n) / dx) ** 2)
+    lam_z = -((2 * np.sin(np.pi * k / (2 * (n - 1))) / dz) ** 2)
     return lam_z[:, None] + lam_x[None, :]
 
 
@@ -148,62 +133,73 @@ def nusselt_number(temperature, dz):
     return float(np.mean(-dT_dz) / (T_BOTTOM - T_TOP))
 
 
-def draw_grid(screen, pygame, temperature):
-    """Draw the temperature field with the hot bottom wall at the bottom."""
-    rgb = value_to_color(temperature[::-1])  # row 0 of the image is the top wall
-    surface = pygame.surfarray.make_surface(np.transpose(rgb, (1, 0, 2)))
-    screen.blit(pygame.transform.scale(surface, screen.get_size()), (0, 0))
+class RayleighBenardSimulation(Simulation):
+    """Temperature and vorticity on the periodic layer; adaptive time steps."""
+
+    def __init__(self, n=GRID_SIZE, seed=SEED):
+        super().__init__()
+        self.dx = 1.0 / n  # periodic: n nodes span one unit
+        self.dz = 1.0 / (n - 1)  # walls at z = 0 and z = 1
+        self.eigenvalues = poisson_eigenvalues(self.dx, self.dz, n)
+        self.temperature, self.vorticity = initialize_fields(
+            np.random.default_rng(seed), n
+        )
+        self.elapsed = 0.0  # free-fall times; dt varies from step to step
+
+    @property
+    def time(self):
+        return self.elapsed
+
+    def step(self):
+        self.elapsed += time_step(
+            self.temperature, self.vorticity, self.eigenvalues, self.dx, self.dz
+        )
+
+    def nusselt(self):
+        return nusselt_number(self.temperature, self.dz)
+
+
+class RayleighBenardView(View):
+    """Temperature map from blue (cold top wall) to red (hot bottom wall)."""
+
+    figsize = (7.0, 6.2)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        ax = figure.subplots()
+        self.image = ax.imshow(
+            simulation.temperature, origin="lower", extent=(0.0, 1.0, 0.0, 1.0),
+            cmap="turbo", vmin=T_TOP, vmax=T_BOTTOM, interpolation="bilinear",
+        )  # fmt: skip
+        figure.colorbar(self.image, ax=ax, label="temperature T")
+        ax.set(xlabel="x (periodic)", ylabel="height z")
+
+    def draw(self):
+        self.image.set_data(self.simulation.temperature)
+
+    def status(self):
+        simulation = self.simulation
+        return f"t = {simulation.time:.1f}   Nu = {simulation.nusselt():.2f}"
+
+
+ANIMATION = Animation(
+    title="Rayleigh-Bénard Convection",
+    subtitle="Fluid heated from below overturns in rolls",
+    filename="rayleigh_benard_convection.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label=f"time steps of dt <= {MAX_TIME_STEP:g}",
+    endless=True,
+)
 
 
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=None,
-        help=f"frames to run, each {STEPS_PER_FRAME} time steps "
-        "(default: until the window is closed)",
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, RayleighBenardSimulation(), RayleighBenardView)
+    print(
+        f"Ra = {RAYLEIGH:g}, Pr = {PRANDTL:g}: t = {simulation.time:.1f} free-fall "
+        f"times, Nusselt number = {simulation.nusselt():.2f}"
     )
-    args = parser.parse_args(argv)
-
-    if args.no_show:
-        os.environ["SDL_VIDEODRIVER"] = "dummy"
-    os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
-    import pygame
-
-    dx = 1.0 / GRID_SIZE  # periodic: GRID_SIZE nodes span one unit
-    dz = 1.0 / (GRID_SIZE - 1)  # walls at z = 0 and z = 1
-    eigenvalues = poisson_eigenvalues(dx, dz)
-    temperature, vorticity = initialize_fields(np.random.default_rng(SEED))
-
-    pygame.init()
-    try:
-        screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
-        pygame.display.set_caption("Rayleigh Bénard Convection")
-        clock = pygame.time.Clock()
-        time = 0.0
-
-        for frame in range(args.steps):
-            if any(event.type == pygame.QUIT for event in pygame.event.get()):
-                break
-            for _ in range(STEPS_PER_FRAME):
-                time += time_step(temperature, vorticity, eigenvalues, dx, dz)
-            draw_grid(screen, pygame, temperature)
-            pygame.display.flip()
-            if not args.no_show:
-                clock.tick(FPS)
-
-        print(
-            f"Ra = {RAYLEIGH:g}, Pr = {PRANDTL:g}: t = {time:.1f} free-fall times, "
-            f"Nusselt number = {nusselt_number(temperature, dz):.2f}"
-        )
-        if args.output:
-            args.output.mkdir(parents=True, exist_ok=True)
-            pygame.image.save(
-                screen, str(args.output / "rayleigh_benard_convection.png")
-            )
-    finally:
-        pygame.quit()
 
 
 if __name__ == "__main__":

@@ -1,20 +1,19 @@
 """Animate the helical path of a charged particle in a uniform magnetic field.
 
 The Lorentz-force equations of motion dr/dt = v, dv/dt = (q/m) v x B are
-integrated with the classical fourth-order Runge-Kutta method (RK4). The
-trajectory is revealed progressively in a 3D animation.
+integrated with the classical fourth-order Runge-Kutta method (RK4). A 3D view
+shows the trajectory traced so far and the particle's current position.
 """
 
 import sys
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.animation import FuncAnimation
+from matplotlib.ticker import MaxNLocator
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int, save_figure  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
 Q = 1.0  # particle charge, C
 M = 1.0  # particle mass, kg
@@ -22,8 +21,11 @@ B = np.array([0.0, 0.0, 1.0])  # magnetic field, T
 R0 = np.array([0.0, 1.0, 0.0])  # initial position, m
 V0 = np.array([1.0, 0.0, 1.0])  # initial velocity, m/s
 DT = 0.01  # RK4 time step, s
-NUM_FRAMES = 200  # animation frames in the default run
-STEPS_PER_FRAME = 25  # RK4 steps per frame; 200 * 25 * 0.01 s = 50 s
+STEPS_PER_FRAME = 25  # RK4 steps per animation frame
+N_FRAMES = 200  # default frames; 200 * 25 * 0.01 s = 50 s
+XY_LIMIT = 2.0  # half-width of the x and y axes, m (grows if the orbit is wider)
+Z_LIMITS = (-2.0, 55.0)  # initial z range, m; fits the default run (z = 50 m)
+COLOR = "dodgerblue"  # trail and particle; brighter than pure blue on black
 
 
 def lorentz_force(t, y):
@@ -72,76 +74,87 @@ def report(t_vals, r_vals, v_vals):
     print(f"max relative speed drift: {np.max(np.abs(speed / speed[0] - 1)):.2e}")
 
 
+class ChargedParticleSimulation(Simulation):
+    """RK4 state with every position and velocity recorded.
+
+    ``positions[k]`` and ``velocities[k]`` belong to ``times()[k] = k dt``,
+    so the recorded arrays match those returned by ``integrate``.
+    """
+
+    def __init__(self, r0=R0, v0=V0, dt=DT):
+        super().__init__()
+        self.dt = dt
+        self.state = np.hstack((r0, v0)).astype(float)
+        self.positions = [self.state[:3]]
+        self.velocities = [self.state[3:]]
+
+    def step(self):
+        self.state = rk4_step(lorentz_force, self.time, self.state, self.dt)
+        self.positions.append(self.state[:3])
+        self.velocities.append(self.state[3:])
+
+    def times(self):
+        return np.arange(len(self.positions)) * self.dt
+
+    def trajectory(self):
+        """Return the recorded times, positions and velocities as arrays."""
+        return self.times(), np.array(self.positions), np.array(self.velocities)
+
+
+class ChargedParticleView(View):
+    """Trail of the particle and its current position in 3D.
+
+    The axes start at fixed limits that fit the default run and widen
+    smoothly once the particle leaves them, so longer runs stay in view.
+    """
+
+    figsize = (6.5, 6.0)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        self.ax = ax = figure.add_subplot(projection="3d")
+        (self.trail,) = ax.plot([], [], [], "-", color=COLOR)
+        (self.particle,) = ax.plot(
+            [], [], [], "o", color=COLOR, markersize=12 if portrait else 8
+        )
+        ax.set(xlabel="x (m)", ylabel="y (m)", zlabel="z (m)")
+        for axis in (ax.xaxis, ax.yaxis):
+            axis.set_major_locator(MaxNLocator(5, steps=[1, 2, 5, 10], prune="both"))
+        if portrait:  # a taller box fills the reel panel and shows the pitch
+            ax.set_box_aspect((1, 1, 1.4), zoom=0.95)
+            for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
+                axis.labelpad = 14
+
+    def draw(self):
+        r = np.array(self.simulation.positions)
+        self.trail.set_data_3d(r[:, 0], r[:, 1], r[:, 2])
+        self.particle.set_data_3d(r[-1:, 0], r[-1:, 1], r[-1:, 2])
+        xy = max(XY_LIMIT, 1.1 * np.abs(r[:, :2]).max())
+        self.ax.set_xlim(-xy, xy)
+        self.ax.set_ylim(-xy, xy)
+        z_low, z_high = Z_LIMITS
+        self.ax.set_zlim(
+            min(z_low, 1.1 * r[:, 2].min()), max(z_high, 1.1 * r[:, 2].max())
+        )
+
+    def status(self):
+        return f"t = {self.simulation.time:.2f} s"
+
+
+ANIMATION = Animation(
+    title="Charged Particle Helix",
+    subtitle="Lorentz force in a uniform B, RK4 integration",
+    filename="charged_particle_helix.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label=f"RK4 steps of dt = {DT:g} s",
+)
+
+
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=NUM_FRAMES,
-        help=f"animation frames, each {STEPS_PER_FRAME} RK4 steps of dt = {DT} s "
-        f"(default {NUM_FRAMES}, i.e. t = 50 s)",
-    )
-    args = parser.parse_args(argv)
-
-    n_frames = args.steps
-    t_vals, r_vals, v_vals = integrate(n_frames * STEPS_PER_FRAME)
-    report(t_vals, r_vals, v_vals)
-
-    fig = plt.figure(facecolor="black")
-    ax = fig.add_subplot(111, projection="3d", facecolor="black")
-    ax.set_xlim(-2, 2)
-    ax.set_ylim(-2, 2)
-    ax.set_zlim(-2, max(60.0, 1.05 * r_vals[:, 2].max()))
-    ax.set_xlabel("X (meters)", color="white")
-    ax.set_ylabel("Y (meters)", color="white")
-    ax.set_zlabel("Z (meters)", color="white")
-    ax.tick_params(colors="white")
-    ax.set_title(
-        "Helical Motion of a Charged Particle in a Magnetic Field", color="white"
-    )
-
-    (line,) = ax.plot([], [], [], "b-")
-    (point,) = ax.plot([], [], [], "bo")  # the moving particle
-
-    def init():
-        line.set_data([], [])
-        line.set_3d_properties([])
-        point.set_data([], [])
-        point.set_3d_properties([])
-        return line, point
-
-    def update(frame):
-        idx = frame * STEPS_PER_FRAME
-        line.set_data(r_vals[: idx + 1, 0], r_vals[: idx + 1, 1])
-        line.set_3d_properties(r_vals[: idx + 1, 2])
-        point.set_data([r_vals[idx, 0]], [r_vals[idx, 1]])
-        point.set_3d_properties([r_vals[idx, 2]])
-        return line, point
-
-    if args.no_show:
-        update(n_frames)
-    else:
-        ani = FuncAnimation(
-            fig,
-            update,
-            frames=range(1, n_frames + 1),
-            init_func=init,
-            blit=True,
-            interval=50,
-            repeat=False,
-        )
-        plt.show()
-        del ani
-
-    if args.output:
-        update(n_frames)
-        save_figure(
-            fig,
-            args.output,
-            "charged_particle_helix.png",
-            facecolor=fig.get_facecolor(),
-        )
-    plt.close(fig)
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, ChargedParticleSimulation(), ChargedParticleView)
+    report(*simulation.trajectory())
 
 
 if __name__ == "__main__":

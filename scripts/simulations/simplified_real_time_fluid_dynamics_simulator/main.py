@@ -1,44 +1,60 @@
-"""Interactive 2D smoke simulation with Jos Stam's Stable Fluids method in Pygame.
+"""Interactive 2D smoke simulation with Jos Stam's Stable Fluids method.
 
 Velocity and a passive density field live on a collocated grid inside a closed
-box. Each frame diffuses (Jacobi iterations of the implicit system), projects,
+box. Each step diffuses (Jacobi iterations of the implicit system), projects,
 semi-Lagrangian-advects and projects the velocity again, then diffuses and
-advects the density. Left-click to inject density and a random velocity kick;
-with ``--no-show`` (or ``--auto-inject``) a seeded rising, swaying plume is
-injected automatically instead.
+advects the density, which is shown as smoke. Left-click in the window to
+inject density and a random velocity kick; without a window (``--no-show`` or
+``--reel``), or with ``--auto-inject``, a seeded rising, swaying plume is
+injected automatically.
 """
 
-import os
 import sys
 from pathlib import Path
 
 import numpy as np
+from matplotlib.colors import LinearSegmentedColormap
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
 SEED = 0
-SCREEN_SIZE = (800, 600)  # pixels
-CELL_SIZE = 4  # pixels per grid cell -> 200 x 150 grid
+GRID_WIDTH, GRID_HEIGHT = 200, 150  # grid cells, walls included
 DIFFUSION = 0.0001  # density diffusion coefficient
 VISCOSITY = 0.0001  # kinematic viscosity
 TIME_STEP = 0.1
 SOLVER_ITERATIONS = 20  # Jacobi iterations for diffusion and pressure
 CLICK_DENSITY = 1000  # density added by a mouse click
 CLICK_VELOCITY = 200  # maximum random velocity component added by a click
-PLUME_DENSITY = 0.25  # density added per source cell per frame (scripted plume)
-PLUME_VELOCITY = 0.15  # upward velocity added per source cell per frame
-PLUME_SWAY = 0.08  # amplitude of the sideways velocity added per frame
-FPS = 60
+PLUME_DENSITY = 0.25  # density added per source cell per step (scripted plume)
+PLUME_VELOCITY = 0.15  # upward velocity added per source cell per step
+PLUME_SWAY = 0.08  # amplitude of the sideways velocity added per step
+DENSITY_BLUE = 0.255  # density drawn as full blue; twice this is drawn white
+STEPS_PER_FRAME = 2  # solver steps between drawn frames
+N_FRAMES = 450  # frames of a headless run or reel (900 steps, t = 90)
 
 
-class FluidSimulation:
-    def __init__(self, width, height, diffusion, viscosity, dt):
+class FluidSimulation(Simulation):
+    """Stable Fluids state; ``step`` adds the plume (if enabled) and advances."""
+
+    def __init__(
+        self,
+        width=GRID_WIDTH,
+        height=GRID_HEIGHT,
+        diffusion=DIFFUSION,
+        viscosity=VISCOSITY,
+        dt=TIME_STEP,
+        auto_inject=False,
+        seed=SEED,
+    ):
+        super().__init__()
         self.size = (height, width)
         self.dt = dt
         self.diff = diffusion
         self.visc = viscosity
+        self.auto_inject = auto_inject
+        self.rng = np.random.default_rng(seed)  # plume noise and click kicks
 
         self.s = np.zeros(self.size)
         self.density = np.zeros(self.size)
@@ -55,6 +71,16 @@ class FluidSimulation:
     def add_velocity(self, x, y, amountX, amountY):
         self.Vx[y, x] += amountX
         self.Vy[y, x] += amountY
+
+    def add_click(self, x, y):
+        """A left click: a puff of density with a random velocity kick."""
+        self.add_density(x, y, CLICK_DENSITY)
+        self.add_velocity(
+            x,
+            y,
+            self.rng.uniform(-CLICK_VELOCITY, CLICK_VELOCITY),
+            self.rng.uniform(-CLICK_VELOCITY, CLICK_VELOCITY),
+        )
 
     def diffuse(self, b, x, x0, diff):
         """Implicit diffusion (I - a lap) x = x0 solved with Jacobi iterations."""
@@ -148,6 +174,8 @@ class FluidSimulation:
         self.project(self.Vx, self.Vy, self.Vx0, self.Vy0)
 
     def step(self):
+        if self.auto_inject:
+            inject_plume(self, self.steps, self.rng)
         self.vel_step()
         self.dens_step()
 
@@ -168,100 +196,78 @@ def inject_plume(fluid_sim, frame, rng):
             )
 
 
-def handle_events(pygame, fluid_sim, cell_size, grid_width, grid_height, rng):
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            return True
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Left click
-            mouse_x, mouse_y = event.pos
-            grid_x, grid_y = mouse_x // cell_size, mouse_y // cell_size
-            print(
-                f"Mouse Clicked at: ({mouse_x}, {mouse_y}), Grid Coords: ({grid_x}, {grid_y})"
-            )
-            if 0 <= grid_x < grid_width and 0 <= grid_y < grid_height:
-                fluid_sim.add_density(grid_x, grid_y, CLICK_DENSITY)
-                fluid_sim.add_velocity(
-                    grid_x,
-                    grid_y,
-                    rng.uniform(-CLICK_VELOCITY, CLICK_VELOCITY),
-                    rng.uniform(-CLICK_VELOCITY, CLICK_VELOCITY),
-                )
-    return False
+class FluidView(View):
+    """Smoke density from black through blue to white; left-click adds smoke.
+
+    Row 0 of the grid is the top of the box, so the image is drawn with
+    ``origin="upper"`` and the y axis counts cells downwards.
+    """
+
+    figsize = (8.0, 6.6)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        self.ax = figure.subplots()
+        smoke = LinearSegmentedColormap.from_list("smoke", ["black", "blue", "white"])
+        self.image = self.ax.imshow(
+            simulation.density, origin="upper", cmap=smoke, vmin=0.0,
+            vmax=2 * DENSITY_BLUE, interpolation="bilinear",
+        )  # fmt: skip
+        figure.colorbar(
+            self.image, ax=self.ax, label="smoke density",
+            location="bottom" if portrait else "right",
+        )  # fmt: skip
+        self.ax.set(xlabel="x [cells]", ylabel="y [cells]")
+        figure.canvas.mpl_connect("button_press_event", self.on_click)
+
+    def on_click(self, event):
+        """Left-click inside the box: smoke and a random kick at that cell."""
+        toolbar = self.figure.canvas.toolbar
+        if event.button != 1 or event.inaxes is not self.ax:
+            return
+        if toolbar is not None and toolbar.mode:  # zooming or panning
+            return
+        height, width = self.simulation.size
+        x, y = int(round(event.xdata)), int(round(event.ydata))
+        if 0 <= x < width and 0 <= y < height:
+            self.simulation.add_click(x, y)
+
+    def draw(self):
+        self.image.set_data(self.simulation.density)
+
+    def status(self):
+        return f"t = {self.simulation.time:.1f}"
 
 
-def draw_simulation(pygame, screen, fluid_sim, screen_size):
-    screen.fill((0, 0, 0))
-    density_scaled = np.clip(fluid_sim.density * 1000, 0, 255).astype(np.uint8)
-
-    # Transpose the density array to match Pygame's (x, y) surface indexing
-    density_scaled = np.transpose(density_scaled)
-
-    color_surface = np.zeros((*density_scaled.shape, 3), dtype=np.uint8)
-    color_surface[:, :, 2] = density_scaled  # Using blue channel
-    density_surface = pygame.surfarray.make_surface(color_surface)
-    density_surface = pygame.transform.scale(density_surface, screen_size)
-    screen.blit(density_surface, (0, 0))
-    pygame.display.flip()
+ANIMATION = Animation(
+    title="Stable Fluids Smoke",
+    subtitle="A swaying plume in a closed box, Stam's method",
+    filename="simplified_real_time_fluid_dynamics_simulator.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label=f"solver steps of dt = {TIME_STEP:g}",
+    endless=True,
+)
 
 
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=None,
-        help="frames (one solver step each) to run (default: until the window is closed)",
-    )
+    parser = ANIMATION.parser(__doc__)
     parser.add_argument(
         "--auto-inject",
         action="store_true",
-        help="inject a scripted plume every frame (implied by --no-show)",
+        help="inject the scripted plume in the window too "
+        "(always on with --no-show or --reel)",
     )
     args = parser.parse_args(argv)
-
-    if args.no_show:
-        os.environ["SDL_VIDEODRIVER"] = "dummy"
-    os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
-    import pygame
-
-    rng = np.random.default_rng(SEED)
-    grid_width, grid_height = SCREEN_SIZE[0] // CELL_SIZE, SCREEN_SIZE[1] // CELL_SIZE
-    fluid_sim = FluidSimulation(
-        width=grid_width,
-        height=grid_height,
-        diffusion=DIFFUSION,
-        viscosity=VISCOSITY,
-        dt=TIME_STEP,
+    auto_inject = args.auto_inject or args.no_show or args.reel is not None
+    simulation = ANIMATION.run(
+        args, FluidSimulation(auto_inject=auto_inject), FluidView
     )
-    auto_inject = args.auto_inject or args.no_show
-
-    pygame.init()
-    try:
-        screen = pygame.display.set_mode(SCREEN_SIZE)
-        pygame.display.set_caption("Fluid Simulation")
-        clock = pygame.time.Clock()
-        frame = 0
-        while args.steps is None or frame < args.steps:
-            if handle_events(
-                pygame, fluid_sim, CELL_SIZE, grid_width, grid_height, rng
-            ):
-                break
-            if auto_inject:
-                inject_plume(fluid_sim, frame, rng)
-            fluid_sim.step()
-            draw_simulation(pygame, screen, fluid_sim, SCREEN_SIZE)
-            if not args.no_show:
-                clock.tick(FPS)
-            frame += 1
-
-        if args.output:
-            args.output.mkdir(parents=True, exist_ok=True)
-            pygame.image.save(
-                screen,
-                str(args.output / "simplified_real_time_fluid_dynamics_simulator.png"),
-            )
-    finally:
-        pygame.quit()
+    density = simulation.density[1:-1, 1:-1]
+    print(
+        f"t = {simulation.time:g} after {simulation.steps} solver steps: smoke "
+        f"density max {density.max():.3f}, mean {density.mean():.4f}"
+    )
 
 
 if __name__ == "__main__":

@@ -4,25 +4,26 @@ Grains are dropped one at a time on random sites of a square lattice. A site
 holding at least 4 grains topples, sending one grain to each of its four
 neighbours; grains pushed over the edge are lost. The height field is drawn as
 a 3D surface after each grain, and the size of the avalanche it caused (number
-of topplings) is shown in the title.
+of topplings) is shown in the status line.
 """
 
 import sys
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.animation import FuncAnimation
+from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
+from matplotlib.ticker import MaxNLocator
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int, save_figure  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
-GRID_SIZE = 20  # lattice is GRID_SIZE x GRID_SIZE
-NUM_GRAINS = 1000  # grains added in the default animation
-CRITICAL_HEIGHT = 4  # a site topples at this height (= number of neighbours)
+GRID_SIZE = 20  # lattice is GRID_SIZE x GRID_SIZE sites
+CRITICAL_HEIGHT = 4  # a site topples at this height [grains] (= number of neighbours)
 SEED = 0  # random seed for the drop positions
+STEPS_PER_FRAME = 1  # grains added per animation frame
+N_FRAMES = 1000  # default frames -> 1000 grains
 
 
 def topple(grid, critical_height=CRITICAL_HEIGHT):
@@ -61,101 +62,86 @@ def add_grain(grid, rng):
     return topple(grid)
 
 
-def setup_figure(grid):
-    """Create the dark 3D figure with a colour bar; return (fig, ax, draw)."""
-    fig = plt.figure(figsize=(12, 8), facecolor="black")
-    ax = fig.add_axes([0.3, 0.1, 0.65, 0.8], projection="3d", facecolor="black")
-    cbar_ax = fig.add_axes([0.1, 0.1, 0.02, 0.8])
+class SandpileSimulation(Simulation):
+    """Height field and the avalanche size caused by every grain added."""
 
-    x, y = np.meshgrid(range(grid.shape[1]), range(grid.shape[0]))
-    zmax = CRITICAL_HEIGHT
-    norm = Normalize(vmin=0, vmax=zmax - 1)
+    def __init__(self, size=GRID_SIZE, seed=SEED):
+        super().__init__()
+        self.rng = np.random.default_rng(seed)
+        self.grid = np.zeros((size, size), dtype=int)
+        self.avalanche_sizes = []  # topplings caused by grain 1, 2, ...
 
-    ax.set_zlim(0, zmax)
-    ax.set_xlabel("X-axis", fontsize=12, color="white")
-    ax.set_ylabel("Y-axis", fontsize=12, color="white")
-    ax.set_zlabel("Grains (Height)", fontsize=12, color="white")
-    ax.xaxis.pane.set_facecolor("black")
-    ax.yaxis.pane.set_facecolor("black")
-    ax.zaxis.pane.set_facecolor("black")
-    ax.grid(True, color="gray", linestyle="--", linewidth=0.5)
-    for axis in ("x", "y", "z"):
-        ax.tick_params(axis=axis, colors="white")
+    @property
+    def last_avalanche(self):
+        return self.avalanche_sizes[-1] if self.avalanche_sizes else 0
 
-    def draw(grains, avalanche):
-        for coll in ax.collections[:]:
-            coll.remove()
-        surf = ax.plot_surface(
-            x,
-            y,
-            grid,
-            cmap="plasma",
-            norm=norm,
-            edgecolor="k",
-            linewidth=0.5,
-            antialiased=True,
-        )
-        ax.set_title(
-            "Bak-Tang-Wiesenfeld Sandpile Model: Evolution Over Time\n"
-            f"grains added: {grains}, last avalanche: {avalanche} topplings, "
-            f"mean height: {grid.mean():.2f}",
-            fontsize=14,
-            color="white",
-        )
-        return surf
+    def step(self):
+        self.avalanche_sizes.append(add_grain(self.grid, self.rng))
 
-    surf = draw(0, 0)
-    cbar = fig.colorbar(surf, cax=cbar_ax, orientation="vertical")
-    cbar.set_label("Grains (Height)", color="white", fontsize=12)
-    cbar.ax.yaxis.set_tick_params(color="white")
-    plt.setp(plt.getp(cbar.ax.axes, "yticklabels"), color="white")
-    return fig, ax, draw
+
+class SandpileView(View):
+    """Height field as a 3D surface coloured from 0 to 3 grains.
+
+    The colour bar sits left of the surface in the window and below it in a
+    reel, where it also replaces the z label.
+    """
+
+    figsize = (10.0, 7.0)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        self.ax = ax = figure.add_subplot(projection="3d")
+        n_rows, n_cols = simulation.grid.shape
+        self.x, self.y = np.meshgrid(range(n_cols), range(n_rows))
+        self.norm = Normalize(vmin=0, vmax=CRITICAL_HEIGHT - 1)
+        self.surface = None
+        ax.set_zlim(0, CRITICAL_HEIGHT)
+        ax.set_zticks(range(CRITICAL_HEIGHT + 1))
+        for axis in (ax.xaxis, ax.yaxis):
+            axis.set_major_locator(MaxNLocator(5, integer=True))
+        ax.set(xlabel="x (site)", ylabel="y (site)")
+        if portrait:  # keep the larger labels clear of the tick labels
+            ax.xaxis.labelpad = ax.yaxis.labelpad = 14
+        else:
+            ax.set_zlabel("height (grains)")
+        figure.colorbar(
+            ScalarMappable(self.norm, "plasma"), ax=ax, label="height (grains)",
+            location="bottom" if portrait else "left", shrink=0.7,
+            pad=0.0 if not portrait else 0.02, ticks=range(CRITICAL_HEIGHT),
+        )  # fmt: skip
+
+    def draw(self):
+        if self.surface is not None:
+            self.surface.remove()
+        self.surface = self.ax.plot_surface(
+            self.x, self.y, self.simulation.grid, cmap="plasma", norm=self.norm,
+            edgecolor="k", linewidth=0.5, antialiased=True,
+        )  # fmt: skip
+
+    def status(self):
+        simulation = self.simulation
+        return f"grain {simulation.steps}   avalanche {simulation.last_avalanche}"
+
+
+ANIMATION = Animation(
+    title="Bak-Tang-Wiesenfeld Sandpile",
+    subtitle="Self-organised criticality, grain by grain",
+    filename="sandpile_3d.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label="grains",
+)
 
 
 def main(argv=None):
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=NUM_GRAINS,
-        help=f"number of grains to add, one per frame (default {NUM_GRAINS})",
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, SandpileSimulation(), SandpileView)
+    sizes = simulation.avalanche_sizes
+    print(
+        f"{simulation.steps} grains added, mean height {simulation.grid.mean():.2f}, "
+        f"{np.count_nonzero(sizes)} avalanches, largest {max(sizes, default=0)} "
+        "topplings"
     )
-    args = parser.parse_args(argv)
-
-    rng = np.random.default_rng(SEED)
-    grid = np.zeros((GRID_SIZE, GRID_SIZE), dtype=int)
-    fig, ax, draw = setup_figure(grid)
-    state = {"grains": 0, "avalanche": 0, "sizes": []}
-
-    def step():
-        state["avalanche"] = add_grain(grid, rng)
-        state["sizes"].append(state["avalanche"])
-        state["grains"] += 1
-
-    def update(frame):
-        step()
-        return (draw(state["grains"], state["avalanche"]),)
-
-    if args.no_show:
-        for _ in range(args.steps):
-            step()
-        draw(state["grains"], state["avalanche"])
-    else:
-        ani = FuncAnimation(
-            fig, update, frames=args.steps, interval=20, blit=False, repeat=False
-        )
-        plt.show()
-        del ani
-
-    sizes = np.array(state["sizes"])
-    if sizes.size:
-        print(
-            f"{state['grains']} grains added, mean height {grid.mean():.2f}, "
-            f"{np.count_nonzero(sizes)} avalanches, largest {sizes.max()} topplings"
-        )
-    if args.output:
-        save_figure(fig, args.output, "sandpile_3d.png", facecolor=fig.get_facecolor())
-    plt.close(fig)
 
 
 if __name__ == "__main__":

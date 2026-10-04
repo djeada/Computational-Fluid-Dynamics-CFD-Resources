@@ -19,12 +19,21 @@ def positive_int(value: str) -> int:
     return result
 
 
+def positive_float(value: str) -> float:
+    """Parse a positive, finite duration or rate for argparse."""
+    try:
+        result = float(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("expected a positive number") from exc
+    if not 0 < result < float("inf"):
+        raise argparse.ArgumentTypeError("expected a positive number")
+    return result
+
+
 def create_parser(description: str) -> argparse.ArgumentParser:
     """Create an example parser with the shared display and output options."""
     parser = argparse.ArgumentParser(description=description.splitlines()[0])
-    parser.add_argument(
-        "--no-show", action="store_true", help="do not open plot or pygame windows"
-    )
+    parser.add_argument("--no-show", action="store_true", help="do not open a window")
     parser.add_argument(
         "--output", type=Path, metavar="DIR", help="save PNG output in DIR"
     )

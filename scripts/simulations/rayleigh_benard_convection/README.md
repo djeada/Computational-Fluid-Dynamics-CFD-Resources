@@ -1,6 +1,6 @@
 # Rayleigh-Bénard Convection Simulation
 
-This script simulates Rayleigh-Bénard convection, the buoyancy-driven flow in a fluid layer heated from below and cooled from above, and draws the temperature field in real time with Pygame. It solves the 2D Boussinesq equations in vorticity-streamfunction form on a 128 × 128 grid at $Ra = 10^5$ and $Pr = 1$. A video of an earlier version is on YouTube: [![YouTube](https://img.youtube.com/vi/E_N-ld6Vfwo/hqdefault.jpg)](https://youtube.com/shorts/E_N-ld6Vfwo)
+This script simulates Rayleigh-Bénard convection, the buoyancy-driven flow in a fluid layer heated from below and cooled from above, and animates the temperature field with Matplotlib. It solves the 2D Boussinesq equations in vorticity-streamfunction form on a 128 × 128 grid at $Ra = 10^5$ and $Pr = 1$. A video of an earlier version is on YouTube: [![YouTube](https://img.youtube.com/vi/E_N-ld6Vfwo/hqdefault.jpg)](https://youtube.com/shorts/E_N-ld6Vfwo)
 
 ## Overview
 
@@ -9,7 +9,7 @@ This script simulates Rayleigh-Bénard convection, the buoyancy-driven flow in a
 - **Initial state**: fluid at rest with the linear conduction profile $T = 1 - z$, plus seeded Gaussian noise of amplitude 0.01 that triggers the instability.
 - **Streamfunction**: the Poisson equation is solved exactly each step with an FFT in $x$ and a discrete sine transform in $z$.
 - **Time stepping**: forward Euler with first-order upwind advection and central-difference diffusion. The time step is capped by an advective Courant number of 0.4.
-- **Display**: a 400 × 400 Pygame window updated every 20 time steps, with a blue → cyan → green → yellow → red colour map for $T \in [0, 1]$. On exit the script prints the elapsed time and the Nusselt number.
+- **Display**: a Matplotlib window redrawn every 40 time steps, showing $T$ with the `turbo` colour map (dark blue → cyan → green → yellow → dark red) on the fixed range $[0, 1]$, hot wall at the bottom. The title line shows the time and the current Nusselt number, and on exit the script prints both.
 
 ## Mathematical Background
 
@@ -73,28 +73,30 @@ The script evaluates it with a second-order one-sided difference. $Nu = 1$ means
 - `velocities`, `upwind_advection` and `laplacian` evaluate the spatial operators.
 - `time_step` solves for $\psi$, chooses $\Delta t$, applies Thom's wall vorticity, advances $T$ and $\omega$, and resets the wall temperatures.
 - `nusselt_number` computes $Nu$ at the bottom wall.
-- `value_to_color` and `draw_grid` convert the temperature array to an RGB surface, with the hot wall drawn at the bottom of the window.
-- `main` handles the flags, runs `STEPS_PER_FRAME` time steps per frame, and always calls `pygame.quit()` on exit.
+- `RayleighBenardSimulation` holds $T$, $\omega$ and the Poisson eigenvalues. Its `step` performs one `time_step` and adds the returned $\Delta t$ to the elapsed time, which it reports as `time` because the step size can vary.
+- `RayleighBenardView` draws the temperature with `imshow` (`origin="lower"`, so the hot wall is at the bottom) and puts $t$ and $Nu$ in the status line.
+- `ANIMATION` and `main` use the shared runner in `scripts/_animation.py` for the window, `--no-show`, `--output` and `--reel`. A frame is `STEPS_PER_FRAME = 40` time steps, and headless runs and reels default to `N_FRAMES = 500` frames ($t = 40$). In the window the simulation runs until it is closed.
 
 ## Usage
 
 ```bash
-python main.py                                     # run until the window is closed
-python main.py --steps 500                         # stop after 500 frames (t = 20)
-python main.py --no-show --output . --steps 1000   # headless, save a screenshot at t = 40
+python main.py                                     # animate until the window is closed (space pauses)
+python main.py --steps 250                         # stop after 250 frames (t = 20)
+python main.py --no-show --output . --steps 500    # save the final frame at t = 40 as a PNG
+python main.py --reel reel.mp4                     # 30 s vertical video for Shorts/Reels (t = 0 to 40)
 ```
 
-`--steps N` sets the number of frames. Each frame is 20 time steps of at most 0.002 free-fall times. Convection starts at roughly $t \approx 15$, which is about 375 frames.
+`--steps N` sets the number of frames; each frame is 40 time steps of at most 0.002 free-fall times. Convection starts at roughly $t \approx 13$, about 160 frames in.
 
 ## Output
 
 ![Temperature field of Rayleigh-Bénard convection at t = 40](rayleigh_benard_convection.png)
 
-The screenshot shows the temperature field after 1000 frames ($t = 40$ free-fall times):
+The image shows the temperature field after 500 frames ($t = 40$ free-fall times), with the colour bar for $T$ on the right:
 
-- **Thermal boundary layers** at the bottom (red) and top (blue) walls.
-- **Plumes**: a hot plume rising from the bottom wall and a cold plume falling from the top wall, joined by a pair of counter-rotating convection rolls in the periodic domain.
-- **Heat transport**: the run prints $Nu \approx 4.0$, compared with $Nu = 1$ before convection starts.
+- **Thermal boundary layers**: thin dark-red and dark-blue bands along the hot bottom and cold top walls.
+- **Plumes**: a hot (orange) plume rising from the bottom wall near $x \approx 0.8$ and a cold (blue) plume falling from the top wall above it, joined by a pair of counter-rotating convection rolls in the periodic domain. The well-mixed interior sits near $T \approx 0.5$ (green).
+- **Heat transport**: the title shows, and the run prints, $Nu = 3.96$, compared with $Nu = 1$ before convection starts.
 
 First-order upwind advection adds numerical diffusion. Treat the Nusselt number as qualitative; a quantitative comparison would need a finer grid and a higher-order scheme.
 

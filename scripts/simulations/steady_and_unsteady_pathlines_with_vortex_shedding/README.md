@@ -8,8 +8,8 @@ This script compares streamlines and particle pathlines for steady potential flo
 - **Unsteady flow**: the same flow plus point vortices of strength $\mp\Gamma/2$ released alternately above and below the wake at $(1.5R, \pm 0.6R)$. A vortex is released every half shedding period, with the period set by a Strouhal number $St = fD/U = 0.2$ ($T = 10$).
 - **Vortex motion**: each shed vortex is convected downstream at $0.8U$ and its strength ramps up over half a period. Image vortices keep the cylinder (approximately) impermeable.
 - **Model limits**: this is a kinematic model. Vortex positions and strengths are prescribed and not computed from the Navier-Stokes or vortex-dynamics equations, and the Reynolds number does not appear.
-- **Particles**: 20 particles start on the line $x = -4$, $-3 \le y \le 3$, and are advanced with classical RK4 ($\Delta t = 0.05$, 300 steps, $t = 15$). Particles that enter the cylinder are removed.
-- **Animation**: two Matplotlib panels. Left: steady streamlines (cyan), pathlines (lime) and particles (yellow). Right: instantaneous streamlines at the current time (magenta), pathlines (orange), particles (red) and the shed vortices (white circles).
+- **Particles**: 20 particles start on the line $x = -4$, $-3 \le y \le 3$, and are advanced with classical RK4 ($\Delta t = 0.01$, 1500 steps, $t = 15$). Particles that enter the cylinder are removed.
+- **Animation**: two Matplotlib panels, side by side in the window and stacked in a reel. Both show the streamlines at the current time (blue), the pathlines (orange) and the particles (yellow); the unsteady panel also marks the shed vortices (pink circles). The streamlines are contours of the stream function, spaced so that one passes through each seed point; in the steady panel every pathline therefore lies on a drawn streamline.
 
 ## Mathematical Background
 
@@ -59,6 +59,16 @@ By the circle theorem, an image vortex $-\gamma_k$ at $R^2/\bar z_k$ plus a vort
 - A pathline is the trajectory of a particle: $d\mathbf{x}/dt = \mathbf{u}(\mathbf{x}, t)$.
 - The two coincide only when $\mathbf{u}$ does not depend on $t$.
 
+### Stream Function
+
+In 2D incompressible flow the velocity follows from a stream function, $u = \partial\psi/\partial y$ and $v = -\partial\psi/\partial x$, and the streamlines at time $t$ are the contours $\psi(x, y, t) = \text{const}$. Here $\psi = \operatorname{Im} F$ with the complex potential $F = U(z + R^2/z) - i\Gamma \ln z / (2\pi)$ of the steady flow, and each shed or image vortex adds
+
+$$
+\psi_k = -\frac{\gamma_k}{4\pi}\ln\left(|z - z_k|^2 + \delta^2\right)
+$$
+
+with $\delta = 0$ for the images.
+
 ### RK4 Integration
 
 $$
@@ -80,20 +90,22 @@ $$
 
 - `base_velocity(x, y)` evaluates the steady potential flow and returns NaN inside the cylinder.
 - `shed_vortices(t)` returns the positions and strengths of the vortices at time `t`. `vortex_velocity(x, y, vortices)` adds their induced velocity, including the images.
-- `steady_velocity` and `unsteady_velocity(x, y, t)` are the two velocity fields.
-- `rk4_step` advances all particles at once. `compute_pathlines(velocity, particles, dt, nt)` returns an array of shape `(nt + 1, n, 2)`.
-- `draw_panel` draws the cylinder and a streamline plot. `main` precomputes both sets of pathlines, draws the steady panel once, and redraws the unsteady panel for every frame.
-- Parameters are module constants: `R`, `U`, `GAMMA`, `STROUHAL`, `VORTEX_STRENGTH`, `SHED_POSITION`, `CONVECTION_SPEED`, `VORTEX_CORE`, `TIME_STEP`, `N_STEPS` and `NUM_PARTICLES`.
+- `steady_velocity` and `unsteady_velocity(x, y, t)` are the two velocity fields. `base_stream_function`, `vortex_stream_function`, `steady_stream_function` and `unsteady_stream_function` are the matching stream functions.
+- `rk4_step` advances all particles at once, and `pathline_step` also removes particles that end inside the cylinder. `compute_pathlines(velocity, particles, dt, nt)` returns a whole pathline array of shape `(nt + 1, n, 2)`.
+- `PathlineSimulation` holds the same seed particles in both flows. `step()` is one RK4 step of every particle in both, and the positions after every step are kept, so `paths(flow)` is the pathline history.
+- `PathlineView` draws the steady streamlines once and the unsteady ones again on every frame. Contouring the stream function on the 300 × 200 grid takes about 0.02 s per frame, roughly a tenth of the time of a `streamplot` of the same field. `streamline_levels` picks the contour values through the seed points.
+- Parameters are module constants: `R`, `U`, `GAMMA`, `STROUHAL`, `VORTEX_STRENGTH`, `SHED_POSITION`, `CONVECTION_SPEED`, `VORTEX_CORE`, `TIME_STEP`, `STEPS_PER_FRAME`, `N_FRAMES` and `NUM_PARTICLES`.
 
 ## Usage
 
 ```bash
-python main.py                                    # animate 300 time steps (t = 15)
+python main.py                                    # animate in a window (space pauses), t = 15
 python main.py --steps 100                        # shorter run (t = 5)
 python main.py --no-show --output . --steps 300   # save the final frame as a PNG
+python main.py --reel reel.mp4                    # 30 s vertical video for Shorts/Reels
 ```
 
-`--steps N` sets the number of time steps. Each step is one animation frame, and it also sets how far the pathlines are integrated.
+`--steps N` sets the number of frames; each frame is 5 RK4 steps of $\Delta t = 0.01$, so the pathlines are integrated to $t = 0.05N$.
 
 ## Output
 
@@ -101,8 +113,8 @@ python main.py --no-show --output . --steps 300   # save the final frame as a PN
 
 The final frame at $t = 15$ shows:
 
-- **Steady panel**: every lime pathline lies on a cyan streamline. Flow below the cylinder is faster because the counter-clockwise circulation adds to the free stream there, and the streamlines divide at the stagnation point on top.
-- **Unsteady panel**: the orange pathlines cross the magenta instantaneous streamlines. They record the flow at earlier times, before the three shed vortices (white circles) had moved to their current positions, so the particle trajectories are deflected differently from the current streamline pattern.
+- **Steady panel**: every orange pathline lies on a streamline. Flow below the cylinder is faster because the counter-clockwise circulation adds to the free stream there, so the streamlines crowd together, and they divide at the stagnation point on top.
+- **Unsteady panel**: the orange pathlines cross the blue instantaneous streamlines. They record the flow at earlier times, before the shed vortices (pink circles) had moved to their current positions, so the particle trajectories are deflected differently from the current streamline pattern. Closed streamlines surround the oldest vortex near the right edge.
 
 ## Related Notes
 

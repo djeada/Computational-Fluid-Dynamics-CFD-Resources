@@ -2,35 +2,37 @@
 
 A perfect maze is carved with a seeded depth-first backtracker. Laplace's
 equation is solved on the open cells with phi = 0 at the entrance, phi = 1 at
-the exit and insulating (zero-flux) walls, using conjugate-gradient iterations
-that are animated in Pygame. The route is then traced by stepping to the
-neighbour with the largest potential and revealed one cell per frame.
+the exit and insulating (zero-flux) walls, by conjugate-gradient iterations
+shown as the potential spreading through the passages. The route is then
+traced by stepping to the neighbour with the largest potential and revealed
+one cell per solver step.
 """
 
-import os
 import random
 import sys
 from pathlib import Path
 
 import numpy as np
+from matplotlib.colors import LinearSegmentedColormap, to_rgba
+from matplotlib.patches import Circle
 
 # Allow execution with `python main.py` from any working directory.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from _common import create_parser, positive_int  # noqa: E402
+from _animation import Animation, Simulation, View  # noqa: E402
 
 # Constants
 MAZE_SIZE: int = 100  # grid cells per side (walls and passages)
-CELL_SIZE: int = 8  # pixels per grid cell
 SEED: int = 0
-CG_ITERATIONS_PER_FRAME: int = 25  # solver iterations drawn per frame
 MAX_ITERATIONS: int = 50_000  # cap on conjugate-gradient iterations
 TOLERANCE: float = 1e-10  # stop when ||residual|| / ||b|| < TOLERANCE
-FPS: int = 30
-SCREEN_COLOR: tuple[int, int, int] = (255, 255, 255)
-WALL_COLOR: tuple[int, int, int] = (0, 0, 0)
-PATH_COLOR: tuple[int, int, int] = (255, 215, 0)
-START_COLOR: tuple[int, int, int] = (255, 0, 0)
-END_COLOR: tuple[int, int, int] = (0, 255, 0)
+# One solver step is one CG iteration, the path trace, or one revealed path cell.
+# The default maze takes 4646 + 1 + 1649 = 6296 steps.
+STEPS_PER_FRAME: int = 10
+N_FRAMES: int = 630  # frames of a headless run or reel: the full solve and path
+PATH_COLOR = "gold"
+START_COLOR = "red"
+END_COLOR = "lime"
+MARKER_RADIUS = 1.4  # entrance and exit markers [cells]
 
 NEIGHBOURS = ((0, 1), (1, 0), (0, -1), (-1, 0))
 
@@ -114,6 +116,10 @@ class LaplaceSolver:
     def converged(self) -> bool:
         return np.sqrt(self.rr) <= TOLERANCE * self.b_norm
 
+    @property
+    def relative_residual(self) -> float:
+        return float(np.sqrt(self.rr) / self.b_norm)
+
     def iterate(self, n: int) -> None:
         for _ in range(n):
             if self.converged or self.iterations >= MAX_ITERATIONS:
@@ -153,91 +159,129 @@ def follow_gradient(
     return path
 
 
-def draw_maze(
-    screen, pygame, maze, phi, path, cell_size, start, end, visible_path_length
-):
-    """Walls black, open cells from blue (phi = 0) to green (phi = 1), path in gold."""
-    potential = np.clip(phi, 0.0, 1.0)
-    rgb = np.zeros((*maze.shape, 3), dtype=np.uint8)
-    rgb[..., 1] = (255 * potential).astype(np.uint8)
-    rgb[..., 2] = (255 * (1 - potential)).astype(np.uint8)
-    rgb[maze == 1] = WALL_COLOR
-    for point in path[:visible_path_length]:
-        rgb[point] = PATH_COLOR
-    rgb[start] = START_COLOR
-    rgb[end] = END_COLOR
-    surface = pygame.surfarray.make_surface(np.transpose(rgb, (1, 0, 2)))
-    screen.blit(
-        pygame.transform.scale(
-            surface, (maze.shape[1] * cell_size, maze.shape[0] * cell_size)
-        ),
-        (0, 0),
-    )
+class MazeSimulation(Simulation):
+    """Two phases: CG iterations for the potential, then the path cell by cell.
+
+    Each step does one unit of work: a conjugate-gradient iteration until the
+    solver converges (or reaches MAX_ITERATIONS), then the gradient-ascent
+    trace, then one more visible path cell. The run is done once the whole
+    path is visible.
+    """
+
+    def __init__(self, size=MAZE_SIZE, seed=SEED):
+        super().__init__()
+        self.maze = generate_maze(size, random.Random(seed))
+        last = (size - 1) // 2 * 2  # largest even index: always a passage cell
+        self.start, self.end = (0, 0), (last, last)
+        self.solver = LaplaceSolver(self.maze, self.start, self.end)
+        self.path: list[tuple[int, int]] | None = None
+        self.visible = 0  # path cells revealed so far
+
+    @property
+    def solved(self):
+        solver = self.solver
+        return solver.converged or solver.iterations >= MAX_ITERATIONS
+
+    @property
+    def done(self):
+        return self.path is not None and self.visible >= len(self.path)
+
+    def step(self):
+        if not self.solved:
+            self.solver.iterate(1)
+        elif self.path is None:
+            self.path = follow_gradient(
+                self.solver.phi, self.solver.open, self.start, self.end
+            )
+        else:
+            self.visible += 1
+
+
+class MazeView(View):
+    """Walls black, passages blue (phi = 0) to green (phi = 1), the path in gold."""
+
+    figsize = (7.2, 6.4)
+
+    def __init__(self, simulation, figure, portrait=False):
+        super().__init__(simulation, figure, portrait)
+        ax = figure.subplots()
+        cmap = LinearSegmentedColormap.from_list(
+            "potential", ["blue", "lime"]
+        ).with_extremes(bad="black")  # walls are masked out of the potential
+        self.walls = simulation.maze == 1
+        self.potential = ax.imshow(
+            self.potential_field(), origin="upper", cmap=cmap, vmin=0.0, vmax=1.0,
+            interpolation="nearest",
+        )  # fmt: skip
+        self.overlay = ax.imshow(
+            self.path_overlay(), origin="upper", interpolation="nearest"
+        )
+        figure.colorbar(self.potential, ax=ax, label="potential φ")
+        for (row, col), color in (
+            (simulation.start, START_COLOR),
+            (simulation.end, END_COLOR),
+        ):
+            ax.add_patch(
+                Circle((col, row), MARKER_RADIUS, facecolor=color, edgecolor="white")
+            )
+        # A black border as wide as the bottom and right wall rows, so the frame
+        # surrounds the maze evenly and the entrance marker is not cut off.
+        n = self.walls.shape[0]
+        ax.set(xlim=(-2.0, n), ylim=(n, -2.0), xticks=[], yticks=[])
+        ax.set_xlabel("entrance (red) to exit (green)")
+
+    def potential_field(self):
+        return np.ma.masked_array(self.simulation.solver.phi, mask=self.walls)
+
+    def path_overlay(self):
+        """RGBA image: the revealed path cells in gold, transparent elsewhere."""
+        overlay = np.zeros((*self.walls.shape, 4))
+        simulation = self.simulation
+        if simulation.path is not None and simulation.visible > 0:
+            rows, cols = np.array(simulation.path[: simulation.visible]).T
+            overlay[rows, cols] = to_rgba(PATH_COLOR)
+        return overlay
+
+    def draw(self):
+        self.potential.set_data(self.potential_field())
+        self.overlay.set_data(self.path_overlay())
+
+    def status(self):
+        simulation = self.simulation
+        solver = simulation.solver
+        if simulation.path is None:
+            return (
+                f"CG iteration {solver.iterations}   "
+                f"residual {solver.relative_residual:.0e}"
+            )
+        return f"path {simulation.visible} of {len(simulation.path)} cells"
+
+
+ANIMATION = Animation(
+    title="Laplace Equation Maze Solver",
+    subtitle="Solve Laplace's equation, then walk uphill",
+    filename="laplace_equation_maze_solver.png",
+    frames=N_FRAMES,
+    steps_per_frame=STEPS_PER_FRAME,
+    step_label="CG iterations or revealed path cells",
+)
 
 
 def main(argv=None) -> None:
-    parser = create_parser(__doc__)
-    parser.add_argument(
-        "--steps",
-        type=positive_int,
-        default=None,
-        help=f"frames to run; each frame does {CG_ITERATIONS_PER_FRAME} solver "
-        "iterations, or reveals one path cell once solved (default: until closed)",
-    )
-    args = parser.parse_args(argv)
-
-    if args.no_show:
-        os.environ["SDL_VIDEODRIVER"] = "dummy"
-    os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
-    import pygame
-
-    maze = generate_maze(MAZE_SIZE, random.Random(SEED))
-    last = (MAZE_SIZE - 1) // 2 * 2  # largest even index: always a passage cell
-    start, end = (0, 0), (last, last)
-    solver = LaplaceSolver(maze, start, end)
-
-    pygame.init()
-    try:
-        screen = pygame.display.set_mode((MAZE_SIZE * CELL_SIZE, MAZE_SIZE * CELL_SIZE))
-        pygame.display.set_caption("Interactive Maze Solver")
-        clock = pygame.time.Clock()
-        path: list[tuple[int, int]] = []
-        visible_path_length = 0
-        frame = 0
-
-        while args.steps is None or frame < args.steps:
-            if any(event.type == pygame.QUIT for event in pygame.event.get()):
-                break
-
-            if not solver.converged and solver.iterations < MAX_ITERATIONS:
-                solver.iterate(CG_ITERATIONS_PER_FRAME)
-            elif not path:
-                print(
-                    f"Potential solved after {solver.iterations} conjugate-gradient "
-                    "iterations."
-                )
-                path = follow_gradient(solver.phi, solver.open, start, end)
-                print(f"Path from {start} to {end}: {len(path)} cells.")
-            else:
-                visible_path_length = min(visible_path_length + 1, len(path))
-
-            screen.fill(SCREEN_COLOR)
-            draw_maze(
-                screen, pygame, maze, solver.phi, path, CELL_SIZE, start, end,
-                visible_path_length,
-            )  # fmt: skip
-            pygame.display.flip()
-            if not args.no_show:
-                clock.tick(FPS)
-            frame += 1
-
-        if args.output:
-            args.output.mkdir(parents=True, exist_ok=True)
-            pygame.image.save(
-                screen, str(args.output / "laplace_equation_maze_solver.png")
-            )
-    finally:
-        pygame.quit()
+    args = ANIMATION.parser(__doc__).parse_args(argv)
+    simulation = ANIMATION.run(args, MazeSimulation(), MazeView)
+    solver = simulation.solver
+    if simulation.path is None:
+        print(
+            f"After {solver.iterations} conjugate-gradient iterations the relative "
+            f"residual is {solver.relative_residual:.1e}; no path traced yet."
+        )
+    else:
+        print(
+            f"Potential solved after {solver.iterations} conjugate-gradient "
+            f"iterations. Path from {simulation.start} to {simulation.end}: "
+            f"{len(simulation.path)} cells, {simulation.visible} shown."
+        )
 
 
 if __name__ == "__main__":

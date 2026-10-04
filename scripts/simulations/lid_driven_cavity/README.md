@@ -7,8 +7,9 @@ This script solves the 2D incompressible Navier-Stokes equations for flow in a s
 - **Problem**: unit square cavity ($L = 1$ m) with the top wall moving at $U = 1$ m/s and $\nu = 0.01$ m²/s, so $Re = UL/\nu = 100$. The fluid starts at rest.
 - **Grid**: 129 × 129 collocated nodes (`N_POINTS`), the same resolution as Ghia et al.
 - **Scheme**: forward-Euler predictor with second-order central differences, a pressure Poisson equation solved with 50 Jacobi sweeps per step, then a velocity correction.
-- **Animation**: filled contours of $u$ and $v$ with Matplotlib `FuncAnimation`. Each frame advances 100 time steps of $\Delta t = 10^{-3}$ s, and the default 150 frames reach $t = 15$ s, when the flow is close to steady.
-- **Validation** (`--compare-ghia`): adds a third panel with $u/U$ along $x = L/2$ against Table I of Ghia et al. (1982) for $Re = 100$, and prints the maximum and RMS differences every frame.
+- **Animation**: colour maps of $u$ and $v$, on scales symmetric about zero so that white marks fluid at rest. Each frame advances 100 time steps of $\Delta t = 10^{-3}$ s, and the default 150 frames reach $t = 15$ s, when the flow is close to steady.
+- **Validation** (`--compare-ghia`): adds a third panel with $u/U$ along $x = L/2$ against Table I of Ghia et al. (1982) for $Re = 100$, and prints the maximum and RMS differences at the end of the run.
+- **Reel**: `--reel FILE` renders the run as a 1080 × 1920 MP4 for YouTube Shorts or Instagram Reels.
 
 ## Mathematical Background
 
@@ -79,24 +80,26 @@ With $\Delta t = 10^{-3}$ s all the usual limits are satisfied:
 - `solve_pressure_poisson` runs `N_PRESSURE_POISSON_ITERATIONS` Jacobi sweeps with zero-gradient pressure walls and removes the mean.
 - `time_step` performs the predictor, pressure solve and correction for one `TIME_STEP`.
 - `centreline_u` extracts $u/U$ on the column $x = L/2$ and interpolates it to the Ghia et al. $y/L$ values. These are nodes of the same 129-point grid, rounded to four decimals.
-- `CavitySimulation(n_points)` owns `u`, `v`, `p`, the grid, and the completed step counter. `advance(steps)` runs projection iterations without plotting.
-- `main` parses the flags, builds the figure with `draw_contour`, and advances `STEPS_PER_FRAME` steps per animation frame.
+- `CavitySimulation(n_points)` derives from the shared `Simulation` class in [`scripts/_animation.py`](../../_animation.py). It owns `u`, `v`, `p` and the grid; `step()` runs one projection iteration, `advance(n)` runs several, and `ghia_error()` returns the centreline error at the 17 benchmark points.
+- `CavityView` draws the state without advancing it: two `imshow` colour maps, plus the centreline profile with `compare_ghia`. The panels sit side by side in the window and are rearranged for the tall reel frame.
+- `ANIMATION` holds the title, the PNG name and the frame grouping (`STEPS_PER_FRAME` time steps per frame). `main` adds `--compare-ghia` to the shared parser and hands the state and view to `ANIMATION.run`, which opens the window, runs headless, or records the reel.
 - Physical and numerical constants (`LID_VELOCITY`, `KINEMATIC_VISCOSITY`, `DENSITY`, `TIME_STEP`, `N_FRAMES`) are at the top of the file. Changing `KINEMATIC_VISCOSITY` changes $Re$, and the Ghia data are only valid for $Re = 100$.
 
 The 50 Jacobi sweeps do not fully converge the pressure within a single step during the start-up transient. The warm start carries the iteration over from step to step, so the pressure converges as the flow approaches steady state.
 
-Headless execution advances all requested frames and renders the final contours once. With `--compare-ghia`, it prints the final centreline error; interactive execution reports it per frame.
+Headless execution advances all requested frames and renders the final state once. With `--compare-ghia`, the centreline error of the final state is printed after the run.
 
 ## Usage
 
 ```bash
-python main.py                    # interactive animation, 150 frames (t = 15 s)
+python main.py                    # animate in a window, 150 frames (t = 15 s); space pauses
 python main.py --compare-ghia     # add the centreline comparison with Ghia et al. (1982)
 python main.py --steps 50         # shorter run: 50 frames (t = 5 s)
 python main.py --no-show --output . --steps 150 --compare-ghia   # save the final frame as a PNG
+python main.py --reel reel.mp4 --compare-ghia   # 30 s vertical video for Shorts/Reels
 ```
 
-`--steps N` sets the number of animation frames. Each frame is 100 time steps.
+`--steps N` sets the number of frames; each frame is 100 time steps.
 
 ## Output
 
@@ -104,8 +107,8 @@ python main.py --no-show --output . --steps 150 --compare-ghia   # save the fina
 
 The figure shows the flow at $t = 15$ s:
 
-- **$u$ contours** (left): the thin shear layer under the lid and the return flow in the lower half of the cavity.
-- **$v$ contours** (right): upflow near the left wall and downflow near the right wall, which together form the primary clockwise vortex.
+- **$u$** (left): the thin shear layer under the lid and the return flow in the lower half of the cavity.
+- **$v$** (middle): upflow near the left wall and downflow near the right wall, which together form the primary clockwise vortex.
 - **Centreline profile** (third panel, `--compare-ghia`): the computed $u/U$ at $x = L/2$ against Ghia et al. (1982). At $t = 15$ s the largest difference over the 17 tabulated points is 0.004 and the RMS difference is 0.002. These numbers stop changing at the third decimal place after about $t = 12$ s.
 
 ## Related Notes

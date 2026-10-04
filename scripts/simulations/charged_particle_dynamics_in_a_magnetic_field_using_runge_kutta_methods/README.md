@@ -8,7 +8,7 @@ This script integrates the motion of a charged particle in a uniform magnetic fi
 - Integrates the six first-order ODEs for position and velocity with a hand-written RK4 step (`DT = 0.01`).
 - Starts from `R0 = (0, 1, 0)` and `V0 = (1, 0, 1)`, which gives a helix of radius 1 around the $z$-axis.
 - Prints the final time, cyclotron period, analytical and numerical Larmor radius, and maximum relative speed drift.
-- Animates the trajectory as a growing blue line with a marker at the particle's current position. Each of the 200 default frames advances 25 RK4 steps, so the animation covers $t = 0$ to $50$.
+- Animates the trajectory as a growing blue line with a marker at the particle's current position. Each of the `N_FRAMES = 200` default frames advances `STEPS_PER_FRAME = 25` RK4 steps, so the animation covers $t = 0$ to $50$.
 
 ## Mathematical Background
 
@@ -61,27 +61,28 @@ RK4 is fourth-order accurate but not energy-conserving. For this rotation its pe
 
 - `lorentz_force(t, y)` returns $(\mathbf{v}, (q/m)\,\mathbf{v} \times \mathbf{B})$.
 - `rk4_step(func, t, y, dt)` performs one RK4 step.
-- `integrate(num_steps)` runs `num_steps` RK4 steps from the initial state and stores $t$, $\mathbf{r}$ and $\mathbf{v}$.
-- `report` prints the diagnostics above.
-- `main` integrates `--steps × STEPS_PER_FRAME` steps up front. It then either animates the stored trajectory with `FuncAnimation` or, with `--no-show`, draws the final frame directly.
+- `integrate(num_steps)` runs `num_steps` RK4 steps from the initial state and returns $t$, $\mathbf{r}$ and $\mathbf{v}$ arrays. The animation does not use it; it is kept as a standalone helper.
+- `ChargedParticleSimulation` advances the state one RK4 step per `step()` and records every position and velocity, so `trajectory()` returns the same arrays as `integrate`.
+- `ChargedParticleView` draws the recorded trail and the particle in 3D. The axes start at $x, y \in [-2, 2]$ and $z \in [-2, 55]$, which fit the default run, and widen smoothly when a longer run leaves them. The vertical reel uses a taller box.
+- `report` prints the diagnostics above from the recorded trajectory when the run ends.
+- `main` runs the shared animation runner from `scripts/_animation.py`: a window, a headless run with `--no-show`, or a reel with `--reel`.
 
 ## Usage
 
 ```bash
-python main.py                                  # 200 frames, t = 0 to 50
-python main.py --steps 50                       # 50 frames, t = 0 to 12.5
-python main.py --no-show --output .             # save the full helix as a PNG
+python main.py                                    # animate in a window (space pauses)
+python main.py --steps 50                         # a shorter run: t = 0 to 12.5
+python main.py --no-show --output . --steps 200   # save the final frame as a PNG
+python main.py --reel reel.mp4                    # 30 s vertical video for Shorts/Reels
 ```
 
-- `--steps N` shows `N` frames. Each frame is 25 RK4 steps of 0.01 s, so `N` also sets the integration length.
-- `--no-show` skips the window.
-- `--output DIR` saves `charged_particle_helix.png` in `DIR`.
+`--steps N` sets the number of frames; each frame is 25 RK4 steps of 0.01 s.
 
 ## Output
 
 ![Helical trajectory of the charged particle](charged_particle_helix.png)
 
-The figure shows the full trajectory after 200 frames ($t = 50$): a helix of radius 1 around the $z$-axis with a pitch of $2\pi v_z/\omega_c \approx 6.28$, ending at $z = 50$ (marker). The console output reports a Larmor radius of 1.000000 and a speed drift of about $2 \times 10^{-11}$.
+The figure shows the full trajectory after 200 frames ($t = 50$): a helix of radius 1 around the $z$-axis with a pitch of $2\pi v_z/\omega_c \approx 6.28$, ending at $z = 50$ (marker). The title line shows the simulated time. The console output reports a Larmor radius of 1.000000 and a speed drift of about $2 \times 10^{-11}$.
 
 ## Related Notes
 
