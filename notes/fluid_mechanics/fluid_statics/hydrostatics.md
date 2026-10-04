@@ -54,9 +54,9 @@ When a surface (like a dam wall or plate) is submerged, the fluid pressure **pus
 
 **Vertical (or inclined) plate:** pressure **varies with depth**, so the force must be found via integration:
 
-$$
+```math
 F = \int_{A} p \, dA
-$$
+```
 
 #### Example: Vertical Rectangular Plate
 
@@ -83,9 +83,9 @@ $$
 
 Taking $p_0$ as atmospheric pressure, which also acts on the dry side of the plate and cancels, only the gauge pressure $\rho g h$ contributes:
 
-$$
+```math
 F = \int_{h_1}^{h_2} \rho g h \, b \, dh
-$$
+```
 
 $$
 F = \rho g b \left[\frac{h^2}{2}\right]_{h_1}^{h_2}

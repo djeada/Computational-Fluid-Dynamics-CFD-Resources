@@ -25,8 +25,8 @@ This page covers the model hierarchy, the equations and standard constants of th
 | Approach | Resolved | Modeled | Grid scaling for a flat-plate boundary layer | Typical use |
 | --- | --- | --- | --- | --- |
 | DNS | All scales down to $\eta$ | Nothing | $Re_{L_x}^{37/14}$ | Physics research, model calibration |
-| Wall-resolved LES | Energy-containing eddies, including near-wall streaks | Subgrid scales | $Re_{L_x}^{13/7}$ | Moderate-$Re$ research, aeroacoustics |
-| Wall-modeled LES | Outer-layer eddies | Subgrid scales and the inner layer | $Re_{L_x}$ | High-$Re$ flows, increasingly industrial |
+| Wall-resolved LES | Energy-containing eddies, including near-wall streaks | Subgrid scales | $Re_{L_x}^{13/7}$ | Moderate-$`Re`$ research, aeroacoustics |
+| Wall-modeled LES | Outer-layer eddies | Subgrid scales and the inner layer | $Re_{L_x}$ | High-$`Re`$ flows, increasingly industrial |
 | Hybrid RANS–LES (DES family) | Eddies in separated regions | Attached boundary layers (RANS) and subgrid scales | Between RANS and WMLES | Massively separated flows |
 | URANS | Large-scale unsteadiness well separated from turbulence | All turbulence | RANS grid | Periodic shedding, slowly varying flows |
 | RANS | Mean flow only | All turbulence | Weak dependence on $Re$ | Industrial design and optimization |
@@ -37,9 +37,9 @@ The grid scalings are the estimates of Choi and Moin (*Physics of Fluids*, 2012)
 
 Most engineering models use the Boussinesq hypothesis (derived in [RANS Equations](./rans_equations.md)):
 
-$$
+```math
 -\overline{u_i'u_j'} = 2\nu_t\,\overline{S}_{ij} - \frac{2}{3}k\,\delta_{ij}
-$$
+```
 
 On dimensional grounds $\nu_t$ is a velocity times a length, $\nu_t \sim u^\ast \ell^\ast$. Models are classified by how many transport equations they solve to obtain these scales:
 
@@ -51,18 +51,18 @@ On dimensional grounds $\nu_t$ is a velocity times a length, $\nu_t \sim u^\ast 
 
 Prandtl (1925) pictured fluid lumps travelling a distance $\ell_m$ before mixing with their surroundings. The resulting eddy viscosity is
 
-$$
+```math
 \nu_t = \ell_m^2\left\lvert \frac{\partial U}{\partial y}\right\rvert
 \qquad \text{(thin shear layers)},
 \qquad \nu_t = \ell_m^2\, S
 \qquad \text{(general)}
-$$
+```
 
 For wall boundary layers the mixing length is:
 
 - **Log layer:** $\ell_m = \kappa y$, which reproduces the log law exactly.
 - **Viscous sublayer:** van Driest damping, $\ell_m = \kappa y\left[1 - \exp(-y^+/A^+)\right]$ with $A^+ = 26$.
-- **Outer layer:** capped at $\ell_m \approx 0.09\,\delta$.
+- **Outer layer:** capped at $`\ell_m \approx 0.09\,\delta`$.
 
 Algebraic models of this kind, notably Cebeci–Smith and Baldwin–Lomax, were the workhorses of early aerodynamic CFD. They are cheap, but they have no memory of upstream history. They need a length scale that is hard to define in complex geometries, and they perform poorly in separated flows.
 
@@ -111,7 +111,7 @@ SA is robust, cheap, and accurate for attached and mildly separated aerodynamic 
 
 ## Two-Equation Models
 
-### Standard $k$–$\varepsilon$
+### Standard $k$–$`\varepsilon`$
 
 The standard model of Launder and Spalding (1974) transports $k$ and $\varepsilon$ and forms $\nu_t = C_\mu k^2/\varepsilon$:
 
@@ -136,13 +136,13 @@ Production is $\mathcal{P}_k = \nu_t S^2$. The $k$ equation is a modeled version
 The constants are not arbitrary.
 
 - **$C_{\varepsilon 2}$ from decaying turbulence.** With no mean gradients, $dk/dt = -\varepsilon$ and $d\varepsilon/dt = -C_{\varepsilon 2}\varepsilon^2/k$. These give power-law decay $k \propto t^{-n}$ with $n = 1/(C_{\varepsilon 2} - 1) = 1.09$. Grid-turbulence experiments give values of roughly 1.1 to 1.4.
-- **$C_\mu$ from equilibrium shear layers.** If $\mathcal{P}_k = \varepsilon$, the Boussinesq relation gives $(\overline{u'v'})^2 = \nu_t^2(dU/dy)^2 = \nu_t\,\varepsilon = C_\mu k^2$, i.e. $-\overline{u'v'}/k = C_\mu^{1/2}$. The measured ratio is about 0.3, hence $C_\mu = 0.09$.
+- **$C_\mu$ from equilibrium shear layers.** If $`\mathcal{P}_k = \varepsilon`$, the Boussinesq relation gives $`(\overline{u'v'})^2 = \nu_t^2(dU/dy)^2 = \nu_t\,\varepsilon = C_\mu k^2`$, i.e. $-\overline{u'v'}/k = C_\mu^{1/2}$. The measured ratio is about 0.3, hence $C_\mu = 0.09$.
 - **$\sigma_\varepsilon$ from the log law.** Substituting the log-layer solution into the $\varepsilon$ equation requires $\kappa^2 = \sigma_\varepsilon C_\mu^{1/2}(C_{\varepsilon 2} - C_{\varepsilon 1})$. The standard constants imply $\kappa = 0.433$, close to 0.41 (Exercise 1).
 - **$C_{\varepsilon 1}$ and $\sigma_k$** were set by fitting homogeneous shear-flow data and by analogy, respectively.
 
 In use, $\varepsilon$ is ill-behaved at walls. The model is therefore used with **wall functions**, or with low-Reynolds-number damping functions or two-layer formulations. It performs well in free shear flows and flows without strong pressure gradients. It overpredicts turbulence at stagnation points, responds too weakly to adverse pressure gradients (separation is predicted too late or not at all), and ignores curvature and swirl. The RNG and realizable variants modify the $\varepsilon$ equation and $C_\mu$ to address some of these problems.
 
-### $k$–$\omega$
+### $k$–$`\omega`$
 
 Wilcox's model replaces $\varepsilon$ with the specific dissipation rate $\omega \sim \varepsilon/k$, a turbulence frequency. In its 1988 form:
 
@@ -168,13 +168,13 @@ with $\nu_t = k/\omega$ and $\varepsilon = \beta^\ast k\omega$.
 
 The log-layer consistency condition is $\alpha = \beta/\beta^\ast - \sigma\kappa^2/\sqrt{\beta^\ast}$, which with these values gives $\kappa = 0.408$. Decaying turbulence follows $k \propto t^{-\beta^\ast/\beta} = t^{-1.2}$.
 
-Near a smooth wall the exact solution is $\omega \to 6\nu/(\beta y^2)$. The equations can therefore be integrated to the wall without damping functions, which gives better behaviour than $k$–$\varepsilon$ in adverse pressure gradients. Menter's practical boundary condition is $\omega_{wall} = 10 \times 6\nu/(\beta_1 \Delta y_1^2)$, where $\Delta y_1$ is the first-cell distance.
+Near a smooth wall the exact solution is $\omega \to 6\nu/(\beta y^2)$. The equations can therefore be integrated to the wall without damping functions, which gives better behaviour than $k$–$`\varepsilon`$ in adverse pressure gradients. Menter's practical boundary condition is $\omega_{wall} = 10 \times 6\nu/(\beta_1 \Delta y_1^2)$, where $\Delta y_1$ is the first-cell distance.
 
 The main weakness of the 1988 model is a strong sensitivity to the free-stream value of $\omega$. Wilcox's 2006 revision reduces this with a cross-diffusion term and a stress limiter. Its constants are $\alpha = 13/25$, $\beta_0 = 0.0708$, $\beta^\ast = 0.09$, $\sigma = 1/2$, $\sigma^\ast = 3/5$ and $\sigma_{do} = 1/8$.
 
 ### Menter SST
 
-The shear-stress transport (SST) model (Menter, 1994) blends the two approaches. It uses $k$–$\omega$ near walls, where it performs well, and switches to a $k$–$\varepsilon$ model rewritten in $\omega$ form away from walls, which removes the free-stream sensitivity. It also limits the eddy viscosity in adverse pressure gradients.
+The shear-stress transport (SST) model (Menter, 1994) blends the two approaches. It uses $k$–$`\omega`$ near walls, where it performs well, and switches to a $`k`$–$`\varepsilon`$ model rewritten in $`\omega`$ form away from walls, which removes the free-stream sensitivity. It also limits the eddy viscosity in adverse pressure gradients.
 
 $$
 \frac{\partial k}{\partial t} + U_j
@@ -199,39 +199,37 @@ $$
 
 The blending functions use the wall distance $y$:
 
-$$
+```math
 F_1 = \tanh\left(\mathrm{arg}_1^4\right),
 \qquad
-\mathrm{arg}_1 = \min\left[\max\left(\frac{\sqrt{k}}{\beta^\ast\omega y},\
-\frac{500\nu}{y^2\omega}\right),\  \frac{4\sigma_{\omega 2}k}{CD_{k\omega}\,y^2}\right]
-$$
+\mathrm{arg}_1 = \min\left[\max\left(\frac{\sqrt{k}}{\beta^\ast\omega y},\ \frac{500\nu}{y^2\omega}\right),\ \frac{4\sigma_{\omega 2}k}{CD_{k\omega}\,y^2}\right]
+```
 
 $$
 CD_{k\omega} = \max\left(\frac{2\sigma_{\omega 2}}{\omega}
 \frac{\partial k}{\partial x_j} \frac{\partial \omega}{\partial x_j},\ 10^{-20}\right),
 \qquad F_2 = \tanh\left(\mathrm{arg}_2^2\right),
 \qquad
-\mathrm{arg}_2 = \max\left(\frac{2\sqrt{k}}{\beta^\ast\omega y},\
-\frac{500\nu}{y^2\omega}\right)
+\mathrm{arg}_2 = \max\left(\frac{2\sqrt{k}}{\beta^\ast\omega y},\ \frac{500\nu}{y^2\omega}\right)
 $$
 
 Each coefficient $\phi$ is blended as $\phi = F_1\phi_1 + (1 - F_1)\phi_2$, where set 1 applies near the wall ($F_1 \to 1$) and set 2 in the free stream ($F_1 \to 0$). Common constants are $\beta^\ast = 0.09$, $\kappa = 0.41$ and $a_1 = 0.31$, with $\gamma_i = \beta_i/\beta^\ast - \sigma_{\omega i}\kappa^2/\sqrt{\beta^\ast}$.
 
 | Set | $\sigma_k$ | $\sigma_\omega$ | $\beta$ | $\gamma$ |
 | --- | --- | --- | --- | --- |
-| 1 (inner, $k$–$\omega$) | 0.85 | 0.5 | 0.075 | 0.553 |
-| 2 (outer, $k$–$\varepsilon$) | 1.0 | 0.856 | 0.0828 | 0.440 |
+| 1 (inner, $k$–$`\omega`$) | 0.85 | 0.5 | 0.075 | 0.553 |
+| 2 (outer, $k$–$`\varepsilon`$) | 1.0 | 0.856 | 0.0828 | 0.440 |
 
 The eddy-viscosity limiter encodes Bradshaw's observation that $-\overline{u'v'} \approx a_1 k$ in boundary layers. In adverse pressure gradients, where production exceeds dissipation, the standard formula overpredicts the shear stress and delays separation; the limiter caps it.
 
-The 2003 revision (Menter, Kuntz and Langtry) uses the strain-rate magnitude $S$ in place of $\Omega$ in the limiter, limits production to $\tilde{\mathcal{P}}_k = \min(\mathcal{P}_k,\ 10\beta^\ast k\omega)$, and uses $10^{-10}$ as the lower bound in $CD_{k\omega}$. SST is among the most widely used general-purpose RANS models.
+The 2003 revision (Menter, Kuntz and Langtry) uses the strain-rate magnitude $S$ in place of $\Omega$ in the limiter, limits production to $`\tilde{\mathcal{P}}_k = \min(\mathcal{P}_k,\ 10\beta^\ast k\omega)`$, and uses $`10^{-10}`$ as the lower bound in $`CD_{k\omega}`$. SST is among the most widely used general-purpose RANS models.
 
 ## Reynolds Stress Models
 
 Reynolds stress models (RSM) drop the Boussinesq hypothesis. They solve the six transport equations for $\overline{u_i'u_j'}$ derived in [RANS Equations](./rans_equations.md), plus an equation for $\varepsilon$ or $\omega$. Production is then exact, and the modeling effort goes into the pressure–strain term. A classic closure combines two parts:
 
-- **Rotta's return-to-isotropy term:** $-2C_1\varepsilon\,b_{ij}$.
-- **The isotropization-of-production term:** $-C_2\left(P_{ij} - \frac{2}{3}\mathcal{P}\,\delta_{ij}\right)$.
+- **Rotta's return-to-isotropy term:** $`-2C_1\varepsilon\,b_{ij}`$.
+- **The isotropization-of-production term:** $`-C_2\left(P_{ij} - \frac{2}{3}\mathcal{P}\,\delta_{ij}\right)`$.
 
 The LRR-IP model uses $C_1 = 1.8$ and $C_2 = 0.6$. RSMs naturally capture normal-stress anisotropy, streamline curvature, rotation and swirl, and secondary flows in ducts. The cost is seven equations, stiffer numerics, and less robust convergence.
 
@@ -241,11 +239,11 @@ The LRR-IP model uses $C_1 = 1.8$ and $C_2 = 0.6$. RSMs naturally capture normal
 
 LES computes the large, geometry-dependent eddies directly and models only the small, more universal ones. The velocity is **filtered** with a kernel $G$ of width $\Delta$:
 
-$$
+```math
 \overline{u}_i(\mathbf{x},t) = \int G(\mathbf{r};\Delta)\,
 u_i(\mathbf{x} - \mathbf{r},t)\, d\mathbf{r},
 \qquad \int G(\mathbf{r};\Delta)\, d\mathbf{r} = 1
-$$
+```
 
 Common kernels are the box (top-hat), the Gaussian, and the sharp spectral cutoff at $\kappa_c = \pi/\Delta$. Many codes filter implicitly, through the grid and discretization. Here the overbar denotes filtering, which is not a Reynolds average. In general $\overline{\overline{u}} \ne \overline{u}$, and the residual $u' = u - \overline{u}$ does not filter to zero, except for the sharp spectral filter.
 
@@ -268,11 +266,11 @@ Pope suggests that a well-resolved LES should resolve at least about 80% of the 
 
 Smagorinsky (1963) proposed an eddy viscosity built from the filter width and the resolved strain rate:
 
-$$
+```math
 \tau_{ij}^r - \frac{1}{3}\tau_{kk}^r\,\delta_{ij} = -2\nu_r\overline{S}_{ij},
 \qquad \nu_r = (C_s\Delta)^2\,\lvert \overline{S} \rvert,
 \qquad \lvert \overline{S} \rvert = \sqrt{2\,\overline{S}_{ij}\overline{S}_{ij}}
-$$
+```
 
 The SGS dissipation is then $\Pi = \nu_r\lvert \overline{S} \rvert^2 \ge 0$. The model always removes energy from the resolved scales and cannot represent backscatter.
 
@@ -296,7 +294,7 @@ If SGS dissipation balances $\varepsilon$, the Smagorinsky viscosity can be esti
 Detached-eddy simulation (DES) was introduced by Spalart and co-workers in 1997. It uses one model that acts as RANS in attached boundary layers and as an LES subgrid model in separated regions. In the SA-based version, the wall distance $d$ in the destruction term is replaced by
 
 $$
-\tilde{d} = \min(d,\  C_{DES}\Delta),
+\tilde{d} = \min(d,\ C_{DES}\Delta),
 \qquad \Delta = \max(\Delta x, \Delta y, \Delta z),
 \qquad C_{DES} = 0.65
 $$
@@ -309,7 +307,7 @@ The weakness is the switch location. It depends on the grid, not the flow. If th
 
 ### Inlet Turbulence Quantities
 
-Air ($\nu = 1.5 \times 10^{-5}\ \mathrm{m^2/s}$) enters a duct with hydraulic diameter $D_h = 0.2$ m at $U = 10$ m/s. The inlet turbulence intensity is $I = 5\%$, and the common rule of thumb for duct flow gives a turbulence length scale $\ell = 0.07D_h = 0.014$ m.
+Air ($\nu = 1.5 \times 10^{-5}\ \mathrm{m^2/s}$) enters a duct with hydraulic diameter $D_h = 0.2$ m at $U = 10$ m/s. The inlet turbulence intensity is $`I = 5\%`$, and the common rule of thumb for duct flow gives a turbulence length scale $\ell = 0.07D_h = 0.014$ m.
 
 $$
 k = \frac{3}{2}(IU)^2 = 0.375\ \mathrm{m^2/s^2}
@@ -346,10 +344,10 @@ The SGS viscosity exceeds the molecular viscosity by an order of magnitude and s
 | --- | --- | --- |
 | Attached external aerodynamics (wings, bodies) | SA or SST | Transition location if not fully turbulent |
 | Adverse pressure gradients, smooth-surface separation | SST | Every RANS model is uncertain for separation and reattachment |
-| Internal flows, ducts, industrial equipment without strong swirl | Realizable $k$–$\varepsilon$ or SST, with matching wall treatment | $y^+$ consistent with the wall treatment |
+| Internal flows, ducts, industrial equipment without strong swirl | Realizable $k$–$`\varepsilon`$ or SST, with matching wall treatment | $y^+$ consistent with the wall treatment |
 | Strong swirl, curvature, rotation, duct secondary flows | RSM, or eddy-viscosity models with curvature corrections | Linear Boussinesq models miss these effects |
-| Impinging jets and stagnation-point heat transfer | SST or RSM | Standard $k$–$\varepsilon$ overpredicts stagnation turbulence |
-| Free shear flows (jets, wakes, mixing layers) | $k$–$\varepsilon$ family | Spreading-rate errors differ between plane and round jets |
+| Impinging jets and stagnation-point heat transfer | SST or RSM | Standard $k$–$`\varepsilon`$ overpredicts stagnation turbulence |
+| Free shear flows (jets, wakes, mixing layers) | $k$–$`\varepsilon`$ family | Spreading-rate errors differ between plane and round jets |
 | Bluff bodies, massive separation, unsteady loads, aeroacoustics | DDES or LES | Grid and time-step resolution; statistical sampling time |
 | Transitional flows (low-Re aerofoils, turbomachinery) | RANS with a transition model, or LES | Fully turbulent models ignore laminar regions |
 | Fundamental physics and model development | DNS | Cost scales as $Re^3$ |
@@ -372,12 +370,12 @@ General guidance:
 
 ## Exercises
 
-**Exercise 1.** In the log layer of an equilibrium boundary layer, show that the standard $k$–$\varepsilon$ model gives $-\overline{u'v'}/k = C_\mu^{1/2}$. Then compute the von Kármán constant implied by $\kappa^2 = \sigma_\varepsilon C_\mu^{1/2}(C_{\varepsilon 2} - C_{\varepsilon 1})$ with the standard constants. What value of $\sigma_\varepsilon$ would give $\kappa = 0.41$?
+**Exercise 1.** In the log layer of an equilibrium boundary layer, show that the standard $k$–$`\varepsilon`$ model gives $-\overline{u'v'}/k = C_\mu^{1/2}$. Then compute the von Kármán constant implied by $\kappa^2 = \sigma_\varepsilon C_\mu^{1/2}(C_{\varepsilon 2} - C_{\varepsilon 1})$ with the standard constants. What value of $\sigma_\varepsilon$ would give $\kappa = 0.41$?
 
 <details>
 <summary>Answer</summary>
 
-**Stress-to-energy ratio.** With $\mathcal{P}_k = \varepsilon$ and $-\overline{u'v'} = \nu_t\,dU/dy$:
+**Stress-to-energy ratio.** With $\mathcal{P}_k = \varepsilon$ and $`-\overline{u'v'} = \nu_t\,dU/dy`$:
 
 ```math
 (\overline{u'v'})^2 = \nu_t\cdot\nu_t\left(\frac{dU}{dy}\right)^2 = \nu_t\,\varepsilon = C_\mu k^2
@@ -391,18 +389,18 @@ so $-\overline{u'v'}/k = C_\mu^{1/2} = 0.3$.
 
 </details>
 
-**Exercise 2.** In decaying homogeneous turbulence, with no mean gradients and no transport, find the power-law decay exponent $n$ in $k \propto t^{-n}$ predicted by the standard $k$–$\varepsilon$ model and by the 1988 $k$–$\omega$ model.
+**Exercise 2.** In decaying homogeneous turbulence, with no mean gradients and no transport, find the power-law decay exponent $n$ in $k \propto t^{-n}$ predicted by the standard $k$–$`\varepsilon`$ model and by the 1988 $k$–$`\omega`$ model.
 
 <details>
 <summary>Answer</summary>
 
-**$k$–$\varepsilon$.** The model equations are $dk/dt = -\varepsilon$ and $d\varepsilon/dt = -C_{\varepsilon 2}\varepsilon^2/k$. Substituting $k \propto t^{-n}$ gives $\varepsilon = nk/t$. Then $d\varepsilon/dt = -n(n+1)k/t^2$ must equal $-C_{\varepsilon 2}n^2k/t^2$, so $n = 1/(C_{\varepsilon 2} - 1) = 1/0.92 = 1.09$.
+**$k$–$`\varepsilon`$.** The model equations are $dk/dt = -\varepsilon$ and $d\varepsilon/dt = -C_{\varepsilon 2}\varepsilon^2/k$. Substituting $k \propto t^{-n}$ gives $\varepsilon = nk/t$. Then $d\varepsilon/dt = -n(n+1)k/t^2$ must equal $-C_{\varepsilon 2}n^2k/t^2$, so $n = 1/(C_{\varepsilon 2} - 1) = 1/0.92 = 1.09$.
 
-**$k$–$\omega$.** The equation $d\omega/dt = -\beta\omega^2$ gives $\omega = 1/(\beta t)$. Then $dk/dt = -\beta^\ast k\omega = -(\beta^\ast/\beta)k/t$, so $n = \beta^\ast/\beta = 0.09/0.075 = 1.2$.
+**$k$–$`\omega`$.** The equation $d\omega/dt = -\beta\omega^2$ gives $\omega = 1/(\beta t)$. Then $dk/dt = -\beta^\ast k\omega = -(\beta^\ast/\beta)k/t$, so $n = \beta^\ast/\beta = 0.09/0.075 = 1.2$.
 
 </details>
 
-**Exercise 3.** A wind-tunnel inlet has $U = 50$ m/s, $I = 2\%$ and turbulence length scale $\ell = 0.01$ m, in air with $\nu = 1.5 \times 10^{-5}\ \mathrm{m^2/s}$. Compute $k$, $\varepsilon$, $\omega$ and $\nu_t/\nu$ using $C_\mu = 0.09$.
+**Exercise 3.** A wind-tunnel inlet has $U = 50$ m/s, $`I = 2\%`$ and turbulence length scale $\ell = 0.01$ m, in air with $\nu = 1.5 \times 10^{-5}\ \mathrm{m^2/s}$. Compute $k$, $\varepsilon$, $\omega$ and $\nu_t/\nu$ using $C_\mu = 0.09$.
 
 <details>
 <summary>Answer</summary>

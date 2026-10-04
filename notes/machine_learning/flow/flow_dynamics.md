@@ -25,12 +25,12 @@ Dynamic Mode Decomposition (DMD), introduced by Schmid (2010) and further develo
 
 Mathematically, given a sequence of $m$ snapshots $\mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_m$ arranged into data matrices
 
-$$
+```math
 \mathbf{X} = [\mathbf{x}_1 \;\; \mathbf{x}_2 \;\; \cdots \;\; \mathbf{x}_{m-1}],
 \qquad \mathbf{X}' = [\mathbf{x}_2 \;\; \mathbf{x}_3 \;\; \cdots \;\; \mathbf{x}_m]
-$$
+```
 
-DMD seeks the best-fit linear operator $\mathbf{A}$ such that $\mathbf{X}' \approx \mathbf{A}\mathbf{X}$. In practice, $\mathbf{A}$ is computed via the singular value decomposition $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^*$ and its rank-$r$ projection $\tilde{\mathbf{A}} = \mathbf{U}_r^* \mathbf{X}' \mathbf{V}_r \boldsymbol{\Sigma}_r^{-1}$. The eigenvalues $\lambda_j$ and eigenvectors of $\tilde{\mathbf{A}}$ yield the DMD modes and their associated growth rates and oscillation frequencies, providing a compact linear model of the flow dynamics.
+DMD seeks the best-fit linear operator $\mathbf{A}$ such that $\mathbf{X}' \approx \mathbf{A}\mathbf{X}$. In practice, $\mathbf{A}$ is computed via the singular value decomposition $`\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^*`$ and its rank-$`r`$ projection $`\tilde{\mathbf{A}} = \mathbf{U}_r^* \mathbf{X}' \mathbf{V}_r \boldsymbol{\Sigma}_r^{-1}`$. The eigenvalues $\lambda_j$ and eigenvectors of $\tilde{\mathbf{A}}$ yield the DMD modes and their associated growth rates and oscillation frequencies, providing a compact linear model of the flow dynamics.
 
 Koopman analysis extends this idea by considering the evolution of all possible observables of the system. The Koopman operator acts on functions of the state, theoretically unfolding the nonlinear dynamics into an infinite-dimensional linear framework. In practice, one approximates this operator using finite-dimensional techniques, often by incorporating nonlinear measurements, kernel methods, or deep neural networks to construct effective nonlinear embeddings. These embeddings allow us to capture the rich dynamics of the original system in a linearized form, providing both interpretability and predictive power.
 
@@ -160,7 +160,7 @@ Combining these steps creates a pipeline that balances physical fidelity with co
 
 The continuous-time eigenvalue is $\omega = \ln(\lambda)/\Delta t$.
 
-$|\lambda| = \sqrt{0.95^2 + 0.30^2} \approx 0.9962$, so the growth rate is $\ln|\lambda|/\Delta t \approx -0.376$ s$^{-1}$ and the mode decays.
+$|\lambda| = \sqrt{0.95^2 + 0.30^2} \approx 0.9962$, so the growth rate is $\ln|\lambda|/\Delta t \approx -0.376$ s$`^{-1}`$ and the mode decays.
 
 $\arg\lambda = \operatorname{atan2}(0.30, 0.95) \approx 0.306$ rad, so the frequency is $f = \arg\lambda / (2\pi\Delta t) \approx 4.87$ Hz.
 
@@ -168,22 +168,22 @@ The half-life is $\ln 2 / 0.376 \approx 1.84$ s.
 
 </details>
 
-**Exercise 2.** A linear system evolves as $\mathbf{x}_{k+1} = \mathbf{A}\mathbf{x}_k$ with $\mathbf{A} = \begin{bmatrix} 0.9 & -0.2 \\ 0.2 & 0.9 \end{bmatrix}$ and $\mathbf{x}_0 = (1, 0)$. Generate $\mathbf{x}_1$ and $\mathbf{x}_2$, form $\mathbf{X}$ and $\mathbf{X}'$, and show that $\mathbf{X}'\mathbf{X}^{-1}$ recovers $\mathbf{A}$. Give its eigenvalues and interpret them.
+**Exercise 2.** A linear system evolves as $\mathbf{x}_{k+1} = \mathbf{A}\mathbf{x}_k$ with $`\mathbf{A} = \begin{bmatrix} 0.9 & -0.2 \\ 0.2 & 0.9 \end{bmatrix}`$ and $\mathbf{x}_0 = (1, 0)$. Generate $\mathbf{x}_1$ and $\mathbf{x}_2$, form $\mathbf{X}$ and $\mathbf{X}'$, and show that $\mathbf{X}'\mathbf{X}^{-1}$ recovers $\mathbf{A}$. Give its eigenvalues and interpret them.
 
 <details>
 <summary>Answer</summary>
 
 $\mathbf{x}_1 = (0.9, 0.2)$ and $\mathbf{x}_2 = (0.77, 0.36)$.
 
-$\mathbf{X} = \begin{bmatrix} 1 & 0.9 \\ 0 & 0.2 \end{bmatrix}$ and $\mathbf{X}' = \begin{bmatrix} 0.9 & 0.77 \\ 0.2 & 0.36 \end{bmatrix}$, with $\mathbf{X}^{-1} = \begin{bmatrix} 1 & -4.5 \\ 0 & 5 \end{bmatrix}$.
+$`\mathbf{X} = \begin{bmatrix} 1 & 0.9 \\ 0 & 0.2 \end{bmatrix}`$ and $`\mathbf{X}' = \begin{bmatrix} 0.9 & 0.77 \\ 0.2 & 0.36 \end{bmatrix}`$, with $`\mathbf{X}^{-1} = \begin{bmatrix} 1 & -4.5 \\ 0 & 5 \end{bmatrix}`$.
 
-$\mathbf{X}'\mathbf{X}^{-1} = \begin{bmatrix} 0.9 & -4.05 + 3.85 \\ 0.2 & -0.9 + 1.8 \end{bmatrix} = \begin{bmatrix} 0.9 & -0.2 \\ 0.2 & 0.9 \end{bmatrix} = \mathbf{A}$.
+$`\mathbf{X}'\mathbf{X}^{-1} = \begin{bmatrix} 0.9 & -4.05 + 3.85 \\ 0.2 & -0.9 + 1.8 \end{bmatrix} = \begin{bmatrix} 0.9 & -0.2 \\ 0.2 & 0.9 \end{bmatrix} = \mathbf{A}`$.
 
 The eigenvalues are $0.9 \pm 0.2i$, with $|\lambda| \approx 0.922$ and phase $\approx 0.219$ rad per step: a decaying rotation. With noise-free data from a linear system, DMD is exact. With noisy or nonlinear data it gives only a least-squares fit, which is why the rank truncation in the note matters.
 
 </details>
 
-**Exercise 3.** Consider the nonlinear map $x_{k+1} = \lambda x_k$, $y_{k+1} = \mu y_k + c\, x_k^2$. Find a set of observables in which the dynamics are exactly linear, write the Koopman matrix, and give its eigenvalues.
+**Exercise 3.** Consider the nonlinear map $x_{k+1} = \lambda x_k$, $`y_{k+1} = \mu y_k + c\, x_k^2`$. Find a set of observables in which the dynamics are exactly linear, write the Koopman matrix, and give its eigenvalues.
 
 <details>
 <summary>Answer</summary>
@@ -226,7 +226,7 @@ With two bias vectors per gate (as in PyTorch) the LSTM part becomes $4(640 + 40
 
 because mixed partial derivatives commute for a smooth $\psi$.
 
-The $\|\nabla \cdot \mathbf{u}\|^2$ term can be dropped from the loss, so the optimizer only has to balance the momentum and boundary terms. This is an example of building a conservation law into the architecture.
+The $`\|\nabla \cdot \mathbf{u}\|^2`$ term can be dropped from the loss, so the optimizer only has to balance the momentum and boundary terms. This is an example of building a conservation law into the architecture.
 
 The momentum residual contains second derivatives of $u$, which are third derivatives of $\psi$. Smooth activations such as tanh are needed; ReLU has zero second derivative almost everywhere.
 

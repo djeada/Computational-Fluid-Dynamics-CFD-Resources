@@ -7,7 +7,7 @@ A shock wave is an extremely thin region, only a few molecular mean free paths t
 For design and CFD, the internal structure of a shock is irrelevant. What matters is the jump in properties, which follows from applying conservation laws to a control volume around the shock. This page covers:
 
 - **normal shocks**: the Rankine–Hugoniot jump conditions, entropy rise and total-pressure loss;
-- **oblique shocks**: the $\theta$–$\beta$–$M$ relation, weak and strong solutions, and detachment;
+- **oblique shocks**: the $\theta$–$`\beta`$–$`M`$ relation, weak and strong solutions, and detachment;
 - **Prandtl–Meyer expansion fans**: the isentropic turning of supersonic flow around convex corners.
 
 Background on stagnation properties and entropy is in [thermodynamics.md](thermodynamics.md), and on Mach waves in [speed_of_sound.md](speed_of_sound.md). Numbers are for air with $\gamma = 1.4$ and $R = 287\ \text{J/(kg K)}$.
@@ -52,7 +52,7 @@ $$
 u_1 u_2 = a^{*2}
 $$
 
-With the characteristic Mach number $M^* = u/a^*$, this reads $M_1^* M_2^* = 1$. If the upstream flow is supersonic ($M_1^* > 1$), the downstream flow must be subsonic.
+With the characteristic Mach number $`M^* = u/a^*`$, this reads $`M_1^* M_2^* = 1`$. If the upstream flow is supersonic ($M_1^* > 1$), the downstream flow must be subsonic.
 
 ### Property Ratios
 
@@ -105,7 +105,7 @@ s_2 - s_1 = c_p \ln \frac{T_2}{T_1} - R \ln \frac{p_2}{p_1} = -R \ln
 \frac{p_{02}}{p_{01}}
 $$
 
-The jump conditions are purely algebraic and have solutions for $M_1 < 1$ as well. At $M_1 = 0.8$ they predict a rarefaction "shock" with $p_2/p_1 = 0.58$. They also give $p_{02}/p_{01} = 1.0165$, which means $s_2 - s_1 = -0.0164\, R < 0$. **Entropy would decrease in an adiabatic process, which violates the second law.** Only the $M_1 > 1$ branch is physical, so every normal shock:
+The jump conditions are purely algebraic and have solutions for $M_1 < 1$ as well. At $M_1 = 0.8$ they predict a rarefaction "shock" with $p_2/p_1 = 0.58$. They also give $p_{02}/p_{01} = 1.0165$, which means $`s_2 - s_1 = -0.0164\, R < 0`$. **Entropy would decrease in an adiabatic process, which violates the second law.** Only the $M_1 > 1$ branch is physical, so every normal shock:
 
 - takes supersonic flow to subsonic flow;
 - increases $p$, $\rho$ and $T$ and decreases $u$;
@@ -155,7 +155,7 @@ Air at $M_1 = 2$, $T_1 = 288.15\ \text{K}$ and $p_1 = 101.325\ \text{kPa}$ passe
 
 - Momentum: $p + \rho u^2 = 668.7\ \text{kPa}$ on both sides.
 - Energy: $c_p T + u^2/2 = 521.0\ \text{kJ/kg}$ on both sides.
-- Prandtl relation: $u_1 u_2 = 173\,668\ \text{m}^2/\text{s}^2 = a^{*2} = 2\gamma R T_0/(\gamma + 1)$.
+- Prandtl relation: $`u_1 u_2 = 173\,668\ \text{m}^2/\text{s}^2 = a^{*2} = 2\gamma R T_0/(\gamma + 1)`$.
 - Entropy: $s_2 - s_1 = -287 \ln 0.7209 = 93.9\ \text{J/(kg K)}$.
 
 ## Oblique Shocks
@@ -194,11 +194,11 @@ $$
 \frac{\tan(\beta - \theta)}{\tan\beta} = \frac{(\gamma - 1) M_1^2 \sin^2\beta + 2}{(\gamma + 1) M_1^2 \sin^2\beta}
 $$
 
-After some trigonometry this becomes the **$\theta$–$\beta$–$M$ relation**:
+After some trigonometry this becomes the **$\theta$–$`\beta`$–$`M`$ relation**:
 
-$$
+```math
 \tan\theta = 2\cot\beta\, \frac{M_1^2 \sin^2\beta - 1}{M_1^2 (\gamma + \cos 2\beta) + 2}
-$$
+```
 
 ### Weak, Strong and Detached Shocks
 
@@ -212,7 +212,7 @@ For a given $M_1$, $\theta$ is zero at two wave angles: at the Mach angle $\beta
 | $\theta_{max}$ | $12.11^\circ$ | $22.97^\circ$ | $34.07^\circ$ | $41.12^\circ$ | $44.43^\circ$ | $45.58^\circ$ |
 | $\beta$ at $\theta_{max}$ | $66.6^\circ$ | $64.7^\circ$ | $65.2^\circ$ | $66.6^\circ$ | $67.5^\circ$ |  |
 
-The $\theta$–$\beta$–$M$ relation is explicit only for $\theta$. To find $\beta$ from $\theta$, bracket the weak root on $(\mu, \beta_{\theta_{max}})$ and the strong root on $(\beta_{\theta_{max}}, 90^\circ)$, and solve each with a scalar root finder. This is how the numbers below were computed.
+The $\theta$–$`\beta`$–$`M`$ relation is explicit only for $\theta$. To find $`\beta`$ from $`\theta`$, bracket the weak root on $(\mu, \beta_{\theta_{max}})$ and the strong root on $(\beta_{\theta_{max}}, 90^\circ)$, and solve each with a scalar root finder. This is how the numbers below were computed.
 
 ### Worked Example 2: Wedge in a Mach 2 Stream
 
@@ -265,7 +265,7 @@ $$
 \nu(M_2) = \nu(M_1) + \theta
 $$
 
-The static properties then follow from the isentropic ratios with constant $p_0$ and $T_0$, for example $p_2/p_1 = (p_0/p)_{M_1}/(p_0/p)_{M_2}$.
+The static properties then follow from the isentropic ratios with constant $p_0$ and $T_0$, for example $`p_2/p_1 = (p_0/p)_{M_1}/(p_0/p)_{M_2}`$.
 
 | $M$ | 1.5 | 2.0 | 2.5 | 3.0 |
 | --- | --- | --- | --- | --- |
@@ -295,7 +295,7 @@ The fan starts at $\mu_1 = 30.0^\circ$ to the upstream flow. It ends at $\mu_2 =
 - Normal shocks conserve mass, momentum and $h_0$. They take $M_1 > 1$ to $M_2 < 1$ and raise $p$, $\rho$, $T$ and $s$.
 - Expansion shocks would decrease entropy and cannot exist. The entropy rise across weak shocks scales as $(M_1^2 - 1)^3$.
 - $s_2 - s_1 = -R \ln(p_{02}/p_{01})$, so shocks are measured by total-pressure loss.
-- Oblique shocks are normal shocks in the normal component $M_1 \sin\beta$. The $\theta$–$\beta$–$M$ relation gives weak and strong solutions below $\theta_{max}$ and a detached bow shock above it.
+- Oblique shocks are normal shocks in the normal component $M_1 \sin\beta$. The $\theta$–$`\beta`$–$`M`$ relation gives weak and strong solutions below $\theta_{max}$ and a detached bow shock above it.
 - Convex corners produce isentropic Prandtl–Meyer fans with $\nu(M_2) = \nu(M_1) + \theta$.
 
 ## Exercises
@@ -333,7 +333,7 @@ Using the isentropic relation $p_0/p = (1 + 0.2 M^2)^{3.5} = 8.0$ would give $M 
 <details>
 <summary>Answer</summary>
 
-Solving the $\theta$–$\beta$–$M$ relation on the weak branch: $\beta = 32.24^\circ$ and $M_{n1} = 3 \sin 32.24^\circ = 1.600$.
+Solving the $\theta$–$`\beta`$–$`M`$ relation on the weak branch: $\beta = 32.24^\circ$ and $M_{n1} = 3 \sin 32.24^\circ = 1.600$.
 
 Normal-shock relations at 1.600: $M_{n2} = 0.6683$, $p_2/p_1 = 2.822$, $T_2/T_1 = 1.388$, $p_{02}/p_{01} = 0.8950$.
 

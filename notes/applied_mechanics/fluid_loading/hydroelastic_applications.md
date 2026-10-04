@@ -101,9 +101,9 @@ The fluid and structural solvers run separately and exchange information at the 
 
 The fluid and structural equations are assembled into a single system and solved simultaneously:
 
-$$
+```math
 \begin{bmatrix} A_{ff} & A_{fs} \\ A_{sf} & A_{ss} \end{bmatrix} \begin{bmatrix} u_f \\ u_s \end{bmatrix} = \begin{bmatrix} b_f \\ b_s \end{bmatrix}
-$$
+```
 
 **Advantages:** Unconditionally stable; handles strong coupling.
 **Disadvantages:** Requires a unified solver; larger system to solve.
@@ -112,9 +112,9 @@ $$
 
 For linear problems the structural response is expanded in terms of dry (in-vacuo) modes $\phi_i$:
 
-$$
+```math
 x(\mathbf{r},t) = \sum_{i=1}^{N} q_i(t) \, \phi_i(\mathbf{r})
-$$
+```
 
 Substituting into the coupled equation yields a set of ordinary differential equations in the generalised coordinates $q_i$, with frequency-dependent added mass and damping from the hydrodynamic analysis:
 
@@ -287,7 +287,7 @@ k_1 q_{1,max} = \omega_1^2 m_1 q_{1,max} = (2.83)^2 \times 5 \times 10^7 \times 
 \approx 1.41 \times 10^7 \text{ N}
 $$
 
-Converting this to a hull-girder bending moment requires the modal bending-moment distribution, $M_{whip}(x) = EI(x)\,\phi_1''(x)\,q_{1,max}$, which depends on the mode shape and its normalisation and is not given here. For large container ships the whipping contribution is typically 30–50% of the wave bending moment, i.e. about 2,400–4,000 MN·m for this ship. Real slam loads are also spread in time and space rather than being a single ideal impulse, which reduces the modal response. The example illustrates why **whipping cannot be ignored** in modern hull girder design.
+Converting this to a hull-girder bending moment requires the modal bending-moment distribution, $`M_{whip}(x) = EI(x)\,\phi_1''(x)\,q_{1,max}`$, which depends on the mode shape and its normalisation and is not given here. For large container ships the whipping contribution is typically 30–50% of the wave bending moment, i.e. about 2,400–4,000 MN·m for this ship. Real slam loads are also spread in time and space rather than being a single ideal impulse, which reduces the modal response. The example illustrates why **whipping cannot be ignored** in modern hull girder design.
 
 ## Worked Example 3: Critical Velocity for a Fluid-Conveying Pipe
 
@@ -405,7 +405,7 @@ The natural frequency drops by about 35%.
 
 (a) Hydrostatic (depends on displacement). (b) Hydrokinetic (radiation damping depends on velocity). (c) Hydroinertial (depends on acceleration).
 
-In a staggered scheme the fluid force is computed from the previous structural acceleration: $m_s\ddot{x}^{(i+1)} = F - m_a\ddot{x}^{(i)}$. An error in the acceleration therefore evolves as $e^{(i+1)} = -(m_a/m_s)\,e^{(i)}$. It grows, with alternating sign, whenever $m_a/m_s > 1$, which is typical of light structures in water and of blood-vessel models. Relaxation, strong coupling or monolithic schemes are needed in that case.
+In a staggered scheme the fluid force is computed from the previous structural acceleration: $m_s\ddot{x}^{(i+1)} = F - m_a\ddot{x}^{(i)}$. An error in the acceleration therefore evolves as $`e^{(i+1)} = -(m_a/m_s)\,e^{(i)}`$. It grows, with alternating sign, whenever $m_a/m_s > 1$, which is typical of light structures in water and of blood-vessel models. Relaxation, strong coupling or monolithic schemes are needed in that case.
 
 </details>
 
@@ -442,7 +442,7 @@ P_{max} = \frac{(5 \times 10^5)^2}{8 \times 2 \times 10^5} = 156 \text{ kW}
 
 </details>
 
-**Exercise 5.** For the subsea module of Example 1 ($m_{eff} = 27\,546$ kg in water), what crane-wire stiffness would keep the heave natural period below 1.0 s? Why is it important to use the wet effective mass rather than the dry mass in this check?
+**Exercise 5.** For the subsea module of Example 1 ($`m_{eff} = 27\,546`$ kg in water), what crane-wire stiffness would keep the heave natural period below 1.0 s? Why is it important to use the wet effective mass rather than the dry mass in this check?
 
 <details>
 <summary>Answer</summary>

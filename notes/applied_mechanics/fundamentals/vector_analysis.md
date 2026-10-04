@@ -147,15 +147,15 @@ $$
 
 The cross product of two vectors produces a vector perpendicular to both:
 
-$$
+```math
 \mathbf{A} \times \mathbf{B} = |\mathbf{A}||\mathbf{B}|\sin\theta\,\hat{\mathbf{n}}
-$$
+```
 
 where $\hat{\mathbf{n}}$ is determined by the right-hand rule. In component form:
 
-$$
+```math
 \mathbf{A} \times \mathbf{B} = \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ A_x & A_y & A_z \\ B_x & B_y & B_z \end{vmatrix}
-$$
+```
 
 $$
 = (A_yB_z - A_zB_y)\mathbf{i} - (A_xB_z - A_zB_x)\mathbf{j} +
@@ -187,9 +187,9 @@ $$
 
 ### Scalar Triple Product
 
-$$
+```math
 \mathbf{A} \cdot (\mathbf{B} \times \mathbf{C}) = \begin{vmatrix} A_x & A_y & A_z \\ B_x & B_y & B_z \\ C_x & C_y & C_z \end{vmatrix}
-$$
+```
 
 The absolute value of the scalar triple product gives the volume of the parallelepiped formed by the three vectors. It is also used to compute the moment of a force about an axis:
 
@@ -232,15 +232,15 @@ $$
 x = r\cos\theta, \quad y = r\sin\theta, \quad z = z
 $$
 
-Unit vectors $\hat{\mathbf{e}}_r$, $\hat{\mathbf{e}}_\theta$, $\hat{\mathbf{e}}_z$ where $\hat{\mathbf{e}}_r$ and $\hat{\mathbf{e}}_\theta$ vary with position:
+Unit vectors $`\hat{\mathbf{e}}_r`$, $`\hat{\mathbf{e}}_\theta`$, $\hat{\mathbf{e}}_z$ where $`\hat{\mathbf{e}}_r`$ and $`\hat{\mathbf{e}}_\theta`$ vary with position:
 
-$$
+```math
 \hat{\mathbf{e}}_r = \cos\theta\,\mathbf{i} + \sin\theta\,\mathbf{j}
-$$
+```
 
-$$
+```math
 \hat{\mathbf{e}}_\theta = -\sin\theta\,\mathbf{i} + \cos\theta\,\mathbf{j}
-$$
+```
 
 Applications: rotating shafts, pipe flow analysis, turbomachinery.
 
@@ -350,9 +350,9 @@ $$
 
 Moment (cross product):
 
-$$
+```math
 \mathbf{M}_O = \mathbf{r} \times \mathbf{F} = \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ 2 & 1 & -1 \\ 4 & -3 & 5 \end{vmatrix}
-$$
+```
 
 $$
 \mathbf{M}_O = [(1)(5) - (-1)(-3)]\mathbf{i} - [(2)(5) - (-1)(4)]\mathbf{j} +
@@ -460,7 +460,7 @@ F_\perp = \sqrt{|\mathbf{F}|^2 - F_\parallel^2} = \sqrt{2900 - 2844.4} = 7.45 \t
 <details>
 <summary>Answer</summary>
 
-$\mathbf{r}_{AB} = (-1, 2, 0)$ and $\mathbf{r}_{AC} = (-1, 0, 3)$.
+$`\mathbf{r}_{AB} = (-1, 2, 0)`$ and $`\mathbf{r}_{AC} = (-1, 0, 3)`$.
 
 ```math
 \mathbf{r}_{AB} \times \mathbf{r}_{AC} = (6, 3, 2), \quad |\mathbf{r}_{AB} \times
@@ -490,7 +490,7 @@ so the volume is 6 (cubic units).
 
 </details>
 
-**Exercise 5.** Differentiate the cylindrical unit vectors $\hat{\mathbf{e}}_r$ and $\hat{\mathbf{e}}_\theta$ with respect to time, and use the result to derive the velocity $\mathbf{v} = \dot{r}\hat{\mathbf{e}}_r + r\dot{\theta}\hat{\mathbf{e}}_\theta + \dot{z}\mathbf{k}$ of a point at $\mathbf{r} = r\hat{\mathbf{e}}_r + z\mathbf{k}$. Evaluate the speed for $r = 2$ m, $\dot{r} = 1$ m/s, $\dot{\theta} = 3$ rad/s and $\dot{z} = 0$.
+**Exercise 5.** Differentiate the cylindrical unit vectors $`\hat{\mathbf{e}}_r`$ and $`\hat{\mathbf{e}}_\theta`$ with respect to time, and use the result to derive the velocity $`\mathbf{v} = \dot{r}\hat{\mathbf{e}}_r + r\dot{\theta}\hat{\mathbf{e}}_\theta + \dot{z}\mathbf{k}`$ of a point at $\mathbf{r} = r\hat{\mathbf{e}}_r + z\mathbf{k}$. Evaluate the speed for $r = 2$ m, $\dot{r} = 1$ m/s, $\dot{\theta} = 3$ rad/s and $\dot{z} = 0$.
 
 <details>
 <summary>Answer</summary>
@@ -502,9 +502,9 @@ so the volume is 6 (cubic units).
 \sin\theta\,\mathbf{j}) = -\dot{\theta}\,\hat{\mathbf{e}}_r
 ```
 
-Therefore $\mathbf{v} = \frac{d}{dt}(r\hat{\mathbf{e}}_r + z\mathbf{k}) = \dot{r}\hat{\mathbf{e}}_r + r\dot{\theta}\hat{\mathbf{e}}_\theta + \dot{z}\mathbf{k}$, since $\mathbf{k}$ is constant.
+Therefore $`\mathbf{v} = \frac{d}{dt}(r\hat{\mathbf{e}}_r + z\mathbf{k}) = \dot{r}\hat{\mathbf{e}}_r + r\dot{\theta}\hat{\mathbf{e}}_\theta + \dot{z}\mathbf{k}`$, since $\mathbf{k}$ is constant.
 
-Numerically $\mathbf{v} = 1\,\hat{\mathbf{e}}_r + 6\,\hat{\mathbf{e}}_\theta$ m/s, so the speed is $\sqrt{37} = 6.08$ m/s.
+Numerically $`\mathbf{v} = 1\,\hat{\mathbf{e}}_r + 6\,\hat{\mathbf{e}}_\theta`$ m/s, so the speed is $\sqrt{37} = 6.08$ m/s.
 
 </details>
 

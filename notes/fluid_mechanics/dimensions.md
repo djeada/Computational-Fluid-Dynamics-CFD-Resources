@@ -490,9 +490,9 @@ Waves form along hull. The severity of wave drag depends on $Fr = \frac{U}{\sqrt
 
 #### Weber Number $(We)$
 
-$$
+```math
 We = \frac{\rho \, U^2 \, L}{\sigma}
-$$
+```
 
 where:
 
@@ -507,9 +507,9 @@ where:
 
 #### Bond Number $(Bo)$
 
-$$
+```math
 Bo = \frac{\rho \, g \, L^2}{\sigma}
-$$
+```
 
 - Ratio of **gravitational forces** to **surface tension** forces.
 - High $Bo$ $\rightarrow$ gravitational effects dominate, big droplets flatten out.
@@ -518,9 +518,9 @@ $$
 
 #### Strouhal Number $(St)$
 
-$$
+```math
 St = \frac{f \, L}{U}
-$$
+```
 
 where:
 
@@ -538,8 +538,8 @@ where:
 
 | **Scale Model (smaller)** | **Real Object (full-scale)** |
 | --- | --- |
-| $\mathrm{Re}_{model} = \mathrm{Re}_{full}$ | $\displaystyle \frac{\rho\, U\, L_{model}}{\mu} = \frac{\rho\, U\, L_{full}}{\mu}$ |
-| $\mathrm{Ma}_{model} = \mathrm{Ma}_{full}$ | $\displaystyle \frac{U_{model}}{c_{model}} = \frac{U_{full}}{c_{full}}$ |
+| $`\mathrm{Re}_{model} = \mathrm{Re}_{full}`$ | $`\displaystyle \frac{\rho\, U\, L_{model}}{\mu} = \frac{\rho\, U\, L_{full}}{\mu}`$ |
+| $`\mathrm{Ma}_{model} = \mathrm{Ma}_{full}`$ | $\displaystyle \frac{U_{model}}{c_{model}} = \frac{U_{full}}{c_{full}}$ |
 | ... | ... |
 
 If these dimensionless #s match => Flow physics in the model should mimic the real system.
@@ -713,7 +713,7 @@ There are $n = 7$ variables ($\Delta p, \rho, V, D, \mu, L, \varepsilon$) and $k
 \frac{\varepsilon}{D}\right)
 ```
 
-that is, a pressure coefficient as a function of $Re$, the length ratio and the relative roughness. Because $\Delta p$ grows in proportion to $L$ in fully developed flow, this reduces to the Darcy form $\Delta p/(\rho V^2) = (L/D)\, \phi(Re, \varepsilon/D)$.
+that is, a pressure coefficient as a function of $Re$, the length ratio and the relative roughness. Because $\Delta p$ grows in proportion to $L$ in fully developed flow, this reduces to the Darcy form $`\Delta p/(\rho V^2) = (L/D)\, \phi(Re, \varepsilon/D)`$.
 
 </details>
 
@@ -722,7 +722,7 @@ that is, a pressure coefficient as a function of $Re$, the length ratio and the 
 <details>
 <summary>Answer</summary>
 
-$f = St\, U / D = 0.2 \times 10 / 0.05 = 40$ Hz.
+$`f = St\, U / D = 0.2 \times 10 / 0.05 = 40`$ Hz.
 
 </details>
 

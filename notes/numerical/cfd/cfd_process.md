@@ -173,7 +173,7 @@ $$
    - Apply the discrete equation to each grid point. For a 1D grid with $N$ points:
 
 $$
--u_{i-1} + (1 + \Delta x)u_i = 0 \quad \text{for} \  i = 2, 3, \ldots, N - 1
+-u_{i-1} + (1 + \Delta x)u_i = 0 \quad \text{for} \ i = 2, 3, \ldots, N - 1
 $$
 
 - Special treatment is required at boundaries where not all neighboring points exist.
@@ -346,7 +346,7 @@ Each equation $-u_{i-1} + (1 + \Delta x)u_i = 0$ gives $u_i = u_{i-1}/1.25$.
 
 $u = (1, 0.8, 0.64, 0.512, 0.4096)$.
 
-The exact value is $e^{-1} \approx 0.3679$, so the error at $x = 1$ is $(0.4096 - 0.3679)/0.3679 \approx 11.3\%$, down from 14.7% on the 4-point grid.
+The exact value is $e^{-1} \approx 0.3679$, so the error at $x = 1$ is $`(0.4096 - 0.3679)/0.3679 \approx 11.3\%`$, down from 14.7% on the 4-point grid.
 
 </details>
 

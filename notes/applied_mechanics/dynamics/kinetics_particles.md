@@ -24,7 +24,7 @@ $$
 
 ### Third Law (Action-Reaction)
 
-For every action there is an equal and opposite reaction: $\mathbf{F}_{AB} = -\mathbf{F}_{BA}$.
+For every action there is an equal and opposite reaction: $`\mathbf{F}_{AB} = -\mathbf{F}_{BA}`$.
 
 ## Equations of Motion in Different Coordinate Systems
 
@@ -344,7 +344,7 @@ r = \left(\frac{GM\,T^2}{4\pi^2}\right)^{1/3} = 4.216 \times 10^7 \text{ m} = 42
 \text{ km}
 ```
 
-The altitude is $42\,164 - 6371 = 35\,793$ km and the speed is $v = 2\pi r/T = 3.07$ km/s.
+The altitude is $`42\,164 - 6371 = 35\,793`$ km and the speed is $v = 2\pi r/T = 3.07$ km/s.
 
 </details>
 

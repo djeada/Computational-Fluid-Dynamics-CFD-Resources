@@ -152,7 +152,7 @@ $$
 \mathcal{L} = \frac{1}{\sum_{i} m_i} \sum_{i} m_i \bigl(\hat{d}_i - d_i\bigr)^2
 $$
 
-where $\hat{d}_i$ is the predicted mesh density at pixel $i$, $d_i$ is the ground-truth density from the adjoint-refined mesh, and $m_i \in \{0,1\}$ is the binary mask that is 1 for fluid-domain pixels and 0 for solid interior or prism-layer regions. The denominator $\sum_{i} m_i$ equals the number of fluid-domain pixels, ensuring the loss is averaged only over the physically meaningful region. This formulation ensures the network only receives gradients from physically meaningful regions.
+where $`\hat{d}_i`$ is the predicted mesh density at pixel $`i`$, $`d_i`$ is the ground-truth density from the adjoint-refined mesh, and $`m_i \in \{0,1\}`$ is the binary mask that is 1 for fluid-domain pixels and 0 for solid interior or prism-layer regions. The denominator $`\sum_{i} m_i`$ equals the number of fluid-domain pixels, ensuring the loss is averaged only over the physically meaningful region. This formulation ensures the network only receives gradients from physically meaningful regions.
 
 A variety of hyperparameters are carefully tuned—ranging from the choice of optimizer (such as the Adam optimizer) to the configuration of skip connections and learning rates. Extensive experimentation shows that networks capable of capturing both large-scale patterns and minute details tend to perform best. The resulting model demonstrates high prediction accuracy, providing a reliable starting point for CFD simulations and, if necessary, further refinement using traditional methods.
 
@@ -217,7 +217,7 @@ A variety of hyperparameters are carefully tuned—ranging from the choice of op
 
 ## Exercises
 
-**Exercise 1.** On a $3 \times 3$ image the predicted densities are $\hat{d} = \begin{bmatrix} 0.2 & 0.4 & 0.5 \\ 0.3 & 0.9 & 0.6 \\ 0.1 & 0.2 & 0.3 \end{bmatrix}$ and the references are $d = \begin{bmatrix} 0.25 & 0.4 & 0.45 \\ 0.3 & 0.1 & 0.7 \\ 0.1 & 0.3 & 0.3 \end{bmatrix}$. The centre pixel lies inside the solid body ($m = 0$); all others have $m = 1$. Compute the masked MSE and the unmasked MSE.
+**Exercise 1.** On a $3 \times 3$ image the predicted densities are $`\hat{d} = \begin{bmatrix} 0.2 & 0.4 & 0.5 \\ 0.3 & 0.9 & 0.6 \\ 0.1 & 0.2 & 0.3 \end{bmatrix}`$ and the references are $`d = \begin{bmatrix} 0.25 & 0.4 & 0.45 \\ 0.3 & 0.1 & 0.7 \\ 0.1 & 0.3 & 0.3 \end{bmatrix}`$. The centre pixel lies inside the solid body ($m = 0$); all others have $m = 1$. Compute the masked MSE and the unmasked MSE.
 
 <details>
 <summary>Answer</summary>

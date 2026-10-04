@@ -98,10 +98,10 @@ Mesh Reduction:
 
 Mathematically, one might express the decimation as a minimization problem:
 
-$$
+```math
 \min_{\text{decimated mesh}} \sum_{\text{original points}}
 \|\mathbf{x}_{\text{original}} - \mathbf{x}_{\text{decimated}}\|^2
-$$
+```
 
 subject to constraints that preserve the topology and key geometric features.
 
@@ -177,7 +177,7 @@ With a half-model (100,000 points) everything halves: 1.68 GB in total.
 <details>
 <summary>Answer</summary>
 
-$L = Re\,\nu/U = 8 \times 10^6 \times 1.5 \times 10^{-5} / 40 = 3.0$ m.
+$`L = Re\,\nu/U = 8 \times 10^6 \times 1.5 \times 10^{-5} / 40 = 3.0`$ m.
 
 With $L = 4.5$ m, $Re = 40 \times 4.5 / 1.5 \times 10^{-5} = 1.2 \times 10^7$.
 

@@ -28,7 +28,7 @@ where the subscript $i$ represents the value at grid point $x_i$.
 
 ### Taylor Series Expansion
 
-To express $\left( \frac{du}{dx} \right)_i$ in terms of $u$ at the grid points, we expand $u_{i-1}$ in a Taylor series:
+To express $`\left( \frac{du}{dx} \right)_i`$ in terms of $`u`$ at the grid points, we expand $`u_{i-1}`$ in a Taylor series:
 
 $$
 u_{i-1} = u_i - \Delta x \left(\frac{du}{dx} \right)_i + O(\Delta x^2)
@@ -126,7 +126,7 @@ This note demonstrates the core FDM discretization workflow on a minimal 1-D exa
 <details>
 <summary>Answer</summary>
 
-Rearranging $(u_i - u_{i-1})/\Delta x + u_i = 0$ gives $u_i = u_{i-1}/(1 + \Delta x) = 0.75\,u_{i-1}$. So:
+Rearranging $(u_i - u_{i-1})/\Delta x + u_i = 0$ gives $`u_i = u_{i-1}/(1 + \Delta x) = 0.75\,u_{i-1}`$. So:
 
 - $u_2 = 0.75$
 - $u_3 = 0.5625$
@@ -152,7 +152,7 @@ The error ratio is $0.0540/0.0287 = 1.88$, close to 2. Halving $\Delta x$ roughl
 <details>
 <summary>Answer</summary>
 
-(a) $u_{i-1} = u_i - \Delta x\,u'_i + \frac{\Delta x^2}{2}u''_i - \dots$, so
+(a) $`u_{i-1} = u_i - \Delta x\,u'_i + \frac{\Delta x^2}{2}u''_i - \dots`$, so
 
 ```math
 \frac{u_i - u_{i-1}}{\Delta x} = u'_i - \frac{\Delta x}{2}u''_i + O(\Delta x^2)
@@ -171,7 +171,7 @@ If $\Delta x > 2$, then $|1 - \Delta x| > 1$ and the forward solution oscillates
 <details>
 <summary>Answer</summary>
 
-Each step is a quadratic, $\Delta x\,u_i^2 + u_i - u_{i-1} = 0$. Its positive root is
+Each step is a quadratic, $`\Delta x\,u_i^2 + u_i - u_{i-1} = 0`$. Its positive root is
 
 ```math
 u_i = \frac{-1 + \sqrt{1 + 4\Delta x\,u_{i-1}}}{2\Delta x}

@@ -261,7 +261,7 @@ That is 1.2° trailing edge up, consistent with Exercise 1.
 
 </details>
 
-**Exercise 4.** The neutral point is 0.62 m and the CG 0.45 m behind the leading edge of the mean aerodynamic chord ($c = 1.5$ m). The aircraft lift-curve slope is 5.2 per radian. Find the static margin and $C_{m_\alpha} = -C_{L_\alpha}\,SM$. How far aft can the CG move if the static margin must stay at least 5%?
+**Exercise 4.** The neutral point is 0.62 m and the CG 0.45 m behind the leading edge of the mean aerodynamic chord ($c = 1.5$ m). The aircraft lift-curve slope is 5.2 per radian. Find the static margin and $`C_{m_\alpha} = -C_{L_\alpha}\,SM`$. How far aft can the CG move if the static margin must stay at least 5%?
 
 <details>
 <summary>Answer</summary>
@@ -274,7 +274,7 @@ For $SM \geq 0.05$: $x_{CG} \leq 0.62 - 0.05 \times 1.5 = 0.545$ m. The aft CG l
 
 </details>
 
-**Exercise 5.** Lanchester's approximation gives the phugoid period as $T \approx \pi\sqrt{2}\,V/g$. Estimate it at 60 m/s and explain why pilots can easily control the phugoid but not a poorly damped short-period mode.
+**Exercise 5.** Lanchester's approximation gives the phugoid period as $`T \approx \pi\sqrt{2}\,V/g`$. Estimate it at 60 m/s and explain why pilots can easily control the phugoid but not a poorly damped short-period mode.
 
 <details>
 <summary>Answer</summary>

@@ -304,9 +304,9 @@ r = \frac{\omega}{\omega_n} = 2.769 \implies \omega_n = \frac{125.7}{2.769} = 45
 \text{ rad/s}
 $$
 
-$$
+```math
 k = m\omega_n^2 = 200(45.4)^2 = 412\,232 \text{ N/m} \approx 412 \text{ kN/m}
-$$
+```
 
 **Transmitted force:**
 
@@ -344,7 +344,7 @@ $$
 
 - Most engineering systems are underdamped ($\zeta < 1$)
 - Measure damping via logarithmic decrement from free vibration tests
-- Typical values: structural steel $\zeta \approx 0.01$–$0.05$, rubber mounts $\zeta \approx 0.05$–$0.15$
+- Typical values: structural steel $\zeta \approx 0.01$–$`0.05`$, rubber mounts $\zeta \approx 0.05$–$`0.15`$
 
 ### 3. Avoid Resonance in Design
 

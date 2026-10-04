@@ -27,11 +27,11 @@ Substitute $u_i = U_i + u_i'$ and $p = P + p'$, then average each term.
 | Term | Instantaneous | Averaged |
 | --- | --- | --- |
 | Unsteady | $\partial u_i/\partial t$ | $\partial U_i/\partial t$ |
-| Convective | $\partial (u_i u_j)/\partial x_j$ | $\partial (U_i U_j)/\partial x_j + \partial\,\overline{u_i'u_j'}/\partial x_j$ |
-| Pressure | $-(1/\rho)\,\partial p/\partial x_i$ | $-(1/\rho)\,\partial P/\partial x_i$ |
-| Viscous | $\nu\,\partial^2 u_i/\partial x_j\partial x_j$ | $\nu\,\partial^2 U_i/\partial x_j\partial x_j$ |
+| Convective | $\partial (u_i u_j)/\partial x_j$ | $`\partial (U_i U_j)/\partial x_j + \partial\,\overline{u_i'u_j'}/\partial x_j`$ |
+| Pressure | $`-(1/\rho)\,\partial p/\partial x_i`$ | $`-(1/\rho)\,\partial P/\partial x_i`$ |
+| Viscous | $`\nu\,\partial^2 u_i/\partial x_j\partial x_j`$ | $`\nu\,\partial^2 U_i/\partial x_j\partial x_j`$ |
 
-Every linear term keeps its form. Only the convective term produces something new, because $\overline{u_i u_j} = U_iU_j + \overline{u_i'u_j'}$. Averaging continuity gives $\partial U_i/\partial x_i = 0$, which lets us write $\partial (U_iU_j)/\partial x_j = U_j\,\partial U_i/\partial x_j$. The result is the **RANS momentum equation**:
+Every linear term keeps its form. Only the convective term produces something new, because $\overline{u_i u_j} = U_iU_j + \overline{u_i'u_j'}$. Averaging continuity gives $\partial U_i/\partial x_i = 0$, which lets us write $`\partial (U_iU_j)/\partial x_j = U_j\,\partial U_i/\partial x_j`$. The result is the **RANS momentum equation**:
 
 $$
 \frac{\partial U_i}{\partial t} + U_j
@@ -40,17 +40,17 @@ $$
 \frac{\partial U_j}{\partial x_i}\right) - \overline{u_i'u_j'}\right]
 $$
 
-The term $\nu\,\partial U_j/\partial x_i$ contributes nothing (its divergence vanishes by continuity). It is included so that the bracket is a proper symmetric stress. Multiplying by $\rho$:
+The term $`\nu\,\partial U_j/\partial x_i`$ contributes nothing (its divergence vanishes by continuity). It is included so that the bracket is a proper symmetric stress. Multiplying by $\rho$:
 
-$$
+```math
 \rho
 \frac{\overline{D} U_i}{\overline{D} t} = \frac{\partial}{\partial x_j}\left[-P\,\delta_{ij} + 2\mu\,\overline{S}_{ij} - \rho\,\overline{u_i'u_j'}\right],
 \qquad
 \overline{S}_{ij} = \frac{1}{2}\left(\frac{\partial U_i}{\partial x_j} +
 \frac{\partial U_j}{\partial x_i}\right)
-$$
+```
 
-Here $\overline{D}/\overline{D}t = \partial/\partial t + U_k\,\partial/\partial x_k$ is the rate of change following the *mean* flow, not a fluid particle. The mean momentum is acted on by the mean pressure, the mean viscous stress and the **Reynolds stress** $-\rho\,\overline{u_i'u_j'}$. For compressible flow the same steps are carried out with Favre averaging (see [Reynolds Decomposition](./reynolds_decomposition.md)).
+Here $`\overline{D}/\overline{D}t = \partial/\partial t + U_k\,\partial/\partial x_k`$ is the rate of change following the *mean* flow, not a fluid particle. The mean momentum is acted on by the mean pressure, the mean viscous stress and the **Reynolds stress** $`-\rho\,\overline{u_i'u_j'}`$. For compressible flow the same steps are carried out with Favre averaging (see [Reynolds Decomposition](./reynolds_decomposition.md)).
 
 ## The Closure Problem
 
@@ -65,7 +65,7 @@ This **closure problem** is a direct consequence of the quadratic nonlinearity o
 
 ## Equation for the Fluctuations
 
-Subtracting the RANS equation from the instantaneous Navier–Stokes equation gives an exact equation for the velocity fluctuation. The steps use $\partial (U_i u_k')/\partial x_k = u_k'\,\partial U_i/\partial x_k$ and $\partial (u_i'U_k)/\partial x_k = U_k\,\partial u_i'/\partial x_k$, both of which follow from continuity. The result is
+Subtracting the RANS equation from the instantaneous Navier–Stokes equation gives an exact equation for the velocity fluctuation. The steps use $`\partial (U_i u_k')/\partial x_k = u_k'\,\partial U_i/\partial x_k`$ and $`\partial (u_i'U_k)/\partial x_k = U_k\,\partial u_i'/\partial x_k`$, both of which follow from continuity. The result is
 
 $$
 \frac{\partial u_i'}{\partial t} + U_k \frac{\partial u_i'}{\partial x_k} = -u_k'
@@ -75,7 +75,7 @@ $$
 \frac{\partial^2 u_i'}{\partial x_k\partial x_k}
 $$
 
-The first term on the right, $-u_k'\,\partial U_i/\partial x_k$, is the interaction of fluctuations with mean gradients. It is how the mean flow feeds the turbulence.
+The first term on the right, $`-u_k'\,\partial U_i/\partial x_k`$, is the interaction of fluctuations with mean gradients. It is how the mean flow feeds the turbulence.
 
 ## Reynolds Stress Transport Equation
 
@@ -94,18 +94,18 @@ P_{ij} = -\overline{u_i'u_k'} \frac{\partial U_j}{\partial x_k} - \overline{u_j'
 \frac{\partial U_i}{\partial x_k}
 $$
 
-$$
+```math
 R_{ij} = \overline{\frac{p'}{\rho}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)},
 \qquad
 \varepsilon_{ij} = 2\nu\,\overline{\frac{\partial u_i'}{\partial x_k}\frac{\partial u_j'}{\partial x_k}}
-$$
+```
 
-$$
+```math
 T_{kij} = \overline{u_i'u_j'u_k'} +
 \frac{1}{\rho}\left(\overline{p'u_i'}\,\delta_{jk} +
 \overline{p'u_j'}\,\delta_{ik}\right) - \nu
 \frac{\partial \overline{u_i'u_j'}}{\partial x_k}
-$$
+```
 
 | Term | Name | Physical role | Closed? |
 | --- | --- | --- | --- |
@@ -114,11 +114,11 @@ $$
 | $\varepsilon_{ij}$ | Dissipation tensor | Viscous destruction at small scales | No |
 | $\overline{u_i'u_j'u_k'}$ | Turbulent transport | Spatial transport by the fluctuations themselves | No |
 | $\overline{p'u_i'}/\rho$ | Pressure transport | Spatial transport by pressure fluctuations | No (often neglected or lumped with turbulent transport) |
-| $\nu\,\partial \overline{u_i'u_j'}/\partial x_k$ | Viscous diffusion | Molecular transport; important only near walls | Yes |
+| $`\nu\,\partial \overline{u_i'u_j'}/\partial x_k`$ | Viscous diffusion | Molecular transport; important only near walls | Yes |
 
-The pressure–strain term deserves special attention. Its trace is $R_{ii} = 2\,\overline{(p'/\rho)\,\partial u_i'/\partial x_i} = 0$ by continuity. It therefore changes no energy in total; it only moves energy between components.
+The pressure–strain term deserves special attention. Its trace is $`R_{ii} = 2\,\overline{(p'/\rho)\,\partial u_i'/\partial x_i} = 0`$ by continuity. It therefore changes no energy in total; it only moves energy between components.
 
-In a simple shear flow $U(y)$ the production tensor has only two nonzero components: $P_{11} = -2\,\overline{u'v'}\,dU/dy$ and $P_{12} = -\overline{v'^2}\,dU/dy$. The mean shear feeds only $\overline{u'^2}$. That $\overline{v'^2}$ and $\overline{w'^2}$ are nonzero is entirely due to pressure–strain redistribution, which tends to restore isotropy.
+In a simple shear flow $U(y)$ the production tensor has only two nonzero components: $`P_{11} = -2\,\overline{u'v'}\,dU/dy`$ and $`P_{12} = -\overline{v'^2}\,dU/dy`$. The mean shear feeds only $\overline{u'^2}$. That $\overline{v'^2}$ and $\overline{w'^2}$ are nonzero is entirely due to pressure–strain redistribution, which tends to restore isotropy.
 
 **Reynolds stress models** (RSM) close the terms marked "No" in the table and solve all six equations (see [Turbulence Modeling](./modeling.md)).
 
@@ -135,16 +135,16 @@ $$
 
 with
 
-$$
+```math
 \mathcal{P} = -\overline{u_i'u_j'} \frac{\partial U_i}{\partial x_j},
 \qquad
 \varepsilon = \nu\,\overline{\frac{\partial u_i'}{\partial x_j}\frac{\partial u_i'}{\partial x_j}}
-$$
+```
 
 The terms have clear physical meanings.
 
 - **Production** $\mathcal{P}$ is the rate at which the mean flow does work against the Reynolds stresses. The same term appears with the opposite sign in the equation for the mean kinetic energy $\frac{1}{2}U_iU_i$, so it is a *transfer*, not a creation. It is usually positive: energy flows from the mean flow into turbulence.
-- **Dissipation** $\varepsilon$ is the rate at which viscosity converts turbulent kinetic energy into internal energy at the smallest scales (see [Energy Cascade](./energy_cascade.md)). Strictly, the expression above is the "pseudo-dissipation". It differs from the true dissipation $2\nu\,\overline{s_{ij}'s_{ij}'}$ by a term that is usually small.
+- **Dissipation** $\varepsilon$ is the rate at which viscosity converts turbulent kinetic energy into internal energy at the smallest scales (see [Energy Cascade](./energy_cascade.md)). Strictly, the expression above is the "pseudo-dissipation". It differs from the true dissipation $`2\nu\,\overline{s_{ij}'s_{ij}'}`$ by a term that is usually small.
 - **Transport**, the divergence on the right, contains turbulent transport, pressure transport and viscous diffusion. It moves $k$ from place to place. Integrated over a closed volume with no flux through the boundary, it contributes nothing.
 
 Two limiting cases are instructive:
@@ -156,12 +156,12 @@ Two limiting cases are instructive:
 
 Boussinesq (1877) proposed that turbulent momentum transfer behaves like molecular momentum transfer. The Reynolds stress is taken proportional to the mean strain rate, with a scalar **eddy viscosity** $\nu_t$:
 
-$$
+```math
 -\overline{u_i'u_j'} = \nu_t\left(\frac{\partial U_i}{\partial x_j} +
 \frac{\partial U_j}{\partial x_i}\right) - \frac{2}{3}k\,\delta_{ij}
-$$
+```
 
-The isotropic term is needed for consistency. Taking the trace of the left side gives $-2k$. On the right, the strain term has trace $2\nu_t\,\partial U_i/\partial x_i = 0$, so the $-\frac{2}{3}k\,\delta_{ij}$ term is what supplies $-2k$.
+The isotropic term is needed for consistency. Taking the trace of the left side gives $-2k$. On the right, the strain term has trace $`2\nu_t\,\partial U_i/\partial x_i = 0`$, so the $`-\frac{2}{3}k\,\delta_{ij}`$ term is what supplies $-2k$.
 
 Substituting into RANS gives equations of Navier–Stokes form with an effective viscosity $\nu + \nu_t$ and a modified pressure $P + \frac{2}{3}\rho k$:
 
@@ -176,12 +176,12 @@ $$
 
 The production of $k$ becomes
 
-$$
+```math
 \mathcal{P} = 2\nu_t\,\overline{S}_{ij}\overline{S}_{ij} = \nu_t S^2 \ge 0,
 \qquad S = \sqrt{2\,\overline{S}_{ij}\overline{S}_{ij}}
-$$
+```
 
-Unlike molecular viscosity, $\nu_t$ is a property of the *flow*, not the fluid. It varies in space and time, and it must be supplied by a turbulence model. All eddy-viscosity models (mixing length, Spalart–Allmaras, $k$–$\varepsilon$, $k$–$\omega$, SST) differ only in how they compute $\nu_t$.
+Unlike molecular viscosity, $\nu_t$ is a property of the *flow*, not the fluid. It varies in space and time, and it must be supplied by a turbulence model. All eddy-viscosity models (mixing length, Spalart–Allmaras, $k$–$`\varepsilon`$, $k$–$`\omega`$, SST) differ only in how they compute $\nu_t$.
 
 ### Limitations
 
@@ -204,7 +204,7 @@ $$
 \frac{d}{dy}\left(\nu \frac{dU}{dy} - \overline{u'v'}\right)
 $$
 
-The total shear stress $\tau(y) = \rho\nu\,dU/dy - \rho\,\overline{u'v'}$ therefore varies linearly. By symmetry it vanishes on the centreline, so
+The total shear stress $`\tau(y) = \rho\nu\,dU/dy - \rho\,\overline{u'v'}`$ therefore varies linearly. By symmetry it vanishes on the centreline, so
 
 $$
 \tau(y) = \tau_w\left(1 - \frac{y}{\delta}\right)
@@ -228,15 +228,15 @@ At the wall the no-slip condition forces $u' = v' = 0$, so all the stress is vis
 
 Near the wall the only relevant parameters are $\tau_w$, $\rho$ and $\nu$. They define the **friction velocity** and the **viscous length scale**:
 
-$$
+```math
 u_\tau = \sqrt{\frac{\tau_w}{\rho}}, \qquad \delta_\nu = \frac{\nu}{u_\tau}, \qquad y^+ = \frac{y}{\delta_\nu} = \frac{y\,u_\tau}{\nu}, \qquad u^+ = \frac{U}{u_\tau}
-$$
+```
 
 The friction Reynolds number $Re_\tau = u_\tau\delta/\nu = \delta/\delta_\nu$ is the ratio of the outer and inner length scales. Prandtl's **law of the wall** states that, in the inner layer ($y/\delta$ below about 0.1), $u^+$ depends on $y^+$ alone: $u^+ = f_w(y^+)$.
 
 ### Viscous Sublayer
 
-Very close to the wall, continuity and no-slip give $u' \propto y$ and $v' \propto y^2$, so $\overline{u'v'} \propto y^3$. The Reynolds stress is negligible, and $\tau \approx \mu\,dU/dy \approx \tau_w$. Hence
+Very close to the wall, continuity and no-slip give $u' \propto y$ and $v' \propto y^2$, so $\overline{u'v'} \propto y^3$. The Reynolds stress is negligible, and $`\tau \approx \mu\,dU/dy \approx \tau_w`$. Hence
 
 $$
 u^+ = y^+ \qquad (y^+ \lesssim 5)
@@ -296,7 +296,7 @@ $$
 
 The first near-wall grid point must be placed consistently with the chosen wall treatment.
 
-- **Wall-resolved (low-Reynolds-number) treatment**, used with Spalart–Allmaras, $k$–$\omega$, SST and low-Re $k$–$\varepsilon$: the first cell centroid should sit at $y^+ \approx 1$, with several cells inside the buffer layer.
+- **Wall-resolved (low-Reynolds-number) treatment**, used with Spalart–Allmaras, $k$–$`\omega`$, SST and low-Re $k$–$`\varepsilon`$: the first cell centroid should sit at $y^+ \approx 1$, with several cells inside the buffer layer.
 - **Wall functions**: the first cell centroid should sit in the log layer, typically $30 < y^+ < 300$, and still well inside $y/\delta < 0.3$. The log law is then used to bridge the unresolved inner layer.
 - **Buffer layer**: placing the first cell at $5 < y^+ < 30$ is the worst choice for standard wall functions.
 
@@ -308,7 +308,7 @@ Air ($\rho = 1.2\ \mathrm{kg/m^3}$, $\nu = 1.5 \times 10^{-5}\ \mathrm{m^2/s}$) 
 
 I. **Reynolds number.** $Re_x = U_\infty x/\nu = 1.33 \times 10^6$.
 
-II. **Skin friction.** From the turbulent flat-plate correlation, $C_f = 0.0592\,Re_x^{-1/5} = 0.00353$.
+II. **Skin friction.** From the turbulent flat-plate correlation, $`C_f = 0.0592\,Re_x^{-1/5} = 0.00353`$.
 
 III. **Wall shear stress.** $\tau_w = \frac{1}{2}\rho U_\infty^2 C_f = 0.846$ Pa.
 
@@ -322,7 +322,7 @@ V. **Wall distances.**
 | 30 | 0.54 mm | 1.07 mm |
 | 100 | 1.79 mm | 3.57 mm |
 
-VI. **Boundary-layer thickness.** The one-seventh power-law estimate is $\delta \approx 0.37\,x\,Re_x^{-1/5} = 22$ mm, so $\delta^+ \approx 1{,}230$. The log layer extends only to about $y^+ \approx 0.3\,\delta^+ \approx 370$. A wall-function mesh with $y^+ = 300$ would already sit at $y/\delta = 0.24$, near the limit.
+VI. **Boundary-layer thickness.** The one-seventh power-law estimate is $`\delta \approx 0.37\,x\,Re_x^{-1/5} = 22`$ mm, so $\delta^+ \approx 1{,}230$. The log layer extends only to about $`y^+ \approx 0.3\,\delta^+ \approx 370`$. A wall-function mesh with $y^+ = 300$ would already sit at $y/\delta = 0.24$, near the limit.
 
 The estimate of $C_f$ is only a starting point. After a first solution, check the actual $y^+$ distribution and refine where needed. At $y^+ = 100$ in this flow, the log-layer balance gives $\mathcal{P} \approx u_\tau^3/(\kappa y) \approx 810\ \mathrm{m^2/s^3}$, orders of magnitude above typical free-stream levels. This is why near-wall resolution matters.
 
@@ -342,7 +342,7 @@ The estimate of $C_f$ is only a starting point. After a first solution, check th
 
 **Counting.** There are 4 equations (three momentum plus continuity) and 10 unknowns ($U_1$, $U_2$, $U_3$, $P$ and six Reynolds stresses), so 6 relations are missing.
 
-**Trace of pressure–strain.** $R_{ii} = \overline{(p'/\rho)(\partial u_i'/\partial x_i + \partial u_i'/\partial x_i)} = 2\,\overline{(p'/\rho)\,\partial u_i'/\partial x_i} = 0$, because $\partial u_i'/\partial x_i = 0$.
+**Trace of pressure–strain.** $`R_{ii} = \overline{(p'/\rho)(\partial u_i'/\partial x_i + \partial u_i'/\partial x_i)} = 2\,\overline{(p'/\rho)\,\partial u_i'/\partial x_i} = 0`$, because $\partial u_i'/\partial x_i = 0$.
 
 **Meaning.** Pressure–strain does not appear in the $k$ equation. It cannot create or destroy turbulent kinetic energy, only shuffle it between the normal stresses, generally toward isotropy.
 
@@ -353,13 +353,13 @@ The estimate of $C_f$ is only a starting point. After a first solution, check th
 <details>
 <summary>Answer</summary>
 
-The only nonzero mean gradient is $\partial U_1/\partial x_2 = dU/dy$. From $P_{ij} = -\overline{u_i'u_k'}\,\partial U_j/\partial x_k - \overline{u_j'u_k'}\,\partial U_i/\partial x_k$:
+The only nonzero mean gradient is $\partial U_1/\partial x_2 = dU/dy$. From $`P_{ij} = -\overline{u_i'u_k'}\,\partial U_j/\partial x_k - \overline{u_j'u_k'}\,\partial U_i/\partial x_k`$:
 
-- $P_{11} = -2\,\overline{u'v'}\,dU/dy$
-- $P_{12} = -\overline{v'^2}\,dU/dy$
+- $`P_{11} = -2\,\overline{u'v'}\,dU/dy`$
+- $`P_{12} = -\overline{v'^2}\,dU/dy`$
 - $P_{22} = P_{33} = P_{13} = P_{23} = 0$
 
-The TKE production is $\mathcal{P} = \frac{1}{2}P_{ii} = -\overline{u'v'}\,dU/dy$. This is positive, since $\overline{u'v'} < 0$ when $dU/dy > 0$.
+The TKE production is $`\mathcal{P} = \frac{1}{2}P_{ii} = -\overline{u'v'}\,dU/dy`$. This is positive, since $\overline{u'v'} < 0$ when $dU/dy > 0$.
 
 Energy enters only the streamwise component. Pressure–strain redistributes it to $\overline{v'^2}$ and $\overline{w'^2}$.
 
@@ -370,7 +370,7 @@ Energy enters only the streamwise component. Pressure–strain redistributes it 
 <details>
 <summary>Answer</summary>
 
-**Equation to solve.** $U/u_\tau = \frac{1}{0.41}\ln(y\,u_\tau/\nu) + 5.2$, with $U = 15$ m/s and $y = 0.005$ m.
+**Equation to solve.** $`U/u_\tau = \frac{1}{0.41}\ln(y\,u_\tau/\nu) + 5.2`$, with $U = 15$ m/s and $y = 0.005$ m.
 
 **Solution.** Iterating, or using a root finder, gives $u_\tau = 0.797$ m/s.
 
@@ -400,7 +400,7 @@ Energy enters only the streamwise component. Pressure–strain redistributes it 
 <details>
 <summary>Answer</summary>
 
-**Derivation.** Boussinesq gives $-\overline{u'v'} = \nu_t\,dU/dy$. With $dU/dy = u_\tau/(\kappa y)$, this becomes $u_\tau^2 = \nu_t\,u_\tau/(\kappa y)$, so
+**Derivation.** Boussinesq gives $`-\overline{u'v'} = \nu_t\,dU/dy`$. With $dU/dy = u_\tau/(\kappa y)$, this becomes $`u_\tau^2 = \nu_t\,u_\tau/(\kappa y)`$, so
 
 ```math
 \nu_t = \kappa\, u_\tau\, y

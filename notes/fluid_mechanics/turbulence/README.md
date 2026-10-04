@@ -33,7 +33,7 @@ Derivation of the Reynolds-averaged equations, the closure problem, Reynolds-str
 
 ### 5. [Turbulence Modeling](./modeling.md)
 
-The DNS/LES/DES/RANS hierarchy, the mixing-length, Spalart–Allmaras, $k$–$\varepsilon$, $k$–$\omega$ and SST models with their constants, LES and the Smagorinsky model, and how to choose a model.
+The DNS/LES/DES/RANS hierarchy, the mixing-length, Spalart–Allmaras, $k$–$`\varepsilon`$, $k$–$`\omega`$ and SST models with their constants, LES and the Smagorinsky model, and how to choose a model.
 
 For how turbulence models are used inside a CFD workflow, see [Turbulence Modeling in CFD](../../numerical/cfd/turbulence_modeling.md).
 

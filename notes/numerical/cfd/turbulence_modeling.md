@@ -56,10 +56,10 @@ III. Ensemble Average
 
 - Definition:
 
-$$
+```math
 \overline{u}(y) \equiv \lim_{\tau \to \infty} \frac{1}{2\tau} \int_{-\tau}^{\tau} u(y,t)
 \, dt
-$$
+```
 
 - This formula represents the mean value of a flow variable over a long period and is particularly applicable to statistically stationary flows where the statistics do not change with time.
 
@@ -188,12 +188,12 @@ II. Turbulent Energy Dissipation Rate (ε)
 
 - Definition (with summation over $i, j = 1, 2, 3$):
 
-$$
+```math
 \epsilon = \nu \,
 \overline{\frac{\partial u_i'}{\partial x_j} \frac{\partial u_i'}{\partial x_j}}
-$$
+```
 
-Strictly, this is the pseudo-dissipation. The true dissipation is $2\nu \, \overline{s_{ij}' s_{ij}'}$ with $s_{ij}' = \frac{1}{2}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)$; the two are equal in homogeneous turbulence.
+Strictly, this is the pseudo-dissipation. The true dissipation is $`2\nu \, \overline{s_{ij}' s_{ij}'}`$ with $s_{ij}' = \frac{1}{2}\left(\frac{\partial u_i'}{\partial x_j} + \frac{\partial u_j'}{\partial x_i}\right)$; the two are equal in homogeneous turbulence.
 
 - Role:\
   Measures the rate at which turbulent kinetic energy is dissipated into heat due to viscosity.
@@ -270,11 +270,11 @@ $u_{\text{rms}} \approx 0.289$ m/s, so the turbulence intensity is about 2.9%.
 
 $k = \tfrac{1}{2}(0.25 + 0.25 + 0.25) = 0.375$ m²/s².
 
-The mean-flow kinetic energy is $\tfrac{1}{2}\overline{u}^2 = 50$ m²/s², so $k$ is $0.375/50 = 0.75\%$ of it, within the "few percent" range quoted in the note.
+The mean-flow kinetic energy is $\tfrac{1}{2}\overline{u}^2 = 50$ m²/s², so $k$ is $`0.375/50 = 0.75\%`$ of it, within the "few percent" range quoted in the note.
 
 </details>
 
-**Exercise 3.** Integrate the averaged channel momentum equation of the note from the centreline $y = 0$ to $y$ to obtain a relation for the total shear stress. Evaluate it at the wall $y = H$ to show that $\tau_w = -H\, dp/dx$.
+**Exercise 3.** Integrate the averaged channel momentum equation of the note from the centreline $y = 0$ to $y$ to obtain a relation for the total shear stress. Evaluate it at the wall $y = H$ to show that $`\tau_w = -H\, dp/dx`$.
 
 <details>
 <summary>Answer</summary>
@@ -287,7 +287,7 @@ Integrating $\frac{d}{dy}\overline{u'v'} + \frac{1}{\rho}\frac{dp}{dx} = \nu\fra
 
 The total (viscous plus turbulent) shear stress varies linearly across the channel.
 
-At the wall the fluctuations vanish (no-slip), so $\overline{u'v'} = 0$ and $\mu\, d\overline{u}/dy|_H = H\, dp/dx$. Since $dp/dx < 0$, the velocity gradient is negative at the upper wall, and the magnitude of the wall shear stress is $\tau_w = -H\, dp/dx$.
+At the wall the fluctuations vanish (no-slip), so $\overline{u'v'} = 0$ and $`\mu\, d\overline{u}/dy|_H = H\, dp/dx`$. Since $dp/dx < 0$, the velocity gradient is negative at the upper wall, and the magnitude of the wall shear stress is $`\tau_w = -H\, dp/dx`$.
 
 </details>
 

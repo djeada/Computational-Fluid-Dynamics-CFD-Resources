@@ -289,7 +289,7 @@ $$
 
 - In the finite-dimensional case:
   - $a_k(t)$ is the column vector $(a_{1k}, a_{2k}, \ldots, a_{mk})^T$.
-  - $\mathbf{\Phi}_k(\mathbf{x})$ is the row vector $(\phi_{1k}, \phi_{2k}, \ldots, \phi_{nk})$.
+  - $`\mathbf{\Phi}_k(\mathbf{x})`$ is the row vector $`(\phi_{1k}, \phi_{2k}, \ldots, \phi_{nk})`$.
   - Example: $m = 3580$ time coefficients (one per snapshot), $n = 5805$ spatial points.
 
 ## Orthogonality of POD Modes
@@ -371,15 +371,15 @@ This note extends the 2-D POD derivation to N dimensions, which is the form used
 <details>
 <summary>Answer</summary>
 
-The two-mode model holds $20\% + 8\% = 28\%$ and the residual holds $72\%$. The percentages add because the modes are orthonormal and the time coefficients are uncorrelated, so the energy (squared Frobenius norm) of a sum of mode contributions is the sum of their energies: $\|\tilde{\mathbf{U}}^1 + \tilde{\mathbf{U}}^2\|_F^2 = \|\tilde{\mathbf{U}}^1\|_F^2 + \|\tilde{\mathbf{U}}^2\|_F^2$ (proved in Exercise 4). A low 28% is typical of turbulent flows, where energy is spread over many modes.
+The two-mode model holds $`20\% + 8\% = 28\%`$ and the residual holds $`72\%`$. The percentages add because the modes are orthonormal and the time coefficients are uncorrelated, so the energy (squared Frobenius norm) of a sum of mode contributions is the sum of their energies: $`\|\tilde{\mathbf{U}}^1 + \tilde{\mathbf{U}}^2\|_F^2 = \|\tilde{\mathbf{U}}^1\|_F^2 + \|\tilde{\mathbf{U}}^2\|_F^2`$ (proved in Exercise 4). A low 28% is typical of turbulent flows, where energy is spread over many modes.
 
 </details>
 
 **Exercise 3.** Consider $m = 3$ mean-subtracted snapshots at $n = 4$ points:
 
-$$
+```math
 \mathbf{U} = \begin{pmatrix} 1 & 0 & -1 & 2 \\ 0 & 1 & 1 & -1 \\ -1 & -1 & 0 & -1 \end{pmatrix}
-$$
+```
 
 Compute $\mathbf{C}$, its eigenvalues and energy fractions, the first two modes, and the matrix of time coefficients $\mathbf{A} = \mathbf{U}\mathbf{\Phi}$ (first two columns). Explain why only two eigenvalues are nonzero.
 
@@ -390,7 +390,7 @@ Compute $\mathbf{C}$, its eigenvalues and energy fractions, the first two modes,
 \mathbf{C} = \frac{1}{2}\mathbf{U}^T\mathbf{U} = \begin{pmatrix} 1 & 0.5 & -0.5 & 1.5 \\ 0.5 & 1 & 0.5 & 0 \\ -0.5 & 0.5 & 1 & -1.5 \\ 1.5 & 0 & -1.5 & 3 \end{pmatrix}
 ```
 
-The eigenvalues are $4.5, 1.5, 0, 0$, giving energy fractions of 75% and 25%. The modes (up to sign) are $\mathbf{\phi}_1 = (1, 0, -1, 2)/\sqrt{6}$ and $\mathbf{\phi}_2 = (1, 2, 1, 0)/\sqrt{6}$. You can check directly that $\mathbf{C}\mathbf{\phi}_1 = 4.5\,\mathbf{\phi}_1$ and $\mathbf{C}\mathbf{\phi}_2 = 1.5\,\mathbf{\phi}_2$.
+The eigenvalues are $4.5, 1.5, 0, 0$, giving energy fractions of 75% and 25%. The modes (up to sign) are $\mathbf{\phi}_1 = (1, 0, -1, 2)/\sqrt{6}$ and $\mathbf{\phi}_2 = (1, 2, 1, 0)/\sqrt{6}$. You can check directly that $`\mathbf{C}\mathbf{\phi}_1 = 4.5\,\mathbf{\phi}_1`$ and $`\mathbf{C}\mathbf{\phi}_2 = 1.5\,\mathbf{\phi}_2`$.
 
 Time coefficients: $\mathbf{a}_1 = \mathbf{U}\mathbf{\phi}_1 = (6, -3, -3)/\sqrt{6} = (2.449, -1.225, -1.225)$ and $\mathbf{a}_2 = \mathbf{U}\mathbf{\phi}_2 = (0, 3, -3)/\sqrt{6} = (0, 1.225, -1.225)$. Check: $\mathbf{a}_1^T\mathbf{a}_1/2 = 4.5$, $\mathbf{a}_2^T\mathbf{a}_2/2 = 1.5$ and $\mathbf{a}_1^T\mathbf{a}_2 = 0$.
 
@@ -398,21 +398,21 @@ Only two eigenvalues are nonzero because $\text{rank}(\mathbf{C}) = \text{rank}(
 
 </details>
 
-**Exercise 4.** Using $\mathbf{C}\mathbf{\Phi} = \mathbf{\Phi}\mathbf{\Lambda}$ with orthonormal $\mathbf{\Phi}$, prove that the time coefficients are uncorrelated, $\frac{1}{m-1}\mathbf{A}^T\mathbf{A} = \mathbf{\Lambda}$. Then show that the truncation error satisfies $\|\mathbf{U} - \sum_{k=1}^{r}\tilde{\mathbf{U}}^k\|_F^2 = (m-1)\sum_{k > r}\lambda_k$, and check this for $r = 1$ with the matrix of Exercise 3.
+**Exercise 4.** Using $\mathbf{C}\mathbf{\Phi} = \mathbf{\Phi}\mathbf{\Lambda}$ with orthonormal $\mathbf{\Phi}$, prove that the time coefficients are uncorrelated, $\frac{1}{m-1}\mathbf{A}^T\mathbf{A} = \mathbf{\Lambda}$. Then show that the truncation error satisfies $`\|\mathbf{U} - \sum_{k=1}^{r}\tilde{\mathbf{U}}^k\|_F^2 = (m-1)\sum_{k > r}\lambda_k`$, and check this for $r = 1$ with the matrix of Exercise 3.
 
 <details>
 <summary>Answer</summary>
 
-$\frac{1}{m-1}\mathbf{A}^T\mathbf{A} = \mathbf{\Phi}^T\left(\frac{1}{m-1}\mathbf{U}^T\mathbf{U}\right)\mathbf{\Phi} = \mathbf{\Phi}^T\mathbf{C}\mathbf{\Phi} = \mathbf{\Phi}^T\mathbf{\Phi}\mathbf{\Lambda} = \mathbf{\Lambda}$. So $\mathbf{a}_k^T\mathbf{a}_l = (m-1)\lambda_k\delta_{kl}$.
+$\frac{1}{m-1}\mathbf{A}^T\mathbf{A} = \mathbf{\Phi}^T\left(\frac{1}{m-1}\mathbf{U}^T\mathbf{U}\right)\mathbf{\Phi} = \mathbf{\Phi}^T\mathbf{C}\mathbf{\Phi} = \mathbf{\Phi}^T\mathbf{\Phi}\mathbf{\Lambda} = \mathbf{\Lambda}$. So $`\mathbf{a}_k^T\mathbf{a}_l = (m-1)\lambda_k\delta_{kl}`$.
 
-From $\mathbf{U} = \mathbf{A}\mathbf{\Phi}^T = \sum_k \mathbf{a}_k\mathbf{\phi}_k^T$, the error is $\mathbf{E} = \sum_{k > r}\mathbf{a}_k\mathbf{\phi}_k^T$. Therefore
+From $`\mathbf{U} = \mathbf{A}\mathbf{\Phi}^T = \sum_k \mathbf{a}_k\mathbf{\phi}_k^T`$, the error is $`\mathbf{E} = \sum_{k > r}\mathbf{a}_k\mathbf{\phi}_k^T`$. Therefore
 
 ```math
 \|\mathbf{E}\|_F^2 = \text{tr}(\mathbf{E}^T\mathbf{E}) = \sum_{k,l > r}
 (\mathbf{a}_k^T\mathbf{a}_l)(\mathbf{\phi}_l^T\mathbf{\phi}_k) = \sum_{k > r}\mathbf{a}_k^T\mathbf{a}_k = (m - 1)\sum_{k > r}\lambda_k
 ```
 
-Check with Exercise 3: $\|\mathbf{U}\|_F^2 = 12 = 2(4.5 + 1.5)$. The rank-1 residual has squared norm $\|\mathbf{a}_2\|^2 = 3 = 2 \times 1.5$.
+Check with Exercise 3: $`\|\mathbf{U}\|_F^2 = 12 = 2(4.5 + 1.5)`$. The rank-1 residual has squared norm $`\|\mathbf{a}_2\|^2 = 3 = 2 \times 1.5`$.
 
 </details>
 

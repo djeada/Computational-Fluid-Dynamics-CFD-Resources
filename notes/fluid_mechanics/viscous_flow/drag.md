@@ -25,9 +25,9 @@ Objects moving through fluids encounter drag for several reasons. Form drag, som
 
 The drag equation for an object moving through a fluid (e.g., air or water) is:
 
-$$
+```math
 F = \frac{1}{2} \rho \, v^{2} \, C_{d} \, A
-$$
+```
 
 where:
 
@@ -41,28 +41,28 @@ where:
 
 Calculate the drag force $F$.
 
-- Air density ($\rho$) = $1.225\,\mathrm{kg/m^3}$ (sea-level standard air)
-- Velocity ($v$) = $30\,\mathrm{m/s}$ (about $108\,\mathrm{km/h}$)
+- Air density ($\rho$) = $`1.225\,\mathrm{kg/m^3}`$ (sea-level standard air)
+- Velocity ($v$) = $`30\,\mathrm{m/s}`$ (about $`108\,\mathrm{km/h}`$)
 - Drag coefficient ($C_d$) = $0.30$ (typical for a moderately aerodynamic car)
-- Cross-sectional area ($A$) = $2.2\,\mathrm{m^2}$
+- Cross-sectional area ($A$) = $`2.2\,\mathrm{m^2}`$
 
 I. **Square the velocity**:
 
-$$
+```math
 v^2 = 30^2 = 900 \,\mathrm{(m/s)}^2
-$$
+```
 
 II. **Multiply by the fluid density and the 0.5 factor**:
 
-$$
+```math
 \frac{1}{2} \rho = 0.5 \times 1.225 = 0.6125\,\mathrm{kg/m^3}
-$$
+```
 
 Then:
 
-$$
+```math
 0.6125 \times 900 = 551.25 \,\mathrm{(kg/m^3) \cdot (m/s)^2}
-$$
+```
 
 III. **Include the drag coefficient**:
 
@@ -72,11 +72,11 @@ $$
 
 IV. **Include the cross-sectional area**:
 
-$$
+```math
 165.375 \times 2.2 = 363.825 \,\mathrm{N}
-$$
+```
 
-So, the drag force is approximately **$364\,\mathrm{N}$**.
+So, the drag force is approximately **$`364\,\mathrm{N}`$**.
 
 ### How to Decrease Drag
 
@@ -93,23 +93,23 @@ Now let’s see how drastically drag can change in a denser fluid, using a small
 
 #### Drag in Air
 
-- Sphere radius $r$ = $0.05\,\mathrm{m}$
-- Cross-sectional area $A$ = $\pi r^2 = \pi \times (0.05)^2 \approx 0.00785\,\mathrm{m^2}$
-- Velocity ($v$) = $15\,\mathrm{m/s}$
-- Fluid density ($\rho$, air) = $1.225\,\mathrm{kg/m^3}$
+- Sphere radius $r$ = $`0.05\,\mathrm{m}`$
+- Cross-sectional area $A$ = $`\pi r^2 = \pi \times (0.05)^2 \approx 0.00785\,\mathrm{m^2}`$
+- Velocity ($v$) = $`15\,\mathrm{m/s}`$
+- Fluid density ($\rho$, air) = $`1.225\,\mathrm{kg/m^3}`$
 - Drag coefficient ($C_d$) ≈ $0.47$ (typical for a smooth sphere)
 
 I. **Square the velocity**:
 
-$$
+```math
 v^2 = 15^2 = 225 \,\mathrm{(m/s)}^2
-$$
+```
 
 II. **Compute the half-density term**:
 
-$$
+```math
 \frac{1}{2} \rho = 0.5 \times 1.225 = 0.6125\,\mathrm{kg/m^3}
-$$
+```
 
 III. **Multiply by $v^2$**:
 
@@ -125,15 +125,15 @@ $$
 
 V. **Multiply by the cross-sectional area**:
 
-$$
+```math
 64.772 \times 0.00785 \approx 0.508\,\mathrm{N}
-$$
+```
 
-So, **in air**, the drag force on this sphere is about **$0.51\,\mathrm{N}$**.
+So, **in air**, the drag force on this sphere is about **$`0.51\,\mathrm{N}`$**.
 
 #### Drag in Water
 
-Let's keep everything the same except for the fluid density. Water has a density of approximately $1000\,\mathrm{kg/m^3}$ (fresh water at around room temperature).
+Let's keep everything the same except for the fluid density. Water has a density of approximately $`1000\,\mathrm{kg/m^3}`$ (fresh water at around room temperature).
 
 I. **Half-density term**:
 
@@ -141,7 +141,7 @@ $$
 \frac{1}{2} \rho_{\text{water}} = 0.5 \times 1000 = 500
 $$
 
-II. **Multiply by $v^2$** ($v=15\,\mathrm{m/s}$):
+II. **Multiply by $v^2$** ($`v=15\,\mathrm{m/s}`$):
 
 $$
 500 \times 225 = 112{,}500
@@ -153,13 +153,13 @@ $$
 112{,}500 \times 0.47 = 52{,}875
 $$
 
-IV. **Multiply by the cross-sectional area ($0.00785\,\mathrm{m^2}$)**:
+IV. **Multiply by the cross-sectional area ($`0.00785\,\mathrm{m^2}`$)**:
 
-$$
+```math
 52{,}875 \times 0.00785 \approx 415.07\,\mathrm{N}
-$$
+```
 
-So, **in water**, the drag force on the same sphere (moving at the same speed) is about **$415\,\mathrm{N}$**—hundreds of times greater than in air, highlighting how a more dense fluid enormously increases drag.
+So, **in water**, the drag force on the same sphere (moving at the same speed) is about **$`415\,\mathrm{N}`$**—hundreds of times greater than in air, highlighting how a more dense fluid enormously increases drag.
 
 ### Real-world Examples
 

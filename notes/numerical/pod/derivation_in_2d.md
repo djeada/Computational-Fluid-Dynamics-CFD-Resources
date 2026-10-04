@@ -65,7 +65,7 @@ $$
 ### Snapshot Matrix
 
 - Analyze data at two positions within the separation bubble.
-- Velocity data: Two arrays of $m = 3580$ longitudinal velocity values ($U_a(t_i)$ and $U_b(t_i)$).
+- Velocity data: Two arrays of $m = 3580$ longitudinal velocity values ($U_a(t_i)$ and $`U_b(t_i)`$).
 - Concatenate into $m \times 2$ matrix $\mathbf{S}$ (matrix of snapshots).
 
 ### Steps to Implement POD
@@ -176,18 +176,18 @@ $$
 
 - **Total Fluctuating Kinetic Energy (TKE)**: Represents the kinetic energy of the velocity fluctuations.
 
-$$
+```math
 \text{TKE} = \frac{1}{2} \frac{1}{m-1}
 \left(\sum_{i=1}^{m} u'_a(t_i)^2 + \sum_{i=1}^{m} u'_b(t_i)^2 \right) = \frac{1}{2}
 (c_{11} + c_{22}) = 4.96 \, \text{m}^2/ \text{s}^2
-$$
+```
 
 ### Variance and Modes of Variation
 
 - **Natural Basis Variance**:
 
-  - Variance of $u'_a$: $4.92 \, \text{m}^2/\text{s}^2$
-  - Variance of $u'_b$: $5.01 \, \text{m}^2/\text{s}^2$
+  - Variance of $u'_a$: $`4.92 \, \text{m}^2/\text{s}^2`$
+  - Variance of $u'_b$: $`5.01 \, \text{m}^2/\text{s}^2`$
   - Statistical connection expressed as off-diagonal terms of $\mathbf{C}$.
 
 - **Projection onto a Unit Vector**:
@@ -228,8 +228,8 @@ a_i^2 = \frac{1}{m-1} \mathbf{a}^T \mathbf{a}. \quad (10)
 $$
 
 - Example for unit vector $\mathbf{\phi} = \left( \frac{2}{\sqrt{5}}, \frac{1}{\sqrt{5}} \right)$:
-  - Variance: $7.19 \, \text{m}^2/\text{s}^2$
-  - Larger than variances on horizontal ($4.92 \, \text{m}^2/\text{s}^2$) or vertical ($5.01 \, \text{m}^2/\text{s}^2$) axes.
+  - Variance: $`7.19 \, \text{m}^2/\text{s}^2`$
+  - Larger than variances on horizontal ($`4.92 \, \text{m}^2/\text{s}^2`$) or vertical ($`5.01 \, \text{m}^2/\text{s}^2`$) axes.
 
 ### Principal Axes and Modes
 
@@ -324,13 +324,13 @@ $$
 - **Eigenvalues and Correlation**:
   - Eigenvalues rank the correlation with respect to the variance (or kinetic energy) of the velocity fluctuations.
   - For the given data:
-    - $\lambda_1 = 7.78 \, \text{m}^2/\text{s}^2$
-    - $\lambda_2 = 2.15 \, \text{m}^2/\text{s}^2$
+    - $`\lambda_1 = 7.78 \, \text{m}^2/\text{s}^2`$
+    - $`\lambda_2 = 2.15 \, \text{m}^2/\text{s}^2`$
   - Total Kinetic Energy (TKE) is:
 
-$$
+```math
 \text{TKE} = \frac{1}{2} (\lambda_1 + \lambda_2) = 4.96 \, \text{m}^2/ \text{s}^2
-$$
+```
 
 - **Proportion of TKE by Each Mode**:
   - Mode 1: $\lambda_1/(\lambda_1 + \lambda_2) \approx 0.78$ (78% of TKE)
@@ -537,7 +537,7 @@ These are almost exactly $\lambda_1 = 7.78$ and $\lambda_2 = 2.15$. Because $c_{
 
 </details>
 
-**Exercise 2.** For a symmetric $2 \times 2$ matrix, $\lambda_{1,2} = \frac{c_{11} + c_{22}}{2} \pm \sqrt{\left(\frac{c_{11} - c_{22}}{2}\right)^2 + c_{12}^2}$, and the first eigenvector makes an angle $\theta$ with the $u'_a$ axis given by $\tan 2\theta = 2c_{12}/(c_{11} - c_{22})$. Evaluate $\lambda_1$, $\lambda_2$, $\theta$ and the energy fractions for Eq. (7).
+**Exercise 2.** For a symmetric $2 \times 2$ matrix, $\lambda_{1,2} = \frac{c_{11} + c_{22}}{2} \pm \sqrt{\left(\frac{c_{11} - c_{22}}{2}\right)^2 + c_{12}^2}$, and the first eigenvector makes an angle $\theta$ with the $`u'_a`$ axis given by $`\tan 2\theta = 2c_{12}/(c_{11} - c_{22})`$. Evaluate $\lambda_1$, $\lambda_2$, $\theta$ and the energy fractions for Eq. (7).
 
 <details>
 <summary>Answer</summary>
@@ -555,13 +555,13 @@ Energy fractions: $7.785/9.93 = 0.784$ (78.4%) and $0.216$ (21.6%), matching the
 <details>
 <summary>Answer</summary>
 
-$\mathbf{U}^T\mathbf{U} = \begin{pmatrix} 10 & 8 \\ 8 & 10 \end{pmatrix}$, so $\mathbf{C} = \frac{1}{3}\begin{pmatrix} 10 & 8 \\ 8 & 10 \end{pmatrix}$. The eigenvalues are $\lambda_1 = 18/3 = 6$ and $\lambda_2 = 2/3$, with $\mathbf{\phi}_1 = (1,1)/\sqrt{2}$ and $\mathbf{\phi}_2 = (1,-1)/\sqrt{2}$.
+$`\mathbf{U}^T\mathbf{U} = \begin{pmatrix} 10 & 8 \\ 8 & 10 \end{pmatrix}`$, so $`\mathbf{C} = \frac{1}{3}\begin{pmatrix} 10 & 8 \\ 8 & 10 \end{pmatrix}`$. The eigenvalues are $\lambda_1 = 18/3 = 6$ and $\lambda_2 = 2/3$, with $\mathbf{\phi}_1 = (1,1)/\sqrt{2}$ and $\mathbf{\phi}_2 = (1,-1)/\sqrt{2}$.
 
 The columns of $\mathbf{A}$ are $\mathbf{a}_1 = (u'_a + u'_b)/\sqrt{2} = (3, 3, -3, -3)/\sqrt{2}$ and $\mathbf{a}_2 = (u'_a - u'_b)/\sqrt{2} = (-1, 1, 1, -1)/\sqrt{2}$. Then $\mathbf{a}_1^T\mathbf{a}_1/3 = 18/3 = 6$, $\mathbf{a}_2^T\mathbf{a}_2/3 = 2/3$ and $\mathbf{a}_1^T\mathbf{a}_2 = 0$, so $\mathbf{C}' = \text{diag}(6, 2/3) = \mathbf{\Lambda}$.
 
-Mode 1 holds $6/(20/3) = 90\%$ of the TKE, where $\text{TKE} = \frac{1}{2}(6 + 2/3) = 10/3$.
+Mode 1 holds $`6/(20/3) = 90\%`$ of the TKE, where $\text{TKE} = \frac{1}{2}(6 + 2/3) = 10/3$.
 
-$\tilde{\mathbf{U}}^1 = \mathbf{a}_1 \mathbf{\phi}_1^T$ has rows $(1.5, 1.5), (1.5, 1.5), (-1.5, -1.5), (-1.5, -1.5)$. The residual has eight entries of magnitude $0.5$, so $\|\mathbf{U} - \tilde{\mathbf{U}}^1\|_F^2 = 8 \times 0.25 = 2 = (m-1)\lambda_2$.
+$\tilde{\mathbf{U}}^1 = \mathbf{a}_1 \mathbf{\phi}_1^T$ has rows $(1.5, 1.5), (1.5, 1.5), (-1.5, -1.5), (-1.5, -1.5)$. The residual has eight entries of magnitude $0.5$, so $`\|\mathbf{U} - \tilde{\mathbf{U}}^1\|_F^2 = 8 \times 0.25 = 2 = (m-1)\lambda_2`$.
 
 </details>
 
@@ -570,7 +570,7 @@ $\tilde{\mathbf{U}}^1 = \mathbf{a}_1 \mathbf{\phi}_1^T$ has rows $(1.5, 1.5), (1
 <details>
 <summary>Answer</summary>
 
-Maximize $\mathbf{\phi}^T\mathbf{C}\mathbf{\phi}$ subject to $\mathbf{\phi}^T\mathbf{\phi} = 1$ with the Lagrangian $L = \mathbf{\phi}^T\mathbf{C}\mathbf{\phi} - \lambda(\mathbf{\phi}^T\mathbf{\phi} - 1)$. Since $\mathbf{C}$ is symmetric, $\nabla_{\mathbf{\phi}} L = 2\mathbf{C}\mathbf{\phi} - 2\lambda\mathbf{\phi} = 0$, so every stationary point is an eigenvector, $\mathbf{C}\mathbf{\phi} = \lambda\mathbf{\phi}$. At such a point the variance is $\mathbf{\phi}^T\mathbf{C}\mathbf{\phi} = \lambda\,\mathbf{\phi}^T\mathbf{\phi} = \lambda$, so the maximum is the largest eigenvalue $\lambda_1$. Alternatively, expand $\mathbf{\phi} = \sum_k \alpha_k \mathbf{\phi}_k$ in the orthonormal eigenbasis: $\mathbf{\phi}^T\mathbf{C}\mathbf{\phi} = \sum_k \lambda_k \alpha_k^2 \le \lambda_1 \sum_k \alpha_k^2 = \lambda_1$. Adding the constraint $\mathbf{\phi} \perp \mathbf{\phi}_1$ gives the second mode with variance $\lambda_2$.
+Maximize $\mathbf{\phi}^T\mathbf{C}\mathbf{\phi}$ subject to $\mathbf{\phi}^T\mathbf{\phi} = 1$ with the Lagrangian $L = \mathbf{\phi}^T\mathbf{C}\mathbf{\phi} - \lambda(\mathbf{\phi}^T\mathbf{\phi} - 1)$. Since $\mathbf{C}$ is symmetric, $\nabla_{\mathbf{\phi}} L = 2\mathbf{C}\mathbf{\phi} - 2\lambda\mathbf{\phi} = 0$, so every stationary point is an eigenvector, $\mathbf{C}\mathbf{\phi} = \lambda\mathbf{\phi}$. At such a point the variance is $`\mathbf{\phi}^T\mathbf{C}\mathbf{\phi} = \lambda\,\mathbf{\phi}^T\mathbf{\phi} = \lambda`$, so the maximum is the largest eigenvalue $\lambda_1$. Alternatively, expand $\mathbf{\phi} = \sum_k \alpha_k \mathbf{\phi}_k$ in the orthonormal eigenbasis: $\mathbf{\phi}^T\mathbf{C}\mathbf{\phi} = \sum_k \lambda_k \alpha_k^2 \le \lambda_1 \sum_k \alpha_k^2 = \lambda_1$. Adding the constraint $\mathbf{\phi} \perp \mathbf{\phi}_1$ gives the second mode with variance $\lambda_2$.
 
 </details>
 

@@ -64,10 +64,10 @@ The kinematics decay with depth; in deep water the decay factor is $e^{kz}$ (wit
 
 For **slender cylindrical members** where the member diameter $D$ is small compared with the wavelength ($D/\lambda < 0.2$), wave forces are calculated using the Morison equation:
 
-$$
+```math
 dF = \underbrace{\rho \frac{\pi D^2}{4} C_M \dot{u}}_{\text{inertia}} \; dz +
 \underbrace{\frac{1}{2}\rho D C_D |u| u}_{\text{drag}} \; dz
-$$
+```
 
 where:
 
@@ -86,9 +86,9 @@ $$
 
 The overturning moment about the seabed is:
 
-$$
+```math
 M = \int_{-d}^{0} (z + d) \, dF
-$$
+```
 
 ### Inertia- vs. Drag-Dominated Regimes
 
@@ -105,9 +105,9 @@ $$
 
 When $D/\lambda > 0.2$, the structure significantly modifies the incident wave field and **diffraction effects** must be included. The total force is found by integrating the pressure from the combined incident and scattered wave fields over the structure surface:
 
-$$
+```math
 F = \iint_S p \, \hat{n} \, dS
-$$
+```
 
 ### MacCamy–Fuchs Solution
 
@@ -135,9 +135,9 @@ Common software: WAMIT, ANSYS AQWA, OrcaFlex, NEMOH (open-source).
 
 A single **design wave** with specified height $H_d$ and period $T_d$ is used to calculate the maximum force. The design wave height is typically the 100-year return period individual wave:
 
-$$
+```math
 H_{100} \approx 1.86 \, H_{s,100}
-$$
+```
 
 where $H_{s,100}$ is the 100-year significant wave height (Rayleigh distribution assumption).
 
@@ -179,15 +179,15 @@ where $\omega_p = 2\pi/T_p$ is the peak frequency and $\gamma \approx 3.3$ is th
 
 The response spectrum of force (or moment) is obtained by transferring the wave spectrum through the force transfer function $|H_F(\omega)|^2$:
 
-$$
+```math
 S_F(\omega) = |H_F(\omega)|^2 \, S(\omega)
-$$
+```
 
 The standard deviation of the force is:
 
-$$
+```math
 \sigma_F = \sqrt{\int_0^\infty S_F(\omega) \, d\omega}
-$$
+```
 
 The most probable maximum force in a sea state of duration $D_{st}$ is:
 
@@ -227,7 +227,7 @@ $$
 \times 1.288 = 1.53 \text{ m/s}^2
 $$
 
-Inertia force (integrated over depth; the $\cosh k(z+d)$ profile integrates to a factor $\tanh(kd)/(kd)$):
+Inertia force (integrated over depth; the $\cosh k(z+d)$ profile integrates to a factor $`\tanh(kd)/(kd)`$):
 
 $$
 F_I = \rho \frac{\pi D^2}{4} C_M \dot{u}_{max} \frac{\tanh kd}{kd} d \approx 1025 \times
@@ -394,7 +394,7 @@ F_I = 1025 \times \frac{\pi}{4} \times 2 \times 1.234 = 1986 \text{ N/m}, \quad
 F_D = 0.5 \times 1025 \times 1 \times 1.571^2 = 1265 \text{ N/m}
 ```
 
-For $\cos\phi > 0$, $dF/d\phi = \cos\phi\,(F_I - 2F_D\sin\phi) = 0$ gives $\sin\phi = F_I/(2F_D)$, which is only possible if $F_D \geq F_I/2$. Substituting back:
+For $\cos\phi > 0$, $`dF/d\phi = \cos\phi\,(F_I - 2F_D\sin\phi) = 0`$ gives $\sin\phi = F_I/(2F_D)$, which is only possible if $F_D \geq F_I/2$. Substituting back:
 
 ```math
 F_{max} = \frac{F_I^2}{2F_D} + F_D\left(1 - \frac{F_I^2}{4F_D^2}\right) = F_D +

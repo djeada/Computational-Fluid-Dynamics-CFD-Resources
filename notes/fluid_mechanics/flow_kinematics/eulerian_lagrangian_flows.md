@@ -126,13 +126,13 @@ The fixed probe sees the air cooling, but a particle heats up, because it is car
 
 (b) Lagrangian: $d^2X/dt^2 = k^2 X_0 e^{kt} = k^2 X$ and $d^2Y/dt^2 = k^2 Y$.
 
-Eulerian: the flow is steady, so $\vec{a} = (u\,\partial u/\partial x + v\,\partial u/\partial y,\; u\,\partial v/\partial x + v\,\partial v/\partial y) = (kx \cdot k,\; -ky \cdot (-k)) = (k^2 x, k^2 y)$.
+Eulerian: the flow is steady, so $`\vec{a} = (u\,\partial u/\partial x + v\,\partial u/\partial y,\; u\,\partial v/\partial x + v\,\partial v/\partial y) = (kx \cdot k,\; -ky \cdot (-k)) = (k^2 x, k^2 y)`$.
 
 At $x = X$, $y = Y$ the two agree. A steady field can still accelerate particles, entirely through the convective term.
 
 </details>
 
-**Exercise 4.** The one-dimensional unsteady field is $u(x,t) = x/(1+t)$. (a) Find the path $X(t)$ of the particle at $X_0$ when $t = 0$. (b) Compute that particle's velocity and acceleration. (c) Confirm the result with $Du/Dt = \partial u/\partial t + u\,\partial u/\partial x$.
+**Exercise 4.** The one-dimensional unsteady field is $u(x,t) = x/(1+t)$. (a) Find the path $X(t)$ of the particle at $X_0$ when $t = 0$. (b) Compute that particle's velocity and acceleration. (c) Confirm the result with $`Du/Dt = \partial u/\partial t + u\,\partial u/\partial x`$.
 
 <details>
 <summary>Answer</summary>
@@ -141,7 +141,7 @@ At $x = X$, $y = Y$ the two agree. A steady field can still accelerate particles
 
 (b) The velocity is $dX/dt = X_0$, a constant, so the acceleration is zero.
 
-(c) $\partial u/\partial t = -x/(1+t)^2$ and $u\,\partial u/\partial x = \dfrac{x}{1+t}\cdot\dfrac{1}{1+t} = x/(1+t)^2$. They add to $Du/Dt = 0$.
+(c) $\partial u/\partial t = -x/(1+t)^2$ and $`u\,\partial u/\partial x = \dfrac{x}{1+t}\cdot\dfrac{1}{1+t} = x/(1+t)^2`$. They add to $Du/Dt = 0$.
 
 At a fixed point the velocity decreases in time, but each particle keeps a constant speed: the local and convective accelerations cancel exactly.
 

@@ -180,7 +180,7 @@ Relative statistical fluctuations scale like $N^{-1/2} \approx 6 \times 10^{-6}$
 
 </details>
 
-**Exercise 2.** A one-dimensional "two-beam" gas has $f(\xi) = \rho_1 \delta(\xi - \xi_1) + \rho_2 \delta(\xi - \xi_2)$ with $\rho_1 = 0.6$ kg/m³ at $\xi_1 = 300$ m/s and $\rho_2 = 0.4$ kg/m³ at $\xi_2 = -200$ m/s. Compute $\rho$, $u$ and the momentum flux of the relative motion $P_{xx} = \int (\xi - u)^2 f \, d\xi$.
+**Exercise 2.** A one-dimensional "two-beam" gas has $f(\xi) = \rho_1 \delta(\xi - \xi_1) + \rho_2 \delta(\xi - \xi_2)$ with $\rho_1 = 0.6$ kg/m³ at $\xi_1 = 300$ m/s and $\rho_2 = 0.4$ kg/m³ at $\xi_2 = -200$ m/s. Compute $\rho$, $u$ and the momentum flux of the relative motion $`P_{xx} = \int (\xi - u)^2 f \, d\xi`$.
 
 <details>
 <summary>Answer</summary>
@@ -193,24 +193,24 @@ This $f$ is far from a Maxwellian, but its moments still define a density, a vel
 
 </details>
 
-**Exercise 3.** The hard-sphere mean free path is $\ell_{\text{mfp}} = k_B T / (\sqrt{2}\,\pi d^2 p)$. For nitrogen take $d = 0.37$ nm, with $T = 293.15$ K and $p = 101325$ Pa. Compute $\ell_{\text{mfp}}$ and the ratio $\ell_{\text{mfp}}/\ell$ for $\ell = 1$ µm and $\ell = 1$ mm. For which scale is there room for an averaging volume with $\ell_{\text{mfp}} \ll \ell_{\text{av}} \ll \ell$?
+**Exercise 3.** The hard-sphere mean free path is $`\ell_{\text{mfp}} = k_B T / (\sqrt{2}\,\pi d^2 p)`$. For nitrogen take $d = 0.37$ nm, with $T = 293.15$ K and $p = 101325$ Pa. Compute $\ell_{\text{mfp}}$ and the ratio $\ell_{\text{mfp}}/\ell$ for $\ell = 1$ µm and $\ell = 1$ mm. For which scale is there room for an averaging volume with $\ell_{\text{mfp}} \ll \ell_{\text{av}} \ll \ell$?
 
 <details>
 <summary>Answer</summary>
 
-$\ell_{\text{mfp}} = 1.380649 \times 10^{-23} \times 293.15 / (\sqrt{2}\,\pi \, (0.37 \times 10^{-9})^2 \times 101325) \approx 6.6 \times 10^{-8}$ m (66 nm).
+$`\ell_{\text{mfp}} = 1.380649 \times 10^{-23} \times 293.15 / (\sqrt{2}\,\pi \, (0.37 \times 10^{-9})^2 \times 101325) \approx 6.6 \times 10^{-8}`$ m (66 nm).
 
 - $\ell = 1$ µm: ratio $\approx 0.066$. The scales are separated by only a factor of about 15, leaving no room for an averaging volume, and the flow is in the slip regime.
 - $\ell = 1$ mm: ratio $\approx 6.6 \times 10^{-5}$. An averaging volume of about 10 µm is two orders of magnitude above $\ell_{\text{mfp}}$ and two orders below $\ell$, so the mesoscopic description is well founded.
 
 </details>
 
-**Exercise 4.** Show that the first moment of $f$ with respect to the relative velocity $v = \xi - u$ vanishes, $\int (\xi - u) f \, d^3\xi = 0$. Use this to split the second moment as $\int \xi \otimes \xi \, f \, d^3\xi = \rho \, u \otimes u + P$, where $P = \int v \otimes v \, f \, d^3\xi$. Which part becomes the convective term of the NSE, and which becomes pressure and viscous stress?
+**Exercise 4.** Show that the first moment of $f$ with respect to the relative velocity $v = \xi - u$ vanishes, $`\int (\xi - u) f \, d^3\xi = 0`$. Use this to split the second moment as $`\int \xi \otimes \xi \, f \, d^3\xi = \rho \, u \otimes u + P`$, where $`P = \int v \otimes v \, f \, d^3\xi`$. Which part becomes the convective term of the NSE, and which becomes pressure and viscous stress?
 
 <details>
 <summary>Answer</summary>
 
-$\int (\xi - u) f \, d^3\xi = \rho u - u\rho = 0$, using the definitions of density and momentum density.
+$`\int (\xi - u) f \, d^3\xi = \rho u - u\rho = 0`$, using the definitions of density and momentum density.
 
 Expand $\xi \otimes \xi = (u + v) \otimes (u + v) = u \otimes u + u \otimes v + v \otimes u + v \otimes v$. Integrating against $f$, the two cross terms vanish by the first result, leaving
 
@@ -218,7 +218,7 @@ Expand $\xi \otimes \xi = (u + v) \otimes (u + v) = u \otimes u + u \otimes v + 
 \int \xi \otimes \xi \, f \, d^3\xi = \rho \, u \otimes u + P
 ```
 
-In the momentum balance $\partial_t(\rho u) + \nabla \cdot \int \xi \otimes \xi \, f \, d^3\xi = \ldots$, the term $\rho \, u \otimes u$ gives the convective flux $\nabla \cdot (\rho u \otimes u)$. The tensor $P$ carries the molecular (thermal) momentum flux. Its isotropic part is the pressure, $p = \operatorname{tr}(P)/3$, and its deviatoric part is minus the viscous stress, which the Chapman–Enskog expansion relates to velocity gradients.
+In the momentum balance $`\partial_t(\rho u) + \nabla \cdot \int \xi \otimes \xi \, f \, d^3\xi = \ldots`$, the term $`\rho \, u \otimes u`$ gives the convective flux $\nabla \cdot (\rho u \otimes u)$. The tensor $P$ carries the molecular (thermal) momentum flux. Its isotropic part is the pressure, $p = \operatorname{tr}(P)/3$, and its deviatoric part is minus the viscous stress, which the Chapman–Enskog expansion relates to velocity gradients.
 
 </details>
 

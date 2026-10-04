@@ -61,9 +61,9 @@ Forces spread over an area or volume:
 
 **Pressure Forces**:
 
-$$
+```math
 dF = p \, dA
-$$
+```
 
 where $p$ is pressure and $dA$ is differential area.
 
@@ -278,9 +278,9 @@ For a uniformly distributed load $w$ (force per unit length):
 
 For any distribution $w(x)$:
 
-**Resultant**: $R = \int_0^L w(x) \, dx$
+**Resultant**: $`R = \int_0^L w(x) \, dx`$
 
-**Location**: $\bar{x} = \frac{\int_0^L x \cdot w(x) \, dx}{\int_0^L w(x) \, dx}$
+**Location**: $`\bar{x} = \frac{\int_0^L x \cdot w(x) \, dx}{\int_0^L w(x) \, dx}`$
 
 ## Applications in Engineering
 

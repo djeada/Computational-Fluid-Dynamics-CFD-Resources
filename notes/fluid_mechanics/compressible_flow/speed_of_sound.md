@@ -42,9 +42,9 @@ $$
 
 Expanding and dropping the product of small quantities gives
 
-$$
+```math
 dV = \frac{a\, d\rho}{\rho}
-$$
+```
 
 **Momentum** (no viscous forces act across the thin control volume):
 
@@ -54,16 +54,16 @@ $$
 
 Continuity says $(\rho + d\rho)(a - dV) = \rho a$, so the last term is $\rho a (a - dV)$, and
 
-$$
+```math
 dp = \rho a\, dV
-$$
+```
 
 **Combining** the two results:
 
-$$
+```math
 dp = \rho a \cdot \frac{a\, d\rho}{\rho} = a^2\, d\rho \quad \Rightarrow \quad
 a^2 = \frac{dp}{d\rho}
-$$
+```
 
 ### Which Derivative?
 
@@ -87,7 +87,7 @@ Three consequences:
 - $a$ grows as $\sqrt{T}$ and falls as the molecular weight rises, since $R = R_u/\mathcal{M}$.
 - For liquids and general fluids, write $a = \sqrt{K_s/\rho}$ with the isentropic bulk modulus $K_s = \rho (\partial p/\partial \rho)_s$ (see [pressure_and_compressibility.md](../fluid_properties/pressure_and_compressibility.md)).
 
-The momentum result $dp = \rho a\, dV$ is also useful on its own. It relates the pressure amplitude of a wave to the fluid velocity it induces. In sea-level air ($\rho = 1.225\ \text{kg/m}^3$, $a = 340.3\ \text{m/s}$), inducing just 1 m/s of fluid velocity takes a pressure jump of 417 Pa.
+The momentum result $`dp = \rho a\, dV`$ is also useful on its own. It relates the pressure amplitude of a wave to the fluid velocity it induces. In sea-level air ($\rho = 1.225\ \text{kg/m}^3$, $a = 340.3\ \text{m/s}$), inducing just 1 m/s of fluid velocity takes a pressure jump of 417 Pa.
 
 ### Typical Values
 
@@ -97,7 +97,7 @@ The momentum result $dp = \rho a\, dV$ is also useful on its own. It relates the
 | Air | 300 K | 347.2 m/s |
 | Air | 216.65 K (11 km, standard atmosphere) | 295.0 m/s |
 | Helium | 293.15 K | 1007 m/s |
-| Water | about 20 $^\circ$C ($K_s \approx 2.2\ \text{GPa}$) | about 1480 m/s |
+| Water | about 20 $`^\circ`$C ($K_s \approx 2.2\ \text{GPa}$) | about 1480 m/s |
 
 ### The Kinetic Theory View
 
@@ -109,11 +109,11 @@ $$
 
 so
 
-$$
+```math
 a = \sqrt{\frac{\gamma}{3}}\, v_{rms}
-$$
+```
 
-For air, $a \approx 0.683\, v_{rms}$. For nitrogen at 300 K ($m = 4.65 \times 10^{-26}\ \text{kg}$), $v_{rms} = 517\ \text{m/s}$ and $a = 353\ \text{m/s}$. Sound is a coordinated drift superimposed on this random motion, and it propagates at a fixed fraction of the typical molecular speed.
+For air, $`a \approx 0.683\, v_{rms}`$. For nitrogen at 300 K ($m = 4.65 \times 10^{-26}\ \text{kg}$), $v_{rms} = 517\ \text{m/s}$ and $a = 353\ \text{m/s}$. Sound is a coordinated drift superimposed on this random motion, and it propagates at a fixed fraction of the typical molecular speed.
 
 ## Mach Number
 
@@ -187,7 +187,7 @@ The observer hears the aircraft when the Mach cone reaches them. By then the air
 
 $$
 \mu = \arcsin \frac{1}{1.5} = 41.8^\circ,
-\qquad x = \frac{h}{\tan \mu} = h \sqrt{M^2 - 1} = 3000 \times 1.118 = 3354\  \text{m}
+\qquad x = \frac{h}{\tan \mu} = h \sqrt{M^2 - 1} = 3000 \times 1.118 = 3354\ \text{m}
 $$
 
 The aircraft speed is $V = 1.5 \times 340 = 510\ \text{m/s}$, so the boom arrives $t = 3354/510 = 6.58\ \text{s}$ after the aircraft was directly overhead. A real atmosphere is colder at altitude, which bends the cone and shifts this estimate.
@@ -196,7 +196,7 @@ The aircraft speed is $V = 1.5 \times 340 = 510\ \text{m/s}$, so the boom arrive
 
 ### The Density–Velocity Relation
 
-Euler's equation along a streamline gives $dp = -\rho V\, dV$. For an isentropic flow $dp = a^2\, d\rho$. Eliminating $dp$:
+Euler's equation along a streamline gives $`dp = -\rho V\, dV`$. For an isentropic flow $`dp = a^2\, d\rho`$. Eliminating $dp$:
 
 $$
 \frac{d\rho}{\rho} = -M^2 \frac{dV}{V}
@@ -258,14 +258,14 @@ Most low-speed wind tunnels operate below about 100 m/s, and the incompressible 
 ## Summary
 
 - A weak pressure wave travels at $a = \sqrt{(\partial p/\partial \rho)_s}$. For a perfect gas this is $\sqrt{\gamma R T}$, independent of pressure.
-- The wave pressure and induced velocity are linked by $dp = \rho a\, dV$.
+- The wave pressure and induced velocity are linked by $`dp = \rho a\, dV`$.
 - The Mach number $M = V/a$ compares flow speed with signal speed, kinetic energy with thermal energy, and inertia with compressibility.
 - Supersonic disturbances are confined to a Mach cone of half-angle $\mu = \arcsin(1/M)$.
-- $d\rho/\rho = -M^2\, dV/V$, and $\Delta\rho/\rho \approx M^2/2$ when a flow is brought to rest. Below $M \approx 0.3$ density changes stay under 5%.
+- $`d\rho/\rho = -M^2\, dV/V`$, and $\Delta\rho/\rho \approx M^2/2$ when a flow is brought to rest. Below $M \approx 0.3$ density changes stay under 5%.
 
 ## Related Scripts
 
-- [probability_distribution_function_of_nitrogen_molecules](../../../scripts/plots/probability_distribution_function_of_nitrogen_molecules/): plots the Maxwell–Boltzmann speed distribution of N$_2$ and marks $v_{rms}$. Multiply $v_{rms}$ by $\sqrt{\gamma/3} = 0.683$ to get the speed of sound at each temperature.
+- [probability_distribution_function_of_nitrogen_molecules](../../../scripts/plots/probability_distribution_function_of_nitrogen_molecules/): plots the Maxwell–Boltzmann speed distribution of N$`_2`$ and marks $v_{rms}$. Multiply $`v_{rms}`$ by $\sqrt{\gamma/3} = 0.683$ to get the speed of sound at each temperature.
 - [compressible_vs_incompressible](../../../scripts/plots/compressible_vs_incompressible/): compares a fully developed incompressible pipe profile with an accelerating compressible one, illustrating why density changes must be tracked once the Mach number is no longer small.
 - [Converging-Diverging Nozzle Flow](../../../scripts/plots/nozzle_flow/): plots quasi-one-dimensional isentropic flow through a converging-diverging (de Laval) nozzle, with streamlines coloured by Mach number.
 
@@ -315,9 +315,9 @@ The waves near the nose are shocks, not Mach waves, and are steeper. The estimat
 
 $\mu = \arcsin(1/2) = 30^\circ$.
 
-$x = h\sqrt{M^2 - 1} = 10\,000 \times \sqrt{3} = 17\,320\ \text{m} = 17.3\ \text{km}$.
+$`x = h\sqrt{M^2 - 1} = 10\,000 \times \sqrt{3} = 17\,320\ \text{m} = 17.3\ \text{km}`$.
 
-$V = 2 \times 320 = 640\ \text{m/s}$, so $t = 17\,320/640 = 27.1\ \text{s}$.
+$V = 2 \times 320 = 640\ \text{m/s}$, so $`t = 17\,320/640 = 27.1\ \text{s}`$.
 
 </details>
 

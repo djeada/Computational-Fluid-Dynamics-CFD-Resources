@@ -30,7 +30,7 @@ L. F. Richardson summarized the idea in 1922 with a parody of a nursery rhyme: *
 Three features of the cascade matter most.
 
 1. Large eddies at high Reynolds number are hardly affected by viscosity. They are unstable and break up, passing their energy to smaller eddies on a time scale of about one turnover time.
-2. The process repeats. At each stage the eddy Reynolds number $Re_\ell = u(\ell)\,\ell/\nu$ decreases.
+2. The process repeats. At each stage the eddy Reynolds number $`Re_\ell = u(\ell)\,\ell/\nu`$ decreases.
 3. The cascade stops when $Re_\ell$ approaches unity. There viscous stresses are as strong as inertia, and the energy is dissipated.
 
 The rate is set at the top of the cascade. Viscosity only decides *where* the cascade ends.
@@ -49,7 +49,7 @@ $$
 \varepsilon \sim \frac{u_0^3}{\ell_0}
 $$
 
-Viscosity does not appear. Experiments and DNS confirm that $\varepsilon\,\ell_0/u_0^3$ tends to a constant of order one as the Reynolds number increases. This is sometimes called the "zeroth law" of turbulence.
+Viscosity does not appear. Experiments and DNS confirm that $`\varepsilon\,\ell_0/u_0^3`$ tends to a constant of order one as the Reynolds number increases. This is sometimes called the "zeroth law" of turbulence.
 
 It can look paradoxical, since the exact definition $\varepsilon = 2\nu\langle s_{ij}s_{ij} \rangle$ is proportional to $\nu$. The resolution is that the smallest scales adjust: as $\nu$ decreases, velocity gradients at the smallest scales grow so that $\langle s_{ij}s_{ij} \rangle \sim \varepsilon/\nu$.
 
@@ -91,10 +91,10 @@ $$
 
 Two identities confirm that these are the dissipative scales:
 
-$$
+```math
 \frac{u_\eta\,\eta}{\nu} = 1,
 \qquad \varepsilon = \nu\left(\frac{u_\eta}{\eta}\right)^2 = \frac{\nu}{\tau_\eta^2}
-$$
+```
 
 The Reynolds number at the Kolmogorov scale is one, and the dissipation equals viscosity times the square of the Kolmogorov velocity gradient $1/\tau_\eta$.
 
@@ -116,7 +116,7 @@ $$
 | $10^5$ | 5,620 | 17.8 | 316 |
 | $10^6$ | 31,600 | 31.6 | 1,000 |
 
-The smallest eddies are slow compared with the large ones, but they are so small that their velocity *gradients*, $u_\eta/\eta = (u_0/\ell_0)\,Re^{1/2}$, are much larger. Energy lives in the large scales, while strain, vorticity and dissipation live in the small ones.
+The smallest eddies are slow compared with the large ones, but they are so small that their velocity *gradients*, $`u_\eta/\eta = (u_0/\ell_0)\,Re^{1/2}`$, are much larger. Energy lives in the large scales, while strain, vorticity and dissipation live in the small ones.
 
 In the inertial range the second similarity hypothesis gives the velocity and time scale of an eddy of size $\ell$:
 
@@ -131,25 +131,25 @@ Both decrease with decreasing $\ell$. Smaller eddies are faster to adjust, which
 
 In spectral terms, the second similarity hypothesis says that in the inertial range the energy spectrum $E(\kappa)$ can depend only on $\varepsilon$ and $\kappa$. Write $E = C\varepsilon^a\kappa^b$ and match dimensions, using $[E] = \mathrm{m^3/s^2}$, $[\varepsilon] = \mathrm{m^2/s^3}$ and $[\kappa] = \mathrm{m^{-1}}$. The seconds require $-2 = -3a$, so $a = 2/3$. The metres require $3 = 2a - b$, so $b = -5/3$. The result is the **Kolmogorov spectrum**:
 
-$$
+```math
 E(\kappa) = C\,\varepsilon^{2/3}\kappa^{-5/3},
 \qquad C \approx 1.5
-$$
+```
 
 Experiments usually measure the one-dimensional spectrum. In the inertial range it follows $E_{11}(\kappa_1) = C_1\varepsilon^{2/3}\kappa_1^{-5/3}$, with $C_1 = \frac{18}{55}C \approx 0.49$ (see [Turbulence Statistics](./statistics.md)).
 
 In physical space, the equivalent statement concerns the second-order structure function of velocity differences $\Delta u_L = u_1(\mathbf{x} + r\mathbf{e}_1) - u_1(\mathbf{x})$:
 
-$$
+```math
 \langle (\Delta u_L)^2 \rangle = C_2\,(\varepsilon r)^{2/3},
 \qquad C_2 \approx 2.0
-$$
+```
 
 The third-order structure function obeys **Kolmogorov's four-fifths law**, which is exact for homogeneous isotropic turbulence at high Reynolds number:
 
-$$
+```math
 \langle (\Delta u_L)^3 \rangle = -\frac{4}{5}\,\varepsilon\, r
-$$
+```
 
 It follows from the Kármán–Howarth equation without any similarity assumption. Its negative sign encodes the net transfer of energy from large to small scales, which also explains the negative skewness of velocity derivatives.
 
@@ -186,10 +186,10 @@ Water ($\nu = 1.0 \times 10^{-6}\ \mathrm{m^2/s}$) flows through a smooth pipe w
 
 **Mean dissipation.** In fully developed flow, all the pumping power ends up as heat. The pressure gradient is $\Delta p/L = f\rho U_b^2/(2D)$, and dividing the power per unit volume by $\rho$ gives the power per unit mass:
 
-$$
+```math
 \varepsilon \approx
 \frac{(\Delta p/L)\,U_b}{\rho} = \frac{f\,U_b^3}{2D} = \frac{0.0156 \times 8}{0.2} = 0.63\ \mathrm{W/kg}
-$$
+```
 
 This is a volume average. The local dissipation is much larger near the wall and smaller on the centreline, and a small part of it is direct viscous dissipation of the mean flow.
 
@@ -202,7 +202,7 @@ $$
 \qquad \tau_\eta = 1.26\ \mathrm{ms}
 $$
 
-**Scale separation.** $D/\eta \approx 2{,}800$, whereas $Re^{3/4} \approx 9{,}500$. The difference arises because the energy-containing eddies are smaller and slower than $D$ and $U_b$. Taking $u_0 \approx 0.1\,U_b = 0.2$ m/s gives $\ell_0 \sim u_0^3/\varepsilon \approx 13$ mm. The eddy Reynolds number is then $Re_{\ell_0} \approx 2{,}600$, and $\ell_0/\eta \approx 360 = Re_{\ell_0}^{3/4}$. That equality is an identity once $\varepsilon = u_0^3/\ell_0$ is adopted. The point is that scale separation is governed by the Reynolds number of the energy-containing eddies, not the bulk Reynolds number.
+**Scale separation.** $D/\eta \approx 2{,}800$, whereas $Re^{3/4} \approx 9{,}500$. The difference arises because the energy-containing eddies are smaller and slower than $D$ and $U_b$. Taking $`u_0 \approx 0.1\,U_b = 0.2`$ m/s gives $\ell_0 \sim u_0^3/\varepsilon \approx 13$ mm. The eddy Reynolds number is then $Re_{\ell_0} \approx 2{,}600$, and $\ell_0/\eta \approx 360 = Re_{\ell_0}^{3/4}$. That equality is an identity once $\varepsilon = u_0^3/\ell_0$ is adopted. The point is that scale separation is governed by the Reynolds number of the energy-containing eddies, not the bulk Reynolds number.
 
 **Inertial-range eddies.** $u(\ell) = (\varepsilon\ell)^{1/3}$ gives 0.18 m/s for a 10 mm eddy and 0.086 m/s for a 1 mm eddy.
 
@@ -312,7 +312,7 @@ Integrate the inertial-range spectrum from $\kappa$ upward:
 d\kappa' = \frac{3}{2}C\,\varepsilon^{2/3}\kappa^{-2/3}
 ```
 
-With $\ell = 1/\kappa$ this becomes $\frac{3}{2}C\,(\varepsilon\ell)^{2/3} \sim u(\ell)^2$. The coefficient is $\frac{3}{2}(1.5) = 2.25$, of order one. The kinetic energy of eddies of size $\ell$ and smaller scales as $(\varepsilon\ell)^{2/3}$, exactly as the dimensional argument in physical space predicts.
+With $\ell = 1/\kappa$ this becomes $`\frac{3}{2}C\,(\varepsilon\ell)^{2/3} \sim u(\ell)^2`$. The coefficient is $\frac{3}{2}(1.5) = 2.25$, of order one. The kinetic energy of eddies of size $\ell$ and smaller scales as $(\varepsilon\ell)^{2/3}$, exactly as the dimensional argument in physical space predicts.
 
 </details>
 

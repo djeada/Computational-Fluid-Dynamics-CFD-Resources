@@ -6,15 +6,15 @@ Stability is the most fundamental requirement of any control system. An unstable
 
 A system is **Bounded-Input Bounded-Output (BIBO) stable** if every bounded input produces a bounded output:
 
-$$
+```math
 |u(t)| \leq M_u < \infty \quad \forall\, t \geq 0 \implies |y(t)| \leq M_y < \infty \quad \forall\, t \geq 0
-$$
+```
 
 For an LTI system with impulse response $g(t)$, BIBO stability requires:
 
-$$
+```math
 \int_0^{\infty} |g(t)|\, dt < \infty
-$$
+```
 
 ### Internal (Lyapunov) Stability
 
@@ -165,7 +165,7 @@ where $\omega_{gc}$ is the **gain crossover frequency** at which $|G(j\omega)H(j
 | Specification | Minimum Recommended |
 | --- | --- |
 | Gain margin | $> 6$ dB (factor of 2) |
-| Phase margin | $> 30^\circ$ (typically $45^\circ$–$60^\circ$) |
+| Phase margin | $> 30^\circ$ (typically $45^\circ$–$`60^\circ`$) |
 
 A system with both adequate GM and PM is **robustly stable** against modeling errors and parameter variations.
 
@@ -264,9 +264,9 @@ $$
 |G(j\omega_{pc})| = \frac{10}{3.162 \cdot \sqrt{1+10} \cdot \sqrt{1+0.1}} = \frac{10}{3.162 \times 3.317 \times 1.049} \approx 0.909
 $$
 
-$$
+```math
 GM = \frac{1}{0.909} = 1.1 \implies GM_{dB} \approx 0.83\; \text{dB}
-$$
+```
 
 This gain margin is **far below the recommended 6 dB**: the Routh array for $0.1s^3 + 1.1s^2 + s + K = 0$ confirms that the loop becomes unstable at $K = 11$, only 10% above the actual gain. The system has very poor relative stability and would benefit from compensation.
 

@@ -142,7 +142,7 @@ At supersonic speed, wave drag grows roughly with the square of the thickness ra
 
 </details>
 
-**Exercise 4.** In the comparison, both airfoils perform worse at $Re = 50\,000$ than at $Re = 1\,000\,000$. Explain the physical reason, and name two design responses for aircraft that must fly at low Reynolds numbers.
+**Exercise 4.** In the comparison, both airfoils perform worse at $`Re = 50\,000`$ than at $`Re = 1\,000\,000`$. Explain the physical reason, and name two design responses for aircraft that must fly at low Reynolds numbers.
 
 <details>
 <summary>Answer</summary>

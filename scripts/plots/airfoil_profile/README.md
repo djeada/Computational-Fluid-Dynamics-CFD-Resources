@@ -18,24 +18,24 @@ For code `MPXX`: $m = M/100$, $p = P/10$ and $t = XX/100$.
 
 ### Camber Line
 
-$$
+```math
 y_c = \begin{cases} \dfrac{m c}{p^2}\left(2p\dfrac{x}{c} - \left(\dfrac{x}{c}\right)^2\right), & x < pc, \\ \dfrac{m c}{(1-p)^2}\left((1-2p) + 2p\dfrac{x}{c} - \left(\dfrac{x}{c}\right)^2\right), & x \geq pc, \end{cases}
-$$
+```
 
 with slope
 
-$$
+```math
 \frac{dy_c}{dx} = \begin{cases} \dfrac{2m}{p^2}\left(p - \dfrac{x}{c}\right), & x < pc, \\ \dfrac{2m}{(1-p)^2}\left(p - \dfrac{x}{c}\right), & x \geq pc. \end{cases}
-$$
+```
 
 ### Thickness Distribution
 
-$$
+```math
 y_t = \frac{t}{0.2}\,
 c\left(0.2969 \sqrt{\frac{x}{c}} - 0.1260 \frac{x}{c} -
 0.3516\left(\frac{x}{c}\right)^2 + 0.2843\left(\frac{x}{c}\right)^3 -
 0.1015\left(\frac{x}{c}\right)^4\right)
-$$
+```
 
 With these coefficients the trailing edge has a small finite thickness.
 

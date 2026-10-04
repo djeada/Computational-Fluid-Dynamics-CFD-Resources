@@ -27,10 +27,10 @@ III. **Velocity Space:**
 
 The key to bridging kinetic theory and macroscopic fluid dynamics lies in how we treat the velocity space. For solving the NSE, we require only certain moments of the distribution function:
 
-$$
+```math
 \int d^3\xi \, f(\xi, x, t) = \rho(x, t), \quad \int d^3\xi \, \xi \,
 f(\xi, x, t) = \rho(x, t)\,\mathbf{u}(x, t)
-$$
+```
 
 where $\rho(x, t)$ is the fluid density and $\mathbf{u}(x, t)$ is the macroscopic velocity. By replacing these integrals with sums—often helped by a Hermite expansion—we simplify the computation.
 
@@ -113,9 +113,9 @@ $$
 
 - **Velocity:**
 
-$$
+```math
 \mathbf{u}(x, t) = \frac{1}{\rho(x, t)} \sum_i c_i \, f_i(x, t)
-$$
+```
 
 ### 3.6. Iterate
 
@@ -146,10 +146,10 @@ $$
 
 At equilibrium, the distribution function $f^{\text{eq}}(\xi, x, t)$ follows the Maxwell-Boltzmann distribution, which is given by:
 
-$$
+```math
 f^{\text{eq}}(\xi, x, t) = \rho \left(\frac{1}{2\pi RT} \right)^{3/2}
 \exp\!\left(-\frac{|\xi - \mathbf{u}|^2}{2RT} \right)
-$$
+```
 
 ### Explanation
 
@@ -256,7 +256,7 @@ Below is a schematic diagram summarizing the process from the Boltzmann equation
 
 ## Purpose in CFD
 
-This note details how the continuous Boltzmann equation is discretized into the Lattice Boltzmann Equation (LBE). It covers the three discretization steps—space ($\Delta x$), time ($\Delta t$), and velocity (finite set $\{c_i\}$)—introduces common velocity sets (D2Q9, D3Q19), and derives the collision, streaming, and macroscopic-variable-extraction steps. The Maxwell–Boltzmann equilibrium distribution and the Chapman–Enskog link to the NSE are also presented.
+This note details how the continuous Boltzmann equation is discretized into the Lattice Boltzmann Equation (LBE). It covers the three discretization steps—space ($\Delta x$), time ($\Delta t$), and velocity (finite set $`\{c_i\}`$)—introduces common velocity sets (D2Q9, D3Q19), and derives the collision, streaming, and macroscopic-variable-extraction steps. The Maxwell–Boltzmann equilibrium distribution and the Chapman–Enskog link to the NSE are also presented.
 
 ## Input / Output
 
@@ -277,7 +277,7 @@ This note details how the continuous Boltzmann equation is discretized into the 
 <details>
 <summary>Answer</summary>
 
-The lattice speed is $c = \Delta x/\Delta t = 10^{-3}/10^{-4} = 10$ m/s. The set has three distinct speeds: 0 for the rest particle ($i = 0$), $c = 10$ m/s for the four cardinal directions, and $\sqrt{2}\,c \approx 14.14$ m/s for the four diagonal directions.
+The lattice speed is $c = \Delta x/\Delta t = 10^{-3}/10^{-4} = 10$ m/s. The set has three distinct speeds: 0 for the rest particle ($i = 0$), $c = 10$ m/s for the four cardinal directions, and $`\sqrt{2}\,c \approx 14.14`$ m/s for the four diagonal directions.
 
 </details>
 
@@ -308,7 +308,7 @@ Smaller $\tau$ gives lower viscosity. As $\tau \to 1/2$ the viscosity tends to z
 
 </details>
 
-**Exercise 4.** Show that the Maxwell–Boltzmann distribution of Section 5 satisfies $\int f^{\text{eq}} \, d^3\xi = \rho$ and $\int |\xi - \mathbf{u}|^2 f^{\text{eq}} \, d^3\xi = 3\rho R T$.
+**Exercise 4.** Show that the Maxwell–Boltzmann distribution of Section 5 satisfies $`\int f^{\text{eq}} \, d^3\xi = \rho`$ and $`\int |\xi - \mathbf{u}|^2 f^{\text{eq}} \, d^3\xi = 3\rho R T`$.
 
 <details>
 <summary>Answer</summary>
@@ -321,11 +321,11 @@ For the second moment, $|\mathbf{v}|^2 = v_x^2 + v_y^2 + v_z^2$. Each term contr
 \int |\xi - \mathbf{u}|^2 f^{\text{eq}} \, d^3\xi = 3\rho R T
 ```
 
-and the thermal energy density $\int \tfrac{1}{2}|\mathbf{v}|^2 f^{\text{eq}} \, d^3\xi = \tfrac{3}{2}\rho R T$ is that of a monatomic ideal gas.
+and the thermal energy density $`\int \tfrac{1}{2}|\mathbf{v}|^2 f^{\text{eq}} \, d^3\xi = \tfrac{3}{2}\rho R T`$ is that of a monatomic ideal gas.
 
 </details>
 
-**Exercise 5.** Verify that the D3Q19 set in Section 2.1 contains one rest velocity, 6 velocities of length $\Delta x/\Delta t$ and 12 of length $\sqrt{2}\,\Delta x/\Delta t$, and that $\sum_i c_i = 0$. With weights $w_0 = 1/3$, $w_i = 1/18$ for the six face neighbours and $w_i = 1/36$ for the twelve edge neighbours, show that $\sum_i w_i c_{i\alpha} c_{i\beta} = c_s^2 \delta_{\alpha\beta}$ with $c_s^2 = 1/3$ in lattice units.
+**Exercise 5.** Verify that the D3Q19 set in Section 2.1 contains one rest velocity, 6 velocities of length $\Delta x/\Delta t$ and 12 of length $`\sqrt{2}\,\Delta x/\Delta t`$, and that $\sum_i c_i = 0$. With weights $w_0 = 1/3$, $w_i = 1/18$ for the six face neighbours and $w_i = 1/36$ for the twelve edge neighbours, show that $\sum_i w_i c_{i\alpha} c_{i\beta} = c_s^2 \delta_{\alpha\beta}$ with $c_s^2 = 1/3$ in lattice units.
 
 <details>
 <summary>Answer</summary>

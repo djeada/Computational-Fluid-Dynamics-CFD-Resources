@@ -283,7 +283,7 @@ This note presents the three governing equations of fluid dynamics—continuity,
 <details>
 <summary>Answer</summary>
 
-In steady flow the volume integral does not change, so $\int_A \rho\vec{v}\cdot\vec{n}\,dA = 0$. With $\vec{n}$ pointing outward, the inlet contributes $-\rho_1 V_1 A_1$ and the outlet $+\rho_2 V_2 A_2$:
+In steady flow the volume integral does not change, so $`\int_A \rho\vec{v}\cdot\vec{n}\,dA = 0`$. With $\vec{n}$ pointing outward, the inlet contributes $-\rho_1 V_1 A_1$ and the outlet $+\rho_2 V_2 A_2$:
 
 ```math
 V_2 = \frac{\rho_1 V_1 A_1}{\rho_2 A_2} = \frac{1.2 \times 10 \times 0.05}{1.5 \times 0.02} = 20 \text{ m/s}
@@ -311,9 +311,9 @@ The plate pushes the fluid back with 400 N, so the fluid pushes the plate with 4
 <details>
 <summary>Answer</summary>
 
-$du/dy = 5/10^{-3} = 5000$ s$^{-1}$, so $\Phi = 0.1 \times 5000^2 = 2.5 \times 10^6$ W/m³.
+$du/dy = 5/10^{-3} = 5000$ s$`^{-1}`$, so $\Phi = 0.1 \times 5000^2 = 2.5 \times 10^6$ W/m³.
 
-With no conduction and no convective temperature change, $\rho c_p\, \partial T/\partial t = \Phi$:
+With no conduction and no convective temperature change, $`\rho c_p\, \partial T/\partial t = \Phi`$:
 
 ```math
 \frac{\partial T}{\partial t} = \frac{2.5 \times 10^6}{870 \times 1900} \approx 1.5

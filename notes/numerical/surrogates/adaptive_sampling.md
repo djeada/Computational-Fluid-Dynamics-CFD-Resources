@@ -10,7 +10,7 @@ When using Kriging or gradient-enhanced Kriging, this initial step involves esti
 
 ## Adaptive Sampling Process and Termination Criteria
 
-Adaptive sampling follows a stage-wise update process. Suppose one currently has $N_i$ samples and a surrogate $\hat{y}^{(N_i)}(x)$. The approach selects a new point $x^{(N+1)}$ according to a selection criterion that reflects the current knowledge encoded in $\hat{y}^{(N_i)}(x)$. After evaluating $y(x^{(N+1)})$, the design and data sets become $X(N_{i+1}) = X(N_i) \cup \{x^{(N+1)}\}$ and $Y(N_{i+1}) = Y(N_i) \cup \{y(x^{(N+1)})\}$. A new surrogate $\hat{y}^{(N_{i+1})}(x)$ is constructed, often with updated hyperparameters. This process of adding new samples, evaluating responses, and rebuilding surrogates continues until either the maximum number of samples $N_{\text{max}}$ is used or until an error estimator indicates that the model meets accuracy targets.
+Adaptive sampling follows a stage-wise update process. Suppose one currently has $N_i$ samples and a surrogate $\hat{y}^{(N_i)}(x)$. The approach selects a new point $x^{(N+1)}$ according to a selection criterion that reflects the current knowledge encoded in $\hat{y}^{(N_i)}(x)$. After evaluating $y(x^{(N+1)})$, the design and data sets become $`X(N_{i+1}) = X(N_i) \cup \{x^{(N+1)}\}`$ and $`Y(N_{i+1}) = Y(N_i) \cup \{y(x^{(N+1)})\}`$. A new surrogate $\hat{y}^{(N_{i+1})}(x)$ is constructed, often with updated hyperparameters. This process of adding new samples, evaluating responses, and rebuilding surrogates continues until either the maximum number of samples $N_{\text{max}}$ is used or until an error estimator indicates that the model meets accuracy targets.
 
 Adaptive strategies do not require knowing $N_{\text{max}}$ in advance. Instead, the process adapts to the complexity of the underlying response. This flexibility leads to more efficient exploration of $\Omega$.
 
@@ -32,15 +32,15 @@ A common approach to adaptive sampling is based on the mean squared error (MSE) 
 
 For a Kriging surrogate,
 
-$$
+```math
 \text{MSE}[\hat{y}(x)] = \sigma^2 \left\{ 1 -
 \begin{pmatrix} r(x)^T & f(x)^T \end{pmatrix}
 \begin{pmatrix} R & F \\ F^T & 0 \end{pmatrix}^{-1}
 \begin{pmatrix} r(x) \\ f(x) \end{pmatrix}
 \right\}
-$$
+```
 
-where $r(x)$ is the correlation vector between $x$ and the sample points, and $F$ is the regression matrix for the trend. The MSE vanishes at existing samples and grows with increasing distance from known data points. As $\|x - X\|$ becomes large, $r(x)$ approaches zero, and the MSE approaches a finite limit related to $\sigma^2$ and the chosen trend.
+where $r(x)$ is the correlation vector between $x$ and the sample points, and $F$ is the regression matrix for the trend. The MSE vanishes at existing samples and grows with increasing distance from known data points. As $`\|x - X\|`$ becomes large, $r(x)$ approaches zero, and the MSE approaches a finite limit related to $\sigma^2$ and the chosen trend.
 
 Selecting new points $x^{(N+1)}$ based on maximum MSE leads to what is essentially a space-filling approach informed by the current surrogate. Such MSE-based selection aims to reduce global uncertainty, benefiting exploration. However, the MSE does not incorporate the actual response values $y_i$, focusing solely on distance-based measures and hyperparameters. This can make MSE a poor local error indicator if the function is highly nonlinear or if certain regions require finer sampling due to complexity rather than just distance from known samples.
 
@@ -48,24 +48,24 @@ Selecting new points $x^{(N+1)}$ based on maximum MSE leads to what is essential
 
 To refine MSE-based methods, some adaptive strategies minimize integrated or maximum MSE over $\Omega$. For example, the next sample point can be chosen as:
 
-$$
+```math
 x^{(N+1)} = \arg \min_{x \in \Omega} \left\{ \int_\Omega \text{MSE}[\hat{y}^{(N+1)}(x')]
 dx' \right\}
-$$
+```
 
 This integrated MSE (IMSE) approach considers the entire domain and seeks a point that will globally reduce uncertainty most effectively.
 
 Alternatively, a simpler approach is to just pick the point where the MSE is currently highest:
 
-$$
+```math
 x^{(N+1)} = \arg \max_{x \in \Omega} \left\{ \text{MSE}[\hat{y}^{(N)}(x)] \right\}
-$$
+```
 
 While easy to implement, this maximum MSE criterion focuses purely on exploration. It places new samples in locations where the model is most uncertain, gradually filling the domain. Although this generally improves global coverage, it can still miss regions where the true response is complex or yields a high approximation error unrelated to sample spacing.
 
 ## Cross-Validation for Improved Adaptive Selection
 
-To incorporate information about actual response values, cross-validation (CV) can be employed as an exploitation-based criterion. CV involves temporarily removing a data point $(x^{(i)}, y_i)$ and reconstructing the surrogate $\hat{y}_{-i}(x)$ without it. The difference $|\hat{y}_{-i}(x^{(i)}) - y_i|$ measures how crucial this sample is for modeling the local response. When $|\hat{y}_{-i}(x^{(i)}) - y_i|$ is small, the sample $(x^{(i)}, y_i)$ is somewhat redundant. When it is large, the sample exerts a strong influence on the surrogate in that region.
+To incorporate information about actual response values, cross-validation (CV) can be employed as an exploitation-based criterion. CV involves temporarily removing a data point $(x^{(i)}, y_i)$ and reconstructing the surrogate $`\hat{y}_{-i}(x)`$ without it. The difference $|\hat{y}_{-i}(x^{(i)}) - y_i|$ measures how crucial this sample is for modeling the local response. When $`|\hat{y}_{-i}(x^{(i)}) - y_i|`$ is small, the sample $(x^{(i)}, y_i)$ is somewhat redundant. When it is large, the sample exerts a strong influence on the surrogate in that region.
 
 A local CV-based error estimator can be extended to any point $x \in \Omega$:
 
@@ -77,15 +77,15 @@ This measures how sensitive the prediction at $x$ is to the removal of individua
 
 However, $e(x)$ often peaks near existing samples. To avoid selecting samples too close to existing ones, the criterion can be modified by multiplying $e(x)$ by the distance to the nearest existing sample:
 
-$$
+```math
 x^{(N+1)} = \arg \max_{x \in \Omega} \{ e(x) \cdot \text{dist}(x, X)\}
-$$
+```
 
 Alternatively, one can multiply $e(x)$ by the MSE, merging exploration (through MSE) and exploitation (through CV):
 
-$$
+```math
 x^{(N+1)} = \arg \max_{x \in \Omega} \{ e(x) \cdot \text{RMSE}[\hat{y}(x)]\}
-$$
+```
 
 This combined metric zeroes out at existing sample points and shifts the focus to regions that are both uncertain and underrepresented.
 
@@ -132,7 +132,7 @@ The end points look most influential because removing them turns interpolation i
 
 </details>
 
-**Exercise 2.** For minimization, the expected improvement criterion used by EGO is $\text{EI}(x) = (y_{\min} - \hat{y})\,\Phi(z) + s\,\varphi(z)$ with $z = (y_{\min} - \hat{y})/s$. Here $s = \sqrt{\text{MSE}}$, and $\Phi$ and $\varphi$ are the standard normal CDF and PDF. With $y_{\min} = 1.0$, compare candidate A ($\hat{y} = 1.2$, $s = 0.3$) with candidate B ($\hat{y} = 0.95$, $s = 0.05$). Which is chosen, and what happens if $s_A = 0.4$?
+**Exercise 2.** For minimization, the expected improvement criterion used by EGO is $`\text{EI}(x) = (y_{\min} - \hat{y})\,\Phi(z) + s\,\varphi(z)`$ with $z = (y_{\min} - \hat{y})/s$. Here $s = \sqrt{\text{MSE}}$, and $\Phi$ and $\varphi$ are the standard normal CDF and PDF. With $y_{\min} = 1.0$, compare candidate A ($\hat{y} = 1.2$, $s = 0.3$) with candidate B ($\hat{y} = 0.95$, $s = 0.05$). Which is chosen, and what happens if $s_A = 0.4$?
 
 <details>
 <summary>Answer</summary>
@@ -149,7 +149,7 @@ B is chosen: exploitation near the current best. With $s_A = 0.4$: $z = -0.5$, $
 <details>
 <summary>Answer</summary>
 
-$R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}$ with $\rho = e^{-2} = 0.1353$, $F = (1, 1)^T$, and $r(0.5) = (e^{-0.5}, e^{-0.5}) = (0.6065, 0.6065)$. Eliminating the block system gives
+$`R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}`$ with $\rho = e^{-2} = 0.1353$, $F = (1, 1)^T$, and $r(0.5) = (e^{-0.5}, e^{-0.5}) = (0.6065, 0.6065)$. Eliminating the block system gives
 
 ```math
 \frac{\text{MSE}}{\sigma^2} = 1 - r^T R^{-1} r +
@@ -173,7 +173,7 @@ With $S = F^T R^{-1} F$, the block inverse is
 
 With $r = 0$ the quadratic form reduces to the lower-right block: $(0, f)^T M^{-1} (0, f) = -f^T S^{-1} f$. Hence $\text{MSE} \to \sigma^2(1 + f^T S^{-1} f)$.
 
-For Exercise 3, $S = 1.7616$, so the limit is $\sigma^2(1 + 1/1.7616) = 1.5677\,\sigma^2$. It exceeds the process variance because, besides the random fluctuation $z(x)$, the trend coefficient $\beta$ is estimated from only two samples, and its uncertainty adds to the prediction error.
+For Exercise 3, $S = 1.7616$, so the limit is $`\sigma^2(1 + 1/1.7616) = 1.5677\,\sigma^2`$. It exceeds the process variance because, besides the random fluctuation $z(x)$, the trend coefficient $\beta$ is estimated from only two samples, and its uncertainty adds to the prediction error.
 
 </details>
 

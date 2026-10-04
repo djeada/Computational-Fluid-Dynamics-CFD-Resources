@@ -4,7 +4,7 @@ This script draws a block in a tank of fluid with its weight and buoyant force s
 
 ## Overview
 
-- Takes the object density (default 500 kg/m$^3$), fluid density (default 1000 kg/m$^3$) and object volume (default 1 m$^3$) as command-line options.
+- Takes the object density (default 500 kg/m$`^3`$), fluid density (default 1000 kg/m$`^3`$) and object volume (default 1 m$`^3`$) as command-line options.
 - Computes the weight $W$ and decides whether the block floats by comparing $W$ with the buoyant force on the fully submerged block.
 - Floating block: drawn with the submerged fraction $\rho_{\text{obj}}/\rho_{\text{fluid}}$ below the surface, where the buoyant force equals the weight.
 - Sinking block: drawn fully submerged at a fixed depth, with the buoyant force of the whole volume.
@@ -15,18 +15,18 @@ This script draws a block in a tank of fluid with its weight and buoyant force s
 
 ### Weight
 
-$$
+```math
 W = \rho_{\text{obj}}\, V\, g,
-\qquad g = 9.81\  \text{m/s}^2
-$$
+\qquad g = 9.81\ \text{m/s}^2
+```
 
 ### Buoyant Force
 
 The buoyant force equals the weight of the displaced fluid:
 
-$$
+```math
 F_b = \rho_{\text{fluid}}\, V_{\text{sub}}\, g
-$$
+```
 
 where $V_{\text{sub}}$ is the submerged volume.
 

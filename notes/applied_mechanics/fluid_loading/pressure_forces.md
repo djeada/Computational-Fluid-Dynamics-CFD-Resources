@@ -31,9 +31,9 @@ $$
 
 The total hydrostatic force on a plane surface of area $A$ is:
 
-$$
+```math
 F = \bar{p} \, A = \rho g \bar{h} \, A
-$$
+```
 
 where $\bar{h}$ is the depth of the centroid of the surface below the free surface.
 
@@ -41,9 +41,9 @@ where $\bar{h}$ is the depth of the centroid of the surface below the free surfa
 
 The point through which the resultant force acts is located below the centroid. For a surface inclined at angle $\theta$ to the horizontal, the distance from the free surface to the center of pressure measured along the incline is:
 
-$$
+```math
 y_{cp} = \bar{y} + \frac{I_{xc}}{\bar{y} \, A}
-$$
+```
 
 where:
 
@@ -66,19 +66,19 @@ For a curved submerged surface the resultant force is resolved into horizontal a
 
 The horizontal component equals the hydrostatic force on the **vertical projection** of the curved surface:
 
-$$
+```math
 F_H = \rho g \bar{h}_{vp} \, A_{vp}
-$$
+```
 
-where $\bar{h}_{vp}$ and $A_{vp}$ are the centroid depth and area of the vertical projection.
+where $`\bar{h}_{vp}`$ and $`A_{vp}`$ are the centroid depth and area of the vertical projection.
 
 ### Vertical Component
 
 The vertical component equals the **weight of the fluid** directly above (or that would be above) the curved surface up to the free surface:
 
-$$
+```math
 F_V = \rho g \, \mathcal{V}
-$$
+```
 
 where $\mathcal{V}$ is the volume of fluid above the surface.
 
@@ -94,9 +94,9 @@ acting at angle $\alpha = \arctan(F_V / F_H)$ to the horizontal.
 
 A body immersed in a fluid experiences an upward buoyant force equal to the weight of the displaced fluid:
 
-$$
+```math
 F_B = \rho_f g \, \mathcal{V}_{disp}
-$$
+```
 
 ### Equilibrium of Floating Bodies
 
@@ -156,10 +156,10 @@ Centroid depth: $\bar{h} = H/2 = 6$ m
 
 Resultant force:
 
-$$
+```math
 F = \rho g \bar{h} \, A = 1000 \times 9.81 \times 6 \times
 (12 \times 30) = 21{,}189{,}600 \text{ N} \approx 21.2 \text{ MN}
-$$
+```
 
 Center of pressure below the surface:
 
@@ -287,7 +287,7 @@ Since $GM > 0$, the barge is **stable** with a comfortable margin.
 
 ### Factors of Safety
 
-- Overturning: $\text{FOS}_{OT} = M_{restoring} / M_{overturning} \geq 1.5$ (typical)
+- Overturning: $`\text{FOS}_{OT} = M_{restoring} / M_{overturning} \geq 1.5`$ (typical)
 - Sliding: $\text{FOS}_{SL} = \mu W / F_H \geq 1.5$
 
 ### Pressure Testing

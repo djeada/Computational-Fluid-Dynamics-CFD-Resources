@@ -4,7 +4,7 @@ This script finds the principal directions of correlated 2D velocity fluctuation
 
 ## Overview
 
-- Generates 1000 seeded samples with $u'_a \sim \mathcal{N}(0, 2^2)$ and $u'_b = 0.7\,u'_a + \mathcal{N}(0, 2^2)$ (m/s), then subtracts the sample mean
+- Generates 1000 seeded samples with $u'_a \sim \mathcal{N}(0, 2^2)$ and $`u'_b = 0.7\,u'_a + \mathcal{N}(0, 2^2)`$ (m/s), then subtracts the sample mean
 - Computes the sample covariance matrix with the $1/(m-1)$ normalisation
 - Solves the symmetric eigenvalue problem with `numpy.linalg.eigh` and sorts the modes by decreasing eigenvalue
 - Prints the covariance matrix, eigenvalues, and eigenvectors
@@ -15,18 +15,18 @@ This script finds the principal directions of correlated 2D velocity fluctuation
 
 ### Covariance Matrix
 
-With the $m \times 2$ matrix of zero-mean samples $\mathbf{U}$ (rows $\mathbf{u}'_i = (u'_{a,i}, u'_{b,i})$):
+With the $m \times 2$ matrix of zero-mean samples $\mathbf{U}$ (rows $`\mathbf{u}'_i = (u'_{a,i}, u'_{b,i})`$):
 
-$$
+```math
 \mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U} = \frac{1}{m-1}\begin{bmatrix}\sum_i u'^2_{a,i} & \sum_i u'_{a,i}u'_{b,i} \\ \sum_i u'_{a,i}u'_{b,i} & \sum_i u'^2_{b,i}\end{bmatrix}
-$$
+```
 
 ### Eigenvalue Problem
 
-$$
+```math
 \mathbf{C}\,\mathbf{e}_k = \lambda_k\,\mathbf{e}_k,
 \qquad \lambda_1 \ge \lambda_2
-$$
+```
 
 Because $\mathbf{C}$ is symmetric, the unit eigenvectors are orthogonal and form the principal axes of the data ellipse.
 
@@ -34,12 +34,12 @@ Because $\mathbf{C}$ is symmetric, the unit eigenvectors are orthogonal and form
 
 The scalar projection (POD coefficient) of sample $i$ on mode $k$ and its position in the plane are
 
-$$
+```math
 a_{k,i} = \mathbf{u}'_i \cdot \mathbf{e}_k,
 \qquad \mathbf{p}_{k,i} = a_{k,i}\,\mathbf{e}_k
-$$
+```
 
-The variance of the coefficients equals the eigenvalue, $\frac{1}{m-1}\sum_i a_{k,i}^2 = \mathbf{e}_k^T\mathbf{C}\,\mathbf{e}_k = \lambda_k$. The first mode therefore carries the most fluctuation energy, and $\lambda_1 + \lambda_2 = \operatorname{tr}\mathbf{C}$.
+The variance of the coefficients equals the eigenvalue, $`\frac{1}{m-1}\sum_i a_{k,i}^2 = \mathbf{e}_k^T\mathbf{C}\,\mathbf{e}_k = \lambda_k`$. The first mode therefore carries the most fluctuation energy, and $\lambda_1 + \lambda_2 = \operatorname{tr}\mathbf{C}$.
 
 ## Implementation
 
@@ -65,9 +65,9 @@ python main.py --no-show --output out   # save both PNGs into out/
 
 With the default seed the script prints
 
-$$
+```math
 \mathbf{C} = \begin{bmatrix} 3.82 & 2.91 \\ 2.91 & 6.39 \end{bmatrix}, \qquad \lambda_1 = 8.28,\ \mathbf{e}_1 = (0.546, 0.838), \qquad \lambda_2 = 1.92,\ \mathbf{e}_2 = (-0.838, 0.546)
-$$
+```
 
 The first figure shows the tilted elliptical cloud, with the black arrow along its major axis and the shorter grey arrow along its minor axis.
 

@@ -21,9 +21,9 @@ $$
 
 ### Model Numerical Solution
 
-$$
+```math
 u_N(x) = e^{-x\left(1 + x/N\right)} = e^{-x}\, e^{-x^2/N}
-$$
+```
 
 The exponent differs from the exact one by $x^2/N$, so
 

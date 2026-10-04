@@ -46,12 +46,12 @@ ML models, often deep neural networks, are trained on pairs of input images and 
 
 In conventional PIV, the displacement between two successive images is estimated by computing the cross-correlation function $R(\mathbf{s})$ over interrogation windows:
 
-$$
+```math
 R(\mathbf{s}) = \int_{\Omega} I_1(\mathbf{x}) \, I_2(\mathbf{x} + \mathbf{s}) \,
 d\mathbf{x}
-$$
+```
 
-where $I_1$ and $I_2$ are the image intensity fields from two frames separated by a known time interval $\Delta t$, and $\mathbf{s}$ is the displacement vector. The peak of $R$ gives the most probable particle displacement $\mathbf{s}^*$, and the local velocity is then $\mathbf{u} = \mathbf{s}^*/\Delta t$. ML-based approaches learn to approximate this mapping end-to-end, predicting $\mathbf{u}$ directly from the image pair without explicit correlation computation.
+where $I_1$ and $I_2$ are the image intensity fields from two frames separated by a known time interval $\Delta t$, and $\mathbf{s}$ is the displacement vector. The peak of $R$ gives the most probable particle displacement $`\mathbf{s}^*`$, and the local velocity is then $`\mathbf{u} = \mathbf{s}^*/\Delta t`$. ML-based approaches learn to approximate this mapping end-to-end, predicting $\mathbf{u}$ directly from the image pair without explicit correlation computation.
 
 **Benefit:**\
 Faster reconstruction enables near-instantaneous flow analysis, paving the way for real-time feedback and control in experimental setups.
@@ -212,7 +212,7 @@ This dynamic-range trade-off is one of the parameter choices the note suggests M
 
 </details>
 
-**Exercise 3.** A 1D version of the correlation integral uses intensity profiles $I_1 = (0, 1, 3, 1, 0, 0, 0, 0, 0)$ and $I_2 = (0, 0, 0, 1, 2.5, 2, 0.5, 0, 0)$. Compute $R(s) = \sum_i I_1(i)\, I_2(i + s)$ for $s = 0, \dots, 4$, find the integer peak, and refine it with the three-point Gaussian estimator $\varepsilon = \frac{\ln R_{-} - \ln R_{+}}{2(\ln R_{-} - 2\ln R_0 + \ln R_{+})}$.
+**Exercise 3.** A 1D version of the correlation integral uses intensity profiles $I_1 = (0, 1, 3, 1, 0, 0, 0, 0, 0)$ and $I_2 = (0, 0, 0, 1, 2.5, 2, 0.5, 0, 0)$. Compute $`R(s) = \sum_i I_1(i)\, I_2(i + s)`$ for $s = 0, \dots, 4$, find the integer peak, and refine it with the three-point Gaussian estimator $\varepsilon = \frac{\ln R_{-} - \ln R_{+}}{2(\ln R_{-} - 2\ln R_0 + \ln R_{+})}$.
 
 <details>
 <summary>Answer</summary>
@@ -236,7 +236,7 @@ The sub-pixel shift towards $s = 3$ reflects the skewed particle image in $I_2$.
 <details>
 <summary>Answer</summary>
 
-$\partial u/\partial x \approx (0.52 - 0.48)/0.002 = 20$ s$^{-1}$ and $\partial v/\partial y \approx (0.11 - 0.13)/0.002 = -10$ s$^{-1}$, so the in-plane divergence is $10$ s$^{-1}$, about a third of the gradient magnitudes.
+$\partial u/\partial x \approx (0.52 - 0.48)/0.002 = 20$ s$`^{-1}`$ and $\partial v/\partial y \approx (0.11 - 0.13)/0.002 = -10$ s$`^{-1}`$, so the in-plane divergence is $10$ s$`^{-1}`$, about a third of the gradient magnitudes.
 
 For planar (2D2C) PIV of a three-dimensional flow, incompressibility only requires $\partial u/\partial x + \partial v/\partial y = -\partial w/\partial z$, and the out-of-plane gradient is not measured. A hard 2D divergence-free constraint is only appropriate for genuinely two-dimensional flows. Otherwise it should be a weak penalty, or the constraint should be applied to stereo or volumetric data where all three components are available.
 

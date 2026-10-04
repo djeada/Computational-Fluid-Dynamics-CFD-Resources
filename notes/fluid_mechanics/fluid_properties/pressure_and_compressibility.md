@@ -24,55 +24,55 @@ When modeling a **compressible** fluid (such as air at higher speeds), **density
 
 I. **Continuity (Mass Conservation)**
 
-$$
+```math
 \frac{\partial \rho}{\partial t} + \nabla \cdot \bigl(\rho\,\mathbf{u}\bigr) = 0
-$$
+```
 
 where $\mathbf{u} = (u, v, w)$ is the velocity vector. This equation enforces overall mass conservation.
 
 II. **Momentum (Navier–Stokes)**
 
-$$
+```math
 \frac{\partial (\rho\,\mathbf{u})}{\partial t} + \nabla \cdot
 \bigl(\rho\,\mathbf{u}\,\mathbf{u} + p\,\mathbf{I} -
 \boldsymbol{\tau}\bigr) = \rho\,\mathbf{f}
-$$
+```
 
 - $\mathbf{u}\mathbf{u}$ is the outer product of the velocity vector with itself.
-- $p\,\mathbf{I}$ is the isotropic pressure term ($\mathbf{I}$ = identity tensor).
+- $`p\,\mathbf{I}`$ is the isotropic pressure term ($\mathbf{I}$ = identity tensor).
 - $\boldsymbol{\tau}$ is the viscous stress tensor.
-- $\mathbf{f}$ is a body force per unit volume, such as $\rho\,\mathbf{g}$ for gravity.
+- $\mathbf{f}$ is a body force per unit volume, such as $`\rho\,\mathbf{g}`$ for gravity.
 
 III. **Energy Equation**
 
 A common form for the total energy $E$ (internal + relating to motion) is:
 
-$$
+```math
 \frac{\partial (\rho\,E)}{\partial t} + \nabla \cdot
 \Bigl[\mathbf{u}\,(\rho\, E + p) - \mathbf{q}\Bigr] = \rho\,\mathbf{f}\cdot\mathbf{u}
-$$
+```
 
 - $E = e + \tfrac{1}{2}|\mathbf{u}|^2$, with $e$ the internal energy per unit mass.
-- $\mathbf{q}$ is the heat flux (e.g., $\mathbf{q} = -k\,\nabla T$).
+- $\mathbf{q}$ is the heat flux (e.g., $`\mathbf{q} = -k\,\nabla T`$).
 - The right-hand side represents work done by body forces.
 
 IV. **Equation of State**
 
 For an ideal gas,
 
-$$
+```math
 p = \rho\, R\, T
-$$
+```
 
-linking pressure, density, and temperature. The gas constant $R$ is specific to the fluid in question (e.g., for air, $R \approx 287\,\text{J/(kg K)}$).
+linking pressure, density, and temperature. The gas constant $R$ is specific to the fluid in question (e.g., for air, $`R \approx 287\,\text{J/(kg K)}`$).
 
 ### Speed of Sound and Pressure Waves
 
 A key hallmark of **compressible** flow is the presence of **acoustic waves**, traveling at the local speed of sound $a$. For an ideal gas:
 
-$$
+```math
 a = \sqrt{\gamma\,\frac{p}{\rho}} = \sqrt{\gamma\,R\,T}
-$$
+```
 
 where $\gamma = \tfrac{C_p}{C_v}$ is the ratio of specific heats. At standard atmospheric conditions ($1\text{ atm}$ and $300\text{ K}$), the speed of sound in air is about **347 m/s**.
 
@@ -83,11 +83,11 @@ where $\gamma = \tfrac{C_p}{C_v}$ is the ratio of specific heats. At standard at
 
 Whether a flow is treated as compressible or incompressible often depends on the **Mach number**:
 
-$$
+```math
 \mathrm{Ma} = \frac{\|\mathbf{u}\|}{a}
-$$
+```
 
-where $\|\mathbf{u}\|$ is the flow velocity magnitude and $a$ is the local speed of sound.
+where $`\|\mathbf{u}\|`$ is the flow velocity magnitude and $a$ is the local speed of sound.
 
 - **Incompressible Flow ($\mathrm{Ma} \ll 1$)**
   - Density $\rho$ is nearly constant.
@@ -103,9 +103,9 @@ where $\|\mathbf{u}\|$ is the flow velocity magnitude and $a$ is the local speed
 
 A simplified Bernoulli-like relation suggests:
 
-$$
+```math
 \frac{\Delta P}{P} \approx \frac{\gamma}{2}\,\mathrm{Ma}^2
-$$
+```
 
 - At $\mathrm{Ma} = 0.1$: $\Delta P / P$ is around 0.7%, often considered insignificant.
 - At $\mathrm{Ma} = 0.3$: $\Delta P / P$ grows to a few percent—still small but not always trivial.
@@ -131,12 +131,12 @@ Below is a schematic illustrating how **incompressible** vs. **compressible** fl
 
 ### Low-Mach Flows and Numerical Stiffness
 
-When $\mathrm{Ma}$ is small, a **fully compressible** solver must still resolve **acoustic waves**, which travel at speed $a \gg \|\mathbf{u}\|$. For explicit time-integration methods, the **timestep** $\Delta t$ is limited by the highest wave speed present (the **Courant–Friedrichs–Lewy (CFL)** condition). Consequently:
+When $\mathrm{Ma}$ is small, a **fully compressible** solver must still resolve **acoustic waves**, which travel at speed $`a \gg \|\mathbf{u}\|`$. For explicit time-integration methods, the **timestep** $\Delta t$ is limited by the highest wave speed present (the **Courant–Friedrichs–Lewy (CFL)** condition). Consequently:
 
 - **Stability Constraint:** $\Delta t$ must be small enough to capture acoustic waves.
-- **Accuracy Constraint:** $\Delta t$ also must resolve the slower convective flow speed $\|\mathbf{u}\|$.
+- **Accuracy Constraint:** $\Delta t$ also must resolve the slower convective flow speed $`\|\mathbf{u}\|`$.
 
-Because $\|\mathbf{u}\| / a = \mathrm{Ma} \ll 1$, **acoustic waves** can force **very small** $\Delta t$. This introduces **numerical stiffness**, drastically increasing computational cost.
+Because $`\|\mathbf{u}\| / a = \mathrm{Ma} \ll 1`$, **acoustic waves** can force **very small** $\Delta t$. This introduces **numerical stiffness**, drastically increasing computational cost.
 
 #### Removing Stiffness via Incompressible Approximation
 
@@ -170,21 +170,21 @@ II. **Enforce Continuity:**
 
 $\nabla \cdot \mathbf{u}^{n+1} = 0$
 
-Since $\mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t\,\nabla \hat{P}^{\,n+1}$,
+Since $`\mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t\,\nabla \hat{P}^{\,n+1}`$,
 
 applying $\nabla \cdot$ to both sides yields:
 
-$$
+```math
 \nabla^2 \hat{P}^{\,n+1} = \frac{1}{\Delta t}\,\nabla \cdot \mathbf{u}^*
-$$
+```
 
 III. **Corrector Step (Pressure Update):**
 
-Solve this **Poisson equation** for $\hat{P}^{\,n+1} = P^{n+1}/\rho$. Then update
+Solve this **Poisson equation** for $`\hat{P}^{\,n+1} = P^{n+1}/\rho`$. Then update
 
-$$
+```math
 \mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t\,\nabla \hat{P}^{\,n+1}
-$$
+```
 
 The result is a divergence-free velocity field.
 
@@ -225,20 +225,20 @@ The estimate is the first term of the binomial expansion of the exact ratio. It 
 
 </details>
 
-**Exercise 3.** Air flows at $\|\mathbf{u}\| = 1$ m/s ($a = 340$ m/s) on a grid with $\Delta x = 1$ mm. With an explicit scheme at a CFL number of 1, compare the largest stable time step for (a) a fully compressible solver, limited by $\|\mathbf{u}\| + a$, and (b) an incompressible solver, limited by $\|\mathbf{u}\|$. How many steps does each need to simulate 1 s?
+**Exercise 3.** Air flows at $`\|\mathbf{u}\| = 1`$ m/s ($a = 340$ m/s) on a grid with $\Delta x = 1$ mm. With an explicit scheme at a CFL number of 1, compare the largest stable time step for (a) a fully compressible solver, limited by $`\|\mathbf{u}\| + a`$, and (b) an incompressible solver, limited by $`\|\mathbf{u}\|`$. How many steps does each need to simulate 1 s?
 
 <details>
 <summary>Answer</summary>
 
-(a) $\Delta t = \Delta x/(\|\mathbf{u}\| + a) = 10^{-3}/341 = 2.93 \times 10^{-6}$ s, which needs about $3.41 \times 10^5$ steps.
+(a) $`\Delta t = \Delta x/(\|\mathbf{u}\| + a) = 10^{-3}/341 = 2.93 \times 10^{-6}`$ s, which needs about $3.41 \times 10^5$ steps.
 
-(b) $\Delta t = \Delta x/\|\mathbf{u}\| = 10^{-3}$ s, which needs $10^3$ steps.
+(b) $`\Delta t = \Delta x/\|\mathbf{u}\| = 10^{-3}`$ s, which needs $10^3$ steps.
 
 The compressible solver needs about $1 + 1/\mathrm{Ma} = 341$ times more steps. That factor is the numerical stiffness that the incompressible (or low-Mach preconditioned) formulation removes.
 
 </details>
 
-**Exercise 4.** In a periodic domain, a predictor step produces $\mathbf{u}^* = (U_0 + \varepsilon \sin x,\; 0)$. Solve the pressure Poisson equation $\nabla^2 \hat{P}^{\,n+1} = \nabla \cdot \mathbf{u}^*/\Delta t$ and apply the corrector. Check that $\mathbf{u}^{n+1}$ is divergence-free.
+**Exercise 4.** In a periodic domain, a predictor step produces $`\mathbf{u}^* = (U_0 + \varepsilon \sin x,\; 0)`$. Solve the pressure Poisson equation $`\nabla^2 \hat{P}^{\,n+1} = \nabla \cdot \mathbf{u}^*/\Delta t`$ and apply the corrector. Check that $\mathbf{u}^{n+1}$ is divergence-free.
 
 <details>
 <summary>Answer</summary>

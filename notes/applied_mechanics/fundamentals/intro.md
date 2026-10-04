@@ -122,7 +122,7 @@ Forces, velocities, and accelerations are vector quantities requiring vector mat
 
 **Dot Product**: $\mathbf{A} \cdot \mathbf{B} = |\mathbf{A}||\mathbf{B}|\cos\theta$
 
-**Cross Product**: $\mathbf{A} \times \mathbf{B} = |\mathbf{A}||\mathbf{B}|\sin\theta \, \hat{\mathbf{n}}$
+**Cross Product**: $`\mathbf{A} \times \mathbf{B} = |\mathbf{A}||\mathbf{B}|\sin\theta \, \hat{\mathbf{n}}`$
 
 ### Differential Equations
 

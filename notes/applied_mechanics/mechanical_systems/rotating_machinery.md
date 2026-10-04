@@ -86,10 +86,10 @@ $$
 
 placed opposite the resultant, at angle (two-argument arctangent, so the quadrant is correct):
 
-$$
+```math
 \theta_b = \operatorname{atan2}\left(-\sum m_i r_i \sin\theta_i,\; - \sum m_i r_i
 \cos\theta_i\right)
-$$
+```
 
 ### Dynamic Balancing (Multi-Plane)
 
@@ -150,8 +150,8 @@ where $\delta_i$ is the static deflection at mass $i$ due to all masses acting u
 
 ### Operating Recommendations
 
-- **Rigid rotors**: Operate below 0.7$\omega_c$
-- **Flexible rotors**: Operate above 1.4$\omega_c$ with rapid passage through critical speed during run-up
+- **Rigid rotors**: Operate below 0.7$`\omega_c`$
+- **Flexible rotors**: Operate above 1.4$`\omega_c`$ with rapid passage through critical speed during run-up
 
 ## Flywheels
 
@@ -175,9 +175,9 @@ $$
 
 Typical values:
 
-- **Engines**: $C_f = 0.02$–$0.05$
+- **Engines**: $C_f = 0.02$–$`0.05`$
 - **Machine tools**: $C_f = 0.02$
-- **Punch presses**: $C_f = 0.10$–$0.20$
+- **Punch presses**: $C_f = 0.10$–$`0.20`$
 
 ### Required Flywheel Inertia
 

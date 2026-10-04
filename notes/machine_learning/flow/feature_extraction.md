@@ -45,7 +45,7 @@ $$
 \mathbf{X} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^*
 $$
 
-where the columns of $\mathbf{U}$ are the POD modes (spatial basis functions), $\boldsymbol{\Sigma} = \text{diag}(\sigma_1, \sigma_2, \dots)$ contains the singular values in descending order, and $\mathbf{V}^*$ holds the temporal coefficients. Truncating to the first $r$ modes gives a rank-$r$ approximation $\mathbf{X} \approx \mathbf{U}_r \boldsymbol{\Sigma}_r \mathbf{V}_r^*$ that captures the fraction of total energy $E_r / E_{\text{total}} = \sum_{i=1}^{r} \sigma_i^2 / \sum_{i=1}^{m} \sigma_i^2$. Typically, $r \ll m$ modes suffice to represent over 90–99% of the flow energy, yielding a dramatic dimensionality reduction.
+where the columns of $\mathbf{U}$ are the POD modes (spatial basis functions), $\boldsymbol{\Sigma} = \text{diag}(\sigma_1, \sigma_2, \dots)$ contains the singular values in descending order, and $`\mathbf{V}^*`$ holds the temporal coefficients. Truncating to the first $`r`$ modes gives a rank-$`r`$ approximation $`\mathbf{X} \approx \mathbf{U}_r \boldsymbol{\Sigma}_r \mathbf{V}_r^*`$ that captures the fraction of total energy $E_r / E_{\text{total}} = \sum_{i=1}^{r} \sigma_i^2 / \sum_{i=1}^{m} \sigma_i^2$. Typically, $r \ll m$ modes suffice to represent over 90–99% of the flow energy, yielding a dramatic dimensionality reduction.
 
 By applying this methodology, researchers have not only simplified complex fluid analyses but have also connected it to other domains. For example, Sirovich’s application of POD to human face classification in images helped illustrate how these data-driven basis functions can transcend disciplinary boundaries.
 
@@ -271,12 +271,12 @@ $r = 3$ is the smallest rank that captures at least 99% (99.04%).
 
 </details>
 
-**Exercise 2.** For the same data, what is the smallest possible squared reconstruction error $\|\mathbf{X} - \tilde{\mathbf{X}}\|_F^2$ of any rank-2 approximation? A linear autoencoder with a 2-dimensional latent space is trained on the (mean-subtracted) data. Can it beat this error? What would it mean if a nonlinear autoencoder with a 2-dimensional latent space reached 1% relative error?
+**Exercise 2.** For the same data, what is the smallest possible squared reconstruction error $`\|\mathbf{X} - \tilde{\mathbf{X}}\|_F^2`$ of any rank-2 approximation? A linear autoencoder with a 2-dimensional latent space is trained on the (mean-subtracted) data. Can it beat this error? What would it mean if a nonlinear autoencoder with a 2-dimensional latent space reached 1% relative error?
 
 <details>
 <summary>Answer</summary>
 
-By the Eckart–Young theorem the best rank-2 approximation is the truncated SVD, with error $\sum_{i > 2} \sigma_i^2 = 4 + 1 + 0.25 = 5.25$, or $5.25/130.25 \approx 4.0\%$ of the total.
+By the Eckart–Young theorem the best rank-2 approximation is the truncated SVD, with error $\sum_{i > 2} \sigma_i^2 = 4 + 1 + 0.25 = 5.25$, or $`5.25/130.25 \approx 4.0\%`$ of the total.
 
 A linear autoencoder can at best learn the span of the first two POD modes, so it cannot go below 4.0%.
 
@@ -284,18 +284,18 @@ A nonlinear autoencoder reaching 1% would show that the data lie close to a curv
 
 </details>
 
-**Exercise 3.** Two snapshots in $\mathbb{R}^3$ form $\mathbf{X} = \begin{bmatrix} 2 & 1 \\ 1 & 2 \\ 0 & 0 \end{bmatrix}$. Using the method of snapshots (the eigendecomposition of $\mathbf{X}^T \mathbf{X}$), find the singular values, the leading POD mode, and the energy fraction of mode 1.
+**Exercise 3.** Two snapshots in $\mathbb{R}^3$ form $`\mathbf{X} = \begin{bmatrix} 2 & 1 \\ 1 & 2 \\ 0 & 0 \end{bmatrix}`$. Using the method of snapshots (the eigendecomposition of $\mathbf{X}^T \mathbf{X}$), find the singular values, the leading POD mode, and the energy fraction of mode 1.
 
 <details>
 <summary>Answer</summary>
 
-$\mathbf{X}^T \mathbf{X} = \begin{bmatrix} 5 & 4 \\ 4 & 5 \end{bmatrix}$ has eigenvalues 9 and 1, with eigenvectors $(1, 1)/\sqrt{2}$ and $(1, -1)/\sqrt{2}$.
+$`\mathbf{X}^T \mathbf{X} = \begin{bmatrix} 5 & 4 \\ 4 & 5 \end{bmatrix}`$ has eigenvalues 9 and 1, with eigenvectors $(1, 1)/\sqrt{2}$ and $(1, -1)/\sqrt{2}$.
 
 The singular values are $\sigma_1 = 3$ and $\sigma_2 = 1$.
 
 The leading mode is $\mathbf{u}_1 = \mathbf{X}\mathbf{v}_1 / \sigma_1 = (3, 3, 0)/(3\sqrt{2}) = (1, 1, 0)/\sqrt{2}$.
 
-Mode 1 carries $9/(9 + 1) = 90\%$ of the energy.
+Mode 1 carries $`9/(9 + 1) = 90\%`$ of the energy.
 
 The method of snapshots only needs an $m \times m$ eigenproblem ($m$ = number of snapshots) rather than an $n \times n$ one ($n$ = number of grid values), which is what makes POD affordable for large flow fields.
 

@@ -188,11 +188,11 @@ $$
 
 The dimensionless Navier-Stokes equations become:
 
-$$
+```math
 \frac{\partial \vec{v}^*}{\partial t^*} +
 (\vec{v}^* \cdot \nabla^*)\vec{v}^* = -\nabla^* p^* + \frac{1}{Re}\nabla^{*2}
 \vec{v}^* + \frac{1}{Fr^2}\vec{g}^*
-$$
+```
 
 where asterisks denote dimensionless variables and $Fr = U/\sqrt{gL}$ is the Froude number.
 
@@ -407,7 +407,7 @@ Understanding the Navier-Stokes equations is fundamental to all of fluid mechani
 - [Lid-Driven Cavity Flow Simulation](../../../scripts/simulations/lid_driven_cavity/): solves the 2D incompressible Navier-Stokes equations for flow in a square cavity driven by a moving lid at a Reynolds number of 100 and animates the velocity field.
 - [Rayleigh-Bénard Convection Simulation](../../../scripts/simulations/rayleigh_benard_convection/): simulates Rayleigh-Bénard convection, the buoyancy-driven flow in a fluid layer heated from below and cooled from above, and draws the temperature field in real time with Pygame.
 - [Simplified Real-Time Fluid Dynamics Simulator](../../../scripts/simulations/simplified_real_time_fluid_dynamics_simulator/): is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Pygame window.
-- [Velocity Layers and Viscosity](../../../scripts/plots/velocity_layers_viscosity/): draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $\tau = \mu\, du/dy$.
+- [Velocity Layers and Viscosity](../../../scripts/plots/velocity_layers_viscosity/): draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $`\tau = \mu\, du/dy`$.
 - [Wall Shear in Pipe Cross-Section](../../../scripts/plots/wall_shear_pipe_cross_section/): sketches fully developed laminar (Hagen-Poiseuille) flow in a circular pipe, with velocity arrows whose lengths follow the parabolic profile $u(r) = u_{max}(1 - (r/R)^2)$.
 
 ## Exercises
@@ -429,11 +429,11 @@ Understanding the Navier-Stokes equations is fundamental to all of fluid mechani
 <summary>Answer</summary>
 
 - Continuity: $\partial u/\partial x = 0$ and $v = 0$, so it holds.
-- x-momentum: $\partial u/\partial t = 0$, $u\,\partial u/\partial x = 0$, $v\,\partial u/\partial y = 0$, $\partial p/\partial x = 0$ and $\nu\,\partial^2 u/\partial y^2 = 0$, so every term vanishes.
+- x-momentum: $\partial u/\partial t = 0$, $`u\,\partial u/\partial x = 0`$, $`v\,\partial u/\partial y = 0`$, $\partial p/\partial x = 0$ and $`\nu\,\partial^2 u/\partial y^2 = 0`$, so every term vanishes.
 - y-momentum: every term is zero.
 - No-slip: $u(0) = 0$ and $u(h) = U$.
 
-The shear stress is uniform: $\tau = \mu\, du/dy = \mu U/h$.
+The shear stress is uniform: $`\tau = \mu\, du/dy = \mu U/h`$.
 
 </details>
 
@@ -466,8 +466,8 @@ Numbers:
 
 $\partial u/\partial x + \partial v/\partial y = a - a = 0$, and $\omega_z = \partial v/\partial x - \partial u/\partial y = 0$. The viscous terms vanish because $\nabla^2 u = \nabla^2 v = 0$.
 
-- x-momentum: $u\,\partial u/\partial x = a^2 x = -\frac{1}{\rho}\partial p/\partial x$.
-- y-momentum: $v\,\partial v/\partial y = a^2 y = -\frac{1}{\rho}\partial p/\partial y$.
+- x-momentum: $`u\,\partial u/\partial x = a^2 x = -\frac{1}{\rho}\partial p/\partial x`$.
+- y-momentum: $`v\,\partial v/\partial y = a^2 y = -\frac{1}{\rho}\partial p/\partial y`$.
 
 Integrating both,
 
@@ -484,7 +484,7 @@ which is Bernoulli's equation with $p_0$ the stagnation pressure. This field doe
 <details>
 <summary>Answer</summary>
 
-For fully developed flow, $v = 0$ and $u = u(y)$, so the convective terms vanish and $0 = G + \mu\, d^2u/dy^2$. With $u(\pm h) = 0$:
+For fully developed flow, $v = 0$ and $u = u(y)$, so the convective terms vanish and $`0 = G + \mu\, d^2u/dy^2`$. With $u(\pm h) = 0$:
 
 ```math
 u(y) = \frac{G}{2\mu}(h^2 - y^2)

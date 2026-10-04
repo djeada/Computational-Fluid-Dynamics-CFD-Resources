@@ -13,9 +13,9 @@ Pipes are ubiquitous in industrial and municipal infrastructure, serving to **tr
 
 The volumetric flow rate $Q$ is given by:
 
-$$
+```math
 Q = A \, V_{\text{avg}}
-$$
+```
 
 where:
 
@@ -51,9 +51,9 @@ Here is the plot comparing Laminar vs. Turbulent Flow Velocity Profiles:
 
 The **Reynolds number** $(Re)$ helps classify flow as laminar or turbulent:
 
-$$
+```math
 Re = \frac{\rho \, V_{\text{avg}} \, D}{\mu}
-$$
+```
 
 - $\rho$: fluid density
 - $V_{\text{avg}}$: average velocity
@@ -90,9 +90,9 @@ Here is the plot illustrating Wall Shear in Pipe Cross-Section:
 
 As fluid moves through the pipe, friction converts mechanical energy into heat, causing a **pressure drop** $\Delta P$. Engineers often use the **Darcy-Weisbach equation**:
 
-$$
+```math
 \Delta P = f \frac{L}{D} \, \frac{\rho \, V_{\text{avg}}^2}{2}
-$$
+```
 
 where:
 
@@ -203,11 +203,11 @@ Hagen–Poiseuille gives $32 \times 0.1 \times 10 \times 0.5/0.02^2 = 40000$ Pa.
 <details>
 <summary>Answer</summary>
 
-(a) $Q = \int_0^R v\, 2\pi r\,dr = \pi R^2 v_{\text{max}}/2$, so $V_{\text{avg}} = v_{\text{max}}/2$.
+(a) $`Q = \int_0^R v\, 2\pi r\,dr = \pi R^2 v_{\text{max}}/2`$, so $V_{\text{avg}} = v_{\text{max}}/2$.
 
-(b) $\tau_w = -\mu\, dv/dr|_R = 2\mu v_{\text{max}}/R = 8\mu V_{\text{avg}}/D$.
+(b) $`\tau_w = -\mu\, dv/dr|_R = 2\mu v_{\text{max}}/R = 8\mu V_{\text{avg}}/D`$.
 
-(c) A force balance on a fluid cylinder of length $L$ gives $\Delta P\, \pi R^2 = \tau_w\, 2\pi R L$, so $\Delta P = 4L\tau_w/D$. Setting this equal to Darcy–Weisbach, $f\frac{L}{D}\frac{\rho V_{\text{avg}}^2}{2}$, gives
+(c) A force balance on a fluid cylinder of length $L$ gives $`\Delta P\, \pi R^2 = \tau_w\, 2\pi R L`$, so $\Delta P = 4L\tau_w/D$. Setting this equal to Darcy–Weisbach, $f\frac{L}{D}\frac{\rho V_{\text{avg}}^2}{2}$, gives
 
 ```math
 f = \frac{8\tau_w}{\rho V_{\text{avg}}^2} = \frac{64\mu}{\rho V_{\text{avg}} D} = \frac{64}{Re}
@@ -215,7 +215,7 @@ f = \frac{8\tau_w}{\rho V_{\text{avg}}^2} = \frac{64\mu}{\rho V_{\text{avg}} D} 
 
 </details>
 
-**Exercise 4.** Water ($\rho = 998$ kg/m³, $\mu = 1.002 \times 10^{-3}$ Pa s) flows at $V_{\text{avg}} = 2$ m/s through $L = 100$ m of smooth pipe with $D = 0.1$ m. Solve the Colebrook equation $1/\sqrt{f} = -2\log_{10}\left(\frac{\epsilon/D}{3.7} + \frac{2.51}{Re\sqrt{f}}\right)$ with $\epsilon = 0$ by fixed-point iteration. Then find the pressure drop and the hydraulic pumping power $Q\,\Delta P$.
+**Exercise 4.** Water ($\rho = 998$ kg/m³, $\mu = 1.002 \times 10^{-3}$ Pa s) flows at $V_{\text{avg}} = 2$ m/s through $L = 100$ m of smooth pipe with $D = 0.1$ m. Solve the Colebrook equation $1/\sqrt{f} = -2\log_{10}\left(\frac{\epsilon/D}{3.7} + \frac{2.51}{Re\sqrt{f}}\right)$ with $\epsilon = 0$ by fixed-point iteration. Then find the pressure drop and the hydraulic pumping power $`Q\,\Delta P`$.
 
 <details>
 <summary>Answer</summary>
@@ -226,7 +226,7 @@ Start from $f = 0.02$ and iterate $f \leftarrow \left[-2\log_{10}\left(2.51/(Re\
 
 - $\Delta P = 0.0156 \times (100/0.1) \times 998 \times 2^2/2 = 3.12 \times 10^4$ Pa.
 - $Q = \frac{\pi}{4}(0.1)^2 \times 2 = 0.0157$ m³/s.
-- Power: $Q\,\Delta P = 491$ W.
+- Power: $`Q\,\Delta P = 491`$ W.
 
 The pump's shaft power must be larger than this, by dividing by the pump efficiency.
 

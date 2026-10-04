@@ -41,7 +41,7 @@ The conservation equations provide:
 - **Momentum**: Relates $\vec{V}$ and $p$
 - **Energy**: Relates $e$ (or $T$) and other variables
 
-The equation of state **closes the system** by providing the $p$-$\rho$-$T$ relationship.
+The equation of state **closes the system** by providing the $p$-$`\rho`$-$`T`$ relationship.
 
 ## Ideal Gas Law
 

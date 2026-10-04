@@ -18,7 +18,7 @@ The idea is to start with an initial guess for the solution, use it to linearize
 
 Consider a finite-difference approximation on a four-point grid. For example, the discretized system for a nonlinear term can be written in matrix form as follows:
 
-$$
+```math
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
 -1 & 1 + 2 \Delta x\, u_{g2} & 0 & 0 \\
@@ -37,12 +37,12 @@ u_4
 \Delta x\, u_{g3}^2 \\
 \Delta x\, u_{g4}^2
 \end{bmatrix}
-$$
+```
 
 In this system:
 
-- The diagonal entries contain terms like $1 + 2 \Delta x\, u_{gi}$, where $u_{gi}$ represents the guess value at grid point $i$.
-- The right-hand side reflects the nonlinear contributions, here expressed as $\Delta x\, u_{gi}^2$.
+- The diagonal entries contain terms like $`1 + 2 \Delta x\, u_{gi}`$, where $u_{gi}$ represents the guess value at grid point $i$.
+- The right-hand side reflects the nonlinear contributions, here expressed as $`\Delta x\, u_{gi}^2`$.
   This representation is obtained after applying a linearization (such as a Newton–Raphson type approach) to the original nonlinear finite-difference equations.
 
 ### Challenges with Large Systems
@@ -62,9 +62,9 @@ Rather than using a direct inversion method, an iterative scheme can be used to 
 
 For grid point $i$, the rearranged equation might be written as:
 
-$$
+```math
 u_i = \frac{u_{i-1} + \Delta x\, u_{gi}^2}{1 + 2 \Delta x\, u_{gi}}
-$$
+```
 
 In this expression:
 
@@ -85,9 +85,9 @@ II. Update $u_3$:
 
 To update $u_3$, the neighbouring value $u_2^{(m)}$ has not yet been computed in the $m^{th}$ sweep (the sweep runs right to left), so its guess value $u_{g2}$ from the previous sweep is used in its place, together with the guess $u_{g3}$ for the linearization:
 
-$$
+```math
 u_3^{(m)} = \frac{u_{g2} + \Delta x\, u_{g3}^2}{1 + 2 \Delta x\, u_{g3}}
-$$
+```
 
 III. Update $u_2$:
 
@@ -163,7 +163,7 @@ Solving the linear system exactly (left to right, using updated neighbours) move
 
 </details>
 
-**Exercise 2.** Apply two iterations of Jacobi and of Gauss–Seidel, both starting from $\mathbf{x} = 0$, to $A\mathbf{x} = \mathbf{b}$ with $A = \begin{bmatrix} 4 & -1 & 0 \\ -1 & 4 & -1 \\ 0 & -1 & 4 \end{bmatrix}$ and $\mathbf{b} = (2, 4, 10)$. The exact solution is $(1, 2, 3)$.
+**Exercise 2.** Apply two iterations of Jacobi and of Gauss–Seidel, both starting from $\mathbf{x} = 0$, to $A\mathbf{x} = \mathbf{b}$ with $`A = \begin{bmatrix} 4 & -1 & 0 \\ -1 & 4 & -1 \\ 0 & -1 & 4 \end{bmatrix}`$ and $\mathbf{b} = (2, 4, 10)$. The exact solution is $(1, 2, 3)$.
 
 <details>
 <summary>Answer</summary>

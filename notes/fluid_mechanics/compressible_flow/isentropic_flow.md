@@ -29,13 +29,13 @@ In isentropic flow $T_0$, $p_0$ and $\rho_0$ stay the same along the whole duct.
 
 The **sonic** (starred) state at $M = 1$ is a second fixed reference:
 
-$$
+```math
 \frac{T^*}{T_0} = \frac{2}{\gamma + 1} = 0.8333,
 \qquad
 \frac{p^*}{p_0} = \left(\frac{2}{\gamma + 1}\right)^{\gamma/(\gamma - 1)} = 0.5283,
 \qquad
 \frac{\rho^*}{\rho_0} = \left(\frac{2}{\gamma + 1}\right)^{1/(\gamma - 1)} = 0.6339
-$$
+```
 
 Selected values (the last column is derived below):
 
@@ -55,10 +55,10 @@ These agree with NACA Report 1135.
 Take logarithmic derivatives of the three governing equations for steady quasi-one-dimensional flow:
 
 - continuity, $\rho V A = \text{const}$: $\dfrac{d\rho}{\rho} + \dfrac{dV}{V} + \dfrac{dA}{A} = 0$
-- Euler's equation: $dp = -\rho V\, dV$
-- isentropic process: $dp = a^2\, d\rho$
+- Euler's equation: $`dp = -\rho V\, dV`$
+- isentropic process: $`dp = a^2\, d\rho`$
 
-The last two combine to give $d\rho/\rho = -M^2\, dV/V$, the same relation used in [speed_of_sound.md](speed_of_sound.md) for the compressibility criterion. Putting this into continuity:
+The last two combine to give $`d\rho/\rho = -M^2\, dV/V`$, the same relation used in [speed_of_sound.md](speed_of_sound.md) for the compressibility criterion. Putting this into continuity:
 
 $$
 \frac{dA}{A} = \left(M^2 - 1\right) \frac{dV}{V}
@@ -79,11 +79,11 @@ At $M = 1$ the equation needs $dA = 0$. **Sonic flow can occur only at an area m
 
 Write the mass flow in terms of stagnation conditions. With $\rho = p/(RT)$ and $V = M\sqrt{\gamma R T}$:
 
-$$
+```math
 \dot m = \rho V A = \frac{p}{RT} M \sqrt{\gamma R T} A = \frac{p_0 A}{\sqrt{T_0}}
 \sqrt{\frac{\gamma}{R}}\, M
 \left(1 + \frac{\gamma - 1}{2} M^2\right)^{-\frac{\gamma + 1}{2(\gamma - 1)}}
-$$
+```
 
 For fixed $p_0$ and $T_0$, the mass flow per unit area $\dot m/A$ is largest at $M = 1$. Since $\dot m$ is the same at every section, compare a general section with a (possibly imaginary) section where the flow would be sonic, of area $A^*$. This gives the **area–Mach relation**:
 
@@ -96,7 +96,7 @@ Key properties:
 
 - $A/A^* \ge 1$, with the minimum at $M = 1$.
 - Every $A/A^* > 1$ has **two** solutions, one subsonic and one supersonic. For $A/A^* = 2$ they are $M = 0.3059$ and $M = 2.1972$. Which one occurs depends on the downstream (back) pressure.
-- $A^*$ is a flow reference, not necessarily a physical area. It stays constant only while $p_0$ is constant. Across a shock $p_0$ falls, so $A^*$ grows: $p_{01} A_1^* = p_{02} A_2^*$.
+- $`A^*`$ is a flow reference, not necessarily a physical area. It stays constant only while $`p_0`$ is constant. Across a shock $`p_0`$ falls, so $`A^*`$ grows: $p_{01} A_1^* = p_{02} A_2^*$.
 
 The area–Mach relation cannot be inverted in closed form. In practice $M$ is found with a bracketed root finder on $(0, 1)$ or $(1, M_{max})$, or read from tables.
 
@@ -104,11 +104,11 @@ The area–Mach relation cannot be inverted in closed form. In practice $M$ is f
 
 At $M = 1$ in the throat the mass flow reaches its maximum:
 
-$$
+```math
 \dot m_{max} = \frac{p_0 A^*}{\sqrt{T_0}} \sqrt{\frac{\gamma}{R}}
 \left(\frac{2}{\gamma + 1}\right)^{\frac{\gamma + 1}{2(\gamma - 1)}} = 0.04042\,
 \frac{p_0 A^*}{\sqrt{T_0}} \quad \text{(air, SI units)}
-$$
+```
 
 Once the throat is sonic, the nozzle is **choked**. Lowering the back pressure further cannot increase the mass flow. Pressure signals travel upstream at speed $a - V$ relative to the duct, and at a sonic throat that speed is zero, so the flow upstream of the throat never finds out that the back pressure has changed. A choked nozzle's flow rate depends only on $p_0$, $T_0$ and $A^*$. This makes a choked orifice or sonic venturi a simple and accurate flow meter and flow limiter.
 
@@ -191,7 +191,7 @@ A nozzle has throat area $A_t = 10\ \text{cm}^2$ and exit area $A_e = 20\ \text{
 
 $$
 \dot m = 0.04042 \times
-\frac{(1.0 \times 10^6)(1.0 \times 10^{-3})}{\sqrt{500}} = 1.808\  \text{kg/s}
+\frac{(1.0 \times 10^6)(1.0 \times 10^{-3})}{\sqrt{500}} = 1.808\ \text{kg/s}
 $$
 
 At the throat, $T^* = 0.8333 \times 500 = 416.7\ \text{K}$, $p^* = 528.3\ \text{kPa}$, $V^* = a^* = \sqrt{1.4 \times 287 \times 416.7} = 409.2\ \text{m/s}$, and $\rho^* = 4.418\ \text{kg/m}^3$. As a check, $\rho^* V^* A_t = 1.808\ \text{kg/s}$.
@@ -213,14 +213,14 @@ $$
 2 = 1.6
 $$
 
-The left side depends only on $M_e$. Solving on the subsonic branch gives $M_e = 0.3572$, so $p_{02} = p_e (p_0/p)_{M_e} = 873.7\ \text{kPa}$ and $p_{02}/p_{01} = 0.8737$. From the normal-shock relations, this total-pressure ratio corresponds to $M_1 = 1.656$. The isentropic relation then puts the shock at $A/A_t = (A/A^*)_{M_1} = 1.297$, and just behind it $M_2 = 0.652$.
+The left side depends only on $M_e$. Solving on the subsonic branch gives $M_e = 0.3572$, so $`p_{02} = p_e (p_0/p)_{M_e} = 873.7\ \text{kPa}`$ and $`p_{02}/p_{01} = 0.8737`$. From the normal-shock relations, this total-pressure ratio corresponds to $M_1 = 1.656$. The isentropic relation then puts the shock at $A/A_t = (A/A^*)_{M_1} = 1.297$, and just behind it $M_2 = 0.652$.
 
 ## Summary
 
 - Stagnation-to-static ratios depend only on $M$. In isentropic flow the stagnation values are the same throughout the duct.
-- $dA/A = (M^2 - 1)\, dV/V$: subsonic flow accelerates in converging ducts and supersonic flow in diverging ducts, and $M = 1$ can occur only at a throat.
+- $`dA/A = (M^2 - 1)\, dV/V`$: subsonic flow accelerates in converging ducts and supersonic flow in diverging ducts, and $M = 1$ can occur only at a throat.
 - $A/A^*$ has a subsonic and a supersonic root. The back pressure selects the root and decides whether and where shocks appear.
-- A sonic throat chokes the flow at $\dot m = 0.04042\, p_0 A^*/\sqrt{T_0}$ for air.
+- A sonic throat chokes the flow at $`\dot m = 0.04042\, p_0 A^*/\sqrt{T_0}`$ for air.
 - Over-expanded nozzles end in oblique shocks and under-expanded nozzles in expansion fans. Only at the design back pressure does the jet leave parallel and at ambient pressure.
 
 ## Related Scripts
@@ -256,7 +256,7 @@ Solving the area–Mach relation on each branch gives $M = 0.1974$ (subsonic) an
 
 $A^* = \pi (0.01)^2 = 3.1416 \times 10^{-4}\ \text{m}^2$.
 
-$\dot m_{max} = 0.04042 \times 500\,000 \times 3.1416 \times 10^{-4}/\sqrt{300} = 0.3666\ \text{kg/s}$.
+$`\dot m_{max} = 0.04042 \times 500\,000 \times 3.1416 \times 10^{-4}/\sqrt{300} = 0.3666\ \text{kg/s}`$.
 
 The throat must be sonic, which needs the back pressure to be at or below the first critical pressure $p_{b1}$ of the nozzle. $p_{b1}$ depends on the exit-to-throat area ratio and is always higher than $p^* = 264.1\ \text{kPa}$.
 
@@ -267,7 +267,7 @@ The throat must be sonic, which needs the back pressure to be at or below the fi
 <details>
 <summary>Answer</summary>
 
-(a) $p_b/p_0 = 0.6 > 0.5283$, so the nozzle is not choked and $p_e = p_b$. From $p_0/p_e = 1.6667$: $M_e = \sqrt{5[(1.6667)^{0.2857} - 1]} = 0.886$. Then $T_e = 300/(1 + 0.2 \times 0.886^2) = 259.3\ \text{K}$, $V_e = 286.1\ \text{m/s}$, $\rho_e = 300\,000/(287 \times 259.3) = 4.032\ \text{kg/m}^3$, and $\dot m = \rho_e V_e A_e = 0.3624\ \text{kg/s}$.
+(a) $p_b/p_0 = 0.6 > 0.5283$, so the nozzle is not choked and $p_e = p_b$. From $p_0/p_e = 1.6667$: $M_e = \sqrt{5[(1.6667)^{0.2857} - 1]} = 0.886$. Then $T_e = 300/(1 + 0.2 \times 0.886^2) = 259.3\ \text{K}$, $V_e = 286.1\ \text{m/s}$, $`\rho_e = 300\,000/(287 \times 259.3) = 4.032\ \text{kg/m}^3`$, and $\dot m = \rho_e V_e A_e = 0.3624\ \text{kg/s}$.
 
 (b) $p_b/p_0 = 0.4 < 0.5283$, so the nozzle is choked: $M_e = 1$, $p_e = 264.1\ \text{kPa} > p_b$, and $\dot m = 0.3666\ \text{kg/s}$. This is only 1.2% more than in case (a), even though the back pressure is 100 kPa lower.
 

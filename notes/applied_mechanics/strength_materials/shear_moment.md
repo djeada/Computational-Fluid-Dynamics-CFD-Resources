@@ -26,13 +26,13 @@ $$
 
 These differential equations can be integrated to give:
 
-$$
+```math
 V(x) = V(x_0) - \int_{x_0}^{x} w(\xi)\, d\xi
-$$
+```
 
-$$
+```math
 M(x) = M(x_0) + \int_{x_0}^{x} V(\xi)\, d\xi
-$$
+```
 
 **Key insight:** The change in shear between two points equals the negative of the area under the load diagram; the change in moment between two points equals the area under the shear diagram.
 
@@ -380,9 +380,9 @@ Contraflexure: $26.7x - 5x^2 = 0$ gives $x = 5.33$ m.
 <details>
 <summary>Answer</summary>
 
-On the element, $V$ and $M$ act on the left face and $V + dV$ and $M + dM$ on the right face, with a downward load $w\,dx$.
+On the element, $V$ and $M$ act on the left face and $V + dV$ and $M + dM$ on the right face, with a downward load $`w\,dx`$.
 
-Vertical equilibrium: $V - w\,dx - (V + dV) = 0$, so $dV/dx = -w$.
+Vertical equilibrium: $`V - w\,dx - (V + dV) = 0`$, so $dV/dx = -w$.
 
 Moments about the right face:
 
