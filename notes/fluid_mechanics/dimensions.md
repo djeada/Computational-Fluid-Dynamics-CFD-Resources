@@ -38,7 +38,7 @@ $$
 Checking dimensions:
 
 - Force: $[M L T^{-2}]$
-- Mass × acceleration: $[M] \times [L T^{-2}] = [M L T^{-2}]$ ✓
+- Mass $\times$ acceleration: $[M] \times [L T^{-2}] = [M L T^{-2}]$ ✓
 
 ## Buckingham Pi Theorem
 
@@ -70,7 +70,7 @@ $$
 - Fluid density: $\rho$ $[M L^{-3}]$
 - Fluid viscosity: $\mu$ $[M L^{-1} T^{-1}]$
 
-**Analysis**: $n = 5$ variables, $k = 3$ dimensions → $(n-k) = 2$ dimensionless groups
+**Analysis**: $n = 5$ variables, $k = 3$ dimensions $\rightarrow$ $(n-k) = 2$ dimensionless groups
 
 **Result**:
 
@@ -329,7 +329,7 @@ $$
 
 ### Plasma Flows
 
-#### Magnetic Reynolds Number (Re_m)
+#### Magnetic Reynolds Number ($Re_m$)
 
 $$
 Re_m = \frac{\mu_0 \sigma V L}{1}
@@ -403,9 +403,9 @@ $$
 
 ### Process Engineering
 
-- **Heat exchanger design**: Nu = f(Re, Pr) correlations
+- **Heat exchanger design**: $Nu = f(Re, Pr)$ correlations
 - **Mixing processes**: Power number vs Reynolds number
-- **Mass transfer**: Sh = f(Re, Sc) relationships
+- **Mass transfer**: $Sh = f(Re, Sc)$ relationships
 
 ### Environmental Engineering
 
@@ -437,14 +437,20 @@ $$
 
 Understanding dimensional analysis and dimensionless numbers is fundamental to fluid mechanics and enables engineers to design efficient experiments, develop general correlations, and scale results across different conditions and applications.
 
-```
-Inertial forces     ~ ρ U^2
-Viscous forces      ~ μ (dU/dy) 
-So,  Re ~ (ρ U L) / μ
+$$
+\begin{aligned}
+  \text{Inertial forces} & \sim \rho U^2 \\
+  \text{Viscous forces} & \sim \mu \frac{dU}{dy} \\
+  \text{So,} \quad Re & \sim \frac{\rho U L}{\mu}
+\end{aligned}
+$$
 
-If Re < ~2300 in a pipe => laminar
-If Re >> 4000 => turbulent
-```
+$$
+\begin{aligned}
+   & \text{If } Re \lesssim 2300 \text{ in a pipe} \Rightarrow \text{laminar} \\
+   & \text{If } Re \gg 4000 \Rightarrow \text{turbulent}
+\end{aligned}
+$$
 
 #### Mach Number $(Ma)$
 
@@ -542,7 +548,7 @@ where:
 | $`\mathrm{Ma}_{model} = \mathrm{Ma}_{full}`$ | $\displaystyle \frac{U_{model}}{c_{model}} = \frac{U_{full}}{c_{full}}$ |
 | ... | ... |
 
-If these dimensionless #s match => Flow physics in the model should mimic the real system.
+If these dimensionless #s match $\Rightarrow$ Flow physics in the model should mimic the real system.
 
 ### Example: A Wind Tunnel Test
 
@@ -676,7 +682,7 @@ Similarly, the Reynolds number ($Re$) and Strouhal number ($St$) are applied in 
 
 ### Common Pitfalls
 
-- If Mach number ~0.3 or below, compressibility might be minor. Otherwise, Mach effects matter.
+- If Mach number $\sim 0.3$ or below, compressibility might be minor. Otherwise, Mach effects matter.
 - High Reynolds might indicate viscosity has lesser global impact, but local boundary-layer phenomena are still crucial.
 - Real flows can involve *Re, Ma, We, Fr,* etc. Deciding which to match in an experiment is often a design compromise.
 - Scaling length can inadvertently scale gravitational or surface tension effects differently (Froude or Weber mismatches).

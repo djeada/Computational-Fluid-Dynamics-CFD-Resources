@@ -16,11 +16,11 @@ $$
 
 Where:
 
-- $ \\rho $ is the fluid density,
-- $ \\vec{v} $ is the fluid velocity vector,
-- $ t $ is time.
+- $\rho$ is the fluid density,
+- $\vec{v}$ is the fluid velocity vector,
+- $t$ is time.
 
-For an incompressible fluid ($ \\rho $ is constant):
+For an incompressible fluid ($\rho$ is constant):
 
 $$
 \nabla \cdot \vec{v} = 0
@@ -28,8 +28,8 @@ $$
 
 ### Explanation
 
-- The first term, $ \\frac{\\partial \\rho}{\\partial t} $, represents the local rate of change of density.
-- The second term, $ \\nabla \\cdot (\\rho \\vec{v}) $, represents the convective rate of change of density due to fluid motion.
+- The first term, $\frac{\partial \rho}{\partial t}$, represents the local rate of change of density.
+- The second term, $\nabla \cdot (\rho \vec{v})$, represents the convective rate of change of density due to fluid motion.
 
 ## Navier-Stokes Equations
 
@@ -48,11 +48,11 @@ $$
 
 Where:
 
-- $ \\vec{v} $ is the fluid velocity vector,
-- $ p $ is the pressure,
-- $ \\mu $ is the dynamic viscosity,
-- $ \\mu_v $ is the bulk viscosity,
-- $ \\vec{f} $ represents body forces (e.g., gravity).
+- $\vec{v}$ is the fluid velocity vector,
+- $p$ is the pressure,
+- $\mu$ is the dynamic viscosity,
+- $\mu_v$ is the bulk viscosity,
+- $\vec{f}$ represents body forces (e.g., gravity).
 
 For an incompressible fluid:
 
@@ -83,10 +83,10 @@ $$
 
 Where:
 
-- $ e $ is the internal energy per unit mass (this form, with $-p(\nabla \cdot \vec{v})$ on the right, is the internal-energy equation),
-- $ k $ is the thermal conductivity,
-- $ T $ is the temperature,
-- $ \\Phi $ represents viscous dissipation.
+- $e$ is the internal energy per unit mass (this form, with $-p(\nabla \cdot \vec{v})$ on the right, is the internal-energy equation),
+- $k$ is the thermal conductivity,
+- $T$ is the temperature,
+- $\Phi$ represents viscous dissipation.
 
 For an incompressible fluid (simplified form):
 
@@ -97,7 +97,7 @@ $$
 
 Where:
 
-- $ c_p $ is the specific heat at constant pressure.
+- $c_p$ is the specific heat at constant pressure.
 
 ### Explanation
 
@@ -224,7 +224,7 @@ $$
 
     - Hence, in the equation for mass we have $\int_A\rho\vec{v}\cdot\vec{n}dA = \int_V \nabla\cdot(\rho\vec{v})dV$.
 
-  - Combine all the volume integrals into $\int_V(\text{all terms})dV = 0$. Since the volume integrated over is arbitrary, this equation can only be true if the integrand $(\text{all terms})$ itself is 0. This gives the final result. (Also, $ \\nabla\\cdot(P\\boldsymbol{\\delta}) = \\nabla P$.)
+  - Combine all the volume integrals into $\int_V(\text{all terms})dV = 0$. Since the volume integrated over is arbitrary, this equation can only be true if the integrand $(\text{all terms})$ itself is 0. This gives the final result. (Also, $\nabla\cdot(P\boldsymbol{\delta}) = \nabla P$.)
 
 $$
 \text{Mass Equation:} \quad \frac{\partial \rho}{\partial t} + \nabla \cdot

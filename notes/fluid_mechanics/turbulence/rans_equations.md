@@ -405,7 +405,7 @@ Energy enters only the streamwise component. Pressure–strain redistributes it 
 ```math
 \nu_t = \kappa\, u_\tau\, y
 \qquad \Longrightarrow
-\qquad \frac{\nu_t}{\nu} = \kappa\, y^ +
+\qquad \frac{\nu_t}{\nu} = \kappa\, y^+
 ```
 
 **Values.** $\nu_t/\nu = 41$ at $y^+ = 100$ and $410$ at $y^+ = 1{,}000$.

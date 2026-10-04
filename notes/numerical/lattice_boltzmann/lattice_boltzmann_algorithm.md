@@ -302,7 +302,7 @@ At each time step:
 
 I. **Collision Step**:
 
-- For each lattice cell (x,y):
+- For each lattice cell $(x,y)$:
 - Compute local $\rho, u_x, u_y$.
 - Compute equilibrium distributions $f_i^{\text{eq}}$.
 - Relax towards equilibrium:
@@ -314,7 +314,7 @@ $$
 II. **Streaming Step**:
 
 - Move the post-collision distributions along $c_i$:
-- For each $i$, for each cell (x,y):
+- For each $i$, for each cell $(x,y)$:
 - Compute new coordinates: $x' = x + c_{ix}, y' = y + c_{iy}$.
 - If $(x',y')$ is within the domain, set:
 
@@ -349,7 +349,7 @@ where $\bar{i}$ is the opposite velocity direction of $i$.
 
 After streaming (and before the next collision step):
 
-- For each cell (x,y):
+- For each cell $(x,y)$:
 - $\rho(x,y) = \sum_i f_i(x,y)$
 - $\rho u_x(x,y) = \sum_i f_i(x,y) c_{ix}$
 - $\rho u_y(x,y) = \sum_i f_i(x,y) c_{iy}$

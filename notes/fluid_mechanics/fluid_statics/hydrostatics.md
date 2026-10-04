@@ -122,14 +122,14 @@ $$
 
 Beyond buoyancy, **stability** addresses whether a floating body will **return** to equilibrium when tilted or disturbed.
 
-- **Center of gravity (G)**: where an object’s mass is concentrated.
-- **Center of buoyancy (B)**: the centroid of the displaced fluid volume.
+- **Center of gravity ($G$)**: where an object’s mass is concentrated.
+- **Center of buoyancy ($B$)**: the centroid of the displaced fluid volume.
 
-When the body tilts, **B** may shift. If **B** moves in such a way that a **restoring moment** forms (i.e., tries to push the body upright), the body is stable.
+When the body tilts, **$B$** may shift. If **$B$** moves in such a way that a **restoring moment** forms (i.e., tries to push the body upright), the body is stable.
 
 ##### Metacentric Height
 
-For many ship-like objects, we analyze stability via the **metacentric height (GM)**:
+For many ship-like objects, we analyze stability via the **metacentric height ($GM$)**:
 
 - A large positive $GM$ implies strong stability.
 - A small or negative $GM$ means the object can easily tip or capsize.

@@ -38,24 +38,24 @@ wall │                                 │
 
 | Parameter | Value | Description |
 | --- | --- | --- |
-| Domain size | 0.1 m × 0.1 m | Square cavity |
-| Lid velocity | U = 1 m/s | Constant, in x-direction |
-| Kinematic viscosity | ν = 0.01 m²/s | Gives Re = 10 |
-| Reynolds number | Re = U·L/ν | Varied from 100 to 10,000 |
+| Domain size | $0.1 \text{ m} \times 0.1 \text{ m}$ | Square cavity |
+| Lid velocity | $U = 1$ m/s | Constant, in $x$-direction |
+| Kinematic viscosity | $\nu = 0.01$ m²/s | Gives $Re = 10$ |
+| Reynolds number | $Re = UL/\nu$ | Varied from 100 to 10,000 |
 
 ### Expected Flow Features
 
-At **Re = 100**:
+At **$Re = 100$**:
 
 - Single primary vortex centered slightly right of and above the geometric center.
 - Weak secondary vortices in the bottom corners.
 
-At **Re = 1,000**:
+At **$Re = 1{,}000$**:
 
 - Stronger primary vortex.
 - Distinct secondary vortices in all corners.
 
-At **Re = 10,000**:
+At **$Re = 10{,}000$**:
 
 - Primary vortex nearly centered.
 - Strong secondary and tertiary corner vortices.
@@ -64,23 +64,25 @@ At **Re = 10,000**:
 
 The Reynolds number controls the flow regime:
 
-```
-Re = U × L / ν
-```
+$$
+Re = \frac{U L}{\nu}
+$$
 
-For Re = 100:
+For $Re = 100$:
 
-```
-U = 1 m/s
-L = 0.1 m
-ν = U × L / Re = 1 × 0.1 / 100 = 0.001 m²/s
-```
+$$
+\begin{aligned}
+  U &= 1 \text{ m/s} \\
+  L &= 0.1 \text{ m} \\
+  \nu &= \frac{U L}{Re} = \frac{1 \times 0.1}{100} = 0.001 \text{ m}^2/ \text{s}
+\end{aligned}
+$$
 
-For Re = 1000:
+For $Re = 1000$:
 
-```
-ν = 1 × 0.1 / 1000 = 0.0001 m²/s
-```
+$$
+\nu = \frac{1 \times 0.1}{1000} = 0.0001 \text{ m}^2/ \text{s}
+$$
 
 ## Case Setup in OpenFOAM
 
@@ -457,8 +459,8 @@ sample -latestTime
 
 This creates files in `postProcessing/sets/<latestTime>/`:
 
-- `verticalLine_U.xy` — u(y) along the vertical centerline
-- `horizontalLine_U.xy` — v(x) along the horizontal centerline
+- `verticalLine_U.xy` — $u(y)$ along the vertical centerline
+- `horizontalLine_U.xy` — $v(x)$ along the horizontal centerline
 
 ### Visualize in ParaView
 
@@ -480,11 +482,11 @@ Key visualizations to create:
 
 The standard benchmark is **Ghia, Ghia, and Shin (1982)**, "High-Re solutions for incompressible flow using the Navier-Stokes equations and a multigrid method", *Journal of Computational Physics*, 48, 387–411.
 
-### Benchmark Data for Re = 100
+### Benchmark Data for $Re = 100$
 
-Horizontal velocity (u) along the vertical centerline (x = 0.5L):
+Horizontal velocity ($u$) along the vertical centerline ($x = 0.5L$):
 
-| y/L | u/U (Ghia et al.) |
+| $y/L$ | $u/U$ (Ghia et al.) |
 | --- | --- |
 | 1.0000 | 1.00000 |
 | 0.9766 | 0.84123 |
@@ -608,7 +610,7 @@ if __name__ == "__main__":
 
 Explore how flow structure changes with Reynolds number by modifying `constant/transportProperties`:
 
-| Re | ν (m²/s) | Flow Character |
+| $Re$ | $\nu$ (m²/s) | Flow Character |
 | --- | --- | --- |
 | 100 | 0.001 | Single vortex, steady |
 | 400 | 0.00025 | Stronger vortex, visible corner eddies |
@@ -658,16 +660,16 @@ echo "All cases completed."
 
 ## Mesh Independence Study
 
-Run the same case (Re = 100) with different mesh resolutions:
+Run the same case ($Re = 100$) with different mesh resolutions:
 
 | Mesh | Cells | Resolution |
 | --- | --- | --- |
-| Coarse | 20 × 20 | 400 cells |
-| Medium | 40 × 40 | 1,600 cells |
-| Fine | 80 × 80 | 6,400 cells |
-| Very fine | 160 × 160 | 25,600 cells |
+| Coarse | $20 \times 20$ | 400 cells |
+| Medium | $40 \times 40$ | 1,600 cells |
+| Fine | $80 \times 80$ | 6,400 cells |
+| Very fine | $160 \times 160$ | 25,600 cells |
 
-Track the minimum u-velocity along the vertical centerline (the core of the primary vortex) to assess convergence.
+Track the minimum $u$-velocity along the vertical centerline (the core of the primary vortex) to assess convergence.
 
 ```python
 #!/usr/bin/env python3
@@ -714,7 +716,7 @@ After completing the basic tutorial, try these extensions:
 
 ### 1. 3D Cavity
 
-Extend the mesh in the z-direction to study three-dimensional effects:
+Extend the mesh in the $z$-direction to study three-dimensional effects:
 
 ```cpp
 // In blockMeshDict, change:
@@ -725,9 +727,9 @@ Extend the mesh in the z-direction to study three-dimensional effects:
 
 Use `pisoFoam` or `icoFoam` in 3D — note the significantly higher computational cost.
 
-### 2. Turbulent Cavity (High Re)
+### 2. Turbulent Cavity (High $Re$)
 
-For Re > 5,000, consider using RANS turbulence:
+For $Re > 5{,}000$, consider using RANS turbulence:
 
 ```bash
 # Switch to simpleFoam with k-omega SST
@@ -746,8 +748,8 @@ Set both top and bottom walls to move in opposite directions, creating a symmetr
 
 The sharp velocity discontinuity at the top corners (lid velocity vs. zero at the side walls) is a mathematical singularity. For better numerical behavior, use a regularized velocity profile:
 
-```
-U(x) = U_lid × 16 × x² × (1-x)²
+```math
+U(x) = 16 \, U_{\text{lid}} \, x^2 (1 - x)^2
 ```
 
 This sets the velocity smoothly to zero at the corners.

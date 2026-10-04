@@ -45,11 +45,11 @@ This flow illustrates how the Lattice-Boltzmann method serves as the crucial int
 
 ## 3. The Probability Distribution Function (PDF)
 
-At the heart of the LBM lies the **probability distribution function** $ f(\\xi, x, t) $. This function encapsulates the statistical information about particles at a mesoscopic scale.
+At the heart of the LBM lies the **probability distribution function** $f(\xi, x, t)$. This function encapsulates the statistical information about particles at a mesoscopic scale.
 
 ### 3.1. Simplifying Microscopic Details
 
-The objective is to remove unnecessary microscopic details while retaining the essential physics needed to describe macroscopic fluid behavior. This is achieved by averaging over a volume $ \\ell_{\\text{av}} $ that satisfies
+The objective is to remove unnecessary microscopic details while retaining the essential physics needed to describe macroscopic fluid behavior. This is achieved by averaging over a volume $\ell_{\text{av}}$ that satisfies
 
 $$
 \ell_{\text{mfp}} \ll \ell_{\text{av}} \ll \ell
@@ -57,15 +57,15 @@ $$
 
 where:
 
-- $ \\ell_{\\text{mfp}} $ is the mean free path (the typical distance a molecule travels between collisions),
-- $ \\ell $ is the macroscopic length scale.
+- $\ell_{\text{mfp}}$ is the mean free path (the typical distance a molecule travels between collisions),
+- $\ell$ is the macroscopic length scale.
 
-The **distribution function** $ f(\\xi, x, t) $:
+The **distribution function** $f(\xi, x, t)$:
 
-- **Definition:** Describes the density of molecules with velocity $ \\xi $ at position $ x $ and time $ t $.
-- **Kinetic Link:** The molecular velocity is defined as $ \\xi = \\frac{dx}{dt} $.
+- **Definition:** Describes the density of molecules with velocity $\xi$ at position $x$ and time $t$.
+- **Kinetic Link:** The molecular velocity is defined as $\xi = \frac{dx}{dt}$.
 
-In essence, $ f(\\xi, x, t) , d\\xi , dx $ represents the number of molecules in a small velocity range $ d\\xi $ and spatial element $ dx $.
+In essence, $`f(\xi, x, t) \, d\xi \, dx`$ represents the number of molecules in a small velocity range $d\xi$ and spatial element $dx$.
 
 ### 3.2. Visualizing Molecular Averaging
 
@@ -104,9 +104,9 @@ The LBM offers several compelling benefits compared to conventional CFD approach
 
 -----
 
-## 5. Macroscopic Properties via Moments of $ f(\\xi, x, t) $
+## 5. Macroscopic Properties via Moments of $f(\xi, x, t)$
 
-The power of the LBM lies in its ability to recover macroscopic fluid properties by taking moments of the probability distribution function $ f(\\xi, x, t) $.
+The power of the LBM lies in its ability to recover macroscopic fluid properties by taking moments of the probability distribution function $f(\xi, x, t)$.
 
 ### 5.1. Important Properties
 
@@ -116,7 +116,7 @@ The power of the LBM lies in its ability to recover macroscopic fluid properties
    \int d^3\xi \int d^3x \, f(\xi, x, t) = M(t)
    ```
 
-   where $ M(t) $ is the total mass.
+   where $M(t)$ is the total mass.
 
 2. **Fluid Density:**
 
@@ -124,7 +124,7 @@ The power of the LBM lies in its ability to recover macroscopic fluid properties
    \int d^3\xi \, f(\xi, x, t) = \rho(x, t)
    ```
 
-   which defines the density at point $ x $ and time $ t $.
+   which defines the density at point $x$ and time $t$.
 
 3. **Momentum Density:**
 
@@ -132,14 +132,14 @@ The power of the LBM lies in its ability to recover macroscopic fluid properties
    \int d^3\xi \, \xi\, f(\xi, x, t) = \rho(x, t)\, u(x, t)
    ```
 
-   where $ u(x, t) $ is the macroscopic fluid velocity.
+   where $u(x, t)$ is the macroscopic fluid velocity.
 
 4. **Pressure and Stress Tensor:**
-   Higher moments (involving $ \\xi \\otimes \\xi $) provide information about the pressure and viscous stresses in the fluid. Although the exact expressions are more involved, they underpin the recovery of the Navier-Stokes equations from the kinetic model.
+   Higher moments (involving $\xi \otimes \xi$) provide information about the pressure and viscous stresses in the fluid. Although the exact expressions are more involved, they underpin the recovery of the Navier-Stokes equations from the kinetic model.
 
-### 5.2. Comprehensive Role of $ f(\\xi, x, t) $
+### 5.2. Comprehensive Role of $f(\xi, x, t)$
 
-The function $ f(\\xi, x, t) $ holds all local information about the fluid:
+The function $f(\xi, x, t)$ holds all local information about the fluid:
 
 - **Zeroth Moment:** Yields the density.
 - **First Moment:** Gives the momentum.
@@ -148,7 +148,7 @@ The function $ f(\\xi, x, t) $ holds all local information about the fluid:
 Thus, macroscopic properties are obtained as **moments** of the mesoscopic distribution, effectively bridging the scales.
 
 ![Probability Distribution Function](../../../scripts/plots/probability_distribution_function_of_nitrogen_molecules/probability_distribution_function.png)
-*Figure: The probability distribution function $ f(\\xi, x, t) $ encapsulates the complete mesoscopic description of the fluid, from which macroscopic properties emerge.*
+*Figure: The probability distribution function $`f(\xi, x, t)`$ encapsulates the complete mesoscopic description of the fluid, from which macroscopic properties emerge.*
 
 ## Purpose in CFD
 
@@ -218,7 +218,7 @@ Expand $\xi \otimes \xi = (u + v) \otimes (u + v) = u \otimes u + u \otimes v + 
 \int \xi \otimes \xi \, f \, d^3\xi = \rho \, u \otimes u + P
 ```
 
-In the momentum balance $`\partial_t(\rho u) + \nabla \cdot \int \xi \otimes \xi \, f \, d^3\xi = \ldots`$, the term $`\rho \, u \otimes u`$ gives the convective flux $\nabla \cdot (\rho u \otimes u)$. The tensor $P$ carries the molecular (thermal) momentum flux. Its isotropic part is the pressure, $p = \operatorname{tr}(P)/3$, and its deviatoric part is minus the viscous stress, which the Chapman–Enskog expansion relates to velocity gradients.
+In the momentum balance $`\partial_t(\rho u) + \nabla \cdot \int \xi \otimes \xi \, f \, d^3\xi = \ldots`$, the term $`\rho \, u \otimes u`$ gives the convective flux $\nabla \cdot (\rho u \otimes u)$. The tensor $P$ carries the molecular (thermal) momentum flux. Its isotropic part is the pressure, $p = \mathrm{tr}(P)/3$, and its deviatoric part is minus the viscous stress, which the Chapman–Enskog expansion relates to velocity gradients.
 
 </details>
 

@@ -30,13 +30,13 @@ Fluid properties are the physical and thermodynamic characteristics that define 
 
 ### Primary Properties
 
-1. **Density (ρ)**: Mass per unit volume
+1. **Density ($\rho$)**: Mass per unit volume
 
    - Incompressible vs compressible fluids
    - Temperature and pressure effects
    - Specific gravity and relative density
 
-2. **Viscosity (μ, ν)**: Resistance to deformation
+2. **Viscosity ($\mu$, $\nu$)**: Resistance to deformation
 
    - Dynamic viscosity (absolute viscosity)
    - Kinematic viscosity
@@ -50,7 +50,7 @@ Fluid properties are the physical and thermodynamic characteristics that define 
 
 ### Interface Properties
 
-1. **Surface Tension (σ)**: Energy at fluid interfaces
+1. **Surface Tension ($\sigma$)**: Energy at fluid interfaces
 
    - Molecular origin and measurement
    - Temperature dependence

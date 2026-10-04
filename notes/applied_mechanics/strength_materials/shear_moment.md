@@ -41,7 +41,7 @@ M(x) = M(x_0) + \int_{x_0}^{x} V(\xi)\, d\xi
 | Load Condition | Shear Diagram | Moment Diagram |
 | --- | --- | --- |
 | No load ($w = 0$) | Constant | Linear |
-| Uniform load ($w = $ const) | Linear | Parabolic (2nd degree) |
+| Uniform load ($w = \text{const}$) | Linear | Parabolic (2nd degree) |
 | Linearly varying load | Parabolic | Cubic (3rd degree) |
 | Concentrated force $P$ | Jump discontinuity of $P$ | Slope change (kink) |
 | Concentrated moment $M_0$ | No change | Jump discontinuity of $M_0$ |

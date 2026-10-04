@@ -81,7 +81,7 @@ $$
 
 In Cartesian coordinates $(x, y, z)$ with velocity components $(u, v, w)$:
 
-**x-momentum:**
+**$x$-momentum:**
 
 $$
 \frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x} + v
@@ -89,7 +89,7 @@ $$
 \frac{\partial p}{\partial x} + \nu\nabla^2 u + f_x
 $$
 
-**y-momentum:**
+**$y$-momentum:**
 
 $$
 \frac{\partial v}{\partial t} + u \frac{\partial v}{\partial x} + v
@@ -97,7 +97,7 @@ $$
 \frac{\partial p}{\partial y} + \nu\nabla^2 v + f_y
 $$
 
-**z-momentum:**
+**$z$-momentum:**
 
 $$
 \frac{\partial w}{\partial t} + u \frac{\partial w}{\partial x} + v
@@ -111,7 +111,7 @@ where $\nabla^2 = \frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y
 
 In cylindrical coordinates $(r, \theta, z)$:
 
-**r-momentum:**
+**$r$-momentum:**
 
 $$
 \frac{\partial v_r}{\partial t} + v_r \frac{\partial v_r}{\partial r} +
@@ -122,7 +122,7 @@ $$
 \frac{\partial v_\theta}{\partial \theta}\right) + f_r
 $$
 
-**θ-momentum:**
+**$\theta$-momentum:**
 
 $$
 \frac{\partial v_\theta}{\partial t} + v_r \frac{\partial v_\theta}{\partial r} +
@@ -133,7 +133,7 @@ $$
 \frac{\partial v_r}{\partial \theta}\right) + f_\theta
 $$
 
-**z-momentum:**
+**$z$-momentum:**
 
 $$
 \frac{\partial v_z}{\partial t} + v_r \frac{\partial v_z}{\partial r} +
@@ -429,8 +429,8 @@ Understanding the Navier-Stokes equations is fundamental to all of fluid mechani
 <summary>Answer</summary>
 
 - Continuity: $\partial u/\partial x = 0$ and $v = 0$, so it holds.
-- x-momentum: $\partial u/\partial t = 0$, $`u\,\partial u/\partial x = 0`$, $`v\,\partial u/\partial y = 0`$, $\partial p/\partial x = 0$ and $`\nu\,\partial^2 u/\partial y^2 = 0`$, so every term vanishes.
-- y-momentum: every term is zero.
+- $x$-momentum: $\partial u/\partial t = 0$, $`u\,\partial u/\partial x = 0`$, $`v\,\partial u/\partial y = 0`$, $\partial p/\partial x = 0$ and $`\nu\,\partial^2 u/\partial y^2 = 0`$, so every term vanishes.
+- $y$-momentum: every term is zero.
 - No-slip: $u(0) = 0$ and $u(h) = U$.
 
 The shear stress is uniform: $`\tau = \mu\, du/dy = \mu U/h`$.
@@ -466,8 +466,8 @@ Numbers:
 
 $\partial u/\partial x + \partial v/\partial y = a - a = 0$, and $\omega_z = \partial v/\partial x - \partial u/\partial y = 0$. The viscous terms vanish because $\nabla^2 u = \nabla^2 v = 0$.
 
-- x-momentum: $`u\,\partial u/\partial x = a^2 x = -\frac{1}{\rho}\partial p/\partial x`$.
-- y-momentum: $`v\,\partial v/\partial y = a^2 y = -\frac{1}{\rho}\partial p/\partial y`$.
+- $x$-momentum: $`u\,\partial u/\partial x = a^2 x = -\frac{1}{\rho}\partial p/\partial x`$.
+- $y$-momentum: $`v\,\partial v/\partial y = a^2 y = -\frac{1}{\rho}\partial p/\partial y`$.
 
 Integrating both,
 
@@ -479,7 +479,7 @@ which is Bernoulli's equation with $p_0$ the stagnation pressure. This field doe
 
 </details>
 
-**Exercise 5.** Pressure-driven flow between parallel plates at $y = \pm h$ has $dp/dx = -G$ (constant). Reduce the x-momentum equation for fully developed flow, solve for $u(y)$, and find the flow rate per unit width and the ratio of mean to maximum velocity.
+**Exercise 5.** Pressure-driven flow between parallel plates at $y = \pm h$ has $dp/dx = -G$ (constant). Reduce the $x$-momentum equation for fully developed flow, solve for $u(y)$, and find the flow rate per unit width and the ratio of mean to maximum velocity.
 
 <details>
 <summary>Answer</summary>

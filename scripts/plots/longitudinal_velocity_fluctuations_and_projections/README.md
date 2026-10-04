@@ -46,7 +46,7 @@ a_i = \mathbf{u}'_i \cdot \boldsymbol{\Phi} = u'_{a,i}\phi_1 + u'_{b,i}\phi_2,
 The variance along $\boldsymbol{\Phi}$ is
 
 ```math
-\operatorname{var}_{\boldsymbol{\Phi}} = \frac{1}{m-1}\sum_{i=1}^m
+\mathrm{var}_{\boldsymbol{\Phi}} = \frac{1}{m-1}\sum_{i=1}^m
 a_i^2 = \boldsymbol{\Phi}^T\mathbf{C}\,\boldsymbol{\Phi}
 ```
 
@@ -78,7 +78,7 @@ python main.py --no-show --output out   # save the three PNGs into out/
 With the default seed the script prints
 
 ```math
-\mathbf{C} = \begin{bmatrix} 3.82 & 2.15 \\ 2.15 & 5.38 \end{bmatrix}, \qquad \rho_{ab} = 0.47, \qquad \operatorname{var}_{\boldsymbol{\Phi}} = 5.85\ \text{m}^2/\text{s}^2
+\mathbf{C} = \begin{bmatrix} 3.82 & 2.15 \\ 2.15 & 5.38 \end{bmatrix}, \qquad \rho_{ab} = 0.47, \qquad \mathrm{var}_{\boldsymbol{\Phi}} = 5.85\ \text{m}^2/\text{s}^2
 ```
 
 Figure 1 shows the two noisy fluctuation signals.

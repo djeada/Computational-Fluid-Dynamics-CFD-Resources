@@ -36,27 +36,29 @@ Flow kinematics studies the motion of fluid particles without considering the fo
 
 ### Vector Field Description
 
-```
-Velocity field: V⃗(x,y,z,t) = u(x,y,z,t)î + v(x,y,z,t)ĵ + w(x,y,z,t)k̂
+```math
+\text{Velocity field:} \quad \vec{V}(x,y,z,t) = u(x,y,z,t)\,\hat{i} +
+v(x,y,z,t)\,\hat{j} + w(x,y,z,t)\,\hat{k}
 ```
 
 ### Material Derivative
 
-```
-DΦ/Dt = ∂Φ/∂t + (V⃗ · ∇)Φ
-```
+$$
+\frac{D\Phi}{Dt} = \frac{\partial \Phi}{\partial t} + (\vec{V} \cdot \nabla)\Phi
+$$
 
 ### Vorticity
 
-```
-ω⃗ = ∇ × V⃗
-```
+$$
+\vec{\omega} = \nabla \times \vec{V}
+$$
 
 ### Rate of Strain
 
-```
-εᵢⱼ = ½(∂uᵢ/∂xⱼ + ∂uⱼ/∂xᵢ)
-```
+$$
+\varepsilon_{ij} = \frac{1}{2}\left(\frac{\partial u_i}{\partial x_j} +
+\frac{\partial u_j}{\partial x_i}\right)
+$$
 
 ## Lagrangian vs Eulerian Perspectives
 

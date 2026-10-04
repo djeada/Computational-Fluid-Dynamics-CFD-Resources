@@ -6,7 +6,7 @@ Fluid-Structure Interaction (FSI) represents one of the most challenging problem
 
 ### Governing Equations
 
-#### Fluid Domain (Ωf)
+#### Fluid Domain ($\Omega_f$)
 
 The fluid motion is governed by the Navier-Stokes equations:
 
@@ -38,7 +38,7 @@ $$
 \frac{2}{3}\mu(\nabla \cdot \mathbf{v})\mathbf{I}
 $$
 
-#### Structural Domain (Ωs)
+#### Structural Domain ($\Omega_s$)
 
 The structural motion follows elastodynamics:
 
@@ -72,7 +72,7 @@ where:
 
 ### Interface Conditions
 
-At the fluid-structure interface (Γ), two conditions must be satisfied:
+At the fluid-structure interface ($\Gamma$), two conditions must be satisfied:
 
 #### 1. Kinematic Compatibility
 

@@ -31,9 +31,9 @@ A mesh that passes basic quality checks is a prerequisite — not a guarantee �
 
 The ratio of the longest edge (or dimension) to the shortest in a cell.
 
-```
-Aspect Ratio = longest edge / shortest edge
-```
+$$
+\text{Aspect Ratio} = \frac{\text{longest edge}}{\text{shortest edge}}
+$$
 
 | Range | Quality |
 | --- | --- |
@@ -48,9 +48,9 @@ High aspect ratios are expected and acceptable in boundary layer meshes where ce
 
 Measures how far a cell deviates from its ideal shape (equilateral triangle, regular tetrahedron, etc.).
 
-```
-Skewness = (ideal_size - actual_size) / ideal_size
-```
+$$
+\text{Skewness} = \frac{\text{ideal size} - \text{actual size}}{\text{ideal size}}
+$$
 
 | Range | Quality |
 | --- | --- |
@@ -66,9 +66,9 @@ Skewness = (ideal_size - actual_size) / ideal_size
 
 The angle between the line connecting two cell centers and the face normal vector between them.
 
-```
-Non-orthogonality = angle between face normal and cell-center connection
-```
+$$
+\text{Non-orthogonality} = \text{angle between face normal and cell-center connection}
+$$
 
 | Range | Quality |
 | --- | --- |
@@ -83,9 +83,9 @@ Non-orthogonality is the most common source of convergence problems in unstructu
 
 The ratio of the largest neighboring cell volume to the smallest.
 
-```
-Volume Ratio = max(V_neighbor) / min(V_neighbor)
-```
+$$
+\text{Volume Ratio} = \frac{\max(V_\text{neighbor})}{\min(V_\text{neighbor})}
+$$
 
 | Range | Quality |
 | --- | --- |
@@ -448,7 +448,7 @@ This is a critical failure — the mesh cannot be used.
 
 | Physics | Key Requirement |
 | --- | --- |
-| Boundary layers | High aspect ratio OK (stretched cells); y+ must match turbulence model |
+| Boundary layers | High aspect ratio OK (stretched cells); $y^+$ must match turbulence model |
 | Heat transfer | Fine mesh at solid-fluid interface; smooth transitions |
 | Multiphase (VOF) | Uniform cells at interface; avoid high aspect ratios near free surface |
 | Compressible/shocks | Align mesh with expected shock direction; fine cells at shock location |

@@ -476,7 +476,7 @@ Helium is about 7 times less dense than air, which is what gives a balloon its l
 
 </details>
 
-**Exercise 2.** Air ($\gamma = 1.4$, $R = 287$ J/(kg K)) is compressed isentropically from $p_1 = 100$ kPa, $T_1 = 300$ K to $p_2 = 800$ kPa. Find $T_2$, $\rho_1$, $\rho_2$ and check the result with $p\\rho^{-\\gamma} = $ constant.
+**Exercise 2.** Air ($\gamma = 1.4$, $R = 287$ J/(kg K)) is compressed isentropically from $p_1 = 100$ kPa, $T_1 = 300$ K to $p_2 = 800$ kPa. Find $T_2$, $\rho_1$, $\rho_2$ and check the result with $p\rho^{-\gamma} = \text{constant}$.
 
 <details>
 <summary>Answer</summary>

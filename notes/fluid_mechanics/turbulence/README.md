@@ -224,7 +224,7 @@ DNS, LES and hybrid RANS–LES methods, and their cost scalings, are compared in
 - **1925**: Prandtl's mixing length theory
 - **1941**: Kolmogorov's similarity theory
 - **1945**: von Kármán and Howarth equations
-- **1970s**: Development of k-ε model
+- **1970s**: Development of $k$-$`\varepsilon`$ model
 - **1980s**: Large Eddy Simulation
 - **1990s**: Direct Numerical Simulation
 

@@ -43,7 +43,7 @@ Below is a rough  representation comparing a **Newtonian** fluid curve (straight
                   +-----------------> shear rate (γ̇)
 ```
 
-- Newtonian: straight line (slope = µ, constant).
+- Newtonian: straight line (slope = $\mu$, constant).
 - Shear-thinning: curve that starts steep and flattens out.
 - Shear-thickening: curve that starts shallow and steepens.
 
@@ -124,7 +124,7 @@ Wall ->  |--- fluid at rest (no slip)
 
 I. Velocity near the wall is forced to **zero** due to the no-slip condition.
 
-II. Over a small distance (the boundary layer thickness), velocity ramps up to **U∞**.
+II. Over a small distance (the boundary layer thickness), velocity ramps up to **$U_\infty$**.
 
 III. The shape/thickness of this boundary layer has a big impact on drag and heat transfer.
 

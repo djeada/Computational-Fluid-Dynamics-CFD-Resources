@@ -41,7 +41,7 @@ Journal bearings support a rotating shaft within a cylindrical sleeve. The shaft
 
 ## Bearing Loads and Life
 
-### L10 Life Equation
+### $L_{10}$ Life Equation
 
 The basic rating life is the number of revolutions at which 90% of a group of identical bearings will still be operational:
 
@@ -240,7 +240,7 @@ $$
 
 **Given:** A deep groove ball bearing (6208) with $C = 29.1$ kN and $C_0 = 17.8$ kN supports a radial load of 5 kN and an axial load of 2 kN at 1800 rpm.
 
-**Find:** The L10 life in hours.
+**Find:** The $L_{10}$ life in hours.
 
 **Solution:**
 

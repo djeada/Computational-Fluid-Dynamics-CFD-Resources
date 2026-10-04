@@ -39,7 +39,7 @@ a_{k,i} = \mathbf{u}'_i \cdot \mathbf{e}_k,
 \qquad \mathbf{p}_{k,i} = a_{k,i}\,\mathbf{e}_k
 ```
 
-The variance of the coefficients equals the eigenvalue, $`\frac{1}{m-1}\sum_i a_{k,i}^2 = \mathbf{e}_k^T\mathbf{C}\,\mathbf{e}_k = \lambda_k`$. The first mode therefore carries the most fluctuation energy, and $\lambda_1 + \lambda_2 = \operatorname{tr}\mathbf{C}$.
+The variance of the coefficients equals the eigenvalue, $`\frac{1}{m-1}\sum_i a_{k,i}^2 = \mathbf{e}_k^T\mathbf{C}\,\mathbf{e}_k = \lambda_k`$. The first mode therefore carries the most fluctuation energy, and $\lambda_1 + \lambda_2 = \mathrm{tr}\mathbf{C}$.
 
 ## Implementation
 

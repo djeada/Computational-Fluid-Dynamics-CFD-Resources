@@ -327,7 +327,7 @@ The 11 transitions are counted as AA: 2, AB: 3, BB: 1, BC: 2, CA: 2, CC: 1. Norm
 
 with rows and columns ordered A, B, C.
 
-The dominant cycle is A → B → C → A, with each state often repeating once before moving on. This is the kind of discrete representation of a quasi-periodic flow described in the note for cluster-based models. Twelve snapshots are far too few for reliable probabilities; a real model needs many periods of data.
+The dominant cycle is A $\to$ B $\to$ C $\to$ A, with each state often repeating once before moving on. This is the kind of discrete representation of a quasi-periodic flow described in the note for cluster-based models. Twelve snapshots are far too few for reliable probabilities; a real model needs many periods of data.
 
 </details>
 

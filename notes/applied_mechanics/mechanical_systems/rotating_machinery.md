@@ -87,7 +87,7 @@ $$
 placed opposite the resultant, at angle (two-argument arctangent, so the quadrant is correct):
 
 ```math
-\theta_b = \operatorname{atan2}\left(-\sum m_i r_i \sin\theta_i,\; - \sum m_i r_i
+\theta_b = \mathrm{atan2}\left(-\sum m_i r_i \sin\theta_i,\; - \sum m_i r_i
 \cos\theta_i\right)
 ```
 

@@ -79,7 +79,7 @@ In the pre-processing phase, several key tasks must be completed to set up the C
 1. **Define Data Structures**:
 
    - **Purpose**: Organize the physical parameters of the flow field.
-   - **Method**: Typically use 2D or 3D arrays to store parameters like velocity components (U and V), pressure (P), and density. These arrays represent the computational grid where each cell or node holds values of the physical parameters.
+   - **Method**: Typically use 2D or 3D arrays to store parameters like velocity components ($U$ and $V$), pressure ($P$), and density. These arrays represent the computational grid where each cell or node holds values of the physical parameters.
 
 2. **Set Initial Values**:
 
@@ -119,9 +119,12 @@ The most time-consuming part of a CFD simulation is finding the solution to the 
 
 For example, the Laplace operator of a scalar function can be represented using a five-point discrete scheme:
 
+$$
+\nabla^2 f \approx \frac{1}{\Delta x^2}
+\left(-4 f_{i,j} + f_{i-1,j} + f_{i+1,j} + f_{i,j-1} + f_{i,j+1}\right)
+$$
+
 ```
-   ∇²f ≈  1/Δx² (-4 * f[i,j] + f[i-1,j] + f[i+1,j] + f[i,j-1] + f[i,j+1])
-       
     PDE                        Discretized Form
     ∇²f    ----------------->  +--------------------+
                                | f[i-1, j]          |

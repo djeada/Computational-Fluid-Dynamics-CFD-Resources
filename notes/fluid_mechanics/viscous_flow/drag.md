@@ -97,7 +97,7 @@ Now let’s see how drastically drag can change in a denser fluid, using a small
 - Cross-sectional area $A$ = $`\pi r^2 = \pi \times (0.05)^2 \approx 0.00785\,\mathrm{m^2}`$
 - Velocity ($v$) = $`15\,\mathrm{m/s}`$
 - Fluid density ($\rho$, air) = $`1.225\,\mathrm{kg/m^3}`$
-- Drag coefficient ($C_d$) ≈ $0.47$ (typical for a smooth sphere)
+- Drag coefficient ($C_d$) $\approx 0.47$ (typical for a smooth sphere)
 
 I. **Square the velocity**:
 

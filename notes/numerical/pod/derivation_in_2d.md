@@ -544,7 +544,7 @@ These are almost exactly $\lambda_1 = 7.78$ and $\lambda_2 = 2.15$. Because $c_{
 
 The mean of the diagonal is $4.965$, and $\sqrt{0.045^2 + 2.82^2} = 2.8204$, so $\lambda_1 = 7.785$ and $\lambda_2 = 2.145$ m²/s².
 
-Since $c_{11} - c_{22} = -0.09 < 0$, $2\theta$ lies in the second quadrant: $2\theta = \operatorname{atan2}(5.64, -0.09) = 90.91^\circ$, so $\theta = 45.46^\circ$. The first mode is $(\cos\theta, \sin\theta) = (0.701, 0.713)$ and the second is $(-0.713, 0.701)$, up to sign.
+Since $c_{11} - c_{22} = -0.09 < 0$, $2\theta$ lies in the second quadrant: $2\theta = \mathrm{atan2}(5.64, -0.09) = 90.91^\circ$, so $\theta = 45.46^\circ$. The first mode is $(\cos\theta, \sin\theta) = (0.701, 0.713)$ and the second is $(-0.713, 0.701)$, up to sign.
 
 Energy fractions: $7.785/9.93 = 0.784$ (78.4%) and $0.216$ (21.6%), matching the note.
 

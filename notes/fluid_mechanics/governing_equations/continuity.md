@@ -103,7 +103,7 @@ $$
 
 ### Incompressible Flow
 
-For **incompressible flow**, density is constant ($\\rho = $ constant), so:
+For **incompressible flow**, density is constant ($\rho = \text{constant}$), so:
 
 $$
 \frac{\partial \rho}{\partial t} = 0 \quad \text{and} \quad \nabla \rho = 0

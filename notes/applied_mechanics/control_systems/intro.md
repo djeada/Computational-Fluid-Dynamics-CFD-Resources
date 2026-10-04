@@ -167,7 +167,7 @@ Magnitude and phase plots vs. frequency:
 
 Complex plane plot of $G(j\omega)$ as $\omega$ varies from 0 to $\infty$.
 
-**Nyquist Stability Criterion**: System is stable if Nyquist plot encircles -1 point $P$ times counterclockwise, where $P$ = number of open-loop RHP poles.
+**Nyquist Stability Criterion**: System is stable if Nyquist plot encircles $-1$ point $P$ times counterclockwise, where $P$ = number of open-loop RHP poles.
 
 ## Stability Analysis
 
@@ -218,8 +218,8 @@ $$
 
 **Design guidelines**:
 
-- GM > 6 dB (factor of 2)
-- PM > 45°
+- $GM > 6$ dB (factor of 2)
+- $PM > 45^\circ$
 
 ### Example 2: Stability Analysis
 
@@ -326,14 +326,14 @@ Based on process reaction curve from step test.
 
 - **Pole placement**: Place closed-loop poles at desired locations
 - **LQR (Linear Quadratic Regulator)**: Optimize quadratic cost function
-- **H∞ control**: Robust control design
+- **$H_\infty$ control**: Robust control design
 
 ### Example 3: PID Controller Design
 
 Design PID controller for plant $G(s) = \frac{1}{s(s+1)(s+2)}$ with specifications:
 
-- Settling time < 4 seconds
-- Overshoot < 20%
+- Settling time $< 4$ seconds
+- Overshoot $`< 20\%`$
 - Zero steady-state error for step input
 
 **Solution**:
@@ -380,7 +380,7 @@ Design controllers that maintain performance despite:
 - Parameter variations
 - External disturbances
 
-**Methods**: H∞ control, μ-synthesis, sliding mode control
+**Methods**: $H_\infty$ control, $\mu$-synthesis, sliding mode control
 
 ### Adaptive Control
 

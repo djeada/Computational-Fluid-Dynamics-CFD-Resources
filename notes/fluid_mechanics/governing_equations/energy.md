@@ -473,7 +473,7 @@ T_{max} = \frac{\Phi h^2}{8k} = \frac{4.64 \times 10^6 \times (5 \times 10^{-4})
 
 </details>
 
-**Exercise 3.** Air ($c_p = 1005$ J/(kg K)) at $T = 250$ K flows at $V = 250$ m/s. Using $h_0 = c_p T + V^2/2 = $ constant for steady adiabatic flow, find the stagnation temperature.
+**Exercise 3.** Air ($c_p = 1005$ J/(kg K)) at $T = 250$ K flows at $V = 250$ m/s. Using $h_0 = c_p T + V^2/2 = \text{constant}$ for steady adiabatic flow, find the stagnation temperature.
 
 <details>
 <summary>Answer</summary>

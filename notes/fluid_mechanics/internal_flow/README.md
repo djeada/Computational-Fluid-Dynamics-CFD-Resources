@@ -33,41 +33,41 @@ Internal flow deals with fluid motion confined within boundaries such as pipes, 
 
 **Continuity for steady flow:**
 
-```
-ṁ = ρVA = constant
-```
+$$
+\dot{m} = \rho V A = \text{constant}
+$$
 
 **Momentum equation (pipe flow):**
 
-```
-dp/dx = -τw(P/A) - ρg sin θ
-```
+$$
+\frac{dp}{dx} = -\tau_w \frac{P}{A} - \rho g \sin\theta
+$$
 
 **Energy equation:**
 
-```
-h₁ + V₁²/2 + gz₁ = h₂ + V₂²/2 + gz₂ + losses
-```
+$$
+h_1 + \frac{V_1^2}{2} + g z_1 = h_2 + \frac{V_2^2}{2} + g z_2 + \text{losses}
+$$
 
 ### Dimensionless Parameters
 
 **Reynolds number:**
 
-```
-Re = ρVD/μ = VD/ν
-```
+$$
+Re = \frac{\rho V D}{\mu} = \frac{V D}{\nu}
+$$
 
 **Friction factor:**
 
-```
-f = (Δp/L) × (D/ρV²/2)
+```math
+f = \frac{\Delta p}{L}\, \frac{D}{\rho V^2/2}
 ```
 
 **Darcy-Weisbach equation:**
 
-```
-hf = f(L/D)(V²/2g)
-```
+$$
+h_f = f \frac{L}{D} \frac{V^2}{2g}
+$$
 
 ## Laminar Pipe Flow
 
@@ -75,39 +75,39 @@ hf = f(L/D)(V²/2g)
 
 For fully developed laminar flow in a circular pipe:
 
-```
-u(r) = umax[1 - (r/R)²]
-```
+$$
+u(r) = u_{\text{max}}\left[1 - \left(\frac{r}{R}\right)^2\right]
+$$
 
-where umax = 2Vavg
+where $u_{\text{max}} = 2V_{\text{avg}}$
 
 ### Pressure Drop
 
 **Hagen-Poiseuille equation:**
 
-```
-Δp = (32μLV)/(D²)
-```
+$$
+\Delta p = \frac{32 \mu L V}{D^2}
+$$
 
 **Friction factor:**
 
-```
-f = 64/Re
-```
+$$
+f = \frac{64}{Re}
+$$
 
 ### Heat Transfer
 
 **Thermal entrance length:**
 
-```
-Lt,thermal = 0.05 Re Pr D
+```math
+L_{t,\text{thermal}} = 0.05\, Re\, Pr\, D
 ```
 
 **Nusselt number (constant wall temperature):**
 
-```
-Nu = 3.66 (fully developed)
-```
+$$
+Nu = 3.66 \quad (\text{fully developed})
+$$
 
 ## Turbulent Pipe Flow
 
@@ -115,31 +115,32 @@ Nu = 3.66 (fully developed)
 
 **Power law approximation:**
 
-```
-u/umax = (y/R)^(1/n)
-```
+$$
+\frac{u}{u_{\text{max}}} = \left(\frac{y}{R}\right)^{1/n}
+$$
 
-where n ≈ 7 for smooth pipes
+where $n \approx 7$ for smooth pipes
 
 **Log law (near wall):**
 
-```
-u⁺ = (1/κ)ln(y⁺) + B
-```
+$$
+u^+ = \frac{1}{\kappa}\ln(y^+) + B
+$$
 
 ### Friction Factor Correlations
 
 **Smooth pipes (Blasius):**
 
-```
-f = 0.316/Re^0.25 (Re < 10⁵)
-```
+$$
+f = \frac{0.316}{Re^{0.25}} \quad (Re < 10^5)
+$$
 
 **Colebrook equation (rough pipes):**
 
-```
-1/√f = -2log₁₀(ε/D/3.7 + 2.51/(Re√f))
-```
+$$
+\frac{1}{\sqrt{f}} = -2\log_{10}\left(\frac{\epsilon/D}{3.7} +
+\frac{2.51}{Re\sqrt{f}}\right)
+$$
 
 **Moody diagram**: Graphical representation of friction factor
 
@@ -147,11 +148,11 @@ f = 0.316/Re^0.25 (Re < 10⁵)
 
 **Dittus-Boelter equation:**
 
-```
-Nu = 0.023 Re^0.8 Pr^n
+```math
+Nu = 0.023\, Re^{0.8}\, Pr^n
 ```
 
-where n = 0.4 (heating) or 0.3 (cooling)
+where $n = 0.4$ (heating) or $0.3$ (cooling)
 
 ## Non-Circular Ducts
 
@@ -159,11 +160,11 @@ where n = 0.4 (heating) or 0.3 (cooling)
 
 For non-circular cross-sections:
 
-```
-Dh = 4A/P
-```
+$$
+D_h = \frac{4A}{P}
+$$
 
-where A = cross-sectional area, P = wetted perimeter
+where $A$ = cross-sectional area, $P$ = wetted perimeter
 
 ### Common Geometries
 
@@ -189,40 +190,40 @@ where A = cross-sectional area, P = wetted perimeter
 
 ### Loss Coefficients
 
-```
-hL = K(V²/2g)
-```
+$$
+h_L = K \frac{V^2}{2g}
+$$
 
 ### Common Components
 
 1. **Sudden expansion:**
 
-   ```
-   K = (1 - A₁/A₂)²
+   ```math
+   K = \left(1 - \frac{A_1}{A_2}\right)^2
    ```
 
 2. **Sudden contraction:**
 
-   ```
-   K = 0.5(1 - A₂/A₁)
+   ```math
+   K = 0.5\left(1 - \frac{A_2}{A_1}\right)
    ```
 
 3. **Bends and elbows:**
 
-   - 90° elbow: K ≈ 0.9
-   - 45° elbow: K ≈ 0.4
+   - $90^\circ$ elbow: $K \approx 0.9$
+   - $45^\circ$ elbow: $K \approx 0.4$
 
 4. **Valves and fittings:**
 
-   - Gate valve (open): K ≈ 0.15
-   - Globe valve (open): K ≈ 10
-   - Check valve: K ≈ 2.5
+   - Gate valve (open): $K \approx 0.15$
+   - Globe valve (open): $K \approx 10$
+   - Check valve: $K \approx 2.5$
 
 ### Entrance and Exit Losses
 
-- **Sharp-edged entrance:** K = 0.5
-- **Well-rounded entrance:** K = 0.04
-- **Exit to reservoir:** K = 1.0
+- **Sharp-edged entrance:** $K = 0.5$
+- **Well-rounded entrance:** $K = 0.04$
+- **Exit to reservoir:** $K = 1.0$
 
 ## System Analysis
 
@@ -230,14 +231,14 @@ hL = K(V²/2g)
 
 1. **Series systems:**
 
-   ```
-   Δptotal = Σ Δpi
+   ```math
+   \Delta p_{\text{total}} = \sum_i \Delta p_i
    ```
 
 2. **Parallel systems:**
 
-   ```
-   Qtotal = Σ Qi
+   ```math
+   Q_{\text{total}} = \sum_i Q_i
    ```
 
 3. **Complex networks:**

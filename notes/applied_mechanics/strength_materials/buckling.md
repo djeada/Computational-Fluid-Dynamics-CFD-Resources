@@ -82,8 +82,8 @@ where $r = \sqrt{I_{min}/A}$ is the minimum radius of gyration.
 ### Column Classification
 
 - **Short columns** ($\lambda < 30$–50): Failure by crushing (material yielding), not buckling
-- **Intermediate columns** ($30 < \\lambda < $ critical): Inelastic buckling
-- **Long (slender) columns** ($\\lambda > $ critical): Elastic (Euler) buckling
+- **Intermediate columns** ($30 < \lambda < \lambda_c$): Inelastic buckling
+- **Long (slender) columns** ($\lambda > \lambda_c$): Elastic (Euler) buckling
 
 The **critical slenderness ratio** separating elastic and inelastic buckling is:
 

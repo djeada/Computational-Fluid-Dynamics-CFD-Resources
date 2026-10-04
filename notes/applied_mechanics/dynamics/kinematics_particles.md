@@ -75,7 +75,7 @@ For motion along a straight line (say, the x-axis):
 
 ### Kinematic Equations for Constant Acceleration
 
-When acceleration is constant ($a = $ constant), we have:
+When acceleration is constant ($a = \text{constant}$), we have:
 
 1. **Velocity as function of time:**
 

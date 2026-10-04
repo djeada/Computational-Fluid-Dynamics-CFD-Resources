@@ -186,7 +186,7 @@ $$
 
 Every ratio in the normal-shock table (pressure, density, temperature, total pressure) applies with $M_1$ replaced by $M_{n1}$. The downstream Mach number is $M_2 = M_{n2}/\sin(\beta - \theta)$.
 
-### The θ–β–M Relation
+### The $\theta$–$`\beta`$–$`M`$ Relation
 
 Geometry gives $\tan\beta = u_{n1}/u_t$ and $\tan(\beta - \theta) = u_{n2}/u_t$. Continuity gives $u_{n2}/u_{n1} = \rho_1/\rho_2$. Hence
 

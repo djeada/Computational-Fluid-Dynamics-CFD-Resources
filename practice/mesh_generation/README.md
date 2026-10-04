@@ -14,14 +14,14 @@ This guide covers various tools and methodologies for generating high-quality 3D
 
 ### Related Guides
 
-- [Boundary Layer Meshing](boundary_layers.md) — y+ calculations, first cell height, and layer generation
+- [Boundary Layer Meshing](boundary_layers.md) — $y^+$ calculations, first cell height, and layer generation
 - [Mesh Quality Assessment](mesh_quality.md) — metrics, checkMesh interpretation, and automated reporting
 
 ## Mesh Types
 
 ### Structured Meshes
 
-- **Definition**: Regular grid with clear i,j,k indexing
+- **Definition**: Regular grid with clear $i,j,k$ indexing
 - **Advantages**:
   - Higher accuracy per cell
   - Better convergence properties
@@ -285,21 +285,23 @@ Background Field = 1;
 
 #### Layer Parameters
 
-- **First layer height**: y+ ≈ 1 for wall-resolved
+- **First layer height**: $y^+ \approx 1$ for wall-resolved
 - **Growth ratio**: 1.1-1.3 typical
 - **Number of layers**: 10-20 for good resolution
 
-### y+ Calculation
+### $y^+$ Calculation
 
-```
-y+ = (y * u_tau) / nu
-u_tau = sqrt(tau_wall / rho)
+```math
+\begin{aligned}
+  y^+ &= \frac{y\,u_\tau}{\nu}, \\
+  u_\tau &= \sqrt{\frac{\tau_w}{\rho}}
+\end{aligned}
 ```
 
-For y+ = 1:
+For $y^+ = 1$:
 
-```
-y = nu / u_tau ≈ nu / (0.05 * U_inf) for flat plate
+```math
+y = \frac{\nu}{u_\tau} \approx \frac{\nu}{0.05\,U_\infty} \quad \text{for flat plate}
 ```
 
 ## Advanced Techniques
@@ -347,7 +349,7 @@ decomposePar -force
 
 ### Size Guidelines
 
-| Application | Typical Cell Count | y+ Range |
+| Application | Typical Cell Count | $y^+$ Range |
 | --- | --- | --- |
 | Simple validation | 10K - 100K | 30-300 |
 | Engineering analysis | 100K - 1M | 1-30 |
@@ -355,7 +357,7 @@ decomposePar -force
 
 ### Common Pitfalls
 
-- **Over-meshing**: More cells ≠ better results
+- **Over-meshing**: More cells $\neq$ better results
 - **Poor transitions**: Sudden size changes cause errors
 - **Neglecting boundaries**: Poor wall resolution
 - **Ignoring quality**: High skewness causes convergence issues

@@ -162,7 +162,7 @@ The continuous-time eigenvalue is $\omega = \ln(\lambda)/\Delta t$.
 
 $|\lambda| = \sqrt{0.95^2 + 0.30^2} \approx 0.9962$, so the growth rate is $\ln|\lambda|/\Delta t \approx -0.376$ s$`^{-1}`$ and the mode decays.
 
-$\arg\lambda = \operatorname{atan2}(0.30, 0.95) \approx 0.306$ rad, so the frequency is $f = \arg\lambda / (2\pi\Delta t) \approx 4.87$ Hz.
+$\arg\lambda = \mathrm{atan2}(0.30, 0.95) \approx 0.306$ rad, so the frequency is $f = \arg\lambda / (2\pi\Delta t) \approx 4.87$ Hz.
 
 The half-life is $\ln 2 / 0.376 \approx 1.84$ s.
 
