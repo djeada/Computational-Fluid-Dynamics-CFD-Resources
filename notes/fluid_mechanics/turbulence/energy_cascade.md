@@ -235,6 +235,7 @@ This cost is the reason for large-eddy simulation and RANS modeling, discussed i
 
 - [kelvin_helmholtz_instability](../../../scripts/simulations/kelvin_helmholtz_instability/): a shear-layer instability rolling up into large vortices, i.e. the mechanism that creates energy-containing eddies from mean shear. The simulation is two-dimensional, so it shows vortex merging (the 2D inverse cascade) rather than the 3D forward cascade described here.
 - [laminar_vs_turbulent_pipe](../../../scripts/plots/laminar_vs_turbulent_pipe/): laminar and turbulent mean velocity profiles in a pipe, the setting of the worked example.
+- [Decaying 2D Turbulence](../../../scripts/simulations/decaying_2d_turbulence/): simulates freely decaying two-dimensional turbulence in a doubly periodic box and animates how a random vorticity field organises itself into coherent vortices that merge into ever larger ones.
 
 ## Exercises
 

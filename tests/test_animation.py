@@ -239,7 +239,7 @@ class VideoWriterTests(unittest.TestCase):
 class MakeReelsTests(unittest.TestCase):
     def test_selects_simulations_only(self):
         names = [script.parent.name for script in make_reels.simulations([])]
-        self.assertEqual(len(names), 15)
+        self.assertEqual(len(names), 25)
         self.assertEqual(
             [s.parent.name for s in make_reels.simulations(["cavity"])],
             ["lid_driven_cavity"],

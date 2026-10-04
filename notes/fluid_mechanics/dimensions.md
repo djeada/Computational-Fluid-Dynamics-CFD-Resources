@@ -692,6 +692,7 @@ Similarly, the Reynolds number ($Re$) and Strouhal number ($St$) are applied in 
 
 - [Froude Number vs. Flow Velocity](../../scripts/plots/froude_number/): plots the length-based Froude number $Fr = U/\sqrt{gL}$ against speed for hulls of 5, 10, 15, and 20 m, with reference lines at hull speed and at the approximate start of planing.
 - [Ship Hull in Water](../../scripts/plots/ship_hull_in_water/): draws a side-view sketch of a ship hull sitting in a sinusoidal free-surface wave and annotates it with the Froude number $Fr = U/\sqrt{gL}$.
+- [Lorenz Attractor Simulation](../../scripts/simulations/lorenz_attractor/): integrates the Lorenz equations, a three-mode model of convection in a fluid layer heated from below, for 60 trajectories that start within $10^{-5}$ of one another and animates how they fan out over the butterfly-shaped attractor.
 
 ## Exercises
 
