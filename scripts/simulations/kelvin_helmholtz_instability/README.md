@@ -23,9 +23,9 @@ $$
 
 ### Temperature (Passive Scalar)
 
-$$
+```math
 \frac{\partial T}{\partial t} + (\mathbf{u}\cdot\nabla)T = D\,\nabla^2 T
-$$
+```
 
 Temperature does not feed back on the velocity, so it only marks where fluid from each stream goes.
 
@@ -33,19 +33,19 @@ Temperature does not feed back on the velocity, so it only marks where fluid fro
 
 With $B(y) = \tfrac12\left[\tanh\left(\frac{y - N/4}{\delta}\right) - \tanh\left(\frac{y - 3N/4}{\delta}\right)\right]$, which is 1 inside the central band and 0 outside:
 
-$$
+```math
 u = U_0\,(2B - 1),
 \qquad v = A\, U_0
 \sin\left(\frac{2\pi k x}{N}\right)\left[e^{-\left(\frac{y - N/4}{2\delta}\right)^2} +
 e^{-\left(\frac{y - 3N/4}{2\delta}\right)^2}\right],
 \qquad T = B
-$$
+```
 
 with $U_0 = 1$, $A = 0.05$ and $k = 4$. The initial velocity is projected so that it is divergence-free.
 
 ### Linear Instability
 
-A vortex sheet between equal-density streams with velocity jump $\Delta U$ is unstable at every wavenumber, with growth rate $\sigma = k\,\Delta U/2$. A shear layer of finite thickness $u = U_0\tanh(y/\delta)$ is only unstable for long waves. Its fastest-growing mode has $k\delta \approx 0.44$ and $\sigma \approx 0.19\,U_0/\delta$ (Michalke, 1964). The seeded wavelength of 64 cells gives $k\delta = 0.39$, close to this optimum.
+A vortex sheet between equal-density streams with velocity jump $\Delta U$ is unstable at every wavenumber, with growth rate $`\sigma = k\,\Delta U/2`$. A shear layer of finite thickness $u = U_0\tanh(y/\delta)$ is only unstable for long waves. Its fastest-growing mode has $k\delta \approx 0.44$ and $`\sigma \approx 0.19\,U_0/\delta`$ (Michalke, 1964). The seeded wavelength of 64 cells gives $k\delta = 0.39$, close to this optimum.
 
 ### Numerical Scheme
 
@@ -62,11 +62,11 @@ Each call to `update_fields` performs:
 
    This is equivalent to solving $\nabla^2 p = \nabla\cdot\mathbf{u}^*$ and subtracting $\nabla p$.
 
-3. **Diffusion** (explicit Euler, 5-point periodic Laplacian): $\mathbf{u}^{n+1} = \mathbf{u}^{**} + \nu\,\Delta t\,\nabla_h^2\mathbf{u}^{**}$. This operator is diagonal in Fourier space, so it keeps the field divergence-free.
+3. **Diffusion** (explicit Euler, 5-point periodic Laplacian): $`\mathbf{u}^{n+1} = \mathbf{u}^{**} + \nu\,\Delta t\,\nabla_h^2\mathbf{u}^{**}`$. This operator is diagonal in Fourier space, so it keeps the field divergence-free.
 
 4. **Temperature**: advected with $\mathbf{u}^{n+1}$, then diffused explicitly with coefficient $D$.
 
-Semi-Lagrangian advection is stable for any time step. The script uses a Courant number $U_0\Delta t/\Delta x = 0.5$ for accuracy. Explicit diffusion needs $\nu\,\Delta t/\Delta x^2 \le 1/4$; here it is 0.005.
+Semi-Lagrangian advection is stable for any time step. The script uses a Courant number $U_0\Delta t/\Delta x = 0.5$ for accuracy. Explicit diffusion needs $`\nu\,\Delta t/\Delta x^2 \le 1/4`$; here it is 0.005.
 
 ## Implementation
 
