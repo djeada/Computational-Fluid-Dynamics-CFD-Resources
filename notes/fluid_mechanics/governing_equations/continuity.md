@@ -298,6 +298,7 @@ The continuity equation remains fundamental to all fluid flow analysis and is es
 - [Eulerian Cylinder Flow](../../../scripts/simulations/eulerian_cylinder_flow/): simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and animates a dye tracer with Matplotlib.
 - [Flow Rate Through a Circular Pipe](../../../scripts/plots/flow_rate_pipe/): computes the volumetric flow rate $Q = \pi r^2 v$ of a circular pipe and draws a labelled side view of the pipe with flow arrows.
 - [Microscopic vs. Macroscopic View of a Fluid](../../../scripts/plots/microscopic_view/): draws two side-by-side panels that contrast the microscopic (molecular) and macroscopic (continuum) views of a fluid.
+- [Double Gyre Chaotic Mixing](../../../scripts/simulations/double_gyre_chaotic_mixing/): advects 720 000 passive dye tracers through the time-periodic double gyre and animates how the flow stretches and folds them into ever finer filaments.
 
 ## Exercises
 

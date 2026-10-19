@@ -4,7 +4,7 @@ This script integrates the motion of a charged particle in a uniform magnetic fi
 
 ## Overview
 
-- Models the Lorentz force $q\,\mathbf{v} \times \mathbf{B}$ on a particle with `Q = 1`, `M = 1` in a uniform field `B = (0, 0, 1)`.
+- Models the Lorentz force $`q\,\mathbf{v} \times \mathbf{B}`$ on a particle with `Q = 1`, `M = 1` in a uniform field `B = (0, 0, 1)`.
 - Integrates the six first-order ODEs for position and velocity with a hand-written RK4 step (`DT = 0.01`).
 - Starts from `R0 = (0, 1, 0)` and `V0 = (1, 0, 1)`, which gives a helix of radius 1 around the $z$-axis.
 - Prints the final time, cyclotron period, analytical and numerical Larmor radius, and maximum relative speed drift.
@@ -14,18 +14,18 @@ This script integrates the motion of a charged particle in a uniform magnetic fi
 
 A particle with charge $q$ and mass $m$ moving with velocity $\mathbf{v}$ through a magnetic field $\mathbf{B}$ feels the Lorentz force
 
-$$
+```math
 \mathbf{F} = q\,(\mathbf{v} \times \mathbf{B})
-$$
+```
 
 The force is always perpendicular to $\mathbf{v}$, so it does no work and the speed $|\mathbf{v}|$ stays constant.
 
 ### Equations of Motion
 
-$$
+```math
 \dot{\mathbf{r}} = \mathbf{v},
 \qquad \dot{\mathbf{v}} = \frac{q}{m}\,(\mathbf{v} \times \mathbf{B})
-$$
+```
 
 ### Helical Motion
 
@@ -40,14 +40,14 @@ With the default values, $\omega_c = 1$ (period $2\pi \approx 6.28$), $r_L = 1$ 
 
 For $\dot{\mathbf{y}} = \mathbf{f}(t, \mathbf{y})$ with $\mathbf{y} = (\mathbf{r}, \mathbf{v})$:
 
-$$
+```math
 \mathbf{k}_1 = \mathbf{f}(t_n, \mathbf{y}_n), \quad
 \mathbf{k}_2 = \mathbf{f}\left(t_n + \tfrac{\Delta t}{2}, \mathbf{y}_n +
 \tfrac{\Delta t}{2}\mathbf{k}_1\right), \quad
 \mathbf{k}_3 = \mathbf{f}\left(t_n + \tfrac{\Delta t}{2}, \mathbf{y}_n +
 \tfrac{\Delta t}{2}\mathbf{k}_2\right), \quad
 \mathbf{k}_4 = \mathbf{f}(t_n + \Delta t, \mathbf{y}_n + \Delta t\,\mathbf{k}_3)
-$$
+```
 
 $$
 \mathbf{y}_{n+1} = \mathbf{y}_n +
@@ -59,7 +59,7 @@ RK4 is fourth-order accurate but not energy-conserving. For this rotation its pe
 
 ## Implementation
 
-- `lorentz_force(t, y)` returns $(\mathbf{v}, (q/m)\,\mathbf{v} \times \mathbf{B})$.
+- `lorentz_force(t, y)` returns $`(\mathbf{v}, (q/m)\,\mathbf{v} \times \mathbf{B})`$.
 - `rk4_step(func, t, y, dt)` performs one RK4 step.
 - `integrate(num_steps)` runs `num_steps` RK4 steps from the initial state and returns $t$, $\mathbf{r}$ and $\mathbf{v}$ arrays. The animation does not use it; it is kept as a standalone helper.
 - `ChargedParticleSimulation` advances the state one RK4 step per `step()` and records every position and velocity, so `trajectory()` returns the same arrays as `integrate`.

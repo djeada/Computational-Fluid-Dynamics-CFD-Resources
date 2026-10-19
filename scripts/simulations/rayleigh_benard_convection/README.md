@@ -15,10 +15,10 @@ This script simulates Rayleigh-Bénard convection, the buoyancy-driven flow in a
 
 ### Rayleigh and Prandtl Numbers
 
-$$
+```math
 Ra = \frac{g\beta\,\Delta T\,H^3}{\nu\kappa},
 \qquad Pr = \frac{\nu}{\kappa}
-$$
+```
 
 where $g$ is the gravitational acceleration, $\beta$ the thermal expansion coefficient, $\Delta T$ the temperature difference across the layer height $H$, $\nu$ the kinematic viscosity and $\kappa$ the thermal diffusivity. For a layer between rigid plates, convection starts above $Ra_c \approx 1708$.
 
@@ -26,15 +26,15 @@ where $g$ is the gravitational acceleration, $\beta$ the thermal expansion coeff
 
 Lengths are scaled with $H$, velocities with $U_f = \sqrt{g\beta\Delta T H}$, times with $H/U_f$ and temperatures with $\Delta T$. In two dimensions $(x, z)$, with vorticity $\omega = \partial w/\partial x - \partial u/\partial z$ and streamfunction $\psi$:
 
-$$
+```math
 \frac{\partial T}{\partial t} + \mathbf{u}\cdot\nabla
 T = \frac{1}{\sqrt{Ra\,Pr}}\,\nabla^2 T
-$$
+```
 
-$$
+```math
 \frac{\partial \omega}{\partial t} + \mathbf{u}\cdot\nabla
 \omega = \sqrt{\frac{Pr}{Ra}}\,\nabla^2 \omega + \frac{\partial T}{\partial x}
-$$
+```
 
 $$
 \nabla^2\psi = -\omega,
@@ -53,8 +53,8 @@ The buoyancy term $\partial T/\partial x$ spins up vorticity wherever hot and co
 ### Discretization and Stability
 
 - Advection uses first-order upwind differences and diffusion uses the 5-point Laplacian, both advanced with forward Euler.
-- The time step is $\Delta t = \min\left(2\times10^{-3},\; 0.4 / (\max|u|/\Delta x + \max|w|/\Delta z)\right)$.
-- The explicit diffusion limit $\sqrt{Pr/Ra}\,\Delta t\,(2/\Delta x^2 + 2/\Delta z^2) \le 1/2$ allows $\Delta t \le 2.4\times10^{-3}$.
+- The time step is $`\Delta t = \min\left(2\times10^{-3},\; 0.4 / (\max|u|/\Delta x + \max|w|/\Delta z)\right)`$.
+- The explicit diffusion limit $`\sqrt{Pr/Ra}\,\Delta t\,(2/\Delta x^2 + 2/\Delta z^2) \le 1/2`$ allows $\Delta t \le 2.4\times10^{-3}$.
 
 ### Nusselt Number
 

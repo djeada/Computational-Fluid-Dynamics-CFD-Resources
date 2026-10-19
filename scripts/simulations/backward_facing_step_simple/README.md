@@ -46,11 +46,11 @@ $$
 
 Integrating the $u$-momentum equation over the control volume around a $u$ face gives
 
-$$
+```math
 a_P u_P = a_E u_E + a_W u_W + a_N u_N + a_S u_S + (p_w - p_e)\,\Delta y
-$$
+```
 
-where $p_w$ and $p_e$ are the pressures in the cells on either side of the face. With face mass fluxes $F$ (interpolated linearly from neighbouring velocities) and diffusion conductances $D_e = \mu\,\Delta y/\Delta x$ and $D_n = \mu\,\Delta x/\Delta y$, the first-order upwind coefficients are
+where $p_w$ and $p_e$ are the pressures in the cells on either side of the face. With face mass fluxes $F$ (interpolated linearly from neighbouring velocities) and diffusion conductances $`D_e = \mu\,\Delta y/\Delta x`$ and $`D_n = \mu\,\Delta x/\Delta y`$, the first-order upwind coefficients are
 
 $$
 a_E = D_e + \max(-F_e, 0), \quad a_W = D_w + \max(F_w, 0), \quad a_N = D_n +
@@ -65,14 +65,14 @@ Where a no-slip wall lies half a cell from a velocity node, its conductance is d
 
 ### SIMPLE Pressure Correction
 
-1. Solve the momentum equations with the current pressure to get $u^*$ and $v^*$.
+1. Solve the momentum equations with the current pressure to get $`u^*`$ and $`v^*`$.
 2. The velocity correction is $u'_e = d_e (p'_P - p'_E)$ with $d_e = \Delta y / a_e$. Substituting into continuity gives the pressure-correction equation
 
-$$
+```math
 a_P p'_P = \sum_{nb} a_{nb} p'_{nb} + b,
 \qquad a_E = \rho\, d_e\,\Delta y, \quad a_N = \rho\, d_n\,\Delta x,
 \qquad b = -\rho\left[(u^*_e - u^*_w)\Delta y + (v^*_n - v^*_s)\Delta x\right]
-$$
+```
 
 with $p' = 0$ in the outlet column and no correction through solid or inlet faces.
 3. Correct the velocities, $u = u^* + d_e(p'_P - p'_E)$, and the pressure, $p = p + \alpha_p p'$.
@@ -89,7 +89,7 @@ The momentum residual is the mean of $|b + \sum a_{nb}\phi_{nb} - a_P\phi_P|$, a
 - `build_pressure_correction` returns the $p'$ coefficients and the $d$ factors, and `correct_uvp` applies the corrections.
 - `global_mass_imbalance` compares inlet and outlet flux. `reattachment_length` finds where $u$ in the first cell row changes sign from negative to positive behind the step.
 - `BackwardStepSimulation` builds the masks, index arrays, coefficient arrays and initial fields from a `Params` instance. Its `step()` is one SIMPLE iteration (predictor, pressure correction, corrector, monitors); it appends the three residuals and the mass imbalance to the `residuals` and `imbalance` histories and marks the solver `done` once the convergence criterion holds, which stops every run. Its `time` is the iteration count.
-- `BackwardStepView` draws the three panels from the simulation state only. The colour scale runs from 0 to the inlet peak speed $1.5\,U_{avg}$, and the arrow scale is fixed by the same speed (an arrow of that speed is 0.9 arrow spacings long), so every frame uses the same scales. Arrows are hidden inside the step, which is drawn in grey as resolved by the grid, and a red triangle on the bottom wall marks the reattachment point. The history axes are logarithmic and rescale to the data on every frame.
+- `BackwardStepView` draws the three panels from the simulation state only. The colour scale runs from 0 to the inlet peak speed $`1.5\,U_{avg}`$, and the arrow scale is fixed by the same speed (an arrow of that speed is 0.9 arrow spacings long), so every frame uses the same scales. Arrows are hidden inside the step, which is drawn in grey as resolved by the grid, and a red triangle on the bottom wall marks the reattachment point. The history axes are logarithmic and rescale to the data on every frame.
 - The shared runner in `scripts/_animation.py` provides the window, the headless run, the PNG and the reel. In the vertical reel the 16:1 channel would be a thin strip, so the field panel is cropped to $2 \le x \le 12$ (the end of the inlet channel, the step, the recirculation zone and the recovery downstream) and stacked above the residual and mass-imbalance histories, which share the iteration axis.
 
 ## Usage

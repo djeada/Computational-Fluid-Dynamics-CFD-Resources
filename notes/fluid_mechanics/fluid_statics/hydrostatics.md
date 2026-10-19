@@ -160,6 +160,7 @@ IV. **Hydraulic Systems**
 
 - [Archimedes' Principle Visualisation](../../../scripts/plots/archimedes_principle/): draws a block in a tank of fluid with its weight and buoyant force shown as arrows, and states whether the block floats or sinks according to Archimedes' principle.
 - [Pressure Variation with Depth](../../../scripts/plots/pressure_variation_with_depth/): plots how hydrostatic pressure increases linearly with depth below the free surface of a fluid at rest.
+- [SPH Dam Break](../../../scripts/simulations/sph_dam_break/): simulates the collapse of a water column in a closed tank, the classic dam-break problem, with weakly compressible smoothed particle hydrodynamics (SPH), and animates the water particles coloured by their speed.
 
 ### Exercises
 

@@ -197,6 +197,7 @@ For **incompressible** flow, the pressure boundary conditions arise from the mom
 - [Compressible vs. Incompressible Duct Flow](../../../scripts/plots/compressible_vs_incompressible/): draws prescribed incompressible and compressible velocity fields in a 2D duct side by side, so the constant downstream profile of the first can be compared with the accelerating profile of the second.
 - [Pressure Difference Across a Spherical Droplet](../../../scripts/plots/pressure_difference_across_spherical_droplet/): draws an annotated schematic of the Young-Laplace pressure jump across the surface of a spherical droplet.
 - [Pressure Variation with Depth](../../../scripts/plots/pressure_variation_with_depth/): plots how hydrostatic pressure increases linearly with depth below the free surface of a fluid at rest.
+- [SPH Dam Break](../../../scripts/simulations/sph_dam_break/): simulates the collapse of a water column in a closed tank, the classic dam-break problem, with weakly compressible smoothed particle hydrodynamics (SPH), and animates the water particles coloured by their speed.
 
 ### Exercises
 

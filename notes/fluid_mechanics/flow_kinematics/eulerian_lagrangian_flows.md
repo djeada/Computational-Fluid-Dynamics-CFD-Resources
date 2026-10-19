@@ -87,6 +87,9 @@ Deciding whether to use an Eulerian or Lagrangian perspective depends on the pro
 - [Eulerian Cylinder Flow](../../../scripts/simulations/eulerian_cylinder_flow/): simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and animates a dye tracer with Matplotlib.
 - [Kelvin-Helmholtz Instability Simulation](../../../scripts/simulations/kelvin_helmholtz_instability/): simulates the Kelvin-Helmholtz instability, the rolling-up of a shear layer between fluid streams moving in opposite directions, in a periodic 2D incompressible flow animated with Matplotlib.
 - [Simplified Real-Time Fluid Dynamics Simulator](../../../scripts/simulations/simplified_real_time_fluid_dynamics_simulator/): is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Matplotlib window.
+- [Double Gyre Chaotic Mixing](../../../scripts/simulations/double_gyre_chaotic_mixing/): advects 720 000 passive dye tracers through the time-periodic double gyre and animates how the flow stretches and folds them into ever finer filaments.
+- [Leapfrogging Vortex Pairs](../../../scripts/simulations/point_vortex_leapfrogging/): simulates two coaxial vortex pairs, four point vortices in all, that leapfrog: the rear pair contracts, speeds up and slips through the front pair, which widens and slows down, and then the two swap roles again and again.
+- [SPH Dam Break](../../../scripts/simulations/sph_dam_break/): simulates the collapse of a water column in a closed tank, the classic dam-break problem, with weakly compressible smoothed particle hydrodynamics (SPH), and animates the water particles coloured by their speed.
 
 ## Exercises
 

@@ -298,6 +298,11 @@ The fan starts at $\mu_1 = 30.0^\circ$ to the upstream flow. It ends at $\mu_2 =
 - Oblique shocks are normal shocks in the normal component $M_1 \sin\beta$. The $\theta$–$`\beta`$–$`M`$ relation gives weak and strong solutions below $\theta_{max}$ and a detached bow shock above it.
 - Convex corners produce isentropic Prandtl–Meyer fans with $\nu(M_2) = \nu(M_1) + \theta$.
 
+## Related Scripts
+
+- [Mach Cone of a Moving Sound Source](../../../scripts/simulations/mach_cone_moving_source/): simulates the sound of a small source that accelerates from rest to twice the speed of sound and animates its pressure field, from the Doppler-compressed wavefronts of a subsonic source through the pile-up at Mach 1 to the Mach cone of a supersonic one.
+- [Supersonic Forward-Facing Step](../../../scripts/simulations/supersonic_forward_facing_step/): solves the 2D compressible Euler equations for a Mach 3 stream that meets a forward-facing step in a wind tunnel, the benchmark of Woodward and Colella (1984), and animates the shock pattern that forms.
+
 ## Exercises
 
 **Exercise 1.** A normal shock stands in air at $M_1 = 3$. Find $M_2$, $p_2/p_1$, $\rho_2/\rho_1$, $T_2/T_1$, $p_{02}/p_{01}$ and the entropy rise.

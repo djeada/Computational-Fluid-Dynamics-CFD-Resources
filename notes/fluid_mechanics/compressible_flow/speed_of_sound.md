@@ -268,6 +268,7 @@ Most low-speed wind tunnels operate below about 100 m/s, and the incompressible 
 - [probability_distribution_function_of_nitrogen_molecules](../../../scripts/plots/probability_distribution_function_of_nitrogen_molecules/): plots the Maxwell–Boltzmann speed distribution of N$`_2`$ and marks $v_{rms}$. Multiply $`v_{rms}`$ by $\sqrt{\gamma/3} = 0.683$ to get the speed of sound at each temperature.
 - [compressible_vs_incompressible](../../../scripts/plots/compressible_vs_incompressible/): compares a fully developed incompressible pipe profile with an accelerating compressible one, illustrating why density changes must be tracked once the Mach number is no longer small.
 - [Converging-Diverging Nozzle Flow](../../../scripts/plots/nozzle_flow/): plots quasi-one-dimensional isentropic flow through a converging-diverging (de Laval) nozzle, with streamlines coloured by Mach number.
+- [Mach Cone of a Moving Sound Source](../../../scripts/simulations/mach_cone_moving_source/): simulates the sound of a small source that accelerates from rest to twice the speed of sound and animates its pressure field, from the Doppler-compressed wavefronts of a subsonic source through the pile-up at Mach 1 to the Mach cone of a supersonic one.
 
 ## Exercises
 

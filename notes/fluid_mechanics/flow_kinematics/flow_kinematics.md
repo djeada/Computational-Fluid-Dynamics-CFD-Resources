@@ -119,6 +119,9 @@ These concepts often coincide in steady flows, where the flow pattern does not c
 
 - [Eulerian and Lagrangian Flow Descriptions](../../../scripts/plots/eulerian_lagrangian_flows/): contrasts the Eulerian and Lagrangian descriptions of fluid motion using the time-dependent Double Gyre flow.
 - [Steady and Unsteady Pathlines Around a Cylinder with Vortex Shedding](../../../scripts/simulations/steady_and_unsteady_pathlines_with_vortex_shedding/): compares streamlines and particle pathlines for steady potential flow past a cylinder with circulation and for an unsteady version of the same flow with a kinematic vortex-shedding model.
+- [Decaying 2D Turbulence](../../../scripts/simulations/decaying_2d_turbulence/): simulates freely decaying two-dimensional turbulence in a doubly periodic box and animates how a random vorticity field organises itself into coherent vortices that merge into ever larger ones.
+- [Double Gyre Chaotic Mixing](../../../scripts/simulations/double_gyre_chaotic_mixing/): advects 720 000 passive dye tracers through the time-periodic double gyre and animates how the flow stretches and folds them into ever finer filaments.
+- [Leapfrogging Vortex Pairs](../../../scripts/simulations/point_vortex_leapfrogging/): simulates two coaxial vortex pairs, four point vortices in all, that leapfrog: the rear pair contracts, speeds up and slips through the front pair, which widens and slows down, and then the two swap roles again and again.
 
 ### Exercises
 
