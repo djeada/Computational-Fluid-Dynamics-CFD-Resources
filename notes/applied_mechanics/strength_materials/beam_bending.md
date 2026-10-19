@@ -124,8 +124,8 @@ where $y(x)$ is the deflection of the beam at position $x$.
 ### Procedure
 
 1. Determine the bending moment $M(x)$ as a function of $x$
-2. Integrate once to get the slope: $EI\dfrac{dy}{dx} = \int M(x)\,dx + C_1$
-3. Integrate again to get the deflection: $EI\,y = \iint M(x)\,dx\,dx + C_1 x + C_2$
+2. Integrate once to get the slope: $`EI\dfrac{dy}{dx} = \int M(x)\,dx + C_1`$
+3. Integrate again to get the deflection: $`EI\,y = \iint M(x)\,dx\,dx + C_1 x + C_2`$
 4. Apply boundary conditions to find $C_1$ and $C_2$
 
 ### Common Boundary Conditions
@@ -202,20 +202,20 @@ $$
 
 ### Example 2: Cantilever Beam Deflection
 
-A steel cantilever beam ($E = 200$ GPa, $I = 5 \times 10^6$ mm$^4$, $L = 2$ m) carries a uniform distributed load of 8 kN/m.
+A steel cantilever beam ($E = 200$ GPa, $I = 5 \times 10^6$ mm$`^4`$, $L = 2$ m) carries a uniform distributed load of 8 kN/m.
 
 **Given:**
 
-- $E = 200$ GPa, $I = 5 \times 10^6$ mm$^4$
+- $E = 200$ GPa, $I = 5 \times 10^6$ mm$`^4`$
 - $L = 2$ m, $w = 8$ kN/m
 
 **Find:** Maximum deflection at the free end.
 
 **Solution:**
 
-$$
+```math
 \delta_{max} = \frac{wL^4}{8EI} = \frac{8 \times 2000^4}{8 \times 200\,000 \times 5 \times 10^6}
-$$
+```
 
 $$
 \delta_{max} = \frac{8 \times 1.6 \times 10^{13}}{8 \times 10^{12}} = 16.0 \text{ mm}
@@ -244,9 +244,9 @@ $$
 A_w = 30 \times 170 = 5100 \text{ mm}^2, \quad \bar{y}_w = 85 \text{ mm}
 $$
 
-$$
+```math
 \bar{y} = \frac{6000 \times 185 + 5100 \times 85}{6000 + 5100} = \frac{1\,110\,000 + 433\,500}{11\,100} = 139.1 \text{ mm}
-$$
+```
 
 **Moment of inertia** (parallel axis theorem):
 
@@ -255,13 +255,13 @@ I_{NA} = \left[\frac{200 \times 30^3}{12} + 6000(185 - 139.1)^2\right] +
 \left[\frac{30 \times 170^3}{12} + 5100(139.1 - 85)^2\right]
 $$
 
-$$
+```math
 I_{NA} = [450\,000 + 12\,640\,860] + [12\,282\,500 + 14\,926\,731]
-$$
+```
 
-$$
+```math
 I_{NA} = 13\,090\,860 + 27\,209\,231 = 40.30 \times 10^6 \text{ mm}^4
-$$
+```
 
 ## Beam Design Considerations
 
@@ -360,11 +360,11 @@ It occurs at the neutral axis, where the bending stress is zero. It is only 2.5%
 <details>
 <summary>Answer</summary>
 
-Put the fixed end at $x = 0$. Then $M(x) = -P(L - x)$ and $EI\,y'' = -P(L - x)$.
+Put the fixed end at $x = 0$. Then $M(x) = -P(L - x)$ and $`EI\,y'' = -P(L - x)`$.
 
-Integrate once: $EI\,y' = -P(Lx - x^2/2) + C_1$, and $y'(0) = 0$ gives $C_1 = 0$.
+Integrate once: $`EI\,y' = -P(Lx - x^2/2) + C_1`$, and $y'(0) = 0$ gives $C_1 = 0$.
 
-Integrate again: $EI\,y = -P(Lx^2/2 - x^3/6) + C_2$, and $y(0) = 0$ gives $C_2 = 0$.
+Integrate again: $`EI\,y = -P(Lx^2/2 - x^3/6) + C_2`$, and $y(0) = 0$ gives $C_2 = 0$.
 
 At $x = L$:
 

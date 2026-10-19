@@ -96,21 +96,21 @@ where:
 
 In scalar form for planar motion:
 
-$$
+```math
 v_{Bx} = v_{Ax} - \omega \, r_{B/A,y}
-$$
+```
 
-$$
+```math
 v_{By} = v_{Ay} + \omega \, r_{B/A,x}
-$$
+```
 
 ## Instantaneous Center of Zero Velocity
 
 The **instantaneous center (IC)** is a point (which may lie outside the body) that has zero velocity at a given instant. Every point's velocity can then be computed as pure rotation about the IC:
 
-$$
+```math
 v_P = \omega \, d_P
-$$
+```
 
 where $d_P$ is the distance from $P$ to the IC.
 
@@ -131,8 +131,8 @@ $$
 
 The last two terms can be decomposed into:
 
-- **Tangential component**: $(\mathbf{a}_{B/A})_t = \boldsymbol{\alpha} \times \mathbf{r}_{B/A}$, magnitude $= \alpha \, r_{B/A}$
-- **Normal component**: $(\mathbf{a}_{B/A})_n = \boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}_{B/A})$, magnitude $= \omega^2 r_{B/A}$, directed from $B$ toward $A$
+- **Tangential component**: $`(\mathbf{a}_{B/A})_t = \boldsymbol{\alpha} \times \mathbf{r}_{B/A}`$, magnitude $`= \alpha \, r_{B/A}`$
+- **Normal component**: $`(\mathbf{a}_{B/A})_n = \boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}_{B/A})`$, magnitude $`= \omega^2 r_{B/A}`$, directed from $B$ toward $A$
 
 ## Worked Examples
 
@@ -207,15 +207,15 @@ AB\sin\phi = OA, \quad \sin\phi = \frac{0.1}{0.3} = \frac{1}{3}, \quad
 \phi = 19.47^\circ
 $$
 
-Using the relative velocity equation $\mathbf{v}_B = \mathbf{v}_A + \boldsymbol{\omega}_{AB} \times \mathbf{r}_{B/A}$ with a counterclockwise crank, $\mathbf{v}_A = -1\,\mathbf{i}$ m/s, $\mathbf{v}_B = v_B\,\mathbf{i}$ and $\mathbf{r}_{B/A} = AB\cos\phi\,\mathbf{i} - OA\,\mathbf{j} = 0.283\,\mathbf{i} - 0.1\,\mathbf{j}$ m:
+Using the relative velocity equation $`\mathbf{v}_B = \mathbf{v}_A + \boldsymbol{\omega}_{AB} \times \mathbf{r}_{B/A}`$ with a counterclockwise crank, $`\mathbf{v}_A = -1\,\mathbf{i}`$ m/s, $`\mathbf{v}_B = v_B\,\mathbf{i}`$ and $`\mathbf{r}_{B/A} = AB\cos\phi\,\mathbf{i} - OA\,\mathbf{j} = 0.283\,\mathbf{i} - 0.1\,\mathbf{j}`$ m:
 
-$$
+```math
 v_B\,\mathbf{i} = -1\,\mathbf{i} + \omega_{AB}\mathbf{k} \times
 (0.283\,\mathbf{i} - 0.1\,\mathbf{j}) = (-1 + 0.1\,\omega_{AB})\,\mathbf{i} +
 0.283\,\omega_{AB}\,\mathbf{j}
-$$
+```
 
-Vertical ($\mathbf{j}$) components: $0 = 0.283\,\omega_{AB} \implies \omega_{AB} = 0$.
+Vertical ($\mathbf{j}$) components: $`0 = 0.283\,\omega_{AB} \implies \omega_{AB} = 0`$.
 
 Horizontal ($\mathbf{i}$) components: $v_B = -1$ m/s.
 
@@ -356,10 +356,10 @@ Hence $v_B = 0$ (dead-centre position) and $\omega_{AB} = v_A/AB = 1/0.3 = 3.33$
 <details>
 <summary>Answer</summary>
 
-$\omega = v_C/R = 5$ rad/s and $\alpha = a_C/R = 3$ rad/s² (both clockwise). Using $\mathbf{a}_P = \mathbf{a}_C + \boldsymbol{\alpha} \times \mathbf{r}_{P/C} - \omega^2\mathbf{r}_{P/C}$:
+$\omega = v_C/R = 5$ rad/s and $\alpha = a_C/R = 3$ rad/s² (both clockwise). Using $`\mathbf{a}_P = \mathbf{a}_C + \boldsymbol{\alpha} \times \mathbf{r}_{P/C} - \omega^2\mathbf{r}_{P/C}`$:
 
-- Top point ($\mathbf{r} = R\mathbf{j}$): $\mathbf{a} = (1.2 + \alpha R)\mathbf{i} - \omega^2 R\,\mathbf{j} = 2.4\mathbf{i} - 10\mathbf{j}$ m/s², magnitude 10.3 m/s².
-- Contact point ($\mathbf{r} = -R\mathbf{j}$): $\mathbf{a} = (1.2 - \alpha R)\mathbf{i} + \omega^2 R\,\mathbf{j} = 10\mathbf{j}$ m/s², directed toward the centre.
+- Top point ($\mathbf{r} = R\mathbf{j}$): $`\mathbf{a} = (1.2 + \alpha R)\mathbf{i} - \omega^2 R\,\mathbf{j} = 2.4\mathbf{i} - 10\mathbf{j}`$ m/s², magnitude 10.3 m/s².
+- Contact point ($\mathbf{r} = -R\mathbf{j}$): $`\mathbf{a} = (1.2 - \alpha R)\mathbf{i} + \omega^2 R\,\mathbf{j} = 10\mathbf{j}`$ m/s², directed toward the centre.
 
 The contact point has zero velocity but not zero acceleration, which is why the IC cannot be used for acceleration analysis.
 

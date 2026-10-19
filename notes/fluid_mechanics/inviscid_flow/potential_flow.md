@@ -518,6 +518,8 @@ Potential flow theory provides powerful analytical tools for understanding invis
 
 - [Laplace Equation Maze Solver](../../../scripts/simulations/laplace_equation_maze_solver/): solves a randomly generated maze by computing a potential that satisfies Laplace's equation in the maze passages and then following the potential uphill from the entrance to the exit.
 - [Steady and Unsteady Pathlines Around a Cylinder with Vortex Shedding](../../../scripts/simulations/steady_and_unsteady_pathlines_with_vortex_shedding/): compares streamlines and particle pathlines for steady potential flow past a cylinder with circulation and for an unsteady version of the same flow with a kinematic vortex-shedding model.
+- [Double Gyre Chaotic Mixing](../../../scripts/simulations/double_gyre_chaotic_mixing/): advects 720 000 passive dye tracers through the time-periodic double gyre and animates how the flow stretches and folds them into ever finer filaments.
+- [Leapfrogging Vortex Pairs](../../../scripts/simulations/point_vortex_leapfrogging/): simulates two coaxial vortex pairs, four point vortices in all, that leapfrog: the rear pair contracts, speeds up and slips through the front pair, which widens and slows down, and then the two swap roles again and again.
 
 ## Exercises
 
@@ -528,7 +530,7 @@ Potential flow theory provides powerful analytical tools for understanding invis
 
 (a) $u_r = \partial\phi/\partial r = 0$ and $\frac{1}{r}\partial\psi/\partial\theta = 0$. Also $u_\theta = \frac{1}{r}\cdot\frac{\Gamma}{2\pi} = \frac{\Gamma}{2\pi r}$ and $-\partial\psi/\partial r = \frac{\Gamma}{2\pi r}$. Both relations hold.
 
-(b) $\oint u_\theta\, r\, d\theta = \int_0^{2\pi}\frac{\Gamma}{2\pi r}\, r\, d\theta = \Gamma$, independent of $r$.
+(b) $`\oint u_\theta\, r\, d\theta = \int_0^{2\pi}\frac{\Gamma}{2\pi r}\, r\, d\theta = \Gamma`$, independent of $r$.
 
 The vorticity is $\omega = \frac{1}{r}\frac{d(r u_\theta)}{dr} = 0$ for $r > 0$. By Stokes' theorem, all the circulation must therefore come from a singular concentration of vorticity at $r = 0$.
 

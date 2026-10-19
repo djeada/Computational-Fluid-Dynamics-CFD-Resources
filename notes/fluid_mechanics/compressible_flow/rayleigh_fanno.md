@@ -9,7 +9,7 @@
 
 Both models reveal a surprising effect. Friction or heating drives a subsonic flow *faster* and a supersonic flow *slower*, always toward $M = 1$. A duct that is too long, or a stream that is heated too much, becomes **choked** and forces the upstream flow to change.
 
-Each model is derived below, with its property ratios referenced to the sonic (starred) state and its $T$–$s$ diagram, followed by worked examples. Numbers are for air with $\gamma = 1.4$ and $R = 287\ \text{J/(kg K)}$.
+Each model is derived below, with its property ratios referenced to the sonic (starred) state and its $T$–$`s`$ diagram, followed by worked examples. Numbers are for air with $\gamma = 1.4$ and $R = 287\ \text{J/(kg K)}$.
 
 ## Fanno Flow: Adiabatic Flow with Friction
 
@@ -25,10 +25,10 @@ $$
 
 **Momentum.** The wall shear stress $\tau_w$ acts on the perimeter $\pi D$:
 
-$$
+```math
 -A\, dp - \tau_w \pi D\, dx = \rho V A\, dV \quad \Rightarrow \quad dp + \rho V\, dV +
 \frac{4\tau_w}{D} dx = 0
-$$
+```
 
 **Energy.** The flow is adiabatic with no work, so $h_0$ is constant:
 
@@ -36,15 +36,15 @@ $$
 c_p T + \frac{V^2}{2} = c_p T_0 = \text{const}
 $$
 
-The wall shear is expressed with the **Fanning friction factor** $f$, defined by $\tau_w = f \cdot \tfrac{1}{2}\rho V^2$. It is one quarter of the Darcy friction factor used in [pipes.md](../internal_flow/pipes.md), $f_D = 4f$, so $4f\, L/D = f_D\, L/D$. The friction factor comes from the Moody chart as in incompressible pipe flow. It stays nearly constant along the duct because $\rho V D/\mu$ changes only through the viscosity $\mu(T)$.
+The wall shear is expressed with the **Fanning friction factor** $f$, defined by $\tau_w = f \cdot \tfrac{1}{2}\rho V^2$. It is one quarter of the Darcy friction factor used in [pipes.md](../internal_flow/pipes.md), $f_D = 4f$, so $`4f\, L/D = f_D\, L/D`$. The friction factor comes from the Moody chart as in incompressible pipe flow. It stays nearly constant along the duct because $\rho V D/\mu$ changes only through the viscosity $\mu(T)$.
 
 ### The Fanno Relation
 
 Combining continuity, momentum, energy, $p = \rho R T$ and $M^2 = V^2/(\gamma R T)$ gives one ordinary differential equation in $M$:
 
-$$
+```math
 \frac{4f\, dx}{D} = \frac{1 - M^2}{\gamma M^4 \left(1 + \frac{\gamma - 1}{2} M^2\right)}\, dM^2
-$$
+```
 
 The sign of $1 - M^2$ tells the story. Friction always adds a positive $dx$, so $dM^2 > 0$ for subsonic flow and $dM^2 < 0$ for supersonic flow. **Friction drives the Mach number toward 1 from either side.**
 
@@ -57,28 +57,28 @@ $$
 
 For two stations 1 and 2 in the same duct, a distance $L$ apart,
 
-$$
+```math
 \frac{4f L}{D} = \left(\frac{4f L^*}{D}\right)_{M_1} -
 \left(\frac{4f L^*}{D}\right)_{M_2}
-$$
+```
 
 ### Property Ratios
 
 Continuity ($\rho V = \rho^* V^*$), constant $T_0$, and the state equation give the ratios to the sonic state:
 
-$$
+```math
 \frac{T}{T^*} = \frac{\gamma + 1}{2 + (\gamma - 1) M^2},
 \qquad \frac{p}{p^*} = \frac{1}{M} \sqrt{\frac{\gamma + 1}{2 + (\gamma - 1) M^2}}
-$$
+```
 
-$$
+```math
 \frac{\rho}{\rho^*} = \frac{V^*}{V} = \frac{1}{M}
 \sqrt{\frac{2 + (\gamma - 1) M^2}{\gamma + 1}},
 \qquad
 \frac{p_0}{p_0^*} = \frac{1}{M}\left[\frac{2 + (\gamma - 1) M^2}{\gamma + 1}\right]^{\frac{\gamma + 1}{2(\gamma - 1)}}
-$$
+```
 
-The last ratio has the same form as the isentropic area ratio $A/A^*$. Ratios between two stations follow by division, for example $p_2/p_1 = (p/p^*)_{M_2}/(p/p^*)_{M_1}$.
+The last ratio has the same form as the isentropic area ratio $`A/A^*`$. Ratios between two stations follow by division, for example $`p_2/p_1 = (p/p^*)_{M_2}/(p/p^*)_{M_1}`$.
 
 | $M$ | $4fL^*/D$ | $T/T^*$ | $p/p^*$ | $\rho/\rho^*$ | $p_0/p_0^*$ |
 | --- | --- | --- | --- | --- | --- |
@@ -128,17 +128,17 @@ The momentum equation is the same as for a normal shock, because friction is abs
 
 With $\rho V^2 = \gamma p M^2$, the momentum equation gives $p(1 + \gamma M^2) = \text{const}$. Combining with continuity and the state equation gives:
 
-$$
+```math
 \frac{p}{p^*} = \frac{1 + \gamma}{1 + \gamma M^2},
 \qquad \frac{T}{T^*} = M^2 \left(\frac{1 + \gamma}{1 + \gamma M^2}\right)^2,
 \qquad \frac{\rho}{\rho^*} = \frac{V^*}{V} = \frac{1 + \gamma M^2}{(1 + \gamma) M^2}
-$$
+```
 
-$$
+```math
 \frac{T_0}{T_0^*} = \frac{(\gamma + 1) M^2 \left[2 + (\gamma - 1) M^2\right]}{\left(1 + \gamma M^2\right)^2},
 \qquad
 \frac{p_0}{p_0^*} = \frac{1 + \gamma}{1 + \gamma M^2}\left[\frac{2 + (\gamma - 1) M^2}{\gamma + 1}\right]^{\gamma/(\gamma - 1)}
-$$
+```
 
 Here $T_0^*$ is the stagnation temperature the stream would have if enough heat were added to bring it exactly to $M = 1$.
 
@@ -162,10 +162,10 @@ Here $T_0^*$ is the stagnation temperature the stream would have if enough heat 
 
 The largest amount of heat a stream at $M_1$ can absorb is
 
-$$
+```math
 q_{max} = c_p \left(T_0^* - T_{01}\right) = c_p
 T_{01}\left[\frac{1}{(T_0/T_0^*)_{M_1}} - 1\right]
-$$
+```
 
 If more heat is added, the duct is **thermally choked**. A subsonic flow responds by reducing its inlet Mach number, and hence its mass flow, until the exit is just sonic. A supersonic flow responds with a shock that moves upstream. This is one of the main operating limits of ramjets and afterburners.
 
@@ -173,7 +173,7 @@ Note that $M = 1/\sqrt{\gamma}$ is *not* the choking point of Rayleigh flow, onl
 
 ## T–s Diagrams
 
-Plotting static temperature against entropy gives a map of each process. For Fanno flow $(s - s^*)/R = \ln\left[(T/T^*)^{\gamma/(\gamma - 1)}/(p/p^*)\right]$, and similarly for Rayleigh flow. A line on this map is the set of all states with the same mass flux $\rho V$ and the same $h_0$ (Fanno) or the same $p + \rho V^2$ (Rayleigh).
+Plotting static temperature against entropy gives a map of each process. For Fanno flow $`(s - s^*)/R = \ln\left[(T/T^*)^{\gamma/(\gamma - 1)}/(p/p^*)\right]`$, and similarly for Rayleigh flow. A line on this map is the set of all states with the same mass flux $\rho V$ and the same $h_0$ (Fanno) or the same $p + \rho V^2$ (Rayleigh).
 
 **Fanno line.** The line is a "nose" pointing toward higher entropy. The subsonic branch is the upper part, at high temperature and low kinetic energy. The supersonic branch is the lower part. Entropy is **maximum at $M = 1$**. Friction can only increase entropy, so both branches move toward the nose.
 
@@ -234,10 +234,10 @@ Air enters a pipe with $D = 5\ \text{cm}$ and Darcy friction factor $f_D = 4f = 
 
 **Is the pipe choked?**
 
-$$
+```math
 \left(\frac{4fL^*}{D}\right)_1 = 5.2993 \quad \Rightarrow \quad
-L_1^* = \frac{5.2993 \times 0.05}{0.02} = 13.25\  \text{m}
-$$
+L_1^* = \frac{5.2993 \times 0.05}{0.02} = 13.25\ \text{m}
+```
 
 Since $8\ \text{m} < 13.25\ \text{m}$, the pipe is not choked.
 
@@ -257,7 +257,7 @@ $$
 
 **Losses.** $p_{02}/p_{01} = 0.7627$, so $s_2 - s_1 = -287 \ln 0.7627 = 77.7\ \text{J/(kg K)}$.
 
-**Mass flow.** $\rho_1 V_1 = 2.3229 \times 104.16 = 241.9\ \text{kg/(m}^2\,\text{s)}$, which gives $\dot m = 0.475\ \text{kg/s}$. The same value is recovered at the exit.
+**Mass flow.** $`\rho_1 V_1 = 2.3229 \times 104.16 = 241.9\ \text{kg/(m}^2\,\text{s)}`$, which gives $\dot m = 0.475\ \text{kg/s}$. The same value is recovered at the exit.
 
 **A longer pipe.** Suppose the pipe is fed from the same reservoir ($p_{01} = 212.9\ \text{kPa}$, $T_{01} = 305.4\ \text{K}$) through a short isentropic entrance, but is 20 m long. Then $4fL/D = 8.0 > 5.2993$ and the pipe chokes. The inlet Mach number drops to the value with $4fL^*/D = 8.0$, which is $M_1 = 0.2559$. The mass flow falls to 86.6% of its previous value, and the exit is exactly sonic.
 
@@ -267,17 +267,17 @@ Air enters a constant-area combustor at $M_1 = 0.2$, $T_1 = 400\ \text{K}$ and $
 
 **Stagnation temperatures.**
 
-$$
-T_{01} = 400 \times 1.008 = 403.2\  \text{K},
-\qquad T_{02} = 403.2 + \frac{800\,000}{1004.5} = 1199.6\  \text{K}
-$$
+```math
+T_{01} = 400 \times 1.008 = 403.2\ \text{K},
+\qquad T_{02} = 403.2 + \frac{800\,000}{1004.5} = 1199.6\ \text{K}
+```
 
 **Reference state and exit Mach number.**
 
-$$
-T_0^* = \frac{403.2}{0.17355} = 2323.2\  \text{K},
+```math
+T_0^* = \frac{403.2}{0.17355} = 2323.2\ \text{K},
 \qquad \frac{T_{02}}{T_0^*} = 0.5164 \quad \Rightarrow \quad M_2 = 0.3928
-$$
+```
 
 **Exit properties.**
 
@@ -290,7 +290,7 @@ $$
 
 **Choking limit.** $q_{max} = 1004.5 \times (2323.2 - 403.2) = 1928.6\ \text{kJ/kg}$.
 
-**Too much heat.** If $q = 2500\ \text{kJ/kg}$ is added instead, the combustor chokes. The exit stagnation temperature $T_{02} = 2892.0\ \text{K}$ becomes the new $T_0^*$, so the inlet must satisfy $T_0/T_0^* = 403.2/2892.0 = 0.1394$, giving $M_1 = 0.1774$. With the same upstream stagnation state, the mass flow drops to 89.1% of its original value.
+**Too much heat.** If $q = 2500\ \text{kJ/kg}$ is added instead, the combustor chokes. The exit stagnation temperature $T_{02} = 2892.0\ \text{K}$ becomes the new $`T_0^*`$, so the inlet must satisfy $`T_0/T_0^* = 403.2/2892.0 = 0.1394`$, giving $M_1 = 0.1774$. With the same upstream stagnation state, the mass flow drops to 89.1% of its original value.
 
 ## Related Scripts
 
@@ -303,7 +303,7 @@ $$
 <details>
 <summary>Answer</summary>
 
-$(4fL^*/D)_{2.5} = 0.4320$, so $L^* = 0.4320 \times 0.02/0.016 = 0.540\ \text{m}$.
+$`(4fL^*/D)_{2.5} = 0.4320`$, so $`L^* = 0.4320 \times 0.02/0.016 = 0.540\ \text{m}`$.
 
 A longer duct forces a normal shock into the duct. Even an infinitely high inlet Mach number would allow only $4fL^*/D = 0.8215$, or $L = 1.03\ \text{m}$.
 
@@ -316,7 +316,7 @@ A longer duct forces a normal shock into the duct. Even an infinitely high inlet
 
 $4fL/D = 0.016 \times 0.5/0.02 = 0.4$. Then $(4fL^*/D)_2 = 0.5222 - 0.4 = 0.1222$, and the supersonic root is $M_2 = 1.462$.
 
-$T_2/T_1 = (T/T^*)_{1.462}/(T/T^*)_{3} = 1.962$.
+$`T_2/T_1 = (T/T^*)_{1.462}/(T/T^*)_{3} = 1.962`$.
 
 $p_2/p_1 = 2.874$.
 
@@ -331,7 +331,7 @@ Supersonic friction is extremely lossy: nearly three quarters of the stagnation 
 <details>
 <summary>Answer</summary>
 
-$(T_0/T_0^*)_{0.3} = 0.34686$, so $T_0^* = 400/0.34686 = 1153.2\ \text{K}$.
+$`(T_0/T_0^*)_{0.3} = 0.34686`$, so $`T_0^* = 400/0.34686 = 1153.2\ \text{K}`$.
 
 $q_{max} = 1004.5 \times (1153.2 - 400) = 756.6\ \text{kJ/kg}$.
 
@@ -342,11 +342,11 @@ $q_{max} = 1004.5 \times (1153.2 - 400) = 756.6\ \text{kJ/kg}$.
 <details>
 <summary>Answer</summary>
 
-$T_{01} = 300 \times 2.8 = 840\ \text{K}$ and $T_{02} = 840 + 300\,000/1004.5 = 1138.7\ \text{K}$.
+$T_{01} = 300 \times 2.8 = 840\ \text{K}$ and $`T_{02} = 840 + 300\,000/1004.5 = 1138.7\ \text{K}`$.
 
 $T_0^* = 840/0.65398 = 1284.4\ \text{K}$, so $T_{02}/T_0^* = 0.8865$ and the supersonic root is $M_2 = 1.591$.
 
-$T_2 = 300 \times (T/T^*)_{1.591}/0.28028 = 756.0\ \text{K}$, $p_2/p_1 = 2.994$, and $p_{02}/p_{01} = 0.3417$.
+$`T_2 = 300 \times (T/T^*)_{1.591}/0.28028 = 756.0\ \text{K}`$, $`p_2/p_1 = 2.994`$, and $`p_{02}/p_{01} = 0.3417`$.
 
 $q_{max} = 1004.5 \times (1284.4 - 840) = 446.4\ \text{kJ/kg}$.
 
@@ -359,7 +359,7 @@ Heating supersonic flow slows it, compresses it and costs a large fraction of th
 <details>
 <summary>Answer</summary>
 
-**Fanno ratios.** $p_2/p_1 = (p/p^*)_{0.5774}/(p/p^*)_{2} = 1.8371/0.40825 = 4.500$, and $T_2/T_1 = 1.125/0.66667 = 1.6875$.
+**Fanno ratios.** $`p_2/p_1 = (p/p^*)_{0.5774}/(p/p^*)_{2} = 1.8371/0.40825 = 4.500`$, and $T_2/T_1 = 1.125/0.66667 = 1.6875$.
 
 **Rayleigh ratios.** $p_2/p_1 = 1.63636/0.36364 = 4.500$, and $T_2/T_1 = 0.89256/0.52893 = 1.6875$.
 

@@ -22,9 +22,9 @@ Below is a diagram showing fluid layers with different speeds. Viscosity acts to
 
 For **Newtonian fluids**, shear stress $\tau$ is proportional to shear rate $\dot{\gamma}$:
 
-$$
+```math
 \tau = \mu \, \dot{\gamma}
-$$
+```
 
 where $\mu$ is the **dynamic viscosity**, assumed constant under fixed temperature and pressure. Examples include water, air, many oils, and other “simple” fluids.
 
@@ -43,7 +43,7 @@ Below is a rough  representation comparing a **Newtonian** fluid curve (straight
                   +-----------------> shear rate (γ̇)
 ```
 
-- Newtonian: straight line (slope = µ, constant).
+- Newtonian: straight line (slope = $\mu$, constant).
 - Shear-thinning: curve that starts steep and flattens out.
 - Shear-thickening: curve that starts shallow and steepens.
 
@@ -73,9 +73,9 @@ I. **Shear-Thinning (Pseudoplastic)**:
 
 Viscosity helps determine whether flow is **laminar** (smooth layers) or **turbulent** (chaotic, swirling eddies). The **Reynolds number** ($Re$) is a dimensionless group used to predict flow regime:
 
-$$
+```math
 Re = \frac{\rho \, U \, L}{\mu}
-$$
+```
 
 - $\rho$ = fluid density
 - $U$ = characteristic velocity
@@ -124,13 +124,13 @@ Wall ->  |--- fluid at rest (no slip)
 
 I. Velocity near the wall is forced to **zero** due to the no-slip condition.
 
-II. Over a small distance (the boundary layer thickness), velocity ramps up to **U∞**.
+II. Over a small distance (the boundary layer thickness), velocity ramps up to **$U_\infty$**.
 
 III. The shape/thickness of this boundary layer has a big impact on drag and heat transfer.
 
 ### Related Scripts
 
-- [Velocity Layers and Viscosity](../../../scripts/plots/velocity_layers_viscosity/): draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $\tau = \mu\, du/dy$.
+- [Velocity Layers and Viscosity](../../../scripts/plots/velocity_layers_viscosity/): draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $`\tau = \mu\, du/dy`$.
 - [Wall Shear in Pipe Cross-Section](../../../scripts/plots/wall_shear_pipe_cross_section/): sketches fully developed laminar (Hagen-Poiseuille) flow in a circular pipe, with velocity arrows whose lengths follow the parabolic profile $u(r) = u_{max}(1 - (r/R)^2)$.
 
 ### Exercises
@@ -174,7 +174,7 @@ Water has the dynamic viscosity about 55 times larger. Air has the kinematic vis
 <details>
 <summary>Answer</summary>
 
-$\mu_{app} = K\dot{\gamma}^{n-1} = 10\,\dot{\gamma}^{-0.5}$.
+$`\mu_{app} = K\dot{\gamma}^{n-1} = 10\,\dot{\gamma}^{-0.5}`$.
 
 - At $\dot{\gamma} = 1$ s⁻¹: $\mu_{app} = 10$ Pa s.
 - At $\dot{\gamma} = 100$ s⁻¹: $\mu_{app} = 1$ Pa s.

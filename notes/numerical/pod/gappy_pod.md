@@ -12,12 +12,12 @@ However, in many practical scenarios—such as when sensors fail, data become pa
 
 Both POD and Gappy POD are naturally formulated in Hilbert spaces. Consider a function space $L^2(\Omega)$, where $\Omega \subseteq \mathbb{R}^d$ is the spatial domain. A function $y(x)$, with $x \in \Omega$, belongs to $L^2(\Omega)$ if the integral of $|y(x)|^2$ over $\Omega$ is finite. This ensures an inner product and norm can be defined:
 
-$$
+```math
 \langle f, g \rangle_{L^2(\Omega)} = \int_\Omega f(x) g(x) \, dx, \quad \|
 y\|_{L^2(\Omega)} = \sqrt{\langle y, y \rangle_{L^2(\Omega)}}
-$$
+```
 
-POD typically seeks a low-dimensional subspace $\mathcal{Y}^L \subseteq L^2(\Omega)$ spanned by the first $L$ POD modes $\{\psi_j(x)\}_{j=1}^L$. These modes form an orthonormal basis in that subspace. Any function $y \in \mathcal{Y}^L$ can be approximated as:
+POD typically seeks a low-dimensional subspace $\mathcal{Y}^L \subseteq L^2(\Omega)$ spanned by the first $L$ POD modes $`\{\psi_j(x)\}_{j=1}^L`$. These modes form an orthonormal basis in that subspace. Any function $y \in \mathcal{Y}^L$ can be approximated as:
 
 $$
 y(x) \approx \hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x)
@@ -29,12 +29,12 @@ where the coefficients $a_j^{(y)} = \langle y, \psi_j \rangle_{L^2(\Omega)}$ are
 
 ### Non-Gappy Function Approximation
 
-If we have a complete description of $y \in L^2(\Omega)$, the best $L^2$-approximation in the subspace spanned by $\{\psi_j\}$ is obtained by minimizing:
+If we have a complete description of $y \in L^2(\Omega)$, the best $L^2$-approximation in the subspace spanned by $`\{\psi_j\}`$ is obtained by minimizing:
 
-$$
+```math
 \min_{\{a_j^{(y)}\}} \frac{1}{2}\| y(x) - \sum_{j=1}^L
 a_j^{(y)}\psi_j(x)\|_{L^2(\Omega)}^2
-$$
+```
 
 The solution is straightforward:
 
@@ -48,16 +48,16 @@ $$
 \hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x)
 $$
 
-This assumes we have full knowledge of $y(x)$. In practice, especially in experimental settings or databases built from simulations at parameter sets, we often have only a set of discrete measurements $\{y(x^{(i)})\}_{i=1}^N$.
+This assumes we have full knowledge of $y(x)$. In practice, especially in experimental settings or databases built from simulations at parameter sets, we often have only a set of discrete measurements $`\{y(x^{(i)})\}_{i=1}^N`$.
 
 ### Gappy Data Approximation
 
 In Gappy POD, instead of minimizing over the entire domain $\Omega$, we only have partial information at sample points $x^{(i)}$, $i=1,\ldots,N$:
 
-$$
+```math
 \min_{\{a_j^{(y)}\}} \frac{1}{2} \sum_{i=1}^N
 (y(x^{(i)}) - \sum_{j=1}^L a_j^{(y)} \psi_j(x^{(i)}))^2
-$$
+```
 
 Define the "design matrix" $\Psi \in \mathbb{R}^{N \times L}$ as:
 
@@ -67,9 +67,9 @@ $$
 
 We also have the vector $Y = [y(x^{(1)}), y(x^{(2)}), \ldots, y(x^{(N)})]^T \in \mathbb{R}^N$. The optimization problem becomes:
 
-$$
+```math
 \min_{\Gamma_{a}^{(y)}} \frac{1}{2}\| Y - \Psi \Gamma_{a}^{(y)}\|_2^2
-$$
+```
 
 where $\Gamma_{a}^{(y)} = [a_1^{(y)}, \ldots, a_L^{(y)}]^T$. Provided $\text{rank}(\Psi)=L$, the least-squares solution is:
 
@@ -85,7 +85,7 @@ $$
 
 ### Avoiding Redundancy and Database Functions
 
-In many practical cases, the POD modes $\psi_j(x)$ come from a pre-computed database of solutions $\{\phi_j(x)\}_{j=1}^M$ that span a larger manifold $\mathcal{M} \subset L^2(\Omega)$. Using a singular value decomposition (SVD), we extract the dominant $L \le M$ modes to form a reduced basis $\psi_j(x)$. Then:
+In many practical cases, the POD modes $\psi_j(x)$ come from a pre-computed database of solutions $`\{\phi_j(x)\}_{j=1}^M`$ that span a larger manifold $\mathcal{M} \subset L^2(\Omega)$. Using a singular value decomposition (SVD), we extract the dominant $L \le M$ modes to form a reduced basis $\psi_j(x)$. Then:
 
 $$
 \Psi = \Phi V_L W_L^{-1}
@@ -122,11 +122,11 @@ III. **Regularization**:
 
 In presence of transformations and incomplete data, a regularization term $\frac{\delta}{2} p^T p$ can be introduced to stabilize the solution. The optimization problem becomes:
 
-$$
+```math
 \min_{\Gamma_{a}^{(y)}, p} \left\{ \frac{1}{2}\sum_{i=1}^N
 (y(x^{(i)}) - \bar{y}(\bar{\phi}(p), p, a^{(y)}))^2 + \frac{\delta}{2} \| p\|_2^2
 \right\}
-$$
+```
 
 This ensures robustness against ill-conditioned problems and overfitting.
 
@@ -178,7 +178,7 @@ Now, in an experimental wind tunnel test, you only have a handful of pressure se
 ### Limitations and Considerations
 
 - **Quality of Basis**: The accuracy of Gappy POD reconstruction depends heavily on the richness and representativeness of the underlying POD basis. If the basis does not capture the needed structures, reconstruction quality suffers.
-- **Conditioning and Stability**: The least-squares problem $\min \|Y - \Psi \Gamma_{a}^{(y)}\|$ can be ill-conditioned if the sampling points or available data are not chosen wisely. Regularization or sensor placement optimization may be needed.
+- **Conditioning and Stability**: The least-squares problem $`\min \|Y - \Psi \Gamma_{a}^{(y)}\|`$ can be ill-conditioned if the sampling points or available data are not chosen wisely. Regularization or sensor placement optimization may be needed.
 - **Nonlinearity and Complexity**: For highly nonlinear problems or complex transformations (aligned database method), additional steps, such as nonlinear manifold learning or kernel methods, might be required.
 
 ## Future Directions and Research
@@ -209,7 +209,7 @@ In experiments and sensor-limited environments, full-field data are rarely avail
 
 | Aspect | Details |
 | --- | --- |
-| **Inputs** | Partial measurements $Y = [y(x^{(1)}), \dots, y(x^{(N)})]^T$, POD modes $\{\psi_j\}_{j=1}^L$ (from a complete database), sample locations $x^{(i)}$ |
+| **Inputs** | Partial measurements $Y = [y(x^{(1)}), \dots, y(x^{(N)})]^T$, POD modes $`\{\psi_j\}_{j=1}^L`$ (from a complete database), sample locations $x^{(i)}$ |
 | **Outputs** | Reconstructed coefficients $\Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T Y$, full-field approximation $\hat{y}(x) = \sum a_j \psi_j(x)$ |
 
 ## Related Scripts
@@ -235,7 +235,7 @@ With all points sampled, the columns of $\Psi \in \mathbb{R}^{4 \times 2}$ are t
 <details>
 <summary>Answer</summary>
 
-Points 1 and 3: $\Psi = \begin{pmatrix} 1/2 & 1/2 \\ 1/2 & -1/2 \end{pmatrix}$ is square and invertible. Solving $a_1 + a_2 = 4$ and $a_1 - a_2 = 2$ gives $a = (3, 1)$, and $\hat{y} = (2, 2, 1, 1)$ is recovered exactly.
+Points 1 and 3: $`\Psi = \begin{pmatrix} 1/2 & 1/2 \\ 1/2 & -1/2 \end{pmatrix}`$ is square and invertible. Solving $a_1 + a_2 = 4$ and $a_1 - a_2 = 2$ gives $a = (3, 1)$, and $\hat{y} = (2, 2, 1, 1)$ is recovered exactly.
 
 Points 1 and 2: both rows of $\Psi$ equal $(1/2, 1/2)$, so $\text{rank}(\Psi) = 1 < L = 2$ and $\Psi^T\Psi$ is singular. The two modes take identical values at these sensors, so the data cannot tell them apart: any $a$ with $a_1 + a_2 = 4$ fits. Sensor locations must make $\Psi$ have full column rank, and preferably be well conditioned.
 
@@ -256,14 +256,14 @@ Solving gives $a = (3, 1)$, so $\hat{y} = (2, 2, 1, 1)$, equal to the noise-free
 
 </details>
 
-**Exercise 4.** In the mask formulation of Everson and Sirovich, a diagonal mask $M = \text{diag}(m_1, \ldots, m_n)$ has $m_i = 1$ at measured points and $0$ elsewhere. With $\Psi_{\text{full}}$ the modes evaluated at all points, show that the gappy normal equations $(\Psi_{\text{full}}^T M \Psi_{\text{full}})\,a = \Psi_{\text{full}}^T M y$ coincide with those of this note. Then show that if the true field lies exactly in the span of the $L$ modes and $\Psi$ has full column rank, gappy POD recovers the coefficients exactly, whichever points are missing.
+**Exercise 4.** In the mask formulation of Everson and Sirovich, a diagonal mask $M = \text{diag}(m_1, \ldots, m_n)$ has $m_i = 1$ at measured points and $0$ elsewhere. With $\Psi_{\text{full}}$ the modes evaluated at all points, show that the gappy normal equations $`(\Psi_{\text{full}}^T M \Psi_{\text{full}})\,a = \Psi_{\text{full}}^T M y`$ coincide with those of this note. Then show that if the true field lies exactly in the span of the $L$ modes and $\Psi$ has full column rank, gappy POD recovers the coefficients exactly, whichever points are missing.
 
 <details>
 <summary>Answer</summary>
 
 Let $S$ be the $N \times n$ matrix that selects the measured points, so that $\Psi = S\Psi_{\text{full}}$, $Y = Sy$ and $S^TS = M$. Then $\Psi^T\Psi = \Psi_{\text{full}}^T S^T S\Psi_{\text{full}} = \Psi_{\text{full}}^T M\Psi_{\text{full}}$ and $\Psi^T Y = \Psi_{\text{full}}^T M y$, so the two systems are identical.
 
-If $y = \Psi_{\text{full}}a^*$, then $Y = \Psi a^*$ and
+If $`y = \Psi_{\text{full}}a^*`$, then $`Y = \Psi a^*`$ and
 
 ```math
 \Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T\Psi a^* = a^*

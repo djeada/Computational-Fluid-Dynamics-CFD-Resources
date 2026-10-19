@@ -82,8 +82,8 @@ where $r = \sqrt{I_{min}/A}$ is the minimum radius of gyration.
 ### Column Classification
 
 - **Short columns** ($\lambda < 30$–50): Failure by crushing (material yielding), not buckling
-- **Intermediate columns** ($30 < \\lambda < $ critical): Inelastic buckling
-- **Long (slender) columns** ($\\lambda > $ critical): Elastic (Euler) buckling
+- **Intermediate columns** ($30 < \lambda < \lambda_c$): Inelastic buckling
+- **Long (slender) columns** ($\lambda > \lambda_c$): Elastic (Euler) buckling
 
 The **critical slenderness ratio** separating elastic and inelastic buckling is:
 
@@ -176,12 +176,12 @@ $$
 
 ### Example 1: Euler Buckling of a Pin-Pin Column
 
-A steel column ($E = 200$ GPa) has a W200×46 wide-flange section ($I_{min} = 15.4 \times 10^6$ mm$^4$, $A = 5890$ mm$^2$) and a length of 5 m with pin-pin end conditions.
+A steel column ($E = 200$ GPa) has a W200×46 wide-flange section ($I_{min} = 15.4 \times 10^6$ mm$`^4`$, $A = 5890$ mm$`^2`$) and a length of 5 m with pin-pin end conditions.
 
 **Given:**
 
 - $E = 200$ GPa, $L = 5$ m, $K = 1.0$
-- $I_{min} = 15.4 \times 10^6$ mm$^4$, $A = 5890$ mm$^2$
+- $I_{min} = 15.4 \times 10^6$ mm$`^4`$, $A = 5890$ mm$`^2`$
 
 **Find:** Critical buckling load and stress.
 
@@ -195,9 +195,9 @@ $$
 
 **Critical load:**
 
-$$
+```math
 P_{cr} = \frac{\pi^2 EI_{min}}{L_e^2} = \frac{\pi^2 \times 200\,000 \times 15.4 \times 10^6}{5000^2}
-$$
+```
 
 $$
 P_{cr} = \frac{3.041 \times 10^{13}}{25 \times 10^6} = 1216 \text{ kN}
@@ -205,15 +205,15 @@ $$
 
 **Critical stress:**
 
-$$
+```math
 \sigma_{cr} = \frac{P_{cr}}{A} = \frac{1\,216\,000}{5890} = 206.4 \text{ MPa}
-$$
+```
 
 **Check:** $r_{min} = \sqrt{I/A} = \sqrt{15.4 \times 10^6 / 5890} = 51.1$ mm
 
 $\lambda = L_e/r = 5000/51.1 = 97.8$
 
-For steel with $\sigma_y = 250$ MPa: $\lambda_c = \sqrt{\pi^2 \times 200\,000/250} = 88.9$
+For steel with $\sigma_y = 250$ MPa: $`\lambda_c = \sqrt{\pi^2 \times 200\,000/250} = 88.9`$
 
 Since $\lambda = 97.8 > \lambda_c = 88.9$, Euler's formula is valid (elastic buckling).
 
@@ -266,15 +266,15 @@ $$
 \lambda = \frac{L_e}{r} = \frac{3000}{20} = 150
 $$
 
-$$
+```math
 \lambda_c = \sqrt{\frac{2\pi^2 \times 200\,000}{350}} = 106.2
-$$
+```
 
 Since $\lambda = 150 > \lambda_c = 106.2$, use Euler's formula:
 
-$$
+```math
 \sigma_{cr} = \frac{\pi^2 \times 200\,000}{150^2} = 87.7 \text{ MPa}
-$$
+```
 
 $$
 P_{cr} = 87.7 \times 5027 = 441 \text{ kN} < 800 \text{ kN}
@@ -286,9 +286,9 @@ $$
 A = 7854 \text{ mm}^2, \quad r = 25.0 \text{ mm}, \quad \lambda = 3000/25 = 120
 $$
 
-$$
+```math
 \sigma_{cr} = \frac{\pi^2 \times 200\,000}{120^2} = 137.1 \text{ MPa}
-$$
+```
 
 $$
 P_{cr} = 137.1 \times 7854 = 1077 \text{ kN} > 800 \text{ kN}
@@ -394,8 +394,8 @@ Euler would give $\pi^2 E/\lambda^2 = 308$ MPa, or 872 kN, an unsafe overestimat
 E_r = \frac{4EE_t}{(\sqrt{E} + \sqrt{E_t})^2} = \frac{4 \times 200 \times 50}{(14.14 + 7.07)^2} = 88.9 \text{ GPa}
 ```
 
-- Tangent modulus: $\sigma_{cr} = \pi^2 (50\,000)/80^2 = 77.1$ MPa
-- Reduced modulus: $\sigma_{cr} = \pi^2 (88\,900)/80^2 = 137.1$ MPa
+- Tangent modulus: $`\sigma_{cr} = \pi^2 (50\,000)/80^2 = 77.1`$ MPa
+- Reduced modulus: $`\sigma_{cr} = \pi^2 (88\,900)/80^2 = 137.1`$ MPa
 
 Shanley's analysis shows buckling begins near the tangent-modulus load, so the lower value is the one used in design.
 

@@ -14,12 +14,12 @@ This script sketches the meniscus of water and of mercury in a glass tube, showi
 
 ### Meniscus shape and contact angle
 
-Inside the tube the free surface is $y(x) = \pm c\,x^2$ with $c = 0.5$. The wall is vertical at $x = x_w = 1$, so the contact angle, measured through the liquid between the wall and the free surface, is
+Inside the tube the free surface is $`y(x) = \pm c\,x^2`$ with $c = 0.5$. The wall is vertical at $x = x_w = 1$, so the contact angle, measured through the liquid between the wall and the free surface, is
 
-$$
+```math
 \theta_c = 90^\circ - \arctan\left(\frac{dy}{dx}\bigg|_{x_w}\right) = 90^\circ -
 \arctan\left(\pm 2 c\, x_w\right)
-$$
+```
 
 This gives $\theta_c = 45^\circ$ for the upward parabola and $\theta_c = 135^\circ$ for the downward one.
 

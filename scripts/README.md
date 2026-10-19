@@ -43,7 +43,7 @@ python tools/make_reels.py                          # every simulation into reel
 python tools/make_reels.py cavity kelvin --seconds 20 --jobs 2
 ```
 
-A reel is a 1080 × 1920 H.264 MP4 (yuv420p, `+faststart`) at `--reel-fps` frames per second (30 by default). The title and subtitle sit in the top band and the status line and a progress bar sit below the panel, clear of the app overlays at the top and bottom of the screen. The run set by `--steps` is spread evenly over `--reel-seconds` (30 by default), and the last frame is held for 2 s. A run with fewer solver iterations than video frames gives a shorter video rather than repeated frames. Rendering needs `ffmpeg`, either on the `PATH` or from the `imageio-ffmpeg` package in `requirements.txt`. `tools/make_reels.py` renders several simulations in parallel and passes arguments after `--` to every script.
+A reel is a 1080 × 1920 H.264 MP4 (yuv420p, `+faststart`) at `--reel-fps` frames per second (30 by default). The title and subtitle sit in the top band and the status line and a progress bar sit below the panel, clear of the app overlays at the top and bottom of the screen. The run set by `--steps` is spread over about `--reel-seconds` (30 by default) with the same whole number of solver iterations in every video frame, so motion plays at a steady speed; rounding that number sets the exact length. The last frame is held for 2 s. A run with fewer solver iterations than video frames gives a shorter video rather than repeated frames. Rendering needs `ffmpeg`, either on the `PATH` or from the `imageio-ffmpeg` package in `requirements.txt`. `tools/make_reels.py` renders several simulations in parallel and passes arguments after `--` to every script.
 
 ## Run and inspect examples
 

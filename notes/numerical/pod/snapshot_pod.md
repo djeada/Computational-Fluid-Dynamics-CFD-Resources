@@ -112,7 +112,7 @@ The main advantage of Snapshot POD is computational efficiency, especially when 
 
 ### Practical Equivalence
 
-Both Snapshot and Direct POD methods yield the same set of significant modes (limited by $\min(m,n)$). If $m < n$, some modes from the direct method would correspond to zero eigenvalues and be physically irrelevant. Snapshot POD naturally avoids dealing with those irrelevant modes due to its truncated dimension. Additionally:
+Both Snapshot and Direct POD methods yield the same set of significant modes (limited by $`\min(m,n)`$). If $m < n$, some modes from the direct method would correspond to zero eigenvalues and be physically irrelevant. Snapshot POD naturally avoids dealing with those irrelevant modes due to its truncated dimension. Additionally:
 
 - The sign of the modes (or time coefficients) may differ between methods. This is inconsequential, as a negative sign can be absorbed either in the mode shape or the coefficient. The physics (energy, variance captured) remains the same.
 
@@ -147,24 +147,24 @@ The storage ratio is $(n/m)^2$. For the separation bubble, $(5805/3580)^2 \appro
 
 **Exercise 2.** Take $m = 2$ snapshots at $n = 3$ points,
 
-$$
+```math
 \mathbf{U} = \begin{pmatrix} 2 & 1 & 0 \\ 1 & 2 & 1 \end{pmatrix}
-$$
+```
 
 used without mean subtraction, so that $\frac{1}{m-1} = 1$. Compute $\mathbf{C}_s$, its eigenvalues and eigenvectors $A_s$, the unnormalized spatial modes $\mathbf{\Phi}_s = \mathbf{U}^T A_s$ and their norms, and the normalized modes. Compare with the eigen-decomposition of $\mathbf{C} = \mathbf{U}^T\mathbf{U}$.
 
 <details>
 <summary>Answer</summary>
 
-$\mathbf{C}_s = \mathbf{U}\mathbf{U}^T = \begin{pmatrix} 5 & 4 \\ 4 & 6 \end{pmatrix}$. Its eigenvalues are $(11 \pm \sqrt{65})/2$, i.e. $\lambda_1 = 9.5311$ and $\lambda_2 = 1.4689$, with eigenvectors $a_1 = (0.6618, 0.7497)$ and $a_2 = (-0.7497, 0.6618)$.
+$`\mathbf{C}_s = \mathbf{U}\mathbf{U}^T = \begin{pmatrix} 5 & 4 \\ 4 & 6 \end{pmatrix}`$. Its eigenvalues are $(11 \pm \sqrt{65})/2$, i.e. $\lambda_1 = 9.5311$ and $\lambda_2 = 1.4689$, with eigenvectors $a_1 = (0.6618, 0.7497)$ and $a_2 = (-0.7497, 0.6618)$.
 
 $\mathbf{U}^T a_1 = (2.0733, 2.1612, 0.7497)$ has norm $3.0873 = \sqrt{\lambda_1}$. $\mathbf{U}^T a_2 = (-0.8376, 0.5739, 0.6618)$ has norm $1.2120 = \sqrt{\lambda_2}$. Dividing by these norms gives $\phi_1 = (0.6716, 0.7000, 0.2428)$ and $\phi_2 = (-0.6911, 0.4735, 0.5461)$.
 
-Direct POD: $\mathbf{C} = \begin{pmatrix} 5 & 4 & 1 \\ 4 & 5 & 2 \\ 1 & 2 & 1 \end{pmatrix}$ has eigenvalues $9.5311, 1.4689, 0$, and its first two eigenvectors equal $\phi_1$ and $\phi_2$ up to sign. The third mode has zero energy and is not needed.
+Direct POD: $`\mathbf{C} = \begin{pmatrix} 5 & 4 & 1 \\ 4 & 5 & 2 \\ 1 & 2 & 1 \end{pmatrix}`$ has eigenvalues $9.5311, 1.4689, 0$, and its first two eigenvectors equal $\phi_1$ and $\phi_2$ up to sign. The third mode has zero energy and is not needed.
 
 </details>
 
-**Exercise 3.** Prove the eigenvalue equivalence. If $\mathbf{C}_s a = \lambda a$ with $\|a\| = 1$ and $\lambda > 0$, show that $\mathbf{U}^T a$ is an eigenvector of $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$ with the same eigenvalue, and that $\|\mathbf{U}^T a\|^2 = (m-1)\lambda$. Deduce the normalization $\phi = \mathbf{U}^T a/\sqrt{(m-1)\lambda}$.
+**Exercise 3.** Prove the eigenvalue equivalence. If $\mathbf{C}_s a = \lambda a$ with $`\|a\| = 1`$ and $\lambda > 0$, show that $\mathbf{U}^T a$ is an eigenvector of $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$ with the same eigenvalue, and that $`\|\mathbf{U}^T a\|^2 = (m-1)\lambda`$. Deduce the normalization $\phi = \mathbf{U}^T a/\sqrt{(m-1)\lambda}$.
 
 <details>
 <summary>Answer</summary>
@@ -174,11 +174,11 @@ Direct POD: $\mathbf{C} = \begin{pmatrix} 5 & 4 & 1 \\ 4 & 5 & 2 \\ 1 & 2 & 1 \e
 a = \mathbf{U}^T\mathbf{C}_s a = \lambda\,\mathbf{U}^T a
 ```
 
-$\mathbf{U}^T a \neq 0$ because $\|\mathbf{U}^T a\|^2 = a^T\mathbf{U}\mathbf{U}^T a = (m-1)\,a^T\mathbf{C}_s a = (m-1)\lambda > 0$. Dividing by the square root of this norm gives a unit spatial mode, $\phi = \mathbf{U}^T a/\sqrt{(m-1)\lambda}$. In Exercise 2, $m - 1 = 1$ and the norms were $\sqrt{\lambda}$.
+$\mathbf{U}^T a \neq 0$ because $`\|\mathbf{U}^T a\|^2 = a^T\mathbf{U}\mathbf{U}^T a = (m-1)\,a^T\mathbf{C}_s a = (m-1)\lambda > 0`$. Dividing by the square root of this norm gives a unit spatial mode, $\phi = \mathbf{U}^T a/\sqrt{(m-1)\lambda}$. In Exercise 2, $m - 1 = 1$ and the norms were $\sqrt{\lambda}$.
 
 </details>
 
-**Exercise 4.** Show that $\mathbf{U} = A_s\mathbf{\Phi}_s^T$, where $\mathbf{\Phi}_s = \mathbf{U}^T A_s$ is unnormalized. Then show that the direct-POD time coefficients $\mathbf{U}\phi_k$ (with normalized $\phi_k$) equal $\sqrt{(m-1)\lambda_k}\,a_k$, and evaluate the first column for Exercise 2.
+**Exercise 4.** Show that $\mathbf{U} = A_s\mathbf{\Phi}_s^T$, where $\mathbf{\Phi}_s = \mathbf{U}^T A_s$ is unnormalized. Then show that the direct-POD time coefficients $\mathbf{U}\phi_k$ (with normalized $\phi_k$) equal $`\sqrt{(m-1)\lambda_k}\,a_k`$, and evaluate the first column for Exercise 2.
 
 <details>
 <summary>Answer</summary>

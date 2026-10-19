@@ -27,11 +27,11 @@ For most engineering applications, **RANS** models are the standard starting poi
 
 ## RANS Models
 
-### k-epsilon Family
+### $k$-$`\varepsilon`$ Family
 
-The k-ε model solves transport equations for turbulent kinetic energy (k) and its dissipation rate (ε).
+The $k$-$`\varepsilon`$ model solves transport equations for turbulent kinetic energy ($`k`$) and its dissipation rate ($`\varepsilon`$).
 
-#### Standard k-ε
+#### Standard $k$-$`\varepsilon`$
 
 ```
 Model name in OpenFOAM: kEpsilon
@@ -40,7 +40,7 @@ Weaknesses: Poor for separated flows, adverse pressure gradients
 Best for: Pipe flows, jets, mixing layers, far-field flows
 ```
 
-#### Realizable k-ε
+#### Realizable $k$-$`\varepsilon`$
 
 ```
 Model name in OpenFOAM: realizableKE
@@ -49,7 +49,7 @@ Weaknesses: Still limited in strong adverse pressure gradients
 Best for: Recirculating flows, rotating flows, jets with strong curvature
 ```
 
-#### RNG k-ε
+#### RNG $k$-$`\varepsilon`$
 
 ```
 Model name in OpenFOAM: RNGkEpsilon
@@ -58,11 +58,11 @@ Weaknesses: More complex, marginal improvement for simple flows
 Best for: Swirl-dominated flows, transitional flows
 ```
 
-### k-omega Family
+### $k$-$`\omega`$ Family
 
-The k-ω model solves for turbulent kinetic energy (k) and specific dissipation rate (ω).
+The $k$-$`\omega`$ model solves for turbulent kinetic energy ($`k`$) and specific dissipation rate ($`\omega`$).
 
-#### Standard k-ω (Wilcox)
+#### Standard $k$-$`\omega`$ (Wilcox)
 
 ```
 Model name in OpenFOAM: kOmega
@@ -71,7 +71,7 @@ Weaknesses: Sensitive to free-stream ω values
 Best for: Boundary layer flows, low-Re applications
 ```
 
-#### k-ω SST (Shear Stress Transport)
+#### $k$-$`\omega`$ SST (Shear Stress Transport)
 
 ```
 Model name in OpenFOAM: kOmegaSST
@@ -80,7 +80,7 @@ Weaknesses: Slightly more expensive than k-ε
 Best for: Almost everything — external aero, turbomachinery, heat transfer, industrial flows
 ```
 
-The **k-ω SST** model by Menter (1994) is the most widely recommended RANS model for general-purpose CFD. If in doubt, start here.
+The **$k$-$`\omega`$ SST** model by Menter (1994) is the most widely recommended RANS model for general-purpose CFD. If in doubt, start here.
 
 ### Spalart-Allmaras
 
@@ -184,7 +184,7 @@ LES
 
 ### Step 2: Set Initial/Boundary Conditions
 
-For a k-ω SST simulation, you need fields for `k`, `omega`, and `nut` in the `0/` directory.
+For a $k$-$`\omega`$ SST simulation, you need fields for `k`, `omega`, and `nut` in the `0/` directory.
 
 #### 0/k
 
@@ -332,17 +332,19 @@ Estimating turbulence quantities at the inlet is critical. Common approaches:
 
 ### From Turbulence Intensity and Length Scale
 
-```
-k = 1.5 * (U * I)^2
-epsilon = C_mu^0.75 * k^1.5 / l
-omega = k^0.5 / (C_mu^0.25 * l)
-```
+$$
+\begin{aligned}
+  k &= \frac{3}{2} (U I)^2, \\
+  \varepsilon &= \frac{C_\mu^{3/4} k^{3/2}}{l}, \\
+  \omega &= \frac{k^{1/2}}{C_\mu^{1/4} l}
+\end{aligned}
+$$
 
 Where:
 
-- `I` = turbulence intensity (typically 0.01–0.10 for external flows, 0.05–0.20 for internal)
-- `l` = turbulent length scale (typically 0.07 × hydraulic diameter for pipes)
-- `C_mu` = 0.09
+- $I$ = turbulence intensity (typically 0.01–0.10 for external flows, 0.05–0.20 for internal)
+- $l$ = turbulent length scale (typically $0.07 \times$ hydraulic diameter for pipes)
+- $C_\mu = 0.09$
 
 ### Example Calculation
 
@@ -388,9 +390,9 @@ inlet
 }
 ```
 
-## Wall Treatment and y+ Requirements
+## Wall Treatment and $y^+$ Requirements
 
-### Wall Functions (y+ ≈ 30–300)
+### Wall Functions ($y^+ \approx 30\text{–}300$)
 
 Use wall functions when your mesh cannot resolve the viscous sublayer:
 
@@ -401,7 +403,7 @@ Use wall functions when your mesh cannot resolve the viscous sublayer:
 | `omega` | `omegaWallFunction` |
 | `epsilon` | `epsilonWallFunction` |
 
-### Resolved Walls (y+ ≈ 1)
+### Resolved Walls ($y^+ \approx 1$)
 
 When using low-Re models or when wall resolution is critical:
 
@@ -411,7 +413,7 @@ When using low-Re models or when wall resolution is critical:
 | `k` | `fixedValue uniform 0` |
 | `omega` | `omegaWallFunction` (automatic switching) |
 
-### Checking y+ After Simulation
+### Checking $y^+$ After Simulation
 
 ```bash
 # Calculate and write y+ field
@@ -446,29 +448,31 @@ Is the flow steady-state with no separation?
 
 ### Quick Reference Table
 
-| Scenario | Recommended Model | y+ Target |
+| Scenario | Recommended Model | $y^+$ Target |
 | --- | --- | --- |
-| Simple pipe/duct flow | k-ε or k-ω SST | 30–300 (wall functions) |
-| External aerodynamics | k-ω SST or SA | ~1 (resolved) |
-| Turbomachinery | k-ω SST | ~1 |
-| Heat transfer (wall-dominated) | k-ω SST | ~1 |
-| Mixing/combustion | realizable k-ε or LES | Depends on model |
-| Free-shear flows (jets, wakes) | k-ε or LES | Not wall-limited |
+| Simple pipe/duct flow | $k$-$`\varepsilon`$ or $k$-$`\omega`$ SST | 30–300 (wall functions) |
+| External aerodynamics | $k$-$`\omega`$ SST or SA | ~1 (resolved) |
+| Turbomachinery | $k$-$`\omega`$ SST | ~1 |
+| Heat transfer (wall-dominated) | $k$-$`\omega`$ SST | ~1 |
+| Mixing/combustion | realizable $k$-$`\varepsilon`$ or LES | Depends on model |
+| Free-shear flows (jets, wakes) | $k$-$`\varepsilon`$ or LES | Not wall-limited |
 | Vortex shedding | LES or DES | ~1 near walls |
 | Swirling flows | RSM or LES | ~1 |
 
 ## Worked Example: Turbulent Pipe Flow
 
-A fully developed turbulent pipe flow at Re = 44,000 (based on bulk velocity and diameter).
+A fully developed turbulent pipe flow at $Re = 44{,}000$ (based on bulk velocity and diameter).
 
 ### Setup Parameters
 
-```
-D = 0.1 m          (pipe diameter)
-L = 2.0 m          (pipe length, 20D)
-U_bulk = 6.6 m/s   (bulk velocity)
-nu = 1.5e-5 m²/s   (air at 20°C)
-Re = U_bulk * D / nu = 44,000
+```math
+\begin{aligned}
+D &= 0.1\,\text{m} && \text{(pipe diameter)} \\
+L &= 2.0\,\text{m} && \text{(pipe length, } 20D\text{)} \\
+U_\text{bulk} &= 6.6\,\text{m/s} && \text{(bulk velocity)} \\
+\nu &= 1.5 \times 10^{-5}\,\text{m}^2/\text{s} && \text{(air at } 20\,^\circ\text{C)} \\
+Re &= \frac{U_\text{bulk} D}{\nu} = 44{,}000
+\end{aligned}
 ```
 
 ### Turbulence Inlet Values
@@ -515,20 +519,20 @@ sample
 
 Compare the velocity profile against the DNS data of El Khoury et al. (2013) or the classical log-law:
 
-```
-u+ = (1/κ) * ln(y+) + B
-```
+$$
+u^+ = \frac{1}{\kappa} \ln y^+ + B
+$$
 
-where κ ≈ 0.41 and B ≈ 5.2.
+where $\kappa \approx 0.41$ and $B \approx 5.2$.
 
 ## Monitoring and Validating Turbulence Results
 
 ### Key Checks
 
 1. **Residuals**: Turbulence residuals (`k`, `omega`/`epsilon`) should drop at least 3–4 orders of magnitude.
-2. **y+ distribution**: Verify that wall-adjacent cells match your model requirements.
-3. **Turbulent viscosity ratio**: `nut/nu` should typically be 1–1000 in the bulk flow; values > 10,000 suggest problems.
-4. **Physical plausibility**: Check that k > 0 everywhere and that turbulence levels match expectations.
+2. **$y^+$ distribution**: Verify that wall-adjacent cells match your model requirements.
+3. **Turbulent viscosity ratio**: $\nu_t/\nu$ should typically be 1–1000 in the bulk flow; values > 10,000 suggest problems.
+4. **Physical plausibility**: Check that $k > 0$ everywhere and that turbulence levels match expectations.
 
 ### Extracting Turbulent Viscosity Ratio
 
@@ -541,11 +545,11 @@ simpleFoam -postProcess -func 'turbulenceFields(R, devReff, L, I, nut, nuEff, k,
 
 | Symptom | Likely Cause | Fix |
 | --- | --- | --- |
-| `k` goes negative | Poor initialization or mesh | Initialize with larger k; refine mesh near walls |
+| `k` goes negative | Poor initialization or mesh | Initialize with larger $k$; refine mesh near walls |
 | `omega` unbounded | Missing or wrong wall function | Check `0/omega` wall BC; use `omegaWallFunction` |
-| High `nut/nu` (>10,000) | Poor mesh or wrong BCs | Check y+; refine mesh; check inlet values |
+| High $\nu_t/\nu$ (>10,000) | Poor mesh or wrong BCs | Check $y^+$; refine mesh; check inlet values |
 | Residuals plateau | Mesh quality or numerics | Improve mesh; try GAMG for pressure; adjust relaxation |
-| Non-physical separation | Wrong model for the flow | Switch to k-ω SST; ensure mesh resolves gradients |
+| Non-physical separation | Wrong model for the flow | Switch to $k$-$`\omega`$ SST; ensure mesh resolves gradients |
 
 ## Resources
 

@@ -28,27 +28,27 @@ For incompressible flow $\nabla \cdot \mathbf{u} = \partial u/\partial x + \part
 
 The compressible field keeps the same parabolic shape but scales it linearly in $x$:
 
-$$
+```math
 u_{\text{comp}}(x, y) = \left(U_{\text{inlet}} +
 \frac{U_{\text{outlet}} - U_{\text{inlet}}}{L}\, x\right)\left[1 -
 \left(\frac{y - y_{\text{mid}}}{y_{\text{mid}}}\right)^2\right],
 \qquad v = 0
-$$
+```
 
 ### Continuity for Compressible Flow
 
 Steady compressible continuity reads
 
-$$
+```math
 \nabla \cdot (\rho\, \mathbf{u}) = \frac{\partial (\rho u)}{\partial x} +
 \frac{\partial (\rho v)}{\partial y} = 0
-$$
+```
 
 With $v = 0$, the product $\rho u$ is constant along each streamline, so an accelerating flow must have falling density:
 
-$$
+```math
 \frac{\rho(x)}{\rho(0)} = \frac{u(0, y)}{u(x, y)} = \frac{U_{\text{inlet}}}{U_{\text{inlet}} + (U_{\text{outlet}} - U_{\text{inlet}})\, x / L}
-$$
+```
 
 With the default values the implied density at the outlet is a quarter of the inlet density. The script does not compute or plot density. This ratio is exaggerated for visual effect: a real subsonic duct flow, such as Fanno flow with wall friction, accelerates much less before it chokes.
 

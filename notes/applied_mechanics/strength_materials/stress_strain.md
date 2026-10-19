@@ -503,7 +503,7 @@ These concepts form the foundation for more advanced topics in strength of mater
 <details>
 <summary>Answer</summary>
 
-$A = 490.9$ mm², so $\sigma = -40\,000/490.9 = -81.5$ MPa and $\epsilon = \sigma/E = -1.164 \times 10^{-3}$.
+$A = 490.9$ mm², so $`\sigma = -40\,000/490.9 = -81.5`$ MPa and $\epsilon = \sigma/E = -1.164 \times 10^{-3}$.
 
 The lateral strain is $+0.33 \times 1.164 \times 10^{-3} = 3.84 \times 10^{-4}$, so $\Delta d = 25 \times 3.84 \times 10^{-4} = +0.0096$ mm. The rod gets slightly fatter.
 
@@ -526,9 +526,9 @@ G = \frac{E}{2(1 + \nu)} = \frac{200}{2.6} = 76.9 \text{ GPa}, \quad
 <details>
 <summary>Answer</summary>
 
-(a) Two shear planes share the load: $\tau = 15\,000/(2 \times 113.1) = 66.3$ MPa, half the single-shear value.
+(a) Two shear planes share the load: $`\tau = 15\,000/(2 \times 113.1) = 66.3`$ MPa, half the single-shear value.
 
-(b) $d = \sqrt{4V/(\pi\tau_{allow})} = \sqrt{4 \times 15\,000/(\pi \times 100)} = 13.8$ mm, so use a 14 mm bolt.
+(b) $`d = \sqrt{4V/(\pi\tau_{allow})} = \sqrt{4 \times 15\,000/(\pi \times 100)} = 13.8`$ mm, so use a 14 mm bolt.
 
 </details>
 

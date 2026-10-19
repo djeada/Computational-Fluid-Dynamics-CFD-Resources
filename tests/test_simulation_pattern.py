@@ -26,16 +26,35 @@ SMALL = {
         m.Params(nx=24, ny=8)
     ),
     "bak_tang_wiesenfeld_sandpile_model_3d": {"size": 6},
+    "decaying_2d_turbulence": {"n": 16},
+    "double_gyre_chaotic_mixing": {
+        "tracers": (40, 20),
+        "image_shape": (20, 40),
+        "ftle_shape": (8, 16),
+    },
     "eulerian_cylinder_flow": {"resolution": 20},
+    "gray_scott_reaction_diffusion": {"n": 16},
     "ising_model": {"n_rows": 16, "n_cols": 16},
     "kelvin_helmholtz_instability": {"n": 32},
     "laplace_equation_maze_solver": {"size": 11},
     "lattice_boltzmann_cylinder_flow": {"dimensions": (36, 24)},
     "lid_driven_cavity": {"n_points": 17},
+    "lorenz_attractor": {"n_trajectories": 4, "trail_steps": 5, "ghost_time": 1.0},
+    "mach_cone_moving_source": {
+        "width": 3,
+        "height": 4,
+        "cells_per_wavelength": 8,
+        "sponge_width": 1,
+    },
+    "point_vortex_leapfrogging": {"smoke_per_vortex": 50},
     "rayleigh_benard_convection": {"n": 16},
+    "rayleigh_taylor_instability": {"nx": 16, "nz": 32},
     "schroedinger_equation": {"n": 16},
+    "shallow_water_ripples": {"n": 24},
     "simplified_real_time_fluid_dynamics_simulator": {"width": 20, "height": 15},
+    "sph_dam_break": {"particles_across": 4},
     "steady_and_unsteady_pathlines_with_vortex_shedding": {"num_particles": 4},
+    "supersonic_forward_facing_step": {"cells_per_unit": 10},
 }
 
 
@@ -64,7 +83,7 @@ def defined_subclasses(module, base):
 
 class SimulationPatternTests(unittest.TestCase):
     def test_folders_define_state_view_and_animation(self):
-        self.assertEqual(len(FOLDERS), 15)
+        self.assertEqual(len(FOLDERS), 25)
         for folder in FOLDERS:
             with self.subTest(folder.name):
                 module = load(folder)

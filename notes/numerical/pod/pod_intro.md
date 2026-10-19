@@ -18,7 +18,7 @@ At its core, POD is a technique from functional analysis and linear algebra that
 
 **Step 1: Snapshot Acquisition**
 
-Consider a fluid flow problem governed by the Navier-Stokes equations. Let $\mathbf{u}(x,t)$ be a vector field representing the flow state (e.g., velocity components) at spatial location $x \in \Omega$ and time $t$. We collect $N$ snapshots $\{\mathbf{u}(x,t_i)\}_{i=1}^N$ at discrete times $t_i$. These snapshots could be:
+Consider a fluid flow problem governed by the Navier-Stokes equations. Let $\mathbf{u}(x,t)$ be a vector field representing the flow state (e.g., velocity components) at spatial location $x \in \Omega$ and time $t$. We collect $N$ snapshots $`\{\mathbf{u}(x,t_i)\}_{i=1}^N`$ at discrete times $t_i$. These snapshots could be:
 
 - Incompressible velocity fields $(u(x,t), v(x,t), w(x,t))$
 - Pressure fields $p(x,t)$
@@ -84,7 +84,7 @@ where $a_j(t_i)$ are the projection coefficients onto the $j$-th mode.
 
 **Step 7: Reduced-Order Modeling**
 
-If a PDE-based system (e.g., Navier-Stokes) governs the flow, one can project these equations onto the POD modes to derive a system of ordinary differential equations (ODEs) in the time-dependent coefficients $\{a_j(t)\}$. This yields a much lower-dimensional system, i.e., a Reduced-Order Model (ROM).
+If a PDE-based system (e.g., Navier-Stokes) governs the flow, one can project these equations onto the POD modes to derive a system of ordinary differential equations (ODEs) in the time-dependent coefficients $`\{a_j(t)\}`$. This yields a much lower-dimensional system, i.e., a Reduced-Order Model (ROM).
 
 ## Applications in CFD
 
@@ -221,7 +221,7 @@ POD is the foundational technique for Reduced-Order Modeling in CFD. By extracti
 ## Related Scripts
 
 - [Eigenvector Projection of Velocity Fluctuations](../../../scripts/plots/eigenvector_projection/): finds the principal directions of correlated 2D velocity fluctuations from the eigenvectors of their covariance matrix and projects the data onto them.
-- [Image Compression Using SVD](../../../scripts/algorithms/image_compression_using_svd/): compresses a grayscale image by keeping only its $r$ largest singular values and the matching singular vectors, then compares the rank-$r$ reconstructions with the original.
+- [Image Compression Using SVD](../../../scripts/algorithms/image_compression_using_svd/): compresses a grayscale image by keeping only its $r$ largest singular values and the matching singular vectors, then compares the rank-$`r`$ reconstructions with the original.
 - [POD Analysis for Flow Fields](../../../scripts/plots/pod_analysis_for_flow_fields/): performs Proper Orthogonal Decomposition (POD) on a synthetic 100 × 50 snapshot matrix with the singular value decomposition (SVD) and plots the eigenvalue spectrum with the share of turbulent kinetic energy (TKE) in each mode.
 - [POD Modes of a Two-Point Velocity Signal](../../../scripts/plots/pod_modes_2d/): applies Proper Orthogonal Decomposition to velocity signals measured at two points, a and b, and plots how much each of the two POD modes contributes to each signal.
 - [POD Spatial Modes and Temporal Coefficients](../../../scripts/plots/pod_modes_and_temporal_coefficients/): extracts the first three POD spatial modes and their temporal coefficients from a synthetic two-dimensional, time-dependent field and plots them.
@@ -265,7 +265,7 @@ The only nonzero eigenvalue is $\lambda_1 = 4/3$, with $\mathbf{v}_1 = (1, 0, -1
 \boldsymbol{\Phi}_1 = \frac{\mathbf{X}'\mathbf{v}_1}{\sqrt{N\lambda_1}} = \frac{(-2, 0, 2)/\sqrt{2}}{2} = \frac{(-1, 0, 1)}{\sqrt{2}}
 ```
 
-which has unit norm. The coefficients are $a_1(t_i) = \boldsymbol{\Phi}_1^T(\mathbf{u}_i - \bar{\mathbf{u}}) = (\sqrt{2}, 0, -\sqrt{2})$. The reconstruction $\bar{\mathbf{u}} + \sqrt{2}\,\boldsymbol{\Phi}_1 = (2,2,2) + (-1,0,1) = (1,2,3) = \mathbf{u}_1$ is exact, because one mode holds 100% of the fluctuation energy.
+which has unit norm. The coefficients are $a_1(t_i) = \boldsymbol{\Phi}_1^T(\mathbf{u}_i - \bar{\mathbf{u}}) = (\sqrt{2}, 0, -\sqrt{2})$. The reconstruction $`\bar{\mathbf{u}} + \sqrt{2}\,\boldsymbol{\Phi}_1 = (2,2,2) + (-1,0,1) = (1,2,3) = \mathbf{u}_1`$ is exact, because one mode holds 100% of the fluctuation energy.
 
 </details>
 

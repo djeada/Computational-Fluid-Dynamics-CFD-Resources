@@ -40,9 +40,9 @@ $$
 
 The flip is accepted with probability
 
-$$
+```math
 A = \begin{cases} 1 & \Delta E \le 0 \\ e^{-\beta\Delta E} & \Delta E > 0 \end{cases}, \qquad \beta = \frac{1}{k_B T}
-$$
+```
 
 ### Phase Transition
 
@@ -82,8 +82,8 @@ The figure below shows the final frame of the default run (600 frames, 3000 swee
 ![Ising lattice, magnetization and energy after 3000 sweeps](ising_model.png)
 
 - **Lattice** (left): spin-up ($+1$) sites are orange and spin-down ($-1$) sites blue. Large domains have formed, with isolated flipped spins from thermal fluctuations inside them.
-- **Magnetization** (top right): $M$ stays well below $\pm N$ because up and down domains coexist. It ends near $0.14\,N$.
-- **Energy** (bottom right): the random start has $E \approx 0$, and the warm-up sweep already lowers it to about $-0.7\,N$ at sweep 0. $E$ then drops quickly during the first hundred sweeps as domains form, and decreases slowly afterwards as domain walls shorten. It ends near $-1.88\,N$.
+- **Magnetization** (top right): $M$ stays well below $\pm N$ because up and down domains coexist. It ends near $`0.14\,N`$.
+- **Energy** (bottom right): the random start has $E \approx 0$, and the warm-up sweep already lowers it to about $`-0.7\,N`$ at sweep 0. $E$ then drops quickly during the first hundred sweeps as domains form, and decreases slowly afterwards as domain walls shorten. It ends near $`-1.88\,N`$.
 
 The title line shows $\beta$ and the sweep number. When the run ends the program prints $M/N$ and $E/N$ of the final sweep.
 

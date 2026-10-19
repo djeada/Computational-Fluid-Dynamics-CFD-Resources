@@ -1,12 +1,12 @@
 # Image Compression Using SVD
 
-This script compresses a grayscale image by keeping only its $r$ largest singular values and the matching singular vectors, then compares the rank-$r$ reconstructions with the original. The same truncated SVD underlies Proper Orthogonal Decomposition, so the singular value spectrum and energy ratio plots have the same meaning as in a POD analysis of flow snapshots.
+This script compresses a grayscale image by keeping only its $r$ largest singular values and the matching singular vectors, then compares the rank-$`r`$ reconstructions with the original. The same truncated SVD underlies Proper Orthogonal Decomposition, so the singular value spectrum and energy ratio plots have the same meaning as in a POD analysis of flow snapshots.
 
 ## Overview
 
 - Loads a grayscale image: by default the $512 \times 512$ `camera` sample bundled with scikit-image, or any file passed with `--image`. Colour images are converted to grayscale.
 - Computes the thin SVD with `numpy.linalg.svd(..., full_matrices=False)`.
-- Shows the original image next to reconstructions of rank $r \in \{5, 25, 100\}$, each titled with its compression ratio.
+- Shows the original image next to reconstructions of rank $`r \in \{5, 25, 100\}`$, each titled with its compression ratio.
 - Plots the singular values $\sigma_i$ on a logarithmic axis.
 - Plots the cumulative energy ratio $\mathcal{E}(r)$, marks the 90 %, 95 % and 99 % levels, and gives the rank needed to reach each one in the legend and on standard output.
 
@@ -22,17 +22,17 @@ $$
 
 with $p = \min(m, n)$, $U \in \mathbb{R}^{m \times p}$ and $V \in \mathbb{R}^{n \times p}$ having orthonormal columns, and $\Sigma = \mathrm{diag}(\sigma_1, \dots, \sigma_p)$ with $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_p \geq 0$.
 
-### Rank-$r$ Approximation
+### Rank-$`r`$ Approximation
 
 $$
 A_r = U_r \Sigma_r V_r^T = \sum_{i=1}^{r} \sigma_i \mathbf{u}_i \mathbf{v}_i^T
 $$
 
-By the Eckart–Young theorem, $A_r$ is the best rank-$r$ approximation of $A$ in both the Frobenius norm and the 2-norm. Its Frobenius error is
+By the Eckart–Young theorem, $A_r$ is the best rank-$`r`$ approximation of $A$ in both the Frobenius norm and the 2-norm. Its Frobenius error is
 
-$$
+```math
 \| A - A_r\|_F = \sqrt{\sum_{i=r+1}^{p} \sigma_i^2}
-$$
+```
 
 ### Cumulative Energy Ratio
 

@@ -21,11 +21,11 @@ I. Local Feature Prediction
 - Node-Level Learning:\
   Instead of focusing solely on global aerodynamic metrics, the GNN is trained to predict node- or cell-based quantities such as local pressure $p$, wall shear stress $\tau_w$, and turbulent kinetic energy $k$. At each message-passing layer $\ell$, the hidden state of node $v$ is updated by aggregating features from its neighbors:
 
-$$
+```math
 \mathbf{h}_v^{(\ell+1)} = \phi\!\left(\mathbf{h}_v^{(\ell)},\;
 \bigoplus_{u \in \mathcal{N}(v)} \psi\!\left(\mathbf{h}_v^{(\ell)},\,
 \mathbf{h}_u^{(\ell)},\, \mathbf{e}_{vu}\right)\right)
-$$
+```
 
 where $\phi$ and $\psi$ are learnable functions (typically small MLPs), $\bigoplus$ is a permutation-invariant aggregation (sum, mean, or max), $\mathcal{N}(v)$ denotes the neighbors of $v$, and $\mathbf{e}_{vu}$ are edge features (e.g., relative position and distance). After $L$ layers, the final node embeddings $\mathbf{h}_v^{(L)}$ are passed through a readout network to predict the target field variables. This approach provides a detailed map of the flow field over the entire domain, which can then be integrated to compute global performance metrics.
 
@@ -227,7 +227,7 @@ The collection of efforts outlined above points to a growing convergence between
 
 ### Exercises
 
-**Exercise 1.** In the message-passing update from the note, the hidden size is 64, the edge features $\mathbf{e}_{vu}$ have 3 components, and $\psi$ and $\phi$ are each a single linear layer with bias. $\psi$ takes $(\mathbf{h}_v, \mathbf{h}_u, \mathbf{e}_{vu})$; $\phi$ takes $\mathbf{h}_v$ and the 64-dimensional aggregated message. Count the parameters per layer and for $L = 10$ layers with unshared weights.
+**Exercise 1.** In the message-passing update from the note, the hidden size is 64, the edge features $\mathbf{e}_{vu}$ have 3 components, and $\psi$ and $\phi$ are each a single linear layer with bias. $\psi$ takes $`(\mathbf{h}_v, \mathbf{h}_u, \mathbf{e}_{vu})`$; $\phi$ takes $\mathbf{h}_v$ and the 64-dimensional aggregated message. Count the parameters per layer and for $L = 10$ layers with unshared weights.
 
 <details>
 <summary>Answer</summary>
@@ -279,14 +279,14 @@ Volume meshes with tens of millions of cells multiply this, which is why the not
 
 </details>
 
-**Exercise 5.** The pressure drag coefficient is $C_{D,p} = -\frac{1}{A_{\text{ref}}}\oint C_p\, n_x \, dA$, with outward normal $\mathbf{n}$ and flow in the $+x$ direction. A GNN predicts nodal $C_p$ with (a) a uniform bias of $+0.02$ over the whole surface, or (b) a bias of $+0.02$ only on the front-facing surfaces, whose projected frontal area equals $A_{\text{ref}}$. What error in $C_{D,p}$ does each case cause? Express (b) relative to $C_D = 0.31$.
+**Exercise 5.** The pressure drag coefficient is $`C_{D,p} = -\frac{1}{A_{\text{ref}}}\oint C_p\, n_x \, dA`$, with outward normal $\mathbf{n}$ and flow in the $+x$ direction. A GNN predicts nodal $C_p$ with (a) a uniform bias of $+0.02$ over the whole surface, or (b) a bias of $+0.02$ only on the front-facing surfaces, whose projected frontal area equals $A_{\text{ref}}$. What error in $C_{D,p}$ does each case cause? Express (b) relative to $C_D = 0.31$.
 
 <details>
 <summary>Answer</summary>
 
-(a) $\Delta C_{D,p} = -\frac{0.02}{A_{\text{ref}}}\oint n_x\, dA = 0$, because $\oint \mathbf{n}\, dA = 0$ for any closed surface. A uniform bias cancels exactly.
+(a) $`\Delta C_{D,p} = -\frac{0.02}{A_{\text{ref}}}\oint n_x\, dA = 0`$, because $`\oint \mathbf{n}\, dA = 0`$ for any closed surface. A uniform bias cancels exactly.
 
-(b) On the front-facing surfaces $\int n_x\, dA = -A_{\text{ref}}$, so $\Delta C_{D,p} = -\frac{0.02}{A_{\text{ref}}}(-A_{\text{ref}}) = +0.02$. That is about 6.5% of $C_D = 0.31$.
+(b) On the front-facing surfaces $`\int n_x\, dA = -A_{\text{ref}}`$, so $\Delta C_{D,p} = -\frac{0.02}{A_{\text{ref}}}(-A_{\text{ref}}) = +0.02$. That is about 6.5% of $C_D = 0.31$.
 
 Local error maps matter more than average nodal error. Errors that are correlated with the direction of the surface normal cause the errors in integrated forces.
 

@@ -24,9 +24,9 @@ where:
 
 When the cross-section, internal force, or material varies along the length:
 
-$$
+```math
 \delta = \int_0^L \frac{N(x)}{A(x) E(x)} \, dx
-$$
+```
 
 where $N(x)$ is the internal axial force at position $x$.
 
@@ -184,32 +184,32 @@ $$
 
 From compatibility:
 
-$$
+```math
 P_s = P_c \frac{A_s E_s}{A_c E_c} = P_c
 \frac{863.9 \times 200}{1963.5 \times 25} = 3.52\, P_c
-$$
+```
 
 Substituting into equilibrium:
 
-$$
+```math
 3.52\, P_c + P_c = 200 \implies P_c = 44.2 \text{ kN}, \quad P_s = 155.8 \text{ kN}
-$$
+```
 
 **Stresses:**
 
-$$
+```math
 \sigma_s = \frac{155\,800}{863.9} = 180.3 \text{ MPa}
-$$
+```
 
-$$
+```math
 \sigma_c = \frac{44\,200}{1963.5} = 22.5 \text{ MPa}
-$$
+```
 
 **Deformation:**
 
-$$
+```math
 \delta = \frac{P_s L}{A_s E_s} = \frac{155\,800 \times 1500}{863.9 \times 200\,000} = 1.35 \text{ mm}
-$$
+```
 
 ### Example 2: Thermal Stress in a Constrained Bar
 
@@ -262,9 +262,9 @@ $$
 
 **Nominal stress:**
 
-$$
+```math
 \sigma_{nom} = \frac{P}{A_{net}} = \frac{20\,000}{400} = 50 \text{ MPa}
-$$
+```
 
 **Maximum stress:**
 
@@ -338,11 +338,11 @@ R_A = P \frac{L_2}{L_1 + L_2} = 60 \times 0.6 = 36 \text{ kN}, \quad R_B = 60 \t
 0.4 = 24 \text{ kN}
 ```
 
-The shorter, stiffer segment takes more load. Segment A is in tension, $36\,000/300 = 120$ MPa; segment B is in compression, $24\,000/300 = 80$ MPa.
+The shorter, stiffer segment takes more load. Segment A is in tension, $`36\,000/300 = 120`$ MPa; segment B is in compression, $`24\,000/300 = 80`$ MPa.
 
 </details>
 
-**Exercise 3.** Repeat Example 2 (aluminium bar, $L = 0.5$ m, $\Delta T = 60^\circ$C), but with a 0.2 mm gap between the bar and one wall at the start. Find the stress after heating.
+**Exercise 3.** Repeat Example 2 (aluminium bar, $L = 0.5$ m, $`\Delta T = 60^\circ`$C), but with a 0.2 mm gap between the bar and one wall at the start. Find the stress after heating.
 
 <details>
 <summary>Answer</summary>

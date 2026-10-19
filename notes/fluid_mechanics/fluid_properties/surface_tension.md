@@ -12,7 +12,7 @@ This **inward attraction** makes the surface behave like a stretched elastic mem
 
 ### Defining Surface Tension
 
-Surface tension $\sigma$ (or $\gamma$) has units of **force per unit length** (N/m) or equivalently **energy per unit area** (J/m$^2$). It can be interpreted in two equivalent ways:
+Surface tension $\sigma$ (or $\gamma$) has units of **force per unit length** (N/m) or equivalently **energy per unit area** (J/m$`^2`$). It can be interpreted in two equivalent ways:
 
 I. **Force-based View**: The force required to create or stretch a line of unit length at the interface.
 
@@ -84,15 +84,15 @@ $$
 
 For a spherical droplet of radius $R$ ($R_1 = R_2 = R$):
 
-$$
+```math
 \Delta p = \frac{2 \, \sigma}{R}
-$$
+```
 
 A smaller droplet (smaller $R$) has a **larger** internal pressure difference, which explains why tiny bubbles/droplets are more unstable and why they tend to coalesce into larger ones to reduce overall surface energy.
 
 ![pressure_difference_across_spherical_droplet](https://github.com/user-attachments/assets/706c8d64-e5c4-4108-8803-4e6bbbc63d4a)
 
-Pressure inside the droplet is $p_{in} = p_{out} + \frac{2 \, \sigma}{R}$.
+Pressure inside the droplet is $`p_{in} = p_{out} + \frac{2 \, \sigma}{R}`$.
 
 ### Dimensionless Groups: Bond Number, Weber Number
 
@@ -148,7 +148,7 @@ The water rises about 29.7 mm. Halving the radius would double the rise.
 <details>
 <summary>Answer</summary>
 
-Pressure work is $\Delta p\, dV = \Delta p\, 4\pi R^2 dR$. The surface energy increase is $\sigma\, dA = \sigma\, 8\pi R\, dR$. Equating them gives $\Delta p = 2\sigma/R$.
+Pressure work is $`\Delta p\, dV = \Delta p\, 4\pi R^2 dR`$. The surface energy increase is $`\sigma\, dA = \sigma\, 8\pi R\, dR`$. Equating them gives $\Delta p = 2\sigma/R$.
 
 (a) $\Delta p = 2(0.0728)/10^{-6} = 1.456 \times 10^5$ Pa, about 1.44 atm.
 

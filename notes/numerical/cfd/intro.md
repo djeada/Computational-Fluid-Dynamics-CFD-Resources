@@ -165,7 +165,7 @@ Microchannel: $Kn = 6.8 \times 10^{-8}/10^{-5} = 6.8 \times 10^{-3}$. This is in
 
 $Re = 30 \times 4.5/1.5 \times 10^{-5} = 9 \times 10^6$, so the flow is turbulent and a turbulence model is required.
 
-$M = 30/343 \approx 0.087$, so $\Delta\rho/\rho \approx 0.0875^2/2 \approx 0.4\%$.
+$M = 30/343 \approx 0.087$, so $`\Delta\rho/\rho \approx 0.0875^2/2 \approx 0.4\%`$.
 
 $M$ is well below the usual 0.3 limit, so the incompressible equations are appropriate.
 

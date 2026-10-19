@@ -21,7 +21,7 @@ $$
 
 ### Discretisation
 
-A backward Taylor expansion gives the first-order approximation $\left(du/dx\right)_i \approx (u_i - u_{i-1})/\Delta x$, with truncation error $O(\Delta x)$. Substituting it into the ODE gives
+A backward Taylor expansion gives the first-order approximation $`\left(du/dx\right)_i \approx (u_i - u_{i-1})/\Delta x`$, with truncation error $O(\Delta x)$. Substituting it into the ODE gives
 
 $$
 \frac{u_i - u_{i-1}}{\Delta x} + u_i = 0 \quad\Longrightarrow\quad
@@ -31,8 +31,8 @@ $$
 This is the implicit (backward) Euler method applied to $u' = -u$. For $\Delta x = 1/3$ the ratio is $3/4$, so
 
 $$
-u_N = \left[1,\  \frac{3}{4},\  \frac{9}{16},\  \frac{27}{64}\right] \quad
-\text{at}\quad x_i = \left[0,\  \frac{1}{3},\  \frac{2}{3},\ 1\right]
+u_N = \left[1,\ \frac{3}{4},\ \frac{9}{16},\ \frac{27}{64}\right] \quad \text{at}\quad
+x_i = \left[0,\ \frac{1}{3},\ \frac{2}{3},\ 1\right]
 $$
 
 ### Pointwise error

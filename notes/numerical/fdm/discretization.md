@@ -28,7 +28,7 @@ where the subscript $i$ represents the value at grid point $x_i$.
 
 ### Taylor Series Expansion
 
-To express $\left( \frac{du}{dx} \right)_i$ in terms of $u$ at the grid points, we expand $u_{i-1}$ in a Taylor series:
+To express $`\left( \frac{du}{dx} \right)_i`$ in terms of $`u`$ at the grid points, we expand $`u_{i-1}`$ in a Taylor series:
 
 $$
 u_{i-1} = u_i - \Delta x \left(\frac{du}{dx} \right)_i + O(\Delta x^2)
@@ -118,6 +118,8 @@ This note demonstrates the core FDM discretization workflow on a minimal 1-D exa
 - [Laplace Equation Maze Solver](../../../scripts/simulations/laplace_equation_maze_solver/): solves a randomly generated maze by computing a potential that satisfies Laplace's equation in the maze passages and then following the potential uphill from the entrance to the exit.
 - [Lid-Driven Cavity Flow Simulation](../../../scripts/simulations/lid_driven_cavity/): solves the 2D incompressible Navier-Stokes equations for flow in a square cavity driven by a moving lid at a Reynolds number of 100 and animates the velocity field.
 - [Numerical vs. Exact Solution Comparison](../../../scripts/plots/numerical_vs_exact_solution/): solves $du/dx + u = 0$ with $u(0) = 1$ by a first-order finite-difference scheme and compares the result with the exact solution $u(x) = e^{-x}$, plotting the pointwise error.
+- [Gray-Scott Reaction-Diffusion Simulation](../../../scripts/simulations/gray_scott_reaction_diffusion/): simulates the Gray-Scott reaction-diffusion system, in which two chemicals that react and diffuse on a periodic square turn a small seeded square into self-replicating spots or branching coral, and animates the concentration of one of them with Matplotlib.
+- [Mach Cone of a Moving Sound Source](../../../scripts/simulations/mach_cone_moving_source/): simulates the sound of a small source that accelerates from rest to twice the speed of sound and animates its pressure field, from the Doppler-compressed wavefronts of a subsonic source through the pile-up at Mach 1 to the Mach cone of a supersonic one.
 
 ## Exercises
 
@@ -126,7 +128,7 @@ This note demonstrates the core FDM discretization workflow on a minimal 1-D exa
 <details>
 <summary>Answer</summary>
 
-Rearranging $(u_i - u_{i-1})/\Delta x + u_i = 0$ gives $u_i = u_{i-1}/(1 + \Delta x) = 0.75\,u_{i-1}$. So:
+Rearranging $(u_i - u_{i-1})/\Delta x + u_i = 0$ gives $`u_i = u_{i-1}/(1 + \Delta x) = 0.75\,u_{i-1}`$. So:
 
 - $u_2 = 0.75$
 - $u_3 = 0.5625$
@@ -152,7 +154,7 @@ The error ratio is $0.0540/0.0287 = 1.88$, close to 2. Halving $\Delta x$ roughl
 <details>
 <summary>Answer</summary>
 
-(a) $u_{i-1} = u_i - \Delta x\,u'_i + \frac{\Delta x^2}{2}u''_i - \dots$, so
+(a) $`u_{i-1} = u_i - \Delta x\,u'_i + \frac{\Delta x^2}{2}u''_i - \dots`$, so
 
 ```math
 \frac{u_i - u_{i-1}}{\Delta x} = u'_i - \frac{\Delta x}{2}u''_i + O(\Delta x^2)
@@ -171,7 +173,7 @@ If $\Delta x > 2$, then $|1 - \Delta x| > 1$ and the forward solution oscillates
 <details>
 <summary>Answer</summary>
 
-Each step is a quadratic, $\Delta x\,u_i^2 + u_i - u_{i-1} = 0$. Its positive root is
+Each step is a quadratic, $`\Delta x\,u_i^2 + u_i - u_{i-1} = 0`$. Its positive root is
 
 ```math
 u_i = \frac{-1 + \sqrt{1 + 4\Delta x\,u_{i-1}}}{2\Delta x}

@@ -27,9 +27,9 @@ where $\mu$ is the dynamic viscosity and $\mathbf{f}$ is any body force such as 
 
 In automotive contexts, aerodynamic coefficients are important. The drag coefficient $C_D$ is one of the most important indicators of how streamlined a design is. An expression for $C_D$ is:
 
-$$
+```math
 C_D = \frac{2F_D}{\rho \, U^2 \, A}
-$$
+```
 
 where $F_D$ is the drag force, $\rho$ is the air density, $U$ is the freestream velocity, and $A$ is the reference frontal area. Lift coefficients $C_L$ follow a similar form but focus on the lifting force.
 
@@ -254,7 +254,7 @@ $\mathrm{Re} = \rho U L / \mu = 1.2 \times 30 \times 4.5 / 1.8 \times 10^{-5} = 
 
 At $x = 0.5$ m, $\mathrm{Re}_x = 1.0 \times 10^6$, and the note's formula gives $\delta \approx 5 \times 0.5 / \sqrt{10^6} = 2.5$ mm.
 
-That formula is the laminar (Blasius) result. On a flat plate transition typically occurs around $\mathrm{Re}_x \approx 5 \times 10^5$, and on a real car it happens even earlier, so the boundary layer is probably turbulent at this point. The turbulent estimate $\delta \approx 0.37 x \, \mathrm{Re}_x^{-1/5}$ gives about 11.7 mm, almost five times thicker. A feature built from the wrong formula would be badly biased.
+That formula is the laminar (Blasius) result. On a flat plate transition typically occurs around $\mathrm{Re}_x \approx 5 \times 10^5$, and on a real car it happens even earlier, so the boundary layer is probably turbulent at this point. The turbulent estimate $`\delta \approx 0.37 x \, \mathrm{Re}_x^{-1/5}`$ gives about 11.7 mm, almost five times thicker. A feature built from the wrong formula would be badly biased.
 
 </details>
 

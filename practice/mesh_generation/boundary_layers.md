@@ -12,29 +12,29 @@ The boundary layer is the thin region near solid walls where viscous effects dom
 - Large velocity gradients require fine mesh resolution
 - Thickness depends on Reynolds number and distance from leading edge
 
-### y+ Concept
+### $y^+$ Concept
 
-The dimensionless wall distance y+ determines mesh requirements:
+The dimensionless wall distance $y^+$ determines mesh requirements:
 
-```
-y+ = (y * u_τ) / ν
+```math
+y^+ = \frac{y\,u_\tau}{\nu}
 ```
 
 Where:
 
-- y = distance from wall
-- u_τ = friction velocity = √(τ_wall/ρ)
-- ν = kinematic viscosity
+- $y$ = distance from wall
+- $u_\tau$ = friction velocity = $\sqrt{\tau_w/\rho}$
+- $\nu$ = kinematic viscosity
 
-### y+ Guidelines
+### $y^+$ Guidelines
 
-| Application | y+ Range | Wall Treatment |
+| Application | $y^+$ Range | Wall Treatment |
 | --- | --- | --- |
-| DNS | y+ < 1 | Direct resolution |
-| Wall-resolved LES | y+ < 1 | Direct resolution |
-| Low-Re RANS | y+ < 1 | Integration to wall |
-| Wall functions | 30 < y+ < 300 | Logarithmic law |
-| Enhanced wall treatment | y+ < 1 or y+ > 30 | Automatic switching |
+| DNS | $y^+ < 1$ | Direct resolution |
+| Wall-resolved LES | $y^+ < 1$ | Direct resolution |
+| Low-Re RANS | $y^+ < 1$ | Integration to wall |
+| Wall functions | $30 < y^+ < 300$ | Logarithmic law |
+| Enhanced wall treatment | $y^+ < 1$ or $y^+ > 30$ | Automatic switching |
 
 ## First Cell Height Calculation
 
@@ -42,20 +42,22 @@ Where:
 
 For flow over a flat plate:
 
-```
-δ ≈ 5 * x / √(Re_x)
-y_first ≈ δ / (n_layers * growth_ratio^(n_layers-1))
+```math
+\begin{aligned}
+  \delta & \approx \frac{5x}{\sqrt{Re_x}}, \\
+  y_\text{first} & \approx \frac{\delta}{n_\text{layers}\,(\text{growth ratio})^{n_\text{layers}-1}}
+\end{aligned}
 ```
 
 ### Practical Estimation
 
-Quick estimate for y+ = 1:
+Quick estimate for $y^+ = 1$:
 
-```
-y_first ≈ 74 * ν / √(Re_L)
+```math
+y_\text{first} \approx \frac{74\,\nu}{\sqrt{Re_L}}
 ```
 
-Where Re_L is based on characteristic length.
+Where $Re_L$ is based on characteristic length.
 
 ### Example Calculation
 
@@ -198,7 +200,7 @@ mesh.Compute()
 2. **Orthogonality**: > 15° for prisms
 3. **Skewness**: < 0.85
 4. **Growth Ratio**: 1.1-1.3 typical
-5. **y+ Distribution**: Check uniformity along walls
+5. **$y^+$ Distribution**: Check uniformity along walls
 
 ### OpenFOAM Quality Check
 
@@ -210,7 +212,7 @@ checkMesh -allGeometry -allTopology
 simpleFoam -postProcess -func yPlus
 ```
 
-### Python y+ Calculation
+### Python $y^+$ Calculation
 
 ```python
 import numpy as np

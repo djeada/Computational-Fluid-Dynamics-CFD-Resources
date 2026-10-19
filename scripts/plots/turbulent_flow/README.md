@@ -19,9 +19,9 @@ $$
 
 ### Time Mean
 
-$$
+```math
 \bar{u} = \frac{1}{T}\int_0^T u\, dt
-$$
+```
 
 evaluated as the arithmetic mean of the samples. By definition $\overline{u'} = 0$.
 
@@ -40,7 +40,7 @@ $$
 k_u = \frac{1}{2}\overline{u'^2}
 $$
 
-For the default signal the variance is close to $A^2/2 + 0.2^2 = 0.54$, so $u_{rms} \approx 0.73$ and $Tu \approx 15\%$.
+For the default signal the variance is close to $A^2/2 + 0.2^2 = 0.54$, so $u_{rms} \approx 0.73$ and $`Tu \approx 15\%`$.
 
 ## Implementation
 

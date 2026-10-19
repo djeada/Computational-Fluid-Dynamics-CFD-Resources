@@ -55,11 +55,11 @@ I. **Polynomial Response Surfaces**:
 - Often used in global optimization frameworks (e.g., Efficient Global Optimization).
 - Well-suited for moderate dimensions and smoothly varying functions.
   III. **Radial Basis Functions (RBF)**:
-- Use basis functions centered on training points. For a set $\{x^{(i)}, y^{(i)}\}_{i=1}^N$, the RBF surrogate is:
+- Use basis functions centered on training points. For a set $`\{x^{(i)}, y^{(i)}\}_{i=1}^N`$, the RBF surrogate is:
 
-$$
+```math
 \hat{y}(x) = \sum_{i=1}^N w_i R(\| x - x^{(i)}\|)
-$$
+```
 
 where $R$ is a radially symmetric kernel (e.g., Gaussian, multiquadric).
 
@@ -85,7 +85,7 @@ where $R$ is a radially symmetric kernel (e.g., Gaussian, multiquadric).
 
 ### 2. Sampling Strategy
 
-- Choose a one-stage or adaptive sampling plan to select training points $\{x^{(i)}\}_{i=1}^N$.
+- Choose a one-stage or adaptive sampling plan to select training points $`\{x^{(i)}\}_{i=1}^N`$.
 - Space-filling designs (e.g., Latin Hypercube Sampling) or low-discrepancy sequences are commonly used initially.
 - Ensure sufficiently many samples to represent the complexity of $y(x)$. If $N$ is too small, the surrogate may underfit.
 
@@ -112,9 +112,9 @@ $$
 
 - Neural networks: Use stochastic gradient descent to minimize a loss function (e.g., mean squared error):
 
-$$
+```math
 \min_{w,b} \sum_{i=1}^N \| y^{(i)} - \hat{y}(x^{(i)}; w,b)\|^2
-$$
+```
 
 where $w,b$ are weights and biases.
 
@@ -223,7 +223,7 @@ Surrogate models replace expensive CFD evaluations with fast-to-evaluate approxi
 
 | Aspect | Details |
 | --- | --- |
-| **Inputs** | Design parameter vector $x \in \mathbb{R}^d$ (e.g., geometric shape, inflow velocity), sampled CFD results $\{(x^{(i)}, y^{(i)})\}_{i=1}^N$, surrogate model type and hyperparameters |
+| **Inputs** | Design parameter vector $x \in \mathbb{R}^d$ (e.g., geometric shape, inflow velocity), sampled CFD results $`\{(x^{(i)}, y^{(i)})\}_{i=1}^N`$, surrogate model type and hyperparameters |
 | **Outputs** | Surrogate prediction $\hat{y}(x)$ (e.g., drag coefficient, pressure drop), prediction uncertainty (for Kriging), validation metrics (RMSE, $R^2$) |
 
 ## Related Scripts

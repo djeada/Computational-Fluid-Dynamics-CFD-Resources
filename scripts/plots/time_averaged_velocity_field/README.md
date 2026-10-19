@@ -25,7 +25,7 @@ $$
 \bar{u}(y) = \langle u(x,y) \rangle_x = \frac{1}{N_x}\sum_{i=1}^{N_x} u(x_i, y)
 $$
 
-In an experiment or unsteady simulation $\bar{u}$ would be a time average at each point, $\bar{u} = \frac{1}{T}\int_0^T u\,dt$. Replacing it by an average over $x$ assumes the flow statistics do not change along $x$.
+In an experiment or unsteady simulation $\bar{u}$ would be a time average at each point, $`\bar{u} = \frac{1}{T}\int_0^T u\,dt`$. Replacing it by an average over $x$ assumes the flow statistics do not change along $x$.
 
 ### Fluctuation
 

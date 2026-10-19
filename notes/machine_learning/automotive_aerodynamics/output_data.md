@@ -104,13 +104,13 @@ $$
 \overline{C_D} = \frac{1}{T} \int_0^T C_D(t)dt
 $$
 
-Confidence intervals often come from methods such as the standard error of the mean, providing bounds like $\overline{C_D} \pm 1.96 \,\sigma_{\overline{C_D}}$ for a 95% confidence interval, where $\sigma_{\overline{C_D}}$ depends on how many samples are included in the averaging process.
+Confidence intervals often come from methods such as the standard error of the mean, providing bounds like $`\overline{C_D} \pm 1.96 \,\sigma_{\overline{C_D}}`$ for a 95% confidence interval, where $\sigma_{\overline{C_D}}$ depends on how many samples are included in the averaging process.
 
 Slices and iso-surfaces use thresholding and contouring algorithms. A typical Q-criterion iso-surface identifies vortical structures from
 
-$$
+```math
 Q = \frac{1}{2}\Bigl(\|\boldsymbol{\Omega}\|^2 - \|\mathbf{S}\|^2\Bigr)
-$$
+```
 
 where $\boldsymbol{\Omega}$ is the antisymmetric part of the velocity gradient tensor (representing rotation) and $\mathbf{S}$ is the symmetric part (representing strain). Regions with $Q > 0$ often signify vortices.
 
@@ -170,9 +170,9 @@ With correlated samples the effective count is $N_{\text{eff}} = 4000/50 = 80$, 
 <details>
 <summary>Answer</summary>
 
-(a) The only nonzero gradient is $\partial u / \partial y = \gamma$. Then $S_{12} = S_{21} = \gamma/2$ and $\Omega_{12} = -\Omega_{21} = \gamma/2$, so $\|\mathbf{S}\|^2 = \|\boldsymbol{\Omega}\|^2 = \gamma^2/2$ and $Q = 0$.
+(a) The only nonzero gradient is $\partial u / \partial y = \gamma$. Then $S_{12} = S_{21} = \gamma/2$ and $\Omega_{12} = -\Omega_{21} = \gamma/2$, so $`\|\mathbf{S}\|^2 = \|\boldsymbol{\Omega}\|^2 = \gamma^2/2`$ and $Q = 0$.
 
-(b) $\partial u/\partial y = -\omega_0$ and $\partial v/\partial x = \omega_0$, so $\mathbf{S} = 0$, $\Omega_{12} = -\omega_0$ and $\Omega_{21} = \omega_0$. That gives $\|\boldsymbol{\Omega}\|^2 = 2\omega_0^2$ and $Q = \omega_0^2 > 0$.
+(b) $\partial u/\partial y = -\omega_0$ and $\partial v/\partial x = \omega_0$, so $\mathbf{S} = 0$, $\Omega_{12} = -\omega_0$ and $\Omega_{21} = \omega_0$. That gives $`\|\boldsymbol{\Omega}\|^2 = 2\omega_0^2`$ and $Q = \omega_0^2 > 0$.
 
 A boundary layer or shear layer has large vorticity but $Q \le 0$, so it is not flagged. A vortex core, where rotation dominates strain, has $Q > 0$. That is why $Q$ iso-surfaces isolate vortices that a vorticity-magnitude plot would mix with every wall shear layer.
 

@@ -130,7 +130,7 @@ The scaled residual is $R \times N / \sum u_i = 0.0508 \times 4/3.001 \approx 0.
 
 </details>
 
-**Exercise 2.** Carry out the full iteration for $\frac{du}{dx} + u^2 = 0$ on 4 points: initial guess $u_g = 1$ everywhere, update $u_i = (u_{g,i-1} + \Delta x\, u_{gi}^2)/(1 + 2\Delta x\, u_{gi})$ for $i = 4, 3, 2$ in each sweep, then set $u_g = u$. Record $R$ after each sweep and check the claim in the note that $R < 10^{-9}$ after 6 iterations. Why is convergence slow at first and fast later?
+**Exercise 2.** Carry out the full iteration for $\frac{du}{dx} + u^2 = 0$ on 4 points: initial guess $u_g = 1$ everywhere, update $`u_i = (u_{g,i-1} + \Delta x\, u_{gi}^2)/(1 + 2\Delta x\, u_{gi})`$ for $i = 4, 3, 2$ in each sweep, then set $u_g = u$. Record $R$ after each sweep and check the claim in the note that $R < 10^{-9}$ after 6 iterations. Why is convergence slow at first and fast later?
 
 <details>
 <summary>Answer</summary>
@@ -146,7 +146,7 @@ In each right-to-left sweep every point uses the old value of its left neighbour
 <details>
 <summary>Answer</summary>
 
-$(0.549622 - 0.5)/0.5 \approx 9.9\%$, an absolute error of about 0.05. That is roughly $5 \times 10^7$ times larger than the iterative tolerance.
+$`(0.549622 - 0.5)/0.5 \approx 9.9\%`$, an absolute error of about 0.05. That is roughly $5 \times 10^7$ times larger than the iterative tolerance.
 
 Solving the converged discrete equations on finer grids gives errors of 4.6% ($N = 8$), 2.2% ($N = 16$) and 1.1% ($N = 32$). The first grid below 1% is $N = 36$ ($\Delta x = 1/35$), with an error of 0.98%.
 

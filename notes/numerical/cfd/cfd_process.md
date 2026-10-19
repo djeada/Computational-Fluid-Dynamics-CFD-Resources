@@ -79,7 +79,7 @@ In the pre-processing phase, several key tasks must be completed to set up the C
 1. **Define Data Structures**:
 
    - **Purpose**: Organize the physical parameters of the flow field.
-   - **Method**: Typically use 2D or 3D arrays to store parameters like velocity components (U and V), pressure (P), and density. These arrays represent the computational grid where each cell or node holds values of the physical parameters.
+   - **Method**: Typically use 2D or 3D arrays to store parameters like velocity components ($U$ and $V$), pressure ($P$), and density. These arrays represent the computational grid where each cell or node holds values of the physical parameters.
 
 2. **Set Initial Values**:
 
@@ -119,9 +119,12 @@ The most time-consuming part of a CFD simulation is finding the solution to the 
 
 For example, the Laplace operator of a scalar function can be represented using a five-point discrete scheme:
 
+$$
+\nabla^2 f \approx \frac{1}{\Delta x^2}
+\left(-4 f_{i,j} + f_{i-1,j} + f_{i+1,j} + f_{i,j-1} + f_{i,j+1}\right)
+$$
+
 ```
-   ∇²f ≈  1/Δx² (-4 * f[i,j] + f[i-1,j] + f[i+1,j] + f[i,j-1] + f[i,j+1])
-       
     PDE                        Discretized Form
     ∇²f    ----------------->  +--------------------+
                                | f[i-1, j]          |
@@ -173,7 +176,7 @@ $$
    - Apply the discrete equation to each grid point. For a 1D grid with $N$ points:
 
 $$
--u_{i-1} + (1 + \Delta x)u_i = 0 \quad \text{for} \  i = 2, 3, \ldots, N - 1
+-u_{i-1} + (1 + \Delta x)u_i = 0 \quad \text{for} \ i = 2, 3, \ldots, N - 1
 $$
 
 - Special treatment is required at boundaries where not all neighboring points exist.
@@ -346,7 +349,7 @@ Each equation $-u_{i-1} + (1 + \Delta x)u_i = 0$ gives $u_i = u_{i-1}/1.25$.
 
 $u = (1, 0.8, 0.64, 0.512, 0.4096)$.
 
-The exact value is $e^{-1} \approx 0.3679$, so the error at $x = 1$ is $(0.4096 - 0.3679)/0.3679 \approx 11.3\%$, down from 14.7% on the 4-point grid.
+The exact value is $e^{-1} \approx 0.3679$, so the error at $x = 1$ is $`(0.4096 - 0.3679)/0.3679 \approx 11.3\%`$, down from 14.7% on the 4-point grid.
 
 </details>
 

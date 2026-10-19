@@ -45,10 +45,10 @@ This is the most general definition. It allows the mean to depend on both positi
 
 If the flow is **statistically stationary**, meaning its statistics do not change in time, the mean can be taken from a single long record:
 
-$$
+```math
 \overline{u_i}(\mathbf{x}) = \lim_{T \to \infty} \frac{1}{T}\int_{t_0}^{t_0+T}
 u_i(\mathbf{x},t)\, dt
-$$
+```
 
 The result is independent of $t_0$. In practice $T$ is finite, and it must be much longer than the integral time scale of the turbulence. The [statistics page](./statistics.md) shows how to estimate the required record length.
 
@@ -56,10 +56,10 @@ The result is independent of $t_0$. In practice $T$ is finite, and it must be mu
 
 If the flow is **statistically homogeneous** in some direction, the mean can be taken along that direction. In a fully developed channel flow, statistics are homogeneous in the streamwise ($x$) and spanwise ($z$) directions:
 
-$$
+```math
 \overline{u_i}(y,t) = \lim_{L_x, L_z \to \infty}
 \frac{1}{L_x L_z}\int_0^{L_z}\int_0^{L_x} u_i(x,y,z,t)\, dx\, dz
-$$
+```
 
 DNS databases for channel flow are usually averaged over $x$, $z$ *and* $t$ to speed up convergence.
 
@@ -79,11 +79,11 @@ I. **Linearity**: $\overline{f + g} = F + G$ and $\overline{a f} = a F$.
 
 II. **Averaging a mean changes nothing**: $\overline{F} = F$, hence $\overline{f'} = 0$.
 
-III. **Mean times fluctuation averages to zero**: $\overline{F g'} = F\,\overline{g'} = 0$.
+III. **Mean times fluctuation averages to zero**: $`\overline{F g'} = F\,\overline{g'} = 0`$.
 
 IV. **Commutation with derivatives**: $\overline{\partial f/\partial s} = \partial F/\partial s$.
 
-V. **Commutation with integrals**: $\overline{\int f\,ds} = \int F\,ds$.
+V. **Commutation with integrals**: $`\overline{\int f\,ds} = \int F\,ds`$.
 
 The most important consequence is the rule for products:
 
@@ -94,10 +94,10 @@ $$
 
 The **correlation** $\overline{f'g'}$ is generally *not* zero, even though $\overline{f'}$ and $\overline{g'}$ are. The same expansion for a triple product gives
 
-$$
+```math
 \overline{fgh} = FGH + F\,\overline{g'h'} + G\,\overline{f'h'} + H\,\overline{f'g'} +
 \overline{f'g'h'}
-$$
+```
 
 Not every practical average obeys these rules.
 
@@ -138,7 +138,7 @@ The step-by-step derivation, the resulting closure problem, and the transport eq
 
 ### Physical Meaning
 
-Multiplied by $\rho$, the new term $-\rho\,\overline{u_i'u_j'}$ sits next to the viscous stress and has units of stress. It is called the **Reynolds stress**, but it is really a *momentum flux*. A fluctuating velocity $u_j'$ carries fluctuating momentum $\rho u_i'$ across a surface whose normal points in direction $j$. If $u_i'$ and $u_j'$ are correlated, that flux does not average to zero.
+Multiplied by $\rho$, the new term $`-\rho\,\overline{u_i'u_j'}`$ sits next to the viscous stress and has units of stress. It is called the **Reynolds stress**, but it is really a *momentum flux*. A fluctuating velocity $u_j'$ carries fluctuating momentum $\rho u_i'$ across a surface whose normal points in direction $j$. If $u_i'$ and $u_j'$ are correlated, that flux does not average to zero.
 
 The tensor is
 
@@ -172,16 +172,16 @@ Consider a shear flow with $dU/dy > 0$, such as the lower half of a channel or a
      u' < 0, v' < 0   |   u' > 0, v' < 0
 ```
 
-A parcel moving upward ($v' > 0$) comes from a region of lower mean velocity. It therefore arrives with a velocity deficit ($u' < 0$), which is quadrant Q2, an ejection. A parcel moving downward brings high-speed fluid ($u' > 0$), which is Q4, a sweep. Q2 and Q4 events dominate, so $\overline{u'v'} < 0$ and $-\rho\,\overline{u'v'} > 0$. This has the same sign as the viscous stress $\mu\,dU/dy$. Turbulent mixing transports momentum down the mean gradient, like a greatly enhanced viscosity. That observation is the basis of the Boussinesq eddy-viscosity hypothesis.
+A parcel moving upward ($v' > 0$) comes from a region of lower mean velocity. It therefore arrives with a velocity deficit ($u' < 0$), which is quadrant Q2, an ejection. A parcel moving downward brings high-speed fluid ($u' > 0$), which is Q4, a sweep. Q2 and Q4 events dominate, so $\overline{u'v'} < 0$ and $`-\rho\,\overline{u'v'} > 0`$. This has the same sign as the viscous stress $`\mu\,dU/dy`$. Turbulent mixing transports momentum down the mean gradient, like a greatly enhanced viscosity. That observation is the basis of the Boussinesq eddy-viscosity hypothesis.
 
 ### Anisotropy
 
 The isotropic part of the Reynolds stress acts like a pressure. Only the deviatoric part transports momentum between layers. It is measured by
 
-$$
+```math
 a_{ij} = \overline{u_i'u_j'} - \frac{2}{3}k\,\delta_{ij},
 \qquad b_{ij} = \frac{\overline{u_i'u_j'}}{2k} - \frac{1}{3}\delta_{ij}
-$$
+```
 
 Both tensors have zero trace. The normalized anisotropy $b_{ij}$ vanishes for isotropic turbulence, and its eigenvalues lie between $-1/3$ and $2/3$.
 
@@ -204,11 +204,11 @@ $$
 
 The **overall turbulence intensity** is defined from $k$ so that it equals $I_u$ when the turbulence is isotropic:
 
-$$
+```math
 I = \frac{\sqrt{2k/3}}{U_{ref}}
 \qquad \Longleftrightarrow
 \qquad k = \frac{3}{2}\left(I\, U_{ref}\right)^2
-$$
+```
 
 This inversion is how CFD inlet conditions for $k$ are usually set (see [Turbulence Modeling](./modeling.md)).
 
@@ -240,9 +240,9 @@ $$
 k \approx \tfrac{1}{2}(1.115 + 0.12 + 0.12) = 0.678\ \mathrm{m^2/s^2}
 $$
 
-**Intensities.** $I_u = \sqrt{1.115}/10 = 10.6\%$, while $I = \sqrt{2(0.678)/3}/10 = 6.7\%$. The two differ because the turbulence is strongly anisotropic, with $b_{11} = 1.115/(2 \times 0.678) - 1/3 = 0.49$.
+**Intensities.** $`I_u = \sqrt{1.115}/10 = 10.6\%`$, while $`I = \sqrt{2(0.678)/3}/10 = 6.7\%`$. The two differ because the turbulence is strongly anisotropic, with $b_{11} = 1.115/(2 \times 0.678) - 1/3 = 0.49$.
 
-**Reynolds shear stress.** In air ($\rho = 1.2\ \mathrm{kg/m^3}$), $-\rho\,\overline{u'v'} = 0.16$ Pa.
+**Reynolds shear stress.** In air ($\rho = 1.2\ \mathrm{kg/m^3}$), $`-\rho\,\overline{u'v'} = 0.16`$ Pa.
 
 Eight samples are far too few for converged statistics. The numbers only illustrate the arithmetic. How many *independent* samples are needed is discussed in [Turbulence Statistics](./statistics.md).
 
@@ -250,11 +250,11 @@ Eight samples are far too few for converged statistics. The numbers only illustr
 
 When density varies (compressible flows, combustion, strongly heated flows), Reynolds averaging produces density–velocity correlations even in the continuity equation:
 
-$$
+```math
 \frac{\partial \overline{\rho}}{\partial t} +
 \frac{\partial}{\partial x_j}\left(\overline{\rho}\,\overline{u_j} +
 \overline{\rho' u_j'}\right) = 0
-$$
+```
 
 The momentum equation acquires triple correlations such as $\overline{\rho' u_i' u_j'}$. Favre (1965) avoided this by using a **mass-weighted average**:
 
@@ -265,23 +265,23 @@ $$
 
 The rules change:
 
-- $\overline{\rho\,u_i''} = 0$ holds, but the plain average $\overline{u_i''}$ is *not* zero.
+- $`\overline{\rho\,u_i''} = 0`$ holds, but the plain average $\overline{u_i''}$ is *not* zero.
 - Instead, $\overline{u_i''} = \overline{u_i} - \tilde{u}_i = -\overline{\rho' u_i'}/\overline{\rho}$.
 - Density and pressure are still Reynolds-averaged.
 
 With these definitions the mean continuity equation keeps its laminar form:
 
-$$
+```math
 \frac{\partial \overline{\rho}}{\partial t} +
 \frac{\partial (\overline{\rho}\,\tilde{u}_j)}{\partial x_j} = 0
-$$
+```
 
-The mean momentum equation contains a single unclosed term, the Favre Reynolds stress $\overline{\rho}\,\widetilde{u_i''u_j''} = \overline{\rho\,u_i''u_j''}$:
+The mean momentum equation contains a single unclosed term, the Favre Reynolds stress $`\overline{\rho}\,\widetilde{u_i''u_j''} = \overline{\rho\,u_i''u_j''}`$:
 
-$$
+```math
 \frac{\partial (\overline{\rho}\,\tilde{u}_i)}{\partial t} +
 \frac{\partial (\overline{\rho}\,\tilde{u}_i\tilde{u}_j)}{\partial x_j} = -\frac{\partial \overline{p}}{\partial x_i} + \frac{\partial \overline{\tau}_{ij}}{\partial x_j} - \frac{\partial \left(\overline{\rho}\,\widetilde{u_i''u_j''}\right)}{\partial x_j}
-$$
+```
 
 The corresponding TKE is $\tilde{k} = \frac{1}{2}\widetilde{u_i''u_i''}$. Compressible RANS solvers therefore solve Favre-averaged equations. Boundary layers at moderate supersonic Mach numbers still behave much like incompressible ones once mean density variations are accounted for (Morkovin's hypothesis), so incompressible closures are often carried over.
 
@@ -298,13 +298,13 @@ The corresponding TKE is $\tilde{k} = \frac{1}{2}\widetilde{u_i''u_i''}$. Compre
 <details>
 <summary>Answer</summary>
 
-$\overline{u^2} = \overline{(U + u')^2} = U^2 + 2U\overline{u'} + \overline{u'^2} = U^2 + \overline{u'^2}$, using $\overline{u'} = 0$. Hence $\overline{u'^2} = 101.2 - 100 = 1.2\ \mathrm{m^2/s^2}$, $u_{rms} = \sqrt{1.2} = 1.095$ m/s and $I_u = 11.0\%$.
+$\overline{u^2} = \overline{(U + u')^2} = U^2 + 2U\overline{u'} + \overline{u'^2} = U^2 + \overline{u'^2}$, using $\overline{u'} = 0$. Hence $\overline{u'^2} = 101.2 - 100 = 1.2\ \mathrm{m^2/s^2}$, $u_{rms} = \sqrt{1.2} = 1.095$ m/s and $`I_u = 11.0\%`$.
 
 The example shows why variances must be computed from fluctuations in practice: a 1.2% error in $\overline{u^2}$ would completely change the answer.
 
 </details>
 
-**Exercise 2.** A CFD inlet is specified with turbulence intensity $I = 5\%$ at $U_{ref} = 20$ m/s. Find $k$, assuming isotropic turbulence. What value would you get by mistakenly using $k = \frac{1}{2}\overline{u'^2}$, i.e. only the streamwise component?
+**Exercise 2.** A CFD inlet is specified with turbulence intensity $`I = 5\%`$ at $U_{ref} = 20$ m/s. Find $k$, assuming isotropic turbulence. What value would you get by mistakenly using $k = \frac{1}{2}\overline{u'^2}$, i.e. only the streamwise component?
 
 <details>
 <summary>Answer</summary>
@@ -326,12 +326,12 @@ The remaining components are $\overline{u'^2}$, $\overline{v'^2}$, $\overline{w'
 
 </details>
 
-**Exercise 4.** A velocity signal is $u(t) = U_0 + a\sin(2\pi f t)$ with $a = 0.5U_0$ and $f = 5$ Hz. Averaging runs over a window $[0, T]$. Using the worst case of the window error $a(1 - \cos\omega T)/(\omega T)$, find the smallest $T$ that guarantees the mean is within $0.1\%$ of $U_0$.
+**Exercise 4.** A velocity signal is $u(t) = U_0 + a\sin(2\pi f t)$ with $a = 0.5U_0$ and $f = 5$ Hz. Averaging runs over a window $[0, T]$. Using the worst case of the window error $a(1 - \cos\omega T)/(\omega T)$, find the smallest $T$ that guarantees the mean is within $`0.1\%`$ of $U_0$.
 
 <details>
 <summary>Answer</summary>
 
-The error is bounded by $2a/(\omega T) = a/(\pi f T)$. Requiring $a/(\pi f T) \le 0.001\,U_0$ gives
+The error is bounded by $2a/(\omega T) = a/(\pi f T)$. Requiring $`a/(\pi f T) \le 0.001\,U_0`$ gives
 
 ```math
 T \ge \frac{0.5}{\pi \times 5 \times 0.001} = 31.8\ \mathrm{s}

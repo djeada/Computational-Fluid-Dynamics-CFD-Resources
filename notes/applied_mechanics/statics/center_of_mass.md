@@ -18,15 +18,15 @@ $$
 
 For a continuous body with density $\rho$, the center of mass is:
 
-$$
+```math
 \bar{x} = \frac{\int x \, dm}{\int dm} = \frac{\int x \rho \, dV}{\int \rho \, dV}
-$$
+```
 
 If the density is uniform ($\rho = \text{const}$), the center of mass coincides with the **centroid** of the volume:
 
-$$
+```math
 \bar{x} = \frac{\int x \, dV}{\int dV}
-$$
+```
 
 ## Centroid of Areas
 
@@ -34,12 +34,12 @@ $$
 
 The **centroid** of a plane area $A$ is defined by:
 
-$$
+```math
 \bar{x} = \frac{\int x \, dA}{\int dA} = \frac{Q_y}{A}, \quad
 \bar{y} = \frac{\int y \, dA}{\int dA} = \frac{Q_x}{A}
-$$
+```
 
-where $Q_x = \int y \, dA$ and $Q_y = \int x \, dA$ are the **first moments of area** about the $x$- and $y$-axes, respectively.
+where $`Q_x = \int y \, dA`$ and $`Q_y = \int x \, dA`$ are the **first moments of area** about the $x$- and $y$-axes, respectively.
 
 ### Common Shapes
 
@@ -148,9 +148,9 @@ $$
 
 The **second moment of area** (often called moment of inertia in structural contexts) quantifies how an area is distributed relative to an axis. For an area $A$:
 
-$$
+```math
 I_x = \int y^2 \, dA, \quad I_y = \int x^2 \, dA
-$$
+```
 
 The moment of inertia determines a beam's resistance to bending — a larger $I$ means greater stiffness and strength.
 
@@ -167,9 +167,9 @@ The moment of inertia determines a beam's resistance to bending — a larger $I$
 
 The polar moment of inertia about the $z$-axis (perpendicular to the area) is:
 
-$$
+```math
 J_O = I_x + I_y = \int (x^2 + y^2) \, dA = \int r^2 \, dA
-$$
+```
 
 This quantity is important for torsion analysis of circular shafts.
 
@@ -281,7 +281,7 @@ $$
 ## Practical Tips
 
 - Use symmetry to reduce calculations: the centroid lies on any axis of symmetry
-- For composite shapes, create a systematic table with columns for $A_i$, $\bar{y}_i$, $A_i\bar{y}_i$, $I_{c,i}$, $d_i$, and $A_i d_i^2$
+- For composite shapes, create a systematic table with columns for $A_i$, $\bar{y}_i$, $`A_i\bar{y}_i`$, $`I_{c,i}`$, $d_i$, and $A_i d_i^2$
 - Always apply the parallel axis theorem when transferring moments of inertia to a non-centroidal axis
 - Verify results by checking units: area moments have units of length to the fourth power (mm⁴ or m⁴)
 - When subtracting holes or cutouts, remember to subtract both the centroidal $I_c$ and the transfer term $Ad^2$
@@ -290,12 +290,12 @@ Understanding centroids and moments of inertia is indispensable for structural a
 
 ## Exercises
 
-**Exercise 1.** Starting from $\bar{y} = \int y\,dA / A$, derive the centroid height $\bar{y} = 4r/(3\pi)$ of a semicircle of radius $r$ whose diameter lies on the $x$-axis.
+**Exercise 1.** Starting from $`\bar{y} = \int y\,dA / A`$, derive the centroid height $\bar{y} = 4r/(3\pi)$ of a semicircle of radius $r$ whose diameter lies on the $x$-axis.
 
 <details>
 <summary>Answer</summary>
 
-Use polar coordinates, with $dA = \rho\,d\rho\,d\theta$ and $y = \rho\sin\theta$:
+Use polar coordinates, with $`dA = \rho\,d\rho\,d\theta`$ and $y = \rho\sin\theta$:
 
 ```math
 Q_x = \int_0^{\pi}\int_0^{r} \rho\sin\theta\,\rho\, d\rho\,
@@ -313,7 +313,7 @@ d\theta = \frac{r^3}{3}\left[-\cos\theta\right]_0^{\pi} = \frac{2r^3}{3}
 <details>
 <summary>Answer</summary>
 
-$A_{rect} = 24\,000$ mm² at $(100, 60)$; $A_{hole} = \pi(20)^2 = 1256.6$ mm² at $(150, 60)$.
+$`A_{rect} = 24\,000`$ mm² at $(100, 60)$; $A_{hole} = \pi(20)^2 = 1256.6$ mm² at $(150, 60)$.
 
 ```math
 \bar{x} = \frac{24\,000(100) - 1256.6(150)}{24\,000 - 1256.6} = 97.2 \text{ mm}, \quad
@@ -350,8 +350,8 @@ A = 2\pi \frac{2r}{\pi}\cdot\pi r = 4\pi r^2
 
 Using the parallel axis theorem:
 
-- Flange: $\dfrac{120(20)^3}{12} + 2400(90 - 70)^2 = 80\,000 + 960\,000 = 1\,040\,000$ mm⁴
-- Web: $\dfrac{20(80)^3}{12} + 1600(70 - 40)^2 = 853\,333 + 1\,440\,000 = 2\,293\,333$ mm⁴
+- Flange: $`\dfrac{120(20)^3}{12} + 2400(90 - 70)^2 = 80\,000 + 960\,000 = 1\,040\,000`$ mm⁴
+- Web: $`\dfrac{20(80)^3}{12} + 1600(70 - 40)^2 = 853\,333 + 1\,440\,000 = 2\,293\,333`$ mm⁴
 
 ```math
 I_x = 3.333 \times 10^6 \text{ mm}^4

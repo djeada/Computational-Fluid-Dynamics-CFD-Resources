@@ -126,7 +126,7 @@ For a force $\mathbf{F}$ acting from point A to point B:
 
 2. **Magnitude**: $r_{AB} = \sqrt{(x_B - x_A)^2 + (y_B - y_A)^2 + (z_B - z_A)^2}$
 
-3. **Unit vector**: $\mathbf{u}_{AB} = \frac{\mathbf{r}_{AB}}{r_{AB}}$
+3. **Unit vector**: $`\mathbf{u}_{AB} = \frac{\mathbf{r}_{AB}}{r_{AB}}`$
 
 4. **Force vector**: $\mathbf{F} = F\mathbf{u}_{AB}$
 
@@ -163,8 +163,8 @@ The weight is at the origin O(0, 0, 0).
 **Force vectors:**
 
 - $\mathbf{T}_A = T_A(0.6\mathbf{i} + 0.8\mathbf{k})$
-- $\mathbf{T}_B = T_B\mathbf{u}_{OB}$
-- $\mathbf{T}_C = T_C\mathbf{u}_{OC}$
+- $`\mathbf{T}_B = T_B\mathbf{u}_{OB}`$
+- $`\mathbf{T}_C = T_C\mathbf{u}_{OC}`$
 - $\mathbf{W} = -500\mathbf{k}$ N
 
 **Equilibrium equations:**

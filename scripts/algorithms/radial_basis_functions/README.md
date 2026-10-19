@@ -15,9 +15,9 @@ This script fits a multiquadric radial basis function (RBF) interpolant through 
 
 For centres $x_1, \dots, x_n$ with values $y_1, \dots, y_n$:
 
-$$
+```math
 \tilde{y}(x) = \sum_{i=1}^{n} w_i\, \phi\bigl(|x - x_i|\bigr)
-$$
+```
 
 ### Multiquadric Basis in SciPy
 
@@ -33,10 +33,10 @@ so a larger $\varepsilon$ gives a flatter basis function. By default $\varepsilo
 
 Requiring $\tilde{y}(x_j) = y_j$ gives the symmetric system
 
-$$
+```math
 \Phi\,\mathbf{w} = \mathbf{y},
 \qquad \Phi_{ij} = \phi\bigl(|x_i - x_j|\bigr)
-$$
+```
 
 `Rbf` solves this system directly, with no polynomial term and the default `smooth=0`. For distinct centres the multiquadric matrix is non-singular (Micchelli, 1986).
 

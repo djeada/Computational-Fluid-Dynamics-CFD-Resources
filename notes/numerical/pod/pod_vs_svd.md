@@ -107,7 +107,7 @@ Below is a structured comparison of POD, Snapshot POD, and SVD-based methods for
 - SVD is conceptually the cleanest but may require careful implementation and scaling for very large matrices.
 - **Interpreting Results**:
 
-The singular values $\sigma_i$ inform the significance of each mode. Modes corresponding to larger $\sigma_i$ (or eigenvalues $\sigma_i^2/(m-1)$) represent directions in which the data vary most. Truncating small $\sigma_i$ yields a reduced model retaining the dominant dynamics.
+The singular values $\sigma_i$ inform the significance of each mode. Modes corresponding to larger $\sigma_i$ (or eigenvalues $`\sigma_i^2/(m-1)`$) represent directions in which the data vary most. Truncating small $\sigma_i$ yields a reduced model retaining the dominant dynamics.
 
 ## Purpose in CFD
 
@@ -122,7 +122,7 @@ This note clarifies the mathematical relationship between POD and SVD. It shows 
 
 ## Related Scripts
 
-- [Image Compression Using SVD](../../../scripts/algorithms/image_compression_using_svd/): compresses a grayscale image by keeping only its $r$ largest singular values and the matching singular vectors, then compares the rank-$r$ reconstructions with the original.
+- [Image Compression Using SVD](../../../scripts/algorithms/image_compression_using_svd/): compresses a grayscale image by keeping only its $r$ largest singular values and the matching singular vectors, then compares the rank-$`r`$ reconstructions with the original.
 - [POD Analysis for Flow Fields](../../../scripts/plots/pod_analysis_for_flow_fields/): performs Proper Orthogonal Decomposition (POD) on a synthetic 100 × 50 snapshot matrix with the singular value decomposition (SVD) and plots the eigenvalue spectrum with the share of turbulent kinetic energy (TKE) in each mode.
 - [POD Modes of a Two-Point Velocity Signal](../../../scripts/plots/pod_modes_2d/): applies Proper Orthogonal Decomposition to velocity signals measured at two points, a and b, and plots how much each of the two POD modes contributes to each signal.
 - [POD Spatial Modes and Temporal Coefficients](../../../scripts/plots/pod_modes_and_temporal_coefficients/): extracts the first three POD spatial modes and their temporal coefficients from a synthetic two-dimensional, time-dependent field and plots them.
@@ -150,16 +150,16 @@ Snapshot POD and the thin SVD are of the same order. The SVD avoids squaring the
 
 **Exercise 2.** Let $m = 3$ mean-subtracted snapshots (rows) of $n = 2$ variables be
 
-$$
+```math
 \mathbf{U} = \begin{pmatrix} 1 & 1 \\ 1 & -1 \\ -2 & 0 \end{pmatrix}
-$$
+```
 
 Compute the singular values from $\mathbf{U}^T\mathbf{U}$, the POD eigenvalues $\lambda_i = \sigma_i^2/(m-1)$, the right singular vectors $\mathbf{R}$ and the left singular vectors $\ell_i = \mathbf{U} r_i/\sigma_i$.
 
 <details>
 <summary>Answer</summary>
 
-$\mathbf{U}^T\mathbf{U} = \begin{pmatrix} 6 & 0 \\ 0 & 2 \end{pmatrix}$, so $\sigma_1 = \sqrt{6} \approx 2.449$, $\sigma_2 = \sqrt{2} \approx 1.414$, and $\lambda_1 = 3$, $\lambda_2 = 1$.
+$`\mathbf{U}^T\mathbf{U} = \begin{pmatrix} 6 & 0 \\ 0 & 2 \end{pmatrix}`$, so $\sigma_1 = \sqrt{6} \approx 2.449$, $\sigma_2 = \sqrt{2} \approx 1.414$, and $\lambda_1 = 3$, $\lambda_2 = 1$.
 
 $\mathbf{R} = \mathbf{I}$, so the spatial modes are $(1, 0)$ and $(0, 1)$. The left singular vectors are $\ell_1 = (1, 1, -2)/\sqrt{6}$ and $\ell_2 = (1, -1, 0)/\sqrt{2}$. The full $\mathbf{L}$ adds $\ell_3 = (1, 1, 1)/\sqrt{3}$, which has zero singular value.
 
@@ -184,12 +184,12 @@ The zero eigenvalue appears because mean subtraction makes the rows sum to zero,
 
 </details>
 
-**Exercise 4.** By the Eckart–Young theorem, the best rank-$r$ approximation of $\mathbf{U}$ in the Frobenius norm is the truncated SVD, with squared error $\sum_{i > r}\sigma_i^2$. For the matrix of Exercise 2, write the rank-1 approximation, verify the error and give the fraction of energy captured.
+**Exercise 4.** By the Eckart–Young theorem, the best rank-$`r`$ approximation of $\mathbf{U}$ in the Frobenius norm is the truncated SVD, with squared error $\sum_{i > r}\sigma_i^2$. For the matrix of Exercise 2, write the rank-1 approximation, verify the error and give the fraction of energy captured.
 
 <details>
 <summary>Answer</summary>
 
-$\mathbf{U}_1 = \sigma_1\ell_1 r_1^T = \sqrt{6} \cdot \frac{(1, 1, -2)^T}{\sqrt{6}}(1, 0)$, which has rows $(1, 0), (1, 0), (-2, 0)$. The error $\mathbf{U} - \mathbf{U}_1$ has rows $(0, 1), (0, -1), (0, 0)$, so the squared error is $2 = \sigma_2^2$. The rank-1 model captures $\sigma_1^2/(\sigma_1^2 + \sigma_2^2) = 6/8 = 75\%$ of the energy, the same as $\lambda_1/(\lambda_1 + \lambda_2) = 3/4$.
+$\mathbf{U}_1 = \sigma_1\ell_1 r_1^T = \sqrt{6} \cdot \frac{(1, 1, -2)^T}{\sqrt{6}}(1, 0)$, which has rows $(1, 0), (1, 0), (-2, 0)$. The error $\mathbf{U} - \mathbf{U}_1$ has rows $(0, 1), (0, -1), (0, 0)$, so the squared error is $2 = \sigma_2^2$. The rank-1 model captures $`\sigma_1^2/(\sigma_1^2 + \sigma_2^2) = 6/8 = 75\%`$ of the energy, the same as $\lambda_1/(\lambda_1 + \lambda_2) = 3/4$.
 
 </details>
 

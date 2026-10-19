@@ -372,7 +372,7 @@ sample
 - Primary vortex in the center
 - Secondary vortices in corners
 - Boundary layer near walls
-- Steady-state solution after t ≈ 0.5s
+- Steady-state solution after $`t \approx 0.5\,\text{s}`$
 
 ### Step 11: Parameter Studies
 
@@ -432,7 +432,7 @@ Solution:
 After completing this tutorial, try:
 
 1. **Different Reynolds numbers**: Modify viscosity
-2. **3D cavity**: Extend mesh in z-direction
+2. **3D cavity**: Extend mesh in $z$-direction
 3. **Turbulent flow**: Use simpleFoam with turbulence
 4. **Heat transfer**: Add temperature equation
 5. **Moving mesh**: Try dynamic mesh cases
@@ -447,11 +447,11 @@ Compare your results with benchmark data:
 
 ### Ghia et al. (1982) Reference Data
 
-The standard benchmark for the lid-driven cavity is Ghia, Ghia, and Shin (1982). Here are the reference values for Re = 10 (ν = 0.01 m²/s, U = 1 m/s, L = 0.1 m):
+The standard benchmark for the lid-driven cavity is Ghia, Ghia, and Shin (1982). Here are the reference values for $Re = 10$ ($`\nu = 0.01\,\text{m}^2/\text{s}`$, $`U = 1\,\text{m/s}`$, $`L = 0.1\,\text{m}`$):
 
-#### u-velocity along vertical centerline (x = 0.05 m)
+#### $u$-velocity along vertical centerline ($`x = 0.05\,\text{m}`$)
 
-| y/L | u/U |
+| $y/L$ | $u/U$ |
 | --- | --- |
 | 1.0000 | 1.00000 |
 | 0.9688 | 0.84713 |

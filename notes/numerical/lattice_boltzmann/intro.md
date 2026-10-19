@@ -134,7 +134,7 @@ On a molecular level:
   The average distance a molecule travels between collisions (~70 nm for a gas at atmospheric pressure; the mean spacing between molecules is only ~3 nm).
 
 - **Collision Times:**\
-  Times between collisions (~$10^{-10}$ s at atmospheric pressure) far smaller than macroscopic flow timescales.
+  Times between collisions (~$`10^{-10}`$ s at atmospheric pressure) far smaller than macroscopic flow timescales.
 
 These microscopic properties underlie the **continuum assumption**, where macroscopic fields (velocity, pressure) represent averaged effects of countless molecular interactions.
 
@@ -218,11 +218,11 @@ This note motivates the Lattice Boltzmann Method (LBM) by reviewing the challeng
 <details>
 <summary>Answer</summary>
 
-$D = \mathrm{Re}\,\nu / U = 350 \times 10^{-6} / 0.1 = 3.5 \times 10^{-3}$ m, i.e. 3.5 mm.
+$`D = \mathrm{Re}\,\nu / U = 350 \times 10^{-6} / 0.1 = 3.5 \times 10^{-3}`$ m, i.e. 3.5 mm.
 
 </details>
 
-**Exercise 2.** For argon (molar mass 39.948 g/mol) at $T = 293.15$ K, compute the mean thermal speed $\bar{v} = \sqrt{8 k_B T/(\pi m)}$. Taking a hard-sphere diameter $d = 0.36$ nm and $p = 101325$ Pa, compute the mean free path $\ell_{\text{mfp}} = k_B T/(\sqrt{2}\,\pi d^2 p)$ and the mean collision time $\ell_{\text{mfp}}/\bar{v}$. Compare with the values quoted in the note.
+**Exercise 2.** For argon (molar mass 39.948 g/mol) at $T = 293.15$ K, compute the mean thermal speed $\bar{v} = \sqrt{8 k_B T/(\pi m)}$. Taking a hard-sphere diameter $d = 0.36$ nm and $p = 101325$ Pa, compute the mean free path $`\ell_{\text{mfp}} = k_B T/(\sqrt{2}\,\pi d^2 p)`$ and the mean collision time $\ell_{\text{mfp}}/\bar{v}$. Compare with the values quoted in the note.
 
 <details>
 <summary>Answer</summary>
@@ -246,7 +246,7 @@ $\mathrm{Kn} = 6.9 \times 10^{-8} / 5 \times 10^{-5} \approx 1.4 \times 10^{-3}$
 
 </details>
 
-**Exercise 4.** Take the divergence of the incompressible NSE of Section 1 (constant $\rho$, body force $f = 0$) to derive the pressure Poisson equation $\nabla^2 p = -\rho \, \partial_i u_j \, \partial_j u_i$ (summation over repeated indices). Verify it for solid-body rotation $u = (-\Omega y, \Omega x)$, whose pressure field is $p = p_0 + \rho \Omega^2 (x^2 + y^2)/2$.
+**Exercise 4.** Take the divergence of the incompressible NSE of Section 1 (constant $\rho$, body force $f = 0$) to derive the pressure Poisson equation $`\nabla^2 p = -\rho \, \partial_i u_j \, \partial_j u_i`$ (summation over repeated indices). Verify it for solid-body rotation $u = (-\Omega y, \Omega x)$, whose pressure field is $p = p_0 + \rho \Omega^2 (x^2 + y^2)/2$.
 
 <details>
 <summary>Answer</summary>
@@ -258,9 +258,9 @@ Because $\nabla \cdot u = 0$, the divergence of $\partial u/\partial t$ and of $
 \partial_j \left(\partial_i u_i \right) = \partial_i u_j \, \partial_j u_i
 ```
 
-so $\rho \, \partial_i u_j \, \partial_j u_i = -\nabla^2 p$.
+so $`\rho \, \partial_i u_j \, \partial_j u_i = -\nabla^2 p`$.
 
-For solid-body rotation, $\partial_x u_x = 0$, $\partial_y u_x = -\Omega$, $\partial_x u_y = \Omega$ and $\partial_y u_y = 0$. Then $\partial_i u_j \, \partial_j u_i = (\partial_x u_x)^2 + 2\,\partial_y u_x \, \partial_x u_y + (\partial_y u_y)^2 = -2\Omega^2$, which gives $\nabla^2 p = 2\rho\Omega^2$. Directly, $\nabla^2 \left[\rho\Omega^2(x^2 + y^2)/2\right] = \rho\Omega^2(1 + 1) = 2\rho\Omega^2$, so the two agree. In a CFD solver this equation must be solved at every time step, which LBM avoids.
+For solid-body rotation, $\partial_x u_x = 0$, $\partial_y u_x = -\Omega$, $\partial_x u_y = \Omega$ and $\partial_y u_y = 0$. Then $`\partial_i u_j \, \partial_j u_i = (\partial_x u_x)^2 + 2\,\partial_y u_x \, \partial_x u_y + (\partial_y u_y)^2 = -2\Omega^2`$, which gives $\nabla^2 p = 2\rho\Omega^2$. Directly, $\nabla^2 \left[\rho\Omega^2(x^2 + y^2)/2\right] = \rho\Omega^2(1 + 1) = 2\rho\Omega^2$, so the two agree. In a CFD solver this equation must be solved at every time step, which LBM avoids.
 
 </details>
 

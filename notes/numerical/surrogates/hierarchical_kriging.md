@@ -30,7 +30,7 @@ The term $z(x)$ represents a zero-mean Gaussian process used to model the deviat
 
 ## Hierarchical Kriging Predictor
 
-As in standard Kriging, the predictor $\hat{y}(x)$ at an arbitrary point $x$ is a weighted linear combination of the known responses $Y = \{ y(x^{(1)}), \dots, y(x^{(N)}) \}$:
+As in standard Kriging, the predictor $\hat{y}(x)$ at an arbitrary point $x$ is a weighted linear combination of the known responses $`Y = \{ y(x^{(1)}), \dots, y(x^{(N)}) \}`$:
 
 $$
 \hat{y}(x) = \lambda(x)^T Y
@@ -38,7 +38,7 @@ $$
 
 where $\lambda(x) \in \mathbb{R}^N$ is a vector of weights determined by solving a linear system that ensures both unbiasedness and minimal mean squared error. To achieve unbiasedness, one imposes constraints involving $\bar{y}(x)$ at the sample points.
 
-Define the correlation matrix $R \in \mathbb{R}^{N \times N}$ from the Gaussian process assumption, and a vector $r(x) \in \mathbb{R}^N$ of correlations between $x$ and the sample points $X = \{x^{(i)}\}$. With Hierarchical Kriging, the role of the regression matrix $F \in \mathbb{R}^{N}$ (which in standard Kriging corresponds to the regression functions evaluated at sample points) is taken by:
+Define the correlation matrix $R \in \mathbb{R}^{N \times N}$ from the Gaussian process assumption, and a vector $r(x) \in \mathbb{R}^N$ of correlations between $x$ and the sample points $`X = \{x^{(i)}\}`$. With Hierarchical Kriging, the role of the regression matrix $F \in \mathbb{R}^{N}$ (which in standard Kriging corresponds to the regression functions evaluated at sample points) is taken by:
 
 $$
 F: = \bigl(\bar{y}(\bar{\phi}(p), p, a) \bigr)_{i=1}^N \in \mathbb{R}^N
@@ -52,7 +52,7 @@ $$
 
 The Kriging system, ensuring optimal weights, is:
 
-$$
+```math
 \begin{pmatrix}
 R & F \\ F^T & 0
 \end{pmatrix}
@@ -62,7 +62,7 @@ R & F \\ F^T & 0
 \begin{pmatrix}
 r(x) \\ f(x)
 \end{pmatrix}
-$$
+```
 
 Solving this system yields $\lambda(x)$ and $\mu(x)$, which in turn gives the prediction $\hat{y}(x) = \lambda(x)^T Y$.
 
@@ -70,7 +70,7 @@ Solving this system yields $\lambda(x)$ and $\mu(x)$, which in turn gives the pr
 
 Using matrix operations, one can write the Hierarchical Kriging predictor in a compact form:
 
-$$
+```math
 \hat{y}(x) =
 \begin{pmatrix}
 r(x)^T & f(x)
@@ -81,7 +81,7 @@ R & F \\ F^T & 0
 \begin{pmatrix}
 Y \\ 0
 \end{pmatrix}
-$$
+```
 
 Alternatively, if we define:
 
@@ -101,7 +101,7 @@ This form mirrors the structure of standard Kriging but replaces the regression 
 
 In practice, the preferred formulation for implementation is the block matrix inversion form. Rather than explicitly computing $\beta$, one solves:
 
-$$
+```math
 \begin{pmatrix}
 R & F \\ F^T & 0
 \end{pmatrix}
@@ -111,9 +111,9 @@ w^{(Y)} \\ w^{(f)}
 \begin{pmatrix}
 Y \\ 0
 \end{pmatrix}
-$$
+```
 
-where $\begin{pmatrix} w^{(Y)} \\ w^{(f)} \end{pmatrix}$ is independent of $x$ and can be solved once and stored. The predictor evaluation at a new point $x$ then involves computing $(r(x), f(x))$ and taking their dot product with the stored solution. This method is computationally efficient and maintains the exact interpolation property.
+where $`\begin{pmatrix} w^{(Y)} \\ w^{(f)} \end{pmatrix}`$ is independent of $x$ and can be solved once and stored. The predictor evaluation at a new point $x$ then involves computing $(r(x), f(x))$ and taking their dot product with the stored solution. This method is computationally efficient and maintains the exact interpolation property.
 
 ## Interpreting the Correction Terms
 
@@ -135,7 +135,7 @@ High-fidelity CFD is expensive, but cheaper low-fidelity models (coarser meshes,
 
 | Aspect | Details |
 | --- | --- |
-| **Inputs** | Low-fidelity model $\hat{y}_c(x)$, high-fidelity samples $\{(x^{(i)}, y^{(i)})\}$, correlation function $R(\cdot)$, hyperparameters |
+| **Inputs** | Low-fidelity model $\hat{y}_c(x)$, high-fidelity samples $`\{(x^{(i)}, y^{(i)})\}`$, correlation function $R(\cdot)$, hyperparameters |
 | **Outputs** | Hierarchical Kriging predictor $\hat{y}(x)$ combining low- and high-fidelity information, mean squared error, optimized hyperparameters |
 
 ## Related Scripts
@@ -183,12 +183,12 @@ For comparison, $\bar{y}(0.25) = 0.5$, $\beta\bar{y}(0.25) = 0.5112$ and $y(0.25
 
 </details>
 
-**Exercise 4.** Suppose the high-fidelity data are an exact multiple of the low-fidelity values at the samples, $Y = cF$. Show that $\beta = c$ and that the predictor reduces to $\hat{y}(x) = c\,\bar{y}(x)$ everywhere. Why is this a desirable property for variable-fidelity modelling?
+**Exercise 4.** Suppose the high-fidelity data are an exact multiple of the low-fidelity values at the samples, $Y = cF$. Show that $\beta = c$ and that the predictor reduces to $`\hat{y}(x) = c\,\bar{y}(x)`$ everywhere. Why is this a desirable property for variable-fidelity modelling?
 
 <details>
 <summary>Answer</summary>
 
-$\beta = (F^T R^{-1} F)^{-1} F^T R^{-1}(cF) = c$, so $Y - F\beta = 0$ and the correlation term vanishes. Then $\hat{y}(x) = f(x)\beta = c\,\bar{y}(x)$ for every $x$. When the low-fidelity model has the correct shape and is only mis-scaled, hierarchical Kriging recovers the scaled model exactly and introduces no spurious bumps between samples. This is the source of its robustness compared with fitting the high-fidelity data alone.
+$\beta = (F^T R^{-1} F)^{-1} F^T R^{-1}(cF) = c$, so $Y - F\beta = 0$ and the correlation term vanishes. Then $`\hat{y}(x) = f(x)\beta = c\,\bar{y}(x)`$ for every $x$. When the low-fidelity model has the correct shape and is only mis-scaled, hierarchical Kriging recovers the scaled model exactly and introduces no spurious bumps between samples. This is the source of its robustness compared with fitting the high-fidelity data alone.
 
 </details>
 

@@ -1,6 +1,6 @@
 ## Introduction and Conceptual Framework
 
-One-stage sampling refers to the class of methods in which all sample points within a given domain $\Omega$ are chosen before any evaluations of the expensive function $y(x)$ are performed. This is in contrast to adaptive or sequential sampling, where the locations of future sample points depend on the information gleaned from previously computed values. In the setting of deterministic computer experiments—such as expensive physics-based simulations, computational fluid dynamics models, or high-resolution climate models—each evaluation $y(x)$ may be extremely costly. Thus, the design of the sample set $X = \{x^{(1)}, \ldots, x^{(N)}\}$, with $x^{(i)} \in \Omega \subseteq \mathbb{R}^d$, becomes a critical step in building accurate and efficient surrogate models.
+One-stage sampling refers to the class of methods in which all sample points within a given domain $\Omega$ are chosen before any evaluations of the expensive function $y(x)$ are performed. This is in contrast to adaptive or sequential sampling, where the locations of future sample points depend on the information gleaned from previously computed values. In the setting of deterministic computer experiments—such as expensive physics-based simulations, computational fluid dynamics models, or high-resolution climate models—each evaluation $y(x)$ may be extremely costly. Thus, the design of the sample set $`X = \{x^{(1)}, \ldots, x^{(N)}\}`$, with $x^{(i)} \in \Omega \subseteq \mathbb{R}^d$, becomes a critical step in building accurate and efficient surrogate models.
 
 The fundamental goal of one-stage (or a-priori) designs is to produce sample sets that can lead to globally accurate surrogate approximations without relying on knowledge of $y(x)$ itself. Since we do not know which regions of $\Omega$ are more complex or which variables are more influential, a natural guiding principle is space-fillingness. A space-filling design distributes points as evenly as possible throughout $\Omega$, minimizing large gaps and preventing excessive clustering. This approach ensures that no large portion of the domain is left unexplored, thereby offering a good initial representation of the unknown function.
 
@@ -25,11 +25,11 @@ We typically assume a $d$-dimensional domain $\Omega = [0,1]^d$ for simplicity. 
 
 A design is a set of $N$ points:
 
-$$
+```math
 X = \{ x^{(1)}, x^{(2)}, \ldots, x^{(N)} \} \subset [0,1]^d
-$$
+```
 
-The question is: how to choose $X$ so that a surrogate model $\hat{y}(x)$, built solely from $\{x^{(i)}, y(x^{(i)})\}$, achieves good global accuracy?
+The question is: how to choose $X$ so that a surrogate model $\hat{y}(x)$, built solely from $`\{x^{(i)}, y(x^{(i)})\}`$, achieves good global accuracy?
 
 Without knowledge of $y(x)$, we must rely on geometry and heuristics. Two common strategies are:
 
@@ -47,29 +47,29 @@ $$
 X^* = \arg\min_{X \subset \Omega, |X|=N} \max_{x \in \Omega} \text{dist}(x, X)
 $$
 
-where $\text{dist}(x, X) = \min_{x^{(i)} \in X}\|x - x^{(i)}\|$.
+where $`\text{dist}(x, X) = \min_{x^{(i)} \in X}\|x - x^{(i)}\|`$.
 
 II. **Maximin criterion**: Maximize the minimum distance between any pair of points:
 
-$$
+```math
 X^* = \arg\max_{X \subset \Omega, |X|=N} \min_{i \neq j}\| x^{(i)} - x^{(j)}\|
-$$
+```
 
 III. **$\phi_p$-criterion**: Consider an aggregate measure of inter-point distances:
 
-$$
+```math
 \phi_p(X) = \left(\frac{1}{\binom{N}{2}} \sum_{1 \leq i < j \leq N} \| x^{(i)} -
 x^{(j)}\|^{-p} \right)^{1/p}
-$$
+```
 
 Minimizing $\phi_p(X)$ for large $p$ approximates a maximin design, while other choices of $p$ balance local and global spacing.
 
 IV. **Low-discrepancy criteria**: Discrepancy measures how much the empirical distribution of design points deviates from a uniform distribution over $\Omega$:
 
-$$
+```math
 D_N(X) = \sup_{I \in \mathcal{I}} \left| \frac{\#\{X \cap I\}}{N} -
 \frac{\text{Vol}(I)}{\text{Vol}(\Omega)}\right|
-$$
+```
 
 where $\mathcal{I}$ is a family of axis-aligned boxes. Minimizing discrepancy leads to designs with more uniform coverage.
 
@@ -79,10 +79,10 @@ where $\mathcal{I}$ is a family of axis-aligned boxes. Minimizing discrepancy le
 
 One of the oldest and simplest designs is the full factorial grid. Suppose each dimension is divided into $n_k$ evenly spaced levels:
 
-$$
+```math
 x_k \in \left\{ \frac{0}{n_k-1}, \frac{1}{n_k-1}, \frac{2}{n_k-1}, \ldots,
 \frac{n_k-1}{n_k-1}\right\}
-$$
+```
 
 The total number of points:
 
@@ -121,7 +121,7 @@ $$
 
 A Latin hypercube design ensures that each interval in each dimension contains exactly one point. To construct an LHD:
 
-I. Generate $d$ random permutations $\pi_k$ of $\{1,\ldots,N\}$.
+I. Generate $d$ random permutations $\pi_k$ of $`\{1,\ldots,N\}`$.
 
 II. For each $i=1,\ldots,N$, define:
 
@@ -213,7 +213,7 @@ Possible intervals: $I_1 = [0, \frac{1}{9}], I_2 = [\frac{1}{9}, \frac{2}{9}], \
 
 III. **Permutations**:
 
-Generate two random permutations of $\{1,\ldots,9\}$:
+Generate two random permutations of $`\{1,\ldots,9\}`$:
 
 $$
 \pi_1 = (2,9,4,1,8,3,7,5,6), \quad \pi_2 = (5,2,1,8,4,9,6,7,3)
@@ -243,9 +243,9 @@ V. **Evaluate Space-Filling Quality**:
 
 Compute all $\binom{9}{2}=36$ pairwise distances. Find:
 
-$$
+```math
 \delta_{\min} = \min_{i \neq j}\| x^{(i)} - x^{(j)}\|_2
-$$
+```
 
 The larger $\delta_{\min}$, the better the maximin criterion. If $\delta_{\min}$ seems small, try permuting intervals or applying an optimization algorithm (like simulated annealing) to increase $\delta_{\min}$.
 
@@ -290,7 +290,7 @@ The accuracy of any surrogate model depends on how well the training points cove
 | Aspect | Details |
 | --- | --- |
 | **Inputs** | Design space dimension $d$, number of sample points $N$, space-filling criterion (maximin, minimax, discrepancy), sequence type |
-| **Outputs** | Set of design points $\{x^{(i)}\}_{i=1}^N \subset \mathbb{R}^d$, space-filling metric values |
+| **Outputs** | Set of design points $`\{x^{(i)}\}_{i=1}^N \subset \mathbb{R}^d`$, space-filling metric values |
 
 ## Related Scripts
 
@@ -305,7 +305,7 @@ The accuracy of any surrogate model depends on how well the training points cove
 
 Full factorial: $4^6 = 4096$ points.
 
-LHDs: order the points by their first coordinate. Each of the remaining $d - 1$ coordinates can be any permutation of $\{1, \ldots, N\}$, giving $(N!)^{d-1}$ distinct designs. For $N = 9$, $d = 2$: $9! = 362880$ designs.
+LHDs: order the points by their first coordinate. Each of the remaining $d - 1$ coordinates can be any permutation of $`\{1, \ldots, N\}`$, giving $(N!)^{d-1}$ distinct designs. For $N = 9$, $d = 2$: $9! = 362880$ designs.
 
 </details>
 
@@ -330,7 +330,7 @@ The asymptotic advantage appears only for very large $N$ when $d$ is high. In pr
 
 In units of $1/18$, the points $(2\pi_1(i) - 1, 2\pi_2(i) - 1)$ are $(3,9), (17,3), (7,1), (1,15), (15,7), (5,17), (13,11), (9,13), (11,5)$. Each coordinate uses every odd number $1, 3, \ldots, 17$ exactly once, so every interval in each dimension holds one point.
 
-The smallest squared distance is $4^2 + 2^2 = 20$ (in units of $1/18^2$). It is attained by five pairs, for example $(13,11)$–$(9,13)$ and $(17,3)$–$(15,7)$. So $\delta_{\min} = \sqrt{20}/18 \approx 0.2485$.
+The smallest squared distance is $4^2 + 2^2 = 20$ (in units of $1/18^2$). It is attained by five pairs, for example $(13,11)$–$`(9,13)`$ and $(17,3)$–$`(15,7)`$. So $\delta_{\min} = \sqrt{20}/18 \approx 0.2485$.
 
 </details>
 

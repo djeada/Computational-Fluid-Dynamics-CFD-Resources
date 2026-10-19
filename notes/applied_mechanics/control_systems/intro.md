@@ -107,13 +107,13 @@ $$
 **State-space form**:
 Let $x_1 = x$, $x_2 = \dot{x}$:
 
-$$
+```math
 \begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \end{bmatrix} = \begin{bmatrix} 0 & 1 \\ -k/m & -c/m \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + \begin{bmatrix} 0 \\ 1/m \end{bmatrix} F
-$$
+```
 
-$$
+```math
 y = \begin{bmatrix} 1 & 0 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
-$$
+```
 
 ## System Response Analysis
 
@@ -132,9 +132,9 @@ Response to unit step input reveals:
 
 Response to Dirac delta function:
 
-$$
+```math
 g(t) = \mathcal{L}^{-1}\{ G(s)\}
-$$
+```
 
 For second-order systems:
 
@@ -167,7 +167,7 @@ Magnitude and phase plots vs. frequency:
 
 Complex plane plot of $G(j\omega)$ as $\omega$ varies from 0 to $\infty$.
 
-**Nyquist Stability Criterion**: System is stable if Nyquist plot encircles -1 point $P$ times counterclockwise, where $P$ = number of open-loop RHP poles.
+**Nyquist Stability Criterion**: System is stable if Nyquist plot encircles $-1$ point $P$ times counterclockwise, where $P$ = number of open-loop RHP poles.
 
 ## Stability Analysis
 
@@ -218,8 +218,8 @@ $$
 
 **Design guidelines**:
 
-- GM > 6 dB (factor of 2)
-- PM > 45°
+- $GM > 6$ dB (factor of 2)
+- $PM > 45^\circ$
 
 ### Example 2: Stability Analysis
 
@@ -326,14 +326,14 @@ Based on process reaction curve from step test.
 
 - **Pole placement**: Place closed-loop poles at desired locations
 - **LQR (Linear Quadratic Regulator)**: Optimize quadratic cost function
-- **H∞ control**: Robust control design
+- **$H_\infty$ control**: Robust control design
 
 ### Example 3: PID Controller Design
 
 Design PID controller for plant $G(s) = \frac{1}{s(s+1)(s+2)}$ with specifications:
 
-- Settling time < 4 seconds
-- Overshoot < 20%
+- Settling time $< 4$ seconds
+- Overshoot $`< 20\%`$
 - Zero steady-state error for step input
 
 **Solution**:
@@ -380,7 +380,7 @@ Design controllers that maintain performance despite:
 - Parameter variations
 - External disturbances
 
-**Methods**: H∞ control, μ-synthesis, sliding mode control
+**Methods**: $H_\infty$ control, $\mu$-synthesis, sliding mode control
 
 ### Adaptive Control
 
@@ -453,9 +453,9 @@ Control systems form the "nervous system" of modern mechanical devices, enabling
 <details>
 <summary>Answer</summary>
 
-(a) Open loop: the DC gain is $G(0) = 10$, which falls to 8, a change of $-20\%$.
+(a) Open loop: the DC gain is $G(0) = 10$, which falls to 8, a change of $`-20\%`$.
 
-(b) Closed loop: $T(0) = \frac{10}{1 + 10} = 0.909$, which falls to $\frac{8}{1+8} = 0.889$, a change of $-2.2\%$.
+(b) Closed loop: $T(0) = \frac{10}{1 + 10} = 0.909$, which falls to $\frac{8}{1+8} = 0.889$, a change of $`-2.2\%`$.
 
 Feedback makes the output about $1 + G(0) \approx 11$ times less sensitive to plant variation. The price is that the closed-loop DC gain is not exactly 1 (a 9% steady-state error for a step), which integral action would remove.
 
@@ -494,7 +494,7 @@ s^0 & K &
 
 Stability requires $0 < K < 12$, so $K_u = 12$. At $K = 12$ the auxiliary equation $4s^2 + 12 = 0$ gives $s = \pm j\sqrt{3}$, so $\omega_u = 1.732$ rad/s and $T_u = 2\pi/\omega_u = 3.63$ s.
 
-Ziegler-Nichols PID: $K_p = 0.6K_u = 7.2$, $K_i = 1.2K_u/T_u = 3.97\;\text{s}^{-1}$, $K_d = 0.075K_uT_u = 3.26$ s.
+Ziegler-Nichols PID: $K_p = 0.6K_u = 7.2$, $`K_i = 1.2K_u/T_u = 3.97\;\text{s}^{-1}`$, $K_d = 0.075K_uT_u = 3.26$ s.
 
 </details>
 

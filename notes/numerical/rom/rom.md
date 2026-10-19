@@ -29,7 +29,7 @@ III. **Choice of Reduction Method**:
 
 I. **Reduced Basis**:
 
-- A small set of modes (basis vectors) $\{\xi_1, \ldots, \xi_N\}$ that represent the solution space efficiently.
+- A small set of modes (basis vectors) $`\{\xi_1, \ldots, \xi_N\}`$ that represent the solution space efficiently.
 - Each mode is a vector of length $N_h$, but only $N \ll N_h$ modes are kept, drastically reducing complexity.
 
 II. **Reduced-Order Model (ROM) Equations**:
@@ -39,7 +39,7 @@ II. **Reduced-Order Model (ROM) Equations**:
 
 III. **Reduced Predictions**:
 
-- For new parameter values $\mu^*$, the ROM yields an approximate solution $u_{N}(\mu^*)$ at low cost.
+- For new parameter values $`\mu^*`$, the ROM yields an approximate solution $`u_{N}(\mu^*)`$ at low cost.
 - Can quickly evaluate outputs of interest $s(\mu^*)$ related to lift, drag, flux, or integrated quantities without re-running the HF simulation.
 
 ## The ROM Algorithm: Step-by-Step
@@ -52,7 +52,7 @@ Solve the full-order PDE discretized by, for example, a finite volume method (FV
 
 **Step B: Sampling the Parameter Space**:
 
-Choose parameter points $\{\mu_1, \ldots, \mu_{N_s}\}$ and possibly time instances. Run the HF model at each sampled point to produce snapshots:
+Choose parameter points $`\{\mu_1, \ldots, \mu_{N_s}\}`$ and possibly time instances. Run the HF model at each sampled point to produce snapshots:
 
 $$
 u_h(\mu_1), u_h(\mu_2), \ldots, u_h(\mu_{N_s}) \in \mathbb{R}^{N_h}
@@ -64,7 +64,7 @@ Arrange snapshots into a matrix $X \in \mathbb{R}^{N_h \times N_s}$. Apply POD:
 
 - Compute correlation matrix $C = X^T X$.
 - Perform SVD or eigenvalue decomposition to find eigenvectors and eigenvalues.
-- Select the top $N$ eigenmodes with the largest eigenvalues to form the reduced basis $\{\xi_i\}_{i=1}^N$.
+- Select the top $N$ eigenmodes with the largest eigenvalues to form the reduced basis $`\{\xi_i\}_{i=1}^N`$.
 
 **Step D: Galerkin Projection**:
 
@@ -79,9 +79,9 @@ where $A^\mu, f^\mu$ are the high-fidelity system matrices and vectors, and $B \
 II. **Online Phase** (Cheap, Repeated):
 
 - Given a new parameter $\mu^*$,
-- Assemble the reduced system $A^r(\mu^*) u_N^{\mu^*} = f^r(\mu^*)$ of size $N \times N$.
+- Assemble the reduced system $`A^r(\mu^*) u_N^{\mu^*} = f^r(\mu^*)`$ of size $N \times N$.
 - Solve this small system for $u_N^{\mu^*}$.
-- Evaluate outputs $s(\mu^*) = l(u_N^{\mu^*};\mu^*)$.
+- Evaluate outputs $`s(\mu^*) = l(u_N^{\mu^*};\mu^*)`$.
 
 This separation of offline/online computations is a hallmark of ROM, allowing near real-time responses in the online stage.
 
@@ -172,8 +172,8 @@ ROM replaces expensive full-order CFD solves with low-dimensional approximations
 
 | Aspect | Details |
 | --- | --- |
-| **Inputs** | High-fidelity CFD solver, parameter set $\mathcal{P}$, snapshots $\{u_h(\mu_i)\}$, reduction method (POD/greedy), error tolerance |
-| **Outputs** | Reduced basis $\{\zeta_n\}_{n=1}^N$, reduced system matrices, fast online evaluation $u_N(\mu)$ for new parameters, a posteriori error estimates |
+| **Inputs** | High-fidelity CFD solver, parameter set $\mathcal{P}$, snapshots $`\{u_h(\mu_i)\}`$, reduction method (POD/greedy), error tolerance |
+| **Outputs** | Reduced basis $`\{\zeta_n\}_{n=1}^N`$, reduced system matrices, fast online evaluation $u_N(\mu)$ for new parameters, a posteriori error estimates |
 
 ## Related Scripts
 
@@ -188,7 +188,7 @@ ROM replaces expensive full-order CFD solves with low-dimensional approximations
 <details>
 <summary>Answer</summary>
 
-The offline cost is $50 \times 2 + 1 = 101$ h. Each query saves $2$ h $- 1$ s. The ROM wins when $q\,(2 - 1/3600) > 101$, i.e. $q > 50.5$, so from 51 queries onward. If the snapshots are also useful results in themselves, the break-even comes earlier.
+The offline cost is $50 \times 2 + 1 = 101$ h. Each query saves $2$ h $- 1$ s. The ROM wins when $`q\,(2 - 1/3600) > 101`$, i.e. $q > 50.5$, so from 51 queries onward. If the snapshots are also useful results in themselves, the break-even comes earlier.
 
 </details>
 
@@ -197,17 +197,17 @@ The offline cost is $50 \times 2 + 1 = 101$ h. Each query saves $2$ h $- 1$ s. T
 <details>
 <summary>Answer</summary>
 
-$B$: $10^6 \times 20 \times 8 = 1.6 \times 10^8$ bytes (160 MB). $A^r$: $400 \times 8 = 3.2$ kB. With affine dependence, store the three reduced matrices $B^T A_q B$ (9.6 kB in total), the reduced load vectors, and the functions $\Theta_q$. Online, assemble $A^r(\mu) = \sum_q \Theta_q(\mu)\,B^T A_q B$ without touching any $N_h$-sized object. $B$ itself is needed only to reconstruct full fields.
+$B$: $10^6 \times 20 \times 8 = 1.6 \times 10^8$ bytes (160 MB). $A^r$: $400 \times 8 = 3.2$ kB. With affine dependence, store the three reduced matrices $B^T A_q B$ (9.6 kB in total), the reduced load vectors, and the functions $\Theta_q$. Online, assemble $`A^r(\mu) = \sum_q \Theta_q(\mu)\,B^T A_q B`$ without touching any $N_h$-sized object. $B$ itself is needed only to reconstruct full fields.
 
 </details>
 
 **Exercise 3.** Apply Step D to the system
 
-$$
+```math
 A = \begin{pmatrix} 4 & -1 & 0 \\ -1 & 4 & -1 \\ 0 & -1 & 4 \end{pmatrix}, \qquad f = (1, 2, 1)^T
-$$
+```
 
-with the orthonormal basis $B = [\,(1, 0, 1)^T/\sqrt{2},\ (0, 1, 0)^T\,]$. Compute $A^r = B^T A B$ and $f^r = B^T f$, solve for $u_N$, and compare $B u_N$ with the truth $A^{-1}f$.
+with the orthonormal basis $`B = [\,(1, 0, 1)^T/\sqrt{2},\ (0, 1, 0)^T\,]`$. Compute $A^r = B^T A B$ and $f^r = B^T f$, solve for $u_N$, and compare $B u_N$ with the truth $A^{-1}f$.
 
 <details>
 <summary>Answer</summary>
@@ -222,14 +222,14 @@ Solving gives $u_N = (3\sqrt{2}/7, 5/7) \approx (0.6061, 0.7143)$, so $B u_N = (
 
 </details>
 
-**Exercise 4.** Greedy algorithms need a cheap error estimator. For a symmetric positive definite $A(\mu)$, show that the error $e = u_h - u_{\text{RB}}$ satisfies $\|e\|_2 \le \|r\|_2/\alpha(\mu)$, where $r = f - A u_{\text{RB}}$ and $\alpha(\mu) = \lambda_{\min}(A(\mu))$. Evaluate the bound and the true error for $A = \text{tridiag}(-1, 2, -1) + I$ (size $3 \times 3$), $f = (1, 1, 1)^T$ and the one-vector reduced solution $u_{\text{RB}} = (0.6, 0.6, 0.6)^T$.
+**Exercise 4.** Greedy algorithms need a cheap error estimator. For a symmetric positive definite $A(\mu)$, show that the error $e = u_h - u_{\text{RB}}$ satisfies $`\|e\|_2 \le \|r\|_2/\alpha(\mu)`$, where $`r = f - A u_{\text{RB}}`$ and $`\alpha(\mu) = \lambda_{\min}(A(\mu))`$. Evaluate the bound and the true error for $A = \text{tridiag}(-1, 2, -1) + I$ (size $3 \times 3$), $f = (1, 1, 1)^T$ and the one-vector reduced solution $u_{\text{RB}} = (0.6, 0.6, 0.6)^T$.
 
 <details>
 <summary>Answer</summary>
 
-$Ae = r$, so $\alpha\|e\|^2 \le e^T A e = e^T r \le \|e\|\,\|r\|$, which gives $\|e\| \le \|r\|/\alpha$.
+$Ae = r$, so $`\alpha\|e\|^2 \le e^T A e = e^T r \le \|e\|\,\|r\|`$, which gives $`\|e\| \le \|r\|/\alpha`$.
 
-Numbers: $r = (1,1,1) - A(0.6, 0.6, 0.6) = (-0.2, 0.4, -0.2)$, so $\|r\| = \sqrt{0.24} \approx 0.490$. The smallest eigenvalue is $\alpha = 3 - \sqrt{2} \approx 1.586$, giving a bound of $0.309$. The truth is $(4/7, 5/7, 4/7)$, and the true error is $0.121$. The effectivity (bound divided by true error) is about 2.5. The bound needs only an $N_h$-sized residual (or, with affine precomputation, an $N$-sized computation) plus a lower bound for $\alpha$, not a new truth solve.
+Numbers: $r = (1,1,1) - A(0.6, 0.6, 0.6) = (-0.2, 0.4, -0.2)$, so $`\|r\| = \sqrt{0.24} \approx 0.490`$. The smallest eigenvalue is $\alpha = 3 - \sqrt{2} \approx 1.586$, giving a bound of $0.309$. The truth is $(4/7, 5/7, 4/7)$, and the true error is $0.121$. The effectivity (bound divided by true error) is about 2.5. The bound needs only an $N_h$-sized residual (or, with affine precomputation, an $N$-sized computation) plus a lower bound for $\alpha$, not a new truth solve.
 
 </details>
 

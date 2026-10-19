@@ -75,7 +75,7 @@ For motion along a straight line (say, the x-axis):
 
 ### Kinematic Equations for Constant Acceleration
 
-When acceleration is constant ($a = $ constant), we have:
+When acceleration is constant ($a = \text{constant}$), we have:
 
 1. **Velocity as function of time:**
 
@@ -550,14 +550,14 @@ For both angles $R = 2500 \times 0.866/9.81 = 220.7$ m. The heights differ: $H_{
 
 </details>
 
-**Exercise 4.** A particle moving in a straight line experiences a resisting acceleration $a = -kv$ with $k = 0.5\;\text{s}^{-1}$ and $v_0 = 20$ m/s at $x = 0$. Find $v(t)$, $v(x)$ and the total distance travelled.
+**Exercise 4.** A particle moving in a straight line experiences a resisting acceleration $a = -kv$ with $`k = 0.5\;\text{s}^{-1}`$ and $v_0 = 20$ m/s at $x = 0$. Find $v(t)$, $v(x)$ and the total distance travelled.
 
 <details>
 <summary>Answer</summary>
 
 From $dv/dt = -kv$: $v(t) = v_0 e^{-kt} = 20e^{-0.5t}$ m/s.
 
-Using $a = v\,dv/dx = -kv$ gives $dv/dx = -k$, so $v(x) = v_0 - kx$.
+Using $`a = v\,dv/dx = -kv`$ gives $dv/dx = -k$, so $v(x) = v_0 - kx$.
 
 The particle stops ($v = 0$) at $x = v_0/k = 40$ m. It approaches this distance only as $t \to \infty$, because the speed decays exponentially.
 

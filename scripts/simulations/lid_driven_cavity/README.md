@@ -69,8 +69,8 @@ and starts from the pressure of the previous time step.
 
 With $\Delta t = 10^{-3}$ s all the usual limits are satisfied:
 
-- Diffusion: $\nu\,\Delta t/h^2 = 0.16 \le 1/4$.
-- Advection: the Courant number is $U\,\Delta t/h = 0.13 \le 1$, and $\Delta t \le 2\nu/U^2 = 0.02$ s for central differences with forward Euler.
+- Diffusion: $`\nu\,\Delta t/h^2 = 0.16 \le 1/4`$.
+- Advection: the Courant number is $`U\,\Delta t/h = 0.13 \le 1`$, and $\Delta t \le 2\nu/U^2 = 0.02$ s for central differences with forward Euler.
 - Cell Reynolds number: $Uh/\nu = 0.78 < 2$, so the central-difference advection term does not produce wiggles.
 
 ## Implementation

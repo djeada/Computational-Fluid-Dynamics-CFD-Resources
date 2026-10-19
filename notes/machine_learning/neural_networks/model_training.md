@@ -150,7 +150,7 @@ Spatial error maps—computed as $\Delta\phi(\mathbf{x}) = \phi^{\text{pred}}(\m
 
 Baseline $C_d \approx 0.0110/0.048 \approx 0.229$.
 
-For $C_d = 0.30$: $0.0110/0.30 \approx 3.7\%$.
+For $C_d = 0.30$: $`0.0110/0.30 \approx 3.7\%`$.
 
 Relative MAE depends on the chosen baseline, so the reference value must be reported with it.
 
@@ -196,7 +196,7 @@ Without weighting, the combined model is optimized mostly for Design 1, and its 
 
 </details>
 
-**Exercise 5.** A grid search covers depth $\in \{4, 8, 12, 16\}$, hidden size $\in \{64, 128, 256\}$, learning rate $\in \{10^{-3}, 3 \times 10^{-4}, 10^{-4}\}$ and message-passing steps $\in \{5, 10, 15\}$, at 6 GPU-hours per trial. Compute the total cost and compare with 20 random-search trials. What is the probability that at least one of the 20 random trials lands in the best 5% of the search space?
+**Exercise 5.** A grid search covers depth $`\in \{4, 8, 12, 16\}`$, hidden size $`\in \{64, 128, 256\}`$, learning rate $`\in \{10^{-3}, 3 \times 10^{-4}, 10^{-4}\}`$ and message-passing steps $`\in \{5, 10, 15\}`$, at 6 GPU-hours per trial. Compute the total cost and compare with 20 random-search trials. What is the probability that at least one of the 20 random trials lands in the best 5% of the search space?
 
 <details>
 <summary>Answer</summary>

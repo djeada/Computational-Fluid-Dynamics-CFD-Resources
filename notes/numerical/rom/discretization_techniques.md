@@ -40,11 +40,11 @@ III. **Other Methods**:
 
 ### Discrete Problem Formulation
 
-Once $V_h$ is constructed, we pick a basis $\{\phi_i\}_{i=1}^{N_h}$ for $V_h$. Any $u_h(\mu) \in V_h$ can then be written as:
+Once $V_h$ is constructed, we pick a basis $`\{\phi_i\}_{i=1}^{N_h}`$ for $V_h$. Any $u_h(\mu) \in V_h$ can then be written as:
 
-$$
+```math
 u_h(\mu) = \sum_{i=1}^{N_h} \bigl(u_{N_h}^\mu\bigr)_i \, \phi_i
-$$
+```
 
 where $\bigl(u_{N_h}^\mu\bigr)_i \in \mathbb{R}$ are the unknown coordinates (degrees of freedom) for the discrete solution in the chosen basis.
 
@@ -56,7 +56,7 @@ $$
 a\bigl(u_h(\mu), v_h;\mu\bigr) = f\bigl(v_h;\mu\bigr) \quad \forall v_h \in V_h
 $$
 
-yields a set of algebraic equations. Because $v_h \in V_h$ is also spanned by $\{\phi_i\}$, we can test the equation against each basis function $\phi_j$. This leads to
+yields a set of algebraic equations. Because $v_h \in V_h$ is also spanned by $`\{\phi_i\}`$, we can test the equation against each basis function $\phi_j$. This leads to
 
 $$
 a\Bigl(\sum_{i=1}^{N_h} \bigl(u_{N_h}^\mu\bigr)_i \phi_i,
@@ -65,15 +65,15 @@ $$
 
 By linearity (assuming a linear PDE for simplicity), we can write
 
-$$
+```math
 \sum_{i=1}^{N_h} \bigl(u_{N_h}^\mu\bigr)_i \, a(\phi_i, \phi_j;\mu) = f(\phi_j;\mu)
-$$
+```
 
 Hence we obtain the matrix-vector system
 
-$$
+```math
 A_{N_h}^\mu \, u_{N_h}^\mu = f_{N_h}^\mu
-$$
+```
 
 where
 
@@ -95,7 +95,7 @@ is often referred to as the **truth problem**, and $u_h(\mu)$ is called the **tr
 
 - **High Fidelity Model**:
   - For 2D or 3D problems with fine meshes or higher-order elements, $N_h$ can be very large (ranging into the millions of degrees of freedom).
-  - Solving one instance of $A_{N_h}^\mu \, u_{N_h}^\mu = f_{N_h}^\mu$ can cost on the order of $\mathcal{O}(N_h^3)$ operations with direct solvers, or $\mathcal{O}(N_h^\alpha)$ with iterative solvers (where $\alpha$ is often between 1 and 2, depending on the method and preconditioning strategy).
+  - Solving one instance of $`A_{N_h}^\mu \, u_{N_h}^\mu = f_{N_h}^\mu`$ can cost on the order of $\mathcal{O}(N_h^3)$ operations with direct solvers, or $\mathcal{O}(N_h^\alpha)$ with iterative solvers (where $\alpha$ is often between 1 and 2, depending on the method and preconditioning strategy).
 - **Need for Reduction**:
   - If we need to solve this problem repeatedly for many parameter values $\mu \in \mathcal{P}$ (e.g., for design optimization, real-time simulation, or uncertainty quantification), the cost becomes prohibitive.
   - **Reduced Order Modeling (ROM)** or **Model Order Reduction (MOR)** techniques aim to approximate $u_h(\mu)$ in a much smaller (reduced) subspace while retaining acceptable accuracy, thus drastically reducing the computational cost for repeated solves.
@@ -118,21 +118,21 @@ In simple terms, the error $e_h(\mu) = u(\mu) - u_h(\mu)$ is orthogonal (with re
 
 A classical result in the analysis of Galerkin methods is **Cea’s lemma**, which states that, for a coercive problem,
 
-$$
+```math
 \| u(\mu) - u_h(\mu)\|_V \leq \frac{\gamma(\mu)}{\alpha(\mu)} \, \inf_{v_h \in V_h} \|
 u(\mu) - v_h\|_V
-$$
+```
 
 where
 
 - $\alpha(\mu)$ is the coercivity constant of the bilinear form $a(\cdot,\cdot;\mu)$,
 - $\gamma(\mu)$ is the continuity constant of the bilinear form,
-- $\| \cdot \|_V$ denotes the norm on $V$.
+- $`\| \cdot \|_V`$ denotes the norm on $V$.
   This shows that $u_h(\mu)$ is **quasi-optimal** in $V_h$: up to the constant factor $\frac{\gamma(\mu)}{\alpha(\mu)}$, it is as good an approximation to $u(\mu)$ as you can get within the finite-dimensional space $V_h$.
 
 **Interpretation**:
 
-- The term $\inf_{v_h \in V_h} \|u(\mu) - v_h\|_V$ reflects the best possible approximation error if we could pick the ideal function in $V_h$.
+- The term $`\inf_{v_h \in V_h} \|u(\mu) - v_h\|_V`$ reflects the best possible approximation error if we could pick the ideal function in $V_h$.
 - The factor $\frac{\gamma(\mu)}{\alpha(\mu)}$ comes from the properties of the bilinear form (continuity and coercivity). A well-conditioned problem has $\gamma(\mu)/\alpha(\mu)$ close to 1, making the Galerkin solution nearly the best approximation in $V_h$.
   These results form the theoretical backbone of why Galerkin discretizations (like FEM) are reliable and converge systematically as $V_h$ is enriched (e.g., by refining the mesh or increasing the polynomial order).
 
@@ -152,7 +152,7 @@ A typical ROM workflow is split into two main phases: an **offline** phase and a
 
 I. **Offline Phase**
 
-- **Snapshot Generation**: Solve the high-fidelity problem $u_h(\mu)$ for several "training" parameter values $\{\mu_1,\ldots,\mu_{N_s}\}$. This set of solutions is referred to as **snapshots**.
+- **Snapshot Generation**: Solve the high-fidelity problem $u_h(\mu)$ for several "training" parameter values $`\{\mu_1,\ldots,\mu_{N_s}\}`$. This set of solutions is referred to as **snapshots**.
 - **Snapshot Set**: Collect the snapshots in a data structure (e.g., a matrix whose columns are solutions in vectorized form).
 - This phase involves the majority of the computational cost because each snapshot is a large-scale finite element (or other method) solve.
 
@@ -161,7 +161,7 @@ II. **Basis Extraction (e.g., via POD)**
 - **Proper Orthogonal Decomposition (POD)**:
   - Arrange the snapshot solutions into a matrix $S$ (each snapshot is one column).
   - Perform a **Singular Value Decomposition (SVD)** of $S$, obtaining singular values $\sigma_1 \ge \sigma_2 \ge \cdots$ and corresponding orthonormal singular vectors.
-  - **Truncation**: Choose the first $N$ singular vectors associated with the largest singular values. These vectors $\{\xi_i\}_{i=1}^N$ form the **reduced basis**.
+  - **Truncation**: Choose the first $N$ singular vectors associated with the largest singular values. These vectors $`\{\xi_i\}_{i=1}^N`$ form the **reduced basis**.
 - **Rationale**: The SVD identifies directions in which the snapshots vary the most. By retaining only the leading singular vectors, we keep the subspace that captures the bulk of the solution’s energy or variance.
 
 III. **Online Phase: Reduced Basis (RB) Approximation**
@@ -174,7 +174,7 @@ III. **Online Phase: Reduced Basis (RB) Approximation**
 
   where the vectors $\xi_i \in V_h$ are the reduced basis vectors, and $a_i(\mu)$ are the new unknowns (much fewer in number than $N_h$).
 
-- **Reduced Problem**: By restricting the problem to this reduced subspace $V_{N_h} = \text{span}\{\xi_1,\dots,\xi_N\}$, one obtains a system of $\mathcal{O}(N)$ unknowns instead of $\mathcal{O}(N_h)$. Solving for $a_i(\mu)$ is thus much cheaper computationally.
+- **Reduced Problem**: By restricting the problem to this reduced subspace $`V_{N_h} = \text{span}\{\xi_1,\dots,\xi_N\}`$, one obtains a system of $\mathcal{O}(N)$ unknowns instead of $\mathcal{O}(N_h)$. Solving for $a_i(\mu)$ is thus much cheaper computationally.
 
 #### Effect on Complexity
 
@@ -227,7 +227,7 @@ $N_h^3 = 10^{18}$ and $N^3 = 8000$, a ratio of $1.25 \times 10^{14}$. At $10^9$ 
 
 </details>
 
-**Exercise 2.** Solve $-u'' = 1$ on $(0, 1)$ with $u(0) = u(1) = 0$ using piecewise-linear finite elements on a uniform mesh, for $h = 1/2$ and $h = 1/4$. Assemble $A_{N_h}$ and $f_{N_h}$ from $a(u, v) = \int_0^1 u'v' \, dx$ and $f(v) = \int_0^1 v \, dx$, solve, and compare with the exact solution $u(x) = x(1 - x)/2$.
+**Exercise 2.** Solve $-u'' = 1$ on $(0, 1)$ with $u(0) = u(1) = 0$ using piecewise-linear finite elements on a uniform mesh, for $h = 1/2$ and $h = 1/4$. Assemble $A_{N_h}$ and $f_{N_h}$ from $`a(u, v) = \int_0^1 u'v' \, dx`$ and $`f(v) = \int_0^1 v \, dx`$, solve, and compare with the exact solution $u(x) = x(1 - x)/2$.
 
 <details>
 <summary>Answer</summary>
@@ -251,18 +251,18 @@ These equal the exact values $x(1-x)/2$ at $x = 0.25, 0.5, 0.75$. The nodal valu
 <details>
 <summary>Answer</summary>
 
-$a(\phi_i, \phi_j; \mu) = \mu\int\phi_i'\phi_j' \, dx$, so $A_{N_h}^\mu = \mu A_1$, while $f$ does not depend on $\mu$. Then $u_{N_h}^\mu = (\mu A_1)^{-1} f = u_{N_h}^1/\mu$. Every truth solution is a multiple of the single vector $u_{N_h}^1$, so the solution manifold lies in a one-dimensional subspace. A reduced basis with $N = 1$, $\xi_1 = u_{N_h}^1/\|u_{N_h}^1\|$, reproduces the truth solution exactly for every $\mu$. Most problems are not this simple, but fast singular-value decay reflects the same idea.
+$`a(\phi_i, \phi_j; \mu) = \mu\int\phi_i'\phi_j' \, dx`$, so $A_{N_h}^\mu = \mu A_1$, while $f$ does not depend on $\mu$. Then $u_{N_h}^\mu = (\mu A_1)^{-1} f = u_{N_h}^1/\mu$. Every truth solution is a multiple of the single vector $u_{N_h}^1$, so the solution manifold lies in a one-dimensional subspace. A reduced basis with $N = 1$, $`\xi_1 = u_{N_h}^1/\|u_{N_h}^1\|`$, reproduces the truth solution exactly for every $\mu$. Most problems are not this simple, but fast singular-value decay reflects the same idea.
 
 </details>
 
-**Exercise 4.** For the convection–diffusion form $a(u, v) = \mu\int_0^1 u'v' \, dx + b\int_0^1 u'v \, dx$ on $V = H_0^1(0, 1)$ with $\|v\|_V = \|v'\|_{L^2}$, show that $\alpha = \mu$ and $\gamma \le \mu + |b|/\pi$ (use the Poincaré inequality $\|v\|_{L^2} \le \|v'\|_{L^2}/\pi$). Evaluate the Céa factor $\gamma/\alpha$ for $\mu = 0.01$ and $b = 1$, and interpret it.
+**Exercise 4.** For the convection–diffusion form $`a(u, v) = \mu\int_0^1 u'v' \, dx + b\int_0^1 u'v \, dx`$ on $V = H_0^1(0, 1)$ with $`\|v\|_V = \|v'\|_{L^2}`$, show that $\alpha = \mu$ and $\gamma \le \mu + |b|/\pi$ (use the Poincaré inequality $`\|v\|_{L^2} \le \|v'\|_{L^2}/\pi`$). Evaluate the Céa factor $\gamma/\alpha$ for $\mu = 0.01$ and $b = 1$, and interpret it.
 
 <details>
 <summary>Answer</summary>
 
-Coercivity: $\int_0^1 v'v \, dx = [v^2/2]_0^1 = 0$ for $v \in H_0^1$, so $a(v, v) = \mu\|v'\|^2$ and $\alpha = \mu$.
+Coercivity: $`\int_0^1 v'v \, dx = [v^2/2]_0^1 = 0`$ for $v \in H_0^1$, so $`a(v, v) = \mu\|v'\|^2`$ and $\alpha = \mu$.
 
-Continuity: $|a(u, v)| \le \mu\|u'\|\|v'\| + |b|\,\|u'\|\,\|v\| \le (\mu + |b|/\pi)\|u'\|\|v'\|$.
+Continuity: $`|a(u, v)| \le \mu\|u'\|\|v'\| + |b|\,\|u'\|\,\|v\| \le (\mu + |b|/\pi)\|u'\|\|v'\|`$.
 
 The Céa factor is $\gamma/\alpha = 1 + |b|/(\pi\mu) = 1 + 1/(0.01\pi) \approx 32.8$. The Galerkin error may be up to about 33 times the best approximation error in $V_h$. Convection-dominated problems therefore need fine meshes or stabilization (e.g. SUPG), and reduced models inherit the same difficulty.
 

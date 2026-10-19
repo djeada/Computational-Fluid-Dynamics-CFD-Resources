@@ -89,12 +89,20 @@ def run(argv, simulation=None, **options):
 
 
 class ScheduleTests(unittest.TestCase):
-    def test_increments_cover_all_steps_evenly(self):
-        for total, frames in ((10, 3), (900, 870), (12345, 869), (5, 5)):
-            schedule = frame_schedule(total, frames)
-            self.assertEqual(sum(schedule), total)
-            self.assertEqual(len(schedule), min(total, frames))
-            self.assertLessEqual(max(schedule) - min(schedule), 1)
+    def test_frames_advance_equal_increments(self):
+        cases = ((10, 3), (900, 870), (12345, 869), (5, 5), (2400, 869), (920, 839))
+        for total, frames in cases:
+            with self.subTest(total=total, frames=frames):
+                schedule = frame_schedule(total, frames)
+                self.assertEqual(sum(schedule), total)
+                self.assertEqual(set(schedule[:-1]) | {schedule[0]}, {schedule[0]})
+                self.assertLessEqual(schedule[-1], schedule[0])
+                # the nearest whole increment keeps the video close to its length
+                self.assertLess(abs(len(schedule) - frames), frames / 2 + 1)
+        self.assertEqual(frame_schedule(10, 3), [3, 3, 3, 1])
+        self.assertEqual(frame_schedule(2400, 869), [3] * 800)
+        self.assertEqual(frame_schedule(920, 839), [1] * 920)
+        self.assertEqual(len(frame_schedule(30000, 839)), 834)
 
     def test_short_runs_give_fewer_frames_instead_of_repeats(self):
         self.assertEqual(frame_schedule(4, 100), [1, 1, 1, 1])
@@ -179,9 +187,11 @@ class RunnerTests(unittest.TestCase):
             )
         (writer,) = FakeWriter.instances
         hold = min(round(_animation.REEL_HOLD_SECONDS * 10), 20 // 3)
-        self.assertEqual(writer.frames, 20)
+        moving = frame_schedule(10 * 3, 20 - hold - 1)  # 30 steps for 13 frames
+        self.assertEqual(moving, [2] * 15)
+        self.assertEqual(writer.frames, 1 + len(moving) + hold)
         self.assertEqual(simulation.steps, 10 * 3)
-        self.assertEqual(len(writer.shapes), 20 - hold + 1)
+        self.assertEqual(len(writer.shapes), 1 + len(moving) + 1)
         self.assertEqual(writer.shapes[0], (1920, 1080, 4))
 
     def test_reel_stops_early_when_simulation_finishes(self):
@@ -229,7 +239,7 @@ class VideoWriterTests(unittest.TestCase):
 class MakeReelsTests(unittest.TestCase):
     def test_selects_simulations_only(self):
         names = [script.parent.name for script in make_reels.simulations([])]
-        self.assertEqual(len(names), 15)
+        self.assertEqual(len(names), 25)
         self.assertEqual(
             [s.parent.name for s in make_reels.simulations(["cavity"])],
             ["lid_driven_cavity"],

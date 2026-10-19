@@ -16,11 +16,11 @@ $$
 
 Where:
 
-- $ \\rho $ is the fluid density,
-- $ \\vec{v} $ is the fluid velocity vector,
-- $ t $ is time.
+- $\rho$ is the fluid density,
+- $\vec{v}$ is the fluid velocity vector,
+- $t$ is time.
 
-For an incompressible fluid ($ \\rho $ is constant):
+For an incompressible fluid ($\rho$ is constant):
 
 $$
 \nabla \cdot \vec{v} = 0
@@ -28,8 +28,8 @@ $$
 
 ### Explanation
 
-- The first term, $ \\frac{\\partial \\rho}{\\partial t} $, represents the local rate of change of density.
-- The second term, $ \\nabla \\cdot (\\rho \\vec{v}) $, represents the convective rate of change of density due to fluid motion.
+- The first term, $\frac{\partial \rho}{\partial t}$, represents the local rate of change of density.
+- The second term, $\nabla \cdot (\rho \vec{v})$, represents the convective rate of change of density due to fluid motion.
 
 ## Navier-Stokes Equations
 
@@ -48,11 +48,11 @@ $$
 
 Where:
 
-- $ \\vec{v} $ is the fluid velocity vector,
-- $ p $ is the pressure,
-- $ \\mu $ is the dynamic viscosity,
-- $ \\mu_v $ is the bulk viscosity,
-- $ \\vec{f} $ represents body forces (e.g., gravity).
+- $\vec{v}$ is the fluid velocity vector,
+- $p$ is the pressure,
+- $\mu$ is the dynamic viscosity,
+- $\mu_v$ is the bulk viscosity,
+- $\vec{f}$ represents body forces (e.g., gravity).
 
 For an incompressible fluid:
 
@@ -83,10 +83,10 @@ $$
 
 Where:
 
-- $ e $ is the internal energy per unit mass (this form, with $-p(\nabla \cdot \vec{v})$ on the right, is the internal-energy equation),
-- $ k $ is the thermal conductivity,
-- $ T $ is the temperature,
-- $ \\Phi $ represents viscous dissipation.
+- $e$ is the internal energy per unit mass (this form, with $-p(\nabla \cdot \vec{v})$ on the right, is the internal-energy equation),
+- $k$ is the thermal conductivity,
+- $T$ is the temperature,
+- $\Phi$ represents viscous dissipation.
 
 For an incompressible fluid (simplified form):
 
@@ -97,7 +97,7 @@ $$
 
 Where:
 
-- $ c_p $ is the specific heat at constant pressure.
+- $c_p$ is the specific heat at constant pressure.
 
 ### Explanation
 
@@ -224,7 +224,7 @@ $$
 
     - Hence, in the equation for mass we have $\int_A\rho\vec{v}\cdot\vec{n}dA = \int_V \nabla\cdot(\rho\vec{v})dV$.
 
-  - Combine all the volume integrals into $\int_V(\text{all terms})dV = 0$. Since the volume integrated over is arbitrary, this equation can only be true if the integrand $(\text{all terms})$ itself is 0. This gives the final result. (Also, $ \\nabla\\cdot(P\\boldsymbol{\\delta}) = \\nabla P$.)
+  - Combine all the volume integrals into $\int_V(\text{all terms})dV = 0$. Since the volume integrated over is arbitrary, this equation can only be true if the integrand $(\text{all terms})$ itself is 0. This gives the final result. (Also, $\nabla\cdot(P\boldsymbol{\delta}) = \nabla P$.)
 
 $$
 \text{Mass Equation:} \quad \frac{\partial \rho}{\partial t} + \nabla \cdot
@@ -283,7 +283,7 @@ This note presents the three governing equations of fluid dynamics—continuity,
 <details>
 <summary>Answer</summary>
 
-In steady flow the volume integral does not change, so $\int_A \rho\vec{v}\cdot\vec{n}\,dA = 0$. With $\vec{n}$ pointing outward, the inlet contributes $-\rho_1 V_1 A_1$ and the outlet $+\rho_2 V_2 A_2$:
+In steady flow the volume integral does not change, so $`\int_A \rho\vec{v}\cdot\vec{n}\,dA = 0`$. With $\vec{n}$ pointing outward, the inlet contributes $-\rho_1 V_1 A_1$ and the outlet $+\rho_2 V_2 A_2$:
 
 ```math
 V_2 = \frac{\rho_1 V_1 A_1}{\rho_2 A_2} = \frac{1.2 \times 10 \times 0.05}{1.5 \times 0.02} = 20 \text{ m/s}
@@ -311,9 +311,9 @@ The plate pushes the fluid back with 400 N, so the fluid pushes the plate with 4
 <details>
 <summary>Answer</summary>
 
-$du/dy = 5/10^{-3} = 5000$ s$^{-1}$, so $\Phi = 0.1 \times 5000^2 = 2.5 \times 10^6$ W/m³.
+$du/dy = 5/10^{-3} = 5000$ s$`^{-1}`$, so $\Phi = 0.1 \times 5000^2 = 2.5 \times 10^6$ W/m³.
 
-With no conduction and no convective temperature change, $\rho c_p\, \partial T/\partial t = \Phi$:
+With no conduction and no convective temperature change, $`\rho c_p\, \partial T/\partial t = \Phi`$:
 
 ```math
 \frac{\partial T}{\partial t} = \frac{2.5 \times 10^6}{870 \times 1900} \approx 1.5

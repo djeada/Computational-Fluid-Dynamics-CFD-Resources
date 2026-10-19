@@ -30,10 +30,10 @@ $$
 
 ### Mock CFD profile
 
-$$
+```math
 u_{\mathrm{CFD}}(x_i) = u_{\mathrm{exp}}(x_i) + \epsilon_i,
 \qquad \epsilon_i \sim \mathcal{N}(0,\, 0.05^2)
-$$
+```
 
 ### Agreement metric
 

@@ -28,15 +28,15 @@ These sensors measure linear acceleration along the X, Y, and Z axes. The data p
 
 **Velocity Integration**:
 
-$$
+```math
 v_i(t) = v_{i0} + \int_{t_0}^{t} a_i(\tau) \, d\tau
-$$
+```
 
 **Position Integration**:
 
-$$
+```math
 r_i(t) = r_{i0} + \int_{t_0}^{t} v_i(\tau) \, d\tau
-$$
+```
 
 In these equations, $i$ represents each axis (X, Y, Z), $v_{i0}$ is the initial velocity, and $r_{i0}$ is the initial position.
 
@@ -110,9 +110,9 @@ In this equation:
 
 **Position Update**:
 
-$$
+```math
 \mathbf{r}(t) = \mathbf{r}(t_0) + \int_{t_0}^{t} \mathbf{v}^{n}(\tau) \, d\tau
-$$
+```
 
 #### Feedback Control
 
@@ -172,7 +172,7 @@ where:
 - $\boldsymbol{\omega}_{in}^{n}$ is the angular velocity of the navigation frame relative to the inertial frame (Earth rate plus transport rate).
 - $\boldsymbol{\omega}_{ib}^{b}$ is the angular velocity measured by the gyroscopes.
 - $\boldsymbol{\omega}_{nb}^{b}$ is the angular velocity of the body frame relative to the navigation frame, which drives the attitude update.
-- $\mathbf{C}_{n}^{b} = (\mathbf{C}_{b}^{n})^T$ is the inverse of the direction cosine matrix.
+- $`\mathbf{C}_{n}^{b} = (\mathbf{C}_{b}^{n})^T`$ is the inverse of the direction cosine matrix.
 
 **Gravity Modeling**:
 

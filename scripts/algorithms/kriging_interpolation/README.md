@@ -5,7 +5,7 @@ This script interpolates 11 samples of $y(x) = (3x-3)^2 \sin(2x-10)$ with a krig
 ## Overview
 
 - Samples the test function at 11 equally spaced points in $[0, 1]$.
-- For each $\theta \in \{0.1, 3, 6.5, 10\}$, assembles the cubic spline correlation matrix $R$ and solves $R\mathbf{w} = \mathbf{y}$ with `numpy.linalg.solve`.
+- For each $`\theta \in \{0.1, 3, 6.5, 10\}`$, assembles the cubic spline correlation matrix $R$ and solves $R\mathbf{w} = \mathbf{y}$ with `numpy.linalg.solve`.
 - Evaluates the interpolant at 100 points in $[0, 1]$.
 - Draws a $2 \times 2$ figure, one panel per $\theta$, with the true function, the interpolant and the samples.
 
@@ -15,10 +15,10 @@ This script interpolates 11 samples of $y(x) = (3x-3)^2 \sin(2x-10)$ with a krig
 
 The interpolant is a weighted sum of correlation functions centred on the samples $x_1, \dots, x_n$:
 
-$$
+```math
 \tilde{y}(x) = \sum_{i=1}^{n} w_i\, R(x - x_i;\,\theta) = \mathbf{r}(x)^T R^{-1}
 \mathbf{y}
-$$
+```
 
 This is the kriging predictor with a zero mean (no regression trend $f(x)^T\beta$). It is the same as radial basis function interpolation that uses the correlation function as the basis.
 
@@ -26,18 +26,18 @@ This is the kriging predictor with a zero mean (no regression trend $f(x)^T\beta
 
 Requiring $\tilde{y}(x_j) = y_j$ at every sample gives
 
-$$
+```math
 R\,\mathbf{w} = \mathbf{y},
 \qquad R_{ij} = R(x_i - x_j;\,\theta)
-$$
+```
 
 ### Cubic Spline Correlation
 
 With $\xi = \theta|h|$:
 
-$$
+```math
 R(h;\,\theta) = \begin{cases} 1 - \tfrac{3}{2}\xi^2 + \tfrac{3}{4}\xi^3, & \xi \leq 1, \\ \tfrac{1}{4}(2 - \xi)^3, & 1 < \xi \leq 2, \\ 0, & \xi > 2. \end{cases}
-$$
+```
 
 Each basis function is non-zero only within $|x - x_i| < 2/\theta$. With a sample spacing of 0.1, $\theta = 10$ gives a support radius of two spacings, while $\theta = 0.1$ makes every basis function almost constant over $[0, 1]$. In that limit $R$ is nearly singular (condition number about $5 \times 10^{7}$), yet the interpolant is very smooth.
 

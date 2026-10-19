@@ -34,10 +34,10 @@ On the surface $u_\theta = 0$ when $\sin\theta = \Gamma/(4\pi R U)$, which equal
 
 Vortex $k$ is released at $t_k = kT/2$ and sits at
 
-$$
+```math
 x_k(t) = 1.5R + 0.8\, U\,(t - t_k),
 \qquad y_k = \pm 0.6R
-$$
+```
 
 The upper row ($k$ even) is clockwise and the lower row ($k$ odd) is counter-clockwise. Its strength is
 
@@ -47,9 +47,9 @@ $$
 
 Each vortex induces a regularised (core radius $\delta = 0.3R$) velocity
 
-$$
+```math
 u - iv = -\frac{i\gamma_k}{2\pi}\, \frac{\overline{(z - z_k)}}{|z - z_k|^2 + \delta^2}
-$$
+```
 
 By the circle theorem, an image vortex $-\gamma_k$ at $R^2/\bar z_k$ plus a vortex $+\gamma_k$ at the centre keep the cylinder a streamline for a point vortex. The images are unregularised, so with the regularised core the no-penetration condition holds only approximately. Vortices more than 5 units beyond the right edge of the plot are dropped.
 
@@ -71,14 +71,14 @@ with $\delta = 0$ for the images.
 
 ### RK4 Integration
 
-$$
+```math
 \mathbf{k}_1 = \mathbf{u}(\mathbf{x}_n, t_n), \quad
 \mathbf{k}_2 = \mathbf{u}\left(\mathbf{x}_n + \tfrac{\Delta t}{2}\mathbf{k}_1, t_n +
 \tfrac{\Delta t}{2}\right), \quad
 \mathbf{k}_3 = \mathbf{u}\left(\mathbf{x}_n + \tfrac{\Delta t}{2}\mathbf{k}_2, t_n +
 \tfrac{\Delta t}{2}\right), \quad
 \mathbf{k}_4 = \mathbf{u}(\mathbf{x}_n + \Delta t\,\mathbf{k}_3, t_n + \Delta t)
-$$
+```
 
 $$
 \mathbf{x}_{n+1} = \mathbf{x}_n +

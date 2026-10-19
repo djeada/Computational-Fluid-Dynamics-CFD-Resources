@@ -34,7 +34,7 @@ $$
 
 - $W$ is the weight (N),
 - $m$ is the mass of the airplane (kg),
-- $g$ is the acceleration due to gravity ($9.81 \, \text{m/s}^2$).
+- $g$ is the acceleration due to gravity ($`9.81 \, \text{m/s}^2`$).
 
 III. **Thrust** is the forward force provided by the airplane’s engines, and it is responsible for overcoming drag and propelling the aircraft. Thrust depends on the power of the engines and the design of the propellers or jet nozzles.
 
@@ -210,9 +210,9 @@ where $D$ is the drag force. Reducing the drag coefficient is essential for effi
 <details>
 <summary>Answer</summary>
 
-$W = 1100 \times 9.81 = 10\,791$ N.
+$`W = 1100 \times 9.81 = 10\,791`$ N.
 
-- Flaps up: $v_{stall} = \sqrt{\dfrac{2 \times 10\,791}{1.225 \times 1.6 \times 16.2}} = 26.1$ m/s = 50.7 kt
+- Flaps up: $`v_{stall} = \sqrt{\dfrac{2 \times 10\,791}{1.225 \times 1.6 \times 16.2}} = 26.1`$ m/s = 50.7 kt
 - Flaps down: $v_{stall} = 22.8$ m/s = 44.2 kt
 
 Flaps cut the stall speed by 13%, which shortens takeoff and landing distances roughly in proportion to $v^2$.
@@ -234,7 +234,7 @@ This is less than a quarter of $C_{L_{max}} = 1.6$, leaving a wide margin above 
 
 </details>
 
-**Exercise 3.** Taking $C_D = 0.032$ as constant, find the drag and power required at 55 m/s and at 110 m/s for this aircraft. Why is the constant-$C_D$ assumption poor at low speed?
+**Exercise 3.** Taking $C_D = 0.032$ as constant, find the drag and power required at 55 m/s and at 110 m/s for this aircraft. Why is the constant-$`C_D`$ assumption poor at low speed?
 
 <details>
 <summary>Answer</summary>
@@ -260,7 +260,7 @@ R_c = \frac{P_{excess}}{W} = \frac{45\,000}{10\,791} = 4.17 \text{ m/s} \approx 
 
 $\sin\gamma = R_c/V = 4.17/40$, so $\gamma = 6.0^\circ$.
 
-Perpendicular to the flight path, $L = W\cos\gamma = 0.995\,W$. The climb comes from excess thrust, not excess lift.
+Perpendicular to the flight path, $`L = W\cos\gamma = 0.995\,W`$. The climb comes from excess thrust, not excess lift.
 
 </details>
 

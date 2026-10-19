@@ -68,12 +68,12 @@ The collision term in the Boltzmann equation is important because it quantifies 
 
 A typical form of the collision operator is:
 
-$$
+```math
 \left(\frac{\partial f}{\partial t} \right)_{\text{collision}} = \iint
 g(\mathbf{v}, \Omega)
 \left[f(\mathbf{x}, \mathbf{p}_A', t) f(\mathbf{x}, \mathbf{p}_B', t) - f(\mathbf{x},
 \mathbf{p}_A, t) f(\mathbf{x}, \mathbf{p}_B, t) \right] d\Omega \, d^3\mathbf{p}_B
-$$
+```
 
 where:
 
@@ -111,9 +111,9 @@ Understanding various velocity definitions is important for linking microscopic 
 - **Definition:**\
   The average velocity $\mathbf{u}$ of the fluid is obtained by taking the first moment of the distribution function:
 
-$$
+```math
 \mathbf{u} = \frac{1}{\rho} \int d^3\xi \, \xi \, f(\xi, x, t)
-$$
+```
 
 where the density $\rho$ is defined below.
 
@@ -143,37 +143,37 @@ The beauty of the Boltzmann framework is that macroscopic fluid properties emerg
 - **Total Mass:**\
   The overall mass in a control volume $\ell_{\text{av}}^3$ is given by:
 
-$$
+```math
 \int d^3\xi \int d^3x \, f(\xi, x, t) = M(t)
-$$
+```
 
 ### 5.2. Fluid Density
 
 - **Local Density:**\
   The density at a specific location $x$ is the zeroth moment of $f$:
 
-$$
+```math
 \int d^3\xi \, f(\xi, x, t) = \rho(x, t)
-$$
+```
 
 ### 5.3. Momentum Density
 
 - **Local Momentum:**\
   The first moment yields the momentum density:
 
-$$
+```math
 \int d^3\xi \, \xi \, f(\xi, x, t) = \rho(x, t) \, \mathbf{u}(x, t)
-$$
+```
 
 ### 5.4. Pressure and Stress Tensor
 
 - **Higher Moments:**\
   The second moment (and beyond) of $f$ is related to the pressure and viscous stress tensor:
 
-$$
+```math
 \int d^3\xi \, \xi \otimes \xi \, f(\xi, x, t) \quad
 \text{(leads to the pressure tensor)}
-$$
+```
 
 Although the full expression is more complicated, it is important for recovering the constitutive relations used in the NSE.
 
@@ -181,7 +181,7 @@ Although the full expression is more complicated, it is important for recovering
 
 ### 6.1. Objective
 
-The ultimate goal is to use the Boltzmann equation to solve for macroscopic variables (e.g., $\mathbf{u}(x, t)$ and $p(x, t)$) as governed by the Navier-Stokes equations. Instead of directly solving the continuum equations, one simulates the evolution of the distribution function $f(\xi, x, t)$.
+The ultimate goal is to use the Boltzmann equation to solve for macroscopic variables (e.g., $\mathbf{u}(x, t)$ and $`p(x, t)`$) as governed by the Navier-Stokes equations. Instead of directly solving the continuum equations, one simulates the evolution of the distribution function $f(\xi, x, t)$.
 
 ### 6.2. Advantages and Challenges
 
@@ -259,7 +259,7 @@ The Boltzmann equation is the kinetic-theory foundation of the Lattice Boltzmann
 | Aspect | Details |
 | --- | --- |
 | **Inputs** | Distribution function $f(\xi, x, t)$, external force $F$, collision kernel $g(\mathbf{v}, \Omega)$, relaxation time $\tau$ |
-| **Outputs** | Macroscopic density $\rho = \int f\,d^3\xi$, momentum $\rho\mathbf{u} = \int \xi f\,d^3\xi$, pressure tensor (second moment), equilibrium distribution $f^{\text{eq}}$ |
+| **Outputs** | Macroscopic density $`\rho = \int f\,d^3\xi`$, momentum $`\rho\mathbf{u} = \int \xi f\,d^3\xi`$, pressure tensor (second moment), equilibrium distribution $f^{\text{eq}}$ |
 
 ## Related Scripts
 
@@ -284,7 +284,7 @@ At $t = 3\tau$ the remaining fraction is $e^{-3} \approx 0.0498$, about 5%. The 
 
 </details>
 
-**Exercise 2.** Show that the BGK collision term conserves mass and momentum at every point only if the equilibrium has the same density and momentum as $f$, that is $\int f^{\text{eq}} \, d^3\xi = \rho$ and $\int \xi \, f^{\text{eq}} \, d^3\xi = \rho \mathbf{u}$.
+**Exercise 2.** Show that the BGK collision term conserves mass and momentum at every point only if the equilibrium has the same density and momentum as $f$, that is $`\int f^{\text{eq}} \, d^3\xi = \rho`$ and $`\int \xi \, f^{\text{eq}} \, d^3\xi = \rho \mathbf{u}`$.
 
 <details>
 <summary>Answer</summary>
@@ -296,16 +296,16 @@ The rate of change of density due to collisions is the zeroth moment of the coll
 d^3\xi = -\frac{1}{\tau} \left(\rho - \int f^{\text{eq}} \, d^3\xi \right)
 ```
 
-This vanishes for every $f$ only if $\int f^{\text{eq}} \, d^3\xi = \rho$. The first moment gives $-\frac{1}{\tau}\left(\rho\mathbf{u} - \int \xi f^{\text{eq}} \, d^3\xi\right)$, which vanishes only if $\int \xi f^{\text{eq}} \, d^3\xi = \rho\mathbf{u}$. So $f^{\text{eq}}$ must be built from the local $\rho$ and $\mathbf{u}$ of $f$ itself (and from the local temperature, if energy is also to be conserved). The Maxwell–Boltzmann distribution evaluated with the local $\rho$, $\mathbf{u}$ and $T$ satisfies these constraints.
+This vanishes for every $f$ only if $`\int f^{\text{eq}} \, d^3\xi = \rho`$. The first moment gives $`-\frac{1}{\tau}\left(\rho\mathbf{u} - \int \xi f^{\text{eq}} \, d^3\xi\right)`$, which vanishes only if $`\int \xi f^{\text{eq}} \, d^3\xi = \rho\mathbf{u}`$. So $f^{\text{eq}}$ must be built from the local $\rho$ and $\mathbf{u}$ of $f$ itself (and from the local temperature, if energy is also to be conserved). The Maxwell–Boltzmann distribution evaluated with the local $\rho$, $\mathbf{u}$ and $T$ satisfies these constraints.
 
 </details>
 
-**Exercise 3.** In one velocity dimension the Maxwellian is $f^{\text{eq}}(\xi) = \rho \, (2\pi RT)^{-1/2} \exp\left(-(\xi - u)^2/(2RT)\right)$. Compute its zeroth, first and second moments, and use the relative velocity $v = \xi - u$ to show that the pressure is $p = \rho R T$. Evaluate $p$ for air with $\rho = 1.2$ kg/m³, $R = 287$ J/(kg K) and $T = 300$ K.
+**Exercise 3.** In one velocity dimension the Maxwellian is $`f^{\text{eq}}(\xi) = \rho \, (2\pi RT)^{-1/2} \exp\left(-(\xi - u)^2/(2RT)\right)`$. Compute its zeroth, first and second moments, and use the relative velocity $v = \xi - u$ to show that the pressure is $p = \rho R T$. Evaluate $p$ for air with $\rho = 1.2$ kg/m³, $R = 287$ J/(kg K) and $T = 300$ K.
 
 <details>
 <summary>Answer</summary>
 
-Substitute $v = \xi - u$ and use the Gaussian integrals $\int e^{-v^2/(2RT)} dv = \sqrt{2\pi RT}$, $\int v \, e^{-v^2/(2RT)} dv = 0$ and $\int v^2 e^{-v^2/(2RT)} dv = RT\sqrt{2\pi RT}$:
+Substitute $v = \xi - u$ and use the Gaussian integrals $\int e^{-v^2/(2RT)} dv = \sqrt{2\pi RT}$, $`\int v \, e^{-v^2/(2RT)} dv = 0`$ and $\int v^2 e^{-v^2/(2RT)} dv = RT\sqrt{2\pi RT}$:
 
 ```math
 \int f^{\text{eq}} d\xi = \rho,
@@ -313,7 +313,7 @@ Substitute $v = \xi - u$ and use the Gaussian integrals $\int e^{-v^2/(2RT)} dv 
 \qquad \int \xi^2 f^{\text{eq}} d\xi = \rho u^2 + \rho R T
 ```
 
-The pressure is the second moment of the relative velocity, $p = \int v^2 f^{\text{eq}} \, dv = \rho R T$, which is the ideal gas law. In three dimensions each diagonal component gives the same value, $\int \mathbf{v} \otimes \mathbf{v} \, f^{\text{eq}} \, d^3\xi = \rho R T \, \mathbf{I}$.
+The pressure is the second moment of the relative velocity, $`p = \int v^2 f^{\text{eq}} \, dv = \rho R T`$, which is the ideal gas law. In three dimensions each diagonal component gives the same value, $`\int \mathbf{v} \otimes \mathbf{v} \, f^{\text{eq}} \, d^3\xi = \rho R T \, \mathbf{I}`$.
 
 For the given air: $p = 1.2 \times 287 \times 300 = 103320$ Pa $\approx 1.03 \times 10^5$ Pa.
 

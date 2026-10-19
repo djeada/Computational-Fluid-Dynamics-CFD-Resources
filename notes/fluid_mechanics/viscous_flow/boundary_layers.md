@@ -48,17 +48,17 @@ II. **$\delta^*$ (Displacement Thickness)**
 
 A measure of how much the external inviscid flow is “displaced” by the presence of the boundary layer.
 
-$$
+```math
 \delta^* = \int_0^\delta \left(1 - \frac{u(y)}{U_\infty}\right) \, dy
-$$
+```
 
 III. **$\theta$ (Momentum Thickness)**
 
 Relates to the lost momentum flux due to the boundary layer.
 
-$$
+```math
 \theta = \int_0^\delta \frac{u(y)}{U_\infty}\left(1 - \frac{u(y)}{U_\infty}\right)\, dy
-$$
+```
 
 Velocity Profile & Thicknesses
 
@@ -149,7 +149,7 @@ Flow Separation
 - [Mean Pressure Coefficient Along Vehicle Centreline](../../../scripts/plots/mean_pressure_coefficient/): plots a mock validation figure of mean pressure coefficient $C_P$ against streamwise position, comparing "experimental" data with a "CFD SRS" (scale-resolving simulation) curve that under-predicts a separation plateau.
 - [Steady and Unsteady Pathlines Around a Cylinder with Vortex Shedding](../../../scripts/simulations/steady_and_unsteady_pathlines_with_vortex_shedding/): compares streamlines and particle pathlines for steady potential flow past a cylinder with circulation and for an unsteady version of the same flow with a kinematic vortex-shedding model.
 - [Turbulent Boundary Layer Velocity Profile](../../../scripts/plots/boundary_layer_velocity_profile/): plots the one-seventh power-law velocity profile of a turbulent boundary layer in normalised form, $u/U_\infty$ against $y/\delta$.
-- [Velocity Layers and Viscosity](../../../scripts/plots/velocity_layers_viscosity/): draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $\tau = \mu\, du/dy$.
+- [Velocity Layers and Viscosity](../../../scripts/plots/velocity_layers_viscosity/): draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $`\tau = \mu\, du/dy`$.
 
 ### Exercises
 
@@ -158,11 +158,11 @@ Flow Separation
 <details>
 <summary>Answer</summary>
 
-$x_{tr} = Re_{x,tr}\,\nu/U_\infty = 5 \times 10^5 \times 1.5 \times 10^{-5}/10 = 0.75$ m.
+$`x_{tr} = Re_{x,tr}\,\nu/U_\infty = 5 \times 10^5 \times 1.5 \times 10^{-5}/10 = 0.75`$ m.
 
 </details>
 
-**Exercise 2.** For the same flow, use the Blasius results $\delta \approx 5.0\,x/\sqrt{Re_x}$, $\delta^* = 1.721\,x/\sqrt{Re_x}$ and $\theta = 0.664\,x/\sqrt{Re_x}$ to evaluate the three thicknesses and the shape factor $H = \delta^*/\theta$ at $x = 0.5$ m.
+**Exercise 2.** For the same flow, use the Blasius results $`\delta \approx 5.0\,x/\sqrt{Re_x}`$, $`\delta^* = 1.721\,x/\sqrt{Re_x}`$ and $`\theta = 0.664\,x/\sqrt{Re_x}`$ to evaluate the three thicknesses and the shape factor $H = \delta^*/\theta$ at $x = 0.5$ m.
 
 <details>
 <summary>Answer</summary>
@@ -197,12 +197,12 @@ $H = (1/3)/(2/15) = 2.5$, close to the Blasius value of 2.59.
 
 </details>
 
-**Exercise 4.** Combine the parabolic profile of Exercise 3 with the von Kármán momentum-integral equation for zero pressure gradient, $\tau_w = \rho U_\infty^2\, d\theta/dx$, to derive $\delta(x)$ and the skin-friction coefficient $C_f = \tau_w/(\frac{1}{2}\rho U_\infty^2)$. Compare with Blasius.
+**Exercise 4.** Combine the parabolic profile of Exercise 3 with the von Kármán momentum-integral equation for zero pressure gradient, $`\tau_w = \rho U_\infty^2\, d\theta/dx`$, to derive $\delta(x)$ and the skin-friction coefficient $C_f = \tau_w/(\frac{1}{2}\rho U_\infty^2)$. Compare with Blasius.
 
 <details>
 <summary>Answer</summary>
 
-The wall shear is $\tau_w = \mu\,\partial u/\partial y|_0 = 2\mu U_\infty/\delta$, and $\theta = 2\delta/15$. Substituting,
+The wall shear is $`\tau_w = \mu\,\partial u/\partial y|_0 = 2\mu U_\infty/\delta`$, and $\theta = 2\delta/15$. Substituting,
 
 ```math
 \rho U_\infty^2 \frac{2}{15} \frac{d\delta}{dx} = \frac{2\mu U_\infty}{\delta} \quad

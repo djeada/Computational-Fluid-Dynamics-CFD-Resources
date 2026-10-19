@@ -16,9 +16,9 @@ This script plots how the condition number of a kriging correlation matrix chang
 
 For sample locations $x_1, \dots, x_n$ the correlation matrix is
 
-$$
+```math
 R_{ij} = R(x_i - x_j;\, \theta), \quad i, j = 1, \dots, n
-$$
+```
 
 It is symmetric with ones on the diagonal. In the convention used here, a small $\theta$ gives long-range correlation (all entries close to 1) and a large $\theta$ gives short-range correlation ($R$ close to the identity).
 
@@ -34,27 +34,27 @@ where $\sigma_{\max}$ and $\sigma_{\min}$ are the largest and smallest singular 
 
 Linear (zero for $|h| \geq 1/\theta$):
 
-$$
+```math
 R(h;\,\theta) = \max\bigl(0,\; 1 - \theta|h|\bigr)
-$$
+```
 
 Exponential:
 
-$$
+```math
 R(h;\,\theta) = e^{-\theta|h|}
-$$
+```
 
 Gaussian:
 
-$$
+```math
 R(h;\,\theta) = e^{-\theta h^2}
-$$
+```
 
 Cubic spline, written in the scaled lag $\xi = \theta|h|$ (zero for $|h| \geq 2/\theta$):
 
-$$
+```math
 R(h;\,\theta) = \begin{cases} 1 - \tfrac{3}{2}\xi^2 + \tfrac{3}{4}\xi^3, & \xi \leq 1, \\ \tfrac{1}{4}(2 - \xi)^3, & 1 < \xi \leq 2, \\ 0, & \xi > 2. \end{cases}
-$$
+```
 
 ## Implementation
 

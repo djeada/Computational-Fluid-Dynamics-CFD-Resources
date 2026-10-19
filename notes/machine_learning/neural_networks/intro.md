@@ -10,10 +10,10 @@ Classical CFD relies on discretizing the Navier–Stokes equations and solving f
 
 Neural networks introduce an alternative route: by approximating the mapping from geometry and boundary conditions to flow quantities, they can offer rapid surrogates for full simulations. For instance, a neural network might learn a function
 
-$$
+```math
 F: (\text{geometry parameters}, \text{operating conditions}) \mapsto \left\{
 \text{flow field}, \; C_d, \; C_l,\dots\right\}
-$$
+```
 
 where $C_d$ and $C_l$ are the drag and lift coefficients, respectively. Once trained, such models can instantly deliver aerodynamic properties for new inputs, drastically reducing the cost and time compared to a full CFD solve. Although these methods do not universally replace physics-based solvers, they are immensely valuable in contexts such as:
 
@@ -33,10 +33,10 @@ I. **Physics-Informed Neural Networks (PINNs)**
 
 PINNs embed the underlying governing equations, such as continuity and momentum conservation, into the neural network’s loss function. For instance, one might minimize
 
-$$
+```math
 \mathcal{L} = \lambda_1 \|\nabla \cdot \mathbf{u}\|^2 + \lambda_2 \left\|
 \rho(\mathbf{u}\cdot\nabla)\mathbf{u} + \nabla p - \mu \Delta \mathbf{u}\right\|^2
-$$
+```
 
 along with boundary and initial conditions. Enforcing these PDE constraints during training encourages physically consistent solutions, even with comparatively small datasets.
 
@@ -44,10 +44,10 @@ II. **Pure Data-Driven Neural Solvers**
 
 Another approach learns a direct mapping from shape and flow conditions to the desired outputs using purely data-driven techniques. The network might learn
 
-$$
+```math
 (\text{shape encoding}, \text{Reynolds number}, \dots) \;\mapsto\;
 (p(\mathbf{x}), \mathbf{u}(\mathbf{x}), C_d, \dots)
-$$
+```
 
 without explicitly embedding the PDEs. This requires extensive, high-fidelity data—typically a large set of CFD solutions or experimental measurements.
 
@@ -108,9 +108,9 @@ A widely used approach in such initiatives is to parametrize the geometry of int
 
 A vector $\mathbf{p} = (p_1, p_2, \dots, p_n)$ then describes a family of geometries. By sampling various $\mathbf{p}$-combinations, running CFD, and recording outputs like $C_d$ and $C_l$, one obtains a dataset
 
-$$
+```math
 \{\mathbf{p}^{(i)}, C_d^{(i)}, \dots\}_{i=1}^N
-$$
+```
 
 A neural network can be trained to approximate
 
@@ -182,10 +182,10 @@ III. **Efficient Sampling and Design of Experiments**
 
 Techniques like Latin hypercube sampling, active learning, or Bayesian optimization can reduce the number of required samples by focusing on the most informative geometry points or boundary conditions. Mathematically, these methods aim to minimize a global error metric with as few data points as possible:
 
-$$
+```math
 \min_{ \{\mathbf{p}^{(i)}\} } \;
 \mathbb{E}\left[\| C_d(\mathbf{p}) - \hat{C_d}(\mathbf{p}) \|^2 \right]
-$$
+```
 
 ### Limitations of Current Methods
 
@@ -245,9 +245,9 @@ A particularly promising branch of research is geometric deep learning (GDL). In
 
 The advantage of these methods is their ability to preserve topological and geometric information without forcing the data into a regular grid. One might write the GNN update as:
 
-$$
+```math
 h_v^{(k+1)} = \phi\Bigl(h_v^{(k)}, \bigl\{ h_u^{(k)}: u \in \mathcal{N}(v)\bigr\}\Bigr)
-$$
+```
 
 where $h_v^{(k)}$ is the hidden state of node $v$ at layer $k$, and $\phi$ is a learned update function.
 
@@ -338,7 +338,7 @@ With 120 designs (240 target values) the network is heavily over-parameterized. 
 
 Continuity: $\partial u/\partial x + \partial v/\partial y = 0$, so the first term is zero.
 
-Momentum: $(\mathbf{u}\cdot\nabla)\mathbf{u} = u\,\partial u/\partial x = 0$, $\nabla p = (G, 0)$ and $\mu\Delta\mathbf{u} = (-2\mu U/h^2, 0)$. The residual is $(G + 2\mu U/h^2, 0)$.
+Momentum: $`(\mathbf{u}\cdot\nabla)\mathbf{u} = u\,\partial u/\partial x = 0`$, $\nabla p = (G, 0)$ and $\mu\Delta\mathbf{u} = (-2\mu U/h^2, 0)$. The residual is $(G + 2\mu U/h^2, 0)$.
 
 The loss vanishes when $G = -2\mu U/h^2 = -2 \times 1.8 \times 10^{-5} \times 1/10^{-4} = -0.36$ Pa/m.
 

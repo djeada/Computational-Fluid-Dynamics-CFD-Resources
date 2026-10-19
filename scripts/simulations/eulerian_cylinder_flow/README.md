@@ -27,7 +27,7 @@ Each time step of length $\Delta t = 1/60$ s splits these into three stages.
 
 ### 1. Body Forces
 
-$v \leftarrow v + g\,\Delta t$ on faces between two fluid cells ($g = 0$ by default).
+$`v \leftarrow v + g\,\Delta t`$ on faces between two fluid cells ($g = 0$ by default).
 
 ### 2. Projection
 
@@ -37,23 +37,23 @@ $$
 d = u_{i+1,j} - u_{i,j} + v_{i,j+1} - v_{i,j}
 $$
 
-Let $s_k \in \{0, 1\}$ mark each neighbour as solid or fluid, with $s = s_{i-1,j} + s_{i+1,j} + s_{i,j-1} + s_{i,j+1}$. The cell's outflow is removed by moving its fluid-side faces:
+Let $`s_k \in \{0, 1\}`$ mark each neighbour as solid or fluid, with $s = s_{i-1,j} + s_{i+1,j} + s_{i,j-1} + s_{i,j+1}$. The cell's outflow is removed by moving its fluid-side faces:
 
-$$
+```math
 u_{i,j} \mathrel{+} = \omega\, s_{i-1,j}\, \frac{d}{s}, \quad u_{i+1,j}
 \mathrel{-} = \omega\, s_{i+1,j}\, \frac{d}{s}, \quad v_{i,j} \mathrel{+} = \omega\,
 s_{i,j-1}\, \frac{d}{s}, \quad v_{i,j+1} \mathrel{-} = \omega\, s_{i,j+1}\, \frac{d}{s}
-$$
+```
 
-Sweeping this over all cells is a Gauss–Seidel iteration, with over-relaxation factor $\omega$, for the pressure Poisson equation $\nabla^2 p = (\rho/\Delta t)\,\nabla \cdot \mathbf{u}^*$ followed by the update $\mathbf{u} = \mathbf{u}^* - (\Delta t/\rho)\nabla p$. The pressure is accumulated as $p \mathrel{+}= (\rho h/\Delta t)\,\omega\,(-d/s)$. After a fixed number of sweeps the divergence is reduced but not exactly zero.
+Sweeping this over all cells is a Gauss–Seidel iteration, with over-relaxation factor $\omega$, for the pressure Poisson equation $`\nabla^2 p = (\rho/\Delta t)\,\nabla \cdot \mathbf{u}^*`$ followed by the update $`\mathbf{u} = \mathbf{u}^* - (\Delta t/\rho)\nabla p`$. The pressure is accumulated as $`p \mathrel{+}= (\rho h/\Delta t)\,\omega\,(-d/s)`$. After a fixed number of sweeps the divergence is reduced but not exactly zero.
 
 ### 3. Semi-Lagrangian Advection
 
 Each velocity sample and dye value is traced back along the velocity field for one time step and interpolated bilinearly at the departure point:
 
-$$
+```math
 q^{n+1}(\mathbf{x}) = q^n(\mathbf{x} - \Delta t\,\mathbf{u}(\mathbf{x}))
-$$
+```
 
 This is stable for any $\Delta t$, but the interpolation smooths the fields. That smoothing acts as numerical viscosity, which lets a wake form behind the cylinder.
 

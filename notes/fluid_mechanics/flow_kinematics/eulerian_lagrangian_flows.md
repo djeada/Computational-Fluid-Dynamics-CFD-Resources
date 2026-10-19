@@ -87,6 +87,9 @@ Deciding whether to use an Eulerian or Lagrangian perspective depends on the pro
 - [Eulerian Cylinder Flow](../../../scripts/simulations/eulerian_cylinder_flow/): simulates 2D incompressible, inviscid flow past a circular cylinder on a fixed Eulerian grid and animates a dye tracer with Matplotlib.
 - [Kelvin-Helmholtz Instability Simulation](../../../scripts/simulations/kelvin_helmholtz_instability/): simulates the Kelvin-Helmholtz instability, the rolling-up of a shear layer between fluid streams moving in opposite directions, in a periodic 2D incompressible flow animated with Matplotlib.
 - [Simplified Real-Time Fluid Dynamics Simulator](../../../scripts/simulations/simplified_real_time_fluid_dynamics_simulator/): is an interactive 2D smoke simulation that uses Jos Stam's Stable Fluids algorithm (1999) to approximate the incompressible Navier-Stokes equations fast enough to run in real time in a Matplotlib window.
+- [Double Gyre Chaotic Mixing](../../../scripts/simulations/double_gyre_chaotic_mixing/): advects 720 000 passive dye tracers through the time-periodic double gyre and animates how the flow stretches and folds them into ever finer filaments.
+- [Leapfrogging Vortex Pairs](../../../scripts/simulations/point_vortex_leapfrogging/): simulates two coaxial vortex pairs, four point vortices in all, that leapfrog: the rear pair contracts, speeds up and slips through the front pair, which widens and slows down, and then the two swap roles again and again.
+- [SPH Dam Break](../../../scripts/simulations/sph_dam_break/): simulates the collapse of a water column in a closed tank, the classic dam-break problem, with weakly compressible smoothed particle hydrodynamics (SPH), and animates the water particles coloured by their speed.
 
 ## Exercises
 
@@ -126,13 +129,13 @@ The fixed probe sees the air cooling, but a particle heats up, because it is car
 
 (b) Lagrangian: $d^2X/dt^2 = k^2 X_0 e^{kt} = k^2 X$ and $d^2Y/dt^2 = k^2 Y$.
 
-Eulerian: the flow is steady, so $\vec{a} = (u\,\partial u/\partial x + v\,\partial u/\partial y,\; u\,\partial v/\partial x + v\,\partial v/\partial y) = (kx \cdot k,\; -ky \cdot (-k)) = (k^2 x, k^2 y)$.
+Eulerian: the flow is steady, so $`\vec{a} = (u\,\partial u/\partial x + v\,\partial u/\partial y,\; u\,\partial v/\partial x + v\,\partial v/\partial y) = (kx \cdot k,\; -ky \cdot (-k)) = (k^2 x, k^2 y)`$.
 
 At $x = X$, $y = Y$ the two agree. A steady field can still accelerate particles, entirely through the convective term.
 
 </details>
 
-**Exercise 4.** The one-dimensional unsteady field is $u(x,t) = x/(1+t)$. (a) Find the path $X(t)$ of the particle at $X_0$ when $t = 0$. (b) Compute that particle's velocity and acceleration. (c) Confirm the result with $Du/Dt = \partial u/\partial t + u\,\partial u/\partial x$.
+**Exercise 4.** The one-dimensional unsteady field is $u(x,t) = x/(1+t)$. (a) Find the path $X(t)$ of the particle at $X_0$ when $t = 0$. (b) Compute that particle's velocity and acceleration. (c) Confirm the result with $`Du/Dt = \partial u/\partial t + u\,\partial u/\partial x`$.
 
 <details>
 <summary>Answer</summary>
@@ -141,7 +144,7 @@ At $x = X$, $y = Y$ the two agree. A steady field can still accelerate particles
 
 (b) The velocity is $dX/dt = X_0$, a constant, so the acceleration is zero.
 
-(c) $\partial u/\partial t = -x/(1+t)^2$ and $u\,\partial u/\partial x = \dfrac{x}{1+t}\cdot\dfrac{1}{1+t} = x/(1+t)^2$. They add to $Du/Dt = 0$.
+(c) $\partial u/\partial t = -x/(1+t)^2$ and $`u\,\partial u/\partial x = \dfrac{x}{1+t}\cdot\dfrac{1}{1+t} = x/(1+t)^2`$. They add to $Du/Dt = 0$.
 
 At a fixed point the velocity decreases in time, but each particle keeps a constant speed: the local and convective accelerations cancel exactly.
 

@@ -22,19 +22,19 @@ This script simulates 2D flow past a circular cylinder with the lattice Boltzman
 
 The distribution functions $f_i$ of the discrete velocities $\mathbf{c}_i$ are streamed and relaxed towards equilibrium:
 
-$$
+```math
 f_i(\mathbf{x} + \mathbf{c}_i,\, t + 1) = f_i(\mathbf{x}, t) -
 \omega\left(f_i(\mathbf{x}, t) - f_i^{eq}(\mathbf{x}, t)\right)
-$$
+```
 
 ### D2Q9 Equilibrium and Moments
 
-$$
+```math
 f_i^{eq} = w_i\,\rho\left(1 + 3\,\mathbf{c}_i\cdot\mathbf{u} +
 \frac{9}{2}(\mathbf{c}_i\cdot\mathbf{u})^2 - \frac{3}{2}|\mathbf{u}|^2\right),
 \qquad \rho = \sum_i f_i,
 \qquad \rho\,\mathbf{u} = \sum_i f_i\,\mathbf{c}_i
-$$
+```
 
 The weights are $w_0 = 4/9$ for the rest velocity, $1/9$ for the four axis directions and $1/36$ for the four diagonals. The lattice speed of sound is $c_s = 1/\sqrt3$.
 

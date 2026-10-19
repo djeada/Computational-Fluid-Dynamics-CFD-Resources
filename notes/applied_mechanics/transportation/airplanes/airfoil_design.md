@@ -87,7 +87,7 @@ A symmetrical section behaves the same inverted as upright, so the aircraft can 
 
 </details>
 
-**Exercise 3.** A wing has aspect ratio $AR = 8$ and span efficiency $e = 0.80$ and flies at $C_L = 0.5$. Winglets raise the effective $e$ to 0.85. Using $C_{D_i} = C_L^2/(\pi e\,AR)$, find the induced drag coefficient before and after, and the percentage reduction.
+**Exercise 3.** A wing has aspect ratio $AR = 8$ and span efficiency $e = 0.80$ and flies at $C_L = 0.5$. Winglets raise the effective $e$ to 0.85. Using $`C_{D_i} = C_L^2/(\pi e\,AR)`$, find the induced drag coefficient before and after, and the percentage reduction.
 
 <details>
 <summary>Answer</summary>

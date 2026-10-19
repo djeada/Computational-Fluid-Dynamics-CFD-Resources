@@ -75,7 +75,7 @@ where $K$ is the strength coefficient and $n$ is the strain hardening exponent. 
 For materials without a clear yield point, the **0.2% offset method** is used:
 
 1. Draw a line parallel to the elastic region, offset by $\epsilon = 0.002$
-2. The intersection with the stress-strain curve defines $\sigma_{y(0.2\%)}$
+2. The intersection with the stress-strain curve defines $`\sigma_{y(0.2\%)}`$
 
 ## Ductile vs. Brittle Materials
 
@@ -85,17 +85,17 @@ Ductile materials undergo significant plastic deformation before fracture. Examp
 
 **Percent elongation:**
 
-$$
+```math
 \% EL = \frac{L_f - L_0}{L_0} \times 100
-$$
+```
 
 **Percent reduction in area:**
 
-$$
+```math
 \% RA = \frac{A_0 - A_f}{A_0} \times 100
-$$
+```
 
-A material with $\% EL > 5\%$ is generally considered ductile.
+A material with $`\% EL > 5\%`$ is generally considered ductile.
 
 ### Brittle Materials
 
@@ -127,9 +127,9 @@ $$
 
 Toughness is the total energy absorbed per unit volume up to fracture, represented by the area under the entire stress-strain curve:
 
-$$
+```math
 u_T = \int_0^{\epsilon_f} \sigma \, d\epsilon
-$$
+```
 
 **Approximate toughness for a ductile material:**
 
@@ -168,9 +168,9 @@ The S-N (stress–number of cycles) curve characterizes fatigue behavior. For fe
 
 **Approximate endurance limit (steels):**
 
-$$
+```math
 \sigma_e \approx 0.5\,\sigma_u \quad \text{for } \sigma_u \leq 1400 \text{ MPa}
-$$
+```
 
 ### Modified Goodman Criterion
 
@@ -184,7 +184,7 @@ $$
 
 ### Creep
 
-Creep is the time-dependent deformation under sustained constant stress, significant at elevated temperatures (typically $T > 0.4\,T_m$ where $T_m$ is the melting point in Kelvin).
+Creep is the time-dependent deformation under sustained constant stress, significant at elevated temperatures (typically $`T > 0.4\,T_m`$ where $T_m$ is the melting point in Kelvin).
 
 **Three stages of creep:**
 
@@ -204,9 +204,9 @@ where $A$ is a material constant, $n$ is the stress exponent, $Q$ is the activat
 
 Stress relaxation is the decrease in stress over time under constant strain, important for bolted joints and seals:
 
-$$
+```math
 \sigma(t) = \sigma_0 \, e^{-t/\tau}
-$$
+```
 
 where $\tau$ is the relaxation time constant.
 
@@ -254,23 +254,23 @@ $$
 A_0 = \frac{\pi (12.5)^2}{4} = 122.7 \text{ mm}^2
 $$
 
-$$
+```math
 \sigma_y = \frac{P_y}{A_0} = \frac{38\,000}{122.7} = 309.7 \text{ MPa}
-$$
+```
 
-$$
+```math
 \sigma_u = \frac{P_u}{A_0} = \frac{58\,000}{122.7} = 472.7 \text{ MPa}
-$$
+```
 
-$$
+```math
 \% EL = \frac{63 - 50}{50} \times 100 = 26\%
-$$
+```
 
-$$
+```math
 \% RA = \frac{122.7 - 56.7}{122.7} \times 100 = 53.8\%
-$$
+```
 
-The material is ductile ($\% EL > 5\%$) with good strength and formability.
+The material is ductile ($`\% EL > 5\%`$) with good strength and formability.
 
 ### Example 2: Fatigue Life Assessment
 
@@ -295,7 +295,7 @@ The sum equals 1.0, indicating the shaft is exactly at the fatigue limit — it 
 ## Practical Tips
 
 - Always verify material properties from certified test reports for critical applications
-- Account for temperature effects on material strength, especially above $0.3\,T_m$
+- Account for temperature effects on material strength, especially above $`0.3\,T_m`$
 - Surface finish significantly affects fatigue life — polished surfaces resist fatigue better
 - Ductile materials are generally preferred for structures subject to impact or vibration
 - Use appropriate safety factors to account for material variability and loading uncertainty
@@ -323,8 +323,8 @@ Necking starts at maximum load, so $n \approx 0.17$, within the typical range of
 <details>
 <summary>Answer</summary>
 
-- Steel: $u_r = 250^2/(2 \times 200\,000) = 0.156$ MPa $= 156$ kJ/m³, or 19.9 J/kg
-- Aluminium: $u_r = 276^2/(2 \times 69\,000) = 0.552$ MPa $= 552$ kJ/m³, or 204 J/kg
+- Steel: $`u_r = 250^2/(2 \times 200\,000) = 0.156`$ MPa $= 156$ kJ/m³, or 19.9 J/kg
+- Aluminium: $`u_r = 276^2/(2 \times 69\,000) = 0.552`$ MPa $= 552$ kJ/m³, or 204 J/kg
 
 Aluminium stores about 3.5 times more elastic energy per volume and 10 times more per mass, because of its lower modulus and density. Real springs use high-strength steels, whose much larger $\sigma_y$ enters squared.
 
@@ -352,7 +352,7 @@ With the Goodman line scaled by $n$, $\sigma_a/\sigma_e + \sigma_m/\sigma_u = 1/
 \frac{1}{n} = \frac{200}{300} + \frac{100}{600} = 0.833 \implies n = 1.2
 ```
 
-For $n = 1.5$: $\sigma_a = 300\,(1/1.5 - 100/600) = 150$ MPa.
+For $n = 1.5$: $`\sigma_a = 300\,(1/1.5 - 100/600) = 150`$ MPa.
 
 In practice $\sigma_e$ would first be reduced by the surface, size and reliability (Marin) factors, which lowers both results.
 

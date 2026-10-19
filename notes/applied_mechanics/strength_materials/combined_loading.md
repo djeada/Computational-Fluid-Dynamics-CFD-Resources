@@ -209,9 +209,9 @@ A short concrete column ($300 \times 300$ mm) carries a compressive load of 500 
 
 **Solution:**
 
-$$
+```math
 A = 300 \times 300 = 90\,000 \text{ mm}^2
-$$
+```
 
 $$
 I = \frac{300 \times 300^3}{12} = 6.75 \times 10^8 \text{ mm}^4
@@ -221,10 +221,10 @@ $$
 \sigma = -\frac{P}{A} \pm \frac{Pec}{I}
 $$
 
-$$
+```math
 \sigma = -\frac{500\,000}{90\,000} \pm
 \frac{500\,000 \times 40 \times 150}{6.75 \times 10^8}
-$$
+```
 
 $$
 \sigma = -5.56 \pm 4.44 \text{ MPa}
@@ -294,10 +294,10 @@ $$
 
 **Longitudinal stress (pressure + axial force):**
 
-$$
+```math
 \sigma_2 = \frac{pr}{2t} + \frac{F}{2\pi r t} = \frac{2 \times 400}{2 \times 8} +
 \frac{300\,000}{2\pi \times 400 \times 8}
-$$
+```
 
 $$
 \sigma_2 = 50 + 14.9 = 64.9 \text{ MPa}

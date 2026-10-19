@@ -33,7 +33,7 @@ Each parameter triggers a local (e.g., bonnet LE only) or global (e.g., entire b
 
 ### Modern Parametric Workflow
 
-I. **Parametric Definitions**: Assign numerical bounds and increments (or continuous ranges) for each deformation parameter, e.g. $\pm 20\%$ around the baseline.
+I. **Parametric Definitions**: Assign numerical bounds and increments (or continuous ranges) for each deformation parameter, e.g. $`\pm 20\%`$ around the baseline.
 
 II. **Geometry Updates**: Apply transformations to the baseline CAD model, ensuring feature continuity, smooth surfaces, and minimal distortion.
 
@@ -234,7 +234,7 @@ A space-filling design such as Latin hypercube or Sobol sampling is the practica
 
 </details>
 
-**Exercise 4.** The trunk length has a baseline of 800 mm and is allowed to vary by $\pm 20\%$. For surrogate training all parameters are scaled to $[0, 1]$. What physical trunk length corresponds to a normalized value of 0.25, and why is this normalization useful when the parameters mix angles and lengths?
+**Exercise 4.** The trunk length has a baseline of 800 mm and is allowed to vary by $`\pm 20\%`$. For surrogate training all parameters are scaled to $[0, 1]$. What physical trunk length corresponds to a normalized value of 0.25, and why is this normalization useful when the parameters mix angles and lengths?
 
 <details>
 <summary>Answer</summary>

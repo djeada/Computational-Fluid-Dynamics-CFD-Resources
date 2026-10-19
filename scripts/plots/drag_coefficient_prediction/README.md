@@ -24,21 +24,21 @@ where $\rho$ is the fluid density, $U$ the free-stream velocity, and $A$ the ref
 
 ### Synthetic Data
 
-$$
+```math
 C_{d,i} = 0.15 + 0.2\, r_i,
 \qquad C_{d,pred,i} = C_{d,i} + 0.025\,(2 s_i - 1),
 \qquad r_i, s_i \sim \mathcal{U}(0, 1)
-$$
+```
 
 ### Linear Regression
 
 For each predictor the slope $m$ and intercept $b$ minimise the residual sum of squares:
 
-$$
+```math
 \min_{m,\,b}\sum_{i=1}^{N}\left(C_{d,pred,i} - m\, C_{d,i} - b\right)^2
-$$
+```
 
-which gives $m = \dfrac{\sum_i (C_{d,i} - \bar{C}_d)(C_{d,pred,i} - \bar{C}_{d,pred})}{\sum_i (C_{d,i} - \bar{C}_d)^2}$ and $b = \bar{C}_{d,pred} - m\,\bar{C}_d$.
+which gives $`m = \dfrac{\sum_i (C_{d,i} - \bar{C}_d)(C_{d,pred,i} - \bar{C}_{d,pred})}{\sum_i (C_{d,i} - \bar{C}_d)^2}`$ and $`b = \bar{C}_{d,pred} - m\,\bar{C}_d`$.
 
 ### Coefficient of Determination
 

@@ -32,9 +32,9 @@ where the $\mathbf{a}_i$ are unit-norm temporal eigenvectors and $\lambda_i$ is 
 
 ### Spatial Modes
 
-$$
+```math
 \boldsymbol{\phi}_i = \frac{\tilde{U} \mathbf{a}_i}{\|\tilde{U} \mathbf{a}_i\|}
-$$
+```
 
 ### Link to the SVD
 

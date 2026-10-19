@@ -41,7 +41,7 @@ Journal bearings support a rotating shaft within a cylindrical sleeve. The shaft
 
 ## Bearing Loads and Life
 
-### L10 Life Equation
+### $L_{10}$ Life Equation
 
 The basic rating life is the number of revolutions at which 90% of a group of identical bearings will still be operational:
 
@@ -240,7 +240,7 @@ $$
 
 **Given:** A deep groove ball bearing (6208) with $C = 29.1$ kN and $C_0 = 17.8$ kN supports a radial load of 5 kN and an axial load of 2 kN at 1800 rpm.
 
-**Find:** The L10 life in hours.
+**Find:** The $L_{10}$ life in hours.
 
 **Solution:**
 
@@ -333,7 +333,7 @@ Life is very sensitive to load. Underestimating the load (ignoring shock, misali
 
 </details>
 
-**Exercise 2.** A deep groove ball bearing carries an equivalent load $P = 3.5$ kN at $n = 1450$ rpm and must reach $L_{10h} = 20\,000$ h. (a) Find the required basic dynamic load rating $C$. (b) The reliability requirement is raised to 96% ($a_1 = 0.53$, take $a_{SKF} = 1$). What rating is needed now?
+**Exercise 2.** A deep groove ball bearing carries an equivalent load $P = 3.5$ kN at $n = 1450$ rpm and must reach $`L_{10h} = 20\,000`$ h. (a) Find the required basic dynamic load rating $C$. (b) The reliability requirement is raised to 96% ($a_1 = 0.53$, take $a_{SKF} = 1$). What rating is needed now?
 
 <details>
 <summary>Answer</summary>
@@ -358,7 +358,7 @@ Raising reliability from 90% to 96% needs a 24% higher load rating.
 
 </details>
 
-**Exercise 3.** The 6208 bearing of Example 1 ($C = 29.1$ kN) runs at 1800 rpm. What is the largest equivalent dynamic load it can carry if it must reach $L_{10h} = 20\,000$ h?
+**Exercise 3.** The 6208 bearing of Example 1 ($C = 29.1$ kN) runs at 1800 rpm. What is the largest equivalent dynamic load it can carry if it must reach $`L_{10h} = 20\,000`$ h?
 
 <details>
 <summary>Answer</summary>
@@ -388,7 +388,7 @@ f = 2\pi^2 \frac{\mu N_s}{P} \frac{R}{c} = 2\pi^2 \times
 \frac{0.025 \times 20}{1.5625 \times 10^6} \times 666.7 = 4.21 \times 10^{-3}
 ```
 
-Friction torque: $T_f = f W R = 4.21 \times 10^{-3} \times 10\,000 \times 0.040 = 1.68$ N·m.
+Friction torque: $`T_f = f W R = 4.21 \times 10^{-3} \times 10\,000 \times 0.040 = 1.68`$ N·m.
 
 Power loss:
 
@@ -414,7 +414,7 @@ Petroff's equation assumes a concentric (lightly loaded) journal. With $S \appro
 
 Since $1 < \Lambda < 3$, the contact runs in mixed lubrication.
 
-(b) For $\Lambda = 3$ the composite roughness must be at most $0.35/3 = 0.117$ μm. With equal surfaces, $\sqrt{2}\,R_q = 0.117$ μm, so $R_q = 0.083$ μm. The other route is to raise $h_{min}$, for example with a more viscous oil, since $h_{min} \propto U^{0.68}$.
+(b) For $\Lambda = 3$ the composite roughness must be at most $0.35/3 = 0.117$ μm. With equal surfaces, $`\sqrt{2}\,R_q = 0.117`$ μm, so $R_q = 0.083$ μm. The other route is to raise $h_{min}$, for example with a more viscous oil, since $h_{min} \propto U^{0.68}$.
 
 </details>
 

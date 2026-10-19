@@ -33,42 +33,42 @@ Fluid statics (hydrostatics) studies fluids at rest or in equilibrium, where the
 
 For a fluid in gravitational equilibrium:
 
-```
-dp/dz = -ρg
-```
+$$
+\frac{dp}{dz} = -\rho g
+$$
 
 For incompressible fluids:
 
-```
-p = p₀ + ρgh
-```
+$$
+p = p_0 + \rho g h
+$$
 
 For compressible fluids (atmospheric):
 
-```
-dp/dz = -ρ(z)g
+```math
+\frac{dp}{dz} = -\rho(z)\, g
 ```
 
 ### Buoyancy Force
 
 Archimedes' principle:
 
-```
-F_b = ρ_fluid × g × V_displaced
-```
+$$
+F_b = \rho_{\text{fluid}} \times g \times V_{\text{displaced}}
+$$
 
 ### Metacentric Height
 
 For floating body stability:
 
-```
+$$
 GM = BM - BG
-```
+$$
 
 where:
 
-- BM = metacentric radius
-- BG = distance from center of buoyancy to center of gravity
+- $BM$ = metacentric radius
+- $BG$ = distance from center of buoyancy to center of gravity
 
 ## Pressure Measurement
 
@@ -99,17 +99,17 @@ where:
 
 **Flat surfaces:**
 
-```
-F = ρg h_c A
-```
+$$
+F = \rho g h_c A
+$$
 
-where h_c is the depth of the centroid.
+where $h_c$ is the depth of the centroid.
 
 **Center of pressure:**
 
-```
-y_cp = y_c + I_xx/(y_c A)
-```
+$$
+y_{cp} = y_c + \frac{I_{xx}}{y_c A}
+$$
 
 **Curved surfaces:**
 

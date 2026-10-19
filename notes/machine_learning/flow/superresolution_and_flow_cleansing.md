@@ -95,9 +95,9 @@ Trade-off between the cost of direct high-resolution imaging and ML-driven enhan
 
 **Quantitative Metrics:** Two widely used metrics for evaluating reconstruction quality are peak signal-to-noise ratio (PSNR) and structural similarity index (SSIM). PSNR measures the ratio of maximum possible signal power to noise power:
 
-$$
+```math
 \text{PSNR} = 10 \cdot \log_{10}\!\left(\frac{\text{MAX}^2}{\text{MSE}}\right)
-$$
+```
 
 where MAX is the maximum possible value of the field variable and MSE is the mean squared error between the reconstructed and reference fields. SSIM evaluates structural similarity through luminance, contrast, and structure comparisons:
 
@@ -148,7 +148,7 @@ For 40 dB, $\text{MSE} = 10^{-4}$.
 <details>
 <summary>Answer</summary>
 
-The upsampling factor is 4 per direction, so there are 16 output values per input value, and $15/16 = 93.75\%$ of the outputs must be inferred.
+The upsampling factor is 4 per direction, so there are 16 output values per input value, and $`15/16 = 93.75\%`$ of the outputs must be inferred.
 
 Storage: $256^2 \times 2 \times 4 \times 10^4 \approx 5.24 \times 10^9$ bytes, or about 5.2 GB (4.9 GiB).
 

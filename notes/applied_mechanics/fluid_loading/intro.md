@@ -379,7 +379,7 @@ Steady fluid forces on structures:
 #### Example: Hydrostatic Pressure on a Dam
 
 Pressure distribution: $p(h) = \rho g h$
-Total force: $F = \int_0^H \rho g h \cdot w \, dh = \frac{1}{2}\rho g H^2 w$
+Total force: $`F = \int_0^H \rho g h \cdot w \, dh = \frac{1}{2}\rho g H^2 w`$
 Location of force: $\bar{h} = \frac{2H}{3}$ below the free surface ($H/3$ above the bottom)
 
 ### 2. Flow-Induced Vibrations (FIV)
@@ -718,7 +718,7 @@ For a fixed body in an accelerating flow, the inertia force includes the Froude-
 
 Time scales with $\sqrt{\lambda}$: $T_m = 12/\sqrt{50} = 1.70$ s.
 
-Forces scale with $(\rho_p/\rho_m)\lambda^3 = 1.025 \times 125\,000 = 128\,125$.
+Forces scale with $`(\rho_p/\rho_m)\lambda^3 = 1.025 \times 125\,000 = 128\,125`$.
 
 Velocity scales with $\sqrt{\lambda}$ and length with $\lambda$, so with the same viscosity $Re_p/Re_m = \lambda^{1.5} = 354$. Drag coefficients and flow separation depend on Reynolds number, so drag-dominated members may be poorly represented in the model; roughness or corrections are often needed.
 

@@ -339,7 +339,7 @@ Both reactions are upward. A tip load above 27 kN would make $A_y$ negative, mea
 
 </details>
 
-**Exercise 5.** A horizontal plate with a 400 N weight acting at the point $(1, 0.5)$ m is held by three vertical cables attached at A$(0, 0)$, B$(2, 0)$ and D$(1, 1)$ m. Find the three tensions.
+**Exercise 5.** A horizontal plate with a 400 N weight acting at the point $(1, 0.5)$ m is held by three vertical cables attached at A$`(0, 0)`$, B$`(2, 0)`$ and D$`(1, 1)`$ m. Find the three tensions.
 
 <details>
 <summary>Answer</summary>

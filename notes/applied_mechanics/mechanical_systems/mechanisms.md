@@ -552,7 +552,7 @@ At top dead centre, $\phi = 0$ and $a = -r\omega^2(1 + r/l) = -4934.8 \times 1.2
 
 $\omega = 157.08$ rad/s, $\beta = \pi/2$ rad, $h = 10$ mm.
 
-Simple harmonic: $v = \omega\,\dfrac{h}{2}\dfrac{\pi}{\beta}\sin(\pi\theta/\beta)$ and $a = \omega^2\,\dfrac{h}{2}\left(\dfrac{\pi}{\beta}\right)^2\cos(\pi\theta/\beta)$.
+Simple harmonic: $`v = \omega\,\dfrac{h}{2}\dfrac{\pi}{\beta}\sin(\pi\theta/\beta)`$ and $`a = \omega^2\,\dfrac{h}{2}\left(\dfrac{\pi}{\beta}\right)^2\cos(\pi\theta/\beta)`$.
 
 - $v_{max} = 157.08 \times 5 \times 2 = 1571$ mm/s = 1.57 m/s
 - $a_{max} = 157.08^2 \times 5 \times 4 = 493.5$ m/s², at $\theta = 0$ and $\theta = \beta$, where the acceleration jumps from zero (dwell) to its peak

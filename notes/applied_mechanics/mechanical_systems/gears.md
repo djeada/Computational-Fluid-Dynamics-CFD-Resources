@@ -387,7 +387,7 @@ This is above the recommended minimum of 1.2: on average 1.67 tooth pairs share 
 
 - $m_t = m_n/\cos\psi = 3/\cos 25^\circ = 3.310$ mm, so $d = 30 m_t = 99.30$ mm
 - $\tan\phi_t = \tan\phi_n/\cos\psi$ gives $\phi_t = 21.88^\circ$
-- $T = P/\omega = 10\,000/(1000 \times 2\pi/60) = 95.49$ N·m
+- $`T = P/\omega = 10\,000/(1000 \times 2\pi/60) = 95.49`$ N·m
 
 ```math
 F_t = \frac{2T}{d} = \frac{2 \times 95.49}{0.09930} = 1923 \text{ N}
@@ -429,7 +429,7 @@ in the same direction as the ring, matching $i = 1 + N_s/N_r = 1.4$.
 - Friction angle: $\phi_f = \tan^{-1}0.08 = 4.57^\circ$
 - Efficiency: $\eta = \tan 4.5^\circ/\tan(4.5^\circ + 4.57^\circ) = 0.0787/0.1597 = 0.493$
 - Input torque: $T_{in} = 1500/(1450 \times 2\pi/60) = 9.88$ N·m
-- Output torque: $T_{out} = T_{in}\, i\, \eta = 9.88 \times 40 \times 0.493 = 195$ N·m, which is 739 W of output power
+- Output torque: $`T_{out} = T_{in}\, i\, \eta = 9.88 \times 40 \times 0.493 = 195`$ N·m, which is 739 W of output power
 
 Since $\lambda = 4.5^\circ < \phi_f = 4.57^\circ$ the drive is nominally self-locking, but only just. Vibration lowers the effective friction, so a separate brake is needed where back-driving would be dangerous. Low efficiency and self-locking go together.
 

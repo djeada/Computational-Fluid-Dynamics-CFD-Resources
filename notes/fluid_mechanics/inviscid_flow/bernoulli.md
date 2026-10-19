@@ -20,7 +20,7 @@ $$
 \vec{g} \cdot d\vec{s}
 $$
 
-Since $\vec{V} \cdot \nabla = V \frac{\partial}{\partial s}$ along a streamline, and $\vec{g} \cdot d\vec{s} = -g \, dz$ with $z$ measured upward:
+Since $\vec{V} \cdot \nabla = V \frac{\partial}{\partial s}$ along a streamline, and $`\vec{g} \cdot d\vec{s} = -g \, dz`$ with $z$ measured upward:
 
 $$
 V \frac{\partial V}{\partial s} ds = -\frac{1}{\rho} \frac{\partial p}{\partial s} ds -

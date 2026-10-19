@@ -47,22 +47,26 @@ This section covers advanced and specialized areas of fluid mechanics that combi
 
 **Fluid equations (ALE formulation):**
 
-```
-∂u/∂t + (u-ug)·∇u = -∇p/ρ + ν∇²u
-```
+$$
+\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} - \mathbf{u}_g) \cdot \nabla
+\mathbf{u} = -\frac{\nabla p}{\rho} + \nu \nabla^2 \mathbf{u}
+$$
 
 **Structural equations:**
 
-```
-M ∂²d/∂t² + C ∂d/∂t + Kd = F_fluid
-```
+$$
+M \frac{\partial^2 \mathbf{d}}{\partial t^2} + C
+\frac{\partial \mathbf{d}}{\partial t} + K \mathbf{d} = \mathbf{F}_{\text{fluid}}
+$$
 
 **Interface conditions:**
 
-```
-u_fluid = ∂d/∂t (kinematic)
-τ_fluid · n = τ_solid · n (dynamic)
-```
+$$
+\begin{aligned}
+\mathbf{u}_{\text{fluid}} &= \frac{\partial \mathbf{d}}{\partial t} && \text{(kinematic)} \\
+\boldsymbol{\tau}_{\text{fluid}} \cdot \mathbf{n} &= \boldsymbol{\tau}_{\text{solid}} \cdot \mathbf{n} && \text{(dynamic)}
+\end{aligned}
+$$
 
 ### Applications
 

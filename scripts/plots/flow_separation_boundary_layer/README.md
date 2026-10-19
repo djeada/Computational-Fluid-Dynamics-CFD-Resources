@@ -17,10 +17,10 @@ This script draws a schematic of boundary-layer separation: an attached layer th
 
 On a flat plate with zero pressure gradient the Blasius solution gives
 
-$$
+```math
 \delta(x) \approx \frac{5\,x}{\sqrt{Re_x}} = 5 \sqrt{\frac{\nu x}{U_\infty}},
 \qquad Re_x = \frac{U_\infty x}{\nu}
-$$
+```
 
 so $\delta \propto \sqrt{x}$. The schematic uses the same square-root shape, measured from its leading edge at $x_0 = -1$.
 

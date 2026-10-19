@@ -260,8 +260,8 @@ inlet
 
 ### RANS Models
 
-- **k-ε**: Standard, realizable, RNG variants
-- **k-ω**: Standard, SST variants
+- **$k$-$`\varepsilon`$**: Standard, realizable, RNG variants
+- **$k$-$`\omega`$**: Standard, SST variants
 - **Reynolds Stress Models**: Full RSM
 
 ### LES Models
