@@ -1,360 +1,158 @@
 # Particle Equilibrium
 
-Particle equilibrium is the foundation of statics, dealing with bodies where all forces pass through a single point. This simplification allows us to focus on force balance without considering rotational effects, making it an ideal starting point for understanding equilibrium principles.
+A body can be treated as a particle when every force on it passes through one point, so that moments play no role and equilibrium reduces to a balance of forces. Hooks and rings in cable systems, the joints of pin-jointed trusses and a small mass hanging from springs are all handled this way. This note sets up the equilibrium equations in 2D and 3D, writes them as a linear system for the unknown force magnitudes, and covers cables, springs and pulleys. Bodies on which the forces are not concurrent need the moment equations of [Rigid Body Equilibrium](./rigid_body_equilibrium.md).
 
-## Definition of a Particle
+## Problem Statement
 
-In mechanics, a **particle** is an idealized body where:
+A particle is acted on by known forces $\mathbf{F}_1, \dots, \mathbf{F}_k$ (weights, applied loads) and by $n$ forces of unknown magnitude $T_1, \dots, T_n$ whose lines of action are known: cables, rods and springs attached at known points. The task is to find the magnitudes $T_i$ (N), or, when the geometry is unknown, the position or angle at which the particle is in equilibrium. The assumptions are:
 
-- All forces act at a single point
-- The size and shape are negligible compared to the system dimensions
-- Rotational effects are ignored
-- Only translational equilibrium is considered
+- all forces are concurrent at the particle, and its size does not affect the answer;
+- cables and ropes are weightless and inextensible and can only pull ($T_i \geq 0$);
+- pulleys are frictionless, so a cable has the same tension on both sides;
+- springs are linear, with force proportional to the change in length.
 
-Examples of systems that can be modeled as particles:
-
-- A suspended weight
-- A joint in a pin-connected truss
-- A satellite in orbit (for trajectory analysis)
-- A hanging traffic light
-
-## Conditions for Particle Equilibrium
-
-For a particle to be in static equilibrium, the vector sum of all forces acting on it must be zero:
+The governing equation is Newton's first law for a body at rest or in uniform motion:
 
 $$
-\sum \mathbf{F} = 0
+\sum \mathbf{F} = \mathbf{0}
 $$
 
-In component form, this becomes:
+which gives two scalar equations in a plane and three in space. A planar problem therefore has at most two unknowns that statics alone can determine, and a spatial problem at most three.
+
+## Equilibrium Equations
+
+Write each unknown force as its magnitude times a unit vector $`\mathbf{u}_i`$ along its line of action, pointing away from the particle for a cable (the direction in which the cable pulls). With the known forces summed into $`\mathbf{F}_{\mathrm{app}}`$, equilibrium reads
+
+```math
+\sum_{i=1}^{n} T_i\,\mathbf{u}_i + \mathbf{F}_{\mathrm{app}} = \mathbf{0}
+```
+
+In matrix form this is $\mathbf{U}\mathbf{T} = -\mathbf{F}_{\mathrm{app}}$, where the columns of $\mathbf{U}$ are the unit vectors. In a plane, $\mathbf{U}$ is $2 \times n$; in space it is $3 \times n$. The system has a unique solution when $\mathbf{U}$ is square and its columns are linearly independent, that is when no two of the unknown forces in 2D are collinear and no three in 3D are coplanar. If they are, some applied loads cannot be balanced and the particle moves. If there are more unknowns than equations, the forces cannot be found from statics alone and the stiffnesses of the supporting members are needed (see [Structural Analysis](./structural_analysis.md)).
+
+A negative magnitude means the force acts opposite to the assumed direction. For a rod that is acceptable (it is in compression); for a cable it means the arrangement cannot carry the load, because a cable cannot push.
+
+## Two-Dimensional Problems
+
+### Procedure
+
+1. Isolate the particle and draw its free-body diagram with every force, the known ones with their values and the unknown ones with assumed directions.
+2. Choose axes. Aligning one axis with an unknown force removes it from the other equation.
+3. Resolve every force into components.
+4. Write $\sum F_x = 0$ and $\sum F_y = 0$ and solve.
+5. Check signs (cables in tension) and check the result against a force polygon or a limiting case.
+
+### Worked Example: Mass on Two Cables
+
+A 100 kg mass hangs from two cables. Cable 1 rises to the right at $\theta_1 = 30^\circ$ above the horizontal and cable 2 rises to the left at $\theta_2 = 45^\circ$. The weight is $W = mg = 100 \times 9.81 = 981$ N.
+
+With $x$ to the right and $y$ up:
 
 $$
-\sum F_x = 0
-$$
-
-$$
-\sum F_y = 0
-$$
-
-$$
-\sum F_z = 0
-$$
-
-These equations represent the mathematical statement that there is no net force in any direction.
-
-## Two-Dimensional Particle Equilibrium
-
-### Basic Approach
-
-For coplanar force systems (2D problems):
-
-1. Draw a free body diagram
-2. Establish a coordinate system
-3. Resolve forces into components
-4. Apply equilibrium equations: $\sum F_x = 0$ and $\sum F_y = 0$
-5. Solve for unknown forces
-
-### Example 1: Suspended Weight
-
-A 100 kg mass is suspended by two cables making angles of 30° and 45° with the horizontal.
-
-**Given:**
-
-- Mass: $m = 100$ kg
-- Weight: $W = mg = 100 \times 9.81 = 981$ N
-- Cable angles: $\theta_1 = 30^\circ$, $\theta_2 = 45^\circ$
-
-**Solution:**
-
-**Free Body Diagram:** Shows the mass as a particle with three forces: weight $W$ downward, and tensions $T_1$ and $T_2$ in the cables.
-
-**Force Components:**
-
-- $T_1$: $T_{1x} = T_1\cos(30^\circ)$, $T_{1y} = T_1\sin(30^\circ)$
-- $T_2$: $T_{2x} = -T_2\cos(45^\circ)$, $T_{2y} = T_2\sin(45^\circ)$
-- $W$: $W_x = 0$, $W_y = -981$ N
-
-**Equilibrium Equations:**
-
-$$
-\sum F_x = T_1\cos(30^\circ) - T_2\cos(45^\circ) = 0
+\sum F_x = T_1\cos\theta_1 - T_2\cos\theta_2 = 0
 $$
 
 $$
-\sum F_y = T_1\sin(30^\circ) + T_2\sin(45^\circ) - 981 = 0
+\sum F_y = T_1\sin\theta_1 + T_2\sin\theta_2 - W = 0
 $$
 
-From the first equation:
+Eliminating $T_1$ from the first equation and using $\sin\theta_1\cos\theta_2 + \cos\theta_1\sin\theta_2 = \sin(\theta_1 + \theta_2)$ gives the closed form
 
 $$
-T_1 = T_2 \frac{\cos(45^\circ)}{\cos(30^\circ)} = T_2
-\frac{\sqrt{2}/2}{\sqrt{3}/2} = T_2 \frac{\sqrt{2}}{\sqrt{3}}
+T_1 = \frac{W\cos\theta_2}{\sin(\theta_1 + \theta_2)} = \frac{981\cos 45^\circ}{\sin 75^\circ} = 718 \text{ N},
+\qquad
+T_2 = \frac{W\cos\theta_1}{\sin(\theta_1 + \theta_2)} = \frac{981\cos 30^\circ}{\sin 75^\circ} = 880 \text{ N}
 $$
 
-Substituting into the second equation:
+The steeper cable carries more of the load. The result also follows from Lami's theorem, which holds for any three concurrent forces in equilibrium: each force is proportional to the sine of the angle between the other two. Here the angle between $T_2$ and $W$ is $135^\circ$, between $T_1$ and $W$ it is $120^\circ$, and between $T_1$ and $T_2$ it is $105^\circ$, so $T_1 = W\sin 135^\circ/\sin 105^\circ = 718$ N.
+
+![Free-body diagram of the mass with both tensions to scale, the closed force triangle, and cable tension against sag angle](../../../scripts/plots/statics_cable_force_polygon/statics_cable_force_polygon.png)
+
+Panel (a) draws the forces of the example to scale. In panel (b) the same three forces are placed head to tail; because they sum to zero, the polygon closes. Drawing the polygon to scale was the standard graphical solution before calculators and remains a quick check on signs.
+
+### Cables Under Transverse Load
+
+A cable carrying a load $W$ at its midpoint, with both halves at the sag angle $\theta$ below the horizontal, has $2T\sin\theta = W$ by vertical equilibrium:
 
 $$
-T_2 \frac{\sqrt{2}}{\sqrt{3}} \times \frac{1}{2} + T_2 \frac{\sqrt{2}}{2} = 981
+T = \frac{W}{2\sin\theta}
 $$
 
-$$
-T_2 \left(\frac{\sqrt{2}}{2\sqrt{3}} + \frac{\sqrt{2}}{2}\right) = 981
-$$
+Panel (c) of the figure plots this ratio. A cable at $15^\circ$ already carries almost twice the load, and the tension grows without bound as $\theta \to 0$. A cable can never be pulled straight under a transverse load, and shallow cables (overhead lines, guy wires, safety lines) must be designed for tensions much larger than the loads they carry.
 
-Solving: $T_2 = 880$ N and $T_1 = 718$ N
+## Three-Dimensional Problems
 
-## Three-Dimensional Particle Equilibrium
+In space, each cable direction comes from the coordinates of its two ends. For a cable from the particle at $O$ to an anchor at $A$:
 
-### Vector Analysis Method
+1. Form the position vector $\mathbf{r}_{OA} = (x_A - x_O)\mathbf{i} + (y_A - y_O)\mathbf{j} + (z_A - z_O)\mathbf{k}$ (m).
+2. Compute its length $r_{OA} = |\mathbf{r}_{OA}|$.
+3. The unit vector is $`\mathbf{u}_{OA} = \mathbf{r}_{OA}/r_{OA}`$, and the cable force on the particle is $`T_A\,\mathbf{u}_{OA}`$.
+4. Write $\sum F_x = \sum F_y = \sum F_z = 0$ and solve the $3 \times 3$ system.
 
-For 3D problems, we use three equilibrium equations:
+### Worked Example: Three Cables
 
-$$
-\sum F_x = 0, \quad \sum F_y = 0, \quad \sum F_z = 0
-$$
+A 500 N weight at the origin $O$ hangs from three cables anchored at $A(3, 0, 4)$, $B(-2, 2, 5)$ and $C(1, -3, 6)$ m. The lengths are $r_{OA} = 5$ m, $r_{OB} = \sqrt{33}$ m and $r_{OC} = \sqrt{46}$ m, and the unit vectors are
 
-Forces are typically expressed using:
+```math
+\mathbf{u}_{OA} = (0.6, 0, 0.8), \qquad
+\mathbf{u}_{OB} = \frac{(-2, 2, 5)}{\sqrt{33}}, \qquad
+\mathbf{u}_{OC} = \frac{(1, -3, 6)}{\sqrt{46}}
+```
 
-- **Cartesian components**: $\mathbf{F} = F_x\mathbf{i} + F_y\mathbf{j} + F_z\mathbf{k}$
-- **Unit vectors**: $\mathbf{F} = F\mathbf{u}$ where $\mathbf{u}$ is the unit vector along the force direction
+The equilibrium equations are
 
-### Unit Vector Method
-
-For a force $\mathbf{F}$ acting from point A to point B:
-
-1. **Position vector**: $\mathbf{r}_{AB} = (x_B - x_A)\mathbf{i} + (y_B - y_A)\mathbf{j} + (z_B - z_A)\mathbf{k}$
-
-2. **Magnitude**: $r_{AB} = \sqrt{(x_B - x_A)^2 + (y_B - y_A)^2 + (z_B - z_A)^2}$
-
-3. **Unit vector**: $`\mathbf{u}_{AB} = \frac{\mathbf{r}_{AB}}{r_{AB}}`$
-
-4. **Force vector**: $\mathbf{F} = F\mathbf{u}_{AB}$
-
-### Example 2: 3D Cable System
-
-A 500 N weight is supported by three cables attached to points:
-
-- A(3, 0, 4) m
-- B(-2, 2, 5) m
-- C(1, -3, 6) m
-
-The weight is at the origin O(0, 0, 0).
-
-**Solution:**
-
-**Position vectors from O to attachment points:**
-
-- $\mathbf{r}_{OA} = 3\mathbf{i} + 0\mathbf{j} + 4\mathbf{k}$
-- $\mathbf{r}_{OB} = -2\mathbf{i} + 2\mathbf{j} + 5\mathbf{k}$
-- $\mathbf{r}_{OC} = 1\mathbf{i} - 3\mathbf{j} + 6\mathbf{k}$
-
-**Magnitudes:**
-
-- $r_{OA} = \sqrt{3^2 + 0^2 + 4^2} = 5$ m
-- $r_{OB} = \sqrt{(-2)^2 + 2^2 + 5^2} = \sqrt{33}$ m
-- $r_{OC} = \sqrt{1^2 + (-3)^2 + 6^2} = \sqrt{46}$ m
-
-**Unit vectors:**
-
-- $\mathbf{u}_{OA} = \frac{3\mathbf{i} + 4\mathbf{k}}{5} = 0.6\mathbf{i} + 0.8\mathbf{k}$
-- $\mathbf{u}_{OB} = \frac{-2\mathbf{i} + 2\mathbf{j} + 5\mathbf{k}}{\sqrt{33}}$
-- $\mathbf{u}_{OC} = \frac{\mathbf{i} - 3\mathbf{j} + 6\mathbf{k}}{\sqrt{46}}$
-
-**Force vectors:**
-
-- $\mathbf{T}_A = T_A(0.6\mathbf{i} + 0.8\mathbf{k})$
-- $`\mathbf{T}_B = T_B\mathbf{u}_{OB}`$
-- $`\mathbf{T}_C = T_C\mathbf{u}_{OC}`$
-- $\mathbf{W} = -500\mathbf{k}$ N
-
-**Equilibrium equations:**
-
-$$
-\sum F_x = 0.6T_A - \frac{2T_B}{\sqrt{33}} + \frac{T_C}{\sqrt{46}} = 0
-$$
+```math
+\sum F_x = 0.6\, T_A - \frac{2T_B}{\sqrt{33}} + \frac{T_C}{\sqrt{46}} = 0
+```
 
 $$
 \sum F_y = \frac{2T_B}{\sqrt{33}} - \frac{3T_C}{\sqrt{46}} = 0
 $$
 
-$$
-\sum F_z = 0.8T_A + \frac{5T_B}{\sqrt{33}} + \frac{6T_C}{\sqrt{46}} - 500 = 0
-$$
+```math
+\sum F_z = 0.8\, T_A + \frac{5T_B}{\sqrt{33}} + \frac{6T_C}{\sqrt{46}} - 500 = 0
+```
 
-Solving this system yields the cable tensions.
+Solving gives $T_A = 103.1$ N, $T_B = 266.5$ N and $T_C = 209.8$ N. All three are positive, so every cable is in tension and the arrangement works. The sum of the tensions (579 N) exceeds the weight because the cables are inclined: only their vertical components, which add up to 500 N, hold the weight, and the horizontal components cancel.
 
-## Spring Systems
+## Springs and Pulleys
 
-Springs introduce force-displacement relationships in equilibrium problems.
+A linear spring of stiffness $k$ (N/m) exerts a force $`F = k\,\delta`$, where $\delta$ (m) is the change from its unstretched length, directed to restore that length. When springs support a particle, the geometry is part of the answer: the equilibrium position is found together with the forces.
 
-### Hooke's Law
-
-For a linear spring:
+Springs that share the load, attached between the same two points, act in parallel and their stiffnesses add. Springs connected end to end carry the same force, and their compliances add:
 
 $$
-F = kx
+k_{\mathrm{parallel}} = \sum_i k_i,
+\qquad \frac{1}{k_{\mathrm{series}}} = \sum_i \frac{1}{k_i}
 $$
 
-where:
+For a 50 kg mass hung from two parallel springs with $k_1 = 1000$ N/m and $k_2 = 1500$ N/m, $k = 2500$ N/m and the static deflection is $\delta = mg/k = 490.5/2500 = 0.196$ m.
 
-- $F$ = spring force
-- $k$ = spring constant (stiffness)
-- $x$ = deformation from natural length
+An ideal pulley changes the direction of a cable without changing its tension, because moment equilibrium of a frictionless pulley about its axle gives $T_1 r = T_2 r$. The pulley itself is then a particle loaded by the two cable tensions and the axle reaction. With friction between rope and drum the two tensions differ exponentially with the wrap angle; see [Friction](./friction.md).
 
-### Spring in Series
+## Common Mistakes
 
-Springs connected end-to-end:
+- Drawing a cable force pointing towards the cable instead of away from the particle along it; a cable always pulls.
+- Using the mass (kg) instead of the weight (N) in the force balance.
+- Taking angles from the wrong reference line when resolving components; mark each angle on the free-body diagram first.
+- Treating a negative cable tension as acceptable: it means the configuration cannot hold the load.
+- Applying particle equilibrium to a body whose forces are not concurrent, such as a beam on two supports.
 
-$$
-\frac{1}{k_{eq}} = \frac{1}{k_1} + \frac{1}{k_2} + ... + \frac{1}{k_n}
-$$
+## Key Takeaways
 
-### Springs in Parallel
+- A particle in equilibrium satisfies $\sum \mathbf{F} = \mathbf{0}$: two scalar equations in 2D, three in 3D.
+- Unknown force magnitudes enter linearly, so the equations form a square linear system $\mathbf{U}\mathbf{T} = -\mathbf{F}_{\mathrm{app}}$ when the problem is determinate.
+- The system is solvable only if the unknown forces are not collinear (2D) or coplanar (3D).
+- Cable tensions must come out positive; a shallow cable carries a tension far larger than the load.
+- In 3D, unit vectors from end-point coordinates give every direction without trigonometry.
 
-Springs connected to common points:
+## Related Scripts
 
-$$
-k_{eq} = k_1 + k_2 + ... + k_n
-$$
-
-### Example 3: Spring-Mass System
-
-A 50 kg mass is suspended by two springs in parallel with stiffnesses $k_1 = 1000$ N/m and $k_2 = 1500$ N/m.
-
-**Solution:**
-
-**Equivalent stiffness:**
-
-$$
-k_{eq} = k_1 + k_2 = 1000 + 1500 = 2500 \text{ N/m}
-$$
-
-**Equilibrium position:**
-At equilibrium, spring force balances weight:
-
-$$
-k_{eq}x = mg
-$$
-
-$$
-x = \frac{mg}{k_{eq}} = \frac{50 \times 9.81}{2500} = 0.196 \text{ m}
-$$
-
-## Friction and Particle Equilibrium
-
-When friction is present, additional force components must be considered.
-
-### Static Friction
-
-Maximum static friction force:
-
-$$
-f_{s,max} = \mu_s N
-$$
-
-For equilibrium on an inclined plane:
-
-- **Normal force**: $N = W\cos\theta$
-- **Friction force**: $f = W\sin\theta$ (for equilibrium)
-- **Condition for no sliding**: $W\sin\theta \leq \mu_s W\cos\theta$
-
-This gives the critical angle: $\theta_{critical} = \tan^{-1}(\mu_s)$
-
-## Practical Problem-Solving Strategy
-
-### Step 1: Problem Identification
-
-- Identify the particle (point where forces meet)
-- List all known and unknown forces
-- Determine what needs to be found
-
-### Step 2: Free Body Diagram
-
-- Draw the particle as a point
-- Show all forces with proper directions
-- Label known and unknown quantities
-
-### Step 3: Coordinate System
-
-- Choose convenient axes (often align with some forces)
-- Be consistent with sign conventions
-
-### Step 4: Force Resolution
-
-- Break forces into components
-- Use trigonometry for angled forces
-- Express in terms of unit vectors for 3D
-
-### Step 5: Apply Equilibrium
-
-- Write equilibrium equations
-- Substitute known values
-- Solve system of equations
-
-### Step 6: Verification
-
-- Check signs and magnitudes
-- Verify units are consistent
-- Confirm physical reasonableness
-
-## Common Applications
-
-### Engineering Structures
-
-- **Truss joints**: Pin connections modeled as particles
-- **Cable networks**: Intersection points in cable systems
-- **Suspension systems**: Connection points in bridges
-
-### Mechanical Systems
-
-- **Pulley systems**: Loads at pulley intersections
-- **Linkage mechanisms**: Pin joints in mechanical linkages
-- **Lifting devices**: Crane hook points
-
-### Aerospace Applications
-
-- **Satellite positioning**: Thruster force balance
-- **Aircraft loading**: Point loads on wings
-- **Spacecraft docking**: Force analysis at connection points
-
-## Advanced Considerations
-
-### Multiple Equilibrium Positions
-
-Some systems may have multiple stable equilibrium positions. Analysis involves:
-
-- Identifying all possible configurations
-- Checking stability of each position
-- Determining which is most likely to occur
-
-### Limiting Cases
-
-Understanding behavior at limiting conditions:
-
-- Maximum load before failure
-- Critical angles for stability
-- Minimum forces required for equilibrium
-
-### Sensitivity Analysis
-
-How small changes in parameters affect the equilibrium:
-
-- Effect of small angle changes
-- Influence of material property variations
-- Impact of manufacturing tolerances
-
-Particle equilibrium provides the foundation for more complex structural analysis. Mastering these concepts ensures success in:
-
-- Truss analysis
-- Frame structures
-- Cable systems
-- Machine component design
-
-The principles learned here extend directly to rigid body equilibrium, where moment effects are added to force balance requirements.
+- [Cable Force Polygon](../../../scripts/plots/statics_cable_force_polygon/): solves the tensions of a mass held by two cables, draws its free-body diagram and closed force polygon to scale, and plots how the tension of a sagging cable grows as the sag angle shrinks.
+- [Friction Curves](../../../scripts/plots/statics_friction_curves/): plots the friction force on a block as the push grows through impending motion to sliding, the capstan ratio $e^{\mu\beta}$ against wrap angle, and the efficiency of a square-threaded screw against lead angle with its self-locking range.
 
 ## Exercises
 
-**Exercise 1.** A 20 kg traffic light hangs at the midpoint of a cable whose two halves each make $15^\circ$ with the horizontal. Find the cable tension and comment on what happens as the sag angle shrinks.
+**Exercise 1.** A 20 kg traffic light hangs at the midpoint of a cable whose two halves each make $15^\circ$ with the horizontal. Find the cable tension and describe what happens as the sag angle shrinks.
 
 <details>
 <summary>Answer</summary>
@@ -369,57 +167,50 @@ This is almost twice the weight. As the angle tends to zero, $T \to \infty$, so 
 
 </details>
 
-**Exercise 2.** Solve Example 1 in closed form. Show that for two cables at angles $\theta_1$ and $\theta_2$ above the horizontal supporting weight $W$, $T_1 = W\cos\theta_2/\sin(\theta_1 + \theta_2)$ and $T_2 = W\cos\theta_1/\sin(\theta_1 + \theta_2)$. Evaluate them.
+**Exercise 2.** Show that for two cables at angles $\theta_1$ and $\theta_2$ above the horizontal, on opposite sides, supporting a weight $W$, the tensions are $T_1 = W\cos\theta_2/\sin(\theta_1 + \theta_2)$ and $T_2 = W\cos\theta_1/\sin(\theta_1 + \theta_2)$. What happens when both cables become vertical, and when $\theta_1 + \theta_2 \to 0$?
 
 <details>
 <summary>Answer</summary>
 
-From $\sum F_x = 0$: $T_1 = T_2\cos\theta_2/\cos\theta_1$. Substituting into $\sum F_y = 0$:
+From $\sum F_x = 0$, $T_1 = T_2\cos\theta_2/\cos\theta_1$. Substituting into $\sum F_y = 0$:
 
 ```math
 T_2\left(\frac{\cos\theta_2\sin\theta_1}{\cos\theta_1} + \sin\theta_2\right) = W
 \implies T_2\, \frac{\sin(\theta_1 + \theta_2)}{\cos\theta_1} = W
 ```
 
-This gives the stated results. With $W = 981$ N, $\theta_1 = 30^\circ$ and $\theta_2 = 45^\circ$:
-
-```math
-T_1 = \frac{981\cos 45^\circ}{\sin 75^\circ} = 718 \text{ N}, \quad
-T_2 = \frac{981\cos 30^\circ}{\sin 75^\circ} = 880 \text{ N}
-```
-
-The steeper cable carries more load.
+which gives the stated results. With $\theta_1 = \theta_2 = 90^\circ$ the formulas are $0/0$: the two vertical cables are collinear, the $2 \times 2$ matrix is singular, and any split $T_1 + T_2 = W$ satisfies equilibrium. The actual split then depends on the cable stiffnesses. As $\theta_1 + \theta_2 \to 0$ both tensions grow without bound, as for the traffic light.
 
 </details>
 
-**Exercise 3.** Repeat Example 3 with the two springs ($k_1 = 1000$ N/m, $k_2 = 1500$ N/m) connected in series instead of in parallel. Find the equivalent stiffness and the static deflection under the 50 kg mass.
+**Exercise 3.** Repeat the spring example with the two springs ($k_1 = 1000$ N/m, $k_2 = 1500$ N/m) connected in series instead of in parallel. Find the equivalent stiffness and the static deflection under the 50 kg mass.
 
 <details>
 <summary>Answer</summary>
 
 ```math
-k_{eq} = \left(\frac{1}{1000} + \frac{1}{1500}\right)^{-1} = 600 \text{ N/m}, \quad
-x = \frac{50 \times 9.81}{600} = 0.818 \text{ m}
+k_{\mathrm{series}} = \left(\frac{1}{1000} + \frac{1}{1500}\right)^{-1} = 600 \text{ N/m}, \qquad
+\delta = \frac{50 \times 9.81}{600} = 0.818 \text{ m}
 ```
 
 This is more than four times the parallel deflection of 0.196 m. In series each spring carries the full weight; in parallel the springs share it.
 
 </details>
 
-**Exercise 4.** Complete Example 2: solve the three equilibrium equations for the cable tensions $T_A$, $T_B$ and $T_C$, and check that the cable model is valid.
+**Exercise 4.** In the three-cable example, check the $x$-equation with the computed tensions. Then lower anchor $C$ to $(1, -3, 3)$ m and find the new tensions.
 
 <details>
 <summary>Answer</summary>
 
-Solving the linear system, for instance with a matrix solve:
+Check: $0.6(103.1) - 2(266.5)/\sqrt{33} + 209.8/\sqrt{46} = 61.9 - 92.8 + 30.9 = 0$.
+
+With $C$ at $(1, -3, 3)$ m, $r_{OC} = \sqrt{19} = 4.359$ m and $\mathbf{u}_{OC} = (0.229, -0.688, 0.688)$. Solving the new $3 \times 3$ system gives
 
 ```math
-T_A = 103.1 \text{ N}, \quad T_B = 266.5 \text{ N}, \quad T_C = 209.8 \text{ N}
+T_A = 126.6 \text{ N}, \quad T_B = 327.2 \text{ N}, \quad T_C = 165.5 \text{ N}
 ```
 
-Check for $x$: $0.6(103.1) - 2(266.5)/\sqrt{33} + 209.8/\sqrt{46} = 61.9 - 92.8 + 30.9 \approx 0$.
-
-All three tensions are positive. The cables can only pull, so a negative value would have meant that one "cable" had to push, and that support arrangement could not hold the weight.
+The vertical components ($101.3 + 284.8 + 113.9 = 500$ N) still carry the weight. Cable $C$ is now shallower, so each newton of its tension contributes less vertically and more horizontally; the horizontal components must still cancel, and the load shifts to $A$ and $B$.
 
 </details>
 
@@ -428,12 +219,13 @@ All three tensions are positive. The cables can only pull, so a negative value w
 <details>
 <summary>Answer</summary>
 
-Sliding starts when $W\sin\theta = \mu_s W\cos\theta$, i.e. $\theta_{critical} = \tan^{-1}0.35 = 19.3^\circ$. The weight cancels, so the angle does not depend on mass. That is why tilting-plane tests are a simple way to measure $\mu_s$.
+The forces are the weight, the normal force and the friction force, all through the block's centre. Sliding starts when the friction needed, $W\sin\theta$, reaches its limit $\mu_s W\cos\theta$, so $\theta = \tan^{-1}0.35 = 19.3^\circ$. The weight cancels, so the angle does not depend on mass; tilting-plane tests use this to measure $\mu_s$. See [Friction](./friction.md) for the general case.
 
 </details>
 
 ## References
 
 - Hibbeler, R. C., *Engineering Mechanics: Statics*, 14th ed., Pearson, 2016.
-- Beer, F. P., Johnston, E. R., Mazurek, D. F., and Eisenberg, E. R., *Vector Mechanics for Engineers: Statics*, McGraw-Hill.
-- Meriam, J. L., and Kraige, L. G., *Engineering Mechanics: Statics*, Wiley.
+- Beer, F. P., Johnston, E. R., and Mazurek, D. F., *Vector Mechanics for Engineers: Statics*, 12th ed., McGraw-Hill Education, 2019.
+- Meriam, J. L., Kraige, L. G., and Bolton, J. N., *Engineering Mechanics: Statics*, 9th ed., Wiley, 2018.
+- Pytel, A., and Kiusalaas, J., *Engineering Mechanics: Statics*, 4th ed., Cengage Learning, 2016.

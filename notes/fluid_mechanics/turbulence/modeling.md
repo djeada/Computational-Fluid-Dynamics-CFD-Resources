@@ -367,6 +367,7 @@ General guidance:
 - [kelvin_helmholtz_instability](../../../scripts/simulations/kelvin_helmholtz_instability/): an unsteady shear-layer roll-up of the kind that scale-resolving methods (LES, DES) capture explicitly and steady RANS averages away.
 - [boundary_layer_velocity_profile](../../../scripts/plots/boundary_layer_velocity_profile/): a turbulent mean velocity profile, the kind of target a RANS model with correct wall behaviour must reproduce.
 - [Mean Pressure Coefficient Along Vehicle Centreline](../../../scripts/plots/mean_pressure_coefficient/): plots a mock validation figure of mean pressure coefficient $C_P$ against streamwise position, comparing "experimental" data with a "CFD SRS" (scale-resolving simulation) curve that under-predicts a separation plateau.
+- [Learned Mixing-Length Closure](../../../scripts/algorithms/learned_mixing_length_closure/): learns a near-wall correction to Prandtl's mixing length from reference velocity data, then inserts the learned closure into a 1D RANS solver to check whether a good fit to the closure data also gives a good velocity profile.
 
 ## Exercises
 

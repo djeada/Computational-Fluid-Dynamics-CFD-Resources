@@ -150,6 +150,7 @@ Flow Separation
 - [Steady and Unsteady Pathlines Around a Cylinder with Vortex Shedding](../../../scripts/simulations/steady_and_unsteady_pathlines_with_vortex_shedding/): compares streamlines and particle pathlines for steady potential flow past a cylinder with circulation and for an unsteady version of the same flow with a kinematic vortex-shedding model.
 - [Turbulent Boundary Layer Velocity Profile](../../../scripts/plots/boundary_layer_velocity_profile/): plots the one-seventh power-law velocity profile of a turbulent boundary layer in normalised form, $u/U_\infty$ against $y/\delta$.
 - [Velocity Layers and Viscosity](../../../scripts/plots/velocity_layers_viscosity/): draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $`\tau = \mu\, du/dy`$.
+- [Reynolds Numbers of Flyers](../../../scripts/plots/airplane_reynolds_number_scale/): computes the chord Reynolds number $Re_c = Vc/\nu$ of fourteen flyers, from a fruit fly to an airliner at cruise, and draws them on one logarithmic axis next to the flat-plate skin-friction laws for laminar, turbulent and transitional boundary layers.
 
 ### Exercises
 

@@ -1,248 +1,268 @@
-## How Airplanes Work
+# How Airplanes Fly
 
-Airplanes are remarkable machines that harness the principles of physics to soar through the sky. The complexity of flight, though impressive, can be broken down into a few fundamental concepts. To understand how airplanes fly, it’s important to explore the forces and components involved.
+An airplane in steady flight is a rigid body in equilibrium under four forces: lift and drag from the air, thrust from the engine and its own weight. This note explains where lift comes from (the pressure distribution on the wing, which circulation theory predicts and the "equal transit time" story does not), how the lift and drag of a finite wing are expressed through coefficients, and how the drag polar leads to the speeds, powers and glide angles that define an aircraft's performance. It ends with the control surfaces that change the forces and moments. The same quantities are what a CFD simulation of a wing or a complete aircraft is asked to deliver: $C_L$, $C_D$, $C_m$ and the surface pressure.
 
-### Basic Principles of Flight
+## Problem Statement
 
-At the heart of every flight are four fundamental forces: lift, weight, thrust, and drag. These forces interact in a delicate balance that determines whether an airplane will rise, stay aloft, or descend.
+Given an aircraft of mass $m$, wing area $S$, span $b$ (aspect ratio $AR = b^2/S$), span efficiency $e$, zero-lift drag coefficient $C_{D0}$ and maximum lift coefficient $C_{L,max}$, flying at true airspeed $V$ in air of density $\rho$, find
 
-#### The Four Forces
+- the lift coefficient and angle of attack needed to support the weight,
+- the drag, the thrust and the power required,
+- the stall speed, the speeds of minimum drag and minimum power, and the best lift-to-drag ratio,
+- the rate of climb for a given excess power and the glide angle with the engine off.
 
-Flight is governed by four primary forces: lift, weight, thrust, and drag. Each of these forces can be described mathematically, and understanding their relationships is key to predicting an airplane’s behavior in flight.
-
-![output(4)](https://github.com/user-attachments/assets/768de086-0099-43ff-9b6a-8556f67e49f0)
-
-I. **Lift** is the force that counteracts the airplane’s weight, allowing it to stay in the air. Lift depends on the airspeed, the shape of the wings, and the density of the air. The equation for lift is:
-
-$$
-L = \frac{1}{2} \rho v^2 C_L A
-$$
-
-- $L$ is the lift force in newtons (N),
-- $\rho$ is the air density (kg/m³),
-- $v$ is the velocity of the airplane relative to the air (m/s),
-- $C_L$ is the lift coefficient (a dimensionless number that depends on the wing shape and angle of attack),
-- $A$ is the wing area (m²).
-
-This equation reveals that lift increases with the square of the velocity and the size of the wings. Hence, larger airplanes or those flying faster generate more lift.
-
-II. **Weight** is the gravitational force acting on the airplane, which is simply the mass of the airplane multiplied by the acceleration due to gravity:
+The flow is assumed subsonic and incompressible ($M < 0.3$), the aircraft rigid and the flight steady, with thrust along the flight path. For a flight path inclined at angle $\gamma$ above the horizontal, Newton's second law along and normal to the path gives
 
 $$
-W = mg
+m \frac{dV}{dt} = T - D - W\sin\gamma,
+\qquad mV \frac{d\gamma}{dt} = L - W\cos\gamma
 $$
 
-- $W$ is the weight (N),
-- $m$ is the mass of the airplane (kg),
-- $g$ is the acceleration due to gravity ($`9.81 \, \text{m/s}^2`$).
+and steady flight sets both left-hand sides to zero. Rotational equilibrium (trim) and its stability are treated in [Airplane Stability](airplane_stability.md).
 
-III. **Thrust** is the forward force provided by the airplane’s engines, and it is responsible for overcoming drag and propelling the aircraft. Thrust depends on the power of the engines and the design of the propellers or jet nozzles.
+## The Four Forces
 
-The power delivered by the engines can be expressed as:
+| Force | Direction | Expression |
+| --- | --- | --- |
+| Lift $L$ | normal to the flight path (the relative wind) | $L = \tfrac{1}{2}\rho V^2 S C_L$ |
+| Drag $D$ | opposite to the flight path | $D = \tfrac{1}{2}\rho V^2 S C_D$ |
+| Weight $W$ | vertically down | $W = mg$ |
+| Thrust $T$ | along the propeller or engine axis, here taken along the path | $T = P_{shaft}\eta_p/V$ for a propeller |
 
-$$
-P = T \cdot v
-$$
+Here $q = \tfrac{1}{2}\rho V^2$ is the dynamic pressure (Pa), $S$ the reference wing area (m²), $C_L$ and $C_D$ the dimensionless lift and drag coefficients and $\eta_p$ the propeller efficiency. Lift and drag are defined relative to the flight path, not to the vertical: in a climb the lift is tilted back and is slightly smaller than the weight.
 
-- $P$ is the power (W),
-- $T$ is the thrust (N),
-- $v$ is the airspeed (m/s).
+![Free-body diagram of a light aircraft climbing at 6 degrees](../../../../scripts/plots/airplane_four_forces/airplane_four_forces.png)
 
-IV. **Drag** is the aerodynamic resistance that opposes thrust. The drag force can be expressed by the drag equation:
+The figure shows the four forces on a 1100 kg aircraft climbing at 40 m/s on a $6^\circ$ path, drawn to one scale. Thrust (1943 N) and drag (815 N) are an order of magnitude smaller than lift (10 732 N) and weight (10 791 N), and the climb is produced by the thrust exceeding the drag by $W\sin\gamma$, not by extra lift.
 
-$$
-D = \frac{1}{2} \rho v^2 C_D A
-$$
+## Where Lift Comes From
 
-- $D$ is the drag force (N),
-- $C_D$ is the drag coefficient, which depends on the shape of the airplane and its orientation relative to the airflow.
+### Pressure on the Surface
 
-#### Bernoulli's Principle and the Continuity Equation
+The air acts on the wing only through pressure, normal to the surface, and shear stress, tangent to it. Integrating both over the surface gives the resultant force, and its component normal to the free stream is the lift. In coefficient form, with $C_p = (p - p_\infty)/q_\infty$, the section lift is dominated by the pressure difference between the lower and upper surfaces:
 
-The generation of lift on an airplane wing can also be described using Bernoulli’s principle, which relates the pressure and velocity of a fluid. For a wing, air moves faster over the curved top surface than underneath, causing a pressure difference that generates lift.
+```math
+c_l \approx \frac{1}{c}\int_0^c \left(C_{p,l} - C_{p,u}\right) dx
+\quad \text{(small } \alpha\text{, pressure only)}
+```
 
-According to Bernoulli’s equation:
+![Pressure distribution on a NACA 2412 at 4 degrees from a panel method](../../../../scripts/algorithms/airplane_thin_airfoil_and_polar/airplane_airfoil_pressure.png)
 
-$$
-P_1 + \frac{1}{2} \rho v_1^2 = P_2 + \frac{1}{2} \rho v_2^2
-$$
+The panel-method solution for a NACA 2412 at $\alpha = 4^\circ$ shows the typical picture: strong suction ($C_p$ down to $-1.4$) on the front of the upper surface, a mild overpressure on the lower surface, and most of the lift generated in the front third of the chord. The upper surface contributes more than the lower one. In terms of velocity, Bernoulli's equation (valid along streamlines outside the boundary layer, see [Bernoulli's Equation](../../../fluid_mechanics/inviscid_flow/bernoulli.md)) relates low pressure to high speed, so the air flows faster over the upper surface; but Bernoulli's equation does not say why it does.
 
-- $P_1$ and $P_2$ are the pressures on the top and bottom of the wing,
-- $v_1$ and $v_2$ are the velocities of the airflow over the top and bottom surfaces,
-- $\rho$ is the air density.
+### Circulation and the Kutta Condition
 
-Because the air moves faster over the top of the wing ($v_1 > v_2$), the pressure on the top ($P_1$) is lower than the pressure on the bottom ($P_2$), leading to an upward lift force.
-
-The continuity equation also governs the conservation of mass in a fluid flow. For incompressible flow over an airfoil, the continuity equation ensures that the product of the cross-sectional area and velocity remains constant:
+In inviscid theory ([Potential Flow](../../../fluid_mechanics/inviscid_flow/potential_flow.md)) the flow past a two-dimensional body can carry any amount of circulation
 
 $$
-A_1 v_1 = A_2 v_2
+\Gamma = \oint \mathbf{V}\cdot d\mathbf{s}
 $$
 
-This explains how narrowing airflow over the top of the wing increases its velocity, contributing to Bernoulli’s effect.
-
-### Aircraft Performance and Power
-
-#### Power and Energy Considerations
-
-Aircraft performance can also be explored through energy and power equations. The total mechanical power required to overcome drag and maintain steady flight is:
+and the Kutta–Joukowski theorem gives the lift per unit span
 
 $$
-P_{\text{required}} = D \cdot v = \frac{1}{2} \rho v^3 C_D A
+L' = \rho_\infty V_\infty \Gamma
 $$
 
-This equation highlights that the power required to maintain flight increases dramatically with velocity, as it is proportional to the cube of the airspeed for a constant $C_D$ (a fair approximation at high speed, where parasite drag dominates; at low speed induced drag raises $C_D$ and the power required climbs again). Therefore, small increases in speed require significantly more engine power to overcome drag.
-
-In level flight, the engine must produce enough power to generate sufficient thrust to overcome both drag and maintain altitude. The efficiency of the engines can be expressed by the ratio of useful power (thrust times velocity) to the total energy expended:
+for a clockwise circulation in a free stream from left to right. For a body with a sharp trailing edge the circulation is fixed by the **Kutta condition**, which requires the flow to leave the trailing edge smoothly instead of wrapping around it. Physically, viscosity enforces it: when the wing starts moving, a starting vortex is shed from the trailing edge, and by Kelvin's theorem an equal and opposite circulation remains bound to the wing. Thin-airfoil theory, which replaces the airfoil by a vortex sheet on its camber line, gives
 
 $$
-\eta = \frac{T \cdot v}{P_{\text{input}}}
+\Gamma = \pi c V_\infty(\alpha - \alpha_{L0}),
+\qquad c_l = \frac{L'}{q_\infty c} = 2\pi(\alpha - \alpha_{L0})
 $$
 
-where $\eta$ is the efficiency of the engine.
+with $\alpha$ in radians and $\alpha_{L0}$ the zero-lift angle, which depends only on the camber line (zero for symmetric sections, $-2.08^\circ$ for NACA 2412, $-4.15^\circ$ for NACA 4412). The lift-curve slope $2\pi$ per radian, about 0.11 per degree, is the same for every thin airfoil.
 
-#### Climbing and Descent Performance
+As a check of scale: a light-aircraft wing of 1.5 m chord at 55 m/s with $c_l = 0.36$ carries $\Gamma = c_l V c/2 = 14.9$ m²/s.
 
-A steady climb does not require more lift than weight (in fact $L = W\cos\gamma$, slightly less than $W$, where $\gamma$ is the climb angle); it requires excess thrust, i.e. excess power. The rate of climb is related to the excess power available from the engines after overcoming drag. The vertical component of velocity during a climb, called the rate of climb ($R_c$), can be approximated as:
+### The Equal-Transit-Time Error
 
-$$
-R_c = \frac{P_{\text{excess}}}{W}
-$$
+A common explanation states that air parcels separated at the leading edge must meet again at the trailing edge, so the air over the longer upper surface must go faster. This is false on both counts:
 
-where $P_{\text{excess}}$ is the difference between the engine power and the power required to overcome drag at the current speed.
+1. Nothing requires the parcels to meet. Measurements, flow visualization and every solution of the flow equations show that air over the upper surface of a lifting wing arrives at the trailing edge well before the air that went underneath.
+2. The argument predicts far too little lift. The upper surface of a NACA 2412 is only 1.4% longer than the lower surface; equal transit times would give an upper-surface speed 1.4% higher and $c_l \approx (1.014)^2 - 1 = 0.03$, against about 0.65 measured at $4^\circ$ (0.74 in the inviscid panel solution above).
+3. It cannot explain how a symmetric airfoil, a flat plate or a cambered wing flying inverted produces lift.
 
-Conversely, during descent, the airplane can use gravity to its advantage, reducing the power needed from the engines. The descent rate depends on the lift-to-drag ratio ($L/D$), which is a measure of how efficiently an airplane converts lift into forward motion relative to the drag it encounters. A higher lift-to-drag ratio means the airplane can glide longer distances with minimal engine power.
+The correct statement is that the circulation fixed by the Kutta condition speeds up the flow over the upper surface and slows it over the lower surface. The equivalent momentum description is that the wing turns the oncoming flow downward (downwash), and the rate of change of downward momentum of the air equals the lift. Pressure, circulation and downwash are three consistent descriptions of the same flow, not competing theories.
 
-### Stability and Control
+## Lift and Drag Coefficients
 
-#### Equilibrium and Stability
+### Section and Wing Coefficients
 
-In steady, level flight, an airplane is in equilibrium, meaning that the sum of forces and the sum of moments (torques) acting on it are zero. Mathematically, this is expressed as:
-
-$$
-\sum F = 0 \quad \text{and} \quad \sum M = 0
-$$
-
-where $F$ represents the forces (lift, weight, thrust, drag) and $M$ represents the moments (generated by control surfaces like elevators, rudders, and ailerons).
-
-For stability, the airplane must be able to return to this equilibrium state after a disturbance. Pitch stability, for instance, depends on the location of the center of gravity relative to the aerodynamic center of the wings. The stability condition can be quantified by the stability derivative:
+Lower-case coefficients ($c_l$, $c_d$, $c_m$) refer to a two-dimensional section per unit span, with the chord as reference length; upper-case ($C_L$, $C_D$, $C_m$) refer to a whole wing or aircraft with reference area $S$:
 
 $$
-M_{\alpha} = \frac{\partial M}{\partial \alpha}
+C_L = \frac{L}{\tfrac{1}{2}\rho V^2 S},
+\qquad C_D = \frac{D}{\tfrac{1}{2}\rho V^2 S}
 $$
 
-where $\alpha$ is the angle of attack. If $M_{\alpha}$ is negative, the airplane tends to return to its original pitch angle after being disturbed, indicating positive static stability.
+The coefficients depend on the shape, the angle of attack $\alpha$ (between the chord line and the relative wind), the Reynolds number and the Mach number, but not on $V$ or $\rho$ directly, which is why one curve of $C_L(\alpha)$ describes the wing at all speeds of a given regime ([The Reynolds Number in Flight](reynolds_number.md)).
 
-### Angle of Attack, Stall, and Lift Curves
+### Lift Curve and Stall
 
-The **angle of attack** ($\alpha$) is the angle between the oncoming airflow and the chord line of the wing. Lift increases with angle of attack up to a certain point, beyond which a stall occurs. The relationship between lift and angle of attack is captured in lift curves, where:
-
-$$
-L = C_L(\alpha) \cdot \frac{1}{2} \rho v^2 A
-$$
-
-For small angles of attack, the lift coefficient $C_L$ increases linearly with $\alpha$. However, once the critical angle is exceeded, airflow separation causes a dramatic loss of lift, leading to a stall. Stalls are a critical aspect of flight, and pilots must be aware of the airplane's stall speed:
+$C_L$ grows linearly with $\alpha$ up to a few degrees below the stall. Past the stall angle (typically $14$–$`18^\circ`$ for a clean wing) the boundary layer on the upper surface separates, the suction peak collapses, lift drops and drag rises sharply. The highest lift coefficient $C_{L,max}$ sets the slowest speed at which the aircraft can fly level:
 
 $$
-v_{\text{stall}} = \sqrt{\frac{2 W}{\rho C_{L_{\text{max}}} A}}
+V_{stall} = \sqrt{\frac{2W}{\rho S C_{L,max}}}
 $$
 
-where $C_{L_{\text{max}}}$ is the maximum lift coefficient before stall.
+Flaps and slats raise $C_{L,max}$ (see [Airfoil Design](airfoil_design.md)), which is why they are deployed for take-off and landing.
 
-### Airplane Components
+### Finite Wings and Induced Drag
 
-To appreciate how an airplane flies, it’s helpful to look at its various parts, each contributing to different aspects of flight.
-
-The fuselage forms the main body of the airplane. This is where passengers, crew, and cargo are housed, and it connects the other major components like the wings and tail. The fuselage’s streamlined shape is crucial in reducing drag.
-
-Wings are arguably the most critical part of the airplane when it comes to generating lift. Their shape and orientation, especially the angle of attack (the angle between the wing and the oncoming air), directly affect how much lift is created. On the wings, there are control surfaces like ailerons and flaps. Ailerons, located on the outer rear edges, allow the plane to roll, helping it turn. Flaps, located closer to the fuselage, can extend to increase both lift and drag, making it easier to take off and land at slower speeds.
-
-At the back of the airplane is the empennage, or tail section, which provides stability and control. The horizontal stabilizer helps control pitch, allowing the airplane to point its nose up or down, while the vertical stabilizer manages yaw, which turns the airplane left or right. Attached to these stabilizers are elevators and the rudder. Elevators are small surfaces that move to control pitch, and the rudder swivels to control yaw.
-
-Engines play a pivotal role in providing the thrust necessary to move the airplane forward. There are two main types of engines used in airplanes: jet engines and propeller engines. Jet engines generate thrust by expelling high-speed exhaust gases, while propeller engines use rotating blades to push air backward, moving the airplane forward.
-
-### Control Surfaces
-
-Airplanes are equipped with various control surfaces that pilots use to manipulate the aircraft’s orientation and path through the air. These surfaces can be divided into primary and secondary controls.
-
-Primary control surfaces include ailerons, elevators, and the rudder. Ailerons control the airplane’s roll by moving one wing up while lowering the other, causing the airplane to tilt. Elevators control the pitch, which moves the airplane's nose up or down. The rudder is used to control yaw, allowing the airplane to point its nose left or right, which is essential for coordinated turns.
-
-In addition to these, secondary control surfaces, such as flaps, slats, and spoilers, assist in specific flight conditions. Flaps extend downward from the wing to increase both lift and drag, enabling smoother takeoffs and landings at lower speeds. Slats, which are similar to flaps but located at the leading edge of the wing, increase lift at slow speeds by improving airflow over the wing. Spoilers, on the other hand, are deployed to disrupt the airflow over the wing, reducing lift and increasing drag, which helps the airplane descend and slow down more efficiently.
-
-### Flight Dynamics
-
-The motion of an airplane in the air can be described in terms of three basic types of movement: pitch, roll, and yaw. Each movement is controlled by different parts of the airplane, and understanding them is key to grasping how a plane maneuvers.
-
-Pitch refers to the up and down movement of the airplane’s nose, which is controlled by the elevators on the tail. This movement is crucial for climbing and descending. By raising the elevators, the nose of the airplane points upward, and the aircraft begins to climb. Lowering the elevators causes the nose to drop, initiating a descent.
-
-Roll, on the other hand, is the tilting of the airplane to the left or right. This motion is controlled by the ailerons, which adjust the wings' positions relative to one another. Rolling is a vital part of turning the airplane, as it allows the aircraft to bank into a turn smoothly.
-
-Yaw describes the left or right movement of the airplane's nose, controlled by the rudder on the vertical stabilizer. This motion allows the airplane to align properly during turns and to correct for crosswinds when landing.
-
-### Aerodynamics
-
-Flight is governed by the principles of aerodynamics, with two key concepts being the angle of attack and the lift coefficient. The angle of attack is the angle between the wing's chord line (an imaginary straight line from the leading to the trailing edge) and the direction of the oncoming air. This angle is important because, up to a certain point, increasing the angle of attack increases the lift generated by the wings. However, if the angle becomes too steep, the airflow will separate from the wing’s surface, causing a loss of lift, a condition known as stall.
-
-The lift coefficient is a dimensionless number that quantifies how effectively a wing generates lift. It depends on factors like the shape of the wing, the airspeed, and the angle of attack. The formula for the lift coefficient is given as:
+At the wing tips the high-pressure air below flows around to the low-pressure side, forming trailing vortices. These induce a downward velocity (downwash) at the wing that tilts the local relative wind down by the induced angle $\alpha_i$; the wing works at a smaller effective angle of attack and its lift vector tilts back, producing a drag component, the **induced drag**. For a wing with span efficiency $e$ (1 for an elliptic lift distribution, 0.7–0.9 for practical wings),
 
 $$
-C_L = \frac{L}{0.5 \times \rho \times V^2 \times A}
+\alpha_i = \frac{C_L}{\pi e AR},
+\qquad C_{D_i} = \frac{C_L^2}{\pi e AR}
 $$
 
-where $L$ is the lift force, $\rho$ is the air density, $V$ is the velocity, and $A$ is the wing area. This formula highlights that lift is proportional to both the square of the velocity and the wing area, meaning faster speeds or larger wings result in more lift.
-
-Similarly, drag is quantified using the drag coefficient, which follows a similar formula:
+and the lift-curve slope of the wing falls below the section value $a$ ($\approx 2\pi$):
 
 $$
-C_D = \frac{D}{0.5 \times \rho \times V^2 \times A}
+a_{3D} = \frac{a}{1 + a/(\pi e AR)}
 $$
 
-where $D$ is the drag force. Reducing the drag coefficient is essential for efficient flight, as minimizing drag allows the airplane to fly faster and use less fuel.
+For $AR = 7.47$, $e = 0.8$ and $a = 2\pi$ this gives $a_{3D} = 4.71$ per radian, 25% less than the section. High aspect ratio reduces induced drag, which is why sailplanes ($AR \approx 20$–$`30`$) have long, slender wings; winglets act like a modest increase in span.
 
-### Related Scripts
+### The Drag Polar
 
-- [Airfoil Angle of Attack](../../../../scripts/plots/airfoil_angle_attack/): draws a NACA 2412 airfoil pitched nose-up about its leading edge to several angles of attack, $10^\circ$ and $60^\circ$ by default, relative to a free stream flowing left to right.
+The total drag of the aircraft is the sum of the zero-lift (parasite) drag, made of skin friction, pressure (form) drag and interference drag ([Drag](../../../fluid_mechanics/viscous_flow/drag.md)), and the induced drag. To good accuracy below the drag-divergence Mach number,
 
-### Exercises
+$$
+C_D = C_{D0} + kC_L^2,
+\qquad k = \frac{1}{\pi e AR}
+$$
 
-**Exercise 1.** A light aircraft has mass 1100 kg and wing area 16.2 m². Find its sea-level stall speed ($\rho = 1.225$ kg/m³) with $C_{L_{max}} = 1.6$ (flaps up) and $C_{L_{max}} = 2.1$ (flaps down). Give the answers in m/s and knots.
+where $e$ now absorbs the lift dependence of the profile drag as well (the Oswald efficiency factor). The lift-to-drag ratio $C_L/C_D$ is greatest where the tangent from the origin touches the polar, which is where induced drag equals parasite drag:
+
+$$
+C_L^* = \sqrt{\frac{C_{D0}}{k}},
+\qquad \left(\frac{L}{D}\right)_{max} = \frac{1}{2\sqrt{kC_{D0}}}
+$$
+
+![Lift curves, drag polar and power required of a light aircraft](../../../../scripts/algorithms/airplane_thin_airfoil_and_polar/airplane_lift_curve_and_polar.png)
+
+Panel (a) compares the section lift curve from a panel method with thin-airfoil theory and with the finite wing. Panel (b) is the polar of a light aircraft with $C_{D0} = 0.027$ and $k = 0.0533$, with $(L/D)_{max} = 13.2$ at $C_L^* = 0.71$. Panel (c) is the power required in level flight, discussed next.
+
+## Level Flight Performance
+
+In steady level flight $L = W$ and $T = D$. Each speed requires one lift coefficient,
+
+$$
+C_L = \frac{2W}{\rho V^2 S}
+$$
+
+and the drag and power required follow from the polar:
+
+```math
+D = \tfrac{1}{2}\rho V^2 S C_{D0} + \frac{2kW^2}{\rho V^2 S},
+\qquad
+P_{req} = DV = \tfrac{1}{2}\rho V^3 S C_{D0} + \frac{2kW^2}{\rho V S}
+```
+
+The first term (parasite) grows as $V^2$ in drag and $V^3$ in power; the second (induced) falls as $1/V^2$ and $1/V$. Drag is smallest at $C_L^*$, where $`D_{min} = W/(L/D)_{max}`$. Power is smallest at a lower speed, where $`C_L = \sqrt{3C_{D0}/k}`$, and the minimum-power speed is $3^{-1/4} = 0.76$ times the minimum-drag speed.
+
+### Worked Example
+
+A light aircraft with $m = 1100$ kg ($`W = 10\,791`$ N), $S = 16.2$ m², $b = 11.0$ m, $e = 0.80$, $C_{D0} = 0.027$ and $C_{L,max} = 1.6$ flies at sea level ($\rho = 1.225$ kg/m³).
+
+1. Aspect ratio and induced-drag factor: $AR = 11.0^2/16.2 = 7.47$, $k = 1/(\pi \times 0.80 \times 7.47) = 0.0533$.
+2. Best lift-to-drag ratio: $C_L^* = \sqrt{0.027/0.0533} = 0.712$, $(L/D)_{max} = 1/(2\sqrt{0.0533 \times 0.027}) = 13.2$.
+3. Minimum drag: $`D_{min} = 10\,791/13.2 = 818`$ N, at $V_{md} = \sqrt{2W/(\rho S C_L^*)} = 39.1$ m/s.
+4. Minimum power: at $C_L = \sqrt{3 \times 0.027/0.0533} = 1.23$, $V_{mp} = 0.76 \times 39.1 = 29.7$ m/s and $P_{min} = 28.1$ kW.
+5. Stall: $`V_{stall} = \sqrt{2 \times 10\,791/(1.225 \times 16.2 \times 1.6)} = 26.1`$ m/s.
+6. Cruise at 55 m/s: $C_L = 0.360$, $C_D = 0.027 + 0.0533 \times 0.360^2 = 0.0339$, $D = 1017$ N and $P_{req} = 55.9$ kW, of which induced drag is only 20%.
+
+The minimum-drag speed is the best-glide and best-range speed of a jet; the minimum-power speed gives the longest endurance of a propeller aircraft and the smallest sink rate of a glider.
+
+### Climb and Glide
+
+In a steady climb, multiplying the along-path balance by $V$ gives
+
+$$
+R_c = V\sin\gamma = \frac{TV - DV}{W} = \frac{P_{av} - P_{req}}{W}
+$$
+
+so the rate of climb is the excess power per unit weight. With the engine off ($T = 0$) the aircraft descends at the glide angle
+
+$$
+\tan\gamma_{glide} = \frac{D}{L} = \frac{1}{L/D}
+$$
+
+and the still-air glide distance from height $h$ is $`h\,(L/D)`$, greatest at $(L/D)_{max}$. Weight does not change the glide angle at a given $C_L$, only the speed at which it is flown.
+
+## Control Surfaces
+
+The pilot changes the forces and moments by changing the camber of parts of the lifting surfaces.
+
+| Surface | Location | Primary effect | Motion |
+| --- | --- | --- | --- |
+| Elevator (or all-moving stabilator) | trailing edge of the horizontal tail | changes tail lift, giving a pitching moment | pitch about the lateral axis |
+| Ailerons | outer trailing edges of the wings, deflecting in opposite directions | raise lift on one wing and lower it on the other | roll about the longitudinal axis |
+| Rudder | trailing edge of the fin | side force at the tail, giving a yawing moment | yaw about the vertical axis |
+| Trailing-edge flaps | inner trailing edges | add camber and area: higher $C_{L,max}$, more drag | lower stall and approach speeds |
+| Leading-edge slats | wing leading edge | delay leading-edge separation | stall at higher $\alpha$ |
+| Spoilers | upper wing surface | destroy lift and add drag; roll when used on one side | descent, braking after touchdown |
+| Trim tabs | trailing edges of control surfaces | hold a surface deflected with zero stick force | trim |
+
+A turn is made by banking with the ailerons so that a component of lift points toward the centre of the turn, with the rudder used to keep the flight coordinated (no sideslip). Because the lift must still support the weight, the load factor in a level turn at bank angle $\phi$ is $n = L/W = 1/\cos\phi$, and the stall speed rises by $\sqrt{n}$.
+
+## Key Takeaways
+
+- Lift is the integral of the surface pressure; circulation theory with the Kutta condition predicts it, giving $L' = \rho V\Gamma$ and $c_l = 2\pi(\alpha - \alpha_{L0})$ for thin airfoils.
+- The equal-transit-time explanation is wrong: upper-surface air arrives first, and the path-length argument underestimates lift by a factor of more than 20.
+- A finite wing has a lower lift slope than its section and pays induced drag $C_L^2/(\pi e AR)$, which falls with aspect ratio.
+- The parabolic polar $C_D = C_{D0} + kC_L^2$ gives $`(L/D)_{max} = 1/(2\sqrt{kC_{D0}})`$ where induced and parasite drag are equal.
+- Minimum power occurs at $0.76$ times the minimum-drag speed; climb rate is excess power over weight; glide ratio equals $L/D$.
+
+## Related Scripts
+
+- [Forces on an Aircraft in a Steady Climb](../../../../scripts/plots/airplane_four_forces/): draws the free-body diagram of a 1100 kg light aircraft in a steady climb, with lift, drag, weight and thrust computed from the equilibrium conditions and drawn to scale, and checks that the four forces close into a polygon.
+- [Thin-Airfoil Theory, Panel Method and Drag Polar](../../../../scripts/algorithms/airplane_thin_airfoil_and_polar/): computes the lift of a NACA 4-digit airfoil with thin-airfoil theory and with a Hess–Smith panel method, then turns the section result into a finite-wing lift curve, a parabolic drag polar and the power-required curve of a light aircraft.
+- [Airfoil Angle of Attack](../../../../scripts/plots/airfoil_angle_attack/): draws a NACA 2412 airfoil pitched nose-up about its leading edge to several angles of attack, $0^\circ$, $8^\circ$ and $16^\circ$ by default, relative to a free stream flowing left to right.
+
+## Exercises
+
+**Exercise 1.** A light aircraft has mass 1100 kg and wing area 16.2 m². Find its sea-level stall speed ($\rho = 1.225$ kg/m³) with $C_{L,max} = 1.6$ (flaps up) and $C_{L,max} = 2.1$ (flaps down). Give the answers in m/s and knots.
 
 <details>
 <summary>Answer</summary>
 
 $`W = 1100 \times 9.81 = 10\,791`$ N.
 
-- Flaps up: $`v_{stall} = \sqrt{\dfrac{2 \times 10\,791}{1.225 \times 1.6 \times 16.2}} = 26.1`$ m/s = 50.7 kt
-- Flaps down: $v_{stall} = 22.8$ m/s = 44.2 kt
+- Flaps up: $`V_{stall} = \sqrt{2 \times 10\,791/(1.225 \times 1.6 \times 16.2)} = 26.1`$ m/s = 50.7 kt.
+- Flaps down: $V_{stall} = 22.8$ m/s = 44.2 kt.
 
-Flaps cut the stall speed by 13%, which shortens takeoff and landing distances roughly in proportion to $v^2$.
+Flaps cut the stall speed by 13%. Take-off and landing distances scale roughly with $V^2$, so they shrink by about 24%.
 
 </details>
 
-**Exercise 2.** The same aircraft cruises in level flight at 55 m/s at sea level. What lift coefficient is required? Compare it with $C_{L_{max}}$.
+**Exercise 2.** The same aircraft cruises in level flight at 55 m/s at sea level. What lift coefficient is required? With the thin-airfoil slope corrected for the finite wing ($a_{3D} = 4.71$ per radian) and $\alpha_{L0} = -2.08^\circ$, estimate the angle of attack of the wing.
 
 <details>
 <summary>Answer</summary>
-
-In level flight $L = W$:
 
 ```math
-C_L = \frac{2W}{\rho v^2 A} = \frac{2 \times 10\,791}{1.225 \times 55^2 \times 16.2} = 0.36
+C_L = \frac{2W}{\rho V^2 S} = \frac{2 \times 10\,791}{1.225 \times 55^2 \times 16.2} = 0.360
 ```
 
-This is less than a quarter of $C_{L_{max}} = 1.6$, leaving a wide margin above the stall. It corresponds to a small angle of attack.
+$\alpha - \alpha_{L0} = 0.360/4.71 = 0.0764$ rad $= 4.38^\circ$, so $\alpha = 4.38 - 2.08 = 2.3^\circ$. The required $C_L$ is less than a quarter of $C_{L,max}$, a wide margin above the stall.
 
 </details>
 
-**Exercise 3.** Taking $C_D = 0.032$ as constant, find the drag and power required at 55 m/s and at 110 m/s for this aircraft. Why is the constant-$`C_D`$ assumption poor at low speed?
+**Exercise 3.** Using the polar $`C_D = 0.027 + 0.0533\,C_L^2`$, find the drag and power required at 30, 55 and 110 m/s for this aircraft. What fraction of the drag is induced at each speed? Why would a constant $C_D$ give a wrong picture at low speed?
 
 <details>
 <summary>Answer</summary>
 
-- At 55 m/s: $D = \tfrac{1}{2}(1.225)(55^2)(0.032)(16.2) = 960$ N and $P = Dv = 52.8$ kW
-- At 110 m/s: $D = 3842$ N (4 times) and $P = 423$ kW (8 times)
+| $V$ (m/s) | $C_L$ | $C_D$ | $D$ (N) | $P$ (kW) | induced share |
+| --- | --- | --- | --- | --- | --- |
+| 30 | 1.208 | 0.1048 | 936 | 28.1 | 74% |
+| 55 | 0.360 | 0.0339 | 1017 | 55.9 | 20% |
+| 110 | 0.090 | 0.0274 | 3293 | 362 | 1.6% |
 
-At low speed the wing needs a higher $C_L$, and induced drag grows as $C_L^2$. $C_D$ therefore rises sharply as speed falls, and the real power-required curve has a minimum at an intermediate speed instead of falling steadily toward zero.
+At 30 m/s the aircraft needs almost as much drag force as at 55 m/s, because the induced drag ($\propto C_L^2 \propto 1/V^4$ in coefficient form) dominates. A constant $C_D$ would predict that drag and power fall steadily toward zero as speed decreases, and would miss the minimum of the power curve near 30 m/s.
 
 </details>
 
@@ -251,32 +271,32 @@ At low speed the wing needs a higher $C_L$, and induced drag grows as $C_L^2$. $
 <details>
 <summary>Answer</summary>
 
-$P_{excess} = 45$ kW, so
+The excess power is 45 kW, so
 
 ```math
-R_c = \frac{P_{excess}}{W} = \frac{45\,000}{10\,791} = 4.17 \text{ m/s} \approx 820
-\text{ ft/min}
+R_c = \frac{P_{av} - P_{req}}{W} = \frac{45\,000}{10\,791} = 4.17 \text{ m/s} \approx 820 \text{ ft/min}
 ```
 
-$\sin\gamma = R_c/V = 4.17/40$, so $\gamma = 6.0^\circ$.
-
-Perpendicular to the flight path, $`L = W\cos\gamma = 0.995\,W`$. The climb comes from excess thrust, not excess lift.
+$\sin\gamma = R_c/V = 4.17/40$, so $\gamma = 6.0^\circ$. Normal to the path, $`L = W\cos\gamma = 0.9946\,W`$. The climb comes from excess thrust, not excess lift. (This treats the drag in the climb as equal to that in level flight, which is accurate to within 1% because $\cos\gamma \approx 1$.)
 
 </details>
 
-**Exercise 5.** With the engine off, the aircraft's best lift-to-drag ratio is 10. How far can it glide from 1500 m in still air? What speed should the pilot fly, and how does a headwind change the answer?
+**Exercise 5.** With the engine off, the aircraft's best lift-to-drag ratio is 13.2. How far can it glide from 1500 m in still air, at what speed, and what is the glide angle? How does a headwind change the best speed to fly?
 
 <details>
 <summary>Answer</summary>
 
-Glide distance: $(L/D) \times h = 10 \times 1500 = 15$ km.
+Glide distance: $13.2 \times 1500 = 19.8$ km, flown at the minimum-drag speed, 39.1 m/s at sea-level density (slightly faster higher up, where the air is thinner). The glide angle is $\arctan(1/13.2) = 4.3^\circ$.
 
-The pilot should fly at the speed that gives maximum $L/D$ (the best-glide speed in the handbook). A headwind reduces the distance over the ground, and the best range is then obtained by flying somewhat faster than the still-air best-glide speed.
+A headwind reduces the distance over the ground; the best ground range is then obtained by flying faster than the still-air best-glide speed, because the time spent exposed to the wind falls faster than $L/D$ deteriorates.
 
 </details>
 
-### References
+## References
 
 - Anderson, J. D., Jr., *Introduction to Flight*, 8th ed., McGraw-Hill Education, 2016.
 - Anderson, J. D., Jr., *Fundamentals of Aerodynamics*, 6th ed., McGraw-Hill Education, 2017.
+- McLean, D., *Understanding Aerodynamics: Arguing from the Real Physics*, Wiley, 2013.
+- Raymer, D. P., *Aircraft Design: A Conceptual Approach*, 6th ed., AIAA, 2018.
+- Hess, J. L., and Smith, A. M. O., "Calculation of potential flow about arbitrary bodies", *Progress in Aerospace Sciences*, vol. 8, pp. 1–138, 1967.
 - Federal Aviation Administration, *Pilot's Handbook of Aeronautical Knowledge*, FAA-H-8083-25B, 2016.

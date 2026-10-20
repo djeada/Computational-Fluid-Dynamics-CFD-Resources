@@ -1,383 +1,147 @@
-# Impulse-Momentum Methods
+# Impulse and Momentum
 
-Impulse-momentum methods relate forces acting over time intervals to changes in momentum. These methods are particularly effective for analyzing collisions, impacts, explosions, and any situation where forces act over short or variable time periods.
+The principle of impulse and momentum is Newton's second law integrated over time. It relates the impulse of the forces over an interval to the change in linear and angular momentum, which makes it the natural tool when forces act for a known time, when they are too large and brief to measure (impacts), or when mass enters or leaves the system (jets, rockets). This note covers linear and angular impulse–momentum for particles, systems and rigid bodies, conservation of momentum, central and oblique impact with the coefficient of restitution, steady mass flow through a control volume, and variable-mass systems with the rocket equation. The position-based counterpart is [Work and Energy Methods](work_energy.md).
+
+## Problem Statement
+
+A particle, a system of particles or a rigid body is acted on by forces whose time history is known, or by impulsive contact forces whose history is unknown but whose duration is short; or a stream of mass enters and leaves a body. Given the velocities and angular velocities before an interval and the impulses of the external forces, find the velocities after it; or, given the change of motion, find the impulse, the average force or the thrust. For impacts the bodies are rigid except at the contact, the contact is smooth unless stated, and non-impulsive forces such as gravity are neglected during the impact. The governing equations are
+
+```math
+m\mathbf{v}_{G1} + \sum\int_{t_1}^{t_2}\mathbf{F}\, dt = m\mathbf{v}_{G2},
+\qquad \mathbf{H}_{O1} + \sum\int_{t_1}^{t_2}\mathbf{M}_O\, dt = \mathbf{H}_{O2}
+```
+
+with $O$ a fixed point or the mass centre, supplemented for impacts by the coefficient of restitution and for variable-mass systems by the momentum flux of the ejected mass. Impulse is in N·s, linear momentum in kg·m/s and angular momentum in kg·m²/s.
 
 ## Linear Impulse and Momentum
 
-### Linear Momentum
-
-The **linear momentum** of a particle is:
-
-$$
-\mathbf{L} = m\mathbf{v}
-$$
-
-For a system of particles or a rigid body:
-
-$$
-\mathbf{L} = m\mathbf{v}_G
-$$
-
-where $\mathbf{v}_G$ is the velocity of the mass center.
-
-### Linear Impulse
-
-The **linear impulse** of a force over a time interval is:
+The linear momentum of a particle is $\mathbf{L} = m\mathbf{v}$, and the second law is $\sum\mathbf{F} = d\mathbf{L}/dt$. Integrating over $t_1 \le t \le t_2$,
 
 ```math
-\mathbf{Imp} = \int_{t_1}^{t_2} \mathbf{F} \, dt
+m\mathbf{v}_1 + \sum\int_{t_1}^{t_2}\mathbf{F}\, dt = m\mathbf{v}_2
 ```
 
-For a constant force: $\mathbf{Imp} = \mathbf{F}(t_2 - t_1) = \mathbf{F}\Delta t$
+The integral is the linear impulse of the force. For a constant force it is $\mathbf{F}\Delta t$, and for any force the average force over the interval is $\bar{\mathbf{F}} = m(\mathbf{v}_2 - \mathbf{v}_1)/\Delta t$. For a system of particles, internal forces cancel in pairs, and the total momentum is $m\mathbf{v}_G$, so the same equation holds with the external forces and the velocity of the mass centre.
 
-## Impulse-Momentum Theorem
+When the resultant external impulse in some direction is zero, the momentum of the system in that direction is conserved. This holds exactly for an isolated system, and very nearly during an impact or an explosion, where the internal forces are so much larger than gravity or friction that the external impulse over the short interval is negligible.
 
-Newton's second law in integral form gives the **impulse-momentum theorem**:
+## Angular Impulse and Momentum
+
+The angular momentum of a particle about a fixed point $O$ is $\mathbf{H}_O = \mathbf{r} \times m\mathbf{v}$, which in the plane is $mvd$ with $d$ the perpendicular distance from $O$ to the line of $m\mathbf{v}$. Its rate of change is the moment of the forces, $\sum\mathbf{M}_O = \dot{\mathbf{H}}_O$. For a rigid body in plane motion,
+
+$$
+H_G = I_G\omega,
+\qquad H_O = I_G\omega +
+\left(\mathbf{r}_{G/O} \times m\mathbf{v}_G\right)\cdot\mathbf{k}
+$$
+
+which for rotation about a fixed axis through $O$ is $H_O = I_O\omega$. Integrating over time,
 
 ```math
-m\mathbf{v}_1 + \sum \int_{t_1}^{t_2} \mathbf{F} \, dt = m\mathbf{v}_2
+(H_O)_1 + \sum\int_{t_1}^{t_2}M_O\, dt = (H_O)_2
 ```
 
-In words: initial momentum plus the total impulse equals final momentum.
-
-In component form:
-
-```math
-mv_{1x} + \sum \int_{t_1}^{t_2} F_x \, dt = mv_{2x}
-```
-
-```math
-mv_{1y} + \sum \int_{t_1}^{t_2} F_y \, dt = mv_{2y}
-```
-
-## Conservation of Linear Momentum
-
-When the **net external impulse** on a system is zero in a given direction, linear momentum is conserved in that direction:
-
-$$
-\sum m_i \mathbf{v}_{i,1} = \sum m_i \mathbf{v}_{i,2}
-$$
-
-This applies to:
-
-- Collisions (internal forces are large; external forces are comparatively negligible during impact)
-- Explosions and separations
-- Systems with no external force in a particular direction
-
-## Angular Impulse and Angular Momentum
-
-### Angular Momentum of a Particle
-
-About a fixed point $O$:
-
-$$
-\mathbf{H}_O = \mathbf{r} \times m\mathbf{v}
-$$
-
-In planar problems: $H_O = mvd$, where $d$ is the perpendicular distance from $O$ to the line of action of $m\mathbf{v}$.
-
-### Angular Momentum of a Rigid Body
-
-About the mass center $G$:
-
-$$
-H_G = I_G \omega
-$$
-
-About a fixed point $O$:
-
-$$
-H_O = I_O \omega = (I_G + md^2)\omega
-$$
-
-where $d$ is the distance from $O$ to $G$.
-
-### Angular Impulse-Momentum Theorem
-
-```math
-(H_O)_1 + \sum \int_{t_1}^{t_2} M_O \, dt = (H_O)_2
-```
-
-If no net external moment acts about $O$, angular momentum is conserved:
-
-$$
-I_1\omega_1 = I_2\omega_2
-$$
-
-This explains phenomena like a figure skater spinning faster when pulling in their arms.
+When the external forces have no moment about $O$, angular momentum about $O$ is conserved. A body that changes its own moment of inertia by internal forces, such as a skater pulling in her arms or a satellite deploying booms, changes its spin rate as $I_1\omega_1 = I_2\omega_2$, and its kinetic energy changes by the work of the internal forces (Exercise 4).
 
 ## Impact
 
-**Impact** is a collision between two bodies over a very short time interval, during which large internal forces act while external forces (like gravity) are negligible by comparison.
-
-### Classification
-
-- **Direct impact:** Velocities are along the line connecting the mass centers (line of impact)
-- **Oblique impact:** Velocities have components both along and perpendicular to the line of impact
+An impact is a collision over a short time $\Delta t$ during which large contact forces act. The line of impact is the common normal to the surfaces at the contact. The impact is central when the mass centres lie on the line of impact, and oblique when the velocities have components across it.
 
 ### Coefficient of Restitution
 
-The **coefficient of restitution** $e$ characterizes the elasticity of the collision along the line of impact:
+The contact force has a deformation phase, until the bodies move at the same normal speed, and a restitution phase, during which they separate. The ratio of the restitution impulse to the deformation impulse is the coefficient of restitution, which for particles reduces to the ratio of the normal separation speed to the normal approach speed:
 
 $$
 e = \frac{v_{B2} - v_{A2}}{v_{A1} - v_{B1}}
 $$
 
-where $v_{A1}, v_{B1}$ are approach velocities and $v_{A2}, v_{B2}$ are separation velocities along the line of impact.
+$e = 1$ is a perfectly elastic impact with no loss of kinetic energy, $e = 0$ a perfectly plastic one in which the bodies move together afterwards. In practice $e$ depends on the materials, the shape and the impact speed, and decreases as the speed increases.
 
-- $e = 1$: Perfectly elastic (kinetic energy conserved)
-- $0 < e < 1$: Partially elastic (some energy lost)
-- $e = 0$: Perfectly plastic (bodies stick together)
+### Central Impact
 
-### Direct Central Impact
+Momentum conservation and the restitution equation give two equations for the two final velocities:
 
-Two particles collide head-on. Conservation of momentum and the restitution equation give:
+```math
+m_Av_{A1} + m_Bv_{B1} = m_Av_{A2} + m_Bv_{B2},
+\qquad v_{B2} - v_{A2} = e\,(v_{A1} - v_{B1})
+```
 
-$$
-m_A v_{A1} + m_B v_{B1} = m_A v_{A2} + m_B v_{B2}
-$$
+Writing the kinetic energy as the energy of the mass centre plus the energy of relative motion shows that the loss is
 
-$$
-e(v_{A1} - v_{B1}) = v_{B2} - v_{A2}
-$$
+```math
+\Delta T = \frac{1}{2}\, \frac{m_Am_B}{m_A + m_B}\,(1 - e^2)\,(v_{A1} - v_{B1})^2
+```
 
-Solving simultaneously:
-
-$$
-v_{A2} = \frac{m_A v_{A1} + m_B v_{B1} + m_B e(v_{B1} - v_{A1})}{m_A + m_B}
-$$
-
-$$
-v_{B2} = \frac{m_A v_{A1} + m_B v_{B1} + m_A e(v_{A1} - v_{B1})}{m_A + m_B}
-$$
+A 2 kg ball moving at 6 m/s hits a stationary 3 kg ball with $e = 0.7$. The equations give $12 = 2v_{A2} + 3v_{B2}$ and $v_{B2} - v_{A2} = 4.2$, so $v_{A2} = -0.12$ m/s (a small rebound) and $v_{B2} = 4.08$ m/s. The loss is $\tfrac{1}{2}(1.2)(0.51)(36) = 11.0$ J of the initial 36 J.
 
 ### Oblique Impact
 
-For oblique impact between smooth particles:
+For smooth bodies the contact force acts only along the line of impact $n$. Along $n$, momentum conservation and restitution apply as for central impact; along the tangent $t$, the momentum of each body separately is unchanged. A ball hitting a fixed smooth wall at 10 m/s and $40^\circ$ to the wall with $e = 0.8$ keeps $v_t = 10\cos 40^\circ = 7.66$ m/s and leaves with $v_n = 0.8 \times 10\sin 40^\circ = 5.14$ m/s, so it rebounds at 9.23 m/s and $33.9^\circ$ to the wall.
 
-1. **Along the line of impact:** Apply conservation of momentum and the restitution equation
-2. **Perpendicular to the line of impact:** Each particle's momentum component is individually conserved (no force in that direction)
+### Impact Followed by Motion
 
-## Worked Examples
-
-### Example 1: Direct Central Impact
-
-A 2 kg ball moving at 6 m/s strikes a stationary 3 kg ball. The coefficient of restitution is $e = 0.7$.
-
-**Given:**
-
-- $m_A = 2$ kg, $v_{A1} = 6$ m/s
-- $m_B = 3$ kg, $v_{B1} = 0$
-- $e = 0.7$
-
-**Find:** Final velocities and energy lost.
-
-**Solution:**
-
-**Conservation of momentum:**
+Impact problems usually combine two principles: momentum across the impact, where energy is lost, and energy before or after it, where momentum is not conserved because gravity acts over a finite time. In the ballistic pendulum, a 10 g bullet embeds in a 2 kg block hung as a pendulum, which then swings up 0.15 m. After the impact, energy conservation gives the common speed $v' = \sqrt{2gh} = 1.716$ m/s; across the impact, momentum gives
 
 $$
-2(6) + 3(0) = 2v_{A2} + 3v_{B2}
-$$
-
-$$
-12 = 2v_{A2} + 3v_{B2} \quad \text{...(1)}
-$$
-
-**Restitution:**
-
-$$
-v_{B2} - v_{A2} = e(v_{A1} - v_{B1}) = 0.7(6 - 0) = 4.2 \quad \text{...(2)}
-$$
-
-From (2): $v_{B2} = v_{A2} + 4.2$
-
-Substituting into (1):
-
-$$
-12 = 2v_{A2} + 3(v_{A2} + 4.2) = 5v_{A2} + 12.6
-$$
-
-$$
-v_{A2} = -0.12 \text{ m/s}, \quad v_{B2} = 4.08 \text{ m/s}
-$$
-
-Ball $A$ bounces back slightly; ball $B$ moves forward.
-
-**Energy lost:**
-
-$$
-\Delta T = \frac{1}{2}(2)(6)^2 -
-\left[\frac{1}{2}(2)(0.12)^2 + \frac{1}{2}(3)(4.08)^2\right]
-$$
-
-$$
-\Delta T = 36 - [0.0144 + 24.97] = 11.02 \text{ J}
-$$
-
-### Example 2: Ballistic Pendulum
-
-A 10 g bullet embeds itself in a 2 kg wooden block suspended as a pendulum. The block swings upward 0.15 m.
-
-**Given:**
-
-- $m_b = 0.01$ kg (bullet), $m_B = 2$ kg (block)
-- $h = 0.15$ m (height of swing)
-- Perfectly plastic impact ($e = 0$)
-
-**Find:** Initial speed of the bullet.
-
-**Solution:**
-
-**Step 1 — Impact (conservation of momentum):**
-
-$$
-m_b v_0 = (m_b + m_B)v'
-$$
-
-$$
-0.01 v_0 = (0.01 + 2)v' = 2.01v' \quad \text{...(1)}
-$$
-
-**Step 2 — Swing (conservation of energy):**
-
-$$
-\frac{1}{2}(m_b + m_B)v'^2 = (m_b + m_B)gh
-$$
-
-$$
-v' = \sqrt{2gh} = \sqrt{2(9.81)(0.15)} = 1.716 \text{ m/s}
-$$
-
-**Substituting back into (1):**
-
-$$
-v_0 = \frac{2.01(1.716)}{0.01} = 345 \text{ m/s}
-$$
-
-### Example 3: Rocket Propulsion
-
-A 1000 kg rocket in space exhausts propellant at 50 kg/s with an exhaust velocity of 3000 m/s relative to the rocket.
-
-**Given:**
-
-- $m_0 = 1000$ kg (initial mass)
-- $\dot{m}_e = 50$ kg/s (mass flow rate)
-- $v_e = 3000$ m/s (exhaust velocity)
-- No external forces (space)
-
-**Find:** Thrust and velocity after 10 seconds.
-
-**Solution:**
-
-**Thrust (force from exhaust):**
-
-```math
-F_{thrust} = \dot{m}_e v_e = 50(3000) = 150\,000 \text{ N} = 150 \text{ kN}
-```
-
-**Tsiolkovsky rocket equation:**
-
-$$
-v = v_0 + v_e \ln \frac{m_0}{m_0 - \dot{m}_e t}
-$$
-
-Starting from rest ($v_0 = 0$) after $t = 10$ s:
-
-$$
-m_{final} = 1000 - 50(10) = 500 \text{ kg}
-$$
-
-$$
-v = 0 + 3000\ln \frac{1000}{500} = 3000\ln 2 = 3000(0.693) = 2079 \text{ m/s}
-$$
-
-### Example 4: Oblique Impact
-
-A ball strikes a smooth wall at 10 m/s at an angle of 40° to the wall. The coefficient of restitution with the wall is $e = 0.8$.
-
-**Given:**
-
-- $v_1 = 10$ m/s at 40° to the wall
-- $e = 0.8$
-
-**Find:** Speed and angle after rebound.
-
-**Solution:**
-
-Define axes: $n$ normal to wall, $t$ tangent to wall.
-
-**Initial components:**
-
-$$
-v_{1n} = 10\sin 40^\circ = 6.43 \text{ m/s}, \quad v_{1t} = 10\cos 40^\circ = 7.66
+m_bv_0 = (m_b + m_B)v' \quad\Rightarrow\quad v_0 = \frac{2.01 \times 1.716}{0.01} = 345
 \text{ m/s}
 $$
 
-**Tangential component (conserved, smooth wall):**
+The bullet's 595 J of kinetic energy is reduced to 3.0 J by the impact; using energy conservation across it would be badly wrong.
+
+## Steady Mass Flow
+
+For a control volume through which mass flows steadily, such as a pipe bend, a nozzle or a turbine blade passage, the impulse–momentum principle applied to the mass inside and the mass crossing the boundary in $dt$ gives
+
+```math
+\sum\mathbf{F} = \dot{m}\,(\mathbf{v}_{\mathrm{out}} - \mathbf{v}_{\mathrm{in}})
+```
+
+where $\sum\mathbf{F}$ includes pressure forces on the inlet and outlet. A water jet of area 0.002 m² at 20 m/s ($\dot{m} = 40$ kg/s) turned through $120^\circ$ by a fixed vane at atmospheric pressure needs a force on the water of $\dot{m}V(\cos 120^\circ - 1) = -1200$ N along the jet and $\dot{m}V\sin 120^\circ = 693$ N across it; the vane feels the opposite, 1386 N in total. This is the integral form of the momentum equation solved cell by cell in CFD (see [Navier-Stokes Equations](../../fluid_mechanics/governing_equations/navier_stokes.md)), and the same balance gives the reaction forces that fluid loads put on structures.
+
+## Variable-Mass Systems and the Rocket Equation
+
+A rocket of mass $m$ moving at $v$ ejects $`\dot{m}\,dt`$ of propellant in $dt$ at speed $v_e$ relative to itself. Applying impulse–momentum to the rocket and the ejected mass together over $dt$, with external force $\sum F$ (gravity, drag),
+
+```math
+\sum F\, dt = \left[(m - \dot{m}\, dt)(v + dv) + \dot{m}\, dt\,(v - v_e)\right] - mv
+\quad\Rightarrow\quad m \frac{dv}{dt} = \dot{m}\, v_e + \sum F
+```
+
+The term $\dot{m}v_e$ is the thrust (plus $(p_e - p_a)A_e$ if the nozzle exit pressure differs from ambient). With no external force, $`dv = -v_e\,dm/m`$ integrates to the Tsiolkovsky rocket equation
 
 $$
-v_{2t} = v_{1t} = 7.66 \text{ m/s}
+\Delta v = v_e\ln \frac{m_0}{m_f}
 $$
 
-**Normal component (restitution):**
+which depends only on the exhaust speed and the mass ratio. A 1000 kg rocket in space exhausting 50 kg/s at 3000 m/s has a thrust of 150 kN, and after 10 s, at 500 kg, it has gained $3000\ln 2 = 2079$ m/s.
 
-$$
-v_{2n} = e \cdot v_{1n} = 0.8(6.43) = 5.14 \text{ m/s}
-$$
+With gravity and drag the speed at burnout is the ideal $\Delta v$ minus the gravity loss $`\int g\,dt`$ and the drag loss $`\int D/m\,dt`$.
 
-**Rebound speed:**
+![Speed and altitude of a vertically launched rocket and its burnout speed budget](../../../scripts/algorithms/dynamics_variable_mass_rocket/dynamics_variable_mass_rocket.png)
 
-$$
-v_2 = \sqrt{5.14^2 + 7.66^2} = 9.23 \text{ m/s}
-$$
+For a 1000 kg rocket burning 700 kg of propellant at 10 kg/s with $v_e = 2500$ m/s, panel (a) shows the ideal curve $v_e\ln(m_0/m)$, the closed-form solution with constant gravity (matched by the RK45 markers) and the solution with drag. Panel (c) shows the budget at burnout: 3010 m/s ideal, 687 m/s lost to gravity over the 70 s burn and 341 m/s to drag, leaving 1983 m/s at 50 km. A short burn reduces the gravity loss, which is why launchers need a lift-off thrust well above their weight.
 
-**Rebound angle to wall:** $\alpha = \arctan(5.14/7.66) = 33.9^\circ$ — shallower angle and lower speed than approach.
+## Common Mistakes
 
-## Applications
+1. Applying conservation of energy across an impact or a plastic collision.
+2. Applying restitution to the tangential velocity components in an oblique impact.
+3. Forgetting the sign of velocities in the restitution equation; write all velocities positive in one direction along the line of impact.
+4. Taking angular momentum about a moving point other than the mass centre with the fixed-point formula.
+5. Writing $\mathbf{F} = d(m\mathbf{v})/dt$ for a rocket, which counts the ejected momentum wrongly; use $`m\,d\mathbf{v}/dt = \dot{m}\mathbf{v}_e + \sum\mathbf{F}`$.
 
-### Crash Safety Engineering
+## Key Takeaways
 
-- Vehicle collision analysis and crumple zone design
-- Occupant kinematics during impact and airbag deployment timing
+- Impulse equals the change in momentum, linear for the mass centre and angular about a fixed point or the mass centre.
+- Momentum is conserved in any direction with zero external impulse, which during an impact means almost every direction.
+- The coefficient of restitution closes the impact equations; the kinetic energy lost is $\tfrac{1}{2}\mu(1 - e^2)v_{\mathrm{rel}}^2$.
+- Steady flow through a control volume needs a force $`\dot{m}(\mathbf{v}_{\mathrm{out}} - \mathbf{v}_{\mathrm{in}})`$.
+- A rocket gains $v_e\ln(m_0/m_f)$ in free space; gravity and drag losses come off that.
 
-### Space and Ballistics Engineering
+## Related Scripts
 
-- Orbital maneuver calculations (delta-v budgets) and rocket staging
-- Projectile penetration analysis and armor design
-
-### Manufacturing and Sports
-
-- Forging, stamping, and pile driving force estimation
-- Ball-bat interactions and helmet impact protection design
-
-## Practical Problem-Solving Tips
-
-### 1. Identify the System and Time Interval
-
-- Draw the system boundary to determine internal vs. external forces
-- For impacts, the interval is the very short collision duration
-- Internal forces cancel; only external impulses matter
-
-### 2. Use Impulse-Momentum for Time-Dependent Problems
-
-- When forces vary with time, integrate the force to find impulse
-- For constant forces, impulse is simply $F \Delta t$
-- Average impulsive force: $\bar{F} = \frac{\Delta(mv)}{\Delta t}$
-
-### 3. Combine Methods for Multi-Phase Problems
-
-- Impact phase: use impulse-momentum (momentum conserved)
-- Post-impact phase: use work-energy (find heights, distances)
-- This is the standard approach for ballistic pendulums and crash analysis
-
-### 4. Handle Oblique Impact and Energy Loss
-
-- Decompose velocities along and perpendicular to the line of impact
-- Apply restitution only along the line of impact; tangential components are conserved for smooth surfaces
-- Always compute kinetic energy before and after to quantify energy lost ($e < 1$ means energy loss)
-
-Impulse-momentum methods are indispensable tools that complement Newton's second law and work-energy methods, completing the trio of fundamental approaches in classical dynamics.
+- [Variable-Mass Rocket](../../../scripts/algorithms/dynamics_variable_mass_rocket/): integrates the momentum balance of a vertically launched rocket and splits its burnout speed into the ideal rocket-equation increment, the gravity loss and the drag loss.
+- [Torque-Free Rigid Body Rotation](../../../scripts/algorithms/dynamics_torque_free_rigid_body/): integrates Euler's equations for a rigid box spinning with no applied moment and shows that rotation about the axis of intermediate moment of inertia is unstable.
 
 ## Exercises
 
@@ -386,55 +150,43 @@ Impulse-momentum methods are indispensable tools that complement Newton's second
 <details>
 <summary>Answer</summary>
 
-Taking the outgoing direction as positive: $\text{Imp} = m(v_2 - v_1) = 0.15(40 - (-30)) = 10.5$ N·s.
-
-```math
-\bar{F} = \frac{10.5}{0.01} = 1050 \text{ N}
-```
-
-This force acts in the outgoing direction.
+Taking the outgoing direction as positive, the impulse is $m(v_2 - v_1) = 0.15(40 - (-30)) = 10.5$ N·s, and the average force is $10.5/0.01 = 1050$ N in the outgoing direction.
 
 </details>
 
-**Exercise 2.** A 4 kg block at rest on a frictionless horizontal surface is pushed by a force $F(t) = 200t$ N for $0 \leq t \leq 0.5$ s. Find its speed at $t = 0.5$ s.
+**Exercise 2.** A 4 kg block at rest on a frictionless horizontal surface is pushed by a force $F(t) = 200t$ N for $0 \le t \le 0.5$ s. Find its speed at $t = 0.5$ s.
 
 <details>
 <summary>Answer</summary>
 
 ```math
-\int_0^{0.5} 200t\, dt = 100(0.5)^2 = 25 \text{ N·s}
-```
-
-```math
+\int_0^{0.5}200t\,dt = 100(0.5)^2 = 25 \text{ N·s},
+\qquad
 v_2 = \frac{25}{4} = 6.25 \text{ m/s}
 ```
 
 </details>
 
-**Exercise 3.** Show that the kinetic energy lost in a direct central impact is
-
-$$
-\Delta T = \frac{1}{2} \frac{m_A m_B}{m_A + m_B}(1 - e^2)(v_{A1} - v_{B1})^2
-$$
-
-and check the result against Example 1.
+**Exercise 3.** Derive the energy loss of a direct central impact, $\Delta T = \tfrac{1}{2}\mu(1 - e^2)(v_{A1} - v_{B1})^2$ with $\mu = m_Am_B/(m_A + m_B)$, and check it against the 2 kg and 3 kg example.
 
 <details>
 <summary>Answer</summary>
 
-Write the kinetic energy of two particles as the energy of the mass centre plus the energy of relative motion:
+The kinetic energy of two particles is the energy of the mass centre plus that of the relative motion:
 
 ```math
-T = \frac{1}{2}(m_A + m_B)v_G^2 + \frac{1}{2}\mu v_{rel}^2
+T = \tfrac{1}{2}(m_A + m_B)v_G^2 + \tfrac{1}{2}\mu v_{\mathrm{rel}}^2,
+\qquad
+v_{\mathrm{rel}} = v_A - v_B
 ```
 
-where $\mu = \frac{m_A m_B}{m_A + m_B}$ and $v_{rel} = v_A - v_B$. Momentum conservation keeps $v_G$ unchanged, and restitution gives $`v_{rel,2} = -e\,v_{rel,1}`$. Hence $\Delta T = T_1 - T_2 = \frac{1}{2}\mu(1 - e^2)v_{rel,1}^2$.
+Momentum conservation keeps $v_G$ unchanged, and restitution gives $`v_{\mathrm{rel},2} = -e\,v_{\mathrm{rel},1}`$. Hence $\Delta T = T_1 - T_2 = \tfrac{1}{2}\mu(1 - e^2)v_{\mathrm{rel},1}^2$.
 
-Example 1: $\mu = \frac{2 \times 3}{5} = 1.2$ kg, so $\Delta T = 0.5 \times 1.2 \times (1 - 0.49) \times 36 = 11.02$ J, which matches.
+For the example $\mu = 6/5 = 1.2$ kg, so $\Delta T = 0.5 \times 1.2 \times 0.51 \times 36 = 11.0$ J, which matches.
 
 </details>
 
-**Exercise 4.** A skater spins at 2 rev/s with moment of inertia 3.5 kg·m², then pulls in her arms to reduce it to 1.2 kg·m². Find the new spin rate and the kinetic energy before and after. Where does the extra energy come from?
+**Exercise 4.** A skater spins at 2 rev/s with a moment of inertia of 3.5 kg·m², then pulls in her arms to reduce it to 1.2 kg·m². Find the new spin rate and the kinetic energy before and after. Where does the extra energy come from?
 
 <details>
 <summary>Answer</summary>
@@ -443,32 +195,35 @@ Example 1: $\mu = \frac{2 \times 3}{5} = 1.2$ kg, so $\Delta T = 0.5 \times 1.2 
 \omega_2 = \frac{I_1}{I_2}\omega_1 = \frac{3.5}{1.2} \times 2 = 5.83 \text{ rev/s}
 ```
 
-$T_1 = \frac{1}{2}(3.5)(4\pi)^2 = 276$ J and $T_2 = \frac{1}{2}(1.2)(2\pi \times 5.83)^2 = 806$ J.
+$T_1 = \tfrac{1}{2}(3.5)(4\pi)^2 = 276$ J and $T_2 = \tfrac{1}{2}(1.2)(2\pi \times 5.83)^2 = 806$ J.
 
-The internal forces exert no net moment about the spin axis, so angular momentum is conserved. They do, however, do work: the extra 530 J is supplied by the skater's muscles pulling the arms inward against the centripetal requirement.
+The internal forces have no net moment about the spin axis, so angular momentum is conserved, but they do work: the extra 530 J is supplied by the skater's muscles pulling the arms inward against the centripetal requirement.
 
 </details>
 
-**Exercise 5.** A smooth ball $A$ moving at 4 m/s strikes an identical stationary ball $B$. At impact the line of centres makes $30^\circ$ with $A$'s velocity, and $e = 0.9$. Find the velocities of both balls after impact.
+**Exercise 5.** A smooth ball $A$ moving at 4 m/s strikes an identical stationary ball $B$. At impact the line of centres makes $30^\circ$ with the velocity of $A$, and $e = 0.9$. Find the velocities of both balls after impact.
 
 <details>
 <summary>Answer</summary>
 
-Along the line of impact ($n$): $v_{An} = 4\cos 30^\circ = 3.464$ m/s. Perpendicular ($t$): $v_{At} = 4\sin 30^\circ = 2.0$ m/s, which is unchanged.
+Along the line of impact $n$: $v_{An} = 4\cos 30^\circ = 3.464$ m/s. Across it, $v_{At} = 4\sin 30^\circ = 2.0$ m/s, which is unchanged.
 
 For equal masses the momentum and restitution equations along $n$ give
 
 ```math
-v'_{An} = \frac{1 - e}{2}v_{An} = 0.173 \text{ m/s}, \quad
+v'_{An} = \frac{1 - e}{2}v_{An} = 0.173 \text{ m/s},
+\qquad
 v'_{Bn} = \frac{1 + e}{2}v_{An} = 3.291 \text{ m/s}
 ```
 
-Ball $A$: speed $\sqrt{2.0^2 + 0.173^2} = 2.01$ m/s, almost perpendicular to the line of centres (about $4.9^\circ$ from the tangent direction). Ball $B$: 3.29 m/s along the line of centres. Check: $0.173 + 3.291 = 3.464$ m/s, so momentum along $n$ is conserved.
+Ball $A$ leaves at $\sqrt{2.0^2 + 0.173^2} = 2.01$ m/s, $4.9^\circ$ from the tangent direction; ball $B$ leaves at 3.29 m/s along the line of centres. Check: $0.173 + 3.291 = 3.464$ m/s, so momentum along $n$ is conserved.
 
 </details>
 
 ## References
 
 - R. C. Hibbeler, *Engineering Mechanics: Dynamics*, 14th ed., Pearson, 2016.
-- J. L. Meriam, L. G. Kraige, *Engineering Mechanics: Dynamics*, Wiley.
-- F. P. Beer, E. R. Johnston, P. J. Cornwell, *Vector Mechanics for Engineers: Dynamics*, McGraw-Hill.
+- J. L. Meriam, L. G. Kraige and J. N. Bolton, *Engineering Mechanics: Dynamics*, 9th ed., Wiley, 2018.
+- F. P. Beer, E. R. Johnston, P. J. Cornwell and B. P. Self, *Vector Mechanics for Engineers: Dynamics*, 12th ed., McGraw-Hill, 2019.
+- W. Goldsmith, *Impact: The Theory and Physical Behaviour of Colliding Solids*, Edward Arnold, 1960.
+- G. P. Sutton and O. Biblarz, *Rocket Propulsion Elements*, 9th ed., Wiley, 2017.

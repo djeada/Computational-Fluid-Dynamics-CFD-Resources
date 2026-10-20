@@ -332,6 +332,7 @@ The estimate of $C_f$ is only a starting point. After a first solution, check th
 - [laminar_vs_turbulent_boundary_layer](../../../scripts/plots/laminar_vs_turbulent_boundary_layer/): compares laminar and turbulent profiles. The fuller turbulent profile and its steeper wall gradient are the visible effect of Reynolds-stress momentum transport.
 - [laminar_vs_turbulent_pipe](../../../scripts/plots/laminar_vs_turbulent_pipe/): the same comparison for pipe flow.
 - [Turbulent Flow: Reynolds Decomposition](../../../scripts/plots/turbulent_flow/): splits a synthetic velocity signal into its time mean and fluctuation, following the Reynolds decomposition used in turbulence modelling.
+- [Learned Mixing-Length Closure](../../../scripts/algorithms/learned_mixing_length_closure/): learns a near-wall correction to Prandtl's mixing length from reference velocity data, then inserts the learned closure into a 1D RANS solver to check whether a good fit to the closure data also gives a good velocity profile.
 
 ## Exercises
 

@@ -2,7 +2,8 @@
 
 Parses the four-digit code, computes the mean camber line and the standard
 NACA thickness distribution, offsets the surfaces perpendicular to the camber
-line, and labels the leading edge, trailing edge, chord line and camber line.
+line, and annotates the chord, the maximum camber and thickness and the
+leading-edge radius. A second panel compares NACA 0012, 2412, 4412 and 4421.
 """
 
 import sys
@@ -69,43 +70,132 @@ def naca4_geometry(code, c=1.0, n=500):
     return x, yc, (xu, yu), (xl, yl)
 
 
+def leading_edge_radius(t, c=1.0):
+    """Leading-edge radius of the NACA 4-digit thickness form, 1.1019 t^2 c."""
+    return 1.1019 * t**2 * c
+
+
+def max_thickness_location(t, c=1.0, n=2001):
+    """Chordwise station and value of the maximum half-thickness y_t."""
+    x = np.linspace(0, c, n)
+    yt = thickness_distribution(x, t, c)
+    i = np.argmax(yt)
+    return x[i], 2 * yt[i]
+
+
+def _dimension(ax, p0, p1, text, offset=(0, 0), colour="0.2", **kw):
+    ax.annotate(
+        "",
+        xy=p1,
+        xytext=p0,
+        arrowprops=dict(arrowstyle="<->", color=colour, lw=1.2),
+    )
+    mid = (0.5 * (p0[0] + p1[0]) + offset[0], 0.5 * (p0[1] + p1[1]) + offset[1])
+    ax.text(*mid, text, color=colour, fontsize=10, **kw)
+
+
 def plot_airfoil(code, c=1.0, n=500):
+    m, p, t = parse_naca4(code)
     x, yc, (xu, yu), (xl, yl) = naca4_geometry(code, c, n)
+    fig, axes = plt.subplots(
+        2, 1, figsize=(11, 7.5), gridspec_kw=dict(height_ratios=[1.6, 1])
+    )
 
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(xu, yu, color="gray", label="Upper Surface")
-    ax.plot(xl, yl, color="gray", label="Lower Surface")
-    ax.plot([0, c], [0, 0], "yellow", lw=2, label="Chord Line")
-    ax.plot(x, yc, "r--", lw=2, label="Mean Camber Line")
+    ax = axes[0]
+    ax.fill(np.r_[xu, xl[::-1]], np.r_[yu, yl[::-1]], color="0.88")
+    ax.plot(xu, yu, color="0.2", lw=1.5, label="Upper and lower surfaces")
+    ax.plot(xl, yl, color="0.2", lw=1.5)
+    ax.plot([0, c], [0, 0], color="tab:blue", lw=1.5, label="Chord line")
+    ax.plot(x, yc, "--", color="tab:red", lw=2, label="Mean camber line")
 
-    box = dict(facecolor="lightgray", edgecolor="black")
-    ax.text(-0.02 * c, 0.1 * c, "Leading edge", fontsize=12, bbox=box, ha="left")
-    ax.text(0.98 * c, 0.1 * c, "Trailing edge", fontsize=12, bbox=box, ha="right")
-    ax.text(
-        0.5 * c,
-        -0.03 * c,
-        "Chord line",
-        fontsize=12,
-        bbox=dict(facecolor="yellow", edgecolor="black"),
-        ha="center",
+    # Leading-edge circle, centred on the line through the nose with the
+    # camber-line slope at x = 0.
+    r = leading_edge_radius(t, c)
+    slope0 = 2 * m / p if p > 0 else 0.0
+    centre = r * np.array([np.cos(np.arctan(slope0)), np.sin(np.arctan(slope0))])
+    ax.add_patch(
+        plt.Circle(
+            centre, r, fill=False, ec="tab:green", lw=1.2, label="Leading-edge radius"
+        )
     )
     ax.text(
-        0.5 * c,
-        0.18 * c,
-        "Mean camber line",
-        fontsize=12,
-        bbox=dict(facecolor="orange", edgecolor="black"),
+        0.0,
+        -0.075 * c,
+        f"LE radius\n{r / c * 100:.2f} % c",
+        color="tab:green",
+        fontsize=10,
+        ha="left",
+    )
+
+    _dimension(
+        ax,
+        (0, -0.13 * c),
+        (c, -0.13 * c),
+        f"chord c = {c:g}",
+        offset=(0, -0.035 * c),
         ha="center",
     )
-    ax.text(0.25 * c, 0.13 * c, "Upper surface", fontsize=10, ha="center")
-    ax.text(0.25 * c, -0.1 * c, "Lower surface", fontsize=10, ha="center")
-
-    ax.set_xlim(-0.1 * c, 1.1 * c)
-    ax.set_ylim(-0.35 * c, 0.35 * c)
+    if m > 0:
+        ymax = m * c
+        _dimension(
+            ax,
+            (p * c, 0),
+            (p * c, ymax),
+            f"max camber {m * 100:g} % c\nat x = {p * 10:g}0 % c",
+            colour="tab:red",
+            offset=(0.012 * c, -0.005 * c),
+            ha="left",
+            va="center",
+        )
+    xt, tmax = max_thickness_location(t, c)
+    i = np.argmin(abs(x - xt))
+    _dimension(ax, (xu[i], yl[i] + 0.0), (xu[i], yu[i]), "", colour="0.3")
+    ax.text(
+        xt + 0.015 * c,
+        yu[i] + 0.035 * c,
+        f"max thickness {t * 100:g} % c at x = {xt / c * 100:.0f} % c",
+        fontsize=10,
+        color="0.3",
+    )
+    ax.text(-0.03 * c, 0.03 * c, "LE", fontsize=11, ha="right")
+    ax.text(1.01 * c, 0.0, "TE", fontsize=11, ha="left", va="center")
+    ax.set_xlim(-0.08 * c, 1.08 * c)
+    ax.set_ylim(-0.21 * c, 0.2 * c)
     ax.set_aspect("equal")
-    ax.axis("off")
-    ax.set_title(f"NACA {code} Airfoil Profile")
-    ax.legend()
+    ax.set_xlabel("x / c")
+    ax.set_ylabel("y / c")
+    ax.set_title(f"NACA {code}: geometry of a four-digit section")
+    ax.legend(loc="upper right", fontsize=9, ncol=2)
+    ax.grid(alpha=0.25)
+
+    ax = axes[1]
+    for k, (other, colour) in enumerate(
+        (
+            ("0012", "tab:blue"),
+            ("2412", "tab:orange"),
+            ("4412", "tab:green"),
+            ("4421", "tab:purple"),
+        )
+    ):
+        xo, yco, (xuo, yuo), (xlo, ylo) = naca4_geometry(other, c, n)
+        ax.plot(
+            np.r_[xuo, xlo[::-1]],
+            np.r_[yuo, ylo[::-1]],
+            color=colour,
+            lw=1.5,
+            label=f"NACA {other}",
+        )
+        ax.plot(xo, yco, ":", color=colour, lw=1.2)
+    ax.set_aspect("equal")
+    ax.set_xlim(-0.08 * c, 1.08 * c)
+    ax.set_xlabel("x / c")
+    ax.set_ylabel("y / c")
+    ax.set_title(
+        "Effect of camber (0012, 2412, 4412) and thickness (4412, 4421); dotted: camber lines"
+    )
+    ax.set_ylim(-0.09 * c, 0.17 * c)
+    ax.legend(loc="upper right", fontsize=9, ncol=2)
+    ax.grid(alpha=0.25)
     fig.tight_layout()
     return fig
 

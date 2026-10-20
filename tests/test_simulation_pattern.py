@@ -54,6 +54,7 @@ SMALL = {
     "simplified_real_time_fluid_dynamics_simulator": {"width": 20, "height": 15},
     "sph_dam_break": {"particles_across": 4},
     "steady_and_unsteady_pathlines_with_vortex_shedding": {"num_particles": 4},
+    "sod_shock_tube": {"n_cells": 20},
     "supersonic_forward_facing_step": {"cells_per_unit": 10},
 }
 
@@ -83,7 +84,7 @@ def defined_subclasses(module, base):
 
 class SimulationPatternTests(unittest.TestCase):
     def test_folders_define_state_view_and_animation(self):
-        self.assertEqual(len(FOLDERS), 25)
+        self.assertEqual(len(FOLDERS), 26)
         for folder in FOLDERS:
             with self.subTest(folder.name):
                 module = load(folder)

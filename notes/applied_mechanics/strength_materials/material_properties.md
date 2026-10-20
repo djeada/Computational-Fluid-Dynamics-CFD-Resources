@@ -1,364 +1,271 @@
 # Mechanical Properties of Materials
 
-Understanding the mechanical properties of materials is essential for selecting appropriate materials in engineering design. These properties describe how a material responds to applied forces, temperature changes, and sustained loading over time.
+The formulas of strength of materials need numbers: a modulus to turn stress into deformation, a strength to compare the stress with, and some measure of how much the material can deform or absorb before it breaks. This note explains how these properties are measured in the tensile test, how engineering and true stress–strain curves differ, what yield strength, ultimate strength, ductility, resilience, toughness and hardness mean, and how the properties change with temperature, loading rate and time. It gives a table of typical values for common structural materials and introduces Ashby's performance indices for choosing between them. The definitions of stress and strain are in [Stress and Strain](stress_strain.md); fatigue under cyclic loading is treated separately in [Fatigue](fatigue.md).
 
-## Tensile Testing and Stress-Strain Curves
+## Problem Statement
 
-### The Tensile Test
+Given a material in a specified condition (composition, heat treatment, product form), determine the properties that a structural calculation needs:
 
-The uniaxial tensile test is the most common method for characterizing material behavior. A standardized specimen is pulled in tension at a controlled rate while measuring force and elongation.
+- elastic constants: Young's modulus $E$ (GPa) and Poisson's ratio $\nu$;
+- strength: yield strength $\sigma_Y$ and ultimate tensile strength $\sigma_u$ (MPa), and for brittle materials the separate tensile and compressive strengths;
+- ductility: elongation and reduction of area at fracture (%);
+- energy absorption: modulus of resilience and toughness (MJ/m³), impact energy (J), fracture toughness $K_{Ic}$ (MPa√m);
+- physical properties: density $\rho$ (kg/m³) and thermal expansion coefficient $\alpha$ (K⁻¹);
+- the dependence of all of these on temperature $T$, strain rate $\dot{\varepsilon}$ and time under load (creep).
 
-**Engineering stress and strain:**
+The reference measurement is the quasi-static uniaxial tensile test at room temperature (ISO 6892-1, ASTM E8/E8M). The material is assumed homogeneous and, except for fibre composites, isotropic. A further question is how to combine properties into a single figure of merit when the design goal is minimum mass or cost.
 
-$$
-\sigma_{eng} = \frac{P}{A_0}, \quad \epsilon_{eng} = \frac{\Delta L}{L_0}
-$$
+## The Tensile Test
 
-**True stress and strain:**
-
-$$
-\sigma_{true} = \frac{P}{A_{inst}}, \quad
-\epsilon_{true} = \ln\left(\frac{L}{L_0}\right)
-$$
-
-Relationship between engineering and true quantities (before necking):
+A specimen with a reduced, parallel gauge section of initial length $L_0$ and area $A_0$ is pulled at a slow, controlled rate. A load cell measures the force $P$ and an extensometer the change of gauge length $\Delta L$. The **engineering stress** and **engineering strain** refer to the initial dimensions:
 
 $$
-\sigma_{true} = \sigma_{eng}(1 + \epsilon_{eng}), \quad
-\epsilon_{true} = \ln(1 + \epsilon_{eng})
+\sigma_e = \frac{P}{A_0},
+\qquad \varepsilon_e = \frac{\Delta L}{L_0}
 $$
 
-### Key Points on the Stress-Strain Curve
-
-1. **Proportional limit** — end of linear region
-2. **Elastic limit** — maximum stress with full recovery
-3. **Yield strength** ($\sigma_y$) — onset of permanent deformation
-4. **Ultimate tensile strength** ($\sigma_u$) — peak engineering stress
-5. **Fracture strength** ($\sigma_f$) — stress at rupture
-
-## Elastic vs. Plastic Behavior
-
-### Elastic Region
-
-In the elastic region, deformation is fully recoverable upon unloading:
+The **true stress** uses the current area $A$, and the **true strain** sums the increments $dL/L$:
 
 $$
-\sigma = E\epsilon
+\sigma_t = \frac{P}{A},
+\qquad \varepsilon_t = \int_{L_0}^{L} \frac{dL}{L} = \ln \frac{L}{L_0}
 $$
 
-where $E$ is the elastic modulus (Young's modulus). The elastic modulus represents the stiffness of the material and is a measure of atomic bond strength.
-
-**Elastic strain energy density (resilience per unit volume):**
+Plastic deformation of metals conserves volume, $AL = A_0 L_0$. As long as the gauge section deforms uniformly this gives
 
 $$
-u = \frac{1}{2}\sigma\epsilon = \frac{\sigma^2}{2E}
+\sigma_t = \sigma_e(1 + \varepsilon_e),
+\qquad \varepsilon_t = \ln(1 + \varepsilon_e)
 $$
 
-### Plastic Region
+The two descriptions agree to within 1% for strains below 0.01, which covers the whole elastic range of metals. True strains are additive over successive deformations and are the natural measure for metal forming and crash simulations; engineering values are what design codes quote.
 
-Beyond the yield point, permanent (plastic) deformation occurs. Key characteristics include:
+### Features of the Curve
 
-- **Strain hardening**: stress increases with further plastic deformation
-- **Necking**: localized reduction in cross-sectional area before fracture
-- **Permanent set**: residual strain after unloading
+The figure below shows a model curve for a ductile metal and a brittle one.
 
-**Strain hardening exponent** (power-law model):
+![Engineering and true stress-strain curves of a Ramberg-Osgood ductile metal with toughness shaded, and the small-strain region with the 0.2 % offset construction](../../../scripts/plots/materials_stress_strain_curves/materials_stress_strain_curves.png)
+
+The curves come from the [stress–strain script](../../../scripts/plots/materials_stress_strain_curves/), which describes the ductile metal by the Ramberg–Osgood law in true stress and strain,
 
 $$
-\sigma_{true} = K \epsilon_{true}^n
+\varepsilon_t = \frac{\sigma_t}{E} + 0.002\left(\frac{\sigma_t}{\sigma_{0.2}}\right)^{n}
 $$
 
-where $K$ is the strength coefficient and $n$ is the strain hardening exponent. Typical values of $n$ range from 0.1 to 0.5.
+with $E = 200$ GPa, $\sigma_{0.2} = 350$ MPa and $n = 8$; they are a model, not data for a specific grade. Read from small strain to large:
 
-### Yield Strength Determination
+1. The **proportional limit** ends the linear part, $\sigma = E\varepsilon$. The **elastic limit** is the highest stress after which unloading returns to zero strain; for most metals the two are close and hard to measure.
+2. **Yielding** is the onset of significant plastic deformation. Annealed low-carbon steel shows a distinct upper and lower yield point followed by a plateau (Lüders bands). Most other metals yield gradually, as in the model, and the **0.2% offset yield strength** is used (right panel): draw a line of slope $E$ through $\varepsilon = 0.002$ and read the stress where it meets the curve. For the Ramberg–Osgood law this is exactly $\sigma_{0.2}$, 350 MPa.
+3. Beyond yield the true stress keeps rising because the material **strain-hardens**. A simple fit is the Hollomon law $`\sigma_t = K\varepsilon_t^{\,n_H}`$ with hardening exponent $n_H$ typically 0.1–0.5.
+4. The engineering stress reaches a maximum, the **ultimate tensile strength** $\sigma_u$, when the loss of area outpaces hardening. Setting $dP = d(\sigma_t A) = 0$ with $dA/A = -d\varepsilon_t$ gives the Considère condition $d\sigma_t/d\varepsilon_t = \sigma_t$; for the Hollomon law it is met at $\varepsilon_t = n_H$. In the model $\sigma_u = 516$ MPa at $\varepsilon_e = 0.136$.
+5. After the maximum the deformation localizes in a **neck**, the engineering stress falls, and the specimen fractures (drawn schematically). The true stress in the neck keeps rising, but the neck is in a triaxial stress state and the measured $P/A$ needs the Bridgman correction to give the flow stress.
 
-For materials without a clear yield point, the **0.2% offset method** is used:
+A brittle material (grey line, $E = 120$ GPa, linear to fracture at 300 MPa) fractures at a strain of 0.0025 with no yielding. Ceramics, glass, grey cast iron and concrete behave this way in tension; they are much stronger in compression, so their tensile and compressive strengths are listed separately.
 
-1. Draw a line parallel to the elastic region, offset by $\epsilon = 0.002$
-2. The intersection with the stress-strain curve defines $`\sigma_{y(0.2\%)}`$
+### Elastic Modulus
 
-## Ductile vs. Brittle Materials
+$E$ is set by the stiffness of the interatomic bonds and the packing of atoms. Alloying, cold work and heat treatment change the yield strength of a steel by a factor of five or more but leave $E$ within a few per cent of 200–210 GPa. A stronger steel therefore does not make a stiffer part, and a stiffness-limited design cannot be improved by choosing a higher grade. The slope of a tensile curve is a poor measurement of $E$ because of machine and grip compliance; precise values come from extensometers with careful unloading or from resonance and ultrasonic methods.
 
-### Ductile Materials
+## Ductility
 
-Ductile materials undergo significant plastic deformation before fracture. Examples include mild steel, aluminum alloys, and copper.
-
-**Percent elongation:**
+Ductility is the plastic deformation a material sustains before fracture. It is reported as the **percent elongation** and the **percent reduction of area**,
 
 ```math
-\% EL = \frac{L_f - L_0}{L_0} \times 100
+\%EL = \frac{L_f - L_0}{L_0} \times 100, \qquad \%RA = \frac{A_0 - A_f}{A_0} \times 100
 ```
 
-**Percent reduction in area:**
+where $L_f$ is the gauge length measured after fracture and $A_f$ the area of the fracture surface. Elongation depends on the gauge length because the neck contributes a fixed extension, so it is quoted with the gauge length (for example $L_0 = 5.65\sqrt{A_0}$ in ISO tests). Reduction of area does not, and $\ln(A_0/A_f)$ is the true fracture strain. A material with a fracture strain below about 5% is usually called brittle (Callister and Rethwisch). Ductility matters even when the design stress is elastic: it allows local yielding to relieve stress concentrations, warns of overload by visible deformation, and absorbs energy in a crash.
+
+The following data come from a test on a steel specimen with $d_0 = 12.5$ mm and $L_0 = 50$ mm: yield load 38 kN, maximum load 58 kN, length after fracture 63 mm and fracture diameter 8.5 mm. With $A_0 = 122.7$ mm² and $A_f = 56.7$ mm²,
 
 ```math
-\% RA = \frac{A_0 - A_f}{A_0} \times 100
+\sigma_Y = \frac{38\,000}{122.7} = 309.7 \text{ MPa}, \quad
+\sigma_u = \frac{58\,000}{122.7} = 472.6 \text{ MPa}, \quad
+\%EL = \frac{63 - 50}{50} \times 100 = 26\%, \quad
+\%RA = \frac{122.7 - 56.7}{122.7} \times 100 = 53.8\%
 ```
 
-A material with $`\% EL > 5\%`$ is generally considered ductile.
+and the true fracture strain is $\ln(122.7/56.7) = 0.77$, three times the engineering elongation.
 
-### Brittle Materials
-
-Brittle materials fracture with little or no plastic deformation. Examples include cast iron, concrete, glass, and ceramics.
-
-- Fracture occurs at or near the ultimate strength
-- Much stronger in compression than in tension
-- Sensitive to flaws and stress concentrations
-
-## Hardness, Toughness, and Resilience
-
-### Hardness
-
-Hardness measures resistance to localized plastic deformation (indentation):
-
-| Scale | Method | Typical Application |
-| --- | --- | --- |
-| Brinell (HB) | 10 mm steel ball | Castings, forgings |
-| Rockwell (HRC) | Diamond cone | Hardened steels |
-| Vickers (HV) | Diamond pyramid | Thin sections, coatings |
-
-**Approximate relationship with tensile strength (for steels):**
-
-$$
-\sigma_u \approx 3.45 \times HB \text{ (MPa)}
-$$
-
-### Toughness
-
-Toughness is the total energy absorbed per unit volume up to fracture, represented by the area under the entire stress-strain curve:
-
-```math
-u_T = \int_0^{\epsilon_f} \sigma \, d\epsilon
-```
-
-**Approximate toughness for a ductile material:**
-
-$$
-u_T \approx \frac{\sigma_y + \sigma_u}{2} \times \epsilon_f
-$$
-
-**Impact toughness** is measured using the Charpy or Izod test and quantifies resistance to sudden loading.
+## Resilience, Toughness and Hardness
 
 ### Resilience
 
-Resilience is the energy absorbed per unit volume within the elastic region:
+The **modulus of resilience** is the strain energy per unit volume stored up to the elastic limit, the area under the linear part of the curve:
 
 $$
-u_r = \frac{\sigma_y^2}{2E}
+u_r = \frac{\sigma_Y^2}{2E}
 $$
 
-Materials with high resilience can absorb significant elastic energy — useful for springs and shock absorbers.
+It is the figure of merit for springs, which must store elastic energy without yielding. For the model metal $`u_r = 350^2/(2 \times 200\,000) = 0.31`$ MJ/m³ (green triangle in the figure).
 
-## Fatigue and Endurance Limit
+### Toughness
 
-### Fatigue Failure
-
-Fatigue failure occurs under cyclic loading at stresses well below the ultimate strength. It accounts for approximately 90% of all mechanical failures in service.
-
-**Stress amplitude and mean stress:**
-
-$$
-\sigma_a = \frac{\sigma_{max} - \sigma_{min}}{2}, \quad
-\sigma_m = \frac{\sigma_{max} + \sigma_{min}}{2}
-$$
-
-### S-N Curve
-
-The S-N (stress–number of cycles) curve characterizes fatigue behavior. For ferrous metals, an **endurance limit** $\sigma_e$ exists below which the material can sustain an infinite number of cycles.
-
-**Approximate endurance limit (steels):**
+The **toughness** in the sense of the tensile test is the energy absorbed per unit volume up to fracture, the area under the whole engineering curve:
 
 ```math
-\sigma_e \approx 0.5\,\sigma_u \quad \text{for } \sigma_u \leq 1400 \text{ MPa}
+u_T = \int_0^{\varepsilon_f} \sigma_e \, d\varepsilon_e \approx \frac{\sigma_Y + \sigma_u}{2}\,\varepsilon_f
 ```
 
-### Modified Goodman Criterion
+the approximation being for ductile metals. The model metal absorbs about 145 MJ/m³ (blue area), the brittle material 0.38 MJ/m³, a factor of nearly 400 although its strength is similar. Two other measures are used in practice. The **Charpy impact energy** (J) is absorbed by a notched bar broken by a pendulum; it is a comparative test, used mainly to locate the ductile-to-brittle transition (below). The **fracture toughness** $K_{Ic}$ (MPa√m) is the critical value of the stress intensity factor $K_I = Y\sigma\sqrt{\pi a}$ at the tip of a crack of length $a$ under plane strain; it predicts the stress at which a known flaw grows unstably. Structural steels have $K_{Ic}$ of order 50–150 MPa√m, soda-lime glass below 1 MPa√m and most engineering ceramics 2–10 MPa√m.
 
-For combined alternating and mean stress:
+### Hardness
 
-$$
-\frac{\sigma_a}{\sigma_e} + \frac{\sigma_m}{\sigma_u} = 1
-$$
+Hardness is the resistance to local plastic indentation. It is cheap, nearly non-destructive and can be measured on finished parts.
 
-## Creep and Stress Relaxation
+| Scale | Indenter | Typical use |
+| --- | --- | --- |
+| Brinell (HB) | 10 mm hardened steel or carbide ball | castings, forgings, coarse microstructures |
+| Rockwell (HRB, HRC) | 1.588 mm ball (B) or diamond cone (C) | production control, hardened steels (C) |
+| Vickers (HV) | diamond pyramid | thin sections, coatings, microhardness |
 
-### Creep
+Because indentation is a plastic process, hardness correlates with strength. For steels, and roughly for cast iron and brass, $`\sigma_u \approx 3.45\,\mathrm{HB}`$ MPa (Callister and Rethwisch), so a steel of 200 HB has $\sigma_u \approx 690$ MPa.
 
-Creep is the time-dependent deformation under sustained constant stress, significant at elevated temperatures (typically $`T > 0.4\,T_m`$ where $T_m$ is the melting point in Kelvin).
+## Typical Properties
 
-**Three stages of creep:**
+The table lists room-temperature values for five structural materials. They are representative values from the sources cited; minimum guaranteed values in material standards are lower, and design must use the values specified for the actual product.
 
-1. **Primary creep** — decreasing strain rate
-2. **Secondary (steady-state) creep** — constant strain rate $\dot{\epsilon}_s$
-3. **Tertiary creep** — accelerating strain rate leading to rupture
+| Material | $E$ (GPa) | $\nu$ | $\sigma_Y$ (MPa) | $\sigma_u$ (MPa) | Elongation (%) | $\rho$ (kg/m³) | $\alpha$ ($10^{-6}$ K⁻¹) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Structural steel S355 | 210 | 0.30 | 355 | 470–630 | ≥ 22 | 7850 | 12 |
+| Aluminium alloy 6061-T6 | 69 | 0.33 | 276 | 310 | 12 | 2700 | 23.6 |
+| Titanium alloy Ti-6Al-4V, annealed | 114 | 0.34 | 830 | 900 | 14 | 4430 | 8.6 |
+| Concrete C30/37 | 33 | 0.2 | compression 30 | tension 2.9 | — | 2400 | 10 |
+| CFRP, unidirectional, along fibres | 130–180 | 0.3 | — | 1500–2000 | 1–1.5 | 1550–1600 | about 0 |
 
-**Steady-state creep rate (Arrhenius model):**
+For S355 the yield value is the minimum for thickness up to 16 mm in EN 10025-2, with $E$ and $\alpha$ from EN 1993-1-1. Concrete values are the characteristic cylinder compressive strength $f_{ck}$, the mean tensile strength $f_{ctm}$ and the secant modulus $E_{cm}$ of EN 1992-1-1. The aluminium and titanium values are from Callister and Rethwisch, Appendix B. For a unidirectional carbon–epoxy laminate with a fibre fraction near 60%, the modulus and strength across the fibres are an order of magnitude lower (about 10 GPa and 50 MPa); quasi-isotropic laminates have $E$ of roughly 50–70 GPa. CFRP fails without yielding.
 
-$$
-\dot{\epsilon}_s = A \sigma^n e^{-Q/(RT)}
-$$
+## Material Selection and Ashby Charts
 
-where $A$ is a material constant, $n$ is the stress exponent, $Q$ is the activation energy, $R$ is the gas constant, and $T$ is absolute temperature.
-
-### Stress Relaxation
-
-Stress relaxation is the decrease in stress over time under constant strain, important for bolted joints and seals:
+When the goal is minimum mass, the properties combine into a **performance index**. For a tie of length $L$ carrying a force $F$ without yielding, the area must be $A = F/\sigma_Y$, so the mass is
 
 ```math
-\sigma(t) = \sigma_0 \, e^{-t/\tau}
+m = \rho A L = F L\, \frac{\rho}{\sigma_Y}
 ```
 
-where $\tau$ is the relaxation time constant.
+and the lightest tie maximizes $\sigma_Y/\rho$. For a beam of square section $b \times b$ whose bending stiffness $S = C_1 E I/L^3$ is prescribed, $I = b^4/12$ gives $b^2 = (12 S L^3/(C_1 E))^{1/2}$, and
 
-## Material Selection Criteria
+```math
+m = \rho b^2 L = \left(\frac{12 S}{C_1}\right)^{1/2} L^{5/2}\, \frac{\rho}{E^{1/2}}
+```
 
-### Performance Indices
+so the lightest stiff beam maximizes $E^{1/2}/\rho$. The same argument gives the other common indices:
 
-Material selection often involves optimizing a **performance index** that combines multiple properties:
-
-| Design Goal | Performance Index |
+| Design goal (minimum mass) | Index to maximize |
 | --- | --- |
-| Light, stiff tie rod | $E / \rho$ |
-| Light, stiff beam | $E^{1/2} / \rho$ |
-| Light, strong tie rod | $\sigma_y / \rho$ |
-| Light, strong beam | $\sigma_y^{2/3} / \rho$ |
+| tie, given stiffness | $E/\rho$ |
+| tie, given strength | $\sigma_Y/\rho$ |
+| beam, given stiffness | $E^{1/2}/\rho$ |
+| beam, given strength | $\sigma_Y^{2/3}/\rho$ |
+| panel in bending, given stiffness | $E^{1/3}/\rho$ |
+| panel in bending, given strength | $\sigma_Y^{1/2}/\rho$ |
 
-where $\rho$ is the material density.
+An **Ashby chart** plots one property against another on logarithmic axes, for example $E$ against $\rho$, with each material class as a bubble covering its range. On such a chart a line of constant index, $E^{1/m}/\rho = C$, is a straight line of slope $m$, so lines of slope 1, 2 and 3 for the three stiffness indices can be slid across the chart; materials above the line are better. The $E$–$`\rho`$ chart shows at once why the common metals are almost interchangeable as stiff ties ($E/\rho \approx 26$ GPa m³/Mg for steel, aluminium and titanium alike) while CFRP is three times better, and why wood and foams excel as panels.
 
-### Typical Material Properties
+## Temperature, Strain Rate and Time
 
-| Material | $E$ (GPa) | $\sigma_y$ (MPa) | $\sigma_u$ (MPa) | $\rho$ (kg/m³) |
-| --- | --- | --- | --- | --- |
-| Mild steel | 200 | 250 | 400 | 7850 |
-| Aluminum 6061-T6 | 69 | 276 | 310 | 2700 |
-| Titanium Ti-6Al-4V | 114 | 880 | 950 | 4430 |
-| CFRP (unidirectional) | 140 | — | 1500 | 1600 |
+### Temperature
 
-## Example Problems
+Elastic modulus and strength fall as the temperature rises. The natural scale is the **homologous temperature** $T/T_m$ with both in kelvin. Below about $`0.3\,T_m`$ the properties of metals are nearly independent of time; above about $0.3$–$`0.4\,T_m`$ they creep (below). Aluminium alloys ($T_m \approx 900$ K) therefore lose much of their age-hardened strength above 150–200 °C, while nickel superalloys keep useful strength in gas turbines at homologous temperatures of 0.7 and above.
 
-### Example 1: Tensile Test Analysis
+At low temperature the danger is embrittlement. Body-centred cubic metals, including ferritic structural steels, have a **ductile-to-brittle transition** temperature, below which the Charpy energy drops from over 100 J to a few joules and fracture becomes cleavage. Steel grades are specified with a Charpy energy at a test temperature (S355J2 means 27 J at −20 °C) for this reason. Face-centred cubic metals (aluminium, copper, austenitic stainless steel) show no such transition and are used for cryogenic service. Polymers change from glassy to rubbery behaviour near the glass transition temperature, where the modulus drops by orders of magnitude.
 
-A tensile test on a steel specimen ($d_0 = 12.5$ mm, $L_0 = 50$ mm) yields the following data: yield load $P_y = 38$ kN, maximum load $P_u = 58$ kN, fracture length $L_f = 63$ mm, fracture diameter $d_f = 8.5$ mm.
+### Strain Rate
 
-**Given:**
-
-- $d_0 = 12.5$ mm, $L_0 = 50$ mm
-- $P_y = 38$ kN, $P_u = 58$ kN
-- $L_f = 63$ mm, $d_f = 8.5$ mm
-
-**Find:** Yield strength, ultimate tensile strength, percent elongation, percent reduction in area.
-
-**Solution:**
+The flow stress of most metals rises with strain rate, which matters for impact, crash and blast. A common model for mild steel is the Cowper–Symonds relation
 
 $$
-A_0 = \frac{\pi (12.5)^2}{4} = 122.7 \text{ mm}^2
+\frac{\sigma_{\mathrm{dyn}}}{\sigma_{\mathrm{stat}}} = 1 +
+\left(\frac{\dot{\varepsilon}}{D}\right)^{1/q}
 $$
 
-```math
-\sigma_y = \frac{P_y}{A_0} = \frac{38\,000}{122.7} = 309.7 \text{ MPa}
-```
+with $D = 40.4$ s⁻¹ and $q = 5$ (Jones). The dynamic flow stress doubles at $\dot{\varepsilon} = D$ and is 2.2 times the static value at 100 s⁻¹; even a nominally quasi-static rate of $10^{-3}$ s⁻¹ gives a factor 1.12, which shows that the "static" reference value is itself rate-dependent. Aluminium alloys are much less rate-sensitive, and polymers far more.
+
+### Creep and Stress Relaxation
+
+Under a constant stress at high homologous temperature, strain grows with time. The creep curve has a primary stage with decreasing rate, a long secondary stage at nearly constant rate $\dot{\varepsilon}_s$, and a tertiary stage of accelerating strain ending in rupture. The secondary rate follows the Norton–Arrhenius law
 
 ```math
-\sigma_u = \frac{P_u}{A_0} = \frac{58\,000}{122.7} = 472.7 \text{ MPa}
+\dot{\varepsilon}_s = A\,\sigma^{n} \exp\left(-\frac{Q}{RT}\right)
 ```
+
+with a material constant $A$, stress exponent $n$ (typically 3–8 for metals), activation energy $Q$ and gas constant $R = 8.314$ J/(mol K). Rupture data at different temperatures are collapsed by the Larson–Miller parameter $\mathrm{LMP} = T(C + \log_{10} t_r)$, with $T$ in K, the rupture time $t_r$ in hours and $C \approx 20$, plotted against stress.
+
+If instead the total strain is held fixed, as in a bolted flange or a shrink fit, creep converts elastic strain into creep strain and the stress relaxes. With Norton creep at a fixed temperature, $\dot{\varepsilon}_s = B\sigma^n$, the condition $\dot{\sigma}/E + B\sigma^n = 0$ integrates to
 
 ```math
-\% EL = \frac{63 - 50}{50} \times 100 = 26\%
+\sigma(t) = \sigma_0\left[1 + (n - 1)\,E B \sigma_0^{\,n-1} t\right]^{-1/(n-1)}
 ```
 
-```math
-\% RA = \frac{122.7 - 56.7}{122.7} \times 100 = 53.8\%
-```
+For $n = 1$ (a linear Maxwell material) the limit is exponential, $\sigma = \sigma_0 e^{-EBt}$. Bolts in hot joints are therefore re-tightened or designed with a creep allowance. Polymers creep and relax at room temperature.
 
-The material is ductile ($`\% EL > 5\%`$) with good strength and formability.
+## Key Takeaways
 
-### Example 2: Fatigue Life Assessment
+- Engineering stress and strain use the original dimensions; true values use the current ones and are related by $\sigma_t = \sigma_e(1 + \varepsilon_e)$ and $\varepsilon_t = \ln(1 + \varepsilon_e)$ until necking.
+- Yield is defined by the 0.2% offset unless the material has a distinct yield point; the ultimate strength is the peak of the engineering curve, reached when $d\sigma_t/d\varepsilon_t = \sigma_t$.
+- Resilience is the elastic area $\sigma_Y^2/(2E)$, toughness the area to fracture; strength and toughness are different properties.
+- $E$ barely changes with alloying or heat treatment; strength does.
+- Performance indices such as $E/\rho$, $E^{1/2}/\rho$ and $\sigma_Y^{2/3}/\rho$ decide the lightest material for a given loading.
+- Check the service temperature against the creep regime and the ductile-to-brittle transition, and the loading rate against rate-dependent strength.
 
-A steel shaft ($\sigma_u = 600$ MPa) is subjected to fluctuating bending with $\sigma_a = 250$ MPa and $\sigma_m = 100$ MPa.
+## Related Scripts
 
-**Given:**
-
-- $\sigma_u = 600$ MPa, $\sigma_e \approx 0.5 \times 600 = 300$ MPa
-- $\sigma_a = 250$ MPa, $\sigma_m = 100$ MPa
-
-**Find:** Whether the shaft will have infinite fatigue life using the Goodman criterion.
-
-**Solution:**
-
-$$
-\frac{\sigma_a}{\sigma_e} + \frac{\sigma_m}{\sigma_u} = \frac{250}{300} +
-\frac{100}{600} = 0.833 + 0.167 = 1.0
-$$
-
-The sum equals 1.0, indicating the shaft is exactly at the fatigue limit — it is on the boundary of safe design and should be redesigned with a larger cross-section or better surface finish.
-
-## Practical Tips
-
-- Always verify material properties from certified test reports for critical applications
-- Account for temperature effects on material strength, especially above $`0.3\,T_m`$
-- Surface finish significantly affects fatigue life — polished surfaces resist fatigue better
-- Ductile materials are generally preferred for structures subject to impact or vibration
-- Use appropriate safety factors to account for material variability and loading uncertainty
-
-Understanding mechanical properties enables engineers to select materials that meet performance requirements while optimizing weight, cost, and manufacturability.
+- [Stress-Strain Curves](../../../scripts/plots/materials_stress_strain_curves/): draws model engineering and true stress–strain curves of a ductile and a brittle material.
 
 ## Exercises
 
-**Exercise 1.** In the tensile test of Example 1, the engineering strain at maximum load is 0.18. Find the true stress and true strain at that point. Using the Considère condition (necking begins when $\epsilon_{true} = n$), estimate the strain hardening exponent.
+**Exercise 1.** In the tensile test above, the engineering strain at maximum load is 0.18. Find the true stress and true strain at that point. Using the Considère condition for a Hollomon material, estimate the hardening exponent.
 
 <details>
 <summary>Answer</summary>
 
 ```math
-\sigma_{true} = \sigma_{eng}(1 + \epsilon_{eng}) = 472.7 \times 1.18 = 558 \text{ MPa},
-\quad \epsilon_{true} = \ln 1.18 = 0.166
+\sigma_t = \sigma_e(1 + \varepsilon_e) = 472.6 \times 1.18 = 558 \text{ MPa},
+\quad \varepsilon_t = \ln 1.18 = 0.166
 ```
 
-Necking starts at maximum load, so $n \approx 0.17$, within the typical range of 0.1 to 0.5.
+Necking starts at maximum load, where $\varepsilon_t = n_H$, so $n_H \approx 0.17$, within the typical range.
 
 </details>
 
-**Exercise 2.** Compare the modulus of resilience of mild steel ($\sigma_y = 250$ MPa, $E = 200$ GPa) and aluminium 6061-T6 ($\sigma_y = 276$ MPa, $E = 69$ GPa), per unit volume and per unit mass. Which makes the lighter spring?
+**Exercise 2.** Compare the modulus of resilience of S355 steel and of 6061-T6 aluminium from the property table, per unit volume and per unit mass. Which makes the lighter spring of the two?
 
 <details>
 <summary>Answer</summary>
 
-- Steel: $`u_r = 250^2/(2 \times 200\,000) = 0.156`$ MPa $= 156$ kJ/m³, or 19.9 J/kg
-- Aluminium: $`u_r = 276^2/(2 \times 69\,000) = 0.552`$ MPa $= 552$ kJ/m³, or 204 J/kg
+- Steel: $`u_r = 355^2/(2 \times 210\,000) = 0.300`$ MPa $= 300$ kJ/m³, or 38 J/kg.
+- Aluminium: $`u_r = 276^2/(2 \times 69\,000) = 0.552`$ MPa $= 552$ kJ/m³, or 204 J/kg.
 
-Aluminium stores about 3.5 times more elastic energy per volume and 10 times more per mass, because of its lower modulus and density. Real springs use high-strength steels, whose much larger $\sigma_y$ enters squared.
+The aluminium stores 1.8 times more elastic energy per volume and 5.3 times more per mass, because of its lower modulus and density. Real springs use spring steels with $\sigma_Y$ above 1000 MPa, since the yield strength enters squared.
 
 </details>
 
-**Exercise 3.** Using the property table, rank mild steel, Al 6061-T6, Ti-6Al-4V and CFRP for (a) a light, stiff tie ($E/\rho$) and (b) a light, strong beam ($\sigma_y^{2/3}/\rho$; use $\sigma_u$ for CFRP). Work in GPa, MPa and Mg/m³.
+**Exercise 3.** Using the property table (with the lower end of the CFRP ranges, $E = 135$ GPa, $\sigma_u = 1500$ MPa, $\rho = 1600$ kg/m³, and $\sigma_u$ in place of $\sigma_Y$ for CFRP), rank S355 steel, 6061-T6, Ti-6Al-4V and CFRP for (a) a light, stiff tie ($E/\rho$) and (b) a light, strong beam ($\sigma_Y^{2/3}/\rho$). Work in GPa, MPa and Mg/m³.
 
 <details>
 <summary>Answer</summary>
 
-(a) $E/\rho$: steel 25.5, Al 25.6, Ti 25.7, CFRP 87.5. The three metals are almost identical, which is why weight-critical stiff structures move to composites.
+(a) $E/\rho$: steel 26.8, aluminium 25.6, titanium 25.7, CFRP 84.4. The three metals are practically identical, which is why weight-critical stiff structures move to composites.
 
-(b) $\sigma^{2/3}/\rho$: steel 5.1, Al 15.7, Ti 20.7, CFRP 81.9. The ranking is CFRP, then titanium, aluminium and steel.
+(b) $\sigma^{2/3}/\rho$: steel 6.4, aluminium 15.7, titanium 19.9, CFRP 81.9. The order is CFRP, titanium, aluminium, steel; for strength-limited beams the light alloys beat steel even though steel is cheaper per unit strength.
 
 </details>
 
-**Exercise 4.** The shaft of Example 2 ($\sigma_u = 600$ MPa, $\sigma_e = 300$ MPa) is redesigned so that $\sigma_a = 200$ MPa with $\sigma_m = 100$ MPa unchanged. Find the Goodman safety factor. What alternating stress would give a safety factor of 1.5?
+**Exercise 4.** For an alloy at 100 MPa the Larson–Miller parameter at rupture is $\mathrm{LMP} = 2.0 \times 10^4$ (with $T$ in K, $t_r$ in hours and $C = 20$). Estimate the rupture life at 900 K and at 850 K.
 
 <details>
 <summary>Answer</summary>
 
-With the Goodman line scaled by $n$, $\sigma_a/\sigma_e + \sigma_m/\sigma_u = 1/n$:
+$\log_{10} t_r = \mathrm{LMP}/T - C$.
 
-```math
-\frac{1}{n} = \frac{200}{300} + \frac{100}{600} = 0.833 \implies n = 1.2
-```
+- At 900 K: $\log_{10} t_r = 22.22 - 20 = 2.22$, so $t_r \approx 170$ h.
+- At 850 K: $\log_{10} t_r = 23.53 - 20 = 3.53$, so $t_r \approx 3400$ h.
 
-For $n = 1.5$: $`\sigma_a = 300\,(1/1.5 - 100/600) = 150`$ MPa.
-
-In practice $\sigma_e$ would first be reduced by the surface, size and reliability (Marin) factors, which lowers both results.
+A 50 K reduction in temperature extends the life twenty times.
 
 </details>
 
-**Exercise 5.** A steel creeps with activation energy $Q = 250$ kJ/mol and stress exponent $n = 5$. By what factor does the steady-state creep rate increase if (a) the temperature rises from 800 K to 850 K, or (b) the stress rises by 20%?
+**Exercise 5.** A steel creeps with activation energy $Q = 250$ kJ/mol and stress exponent $n = 5$. By what factor does the secondary creep rate increase if (a) the temperature rises from 800 K to 850 K, or (b) the stress rises by 20%?
 
 <details>
 <summary>Answer</summary>
@@ -366,17 +273,22 @@ In practice $\sigma_e$ would first be reduced by the surface, size and reliabili
 (a)
 
 ```math
-\frac{\dot{\epsilon}_{850}}{\dot{\epsilon}_{800}} = \exp\left[\frac{Q}{R}\left(\frac{1}{800} - \frac{1}{850}\right)\right] = \exp\left[\frac{250\,000}{8.314} \times 7.35 \times 10^{-5}\right] = 9.1
+\frac{\dot{\varepsilon}_{850}}{\dot{\varepsilon}_{800}} = \exp\left[\frac{Q}{R}\left(\frac{1}{800} - \frac{1}{850}\right)\right] = \exp\left[\frac{250\,000}{8.314} \times 7.35 \times 10^{-5}\right] = 9.1
 ```
 
 (b) $1.2^5 = 2.49$.
 
-A 50 K rise matters far more than a 20% stress increase, which is why creep design is dominated by temperature control.
+A 50 K rise matters more than a 20% stress increase, which is why creep design is dominated by temperature control.
 
 </details>
 
 ## References
 
 - Callister, W. D., and Rethwisch, D. G., *Materials Science and Engineering: An Introduction*, 10th ed., Wiley, 2018.
-- Dowling, N. E., *Mechanical Behavior of Materials*, 4th ed., Pearson, 2013.
 - Ashby, M. F., *Materials Selection in Mechanical Design*, 5th ed., Butterworth-Heinemann, 2017.
+- Dowling, N. E., *Mechanical Behavior of Materials*, 4th ed., Pearson, 2013.
+- Jones, N., *Structural Impact*, 2nd ed., Cambridge University Press, 2012.
+- Ramberg, W., and Osgood, W. R., "Description of stress–strain curves by three parameters", NACA Technical Note 902, 1943.
+- EN 1992-1-1:2004, *Eurocode 2: Design of concrete structures, Part 1-1: General rules and rules for buildings*, CEN, 2004.
+- EN 1993-1-1:2005, *Eurocode 3: Design of steel structures, Part 1-1: General rules and rules for buildings*, CEN, 2005.
+- ISO 6892-1:2019, *Metallic materials: Tensile testing, Part 1: Method of test at room temperature*, ISO, 2019.

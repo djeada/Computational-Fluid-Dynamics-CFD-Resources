@@ -1,310 +1,210 @@
-## Machine learning process
+# Automotive Aerodynamics Case Study: Overview
 
-Traditional automotive aerodynamic design depends heavily on expensive wind tunnel tests or time-consuming CFD simulations for each design variant, making iterative optimization slow and costly. Every geometric change—a modified spoiler angle, a reshaped underbody panel—requires a new simulation or test run, often taking hours to days per configuration. Machine learning offers a way to break this bottleneck by learning from existing simulation and experimental data to rapidly predict aerodynamic properties for new shapes. This data-driven approach can accelerate the design cycle dramatically, enabling engineers to explore thousands of candidate geometries in the time it once took to evaluate a handful.
+This note opens a seven-note case study on predicting the aerodynamics of passenger-car variants with machine-learning surrogates trained on CFD. It states the problem, walks through the workflow from design space to deployment and points to the note that covers each step, collects the physics needed to read the rest of the case study, and lists the public datasets on which such models are developed and compared. Each design variant costs hundreds to thousands of core-hours of CFD, so the case study is ultimately about how to get the most predictive model out of a few hundred or thousand such runs.
 
-Machine learning in automotive aerodynamics brings together modern computational intelligence and classical fluid mechanics, creating powerful methods to optimize vehicle design and performance. This field can be quite deep, as it involves fundamental equations of fluid flow, data acquisition and cleaning, model training, hyperparameter tuning, and integration with advanced computational fluid dynamics (CFD) software. What follows is a wide-ranging set of notes that explore these topics in substantial detail, beginning with fundamental aerodynamic concepts, then moving step by step into how machine learning can assist in analyzing and predicting aerodynamic behavior. Examples and analogies are embedded in the text, along with occasional ASCII diagrams to illustrate certain processes.
+## Problem Statement
 
-Before digging into equations and algorithms, it helps to understand why aerodynamics is so essential in automotive engineering and how machine learning can offer solutions. Aerodynamics determines the drag on a moving vehicle, affects its stability, influences cabin noise levels, and even impacts fuel economy or battery range. Traditional aerodynamic evaluation relies on wind tunnel experiments and CFD. These methods are accurate but can be time-consuming or expensive. Machine learning speeds up certain phases of the design cycle by learning patterns from large datasets. It can quickly predict aerodynamic properties for new shapes, allowing engineers to test multiple variations in less time.
-
-### Fundamental Equations of Aerodynamics
-
-Automotive aerodynamics commonly involves incompressible flows (unless one deals with racing cars at very high speeds, where compressibility effects can come into play). For low Mach numbers, air density remains nearly constant, and the Navier–Stokes equations for incompressible flow apply. These equations govern the fluid velocity $\mathbf{u} = (u, v, w)$ and pressure $p$.
-
-Continuity equation for incompressible flow:
-
-$$
-\nabla \cdot \mathbf{u} = 0
-$$
-
-Momentum equation (Navier–Stokes) for constant density $\rho$:
-
-$$
-\rho \frac{\partial \mathbf{u}}{\partial t} + \rho (\mathbf{u} \cdot \nabla)
-\mathbf{u} = -\nabla p + \mu \nabla^2 \mathbf{u} + \mathbf{f}
-$$
-
-where $\mu$ is the dynamic viscosity and $\mathbf{f}$ is any body force such as gravity. These equations describe how velocity fields evolve under pressure gradients, viscosity, and external forces.
-
-In automotive contexts, aerodynamic coefficients are important. The drag coefficient $C_D$ is one of the most important indicators of how streamlined a design is. An expression for $C_D$ is:
+A baseline vehicle is varied through a vector of design parameters $\mathbf{p} \in \mathcal{P} \subset \mathbb{R}^{d}$ (in this case study the $d = 13$ morphing parameters of [Deformation Parameters](deformation_parameters.md)), or more generally through its surface geometry $G$. For each design CFD provides the outputs
 
 ```math
-C_D = \frac{2F_D}{\rho \, U^2 \, A}
+\mathbf{y} = \left(C_d,\; C_l,\; C_s,\; C_{m},\;
+C_p(\mathbf{x})\big|_{\mathbf{x} \in \Gamma},\;
+\overline{\mathbf{u}}(\mathbf{x})\big|_{\mathbf{x} \in \Omega}\right)
 ```
 
-where $F_D$ is the drag force, $\rho$ is the air density, $U$ is the freestream velocity, and $A$ is the reference frontal area. Lift coefficients $C_L$ follow a similar form but focus on the lifting force.
+that is, force and moment coefficients, surface fields on the body surface $\Gamma$ and time-averaged volume fields in the fluid domain $\Omega$. Given a dataset $`\mathcal{D} = \{(\mathbf{p}_i, \mathbf{y}_i)\}_{i=1}^{N}`$ of $N$ simulated designs, the task is to find $f_{\boldsymbol\theta}$ that minimises the expected prediction error on new designs,
 
-### Machine Learning for Automotive Aerodynamics
-
-Machine learning steps in when large datasets or repeated simulations are involved. A single aerodynamics simulation might take hours or days on traditional hardware, especially for detailed turbulent flow. By training a model on hundreds or thousands of CFD runs, wind tunnel results, or on-road measurements, it becomes possible to predict aerodynamic properties with reduced computational expense.
-
-Many problems in aerodynamics naturally map to regression tasks (predicting continuous quantities such as $C_D$ or $C_L$) or classification tasks (identifying whether flow is separated or attached). There is also scope for unsupervised methods, which can group similar flow patterns or detect anomalies in sensor data.
-
-### Data Collection and Preprocessing
-
-Data collection begins with either real measurements (like in a wind tunnel or on a test track) or synthetic results (from a CFD code). These measurements typically include pressure values on the car’s surface, velocity fields in the surrounding flow, temperature readings in some cases, and integral quantities such as drag or lift. In a typical pipeline, each data point might correspond to a particular car design or operational condition (such as speed or yaw angle).\
-Cleaning and preprocessing are crucial to remove erroneous sensor measurements or to filter out noise. Scaling, also called normalization, places all variables on similar numerical ranges, preventing features with large magnitudes (like velocity in meters per second) from dominating the training process. Feature extraction can include boundary layer thickness, vortex strength, stagnation points, or simpler quantities such as Reynolds number $\mathrm{Re} = \frac{\rho U L}{\mu}$, where $L$ is a characteristic length scale (often the vehicle length or a relevant chord length for a particular surface).
-
-### Feature Engineering and Dimensionality Reduction
-
-Engineers often apply domain knowledge to create specialized features for ML models. One example is computing pressure gradients around the front or rear edges of the vehicle, which strongly influences drag. Another is capturing the extent of flow separation behind the rear windshield. The shape parameter $\kappa$ that describes how quickly the boundary layer grows along the body is another possibility.
-
-High-dimensional data, such as a full 3D velocity field from a CFD simulation, can overwhelm even powerful models. Methods like Principal Component Analysis (PCA) or autoencoders map this high-dimensional data to a smaller space. PCA finds directions of maximum variance, forming linear combinations of the original variables. Nonlinear techniques like t-SNE or UMAP sometimes reveal deeper structure that PCA might miss.
-
-### Model Architectures for Aerodynamic Predictions
-
-Different classes of machine learning models come into play, each with advantages:
-
-#### Random Forest Regressors
-
-They work by building many decision trees (each tree on a random subset of features and samples) and averaging predictions. This approach handles noisy data well and provides feature importance estimates, a useful tool for interpretability.
-
-#### Neural Networks
-
-They excel at capturing nonlinear relationships between inputs (such as geometric parameters of a car) and outputs (like $C_D$). Convolutional neural networks (CNNs) can be used if the data is formatted as images or 2D/3D fields. Autoencoders are valuable for dimensionality reduction and pretraining.
-
-#### Support Vector Machines
-
-They can be applied in regression or classification form (known as SVR or SVC). While not always as scalable for huge datasets as neural networks, they can offer solid performance for moderately sized tasks.
-
-#### Clustering Algorithms
-
-K-Means or DBSCAN help identify natural groupings in aerodynamic data. For instance, DBSCAN can label data as “core” or “noise,” which makes it easier to detect outliers such as unusual flow solutions.
-
-### Workflow for Large-Scale CFD and ML Integration
-
-CFD computations and data-driven modeling frequently happen in parallel on high-performance computing (HPC) clusters. The typical workflow might look like this:
-
-```
-+------------------------------------+
-| 1) Geometry & Mesh Generation      |
-|    (CAD models, meshing tools)     |
-+--------------+---------------------+
-               |
-               v
-+--------------+---------------------+
-| 2) CFD Setup & Execution           |
-|    (solver selection, boundary     |
-|     conditions, HPC cluster jobs)  |
-+--------------+---------------------+
-               |
-               v
-+--------------+---------------------+
-| 3) Data Extraction & Preprocessing |
-|    (flow fields, surface pressures,|
-|     velocity profiles)             |
-+--------------+---------------------+
-               |
-               v
-+--------------+---------------------+
-| 4) ML Model Training               |
-|    (regression, classification,    |
-|     or clustering)                 |
-+--------------+---------------------+
-               |
-               v
-+--------------+---------------------+
-| 5) Model Validation & Tuning       |
-|    (cross-validation, hyperparam   |
-|     optimization, error analysis)  |
-+--------------+---------------------+
-               |
-               v
-+--------------+---------------------+
-| 6) Deployment & Monitoring         |
-|    (real-time inference, HPC       |
-|     pipeline updates, retraining)  |
-+------------------------------------+
+```math
+\boldsymbol\theta^* = \arg\min_{\boldsymbol\theta} \; \frac{1}{N}\sum_{i=1}^{N}
+\ell\big(f_{\boldsymbol\theta}(\mathbf{p}_i), \mathbf{y}_i\big) +
+\lambda\,\Omega(\boldsymbol\theta)
 ```
 
-These steps form a loop, as new designs might be suggested by the machine learning model or by traditional engineering judgment. Those designs get meshed, simulated again, and the additional data refines the ML model over time.
+with a loss $\ell$ (squared error on normalised outputs, area-weighted for surface fields) and a regulariser $\Omega$, and to verify on designs not used for training that the error is small compared with the differences between designs.
 
-### Hyperparameter Tuning and Model Selection
+The task is hard for four reasons. Training data is expensive, so $N$ is typically $10^2$ to $10^4$ and every sample has to count. The differences of interest are small: design changes move $C_d$ by a few thousandths, and a useful model must resolve differences of the order of one drag count ($\Delta C_d = 0.001$). The CFD labels themselves contain modelling error (turbulence model, mesh, averaging), typically several drag counts relative to experiment, which bounds what the surrogate can meaningfully achieve. Finally, predictions are only trustworthy inside the design space that was sampled.
 
-Hyperparameter tuning is an essential part of creating robust machine learning models for aerodynamics. This process tries different configurations of the model (like number of trees in a random forest, or learning rate and number of layers in a neural network) in search of those that minimize validation errors. Popular methods include random search, grid search, or Bayesian optimization, where a surrogate model predicts the performance of hyperparameters based on past trials.
+## Workflow and Where Each Step Is Covered
 
-### Evaluation, Validation, and Error Metrics
+![Surrogate-modelling workflow, coloured by stage, with the note that covers each step](../../../scripts/plots/ml_cfd_workflow/ml_cfd_workflow.png)
 
-Testing model accuracy is vital. Common evaluation metrics for aerodynamic regression tasks include Mean Absolute Error (MAE), Mean Squared Error (MSE), and coefficient of determination ($R^2$). These are defined as:
+The workflow has a data-generation stage (blue), a learning stage (orange) and a deployment stage (green). The dashed arrow is the active-learning loop: once a model exists, new CFD runs are placed where it is most uncertain or where an optimiser is searching, rather than spread evenly.
+
+| Step | Question answered | Note |
+| --- | --- | --- |
+| 1. Design space and DoE | Which parameters, which ranges, how many samples, where? | [Deformation Parameters](deformation_parameters.md) |
+| 2. Geometry morphing | How does a parameter vector become a valid surface? | [Deformation Parameters](deformation_parameters.md) |
+| 3. Meshing | How is a consistent, good-quality mesh produced for every variant? | [Dataset of Meshes](dataset_of_meshes.md) |
+| 4. CFD | Which solver settings, turbulence model, convergence criteria? | [Generating CFD Datasets](generating_cfd_datasets.md) |
+| 5. Post-processing | Which outputs are stored, how are they averaged and checked? | [Output Data](output_data.md) |
+| 5. Dataset assembly | How are samples organised, split and documented? | [Datasets](datasets.md) |
+| 6. Training | Which model, loss and training procedure? | [Model Training](model_training.md) |
+| 7. Validation | Is the model accurate on unseen designs, and how is that measured? | [Training and Validation](../fundamentals/training_and_validation.md), [Model Training](model_training.md) |
+| 8. Deployment | How is the surrogate used in design exploration and optimisation? | [Optimization](../flow/optimization.md), [Adaptive Sampling](../../numerical/surrogates/adaptive_sampling.md) |
+
+## Physics Needed for the Case Study
+
+### Force and Moment Coefficients
+
+The aerodynamic force on the vehicle is the integral of pressure and wall shear stress over its surface,
+
+```math
+\mathbf{F} = \oint_{\Gamma}
+\left[-(p - p_\infty)\,\mathbf{n} + \boldsymbol\tau_w \right] dS
+```
+
+with $\mathbf{n}$ the unit normal pointing out of the body into the fluid and $\boldsymbol\tau_w$ the wall shear stress vector. With the dynamic pressure $q_\infty = \tfrac{1}{2}\rho U_\infty^2$ and the frontal area $A$, the drag, lift and side-force coefficients are
 
 $$
-\text{MAE} = \frac{1}{N}\sum_{i=1}^{N}|y_i - \hat{y}_i|,
-\qquad \text{MSE} = \frac{1}{N}\sum_{i=1}^{N}(y_i - \hat{y}_i)^2,
+C_d = \frac{F_x}{q_\infty A},
+\qquad C_l = \frac{F_z}{q_\infty A},
+\qquad C_s = \frac{F_y}{q_\infty A}
+$$
+
+and moment coefficients use an additional reference length, usually the wheelbase $L_{wb}$: $C_m = M_y/(q_\infty A L_{wb})$. The vehicle axis convention (origin, sign of $z$, moment reference point) differs between companies and datasets and must be checked before data from different sources are combined. Typical passenger cars have $C_d$ between about 0.25 and 0.35 and frontal areas of 2.0 to 2.5 $\mathrm{m}^2$. The drag power is $P = F_x U_\infty = \tfrac{1}{2}\rho U_\infty^3 C_d A$, so at 140 km/h a single drag count on a car with $A = 2.2\ \mathrm{m}^2$ costs about 78 W; this is why differences of a few counts matter in practice. Definitions of the surface and volume outputs are collected in [Output Data](output_data.md).
+
+### Reynolds and Mach Numbers
+
+With the vehicle length $L$ and the kinematic viscosity of air $\nu \approx 1.5 \times 10^{-5}\ \mathrm{m^2/s}$,
+
+$$
+\mathrm{Re} = \frac{U_\infty L}{\nu},
+\qquad \mathrm{Ma} = \frac{U_\infty}{a}
+$$
+
+A 4.6 m car at 140 km/h ($U_\infty = 38.9$ m/s) has $\mathrm{Re} \approx 1.2 \times 10^7$ and $\mathrm{Ma} \approx 0.11$. The flow is therefore turbulent over almost the whole body and effectively incompressible, so the incompressible Navier–Stokes equations ([Navier–Stokes Equations](../../fluid_mechanics/governing_equations/navier_stokes.md)) with a turbulence model are the standard description. Because $\mathrm{Re}$ is large, $C_d$ depends only weakly on speed for a fixed shape, and most datasets simulate a single speed; the input of the surrogate is then the geometry alone. Drag of bluff vehicles is dominated by pressure drag from the separated wake at the rear, which is why rear-end parameters usually have the largest effect and why the unsteady wake makes the averaging of outputs important.
+
+## Choosing a Model
+
+The model is chosen by what goes in, what comes out and how much data there is.
+
+| Model | Input | Output | Suitable dataset size | Remarks |
+| --- | --- | --- | --- | --- |
+| Linear or polynomial ridge regression | Parameter vector | Scalars | Tens | Baseline; quadratic terms capture simple interactions |
+| Gaussian process (kriging) | Parameter vector | Scalars, POD coefficients | Tens to a few thousand | Gives uncertainty for active learning; see [Kriging](../../numerical/surrogates/kriging.md) |
+| Radial basis functions | Parameter vector | Scalars, POD coefficients | Tens to thousands | See [Radial Basis Functions](../../numerical/surrogates/radial_basis_functions.md) |
+| Random forest, gradient boosting | Parameter vector, geometric features | Scalars | Hundreds and more | Robust to scaling, little tuning |
+| Multilayer perceptron | Parameter vector | Scalars, POD coefficients | Hundreds and more | See [Neural Networks](../fundamentals/neural_networks.md) |
+| POD plus regression | Parameter vector | Surface or volume fields | Tens to thousands | Field as a few modal coefficients; see [POD](../../numerical/pod/pod_intro.md) |
+| CNN on images, SDF grids or voxels | Rasterised geometry | Scalars, fields on a grid | Thousands | Needs a regular grid representation |
+| Graph neural network | Surface or volume mesh | Fields on the mesh, scalars | Hundreds to thousands | Handles arbitrary geometry; see [Graph Neural Networks](../neural_networks/graph_neural_networks.md) |
+| Point-cloud network | Sampled surface points | Scalars, surface fields | Thousands | No connectivity needed; see [Machine Learning on CAD Geometry](../geometry/ml_on_cad.md) |
+| Neural operator | Fields on a grid or mesh | Fields | Thousands | See [Neural Operators](../neural_networks/neural_operators.md) |
+
+When the designs are described by a fixed parameter vector, simple models are hard to beat and should always be fitted first as baselines. Geometry-based models (graph, point-cloud and grid networks) become necessary when designs come from different families or sources and no common parameterisation exists, or when surface and volume fields are predicted.
+
+## Error Metrics
+
+For $N_t$ test designs with reference values $y_i$, predictions $\hat{y}_i$ and reference mean $\bar{y}$,
+
+$$
+\mathrm{MAE} = \frac{1}{N_t}\sum_{i=1}^{N_t}|y_i - \hat{y}_i|,
+\qquad \mathrm{RMSE} = \sqrt{\frac{1}{N_t}\sum_{i=1}^{N_t}(y_i - \hat{y}_i)^2},
 \qquad R^2 = 1 - \frac{\sum_i(y_i - \hat{y}_i)^2}{\sum_i(y_i - \bar{y})^2}
 $$
 
-where $y_i$ are the reference values, $\hat{y}_i$ are the predictions, and $\bar{y}$ is the mean of the references. Cross-validation splits the dataset into multiple folds, rotating the training and validation sets to ensure consistent model performance. Overfitting can be a concern if the ML model memorizes design patterns from the training set but fails on new geometries.
+For drag, MAE and RMSE are best quoted in drag counts. $R^2$ compares the error with the spread of the test set and therefore depends on how varied the designs are: the same RMSE gives a high $R^2$ on a diverse set and a low one on a set of near-identical variants. A ranking measure (does the model order two designs correctly?) is often what an optimisation actually needs. The test designs must be different geometries from the training designs; when a geometry appears several times (for example at several yaw angles), all its runs belong to the same split. Splitting, cross-validation and uncertainty estimates are covered in [Training and Validation](../fundamentals/training_and_validation.md).
 
-One might compare predicted coefficients of drag or lift with results from high-fidelity CFD or from wind tunnel experiments. If the predicted values deviate beyond acceptable thresholds, engineers examine the differences to find data anomalies, missing physical phenomena, or an insufficient feature set.
+## Public Datasets
 
-### Practical Example of Combining ML and Aerodynamics
+Several open datasets make it possible to develop and compare automotive surrogates without generating thousands of CFD runs.
 
-Consider a study where hundreds of sedan shapes vary in hood curvature, roof slope, and rear spoiler dimensions. CFD simulations produce the drag coefficient for each geometry at three different yaw angles. These outputs form a training dataset, with input features capturing the design geometry in parametric form. A neural network is trained to predict $C_D$ for new shapes.
+| Dataset | Geometry | Data | Reference |
+| --- | --- | --- | --- |
+| DrivAerNet | Parametric variants of the DrivAer fastback | RANS results with drag, surface and volume fields, plus 3D meshes of each design | Elrefaie, Dai and Ahmed (2024) |
+| DrivAerNet++ | About 8000 variants covering fastback, notchback and estateback rear ends, with different wheel and underbody options | RANS results, surface and volume fields | Elrefaie et al. (2024) |
+| AhmedML | 500 variants of the Ahmed body | Hybrid RANS-LES time-averaged surface and volume fields, forces | Ashton et al. (2024a) |
+| DrivAerML | 500 morphed variants of the DrivAer notchback | Hybrid RANS-LES time-averaged surface and volume fields, forces | Ashton et al. (2024b) |
 
-After training, when a new shape is proposed, the neural network infers a drag coefficient in a fraction of a second. The design team can then focus on the most promising shapes. This short-circuits the classical iteration of manually designing, simulating, and repeating. Engineers also use physical insight. For instance, if the network’s predictions suggest an oddly shaped roof might reduce drag, it is worth verifying that real-world constraints (like driver headroom or crash safety) still hold.
+The underlying geometries are standard reference bodies. The Ahmed body (Ahmed et al., 1984) is a simplified bluff body with a slanted rear whose drag depends strongly on the slant angle. The DrivAer model (Heft, Indinger and Adams, 2012) is a realistic generic car with interchangeable fastback, notchback and estateback rear ends and detailed and smooth underbody options, for which wind-tunnel data exist. The datasets differ in fidelity: steady RANS gives more designs per unit of compute, while scale-resolving hybrid RANS-LES gives labels closer to experiment for fewer designs. Results from models trained on one should not be compared directly with results on another.
 
-### Real-Time Systems and Edge Deployment
+## Key Takeaways
 
-Automotive manufacturers are increasingly interested in embedding machine learning models on vehicles. Real-time adjustments of active aerodynamic devices (like moveable vents, grills, or spoilers) can be performed in response to driving conditions. The model might sense crosswinds and deploy a particular spoiler setting to maintain stability or reduce drag. This scenario requires lightweight models or hardware acceleration, since a full deep neural network might be too large for an embedded system if not optimized.
+- The task is to predict force coefficients and surface or volume fields of unseen vehicle variants from a few hundred to a few thousand CFD runs.
+- Each step of the workflow has its own note; data generation (DoE, morphing, meshing, CFD, post-processing) costs far more effort than training.
+- A useful drag surrogate must resolve about one drag count, and its error cannot be meaningfully smaller than the error of the CFD that produced its labels.
+- Start with simple regressors on the parameter vector; use graph, point-cloud or grid networks when there is no common parameterisation or when fields are predicted.
+- Report MAE and RMSE in drag counts on held-out geometries, together with $R^2$ and the spread of the test set.
+- DrivAerNet, DrivAerNet++, AhmedML and DrivAerML provide public training data at different fidelity levels.
 
-Small gradient-boosted trees or compressed neural networks can run on microcontrollers or specialized automotive chips. Data from on-board sensors, such as wheel speed, yaw rate, or local pressure taps, feed into the model. The output might be a recommended angle for a moveable aero flap. In some advanced concepts, the same model can account for external wind conditions or traffic patterns.
+## Related Scripts
 
-### Challenges of Data Quality and Variability
+- [ML-CFD Surrogate Workflow](../../../scripts/plots/ml_cfd_workflow/): draws a schematic of the workflow for building a machine-learning surrogate of CFD results, from the design of experiments to deployment in an optimisation loop.
+- [Drag Coefficient Prediction](../../../scripts/plots/drag_coefficient_prediction/): compares two synthetic drag-coefficient surrogates with held-out CFD values in a parity plot and an error plot, and shows that a high $R^2$ can hide errors of ten drag counts.
 
-Machine learning is only as good as the data it sees. Real-world road conditions can be more turbulent or unpredictable than controlled experiments. Track testing might have wind gusts or slight temperature shifts that were never part of the training set. High-quality labeled data (for example, precise drag measurements from wind tunnel tests) might be expensive to obtain.
+## Exercises
 
-Models also face risk of data drift. As new vehicle designs appear with shapes different from what the model was trained on, the predictions may degrade. Periodic retraining or combining physics-based constraints (like approximate boundary layer behavior) with data-driven approaches can mitigate these issues. Hybrid models that combine partial differential equation solvers with neural networks are an active area of research.
-
-### Mathematical Rigor and Sensitivity Analysis
-
-Rigorous mathematical treatment of machine learning in this context involves analyzing the approximation properties of models, bounding the error in predictions, and conducting sensitivity analyses to see how each input parameter (like an air dam angle or a trunk shape) affects the final aerodynamic coefficients. Sensitivity analysis reveals whether the model is stable or if small changes in geometry produce large swings in predicted drag.
-
-Bayesian methods can estimate uncertainty in the predictions. Instead of a single drag coefficient value, the model outputs a distribution, highlighting confidence regions. This approach helps engineers weigh risk when a design has uncertain aerodynamic performance.
-
-### Example of Boundary Layer Thickness Formula
-
-When dealing with boundary layer development on a flat plate, one might see approximate formulas like:
-
-$$
-\delta(x) \approx \frac{5 x}{\sqrt{\mathrm{Re}_x}}
-$$
-
-where $\mathrm{Re}_x = \frac{\rho U x}{\mu}$. In real automotive designs, the geometry is far more complex than a flat plate, but local boundary layer thickness estimates still matter. Machine learning models can use carefully chosen boundary-layer-related features to represent how flow interacts with curved surfaces or edges.
-
-### Use of Tables for Command-Line Tools and Options
-
-When setting up CFD or post-processing, engineers often run commands in software like OpenFOAM or in Python scripts. The following table summarizes a few frequent commands or flags that might appear in an HPC environment:
-
-| Command | Description |
-| --- | --- |
-| blockMesh | Generates the computational mesh based on block topology |
-| decomposePar | Splits the domain for parallel execution |
-| potentialFoam | Initializes velocity/potential flow before main solver |
-| simpleFoam | Steady-state solver for incompressible flow |
-| paraFoam | Opens ParaView for visualization |
-| reconstructPar | Combines parallel results into single domain files |
-
-Machine learning pipelines then read results from these solvers, transform them into CSV or binary formats, and feed them into training scripts. HPC job schedulers like SLURM or PBS coordinate the runs, enabling multiple CFD simulations and concurrent ML training sessions.
-
-### Future Directions
-
-Researchers are exploring generative models, which can propose new vehicle shapes on their own. A generative adversarial network (GAN), for example, can create a geometry that the discriminator network classifies as “aerodynamically efficient.” This loop can produce shapes that are unlike traditional vehicles, potentially leading to breakthroughs in drag reduction. Another trend is physics-informed neural networks (PINNs), which embed known physics equations into the training loss. By penalizing solutions that violate the Navier–Stokes constraints, the network stays closer to physically valid behavior even if training data is sparse.
-
-Adaptive aerodynamics may become increasingly important in electric vehicles, where energy conservation is critical. As the car adjusts speed or angle of attack, moveable panels and spoilers respond in real time to maintain optimal drag or downforce levels. The synergy of on-board sensors, computational intelligence, and aerodynamic knowledge paves the way for cars that continuously adapt to traffic, wind, or weather conditions.
-
-### Setting Up the Problem
-
-Applying ML to automotive aerodynamics begins with a clear objective. The most
-common goal is to predict aerodynamic coefficients (e.g., $C_D$ or $C_L$) for
-new vehicle shapes without running a full CFD simulation each time.
-
-1. **Define the objective.** Decide what the model should predict—drag
-   coefficient, lift coefficient, surface pressure distribution, or a
-   combination. A well-scoped target keeps the project tractable.
-2. **Gather training data.** Assemble results from prior CFD runs or wind
-   tunnel campaigns. Each sample pairs a geometry description (parametric
-   dimensions, mesh coordinates, or image slices) with the corresponding
-   aerodynamic output.
-3. **Choose features.** Convert raw geometry into a feature vector the model
-   can consume. Options range from simple parametric values (hood angle, rear
-   slope) to full surface meshes encoded via PCA or an autoencoder.
-4. **Select a model architecture.** Start with a baseline such as a random
-   forest or gradient-boosted tree for tabular features, or a CNN/graph
-   neural network when working with spatial fields or mesh data.
-5. **Train and validate.** Split data into training, validation, and test
-   sets. Monitor loss curves to detect overfitting and apply regularization
-   or early stopping as needed.
-6. **Validate against known results.** Compare predictions on the held-out
-   test set with high-fidelity CFD or experimental measurements. Report MAE,
-   MSE, and $R^2$ to quantify accuracy and identify failure modes.
-
-### Key Takeaways
-
-- Traditional aerodynamic evaluation through wind tunnels and CFD is accurate but slow; ML models trained on existing data can predict results in seconds.
-- The Navier–Stokes equations and derived coefficients ($C_D$, $C_L$) provide the physical foundation that ML models learn to approximate.
-- Data quality is paramount—noisy, biased, or insufficient training data leads to unreliable predictions regardless of model complexity.
-- Feature engineering informed by domain knowledge (boundary layer parameters, pressure gradients, Reynolds number) significantly improves model performance.
-- Dimensionality reduction techniques like PCA and autoencoders make high-dimensional CFD fields manageable for ML pipelines.
-- Hybrid approaches that embed physical constraints (e.g., physics-informed neural networks) can improve generalization when training data is limited.
-- Continuous retraining and validation against experimental benchmarks are essential to maintain model accuracy as new vehicle designs emerge.
-
-### Exercises
-
-**Exercise 1.** A wind-tunnel test measures a drag force $F_D = 380$ N at $U = 30$ m/s, with $\rho = 1.2$ kg/m³ and frontal area $A = 2.2$ m². Compute $C_D$ and the power needed to overcome drag. If $C_D$ stays constant, what are the drag force and power at 40 m/s?
+**Exercise 1.** A wind-tunnel test measures a drag force $F_x = 380$ N at $U_\infty = 30$ m/s, with $\rho = 1.2\ \mathrm{kg/m^3}$ and $A = 2.2\ \mathrm{m}^2$. Compute $C_d$ and the drag power. If $C_d$ stays constant, what are the drag force and power at 40 m/s?
 
 <details>
 <summary>Answer</summary>
 
 ```math
-C_D = \frac{2F_D}{\rho U^2 A} = \frac{2 \times 380}{1.2 \times 30^2 \times 2.2} \approx
-0.320
+C_d = \frac{2F_x}{\rho U_\infty^2 A} = \frac{2 \times 380}{1.2 \times 30^2 \times 2.2} \approx 0.320
 ```
 
-Power at 30 m/s: $P = F_D U = 380 \times 30 = 11.4$ kW.
+The power at 30 m/s is $P = F_x U_\infty = 380 \times 30 = 11.4$ kW.
 
-At constant $C_D$ the force scales with $U^2$ and the power with $U^3$: $F_D = 380 (40/30)^2 \approx 676$ N and $P = 11.4 (40/30)^3 \approx 27.0$ kW.
+At constant $C_d$ the force scales with $U_\infty^2$ and the power with $U_\infty^3$: $`F_x = 380\,(40/30)^2 \approx 676`$ N and $`P = 11.4\,(40/30)^3 \approx 27.0`$ kW.
 
 </details>
 
-**Exercise 2.** For the car above ($L = 4.5$ m, $\mu = 1.8 \times 10^{-5}$ Pa s), compute the Reynolds number based on length. Then use the flat-plate formula from the note to estimate $\delta$ at $x = 0.5$ m, and comment on whether that formula applies there.
+**Exercise 2.** A 4.6 m car is simulated at 140 km/h with $\nu = 1.5 \times 10^{-5}\ \mathrm{m^2/s}$ and speed of sound 343 m/s. Compute $\mathrm{Re}$ and $\mathrm{Ma}$. A 1:4 scale model is tested at the same speed: what is its Reynolds number, and what speed would match the full-scale value? Why is that not done?
 
 <details>
 <summary>Answer</summary>
 
-$\mathrm{Re} = \rho U L / \mu = 1.2 \times 30 \times 4.5 / 1.8 \times 10^{-5} = 9.0 \times 10^6$.
+$U_\infty = 140/3.6 = 38.9$ m/s, so $\mathrm{Re} = 38.9 \times 4.6/1.5 \times 10^{-5} \approx 1.19 \times 10^7$ and $\mathrm{Ma} = 38.9/343 \approx 0.11$.
 
-At $x = 0.5$ m, $\mathrm{Re}_x = 1.0 \times 10^6$, and the note's formula gives $\delta \approx 5 \times 0.5 / \sqrt{10^6} = 2.5$ mm.
-
-That formula is the laminar (Blasius) result. On a flat plate transition typically occurs around $\mathrm{Re}_x \approx 5 \times 10^5$, and on a real car it happens even earlier, so the boundary layer is probably turbulent at this point. The turbulent estimate $`\delta \approx 0.37 x \, \mathrm{Re}_x^{-1/5}`$ gives about 11.7 mm, almost five times thicker. A feature built from the wrong formula would be badly biased.
+The model has $L = 1.15$ m and $\mathrm{Re} \approx 2.98 \times 10^6$. Matching the full-scale value needs four times the speed, 156 m/s, which is $\mathrm{Ma} \approx 0.45$: compressibility effects would appear that the real car never sees, and the tunnel power would be enormous. Reduced-scale tests accept the Reynolds-number mismatch. Mixing reduced-scale and full-scale data in one training set therefore requires care with features that depend on $\mathrm{Re}$, such as transition and separation on rounded edges.
 
 </details>
 
-**Exercise 3.** A model predicts $\hat{y} = (0.31, 0.31, 0.29, 0.33, 0.30)$ for five test designs whose reference drag coefficients are $y = (0.30, 0.32, 0.28, 0.35, 0.31)$. Compute MAE, MSE and $R^2$.
+**Exercise 3.** A model predicts $\hat{y} = (0.31, 0.31, 0.29, 0.33, 0.30)$ for five test designs with reference drag coefficients $y = (0.30, 0.32, 0.28, 0.35, 0.31)$. Compute MAE and RMSE in drag counts, and $R^2$.
 
 <details>
 <summary>Answer</summary>
 
-The errors are $(-0.01, 0.01, -0.01, 0.02, 0.01)$.
+The errors $\hat{y} - y$ are $(0.01, -0.01, 0.01, -0.02, -0.01)$.
 
-- MAE $= (0.01 + 0.01 + 0.01 + 0.02 + 0.01)/5 = 0.012$.
-- The squared errors are $(1, 1, 1, 4, 1) \times 10^{-4}$, which sum to $8 \times 10^{-4}$, so MSE $= 1.6 \times 10^{-4}$.
-- $\bar{y} = 0.312$ and $\sum_i (y_i - \bar{y})^2 = 2.68 \times 10^{-3}$, so $R^2 = 1 - 8 \times 10^{-4} / 2.68 \times 10^{-3} \approx 0.70$.
+- MAE $= 0.06/5 = 0.012$, or 12 counts.
+- The squared errors sum to $8 \times 10^{-4}$, so RMSE $= \sqrt{1.6 \times 10^{-4}} \approx 0.0126$, or about 12.6 counts.
+- $\bar{y} = 0.312$ and $\sum_i (y_i - \bar{y})^2 = 2.68 \times 10^{-3}$, so $R^2 = 1 - 8 \times 10^{-4}/2.68 \times 10^{-3} \approx 0.70$.
 
-An MAE of about 4% of $C_D$ still leaves 30% of the variance unexplained, because the designs differ from one another by only a few hundredths.
+An error of about 4% of $C_d$ sounds small, but the designs differ by only a few hundredths, so 30% of their variance is unexplained and the model cannot reliably rank designs that differ by 10 counts.
 
 </details>
 
-**Exercise 4.** The practical example in the note has several hundred sedan shapes, each simulated at three yaw angles. Suppose there are 300 shapes (900 CFD results). A colleague shuffles the 900 rows and splits them 80/10/10. What is wrong, and how should the split be done?
+**Exercise 4.** A study has 300 shapes, each simulated at three yaw angles (900 CFD results). A colleague shuffles the 900 rows and splits them 80/10/10. What is wrong, and how should the split be done?
 
 <details>
 <summary>Answer</summary>
 
-A row-level split puts the same geometry into both training and test sets, only at a different yaw angle. The test score then measures interpolation in yaw for known shapes, not prediction for new shapes, and it will be optimistic.
+A row-level split puts the same geometry into both training and test sets at different yaw angles. The test score then measures interpolation in yaw for known shapes, not prediction for new shapes, and it is optimistic.
 
-Split by shape instead: 240 shapes (720 rows) for training, 30 shapes (90 rows) for validation, and 30 shapes (90 rows) for testing, keeping all yaw angles of a shape together. Fit normalization statistics and feature scalers on the training shapes only, and use grouped cross-validation (folds of shapes) for hyperparameter tuning.
+Split by shape: 240 shapes (720 rows) for training, 30 shapes (90 rows) for validation and 30 shapes (90 rows) for testing, keeping all yaw angles of a shape together. Fit normalisation statistics on the training shapes only, and use grouped cross-validation (folds of shapes) for hyperparameter tuning.
 
 </details>
 
-**Exercise 5.** A neural network for this problem takes 4 inputs (three geometric parameters and yaw angle), has two hidden layers of 64 neurons, and outputs $C_D$. Count its trainable parameters and compare with the size of the training set from Exercise 4. What precautions does the comparison suggest?
+**Exercise 5.** A network takes 4 inputs (three geometric parameters and the yaw angle), has two hidden layers of 64 neurons and outputs $C_d$. Count its trainable parameters and compare with the 720 training rows of Exercise 4. What precautions does the comparison suggest?
 
 <details>
 <summary>Answer</summary>
 
-Each dense layer has (inputs × outputs) weights plus one bias per output:
+Each dense layer has inputs times outputs weights plus one bias per output: $4 \times 64 + 64 = 320$, $64 \times 64 + 64 = 4160$ and $64 + 1 = 65$, so 4545 parameters in total.
 
-- $4 \to 64$: $4 \times 64 + 64 = 320$
-- $64 \to 64$: $64 \times 64 + 64 = 4160$
-- $64 \to 1$: $64 + 1 = 65$
-
-That is 4545 parameters in total, for only 720 training rows.
-
-With more parameters than samples the network can memorize the training set. Precautions include weight decay or dropout, early stopping on the validation shapes, a smaller network, and comparison against a random forest or gradient-boosted tree baseline, which often does as well on small tabular datasets.
+With more parameters than training samples the network can fit the training set exactly. Weight decay, early stopping on the validation shapes, a smaller network and comparison with a Gaussian process or gradient-boosted trees baseline, which often do as well on small tabular datasets, are the usual precautions.
 
 </details>
 
-### References
+## References
 
-- Brunton, S. L., Noack, B. R., & Koumoutsakos, P., "Machine Learning for Fluid Mechanics", *Annual Review of Fluid Mechanics* 52, 2020.
-- Hastie, T., Tibshirani, R., & Friedman, J., *The Elements of Statistical Learning*, 2nd ed., Springer, 2009.
-- Breiman, L., "Random Forests", *Machine Learning* 45(1), 2001.
-- Schlichting, H., & Gersten, K., *Boundary-Layer Theory*, 9th ed., Springer, 2017.
-- Raissi, M., Perdikaris, P., & Karniadakis, G. E., "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations", *Journal of Computational Physics* 378, 2019.
+- Hucho, W.-H. (Ed.), *Aerodynamics of Road Vehicles*, 4th ed., SAE International, 1998.
+- Katz, J., *Automotive Aerodynamics*, Wiley, 2016.
+- Ahmed, S. R., Ramm, G., & Faltin, G., "Some Salient Features of the Time-Averaged Ground Vehicle Wake", SAE Technical Paper 840300, 1984.
+- Heft, A. I., Indinger, T., & Adams, N. A., "Introduction of a New Realistic Generic Car Model for Aerodynamic Investigations", SAE Technical Paper 2012-01-0168, 2012.
+- Elrefaie, M., Dai, A., & Ahmed, F., "DrivAerNet: A Parametric Car Dataset for Data-Driven Aerodynamic Design and Graph-Based Drag Prediction", ASME International Design Engineering Technical Conferences and Computers and Information in Engineering Conference (IDETC-CIE), 2024.
+- Elrefaie, M., Morar, F., Dai, A., & Ahmed, F., "DrivAerNet++: A Large-Scale Multimodal Car Dataset with Computational Fluid Dynamics Simulations and Deep Learning Benchmarks", Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks Track, 2024.
+- Ashton, N., et al., "AhmedML: High-Fidelity Computational Fluid Dynamics Dataset for Incompressible, Low-Speed Bluff Body Aerodynamics", arXiv preprint, 2024a.
+- Ashton, N., et al., "DrivAerML: High-Fidelity Computational Fluid Dynamics Dataset for Road-Car External Aerodynamics", arXiv preprint, 2024b.
+- Brunton, S. L., Noack, B. R., & Koumoutsakos, P., "Machine Learning for Fluid Mechanics", *Annual Review of Fluid Mechanics* 52, 477–508, 2020.

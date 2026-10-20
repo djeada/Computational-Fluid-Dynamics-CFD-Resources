@@ -1,202 +1,134 @@
-## The Snapshot POD
+# The Method of Snapshots
 
-The Proper Orthogonal Decomposition (POD) is a powerful technique used to identify the most energetic modes (patterns) in a dataset—often coming from fluid dynamics, structural vibrations, or other complex systems. Traditional POD can be performed in two main ways: the so-called **Direct POD** and the **Snapshot POD**. While Direct POD deals directly with large covariance matrices that can be huge if the spatial dimension is large, Snapshot POD provides a more computationally tractable route when the number of snapshots (time samples) is smaller than the spatial dimension.
+The method of snapshots, introduced by Sirovich (1987), computes POD from the $M \times M$ matrix of inner products between snapshots instead of the $N \times N$ spatial covariance matrix. Since CFD and PIV data usually have far more spatial degrees of freedom $N$ than snapshots $M$, this turns an impossible eigenvalue problem into a small one. This note gives the derivation, the algorithm including the normalisation of the recovered modes, and when the method is the right choice. The relation to the SVD and the accuracy cost of forming the correlation matrix are in [POD and the SVD](pod_vs_svd.md); the notation is that of [POD for N Points](derivation_in_n_dim.md).
 
-### Symmetry in the POD Equation
+## Problem Statement
 
-A key concept behind POD is that it involves decomposing a field $\mathbf{u}'(\mathbf{x}, t)$ into modes that depend either on space or on time. Mathematically, POD often starts from an equation like:
+Given the mean-subtracted snapshot matrix $\mathbf{U} \in \mathbb{R}^{N \times M}$ with $M \ll N$ (for example $N = 10^7$ cells and $M = 500$ instants), and optionally a diagonal weight matrix $\mathbf{W}$, compute the POD eigenvalues $\lambda_i$, the unit-norm spatial modes $\boldsymbol{\phi}_i$ and the coefficients $a_i(t_j)$ using $O(M^2)$ memory beyond the data and $O(NM^2)$ operations. The method is correct when its modes and eigenvalues equal those of the direct method for every $\lambda_i > 0$.
 
-$$
-\mathbf{u}'(\mathbf{x}, t) = \sum_{k=1}^{\infty} a_k(t) \mathbf{\Phi}_k(\mathbf{x}),
-\quad (1)
-$$
+## Derivation
 
-Here:
+Every POD mode with $\lambda > 0$ lies in the span of the snapshots: from $\mathbf{C}\boldsymbol{\phi} = \lambda\boldsymbol{\phi}$,
 
-- $\mathbf{x}$ is the spatial coordinate.
-- $t$ is the temporal variable.
-- $\mathbf{\Phi}_k(\mathbf{x})$ are spatial modes.
-- $a_k(t)$ are temporal coefficients.
+```math
+\boldsymbol{\phi} = \frac{1}{\lambda}\mathbf{C}\boldsymbol{\phi} = \frac{1}{(M-1)\lambda}\mathbf{U}(\mathbf{U}^T\boldsymbol{\phi}) = \mathbf{U}\mathbf{c}
+```
 
-This expression exhibits a certain symmetry: if you imagine interchanging the role of space and time, the same formalism applies. This conceptual symmetry underlies the idea behind Snapshot POD, as introduced by Sirovich. Instead of focusing on the spatial dimension first, Snapshot POD leverages the time dimension (or more generally, the dimension that has fewer samples) to simplify computations.
+for some coefficient vector $\mathbf{c} \in \mathbb{R}^M$. Substituting $\boldsymbol{\phi} = \mathbf{U}\mathbf{c}$ into the eigenvalue problem, $`\mathbf{U}\mathbf{U}^T\mathbf{U}\mathbf{c} = (M-1)\lambda\,\mathbf{U}\mathbf{c}`$, which holds if $\mathbf{c}$ solves the $M \times M$ problem
 
-### Snapshot POD Methods
+```math
+\mathbf{K}\mathbf{v} = \lambda\mathbf{v}, \qquad \mathbf{K} = \frac{1}{M-1}\mathbf{U}^T\mathbf{U}, \qquad K_{jl} = \frac{(\mathbf{u}'_j, \mathbf{u}'_l)}{M-1}
+```
 
-Recall that POD involves constructing a covariance matrix from your data and performing an eigenvalue decomposition to extract the principal modes. There are two common approaches:
+with $\mathbf{c}$ proportional to $\mathbf{v}$. The entry $K_{jl}$ is the inner product of snapshots $j$ and $l$: the roles of space and time are exchanged, which is the symmetry Sirovich exploited. Conversely, if $\mathbf{K}\mathbf{v} = \lambda\mathbf{v}$ with $\lambda > 0$, then
 
-I. **First Method (Transpose the Snapshot Matrix)**:
+```math
+\mathbf{C}(\mathbf{U}\mathbf{v}) = \frac{1}{M-1}\mathbf{U}(\mathbf{U}^T\mathbf{U}\mathbf{v}) = \mathbf{U}\mathbf{K}\mathbf{v} = \lambda\,(\mathbf{U}\mathbf{v})
+```
 
-Take your snapshot matrix $\mathbf{U}$, which is usually sized $m \times n$ (with $m$ representing the number of snapshots and $n$ the number of spatial points). If performing Direct POD is challenging, you can instead transpose $\mathbf{U}$ (forming $\mathbf{U}^T$) and apply direct POD to this transposed data. Since transposition swaps the roles of $m$ and $n$, you effectively switch what you consider as the "parameter" dimension and the "measurement" dimension.
+so $\mathbf{U}\mathbf{v}$ is an eigenvector of $\mathbf{C}$ with the same eigenvalue. The two problems share their nonzero spectrum, and at most $M - 1$ eigenvalues are nonzero after mean subtraction.
 
-II. **Second Method (Use the Original Snapshot Matrix)**:
+The vector $\mathbf{U}\mathbf{v}$ is not normalised. With $\lVert \mathbf{v} \rVert = 1$,
 
-The hallmark of Snapshot POD as originally proposed by Sirovich is that you keep the original $m \times n$ snapshot matrix $\mathbf{U}$ intact, but you form a correlation matrix differently:
+```math
+\lVert \mathbf{U}\mathbf{v} \rVert^2 = \mathbf{v}^T\mathbf{U}^T\mathbf{U}\mathbf{v} = (M-1)\lambda \quad \Longrightarrow \quad \boldsymbol{\phi}_i = \frac{\mathbf{U}\mathbf{v}_i}{\sqrt{(M-1)\lambda_i}}
+```
 
-$$
-\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T
-$$
+The modes obtained this way are orthonormal, $`\boldsymbol{\phi}_i^T\boldsymbol{\phi}_k = \mathbf{v}_i^T\mathbf{U}^T\mathbf{U}\mathbf{v}_k/((M-1)\sqrt{\lambda_i\lambda_k}) = \delta_{ik}`$. The coefficients follow without another pass over the data:
 
-Notice that in Direct POD, you'd consider $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$, an $n \times n$ matrix (if you have $n$ spatial points). However, now $\mathbf{C}_s$ is $m \times m$, which can be much smaller and thus computationally more feasible if $m < n$.
+```math
+\mathbf{a}_i^T = \boldsymbol{\phi}_i^T\mathbf{U} = \frac{\mathbf{v}_i^T\mathbf{U}^T\mathbf{U}}{\sqrt{(M-1)\lambda_i}} = \sqrt{(M-1)\lambda_i}\;\mathbf{v}_i^T
+```
 
-### The Correlation Matrix $\mathbf{C}_s$
+So the eigenvectors $\mathbf{v}_i$ of $\mathbf{K}$ are the time coefficients scaled to unit length, and $\sqrt{(M-1)\lambda_i} = \sigma_i$ is the singular value of $\mathbf{U}$. In the SVD $\mathbf{U} = \mathbf{L}\boldsymbol{\Sigma}\mathbf{V}^T$, the method of snapshots computes $\mathbf{V}$ and $\boldsymbol{\Sigma}$ first and then $\mathbf{L} = \mathbf{U}\mathbf{V}\boldsymbol{\Sigma}^{-1}$.
 
-The matrix $\mathbf{C}_s = \frac{1}{m-1}\mathbf{U}\mathbf{U}^T$ can be interpreted as follows:
+## Algorithm
 
-- Instead of averaging along the temporal dimension to form a large $n \times n$ matrix, you are now considering a correlation matrix along the snapshot dimension, resulting in an $m \times m$ matrix.
-- Since $m$ (the number of snapshots) is typically much smaller than $n$ (the number of spatial points), $\mathbf{C}_s$ is computationally more manageable.
+1. Assemble $\mathbf{U}$ from the snapshots and subtract the temporal mean from every row.
+2. Form $\mathbf{K} = \mathbf{U}^T\mathbf{W}\mathbf{U}/(M-1)$, with $\mathbf{W} = \mathbf{I}$ on a uniform grid or the cell volumes on a mesh ([weighted inner products](derivation_in_n_dim.md#non-uniform-meshes-and-weighted-inner-products)).
+3. Solve the symmetric eigenproblem $\mathbf{K}\mathbf{V} = \mathbf{V}\boldsymbol{\Lambda}$ and sort the eigenvalues in descending order.
+4. Discard eigenpairs with $\lambda_i$ below a round-off tolerance, about $\epsilon\max(N, M)\lambda_1$. Mean subtraction always produces at least one such null pair.
+5. Recover the modes $\boldsymbol{\phi}_i = \mathbf{U}\mathbf{v}_i/\sqrt{(M-1)\lambda_i}$ for the $r$ modes needed. They satisfy $\boldsymbol{\Phi}^T\mathbf{W}\boldsymbol{\Phi} = \mathbf{I}$.
+6. Set the coefficients $`a_i(t_j) = \sqrt{(M-1)\lambda_i}\,v_{ji}`$.
 
-You then compute the eigenvalue decomposition:
+This is `compute_pod(snapshots, method="snapshot")` in [scripts/_numerics.py](../../../scripts/_numerics.py) for $\mathbf{W} = \mathbf{I}$. Step 2 costs $O(NM^2)$, step 3 $O(M^3)$, step 5 $O(NMr)$. The sign of each $\mathbf{v}_i$ is arbitrary, so the modes and coefficients may differ in sign from those of another code; the products $\boldsymbol{\phi}_i\mathbf{a}_i^T$ do not.
 
-$$
-[A_s, LAM_s] = \text{eig}(C_s)
-$$
+## When to Use It
 
-where $A_s \in \mathbb{R}^{m \times m}$ contains eigenvectors and $LAM_s$ is the diagonal matrix of eigenvalues. These eigenvectors represent temporal modes in this framework.
+The method of snapshots is the natural choice when:
 
-### From Temporal Modes to Spatial Coefficients
+- $M \ll N$, the usual situation for 3D simulations and planar or volumetric PIV;
+- the data do not fit in memory at once. $\mathbf{K}$ is a sum of contributions from blocks of points, $`\mathbf{K} = \sum_{\text{blocks } b}\mathbf{U}_b^T\mathbf{W}_b\mathbf{U}_b/(M-1)`$, so it can be accumulated while reading snapshots or row blocks from disk, or in parallel, with each process holding its own subdomain and a single reduction of an $M \times M$ matrix;
+- snapshots arrive one by one: a new snapshot adds one row and column of inner products.
 
-Once you have the temporal modes from $\mathbf{C}_s$, you still need the spatial patterns. Since your original data is in $\mathbf{U}$, you can recover the spatial coefficients:
+The snapshots need not be time-resolved or equally spaced; only the set matters. Unequal sampling (for example, snapshots clustered in one phase of a cycle) is handled by weighting the snapshots, which replaces $1/(M-1)$ by quadrature weights in time.
 
-$$
-\mathbf{\Phi}_s = \mathbf{U}^T A_s
-$$
-
-where $\mathbf{\Phi}_s$ will provide the spatial structures of the modes. This step effectively translates the temporal mode representation into spatial patterns.
-
-### Equivalence and Differences from Direct POD
-
-**Eigenvalues**: The eigenvalues you get from Snapshot POD match those you would get from Direct POD. Both methods identify the same energy distribution among modes. This ensures that no matter which approach you use, the fundamental modal decomposition remains consistent.
-
-**Modes and Coefficients**: The main difference lies in what is orthonormal and where scaling factors appear:
-
-- In Direct POD:
-- Spatial modes are orthonormal in space.
-- Time coefficients can be determined directly and typically require no additional scaling.
-- In Snapshot POD:
-- Temporal modes end up being orthonormal.
-- The spatial modes you recover from $\mathbf{U}^T A_s$ are not initially normalized and often must be scaled appropriately.
-
-### Normalization and Scaling
-
-To align the results of Snapshot POD with those of Direct POD, a normalization step is often required. This ensures that you end up with a consistent set of modes and coefficients across different approaches. Although Snapshot POD initially yields temporal modes that are orthonormal and spatial modes that are not, simple post-processing (normalization and scaling) rectifies these differences.
-
-### Reconstructing the Original Data
-
-An essential property of POD (including Snapshot POD) is that you can reconstruct the original data matrix $\mathbf{U}$ using the product of temporal modes and spatial modes. Specifically, from the Snapshot POD framework:
-
-$$
-\mathbf{U} = A_s \mathbf{\Phi}_s^T
-$$
-
-where:
-
-- $A_s$ contains the temporal modes (time coefficients).
-- $\mathbf{\Phi}_s$ contains the (unnormalized) spatial modes.
-
-This decomposition shows that every snapshot can be rebuilt from a sum of modal contributions, affirming the completeness of the POD approximation.
-
-### Computational Advantages of Snapshot POD
-
-The main advantage of Snapshot POD is computational efficiency, especially when the spatial dimension $n$ is huge while the number of snapshots $m$ is relatively small:
-
-- **Reduced Matrix Size**: Instead of dealing with an $n \times n$ covariance matrix (which could be huge), Snapshot POD deals with an $m \times m$ matrix. Since $m < n$ typically, this is a significant reduction in computational cost.
-- **Faster Eigen-decompositions**: Computing the eigenvalue decomposition for a smaller $m \times m$ matrix is more tractable, saving both memory and CPU time.
-- **Practical Example**: For complex fluid flow fields (e.g., a turbulent separation bubble):
-- Direct POD would require forming and decomposing an enormous $n \times n$ matrix, with $n$ possibly in the millions.
-- Snapshot POD only deals with an $m \times m$ matrix, with $m$ being the number of snapshots (often in the order of hundreds or thousands, which is far more manageable than millions).
-
-### Use Cases
-
-- **Snapshot POD**: Ideal when your dataset comes from, say, PIV (Particle Image Velocimetry) experiments or from large-scale CFD simulations, where you have a few hundred or thousand snapshots of a very high-dimensional field.
-- **Direct POD**: More practical when you have a small set of spatial points but a very large number of time samples (or other parameters). It's less common in high-dimensional CFD but may arise in experimental setups with very limited spatial sensors but continuous time measurements.
-
-### Practical Equivalence
-
-Both Snapshot and Direct POD methods yield the same set of significant modes (limited by $`\min(m,n)`$). If $m < n$, some modes from the direct method would correspond to zero eigenvalues and be physically irrelevant. Snapshot POD naturally avoids dealing with those irrelevant modes due to its truncated dimension. Additionally:
-
-- The sign of the modes (or time coefficients) may differ between methods. This is inconsequential, as a negative sign can be absorbed either in the mode shape or the coefficient. The physics (energy, variance captured) remains the same.
-
-## Purpose in CFD
-
-In high-fidelity CFD the spatial dimension $n$ (millions of grid points) far exceeds the number of snapshots $m$ (hundreds or thousands). Snapshot POD avoids forming the huge $n \times n$ covariance matrix by instead working with the much smaller $m \times m$ correlation matrix, making the eigenvalue decomposition tractable. This note explains both Snapshot POD methods, the normalization step needed to recover spatial modes, and the computational savings.
-
-## Input / Output
-
-| Aspect | Details |
-| --- | --- |
-| **Inputs** | Snapshot matrix $\mathbf{U} \in \mathbb{R}^{m \times n}$ with $m \ll n$ |
-| **Outputs** | Correlation matrix $\mathbf{C}_s \in \mathbb{R}^{m \times m}$, eigenvalues (same as Direct POD), temporal modes $A_s$, spatial modes $\boldsymbol{\Phi}_s = \mathbf{U}^T A_s$ (after normalization) |
+The direct method is preferable when $N < M$, for example a few hot-wire or pressure probes sampled for millions of time steps. The thin SVD of $\mathbf{U}$ costs the same order as forming $\mathbf{K}$ and is more accurate, because forming $\mathbf{K}$ squares the condition number and limits resolvable singular values to about $10^{-8}\sigma_1$ in double precision ([POD and the SVD](pod_vs_svd.md#numerical-accuracy)). When the whole matrix fits in memory, the SVD is therefore the default and the method of snapshots the tool for out-of-core and distributed data.
 
 ## Related Scripts
 
-- [POD Analysis for Flow Fields](../../../scripts/plots/pod_analysis_for_flow_fields/): performs Proper Orthogonal Decomposition (POD) on a synthetic 100 × 50 snapshot matrix with the singular value decomposition (SVD) and plots the eigenvalue spectrum with the share of turbulent kinetic energy (TKE) in each mode.
-- [POD Spatial Modes and Temporal Coefficients](../../../scripts/plots/pod_modes_and_temporal_coefficients/): extracts the first three POD spatial modes and their temporal coefficients from a synthetic two-dimensional, time-dependent field and plots them.
-- [Proper Orthogonal Decomposition (POD)](../../../scripts/algorithms/pod/): performs Proper Orthogonal Decomposition on a synthetic spatio-temporal field by taking the singular value decomposition of the mean-subtracted snapshot matrix.
 - [Snapshot Proper Orthogonal Decomposition (Snapshot POD)](../../../scripts/algorithms/snapshot_pod/): computes POD modes of a synthetic spatio-temporal field with the snapshot method, which solves an eigenvalue problem for the $M \times M$ temporal correlation matrix instead of the much larger $N \times N$ spatial one.
+- [Proper Orthogonal Decomposition (POD)](../../../scripts/algorithms/pod/): performs Proper Orthogonal Decomposition on a synthetic spatio-temporal field by taking the singular value decomposition of the mean-subtracted snapshot matrix.
+- [POD Spatial Modes and Temporal Coefficients](../../../scripts/plots/pod_modes_and_temporal_coefficients/): extracts the first three POD spatial modes and their temporal coefficients from a synthetic two-dimensional, time-dependent field and plots them.
+- [POD Analysis for Flow Fields](../../../scripts/plots/pod_analysis_for_flow_fields/): performs Proper Orthogonal Decomposition (POD) on a synthetic 100 × 50 snapshot matrix with the singular value decomposition (SVD) and plots the eigenvalue spectrum with the share of turbulent kinetic energy (TKE) in each mode.
 
 ## Exercises
 
-**Exercise 1.** For the separation-bubble data ($m = 3580$ snapshots, $n = 5805$ points), by what factor is the snapshot correlation matrix $\mathbf{C}_s$ smaller in storage than $\mathbf{C}$? Repeat for a simulation with $m = 1000$ snapshots and $n = 10^6$ cells.
+**Exercise 1.** By what factor is $\mathbf{K}$ smaller than $\mathbf{C}$ in storage for a PIV data set with $N = 5805$ points and $M = 3580$ snapshots, and for a simulation with $N = 10^6$ cells and $M = 1000$ snapshots?
 
 <details>
 <summary>Answer</summary>
 
-The storage ratio is $(n/m)^2$. For the separation bubble, $(5805/3580)^2 \approx 2.63$, a modest saving. For the simulation, $(10^6/10^3)^2 = 10^6$: $\mathbf{C}$ would need 8 TB while $\mathbf{C}_s$ needs 8 MB.
+The ratio is $(N/M)^2$. For the PIV data, $(5805/3580)^2 = 2.63$, a modest saving; here the direct method is also feasible. For the simulation, $(10^6/10^3)^2 = 10^6$: $\mathbf{C}$ would need 8 TB, $\mathbf{K}$ needs 8 MB.
 
 </details>
 
-**Exercise 2.** Take $m = 2$ snapshots at $n = 3$ points,
+**Exercise 2.** Three points and two snapshots, used without mean subtraction and with $M - 1 = 1$, give
 
 ```math
-\mathbf{U} = \begin{pmatrix} 2 & 1 & 0 \\ 1 & 2 & 1 \end{pmatrix}
+\mathbf{U} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \\ 0 & 1 \end{pmatrix}
 ```
 
-used without mean subtraction, so that $\frac{1}{m-1} = 1$. Compute $\mathbf{C}_s$, its eigenvalues and eigenvectors $A_s$, the unnormalized spatial modes $\mathbf{\Phi}_s = \mathbf{U}^T A_s$ and their norms, and the normalized modes. Compare with the eigen-decomposition of $\mathbf{C} = \mathbf{U}^T\mathbf{U}$.
+Compute $\mathbf{K}$, its eigenpairs, the unnormalised modes $\mathbf{U}\mathbf{v}_i$ and their norms, and the normalised modes. Compare with the eigendecomposition of $\mathbf{C} = \mathbf{U}\mathbf{U}^T$.
 
 <details>
 <summary>Answer</summary>
 
-$`\mathbf{C}_s = \mathbf{U}\mathbf{U}^T = \begin{pmatrix} 5 & 4 \\ 4 & 6 \end{pmatrix}`$. Its eigenvalues are $(11 \pm \sqrt{65})/2$, i.e. $\lambda_1 = 9.5311$ and $\lambda_2 = 1.4689$, with eigenvectors $a_1 = (0.6618, 0.7497)$ and $a_2 = (-0.7497, 0.6618)$.
+$`\mathbf{K} = \mathbf{U}^T\mathbf{U} = \begin{pmatrix} 5 & 4 \\ 4 & 6 \end{pmatrix}`$, with eigenvalues $(11 \pm \sqrt{65})/2$, i.e. $\lambda_1 = 9.5311$ and $\lambda_2 = 1.4689$, and eigenvectors $\mathbf{v}_1 = (0.6618, 0.7497)$ and $\mathbf{v}_2 = (-0.7497, 0.6618)$.
 
-$\mathbf{U}^T a_1 = (2.0733, 2.1612, 0.7497)$ has norm $3.0873 = \sqrt{\lambda_1}$. $\mathbf{U}^T a_2 = (-0.8376, 0.5739, 0.6618)$ has norm $1.2120 = \sqrt{\lambda_2}$. Dividing by these norms gives $\phi_1 = (0.6716, 0.7000, 0.2428)$ and $\phi_2 = (-0.6911, 0.4735, 0.5461)$.
+$\mathbf{U}\mathbf{v}_1 = (2.0733, 2.1612, 0.7497)$ has norm $3.0873 = \sqrt{\lambda_1}$, and $\mathbf{U}\mathbf{v}_2 = (-0.8376, 0.5739, 0.6618)$ has norm $1.2120 = \sqrt{\lambda_2}$. Dividing gives $\boldsymbol{\phi}_1 = (0.6716, 0.7000, 0.2428)$ and $\boldsymbol{\phi}_2 = (-0.6911, 0.4735, 0.5461)$.
 
-Direct POD: $`\mathbf{C} = \begin{pmatrix} 5 & 4 & 1 \\ 4 & 5 & 2 \\ 1 & 2 & 1 \end{pmatrix}`$ has eigenvalues $9.5311, 1.4689, 0$, and its first two eigenvectors equal $\phi_1$ and $\phi_2$ up to sign. The third mode has zero energy and is not needed.
+$`\mathbf{C} = \begin{pmatrix} 5 & 4 & 1 \\ 4 & 5 & 2 \\ 1 & 2 & 1 \end{pmatrix}`$ has eigenvalues $9.5311$, $1.4689$ and $0$, and its first two eigenvectors equal $\boldsymbol{\phi}_1$ and $\boldsymbol{\phi}_2$ up to sign. The third has zero energy and no counterpart in $\mathbf{K}$.
 
 </details>
 
-**Exercise 3.** Prove the eigenvalue equivalence. If $\mathbf{C}_s a = \lambda a$ with $`\|a\| = 1`$ and $\lambda > 0$, show that $\mathbf{U}^T a$ is an eigenvector of $\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}$ with the same eigenvalue, and that $`\|\mathbf{U}^T a\|^2 = (m-1)\lambda`$. Deduce the normalization $\phi = \mathbf{U}^T a/\sqrt{(m-1)\lambda}$.
+**Exercise 3.** Show that if $\mathbf{K}\mathbf{v} = \lambda\mathbf{v}$ with $\lambda > 0$ and $\lVert \mathbf{v} \rVert = 1$, then $\mathbf{U}\mathbf{v} \ne \mathbf{0}$, and that two such modes with different eigenvalues are orthogonal.
 
 <details>
 <summary>Answer</summary>
 
+$`\lVert \mathbf{U}\mathbf{v} \rVert^2 = \mathbf{v}^T\mathbf{U}^T\mathbf{U}\mathbf{v} = (M-1)\mathbf{v}^T\mathbf{K}\mathbf{v} = (M-1)\lambda > 0`$. For two eigenpairs,
+
 ```math
-\mathbf{C}\,(\mathbf{U}^T a) = \frac{1}{m-1}\mathbf{U}^T\mathbf{U}\mathbf{U}^T
-a = \mathbf{U}^T\mathbf{C}_s a = \lambda\,\mathbf{U}^T a
+(\mathbf{U}\mathbf{v}_i)^T(\mathbf{U}\mathbf{v}_k) = (M-1)\mathbf{v}_i^T\mathbf{K}\mathbf{v}_k = (M-1)\lambda_k\,\mathbf{v}_i^T\mathbf{v}_k = 0
 ```
 
-$\mathbf{U}^T a \neq 0$ because $`\|\mathbf{U}^T a\|^2 = a^T\mathbf{U}\mathbf{U}^T a = (m-1)\,a^T\mathbf{C}_s a = (m-1)\lambda > 0`$. Dividing by the square root of this norm gives a unit spatial mode, $\phi = \mathbf{U}^T a/\sqrt{(m-1)\lambda}$. In Exercise 2, $m - 1 = 1$ and the norms were $\sqrt{\lambda}$.
+because eigenvectors of the symmetric $\mathbf{K}$ for different eigenvalues are orthogonal. The recovered modes inherit orthogonality from $\mathbf{V}$, and the normalisation only rescales them.
 
 </details>
 
-**Exercise 4.** Show that $\mathbf{U} = A_s\mathbf{\Phi}_s^T$, where $\mathbf{\Phi}_s = \mathbf{U}^T A_s$ is unnormalized. Then show that the direct-POD time coefficients $\mathbf{U}\phi_k$ (with normalized $\phi_k$) equal $`\sqrt{(m-1)\lambda_k}\,a_k`$, and evaluate the first column for Exercise 2.
+**Exercise 4.** For Exercise 2, compute the coefficients $\mathbf{a}_1^T = \boldsymbol{\phi}_1^T\mathbf{U}$ directly and from $`\sqrt{(M-1)\lambda_1}\,\mathbf{v}_1^T`$, and check that $\mathbf{U} = \boldsymbol{\phi}_1\mathbf{a}_1^T + \boldsymbol{\phi}_2\mathbf{a}_2^T$ at one entry.
 
 <details>
 <summary>Answer</summary>
 
-$A_s$ is an orthogonal $m \times m$ matrix, so $A_s\mathbf{\Phi}_s^T = A_s A_s^T\mathbf{U} = \mathbf{U}$.
-
-With $\phi_k = \mathbf{U}^T a_k/\sqrt{(m-1)\lambda_k}$:
-
-```math
-\mathbf{U}\phi_k = \frac{\mathbf{U}\mathbf{U}^T a_k}{\sqrt{(m-1)\lambda_k}} = \frac{(m-1)\lambda_k\,a_k}{\sqrt{(m-1)\lambda_k}} = \sqrt{(m-1)\lambda_k}\; a_k
-```
-
-So the snapshot eigenvectors are the time coefficients rescaled to unit norm; this is the scaling step mentioned in the note. For Exercise 2, $\mathbf{U}\phi_1 = 3.0873 \times (0.6618, 0.7497) = (2.0432, 2.3144)$.
+$\boldsymbol{\phi}_1^T\mathbf{U} = (2.0432, 2.3144)$ and $3.0873 \times (0.6618, 0.7497) = (2.0432, 2.3145)$, equal up to rounding. Similarly $`\mathbf{a}_2^T = 1.2120 \times (-0.7497, 0.6618) = (-0.9086, 0.8021)`$. At entry $`(1, 1)`$: $`0.6716 \times 2.0432 + (-0.6911)(-0.9086) = 1.3722 + 0.6279 = 2.000`$, the value of $`U_{11}`$.
 
 </details>
 
 ## References
 
-- L. Sirovich, "Turbulence and the dynamics of coherent structures. Part I: Coherent structures", *Quarterly of Applied Mathematics* 45(3), 1987.
-- J. Weiss, "A Tutorial on the Proper Orthogonal Decomposition", *AIAA Aviation 2019 Forum*, Dallas, Texas, 2019.
+- L. Sirovich, "Turbulence and the dynamics of coherent structures. Part I: Coherent structures", *Quarterly of Applied Mathematics* 45(3), 1987, pp. 561–571.
 - P. Holmes, J. L. Lumley, G. Berkooz and C. W. Rowley, *Turbulence, Coherent Structures, Dynamical Systems and Symmetry*, 2nd ed., Cambridge University Press, 2012.
+- J. Weiss, "A tutorial on the proper orthogonal decomposition", AIAA Paper 2019-3333, *AIAA Aviation 2019 Forum*, Dallas, 2019.
+- K. Taira, S. L. Brunton, S. T. M. Dawson, C. W. Rowley, T. Colonius, B. J. McKeon, O. T. Schmidt, S. Gordeyev, V. Theofilis and L. S. Ukeiley, "Modal analysis of fluid flows: An overview", *AIAA Journal* 55(12), 2017, pp. 4013–4041.

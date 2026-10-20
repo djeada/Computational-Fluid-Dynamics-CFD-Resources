@@ -74,16 +74,16 @@ Topics that are planned but not written yet. Section READMEs used to link to the
 
 ## Numerical methods (`notes/numerical/`)
 
-- [ ] Dynamic mode decomposition (DMD): `rom/dmd.md`
-- [ ] High-order methods (spectral, discontinuous Galerkin): `high_order/intro.md`
 - [ ] Immersed boundary and cut-cell methods: `immersed_boundary/intro.md`
-- [ ] Pressure–velocity coupling (SIMPLE, PISO) in depth: `fvm/pressure_velocity_coupling.md`
+- [ ] Multiphase interface capturing (VOF, level set): `fvm/interface_capturing.md`
+- [ ] Mesh motion and arbitrary Lagrangian–Eulerian methods: `fvm/moving_meshes.md`
+- [ ] Parallel computing and domain decomposition for CFD: `cfd/parallel_computing.md`
 
 ## Machine learning (`notes/machine_learning/`)
 
-- [ ] Physics-informed neural networks (PINNs): `neural_networks/pinns.md`
-- [ ] Neural operators (DeepONet, Fourier neural operator): `neural_networks/neural_operators.md`
-- [ ] Machine-learning-augmented turbulence closures: `flow/ml_turbulence_closures.md`
+- [ ] Reinforcement learning for active flow control: `flow/flow_control_rl.md`
+- [ ] Generative models (VAEs, diffusion models) for flow fields and shapes: `neural_networks/generative_models.md`
+- [ ] Uncertainty quantification for neural-network surrogates in depth: `fundamentals/uncertainty_quantification.md`
 
 ## Applied mechanics (`notes/applied_mechanics/`)
 
@@ -138,5 +138,3 @@ Topics that are planned but not written yet. Section READMEs used to link to the
 ## Scripts (`scripts/`)
 
 - [ ] Validation cases that compare against published benchmark data and report error norms
-- [ ] Dynamic mode decomposition example: `algorithms/dmd/`
-- [ ] Shock tube (Sod problem) with a finite-volume Godunov scheme: `simulations/sod_shock_tube/`

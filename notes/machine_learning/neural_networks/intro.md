@@ -1,396 +1,252 @@
-## Neural Networks in Aerodynamics
+# Neural-Network Surrogates for Aerodynamics
 
-High-fidelity CFD simulations for aerodynamic analysis are computationally expensive, often requiring hours to days per design variant on HPC clusters. This cost limits the number of designs that can be evaluated during optimization. Neural networks offer a way to build fast surrogate models that approximate the mapping from geometry and flow conditions to aerodynamic quantities, enabling rapid exploration of large design spaces at a fraction of the computational cost.
+A steady RANS solution around a car or a wing costs hours of compute, so a design study is limited by how many CFD runs it can afford. A neural-network surrogate is trained once on a set of solved cases and then predicts force coefficients or flow fields for a new geometry in milliseconds. This note sets up the learning problem, organises the methods by how the geometry is fed to the network, compares data-driven, physics-informed and hybrid strategies, and gives a break-even formula for deciding whether a surrogate pays for the CFD needed to train it.
 
-Neural networks in computational fluid dynamics (CFD) blend powerful machine-learning algorithms with physics-based simulation methods. This fusion paves the way for faster and more efficient aerodynamic calculations, unveiling new flow phenomena, accelerating shape optimization, and handling large-scale design tasks. While traditional CFD remains indispensable for high-fidelity simulations in industry, neural networks are reshaping the landscape by offering novel capabilities: reduced computational cost, rapid prototyping, and near real-time flow predictions for complex geometries and operating conditions.
+The case-study notes in [automotive_aerodynamics](../automotive_aerodynamics/ml_process.md) follow one such workflow end to end. Graph networks, physics-informed networks and neural operators have their own notes, linked below.
 
-### Advances in Neural Networks for CFD
+## Problem Statement
 
-Classical CFD relies on discretizing the Navier–Stokes equations and solving for velocity $\mathbf{u}(\mathbf{x},t)$, pressure $p(\mathbf{x},t)$, and other fields over a computational mesh. High-Reynolds-number and transient flows typically demand fine spatial and temporal resolutions, which can translate to extensive simulation times on large-scale HPC resources.
+Let $g$ denote a geometry (a CAD surface or a body-fitted mesh) and $\mathbf{c}$ the operating conditions, for example angle of attack $\alpha$, Reynolds number $Re$, Mach number $M$ or yaw angle. A CFD solver maps $(g, \mathbf{c})$ to one of three kinds of output $\mathbf{y}$:
 
-Neural networks introduce an alternative route: by approximating the mapping from geometry and boundary conditions to flow quantities, they can offer rapid surrogates for full simulations. For instance, a neural network might learn a function
+- scalar coefficients such as the drag and lift coefficients $C_d = F_D / (\tfrac{1}{2}\rho U_\infty^2 A)$ and $C_l = F_L / (\tfrac{1}{2}\rho U_\infty^2 A)$, with force $F$, density $\rho$, free-stream speed $U_\infty$ and reference area $A$;
+- surface fields, the pressure coefficient $C_p$ and skin-friction coefficient $C_f$ at the $M_s$ wall nodes;
+- volume fields, velocity $\mathbf{u}$, pressure $p$ and turbulence variables at the $M_v$ cells of the mesh.
 
-```math
-F: (\text{geometry parameters}, \text{operating conditions}) \mapsto \left\{
-\text{flow field}, \; C_d, \; C_l,\dots\right\}
-```
-
-where $C_d$ and $C_l$ are the drag and lift coefficients, respectively. Once trained, such models can instantly deliver aerodynamic properties for new inputs, drastically reducing the cost and time compared to a full CFD solve. Although these methods do not universally replace physics-based solvers, they are immensely valuable in contexts such as:
-
-I. **Preliminary Shape Optimization**: Exploring large design spaces quickly to identify promising candidates.
-
-II. **Real-Time Flow Analysis**: Enabling on-the-fly feedback loops for active flow control.
-
-III. **Hybrid Approaches**: Providing intermediate or sub-grid scale corrections to partial CFD solutions.
-
-Mathematically, neural networks in CFD leverage powerful approximation theorems in high-dimensional function spaces. Modern architectures, such as convolutional neural networks (CNNs) or graph neural networks (GNNs), handle structured and unstructured grid data in ways that were impractical only a few years ago.
-
-### Strategies Leveraging Neural Networks
-
-Researchers have taken several paths to integrate neural networks within CFD workflows:
-
-I. **Physics-Informed Neural Networks (PINNs)**
-
-PINNs embed the underlying governing equations, such as continuity and momentum conservation, into the neural network’s loss function. For instance, one might minimize
+A dataset of $N$ solved cases $`\mathcal{D} = \{(g_i, \mathbf{c}_i, \mathbf{y}_i)\}_{i=1}^N`$ is available. The geometry is not a fixed-length vector, so it first passes through a representation $`R(g)`$: a parameter vector, a grid, a latent code, a point cloud or a graph. The task is to find network parameters $`\boldsymbol\theta`$ of $`f_{\boldsymbol\theta}`$ that minimise
 
 ```math
-\mathcal{L} = \lambda_1 \|\nabla \cdot \mathbf{u}\|^2 + \lambda_2 \left\|
-\rho(\mathbf{u}\cdot\nabla)\mathbf{u} + \nabla p - \mu \Delta \mathbf{u}\right\|^2
+\mathcal{L}(\boldsymbol\theta) = \frac{1}{N}\sum_{i=1}^{N} \sum_{j=1}^{M_i} w_{ij}\,\bigl\| f_{\boldsymbol\theta}\bigl(R(g_i), \mathbf{c}_i\bigr)_j - \mathbf{y}_{ij} \bigr\|^2 + \lambda\, \Omega(\boldsymbol\theta)
 ```
 
-along with boundary and initial conditions. Enforcing these PDE constraints during training encourages physically consistent solutions, even with comparatively small datasets.
+where $j$ runs over the $M_i$ output locations of case $i$ ($M_i = 1$ for a scalar), $w_{ij}$ are weights such as normalised cell volumes or face areas, and $`\lambda\,\Omega(\boldsymbol\theta)`$ is a regulariser. Without area or volume weights the loss is dominated by the densely meshed boundary layer. The goal is low error on geometries that are not in $\mathcal{D}$, not on $\mathcal{D}$ itself.
 
-II. **Pure Data-Driven Neural Solvers**
+Four things make this hard. Each sample costs a CFD run, so $N$ is in the tens to thousands, while field outputs have $10^5$ to $10^8$ entries. Geometries differ in topology and mesh size, so the network must accept inputs of varying size. Small geometric changes, a sharper edge or a gap, can move a separation line and change $C_d$ by several percent. Finally, the training labels carry the discretisation and turbulence-model error of the solver that produced them, and the surrogate cannot be more accurate than that solver.
 
-Another approach learns a direct mapping from shape and flow conditions to the desired outputs using purely data-driven techniques. The network might learn
+## Input Representations
+
+The representation $R(g)$ decides which network family applies, how much geometric detail reaches the network, and whether a model trained on one mesh can be evaluated on another. The figure shows one airfoil in four of the forms discussed below.
+
+![One NACA 2412 airfoil as a parameter vector, a signed distance field, a point cloud and a mesh graph](../../../scripts/plots/surrogate_input_representations/surrogate_input_representations.png)
+
+Panel (a) holds five numbers. Panel (b) loses the thin trailing edge because the section is thinner than one grid cell over the last 9 % of the chord. Panels (c) and (d) keep the exact wall, and (d) adds the connectivity and near-wall clustering of a CFD mesh.
+
+### Explicit Parameter Vectors
+
+When the geometry comes from a parametric CAD model or a morphing tool, $R(g) = \mathbf{p} \in \mathbb{R}^{n_p}$ holds the design parameters (camber, thickness, hood angle, diffuser angle). Inputs $\mathbf{x} = (\mathbf{p}, \mathbf{c})$ are scaled to $[0, 1]$ or to zero mean and unit variance, and a multilayer perceptron maps them to the outputs:
 
 ```math
-(\text{shape encoding}, \text{Reynolds number}, \dots) \;\mapsto\;
-(p(\mathbf{x}), \mathbf{u}(\mathbf{x}), C_d, \dots)
+f_{\boldsymbol\theta}(\mathbf{x}) = W_L\, \sigma\bigl(W_{L-1} \cdots \sigma(W_1 \mathbf{x} + \mathbf{b}_1) \cdots + \mathbf{b}_{L-1}\bigr) + \mathbf{b}_L
 ```
 
-without explicitly embedding the PDEs. This requires extensive, high-fidelity data—typically a large set of CFD solutions or experimental measurements.
+with weight matrices $W_k$, biases $\mathbf{b}_k$ and activation $\sigma$ (see [neural network fundamentals](../fundamentals/neural_networks.md)). For scalar outputs and $N$ below a few hundred, Gaussian-process regression ([kriging](../../numerical/surrogates/kriging.md)) or [radial basis functions](../../numerical/surrogates/radial_basis_functions.md) are usually as accurate and also give an error estimate. The parameter vector is compact and smooth to learn from, but the model only knows the shapes its parameterisation can produce; a new feature, such as an added spoiler, needs a new parameter and new data. The [deformation parameters](../automotive_aerodynamics/deformation_parameters.md) note discusses how such parameters are chosen for cars.
 
-III. **Hybrid Methods**
+### Grids: Images, Voxels and Signed Distance Fields
 
-Some workflows combine partial CFD solvers with neural networks to handle the most time-consuming aspects of a simulation. A network might provide turbulence modeling corrections (replacing, for instance, certain RANS or LES closures) or predict boundary-layer behavior where meshing is expensive.
-
-IV. **Supplementary Tools**
-
-Neural networks can also assist in supporting tasks, such as adaptive mesh refinement (predicting where to refine), domain decomposition for parallelization, or uncertainty quantification. By identifying high-error regions or critical flow features, ML can make classical CFD processes more efficient.
-
-### Challenges in NN Deployment
-
-Deploying neural networks in industrial CFD or academic research settings faces both technical and organizational hurdles:
-
-- **Generalization to New Shapes and Flow Regimes**
-
-  Networks trained on limited shape families (e.g., sedan-like vehicles) may fail on drastically different geometries (e.g., SUVs or trucks). High Reynolds numbers, transient phenomena, or novel boundary conditions can also confuse the model if they deviate from the training distribution.
-
-- **Data Quality and Quantity**
-
-  Large training sets of CFD solutions require considerable HPC resources; each simulation might take hours. Noise, turbulence modeling assumptions, and numerical errors can propagate through the dataset, affecting the learning process.
-
-- **Architecture Complexity and Overfitting**
-
-  Modern deep networks with millions of parameters can suffer from overfitting. Specialized 3D architectures or regularization strategies are needed to handle high-dimensional data effectively.
-
-- **Regulatory Constraints and Safety**
-
-  In aerospace or automotive industries, each design must meet strict safety standards. Verifying the reliability of black-box neural predictions remains an active area of research, often necessitating thorough validation or hybrid methods.
-
-- **Computational Overheads in Training**
-
-  Although inference may be fast, the initial training phase can be expensive, sometimes requiring iterative HPC resources comparable to standard CFD runs. Ensuring that this cost is justified by subsequent speedups is crucial.
-
-### Example Research Project
-
-Consider a hypothetical large-scale initiative that aims to seamlessly integrate machine learning techniques into conventional computer-aided engineering (CAE) workflows. The overarching objective is to accelerate the computation of aerodynamic forces—namely drag and lift coefficients—for a variety of automotive shapes or similarly streamlined bodies.
-
-#### Goals of the Hypothetical Project
-
-I. **Faster Aerodynamic Evaluations**: Use neural networks to estimate drag coefficients $C_d$, reducing the reliance on full CFD runs for each design variant.
-
-II. **Comprehensive Shape Exploration**: Investigate how small geometric tweaks (e.g., hood angle, windshield curvature) impact global aerodynamic performance.
-
-III. **Data-Driven Surrogate Modeling**: Develop surrogate models that predict flow fields or force coefficients across a large design space, enabling near real-time feedback.
-
-Although the project is theoretical, it mirrors many current research efforts, illustrating both the promise (enabling quick design turnarounds) and the obstacles (costly data generation, potential loss of fidelity) associated with merging ML and CFD.
-
-### Parametrized Geometrical Deformations
-
-A widely used approach in such initiatives is to parametrize the geometry of interest. For example, one might define:
-
-- Hood slope angle.
-- Rear windshield curvature.
-- Front bumper extension length.
-- $\dots$
-
-A vector $\mathbf{p} = (p_1, p_2, \dots, p_n)$ then describes a family of geometries. By sampling various $\mathbf{p}$-combinations, running CFD, and recording outputs like $C_d$ and $C_l$, one obtains a dataset
+Sampling the geometry on a Cartesian grid gives a tensor that convolutional neural networks (CNNs) can process. A binary occupancy mask marks cells inside the body; the signed distance field
 
 ```math
-\{\mathbf{p}^{(i)}, C_d^{(i)}, \dots\}_{i=1}^N
+\phi(\mathbf{x}) = \pm \min_{\mathbf{y} \in \partial\Omega} \|\mathbf{x} - \mathbf{y}\|
 ```
 
-A neural network can be trained to approximate
-
-$$
-\hat{C_d}(\mathbf{p}) \approx C_d(\mathbf{p})
-$$
-
-This reduces shape variations to a manageable parameter set, although capturing complex, localized deformations (e.g., sharp edges, small aerodynamic add-ons) may exceed the scope of simple morphing parameters.
-
-Mathematically, one could also treat partial differential constraints in a reduced space, but typically the parametric approach focuses on the forward mapping from geometry parameters to integral quantities (drag, lift), ignoring finer details of the flow field.
-
-### Convolutional Neural Networks with Autoencoders
-
-Where geometry is too complex for simple morphing, a common solution is to use 3D autoencoders or other dimensionality-reduction techniques:
-
-I. **Encoding Step**
-
-A CNN-based encoder reduces the geometry (often in voxelized or point-cloud form) to a latent vector $\mathbf{z}$, which can be much smaller than the full resolution. Mathematically,
-
-$$
-\mathbf{z} = E(\text{Geometry})
-$$
-
-where $E$ is the encoder network, yielding a compressed representation $\mathbf{z} \in \mathbb{R}^m$.
-
-II. **Decoding or Reconstruction**
-
-A decoder $D$ reconstructs the geometry from $\mathbf{z}$. Although some fidelity is lost, the dimensionality reduction allows the network to discover an efficient global parameterization of shape variation:
-
-$$
-\widehat{\text{Geometry}} = D(\mathbf{z})
-$$
-
-III. **Regression for Aerodynamic Outputs**
-
-A separate network (or an appended layer) can learn a mapping $\mathbf{z} \mapsto C_d$. This approach sidesteps explicit geometric parameters and can handle a wider variety of shapes, albeit at the risk of blurring small but critical geometric details.
-
-Mathematically, autoencoders approximate a manifold in a high-dimensional shape space. Ensuring that aerodynamic relevant features (e.g., edges, curvature changes) are preserved in the latent representation remains a key research topic.
-
-### Regression Methods for Aerodynamic Prediction
-
-After choosing a parameterization—either through explicit morphing or learned latent vectors—the next step is to train a regression model to estimate aerodynamic metrics. While neural networks often dominate in deep learning contexts, other methods also appear:
-
-- **Random Forests / Gradient-Boosted Trees**: Nonlinear, nonparametric models that can handle tabular parameter data effectively.
-- **k-Nearest Neighbors (k-NN)**: A more simplistic, instance-based approach.
-- **Gaussian Process Regression (GPR)**: Favored in some engineering contexts for its built-in uncertainty quantification.
-
-In each case, one aims to map geometric or latent space parameters to aerodynamic outputs. Symbolically:
-
-$$
-\hat{C_d}(\mathbf{z}) = M(\mathbf{z}), \quad \hat{C_l}(\mathbf{z}) = M'(\mathbf{z})
-$$
-
-where $M$ and $M'$ could be neural networks or alternative regressors. The choice often depends on dataset size, desired interpretability, and computational constraints.
-
-### Data Generation and Training Costs
-
-No matter the modeling approach, acquiring high-fidelity data typically involves running many CFD simulations or gathering experimental measurements:
-
-I. **CFD-based Datasets**
-
-Thousands of geometry variants must be simulated to cover the space of interest. Each 3D simulation might require many hours on HPC clusters, so the data generation phase can be extremely expensive.
-
-II. **Experimental Data**
-
-Physical measurements (e.g., wind tunnel tests) are more accurate for certain parameters but are limited by cost, availability, and scheduling. Data scarcity can significantly reduce the scope of feasible ML models.
-
-III. **Efficient Sampling and Design of Experiments**
-
-Techniques like Latin hypercube sampling, active learning, or Bayesian optimization can reduce the number of required samples by focusing on the most informative geometry points or boundary conditions. Mathematically, these methods aim to minimize a global error metric with as few data points as possible:
+(negative inside the body $\Omega$) is a smoother input because it varies continuously across the wall and tells every cell how far it is from it. A convolution layer computes
 
 ```math
-\min_{ \{\mathbf{p}^{(i)}\} } \;
-\mathbb{E}\left[\| C_d(\mathbf{p}) - \hat{C_d}(\mathbf{p}) \|^2 \right]
+z_{ij}^{(k)} = \sigma\Bigl(\sum_{c}\sum_{a,b=-1}^{1} K^{(k)}_{c,ab}\, x_{c,\,i+a,\,j+b} + b^{(k)}\Bigr)
 ```
 
-### Limitations of Current Methods
+for output channel $k$, input channel $c$ and a $3 \times 3$ kernel $K$. The same kernel is applied at every cell, so the layer is translation-equivariant and has few parameters, but each layer only sees a $3 \times 3$ neighbourhood. Encoder-decoder networks downsample with pooling to reach a global receptive field and upsample back to full resolution; the U-Net (Ronneberger et al., 2015) adds skip connections between matching resolutions so that the decoder keeps the fine detail.
 
-Despite their potential, neural-network-based surrogates for aerodynamics face several notable limitations:
+Guo et al. (2016) trained a CNN to map the signed distance field of 2D and 3D shapes, including car profiles, to the steady laminar velocity field computed by a lattice-Boltzmann solver, at a fraction of the solver cost. Thuerey et al. (2020) trained U-Nets on about $10^4$ RANS solutions of airfoils from the UIUC database: the input is a $128 \times 128$ grid with the free-stream velocity components and the airfoil mask, the output is the pressure and velocity fields, and the mean relative error of the larger models is a few percent.
 
-- **Inability to Capture Extreme Geometric Variations**\
-  Parametric deformers or latent encodings can fail if the new shape is far from the training set.
+Grid methods need the CFD solution interpolated from the body-fitted mesh to the grid, which smears the boundary layer. Memory grows as $n^3$ for a 3D grid of $n$ cells per side, so resolution is limited to roughly $128^3$ to $256^3$, which is coarse compared with near-wall CFD spacing. Cells inside the body must be masked out of the loss.
 
-- **Loss of Fine Detail**\
-  Autoencoders or coarse voxelizations can smooth out small but crucial features, like minute spoilers or sharp edges.
+### Latent Shape Codes from Autoencoders
 
-- **Uncertainty and Reliability**\
-  A prediction might look reasonable in tested regions but become unphysical in extrapolation regimes. Unlike traditional CFD with established error estimates, deep neural nets rarely offer guaranteed bounds on error unless carefully designed (e.g., Bayesian NNs, Gaussian processes).
-
-- **Discarded ML Models**
-
-  In some cases, models simply do not meet the accuracy or reliability thresholds needed for production. They may be used for preliminary design screening but are set aside when high-fidelity data is required.
-
-### Search for Alternative Approaches
-
-With these limitations in mind, ongoing research seeks to improve the speed-accuracy tradeoff and expand generalization:
-
-- **Hybrid Parametric + Local Refinement**\
-  Combine broad global parameterization with local, high-resolution patches for critical regions.
-
-- **Physics-Based Constraints**\
-  Further incorporation of PDE constraints (PINNs and variants) to ensure physically plausible outputs.
-
-- **Higher-Resolution Encodings**\
-  Use advanced meshing or point-cloud techniques to capture more geometric detail without exploding the data dimensionality.
-
-- **Active Learning and Transfer Learning**
-
-  Dynamically select new shapes to simulate based on model uncertainty, or transfer knowledge from one geometry class to another.
-
-### Brief Literature Review and Traditional CFD
-
-Traditional CFD remains the gold standard for aerodynamic analysis. Common tactics include:
-
-- **Reynolds-Averaged Navier–Stokes (RANS)**: Widely used in industry, capable of stable and relatively quick solutions for steady-state problems.
-- **Large Eddy Simulation (LES)**: More accurate for transient and separated flows, but much more computationally expensive.
-- **Detached Eddy Simulation (DES) and Hybrid Methods**: Attempt to bridge the gap, modeling near-wall regions with RANS while resolving large-scale eddies in free shear flows.
-
-Reduced-order modeling has been explored for decades to accelerate these computations, often projecting the flow onto a lower-dimensional subspace (e.g., using Proper Orthogonal Decomposition). Neural networks build upon these ideas but benefit from more flexible functional approximations and large training datasets. Nonetheless, the rigorous validation and trust in classical CFD mean it is far from being replaced.
-
-### Geometric Deep Learning in CFD
-
-A particularly promising branch of research is geometric deep learning (GDL). Instead of using uniform grids or voxelized shapes, GDL methods can directly operate on unstructured meshes, point clouds, or graphs:
-
-- **Graph Neural Networks (GNNs)**
-
-  Represent the geometry or flow domain as a graph $G = (V, E)$, where nodes $v \in V$ correspond to mesh cells or points and edges $e \in E$ encode adjacency. A GNN can approximate the flow solution or aerodynamic coefficients by iteratively aggregating information over this graph structure.
-
-- **Point-Cloud Networks**
-
-  Treat geometry as a collection of points in $\mathbb{R}^3$. Neural networks designed for point sets (e.g., PointNet, PointNet++) can then learn local and global features relevant to fluid flow.
-
-The advantage of these methods is their ability to preserve topological and geometric information without forcing the data into a regular grid. One might write the GNN update as:
+An autoencoder compresses a shape, given as a voxel grid, an SDF or a fixed set of surface points, to a latent vector $\mathbf{z} \in \mathbb{R}^{m}$ with an encoder $E$ and reconstructs it with a decoder $D$. The two are trained on geometries alone, which are cheap compared with CFD:
 
 ```math
-h_v^{(k+1)} = \phi\Bigl(h_v^{(k)}, \bigl\{ h_u^{(k)}: u \in \mathcal{N}(v)\bigr\}\Bigr)
+\min_{E,\,D}\; \frac{1}{N_g}\sum_{k=1}^{N_g} \bigl\| D\bigl(E(g_k)\bigr) - g_k \bigr\|^2
 ```
 
-where $h_v^{(k)}$ is the hidden state of node $v$ at layer $k$, and $\phi$ is a learned update function.
+A regression network then maps $(\mathbf{z}, \mathbf{c})$ to the aerodynamic outputs, so the code plays the role of a learned parameter vector. With linear $E$ and $D$ this reduces to principal component analysis, the same decomposition as [proper orthogonal decomposition](../../numerical/pod/pod_intro.md) applied to shape coordinates. The latent code allows shape families that have no CAD parameterisation, and many unlabelled geometries can be used. The reconstruction loss weights all of the surface equally, so small features that matter aerodynamically (mirror edges, gaps, trailing edges) are the first to be lost, and nothing guarantees that nearby codes give similar flows.
 
-### Advantages and Challenges of GNN
+### Point Clouds
 
-GNNs in CFD promise better handling of arbitrary geometries and unstructured meshes, which are ubiquitous in industrial and academic aerodynamic analysis. Key advantages include:
+A point cloud $`\{\mathbf{x}_j\}_{j=1}^{M}`$ sampled on the surface, optionally with normals, keeps the exact geometry without a grid. Because the points have no order, the network must be permutation-invariant. PointNet (Qi et al., 2017) achieves this with a shared per-point network $h$ followed by a symmetric pooling:
 
-I. **Mesh-Based Learning**
+```math
+f_{\boldsymbol\theta}\bigl(\{\mathbf{x}_j\}\bigr) = \gamma\Bigl(\max_{j=1,\dots,M} h(\mathbf{x}_j)\Bigr)
+```
 
-Directly incorporate the connectivity of CFD meshes into the network, preserving boundary-layer resolution or complex topologies.
+where the maximum is taken element-wise over the feature vectors and $\gamma$ is an MLP. For a surface field such as $C_p$, the pooled global feature is concatenated with each point's own feature and decoded point by point. Plain PointNet has no notion of neighbourhood, so local curvature is captured poorly; hierarchical variants such as PointNet++ group nearby points first. Point clouds can be resampled to any density, which makes them mesh-independent, but they carry no connectivity, so wall-normal structure has to be inferred.
 
-II. **Local-to-Global Aggregation**
+### Meshes and Graphs
 
-Each node aggregates features from its neighbors, enabling capture of localized flow phenomena and global influences.
+The CFD mesh itself is a graph: nodes are vertices or cells and edges join neighbours. A graph neural network passes messages along the edges, so it works on the native mesh with its near-wall clustering, accepts any number of nodes, and predicts fields at the solver's own nodes without interpolation. The price is memory proportional to the number of edges and a receptive field that grows by one hop per layer. Both are treated in [Graph Neural Networks for CFD](graph_neural_networks.md).
 
-Nonetheless, challenges persist:
+### Comparison
 
-- **Memory Footprint**\
-  3D meshes can contain millions of cells, making GNN training memory-intensive.
+| Representation | Network | Geometric resolution | Mesh-independent | Data need | Typical accuracy issues |
+| --- | --- | --- | --- | --- | --- |
+| Parameter vector | MLP, GP, RBF | Exact within the family, nothing outside it | Yes (no mesh) | Lowest, tens to hundreds of cases | Cannot represent shapes outside the parameterisation; extrapolation in $\mathbf{p}$ |
+| Grid / voxels / SDF | CNN, U-Net | One grid cell, $10^{-2}$ of the domain at $128$ cells per side | No, tied to the grid | High, $10^3$ to $10^4$ cases for fields | Thin features and boundary layers blurred; interpolation error near walls |
+| Latent code | Autoencoder + MLP | Limited by the decoder and $m$ | Yes once encoded | Many cheap geometries, fewer CFD cases | Small but critical features lost; latent space not aligned with flow sensitivity |
+| Point cloud | PointNet and variants | Exact at sampled points | Yes | Moderate to high | Weak local structure; no wall-normal information |
+| Mesh graph | GNN | Exact, follows the CFD mesh | Yes, within similar mesh densities | High for volume fields | Limited receptive field; memory; sensitivity to mesh density changes |
 
-- **Complex Network Design**\
-  Selecting suitable graph architectures and message-passing schemes is non-trivial.
+## Modelling Strategies
 
-- **Long Training Times**\
-  Each iteration may involve expensive neighbor lookups; large-scale parallelization strategies remain active research topics.
+### Pure Data-Driven Surrogates
 
-- **Extrapolation**
+The network learns the map from inputs to outputs only from the labelled cases, with the loss of the problem statement. It is fast to evaluate and makes no assumption about the physics, which also means it has no protection against unphysical predictions (non-zero divergence, wrong far-field behaviour) away from the training data. Training and validation practice, including splitting by geometry rather than by sample, is covered in [training and validation](../fundamentals/training_and_validation.md) and applied to the car case in [model training](../automotive_aerodynamics/model_training.md).
 
-  GNNs, like other deep nets, struggle when the test geometry is far outside the training distribution.
+### Physics-Informed Training
 
-### Recent Advances and Example Work
+A physics-informed neural network represents the field $(\mathbf{u}, p)(\mathbf{x})$ with a network and adds the residuals of the governing equations at collocation points to the loss. For steady incompressible flow,
 
-Proof-of-concept studies have shown GNN surrogates predicting near-wall pressure distributions or drag coefficients for simpler automotive shapes. While these surrogates can be orders of magnitude faster to evaluate, their accuracy often lags behind full CFD, especially on complex shapes or flow regimes. Ongoing research addresses multi-scale approaches, coupling coarse and fine graph representations, or using domain decomposition to make training more tractable.
+```math
+\mathcal{L} = \mathcal{L}_{\mathrm{data}} + \lambda_1 \bigl\| \nabla\cdot\mathbf{u} \bigr\|^2 + \lambda_2 \Bigl\| (\mathbf{u}\cdot\nabla)\mathbf{u} + \frac{1}{\rho}\nabla p - \nu\,\nabla^2\mathbf{u} \Bigr\|^2 + \mathcal{L}_{\mathrm{BC}}
+```
 
-Mathematically, multi-scale GNNs construct a hierarchy of graphs $G_0, G_1, \dots, G_L$, each representing the domain at a different resolution. The network then learns to pass information across scales, combining the local detail of fine meshes with the global context of coarser meshes.
+with derivatives obtained by automatic differentiation, kinematic viscosity $\nu$, and $\mathcal{L}_{\mathrm{BC}}$ penalising the boundary conditions (Raissi et al., 2019). The residual terms let the model use far fewer labelled solutions, or none, but each new geometry generally needs a new optimisation, and the weights $\lambda_k$ and the stiffness of high-$`Re`$ residuals make training difficult. Details are in [physics-informed neural networks](pinns.md); operator-learning architectures that map whole input functions to solution fields are in [neural operators](neural_operators.md).
 
-### Looking Forward
+### Hybrid Solver-Network Methods
 
-Neural networks, particularly those informed by physics and geometry, are gradually taking root in aerodynamic design workflows. From parametric morphing strategies to advanced GNNs, there is a clear trajectory toward faster, data-driven surrogates that preserve essential fluid physics. Challenges remain, including the cost of data generation, the risk of losing fine geometric details, and ensuring robust out-of-distribution performance.
+Hybrid methods keep a CFD solver in the loop and learn only the part it gets wrong or computes slowly.
 
-In the near future, hybrid solvers may become more common—part neural net, part traditional CFD—where neural corrections accelerate or refine parts of the domain. Incorporating real sensor data could also help networks adapt to real-world conditions. For the moment, neural networks serve as a powerful companion to classical CFD, enabling engineers and researchers to explore broader design spaces, investigate novel concepts, and expedite the quest for aerodynamic efficiency. As mathematical techniques and computational resources advance, the synergy between machine learning and fluid dynamics will continue to shape the next generation of aerodynamic optimization and analysis.
+- A learned closure replaces or corrects a term of the turbulence model, for example the Reynolds-stress anisotropy or a source term in the Spalart–Allmaras equation, while the solver still enforces conservation (Duraisamy et al., 2019). See [ML turbulence closures](../flow/ml_turbulence_closures.md) and the classical models in [turbulence modelling](../../numerical/cfd/turbulence_modeling.md).
+- A correction network runs alongside a coarse solver $S$: $\mathbf{u}^{n+1} = S(\mathbf{u}^n) + c_{\boldsymbol\theta}\bigl(S(\mathbf{u}^n)\bigr)$, trained so that the corrected coarse trajectory follows a fine reference. Training through several solver steps ("solver-in-the-loop", Um et al., 2020) exposes the network to its own errors and gives much more stable rollouts than training on single steps; Kochkov et al. (2021) used learned interpolation inside a differentiable solver to reach the accuracy of a much finer grid in 2D turbulence.
+- A multi-fidelity surrogate learns the difference $`\mathbf{y}_{\mathrm{fine}} - \mathbf{y}_{\mathrm{coarse}}`$ between a cheap solution (potential flow, coarse RANS) and the high-fidelity one. The difference is usually smaller and smoother than $\mathbf{y}_{\mathrm{fine}}$ itself, so it needs less data.
 
-### Setting Up the Problem
+## Cost and Break-Even Analysis
 
-To apply neural networks to aerodynamic prediction, a structured workflow is essential:
+A surrogate is worthwhile only if the CFD spent on its training data is less than the CFD it replaces. Let $c_{\mathrm{CFD}}$ be the cost of one CFD run, $N$ the training runs, $N_v$ the validation and test runs, $C_{\mathrm{train}}$ the cost of training (in the same units, for example core-hours), $c_s$ the cost of one surrogate evaluation, $M$ the number of evaluations the study needs, and $M_c$ the number of final designs that are re-checked with CFD. Running the study with CFD costs $M c_{\mathrm{CFD}}$; with the surrogate it costs
 
-1. **Define Input/Output Pairs**: Identify the mapping to learn, e.g., geometry parameters and flow conditions $(\mathbf{p}, Re, M)$ as inputs and aerodynamic quantities $(C_d, C_l, \text{flow fields})$ as outputs.
-2. **Choose the Modeling Approach**: Decide between physics-informed (PINNs), purely data-driven, or hybrid strategies based on available data volume and accuracy requirements.
-3. **Prepare Training Data from CFD**: Run a set of high-fidelity simulations covering the design space of interest. Use efficient sampling strategies (Latin hypercube, Bayesian optimization) to minimize the number of required runs.
-4. **Select Network Architecture**: Match the architecture to the data representation—CNNs for voxelized or image-based fields, GNNs for unstructured meshes, or autoencoders for dimensionality reduction of complex geometries.
-5. **Train and Validate the Model**: Split data into training, validation, and test sets. Monitor generalization error and use regularization (dropout, weight decay) to prevent overfitting. Validate predictions against held-out CFD results.
-6. **Integrate into Design Workflows**: Deploy the trained surrogate within optimization loops, sensitivity analyses, or real-time feedback systems, replacing or augmenting full CFD evaluations where speed is critical.
+```math
+C_{\mathrm{sur}}(M) = (N + N_v + M_c)\, c_{\mathrm{CFD}} + C_{\mathrm{train}} + M\, c_s
+```
 
-Starting with a well-scoped problem—such as predicting $C_d$ for a parametric airfoil family—before scaling to more complex geometries and flow regimes is a practical way to build confidence in the approach.
+The two are equal at the break-even number of evaluations
 
-### Key Takeaways
+```math
+M^{*} = \frac{(N + N_v + M_c)\, c_{\mathrm{CFD}} + C_{\mathrm{train}}}{c_{\mathrm{CFD}} - c_s} \approx N + N_v + M_c + \frac{C_{\mathrm{train}}}{c_{\mathrm{CFD}}}
+```
 
-- High-fidelity CFD is accurate but computationally expensive; neural network surrogates can reduce evaluation time from hours to milliseconds once trained.
-- Physics-informed approaches (PINNs) embed governing equations into the loss function, improving generalization with limited data.
-- Purely data-driven models require large, high-quality datasets but can learn complex input-output mappings without explicit PDE formulations.
-- Architecture choice matters: CNNs suit grid-based data, GNNs handle unstructured meshes, and autoencoders compress high-dimensional geometries into manageable latent spaces.
-- Training data generation remains the primary bottleneck; efficient sampling and active learning strategies are essential to control costs.
-- Neural networks are best used as complements to traditional CFD—accelerating design exploration, not replacing rigorous validation.
-- Ensuring robust out-of-distribution performance and quantifying prediction uncertainty are open challenges that must be addressed before deploying surrogates in safety-critical applications.
+where the approximation uses $c_s \ll c_{\mathrm{CFD}}$. Three consequences follow. A surrogate needs at least $N + N_v$ evaluations to pay off, so it does not help a study that needs fewer evaluations than the training set, such as an adjoint-based gradient optimisation whose cost is nearly independent of the number of design variables. It pays off for global optimisation, uncertainty quantification and interactive design, which need $10^3$ to $10^6$ evaluations, and when the same surrogate is reused across several studies, since $M$ then sums over all of them. Space-filling or adaptive sampling ([one-stage sampling](../../numerical/surrogates/one_stage_sampling.md), [adaptive sampling](../../numerical/surrogates/adaptive_sampling.md)) reduces $N$ for a given accuracy and so lowers $M^{*}$ directly.
 
-### Exercises
+## Validation Pitfalls
 
-**Exercise 1.** A surrogate $\hat{C_d}(\mathbf{p})$ maps $n = 8$ geometry parameters to two outputs $(C_d, C_l)$ through dense layers of 128, 128 and 64 neurons. Count the trainable parameters and compare with a training set of 120 CFD designs.
+- Splitting by sample instead of by geometry leaks information: the same shape at a different $\alpha$ in the training set makes the test error look small. Hold out whole geometries, and a whole shape family if generalisation across families is claimed.
+- Errors in integrated forces depend on how the field error correlates with the surface normal, not on its mean size. Report $C_d$ and $C_l$ errors in addition to field errors.
+- Extrapolation in the input space, the latent space or the operating conditions gives confident but wrong predictions. A distance to the nearest training case, an ensemble spread or a GP variance flags such queries.
+- A drag change of one count ($\Delta C_d = 10^{-4}$) is often what a design decision depends on, which is far below the error of most field surrogates. Compare the surrogate's error with the differences it must resolve, not with the absolute value of $C_d$.
+
+## Key Takeaways
+
+- The surrogate learns $f_{\boldsymbol\theta}: (R(g), \mathbf{c}) \to \mathbf{y}$ from $N$ CFD solutions; $N$ is small, the outputs are large, and the geometry has no natural fixed-size encoding.
+- The representation $R(g)$ chooses the network: parameter vectors for MLPs and GPs, grids and SDFs for CNNs and U-Nets, latent codes from autoencoders, point clouds for PointNet, and meshes for GNNs.
+- Grid inputs lose features thinner than a cell; parameter vectors cannot leave their family; mesh and point-cloud inputs keep the exact wall at higher memory cost.
+- Physics-informed losses reduce the data need but make training harder; hybrid methods keep the solver and learn a closure or a correction.
+- A surrogate breaks even only after about $N + N_v + M_c + C_{\mathrm{train}}/c_{\mathrm{CFD}}$ evaluations, so it pays off for many-query studies, not for a single gradient-based optimisation.
+- Validate on held-out geometries and on integrated forces, and flag inputs far from the training data.
+
+## Related Scripts
+
+- [Surrogate Input Representations](../../../scripts/plots/surrogate_input_representations/): This script draws one NACA 2412 airfoil in the four forms a neural-network surrogate can take as input: a parameter vector, a signed distance field on a Cartesian grid, a surface point cloud, and a mesh graph.
+- [GNN Message Passing on a Cylinder Mesh](../../../scripts/plots/gnn_message_passing/): This script shows how far information travels through a graph neural network on an unstructured CFD mesh, and that a linear message-passing layer with the right weights is a finite-volume diffusion scheme.
+- [Drag Coefficient Prediction](../../../scripts/plots/drag_coefficient_prediction/): compares two synthetic drag-coefficient surrogates with held-out CFD values in a parity plot and an error plot, and shows that a high $R^2$ can hide errors of ten drag counts.
+
+## Exercises
+
+**Exercise 1.** A surrogate maps $n_p = 8$ geometry parameters to two outputs $(C_d, C_l)$ through dense layers of 128, 128 and 64 neurons. Count the trainable parameters and compare with a training set of 120 CFD designs.
 
 <details>
 <summary>Answer</summary>
+
+A dense layer from $a$ to $b$ neurons has $ab + b$ parameters:
 
 - $8 \to 128$: $8 \times 128 + 128 = 1{,}152$
 - $128 \to 128$: $16{,}512$
 - $128 \to 64$: $8{,}256$
 - $64 \to 2$: $130$
 
-That is 26,050 parameters in total.
-
-With 120 designs (240 target values) the network is heavily over-parameterized. Regularization (weight decay, dropout, early stopping), a smaller network, or a Gaussian process are all worth trying, as the note's section on overfitting warns.
+That is 26,050 parameters in total. With 120 designs there are 240 target values, so the network is heavily over-parameterised. Weight decay, early stopping on a held-out set, a much smaller network, or a Gaussian process are all worth trying, and the comparison should be made on held-out geometries.
 
 </details>
 
-**Exercise 2.** A PINN candidate for steady 2D channel flow is $\mathbf{u} = (U(1 - y^2/h^2), 0)$ with $p = p_0 + Gx$. Evaluate the continuity and momentum residuals in the note's loss $\mathcal{L}$. For what $G$ does the loss vanish? Evaluate it for $\mu = 1.8 \times 10^{-5}$ Pa s, $U = 1$ m/s and $h = 0.01$ m.
+**Exercise 2.** A physics-informed candidate for steady 2D channel flow between $y = \pm h$ is $\mathbf{u} = (U(1 - y^2/h^2), 0)$ with $p = p_0 + Gx$. Evaluate the continuity and momentum residuals of the loss in the physics-informed section. For what $G$ does the loss vanish? Evaluate it for $\mu = \rho\nu = 1.8 \times 10^{-5}$ Pa s, $U = 1$ m/s and $h = 0.01$ m.
 
 <details>
 <summary>Answer</summary>
 
-Continuity: $\partial u/\partial x + \partial v/\partial y = 0$, so the first term is zero.
+Continuity: $\partial u/\partial x + \partial v/\partial y = 0$, so the first residual is zero.
 
-Momentum: $`(\mathbf{u}\cdot\nabla)\mathbf{u} = u\,\partial u/\partial x = 0`$, $\nabla p = (G, 0)$ and $\mu\Delta\mathbf{u} = (-2\mu U/h^2, 0)$. The residual is $(G + 2\mu U/h^2, 0)$.
+Momentum: $`(\mathbf{u}\cdot\nabla)\mathbf{u} = (u\, \partial u/\partial x, 0) = \mathbf{0}`$, $\nabla p / \rho = (G/\rho, 0)$ and $\nu\nabla^2\mathbf{u} = (-2\nu U/h^2, 0)$. The residual is $(G/\rho + 2\nu U/h^2, 0)$.
 
-The loss vanishes when $G = -2\mu U/h^2 = -2 \times 1.8 \times 10^{-5} \times 1/10^{-4} = -0.36$ Pa/m.
+It vanishes for
 
-This is plane Poiseuille flow. The PDE residual alone pins down the pressure gradient, and the boundary-condition terms fix $u = 0$ at $y = \pm h$.
+```math
+G = -\frac{2\rho\nu U}{h^2} = -\frac{2\mu U}{h^2} = -\frac{2 \times 1.8 \times 10^{-5} \times 1}{10^{-4}} = -0.36\ \mathrm{Pa/m}
+```
+
+This is plane Poiseuille flow. The PDE residual fixes the pressure gradient, and the boundary term enforces $u = 0$ at $y = \pm h$, which the candidate already satisfies.
 
 </details>
 
-**Exercise 3.** A 3D CNN autoencoder encodes a $128^3$ voxel geometry into a latent vector $\mathbf{z} \in \mathbb{R}^{256}$. What is the compression ratio? For a 5 m car, how large is a voxel, and what does that imply for small aerodynamic features?
+**Exercise 3.** A 3D CNN autoencoder encodes a $128^3$ voxel geometry into $\mathbf{z} \in \mathbb{R}^{256}$. What is the compression ratio? For a 5 m car, how large is a voxel, and what does that imply for small aerodynamic features?
 
 <details>
 <summary>Answer</summary>
 
 $128^3 = 2{,}097{,}152$ voxels, so the ratio is $2{,}097{,}152/256 = 8{,}192$.
 
-The voxel size is $5/128 \approx 3.9$ cm, so features of a few centimetres (mirror edges, small spoilers, gaps) are at best one voxel wide before any compression. This is the "loss of fine detail" limitation in the note.
+The voxel size is $5/128 \approx 0.039$ m, about 3.9 cm. Mirror edges, small spoilers and panel gaps are at most one voxel wide before any compression, and the first near-wall CFD cell is several orders of magnitude smaller. The grid cannot represent the features that often decide small drag differences.
 
 </details>
 
-**Exercise 4.** Training designs in a 2-parameter space are $(0,0)$: $C_d = 0.30$, $(1,0)$: $0.32$, $(0,1)$: $0.28$, $(1,1)$: $0.31$. Predict $C_d$ at $\mathbf{p} = (0.2, 0.1)$ with k-NN regression, $k = 3$, using (a) a plain average and (b) inverse-distance weighting.
+**Exercise 4.** A CNN maps a $128 \times 128$ SDF to a pressure field. (a) How many $3 \times 3$ convolution layers with stride 1 are needed before one output cell can depend on the whole input? (b) In a U-Net encoder, each level has two $3 \times 3$ convolutions followed by $2 \times 2$ max pooling with stride 2. After how many levels does the receptive field at the end of the level's convolutions exceed 128 cells? Use the recursion $`r \leftarrow r + (k - 1)\,j`$ for a layer of kernel size $k$, where $j$ is the product of the strides of the preceding layers.
 
 <details>
 <summary>Answer</summary>
 
-The distances are $0.224$ to $(0,0)$, $0.806$ to $(1,0)$, $0.922$ to $(0,1)$ and $1.204$ to $(1,1)$.
+(a) Each layer grows the receptive field by 2 cells, so $L$ layers see $2L + 1$ cells. $2L + 1 \ge 128$ needs $L = 64$ layers.
 
-The three nearest are $(0,0)$, $(1,0)$ and $(0,1)$.
+(b) Starting from $r = 1$, $j = 1$:
 
-(a) Plain average: $(0.30 + 0.32 + 0.28)/3 = 0.300$.
+- level 1: convolutions give $r = 5$; pooling gives $r = 6$, $j = 2$
+- level 2: $r = 14$; pooling gives $r = 16$, $j = 4$
+- level 3: $r = 32$; pooling gives $r = 36$, $j = 8$
+- level 4: $r = 68$; pooling gives $r = 76$, $j = 16$
+- level 5: $r = 76 + 2 \times 16 + 2 \times 16 = 140$
 
-(b) Inverse-distance weighting: $\sum (C_{d,i}/d_i) / \sum (1/d_i) \approx 0.3005$.
-
-Here the two estimates are almost the same because the neighbours' values straddle the nearest one. Unlike a GP, k-NN gives no uncertainty estimate.
+The fifth level, after 4 poolings and 10 convolutions, has a 140-cell receptive field. Downsampling buys a global view with far fewer layers, which is why encoder-decoder networks are used for elliptic quantities such as pressure, and the skip connections restore the detail that pooling discards.
 
 </details>
 
-**Exercise 5.** Using the note's sampling guideline of about 10 samples per parameter for $n = 12$ parameters, and 8 h on 64 cores per CFD run, compute the core-hours for the training data. Compare with running CFD directly for an optimization that needs 2,000 evaluations. Above how many evaluations does the surrogate pay off (ignoring training cost)?
+**Exercise 5.** One CFD run costs 8 h on 64 cores. A surrogate needs $N = 120$ training runs, $N_v = 20$ test runs and $M_c = 10$ verification runs of the final designs, plus training equivalent to 5,000 core-hours; its evaluation cost is negligible. (a) Compute the break-even number of evaluations $M^{*}$. (b) An optimisation needs 2,000 evaluations. How much cheaper is the surrogate route? (c) Would the surrogate pay off for an adjoint optimisation that converges in 40 flow-plus-adjoint solves, each costing about twice a flow solve?
 
 <details>
 <summary>Answer</summary>
 
-Training data: $120 \times 8 \times 64 = 61{,}440$ core-hours.
+One run costs $c_{\mathrm{CFD}} = 8 \times 64 = 512$ core-hours.
 
-Direct optimization: $2000 \times 8 \times 64 = 1{,}024{,}000$ core-hours, about 16.7 times more.
+(a) $M^{*} = \bigl((120 + 20 + 10) \times 512 + 5000\bigr)/512 = (76{,}800 + 5{,}000)/512 \approx 160$ evaluations.
 
-The surrogate pays off once the optimization needs more than 120 evaluations. In practice extra validation runs and GPU training time raise that break-even point somewhat.
+(b) Direct CFD costs $2000 \times 512 = 1{,}024{,}000$ core-hours; the surrogate route costs $81{,}800$ core-hours, about 12.5 times less.
+
+(c) The adjoint optimisation costs about $40 \times 2 \times 512 = 40{,}960$ core-hours, the equivalent of 80 flow solves, below $M^{*} = 160$. The surrogate does not pay off for that single study; it would if the surrogate were reused for several studies or for uncertainty quantification.
 
 </details>
 
-### References
+## References
 
+- Guo, X., Li, W., & Iorio, F., "Convolutional Neural Networks for Steady Flow Approximation", *Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining*, pp. 481–490, 2016.
+- Thuerey, N., Weißenow, K., Prantl, L., & Hu, X., "Deep Learning Methods for Reynolds-Averaged Navier–Stokes Simulations of Airfoil Flows", *AIAA Journal* 58(1), pp. 25–36, 2020.
+- Ronneberger, O., Fischer, P., & Brox, T., "U-Net: Convolutional Networks for Biomedical Image Segmentation", *Medical Image Computing and Computer-Assisted Intervention (MICCAI)*, Lecture Notes in Computer Science 9351, pp. 234–241, Springer, 2015.
+- Qi, C. R., Su, H., Mo, K., & Guibas, L. J., "PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation", *IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*, pp. 652–660, 2017.
+- Raissi, M., Perdikaris, P., & Karniadakis, G. E., "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations", *Journal of Computational Physics* 378, pp. 686–707, 2019.
+- Um, K., Brand, R., Fei, Y. R., Holl, P., & Thuerey, N., "Solver-in-the-Loop: Learning from Differentiable Physics to Interact with Iterative PDE-Solvers", *Advances in Neural Information Processing Systems* 33, 2020.
+- Kochkov, D., Smith, J. A., Alieva, A., Wang, Q., Brenner, M. P., & Hoyer, S., "Machine learning–accelerated computational fluid dynamics", *Proceedings of the National Academy of Sciences* 118(21), e2101784118, 2021.
+- Duraisamy, K., Iaccarino, G., & Xiao, H., "Turbulence Modeling in the Age of Data", *Annual Review of Fluid Mechanics* 51, pp. 357–377, 2019.
+- Brunton, S. L., Noack, B. R., & Koumoutsakos, P., "Machine Learning for Fluid Mechanics", *Annual Review of Fluid Mechanics* 52, pp. 477–508, 2020.
 - Goodfellow, I., Bengio, Y., & Courville, A., *Deep Learning*, MIT Press, 2016.
-- Raissi, M., Perdikaris, P., & Karniadakis, G. E., "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations", *Journal of Computational Physics* 378, 2019.
-- Thuerey, N., Weißenow, K., Prantl, L., & Hu, X., "Deep Learning Methods for Reynolds-Averaged Navier–Stokes Simulations of Airfoil Flows", *AIAA Journal* 58(1), 2020.
-- Qi, C. R., Su, H., Mo, K., & Guibas, L. J., "PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation", IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017.
-- Brunton, S. L., Noack, B. R., & Koumoutsakos, P., "Machine Learning for Fluid Mechanics", *Annual Review of Fluid Mechanics* 52, 2020.

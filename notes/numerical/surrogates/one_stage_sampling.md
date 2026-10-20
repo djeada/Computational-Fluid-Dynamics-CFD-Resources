@@ -1,300 +1,206 @@
-## Introduction and Conceptual Framework
+# One-Stage Sampling Plans
 
-One-stage sampling refers to the class of methods in which all sample points within a given domain $\Omega$ are chosen before any evaluations of the expensive function $y(x)$ are performed. This is in contrast to adaptive or sequential sampling, where the locations of future sample points depend on the information gleaned from previously computed values. In the setting of deterministic computer experiments—such as expensive physics-based simulations, computational fluid dynamics models, or high-resolution climate models—each evaluation $y(x)$ may be extremely costly. Thus, the design of the sample set $`X = \{x^{(1)}, \ldots, x^{(N)}\}`$, with $x^{(i)} \in \Omega \subseteq \mathbb{R}^d$, becomes a critical step in building accurate and efficient surrogate models.
+A one-stage (or a priori) sampling plan fixes all $N$ sample points before any expensive evaluation is made. It is the first step of every surrogate study and often the only one when the runs are submitted to a cluster as one batch. Since nothing is known about the response yet, the points are chosen for their geometry: they should cover the design space evenly, have no near-duplicates, and project well onto each input. This note covers factorial and screening designs, Latin hypercubes, the criteria that measure space-filling quality, low-discrepancy sequences and orthogonal arrays, and works through a nine-point example.
 
-The fundamental goal of one-stage (or a-priori) designs is to produce sample sets that can lead to globally accurate surrogate approximations without relying on knowledge of $y(x)$ itself. Since we do not know which regions of $\Omega$ are more complex or which variables are more influential, a natural guiding principle is space-fillingness. A space-filling design distributes points as evenly as possible throughout $\Omega$, minimizing large gaps and preventing excessive clustering. This approach ensures that no large portion of the domain is left unexplored, thereby offering a good initial representation of the unknown function.
+The plan is followed by surrogate fitting ([Surrogate Models in CFD](intro.md)) and, when the budget allows, by sequential refinement ([Adaptive Sampling](adaptive_sampling.md)). The application to vehicle design studies, with sample-size guidelines and train/test splits, is in [Design of Experiments and Dataset Construction](../../machine_learning/automotive_aerodynamics/datasets.md).
 
-## Types of One-Stage Designs
+## Problem Statement
 
-One-stage designs can be categorized along multiple dimensions: deterministic vs. random, model-based vs. model-independent, and grid-based vs. flexible. Some of these categories overlap and can be mixed, depending on the practitioner’s constraints and objectives.
-
-I. Deterministic vs. Random:
-
-- Deterministic designs follow fixed, rule-based patterns (e.g., a structured grid, low-discrepancy sequences).
-- Random designs incorporate randomness to avoid structured aliasing and to produce multiple realizations with statistical properties (e.g., random Latin hypercube designs).
-  II. Model-Based vs. Model-Independent:
-- Model-independent methods assume no prior information about $y(x)$. They require only knowledge of the domain $\Omega$ and the desired sample size $N$.
-- Model-based approaches might assume a certain model form (e.g., polynomial trends) or rely on correlation structures known a-priori. However, even then, in a purely one-stage framework, the model parameters are not updated from observed data; they remain fixed assumptions.
-  III. Grid-Based (e.g., Factorial Designs) vs. More Flexible (e.g., Latin Hypercube, Low-Discrepancy):
-- Simple approaches like full factorial or uniform grids are easy to understand but suffer from the curse of dimensionality.
-- More sophisticated methods—Latin hypercube designs, distance-based optimal designs, or low-discrepancy sequences—offer improved coverage and scalability.
-
-## Mathematical Setup and Notation
-
-We typically assume a $d$-dimensional domain $\Omega = [0,1]^d$ for simplicity. Any rectangular domain can be scaled and shifted to $[0,1]^d$. In higher dimensions, $\Omega$ may be more complicated, but transformations can often reduce it to a unit hypercube.
-
-A design is a set of $N$ points:
+The inputs are scaled to the unit cube, $\Omega = [0, 1]^d$, by $x_k = (q_k - a_k)/(b_k - a_k)$ for a physical variable $q_k \in [a_k, b_k]$. Choose a design
 
 ```math
-X = \{ x^{(1)}, x^{(2)}, \ldots, x^{(N)} \} \subset [0,1]^d
+X = \{x^{(1)}, \dots, x^{(N)}\} \subset [0, 1]^d
 ```
 
-The question is: how to choose $X$ so that a surrogate model $\hat{y}(x)$, built solely from $`\{x^{(i)}, y(x^{(i)})\}`$, achieves good global accuracy?
+with $N$ fixed by the budget, such that a surrogate fitted to $`\{x^{(i)}, f(x^{(i)})\}`$ is accurate over all of $\Omega$ for any reasonable $f$. That goal cannot be evaluated before the runs, so it is replaced by computable proxies: distances between points (no two points should be close, no point of $\Omega$ should be far from the design), discrepancy (the fraction of points in any box should match the box volume), and the quality of the one- and two-dimensional projections (if only a few inputs matter, the design should still have $N$ distinct values of each). A design is good when it scores well on these criteria in the projections that matter, and the difficulty is that $N$ is small (often $10d$) while $d$ can be 10 or more, so every design is sparse.
 
-Without knowledge of $y(x)$, we must rely on geometry and heuristics. Two common strategies are:
+## Factorial Designs
 
-I. Ensuring every dimension is well-sampled across the entire range.
+### Full Factorial
 
-II. Attempting to maximize uniformity or minimize discrepancy.
-
-## Space-Filling Criteria and Quality Measures
-
-Different objective functions attempt to quantify what it means for a design to be "space-filling." Some well-known criteria include:
-
-I. **Minimax criterion**: Minimize the largest empty ball in $\Omega$ that does not contain any design point. Formally:
-
-$$
-X^* = \arg\min_{X \subset \Omega, |X|=N} \max_{x \in \Omega} \text{dist}(x, X)
-$$
-
-where $`\text{dist}(x, X) = \min_{x^{(i)} \in X}\|x - x^{(i)}\|`$.
-
-II. **Maximin criterion**: Maximize the minimum distance between any pair of points:
+A full factorial design takes $n_k$ equally spaced levels in each input and all their combinations,
 
 ```math
-X^* = \arg\max_{X \subset \Omega, |X|=N} \min_{i \neq j}\| x^{(i)} - x^{(j)}\|
+x_k \in \left\{0, \frac{1}{n_k - 1}, \dots, 1\right\}, \qquad N = \prod_{k=1}^{d} n_k = n^d \text{ if } n_k = n
 ```
 
-III. **$\phi_p$-criterion**: Consider an aggregate measure of inter-point distances:
+It is easy to construct and to interpret, and a two-level factorial ($n = 2$) estimates every main effect and interaction of a linear model with interactions independently. Its weaknesses for surrogate modelling are the exponential growth of $N$, the restriction of $N$ to products of level counts, and the poor projections: in each one-dimensional projection the $n^d$ points collapse onto only $n$ values, so most runs repeat information about each single input.
+
+### Fractional Factorial
+
+A two-level fractional factorial $2^{d-p}$ keeps $2^{d-p}$ of the $2^d$ corners. With levels coded $\pm 1$, the first $d - p$ columns form a full factorial and each remaining column is defined by a generator, a product of earlier columns. In the $2^{3-1}$ design with generator $C = AB$ the runs are
+
+| Run | $A$ | $B$ | $C = AB$ |
+| --- | --- | --- | --- |
+| 1 | $-1$ | $-1$ | $+1$ |
+| 2 | $+1$ | $-1$ | $-1$ |
+| 3 | $-1$ | $+1$ | $-1$ |
+| 4 | $+1$ | $+1$ | $+1$ |
+
+The defining relation is $I = ABC$, so each main effect is aliased with a two-factor interaction ($A = BC$, $B = AC$, $C = AB$): the design cannot tell them apart. The resolution, the length of the shortest word in the defining relation (here III), measures how severe the aliasing is (Montgomery, 2017). Fractional factorials are screening designs: they find which of many inputs matter before a space-filling design is spent on those that do.
+
+### Plackett–Burman Designs
+
+Plackett and Burman (1946) constructed two-level orthogonal designs for $N$ a multiple of 4, which estimate up to $N - 1$ main effects from $N$ runs. The 12-run design takes the generating row
 
 ```math
-\phi_p(X) = \left(\frac{1}{\binom{N}{2}} \sum_{1 \leq i < j \leq N} \| x^{(i)} -
-x^{(j)}\|^{-p} \right)^{1/p}
+(+\,+\,-\,+\,+\,+\,-\,-\,-\,+\,-)
 ```
 
-Minimizing $\phi_p(X)$ for large $p$ approximates a maximin design, while other choices of $p$ balance local and global spacing.
+its 10 cyclic shifts, and a final row of all $-$ signs. The 11 columns are mutually orthogonal and balanced (six $+$ and six $-$ each). Plackett–Burman designs assume interactions are negligible, and their main effects are partially aliased with two-factor interactions, so they are used only for screening.
 
-IV. **Low-discrepancy criteria**: Discrepancy measures how much the empirical distribution of design points deviates from a uniform distribution over $\Omega$:
+## Latin Hypercube Sampling
+
+### Definition and Construction
+
+A Latin hypercube design (LHD) of $N$ points in $d$ dimensions divides each axis into $N$ equal intervals $I_j = [(j - 1)/N, j/N)$ and places exactly one point in each interval of each axis (McKay, Beckman and Conover, 1979). It is built as follows:
+
+1. Draw $d$ independent random permutations $\pi_1, \dots, \pi_d$ of $`\{1, \dots, N\}`$.
+2. For point $i$ and coordinate $k$, choose the interval $I_{\pi_k(i)}$.
+3. Place the coordinate inside that interval, either at a uniform random position or at its centre:
 
 ```math
-D_N(X) = \sup_{I \in \mathcal{I}} \left| \frac{\#\{X \cap I\}}{N} -
-\frac{\text{Vol}(I)}{\text{Vol}(\Omega)}\right|
+x_k^{(i)} = \frac{\pi_k(i) - u_{ik}}{N}, \qquad u_{ik} \sim \mathcal{U}(0, 1) \text{ or } u_{ik} = \tfrac{1}{2}
 ```
 
-where $\mathcal{I}$ is a family of axis-aligned boxes. Minimizing discrepancy leads to designs with more uniform coverage.
+Any $N$ is possible, and removing one input leaves an LHD in $d - 1$ dimensions.
 
-## Classical One-Stage Designs: Factorial and Fractional Factorials
+### Properties
 
-### Full Factorial Designs
+Every one-dimensional projection is perfectly stratified. For estimating the mean of $f$ by the sample average, a random LHD is never much worse than independent random sampling, and it removes the variance contributed by the additive part $\sum_k g_k(x_k)$ of $f$. For surrogate fitting this means that the main effects of all inputs are sampled at $N$ distinct levels each.
 
-One of the oldest and simplest designs is the full factorial grid. Suppose each dimension is divided into $n_k$ evenly spaced levels:
+Stratification in one dimension says nothing about the joint layout. The identity permutation $\pi_1 = \pi_2 = \dots$ is a valid LHD with all points on the diagonal, and random permutations often leave clusters and empty regions. This is why an LHD is almost always optimized for a space-filling criterion.
+
+### Maximin Latin Hypercubes
+
+Morris and Mitchell (1995) proposed searching over LHDs for the one that is best by the $\phi_p$ criterion defined below, using simulated annealing in which each move swaps two entries of one column. A swap keeps the Latin property, so the search never leaves the set of LHDs. The cheapest variant, used in many codes, draws a few hundred random LHDs and keeps the best. The [Adaptive Sampling with Kriging](../../../scripts/algorithms/adaptive_sampling_kriging/) script uses that best-of-20 rule for its initial designs.
+
+## Space-Filling Criteria
+
+### Distance-Based Criteria
+
+Let $d_{ij} = \lVert x^{(i)} - x^{(j)} \rVert_2$. Johnson, Moore and Ylvisaker (1990) defined two optimal designs:
 
 ```math
-x_k \in \left\{ \frac{0}{n_k-1}, \frac{1}{n_k-1}, \frac{2}{n_k-1}, \ldots,
-\frac{n_k-1}{n_k-1}\right\}
+\text{maximin:} \quad \max_X \ \min_{i \neq j} d_{ij},
+\qquad
+\text{minimax:} \quad \min_X \ \max_{x \in \Omega} \min_i \lVert x - x^{(i)} \rVert
 ```
 
-The total number of points:
-
-$$
-N = \prod_{k=1}^{d} n_k
-$$
-
-If $n_k = n$ for all $k$, we have:
-
-$$
-N = n^d
-$$
-
-**Issues**:
-
-- Rapidly grows unmanageable as $d$ increases (curse of dimensionality).
-- Very rigid: you must pick $N$ to be a perfect power.
-
-### Fractional Factorial and Plackett-Burman Designs
-
-When $d$ is large, full factorial designs require enormous numbers of samples. Fractional factorial designs reduce the sample size by selecting carefully chosen subsets of the full factorial grid that preserve certain properties of coverage or orthogonality. They are widely used in screening experiments to identify which variables are most important:
-
-- For instance, a $2^{d}$-factorial design picks two levels per dimension, requiring $2^d$ points. For $d=10$, that’s $1024$ points. A fractional factorial might use $2^{5}=32$ points (a 1/32 fraction) to achieve preliminary screening.
-
-While these are historically important, they remain limited in flexibility and dimensional scalability for modern computer experiments.
-
-## Stratification-Based Designs: Latin Hypercube
-
-### Latin Hypercube Designs (LHDs)
-
-Latin hypercube sampling addresses some limitations of factorial designs. For a given $N$ and $d$, each dimension is divided into $N$ equal intervals:
-
-$$
-I_j = \left[\frac{j-1}{N}, \frac{j}{N}\right], \quad j = 1,\ldots,N
-$$
-
-A Latin hypercube design ensures that each interval in each dimension contains exactly one point. To construct an LHD:
-
-I. Generate $d$ random permutations $\pi_k$ of $`\{1,\ldots,N\}`$.
-
-II. For each $i=1,\ldots,N$, define:
-
-$$
-x_k^{(i)} \in I_{\pi_k(i)}
-$$
-
-A common choice is to select the center of each chosen interval:
-
-$$
-x_k^{(i)} = \frac{\pi_k(i)-1}{N} + \frac{1}{2N}
-$$
-
-Alternatively, one can sample uniformly at random within the chosen interval. This ensures that each dimension is "fully represented," preventing the design from collapsing onto a low-dimensional subspace and guaranteeing that removing one dimension results in another valid LHD in $(d-1)$-dimensions.
-
-**Advantages**:
-
-- Flexible: choose any $N$, any $d$.
-- Often combined with optimization criteria (e.g., reorder permutations to maximize minimum inter-point distance or minimize discrepancy).
-- Widely used in engineering, uncertainty quantification, and surrogate modeling due to their simplicity and good empirical performance.
-
-## Distance-Based and Optimized One-Stage Designs
-
-Rather than relying on heuristics (like LHD), one can numerically optimize a design according to a chosen criterion (minimax, maximin, $\phi_p$, or discrepancy). The optimization problem:
-
-$$
-X^* = \arg\min_{X \subset \Omega} C(X)
-$$
-
-where $C(X)$ is a cost function (e.g., $\phi_p$ or discrepancy).
-
-Solving this optimally is often combinatorially hard and computationally expensive, especially in higher dimensions. Thus, heuristics like simulated annealing, genetic algorithms, or gradient-based optimization of continuous representations (like moving points around in $[0,1]^d$) are used.
-
-**Example**:
-
-- Maximin design optimization might start from a random LHD and then iteratively swap rows or columns to increase the minimum inter-point distance. This process yields a "maximin-improved Latin hypercube."
-  **Complexity**:
-- The search space is enormous, even for moderate $N$ and $d$.
-- No closed-form solutions for general cases, and optimal known solutions are often tabulated or published as best known results.
-
-## Low-Discrepancy Designs
-
-Low-discrepancy (LD) sequences, such as Sobol, Halton, or Hammersley sets, are deterministic sequences that aim to fill space more uniformly than random points. They achieve a discrepancy $D_N(X)$ on the order of $(\log N)^d / N$, significantly better than the $N^{-1/2}$ rate of pure Monte Carlo sampling.
-
-**Common LD Sequences**:
-
-I. **Halton sequences**: Constructed using a base-prime representation. Good for low to moderate dimensions but can suffer correlation issues in high $d$.
-
-II. **Sobol sequences**: A popular choice for high-dimensional integration. Defined by direction numbers and known to provide good uniformity properties.
-
-III. **Hammersley sets**: Involves pairing a regular sequence in one dimension with a Van der Corput sequence in another.
-
-These sequences require no complex optimization and can be generated for any $N$. They have been widely used in quasi-Monte Carlo (QMC) methods for numerical integration and have found their way into surrogate modeling. The advantage is their strong theoretical properties ensuring better global coverage as $N$ grows.
-
-## Comparisons and Practical Considerations
-
-Each one-stage design method has trade-offs:
-
-| **Design Type** | **Pros** | **Cons** |
-| --- | --- | --- |
-| **Factorial and Fractional Factorial** | Simple, historically understood. | Not scalable to high $d$, limited flexibility in choosing $N$. |
-| **Latin Hypercube Designs** | Very flexible, easy to generate, can be improved with post-processing. | Without optimization, random LHDs might not be optimal; requires refinement if maximal space-filling is desired. |
-| **Distance-Based Optimal Designs** | Can produce highly uniform or carefully balanced sets of points. | Computationally expensive, no closed-form solutions, limited to moderate $N, d$. |
-| **Low-Discrepancy Designs** | Strong theoretical guarantees, easily generate large $N$ sets, good uniformity properties. | Some sequences degrade in very high dimensions or have subtle correlation patterns. |
-
-In practice, many researchers start with a baseline method (e.g., a random LHD) and then refine it by:
-
-- Applying an optimization algorithm to reorder permutations in LHD to achieve a maximin or minimal $\phi_p$ solution.
-- Using a known low-discrepancy sequence and, if necessary, rotating or permuting coordinates to reduce unwanted correlations.
-- Combining a small initial one-stage design with subsequent adaptive sampling stages to refine the surrogate in promising regions.
-
-## Worked Example: Constructing and Evaluating a One-Stage Design
-
-**Step-by-step Example**:
-
-I. **Setup**:
-
-Suppose $\Omega = [0,1]^2$, $d=2$, and we need $N=9$ samples.
-
-II. **Choice of Method**:
-
-Start with a simple Latin hypercube design. Divide each dimension into 9 equal intervals:
-
-$$
-I_j = \left[\frac{j-1}{9}, \frac{j}{9}\right], \quad j = 1,\ldots,9
-$$
-
-Possible intervals: $I_1 = [0, \frac{1}{9}], I_2 = [\frac{1}{9}, \frac{2}{9}], \ldots, I_9 = [\frac{8}{9},1]$.
-
-III. **Permutations**:
-
-Generate two random permutations of $`\{1,\ldots,9\}`$:
-
-$$
-\pi_1 = (2,9,4,1,8,3,7,5,6), \quad \pi_2 = (5,2,1,8,4,9,6,7,3)
-$$
-
-This means for the first dimension $x_1^{(1)} \in I_2, x_1^{(2)} \in I_9,$ and so forth.
-
-IV. **Assigning Points**:
-
-Take the midpoint of each chosen interval:
-
-$$
-\text{mid}(I_j) = \frac{j-1}{9} + \frac{1}{18} = \frac{2j-1}{18}
-$$
-
-Thus, $\text{mid}(I_2)=\frac{3}{18}=0.1667, \text{mid}(I_9)=\frac{17}{18}=0.9444,$ and so on.
-
-Construct each point $x^{(i)} = (x_1^{(i)}, x_2^{(i)})$ by choosing:
-
-$$
-x_1^{(i)} = \text{mid}(I_{\pi_1(i)}), \quad x_2^{(i)} = \text{mid}(I_{\pi_2(i)})
-$$
-
-After computing all 9 points, we obtain a 9-point LHD.
-
-V. **Evaluate Space-Filling Quality**:
-
-Compute all $\binom{9}{2}=36$ pairwise distances. Find:
+A maximin design has no two points close together, so no CFD run is wasted on a near-duplicate. A minimax design leaves no point of $\Omega$ far from a sample, which bounds the distance over which the surrogate must interpolate; it is harder to compute because it needs a maximum over the whole domain. Many designs share the same minimum distance, so Morris and Mitchell (1995) proposed the scalar criterion
 
 ```math
-\delta_{\min} = \min_{i \neq j}\| x^{(i)} - x^{(j)}\|_2
+\phi_p(X) = \left(\sum_{i < j} d_{ij}^{-p}\right)^{1/p}
 ```
 
-The larger $\delta_{\min}$, the better the maximin criterion. If $\delta_{\min}$ seems small, try permuting intervals or applying an optimization algorithm (like simulated annealing) to increase $\delta_{\min}$.
+to be minimized. For large $p$ the smallest distances dominate, and $\phi_p \to 1/\min_{i \ne j} d_{ij}$ as $p \to \infty$, so minimizing $\phi_p$ breaks ties between designs with the same maximin distance in favour of those with fewer pairs at that distance. Values $p = 20$ to $50$ are usual.
 
-VI. **Optional Refinement**:
+### Discrepancy
 
-Try multiple random LHDs and choose the one with the best maximin distance. This leads to an improved one-stage design.
+The star discrepancy compares the fraction of points in every box anchored at the origin with the box volume:
 
-## Historical and Theoretical Background
+```math
+D_N^*(X) = \sup_{a \in [0, 1]^d}\left|\frac{\#\{i : x^{(i)} \in [0, a)\}}{N} - \prod_{k=1}^{d} a_k\right|
+```
 
-The theory behind one-stage sampling in computer experiments builds on:
+It appears in the Koksma–Hlawka inequality, which bounds the error of the sample mean of $f$ by $`V_{HK}(f)\,D_N^*(X)`$ with $V_{HK}$ the Hardy–Krause variation (Niederreiter, 1992). The supremum is expensive to compute, so $L_2$ versions are used in practice. The $L_2$-star discrepancy, which averages instead of taking the supremum, has the closed form
 
-- Classical experimental design, which historically focused on regression models and factorial designs.
-- Quasi-Monte Carlo literature, which developed low-discrepancy sequences for numerical integration.
-- Geometric combinatorics in searching for optimal packing and covering of high-dimensional spaces.
+```math
+\left(D_2^*\right)^2 = 3^{-d} - \frac{2^{1-d}}{N}\sum_{i=1}^{N}\prod_{k=1}^{d}\left(1 - x_{ik}^2\right) + \frac{1}{N^2}\sum_{i=1}^{N}\sum_{j=1}^{N}\prod_{k=1}^{d}\left(1 - \max(x_{ik}, x_{jk})\right)
+```
 
-Key references (not cited here explicitly) delve into entropy-based designs, integrated mean squared error (IMSE) criteria from Kriging theory, and model-based criteria like maximum likelihood estimation for Gaussian processes. While these may require partial knowledge of $y(x)$ or assumptions about its correlation structure, they can still be used in a pre-data (one-stage) setting to guess good configurations.
+where $x_{ik}$ is coordinate $k$ of point $i$. It favours points near the corner $(1, \dots, 1)$, because all boxes contain the origin. The centred $L_2$ discrepancy of Hickernell (1998) uses boxes anchored at the nearest corner, which makes it invariant under reflections $x_k \to 1 - x_k$:
 
-## Practical Tips and Guidance
+```math
+\mathrm{CD}^2 = \left(\frac{13}{12}\right)^d - \frac{2}{N}\sum_{i=1}^{N}\prod_{k=1}^{d}\left(1 + \frac{1}{2}a_{ik} - \frac{1}{2}a_{ik}^2\right) + \frac{1}{N^2}\sum_{i,j=1}^{N}\prod_{k=1}^{d}\left(1 + \frac{1}{2}a_{ik} + \frac{1}{2}a_{jk} - \frac{1}{2}\left|x_{ik} - x_{jk}\right|\right)
+```
 
-I. **Dimensionality**:
+with $a_{ik} = |x_{ik} - 1/2|$. It is the measure used in the figure below and is available as `scipy.stats.qmc.discrepancy(X, method="CD")`, which returns $\mathrm{CD}^2$.
 
-If $d$ is small (e.g., $d \leq 5$), more sophisticated optimization for one-stage designs is feasible. For $d > 10$, simpler methods like LHD or low-discrepancy sequences might be preferable due to computational constraints.
+Distance and discrepancy measure different things and both should be checked. A design can have small discrepancy and still contain two almost coincident points, and a maximin design in high dimension tends to push points to the boundary of the cube, which raises its discrepancy.
 
-II. **Number of Samples (N)**:
+## Low-Discrepancy Sequences
 
-Choose $N$ large enough to cover $\Omega$ but not so large as to be infeasible. One-stage methods are often initial steps; a moderately sized design (e.g., $N = 10d$ to $50d$) is common as a starting point.
+### Van der Corput and Halton
 
-III. **Refinement and Sequential Use**:
+Write the integer $i$ in base $b$ as $i = \sum_j a_j b^j$. The radical inverse mirrors the digits about the radix point:
 
-The initial one-stage design can serve as a foundation. Once the surrogate is built, if certain regions require more samples, a subsequent adaptive (two-stage or multi-stage) approach can refine the design.
+```math
+\phi_b(i) = \sum_{j \ge 0} a_j\, b^{-j-1}
+```
 
-IV. **Computational Tools**:
+The van der Corput sequence $\phi_2(1), \phi_2(2), \dots = 1/2, 1/4, 3/4, 1/8, 5/8, \dots$ fills $[0, 1]$ by repeatedly halving the gaps. The Halton sequence uses a different prime base per coordinate, $x^{(i)} = (\phi_2(i), \phi_3(i), \phi_5(i), \dots)$, and the Hammersley set replaces the first coordinate by $i/N$ for a fixed $N$. In high dimensions the large prime bases produce long linear runs and strong correlations between neighbouring coordinates unless the digits are scrambled.
 
-Many software packages (R, Python, MATLAB) provide routines for generating LHDs, Sobol sequences, and even heuristics to improve designs. For instance, MATLAB’s `lhsdesign` function can generate LHDs with an option to improve space-filling properties. Python’s `pyDOE` package and R’s `lhs` package offer similar functionalities.
+### Sobol Sequences and Nets
 
-## Purpose in CFD
+The Sobol sequence uses base 2 in every coordinate, with digit permutations generated by direction numbers chosen per dimension. Its first $2^m$ points form a $(t, m, d)$-net in base 2: every elementary box $\prod_k [c_k 2^{-l_k}, (c_k + 1) 2^{-l_k})$ of volume $2^{t-m}$ contains exactly $2^t$ points, with a quality parameter $t$ that is small for good direction numbers. The balance holds only for $N$ a power of two, which is why Sobol designs should have $N = 2^m$ points.
 
-The accuracy of any surrogate model depends on how well the training points cover the design space. This note surveys one-stage (a priori) sampling strategies—full factorial, Latin Hypercube Sampling (LHS), distance-based designs, and low-discrepancy sequences (Sobol, Halton)—and explains space-filling criteria such as maximin distance and discrepancy. Choosing the right sampling plan is the first step in building a reliable CFD surrogate.
+Low-discrepancy sequences achieve
 
-## Input / Output
+```math
+D_N^* = \mathcal{O}\left(\frac{(\log N)^d}{N}\right)
+```
 
-| Aspect | Details |
-| --- | --- |
-| **Inputs** | Design space dimension $d$, number of sample points $N$, space-filling criterion (maximin, minimax, discrepancy), sequence type |
-| **Outputs** | Set of design points $`\{x^{(i)}\}_{i=1}^N \subset \mathbb{R}^d`$, space-filling metric values |
+against $\mathcal{O}(N^{-1/2})$ for random points. The logarithmic factor is large when $d$ is large and $N$ moderate, so the bound alone guarantees little for $d = 10$ (Exercise 2), yet Sobol points still perform well in practice, because CFD responses are dominated by low-dimensional projections, where the sequences are very uniform. Both sequences are extensible: continuing the sequence fills the gaps of the earlier points, which a Latin hypercube cannot do without losing its stratification.
+
+### Scrambling
+
+Owen (1995) applied random nested permutations to the digits of a net. The scrambled points keep the net property, but each point is uniformly distributed on $[0, 1]^d$, so the sample mean is unbiased and independent replicates give an error estimate. For smooth integrands the root-mean-square error of a scrambled net falls like $N^{-3/2}(\log N)^{(d-1)/2}$ (Owen, 1997). For surrogate design, scrambling mainly removes the artefacts of the unscrambled sequences: the point at the origin, the aligned initial points and the correlated coordinates of Halton in high dimension. `scipy.stats.qmc.Sobol` and `scipy.stats.qmc.Halton` scramble by default.
+
+![Random, Latin hypercube and scrambled Sobol designs of 32 points and their centred L2 discrepancy against N](../../../scripts/plots/sampling_strategies_comparison/sampling_strategies_comparison.png)
+
+The top row compares 32-point random, Latin hypercube and scrambled Sobol designs with their marginal histograms: the random design leaves columns empty, while the other two fill every column. The bottom panel shows the centred $L_2$ discrepancy averaged over seeds: random and Latin hypercube designs decay at about $N^{-1/2}$, with a smaller constant for the Latin hypercube, while scrambled Sobol decays at about $N^{-1}$.
+
+## Orthogonal Arrays
+
+An orthogonal array $\mathrm{OA}(N, d, s, t)$ is an $N \times d$ array with entries in $`\{1, \dots, s\}`$ in which every set of $t$ columns contains each of the $s^t$ possible rows equally often. Strength $t = 1$ is the stratification of one Latin hypercube column; a two-level fractional factorial of resolution III is an orthogonal array of strength 2. Tang (1993) used orthogonal arrays to build Latin hypercubes that are also stratified on the $s \times s$ grid of every two-dimensional projection: the 9-run array $\mathrm{OA}(9, 4, 3, 2)$ gives a 9-point, 4-variable Latin hypercube in which every 2D projection has one point in each of the nine cells of a $3 \times 3$ grid. Such designs are worth considering when interactions between pairs of inputs are expected.
+
+## Worked Example
+
+Take $d = 2$, $N = 9$ and a midpoint Latin hypercube from the permutations
+
+```math
+\pi_1 = (2, 9, 4, 1, 8, 3, 7, 5, 6), \qquad \pi_2 = (5, 2, 1, 8, 4, 9, 6, 7, 3)
+```
+
+The interval midpoints are $(2j - 1)/18$, so the points in units of $1/18$ are $(3, 9)$, $(17, 3)$, $(7, 1)$, $(1, 15)$, $(15, 7)$, $(5, 17)$, $(13, 11)$, $(9, 13)$ and $(11, 5)$. Each odd number from 1 to 17 appears once per coordinate, which confirms the Latin property. The 36 pairwise distances give the scores in the first row below. The other rows are the best midpoint LHD found by exhaustive search over all $9!$ second permutations (Exercise 5), the first nine points of the unscrambled Halton sequence in bases 2 and 3, and the mean over 2000 sets of nine independent uniform points.
+
+| Design | $\min_{i \ne j} d_{ij}$ | Pairs at the minimum | $\phi_{50}$ | $\mathrm{CD}^2$ |
+| --- | --- | --- | --- | --- |
+| Random LHD above | 0.2485 | 5 | 4.157 | $6.28 \times 10^{-3}$ |
+| Best midpoint LHD, $\pi_2(i) = 3i \bmod 10$ | 0.3514 | 12 | 2.991 | $3.79 \times 10^{-3}$ |
+| Halton, $i = 1, \dots, 9$ | 0.1672 | 1 | 5.979 | $1.04 \times 10^{-2}$ |
+| Independent uniform (mean) | — | — | — | $4.36 \times 10^{-2}$ |
+
+The optimized Latin hypercube is better by both measures: its minimum distance is $\sqrt{2}$ times larger and its discrepancy is 40% lower. For only nine points the Halton sequence does not beat a random LHD, which is consistent with the asymptotic nature of its bound; its advantage appears as $N$ grows and when points must be added later. All structured designs are about an order of magnitude better than independent random points.
+
+## Choosing a Design
+
+| Design | 1D projections | Allowed $N$ | Extensible | Use |
+| --- | --- | --- | --- | --- |
+| Full factorial | $n$ values | $n^d$ | Only by a full new level | $d \le 3$, or interaction studies with 2 levels |
+| Fractional factorial, Plackett–Burman | 2 values | $2^{d-p}$, multiple of 4 | No | Screening many inputs |
+| Random Latin hypercube | Stratified | Any | No | Baseline; avoid without optimization |
+| Maximin or $\phi_p$-optimal LHD | Stratified | Any | No | Default for $N$ fixed in advance |
+| OA-based LHD | Stratified in 1D and on a grid in 2D | $s^2$ and similar | No | Expected pairwise interactions |
+| Scrambled Sobol | Balanced for $N = 2^m$ | Powers of 2 preferred | Yes | Large $N$, staged budgets, quasi-Monte Carlo |
+
+For kriging surrogates an initial design of about $N = 10d$ points is a common starting rule (Loeppky, Sacks and Welch, 2009); it is adequate for smooth responses dominated by a few inputs and not for responses with sharp local features. If the budget may grow, or a second batch of runs is likely, an extensible sequence or a sequential design is better than a Latin hypercube whose size had to be fixed in advance.
+
+## Key Takeaways
+
+- A one-stage design is chosen by geometry alone: even coverage, no near-duplicates, and good low-dimensional projections.
+- Factorial and Plackett–Burman designs are for screening; they project onto only two levels per input and grow badly with $d$.
+- Latin hypercubes stratify every input but must be optimized (maximin, $\phi_p$) to avoid clusters.
+- Discrepancy and distance criteria measure different defects; check both, in the projections that matter.
+- Scrambled Sobol sequences are extensible, balanced for $N = 2^m$, and the usual choice when the budget is staged.
 
 ## Related Scripts
 
-- [Design Space Distribution via Sobol Sequences](../../../scripts/plots/design_space_distribution/): draws a four-dimensional scrambled Sobol design of 512 geometry variants and plots two 2D projections of it, showing how evenly a low-discrepancy sequence covers a design space.
+- [Sampling Strategies Comparison](../../../scripts/plots/sampling_strategies_comparison/): compares random, Latin hypercube and scrambled Sobol designs of the same size in a 2D design space, showing their point layouts, their 1D marginal histograms and how their centred $L_2$ discrepancy falls with the number of samples.
+- [Design Space Distribution via Sobol Sequences](../../../scripts/plots/design_space_distribution/): draws a four-dimensional scrambled Sobol design of 512 geometry variants and shows all of its 2D projections and 1D marginals in a scatter matrix, with the discrepancy of each projection compared against a random design of the same size.
+- [Adaptive Sampling with Kriging](../../../scripts/algorithms/adaptive_sampling_kriging/): grows a kriging surrogate of a 2D test function from an 8-point maximin Latin hypercube to 40 samples with max-MSE and LOO-CV infill criteria and compares both with one-shot maximin Latin hypercubes of the same size.
+- [Sobol Sensitivity Analysis](../../../scripts/algorithms/sobol_sensitivity_analysis/): estimates first-order and total Sobol sensitivity indices of a synthetic five-parameter drag model with the Saltelli sampling scheme and checks them against the exact values.
 
 ## Exercises
 
@@ -309,7 +215,7 @@ LHDs: order the points by their first coordinate. Each of the remaining $d - 1$ 
 
 </details>
 
-**Exercise 2.** Low-discrepancy sequences achieve $D_N = \mathcal{O}((\log N)^d/N)$ against $\mathcal{O}(N^{-1/2})$ for random sampling. Evaluate both rates for $N = 10^4$ with $d = 2$ and $d = 10$ (ignoring constants). What does the comparison suggest?
+**Exercise 2.** Low-discrepancy sequences achieve $D_N^* = \mathcal{O}((\log N)^d/N)$ against $\mathcal{O}(N^{-1/2})$ for random sampling. Evaluate both rates for $N = 10^4$ with $d = 2$ and $d = 10$ (ignoring constants). What does the comparison suggest?
 
 <details>
 <summary>Answer</summary>
@@ -319,29 +225,27 @@ $N^{-1/2} = 0.01$.
 - $d = 2$: $(\ln 10^4)^2/10^4 = 9.21^2/10^4 = 0.0085$, already slightly better than random.
 - $d = 10$: $9.21^{10}/10^4 \approx 4.4 \times 10^5$, meaningless as a bound.
 
-The asymptotic advantage appears only for very large $N$ when $d$ is high. In practice Sobol sequences still perform well in moderate dimensions, but the bound alone does not guarantee it.
+The asymptotic advantage appears only for very large $N$ when $d$ is high. In practice Sobol sequences still perform well in moderate dimensions, because the responses depend mostly on low-dimensional projections, but the bound alone does not guarantee it.
 
 </details>
 
-**Exercise 3.** For the worked example ($\pi_1 = (2,9,4,1,8,3,7,5,6)$, $\pi_2 = (5,2,1,8,4,9,6,7,3)$, midpoints), list the nine points, verify that they form a Latin hypercube, and compute $\delta_{\min}$.
+**Exercise 3.** For the worked example, verify the minimum distance $\delta_{\min}$ and find the pairs that attain it.
 
 <details>
 <summary>Answer</summary>
 
-In units of $1/18$, the points $(2\pi_1(i) - 1, 2\pi_2(i) - 1)$ are $(3,9), (17,3), (7,1), (1,15), (15,7), (5,17), (13,11), (9,13), (11,5)$. Each coordinate uses every odd number $1, 3, \ldots, 17$ exactly once, so every interval in each dimension holds one point.
-
-The smallest squared distance is $4^2 + 2^2 = 20$ (in units of $1/18^2$). It is attained by five pairs, for example $(13,11)$–$`(9,13)`$ and $(17,3)$–$`(15,7)`$. So $\delta_{\min} = \sqrt{20}/18 \approx 0.2485$.
+Work in units of $1/18$. The smallest squared distance between two of the nine points is $4^2 + 2^2 = 20$, so $\delta_{\min} = \sqrt{20}/18 \approx 0.2485$. Checking all 36 pairs shows that exactly five attain it: $(17, 3)$–$`(15, 7)`$, $`(1, 15)`$–$`(5, 17)`$, $`(15, 7)`$–$`(13, 11)`$, $`(15, 7)`$–$`(11, 5)`$ and $`(13, 11)`$–$`(9, 13)`$. Three of the five involve the point $`(15, 7)`$, which is the natural candidate to move in an optimization of the design.
 
 </details>
 
-**Exercise 4.** For the design of Exercise 3, evaluate the $\phi_p$ criterion of this note for $p = 2$ and $p = 50$, and compare with $1/\delta_{\min}$. Explain the limit $p \to \infty$.
+**Exercise 4.** For the design of the worked example, evaluate $\phi_p = \left(\sum_{i < j} d_{ij}^{-p}\right)^{1/p}$ for $p = 2$ and $p = 50$, and compare with $1/\delta_{\min}$. Explain the limit $p \to \infty$.
 
 <details>
 <summary>Answer</summary>
 
-Computing over all 36 pairwise distances gives $\phi_2 = 2.347$ and $\phi_{50} = 3.869$, while $1/\delta_{\min} = 4.025$.
+Over all 36 pairwise distances, $\phi_2 = 14.08$ and $\phi_{50} = 4.157$, while $1/\delta_{\min} = 4.025$.
 
-For large $p$ the sum is dominated by the $k$ smallest distances, so $\phi_p \approx (k/\binom{N}{2})^{1/p}/\delta_{\min}$. Here $k = 5$, and $(5/36)^{1/50} \times 4.025 = 3.869$. As $p \to \infty$ the prefactor tends to 1, and minimizing $\phi_p$ becomes maximizing $\delta_{\min}$, i.e. the maximin criterion.
+For large $p$ the sum is dominated by the $k$ pairs at the minimum distance, so $\phi_p \approx k^{1/p}/\delta_{\min}$. Here $k = 5$, and $5^{1/50} \times 4.025 = 4.157$. As $p \to \infty$ the factor $k^{1/p}$ tends to 1, so minimizing $\phi_p$ becomes maximizing $\delta_{\min}$, and for finite $p$ designs with fewer pairs at the minimum distance are preferred.
 
 </details>
 
@@ -356,8 +260,14 @@ The exhaustive search gives $\delta_{\min} = \sqrt{40}/18 \approx 0.3514$, attai
 
 ## References
 
-- M. D. McKay, R. J. Beckman and W. J. Conover, "A comparison of three methods for selecting values of input variables in the analysis of output from a computer code", *Technometrics* 21(2), 1979.
-- M. E. Johnson, L. M. Moore and D. Ylvisaker, "Minimax and maximin distance designs", *Journal of Statistical Planning and Inference* 26(2), 1990.
-- M. D. Morris and T. J. Mitchell, "Exploratory designs for computational experiments", *Journal of Statistical Planning and Inference* 43(3), 1995.
+- M. D. McKay, R. J. Beckman and W. J. Conover, "A comparison of three methods for selecting values of input variables in the analysis of output from a computer code", *Technometrics* 21(2), 239–245, 1979.
+- M. E. Johnson, L. M. Moore and D. Ylvisaker, "Minimax and maximin distance designs", *Journal of Statistical Planning and Inference* 26(2), 131–148, 1990.
+- M. D. Morris and T. J. Mitchell, "Exploratory designs for computational experiments", *Journal of Statistical Planning and Inference* 43(3), 381–402, 1995.
+- R. L. Plackett and J. P. Burman, "The design of optimum multifactorial experiments", *Biometrika* 33(4), 305–325, 1946.
+- B. Tang, "Orthogonal array-based Latin hypercubes", *Journal of the American Statistical Association* 88(424), 1392–1397, 1993.
+- F. J. Hickernell, "A generalized discrepancy and quadrature error bound", *Mathematics of Computation* 67(221), 299–322, 1998.
+- A. B. Owen, "Randomly permuted (t, m, s)-nets and (t, s)-sequences", in *Monte Carlo and Quasi-Monte Carlo Methods in Scientific Computing*, Lecture Notes in Statistics 106, Springer, 299–317, 1995.
+- A. B. Owen, "Scrambled net variance for integrals of smooth functions", *The Annals of Statistics* 25(4), 1541–1562, 1997.
 - H. Niederreiter, *Random Number Generation and Quasi-Monte Carlo Methods*, SIAM, 1992.
-- T. J. Santner, B. J. Williams and W. I. Notz, *The Design and Analysis of Computer Experiments*, Springer, 2003.
+- D. C. Montgomery, *Design and Analysis of Experiments*, 9th ed., Wiley, 2017.
+- J. L. Loeppky, J. Sacks and W. J. Welch, "Choosing the sample size of a computer experiment: a practical guide", *Technometrics* 51(4), 366–376, 2009.

@@ -1,131 +1,117 @@
-## Exploring the Airfoil Tools Website
+# Reading Airfoil Polars with Airfoil Tools
 
-The Airfoil Tools website is a valuable resource for anyone interested in aircraft design, whether you're a professional engineer or a hobbyist. It provides access to over 1,600 airfoils and allows users to compare, analyze, and even modify airfoils for specific aircraft designs. In this guide, we’ll explore how to make the most of the website's features and how to use the tools effectively in your design process.
+Airfoil Tools (airfoiltools.com) is a free website that combines a large airfoil coordinate database with precomputed XFOIL polars, a comparison page and a few small calculators. It is a quick way to shortlist sections for a wing, a propeller, a model aircraft or a wind-turbine blade before running one's own XFOIL or CFD analyses. This note describes what the site provides, how to read the five polar plots it shows, where the numbers come from and where they stop being trustworthy. The airfoil geometry and aerodynamics behind the plots are in [Airfoil Design](airfoil_design.md).
 
-### Getting Started with Airfoil Tools
+## Problem Statement
 
-When you first visit the Airfoil Tools website, you’ll find a vast database of airfoils, many of which are sourced from the University of Illinois database. These airfoils cover a wide range of designs used in various types of aircraft, from gliders to high-speed jets. The website also allows users to search for specific airfoils by name or browse through categories based on performance characteristics like lift, drag, or stall behavior.
+Given the operating conditions of a lifting surface (chord $c$, speed range $V$, air properties $\rho$ and $\mu$, hence the Reynolds number $Re = \rho Vc/\mu$), a design lift coefficient or range of lift coefficients, and constraints such as minimum thickness, pitching-moment limits and stall behaviour, select a section whose two-dimensional polar gives low drag (or high $c_l/c_d$) over the operating range and acceptable $c_{l,max}$ and $c_m$.
 
-One of the most helpful features of the Airfoil Tools site is its user-friendly interface. You can easily click on an airfoil to see detailed information, including key parameters like the coefficient of lift (CL), coefficient of drag (CD), and the lift-to-drag ratio (CL/CD). Each airfoil also comes with performance curves that allow you to visualize how it behaves across different angles of attack and Reynolds numbers, helping you make informed decisions about which airfoil best suits your design.
+The data used are steady, two-dimensional, incompressible ($M = 0$) section polars computed by XFOIL with free transition, at a few fixed Reynolds numbers. The result is a shortlist, to be confirmed by analyses at the actual $Re$ and $M$, by three-dimensional wing analysis and, for a new design, by wind-tunnel or flight tests.
 
-### Airfoil Comparison
+## What the Site Provides
 
-One of the key features of the **Airfoil Tools** website is its ability to compare airfoils side by side. Whether you're evaluating different designs or examining the performance of an airfoil under various conditions, this tool provides detailed, data-driven insights.
+| Tool | What it does |
+| --- | --- |
+| Airfoil database search | more than a thousand sections, most taken from the UIUC Airfoil Coordinates Database, searchable by name and filterable by thickness and camber |
+| Airfoil details page | coordinates (downloadable as a text file), a plot of the shape, maximum thickness and camber with their positions, and the XFOIL polars with a summary table of the maximum $c_l/c_d$ and the angle at which it occurs |
+| Lift/drag polars | the polar data behind the plots, one file per Reynolds number and transition setting |
+| Airfoil comparison | overlays the shapes and the polars of several sections from the database or from coordinates the user adds |
+| Airfoil plotter | prints the section at a chosen chord as a full-size or paginated template, or exports it as PDF or SVG |
+| NACA 4- and 5-digit generators | produce coordinates for any section of these families from its parameters |
+| Reynolds number calculator | $Re$ from speed, chord and air properties |
 
-For instance, if you're designing a glider and need to choose between two airfoils, such as the **NACA 0012** and the **Clark Y**, you can use this tool to compare their performance, especially their lift-to-drag ratios at various angles of attack. This is critical in selecting the airfoil that offers the best long-term performance with minimal energy loss. Additionally, you can adjust parameters like Reynolds numbers to simulate real-world flight conditions, enhancing the accuracy of your comparison.
+![Airfoil Tools comparison page with NACA 0012-64 and Clark Y](https://github.com/user-attachments/assets/5d3a76f7-d64b-4ecc-a954-b6e773e7fb25)
 
-Below is an example of the comparison between the **NACA 0012** and **Clark Y** airfoils.
+The comparison page above overlays a NACA 0012-64 (a 12% symmetric section with maximum thickness at 40% chord) and the Clark Y (11.7% thick, 3.4% camber, almost flat lower surface). Each database entry has an identifier ending in `-il`, the suffix for sections taken from the Illinois (UIUC) collection.
 
-![Airfoil Comparison Tool](https://github.com/user-attachments/assets/5d3a76f7-d64b-4ecc-a954-b6e773e7fb25)
+## Where the Numbers Come From
 
-The graphs below show how different airfoils perform at various Reynolds numbers, illustrating changes in lift, drag, and moment coefficients at different angles of attack.
+XFOIL (Drela, 1989) couples a linear-vorticity panel method for the inviscid flow with an integral boundary-layer formulation, iterated until the boundary layer and the inviscid flow agree. Transition is predicted with the $e^N$ method: the boundary layer becomes turbulent where the amplification of the most unstable Tollmien–Schlichting waves reaches $e^{N_{crit}}$. The polars on the site are computed for:
 
-![Graph Comparison: Airfoils](https://github.com/user-attachments/assets/79160ccf-b985-4421-810d-0827287dd801)
+- Reynolds numbers of 50 000, 100 000, 200 000, 500 000 and 1 000 000;
+- $N_{crit} = 9$, the standard value for an average wind tunnel, and $N_{crit} = 5$, which models a disturbed free stream or a rougher surface and moves transition forward;
+- $M = 0$ and free transition on both surfaces.
 
-I. **CL vs CD (Lift Coefficient vs Drag Coefficient)**
+The Reynolds numbers cover model aircraft, UAVs, small wind turbines and the outboard wings of sailplanes. A light aircraft ($Re \approx 3$–$`6 \times 10^6`$) or an airliner ($Re \approx 3 \times 10^7$) is beyond the highest polar, and its section data should come from wind-tunnel collections such as Abbott and von Doenhoff or from one's own XFOIL or RANS runs ([The Reynolds Number in Flight](reynolds_number.md)).
 
-- The **CL vs CD** graph illustrates how much lift an airfoil generates for a given amount of drag. Airfoils with high CL/CD ratios are more efficient as they produce more lift with less drag.
-- The **NACA 0012** (likely represented by the blue line) shows a lower lift-to-drag ratio, meaning it prioritizes stability over efficiency.
-- The **Clark Y** (likely represented by the yellow line) exhibits a higher maximum CL/CD ratio, making it more efficient at generating lift, especially at lower angles of attack. This makes it suitable for slow-speed flight or applications requiring high lift.
+## Reading a Polar
 
-II. **CL vs Alpha (Lift Coefficient vs Angle of Attack)**
+![XFOIL polars of two sections at two Reynolds numbers from the comparison page](https://github.com/user-attachments/assets/79160ccf-b985-4421-810d-0827287dd801)
 
-- This graph shows the relationship between lift and angle of attack (alpha). Lift generally increases as the angle of attack increases until the airfoil stalls.
-- The **Clark Y** generates more lift at moderate angles of attack compared to the **NACA 0012**.
-- The **NACA 0012**, as a symmetric airfoil, shows a more linear increase in lift with angle of attack, while the **Clark Y** achieves a higher maximum lift at a lower angle, making it ideal for low-speed, high-lift conditions (such as takeoff or landing).
+The site shows five plots per set of polars. The image above shows them for the two sections of the comparison, each at a low and a high Reynolds number (four curves).
 
-III. **CL/CD vs Alpha (Lift-to-Drag Ratio vs Angle of Attack)**
+| Plot | What to read from it |
+| --- | --- |
+| $c_l$ against $c_d$ | the drag polar: the drag paid for each lift coefficient. The line from the origin tangent to the curve touches it at the maximum $c_l/c_d$. Laminar sections show a "drag bucket", a range of $c_l$ with low, nearly constant drag |
+| $c_l$ against $\alpha$ | the lift curve: slope close to 0.1 per degree in attached flow, the zero-lift angle (negative for cambered sections), $c_{l,max}$ and the stall angle. Kinks and plateaus at low $Re$ are laminar separation bubbles |
+| $c_l/c_d$ against $\alpha$ | section efficiency: the angle of best $c_l/c_d$ and how sharp the peak is. A broad peak keeps the efficiency over a range of flight speeds |
+| $c_d$ against $\alpha$ | where the drag rises towards stall; the width of the low-drag range |
+| $c_m$ against $\alpha$ | the pitching moment about the quarter chord: near zero for symmetric sections, negative and roughly constant for cambered ones in attached flow; a rapid change marks separation |
 
-- This graph highlights the efficiency of the airfoils at different angles of attack.
-- The **Clark Y** achieves a significantly higher CL/CD ratio, particularly at lower angles of attack, affirming its suitability for slow flight conditions where high lift and low drag are critical.
-- The **NACA 0012** maintains consistent performance at higher angles of attack, showing its versatility in scenarios where balanced performance across a range of flight attitudes is required.
+Reading the low- and high-$`Re`$ curves together shows the effects described in [Airfoil Design](airfoil_design.md#reynolds-number-effects): at the lower Reynolds number the drag is higher, $c_l/c_d$ is much lower, the lift curve has kinks from separation bubbles and stall comes earlier.
 
-IV. **CD vs Alpha (Drag Coefficient vs Angle of Attack)**
+## Limits of XFOIL Data
 
-- This graph shows how drag changes as the angle of attack varies.
-- The **Clark Y** has slightly higher drag at low angles of attack, but generally maintains lower drag, supporting its efficiency in lift generation.
-- The **NACA 0012** produces less drag at higher angles of attack, characteristic of symmetric airfoils. This makes it ideal for higher-speed applications where minimizing drag is crucial, even if lift isn’t maximized.
+XFOIL agrees well with wind-tunnel measurements in attached flow at moderate Reynolds numbers, which is why it is the standard tool for section design. Its polars should still be read with the following limits in mind:
 
-V. **CM vs Alpha (Moment Coefficient vs Angle of Attack)**
+1. They are two-dimensional. A wing has induced drag $C_L^2/(\pi e AR)$ in addition to the section drag, often larger than it, so a section $c_l/c_d$ of 100 does not mean an aircraft $L/D$ of 100 (Exercise 2).
+2. Stall and post-stall values are unreliable. Integral boundary-layer methods handle massive separation poorly, and XFOIL usually overpredicts $c_{l,max}$; points past the stall may be missing where the iteration did not converge.
+3. Transition depends on $N_{crit}$. Comparing the $N_{crit} = 9$ and $N_{crit} = 5$ polars shows how sensitive a section is to turbulence and roughness; a laminar section whose low drag disappears at $N_{crit} = 5$ will lose it on a dirty wing.
+4. Below about $Re = 10^5$ the results depend strongly on the modelling of separation bubbles and should be checked against measurements such as the UIUC low-speed tests (Selig et al., 1995).
+5. The data are incompressible. Above about $M = 0.3$ compressibility raises the suction peaks and, at transonic speeds, causes shocks and drag divergence that XFOIL at $M = 0$ cannot show.
+6. Fixed Reynolds numbers. Real wings work at a continuum of $Re$ along the span and over the speed range, so interpolation between polars is needed, and it is least reliable at low $Re$ where the curves change quickly.
 
-- The moment coefficient reflects how the aerodynamic center shifts with angle of attack, which affects stability and control.
-- The **NACA 0012** shows relatively stable moment characteristics, contributing to steady control—important for aerobatic or high-speed flight.
-- The **Clark Y** shows more variation in its moment coefficient, indicating the potential need for more active control, particularly in high-lift scenarios.
+## Selecting a Section
 
-Comparing Performance at Different Reynolds Numbers:
+1. Compute the Reynolds number range of the wing from its chord (root and tip) and its speed range, using the calculator or $Re = Vc/\nu$.
+2. Compute the design lift coefficients: $C_L = 2W/(\rho V^2S)$ at cruise, at climb and near the minimum speed.
+3. Shortlist sections in the database by thickness (structure, fuel, spar depth) and camber (design $c_l$).
+4. Compare the shortlisted polars at the nearest Reynolds numbers: drag at the cruise $c_l$, width of the low-drag range, $c_{l,max}$, stall character, $c_m$ (tail trim drag) and sensitivity to $N_{crit}$.
+5. Download the coordinates of the best candidates, run XFOIL or a 2D RANS analysis at the actual Reynolds and Mach numbers, and include the induced drag of the wing before judging the aircraft performance.
 
-- At **Re = 50,000**, both airfoils exhibit lower efficiency due to higher drag relative to lift, typical for low Reynolds numbers, where the boundary layer stays laminar longer and is prone to laminar separation bubbles.
-- At **Re = 1,000,000**, the efficiency of both airfoils improves, but the **Clark Y** shows a notably higher peak CL/CD ratio of **114.8**, significantly outperforming the **NACA 0012**, which peaks at **63**. This makes the **Clark Y** a superior choice for smooth, efficient flight at moderate speeds, as in slow-flying planes or gliders.
+### Commonly Used Sections
 
-### Analyzing Airfoil Performance
+| Section | Character | Typical use |
+| --- | --- | --- |
+| NACA 0012 | symmetric, 12% thick | tail surfaces, aerobatic aircraft, rotor-blade studies, CFD validation |
+| NACA 2412 | 2% camber, 12% thick, gentle trailing-edge stall | general-aviation wings |
+| NACA 4412 | 4% camber, 12% thick, higher $c_{l,max}$ and nose-down moment | slow aircraft, wind-tunnel and CFD test case |
+| NACA 23012 | five-digit, forward camber, high $c_{l,max}$, small moment, sharper stall | light aircraft and older transports |
+| Clark Y | 11.7% thick, flat lower surface | historic aircraft, models (easy to build on a flat board) |
+| NACA $63_2$-415 and other six-series | shaped for extended laminar flow and a drag bucket | laminar-flow wings, wind-turbine blades |
+| Eppler, Selig, Wortmann families | designed for low Reynolds numbers | sailplanes, model aircraft, UAVs |
 
-The performance analysis features of Airfoil Tools are especially useful for anyone needing more than just basic information. The site allows you to generate performance graphs that visually represent how an airfoil behaves across different speeds, angles of attack, and Reynolds numbers. These graphs can give you insights into critical factors like when an airfoil might stall, how much drag it produces at certain speeds, and how efficiently it converts airflow into lift.
+## Related Scripts
 
-For example, let’s say you’re developing an aircraft intended for high-speed flight. You’ll want an airfoil with low drag to improve efficiency at higher speeds. By using the performance graphs on Airfoil Tools, you can quickly see which airfoil has the lowest drag at the speeds you’re interested in. Similarly, if you’re working on a slow-flying ultralight, you’ll want an airfoil with a high coefficient of lift to ensure the plane stays airborne at low speeds. The ability to visualize these performance characteristics allows you to tailor your airfoil choice to your specific needs.
+- [NACA 4-Digit Airfoil Profile](../../../../scripts/plots/airfoil_profile/): draws an annotated NACA 4-digit airfoil profile (NACA 4412 by default) from its four-digit designation, marking the chord line, the mean camber line, the maximum camber and thickness and the leading-edge radius, and compares it with sections of different camber and thickness.
+- [Thin-Airfoil Theory, Panel Method and Drag Polar](../../../../scripts/algorithms/airplane_thin_airfoil_and_polar/): computes the lift of a NACA 4-digit airfoil with thin-airfoil theory and with a Hess–Smith panel method, then turns the section result into a finite-wing lift curve, a parabolic drag polar and the power-required curve of a light aircraft.
+- [Reynolds Numbers of Flyers](../../../../scripts/plots/airplane_reynolds_number_scale/): computes the chord Reynolds number $Re_c = Vc/\nu$ of fourteen flyers, from a fruit fly to an airliner at cruise, and draws them on one logarithmic axis next to the flat-plate skin-friction laws for laminar, turbulent and transitional boundary layers.
 
-### Modifying Airfoils
+## Exercises
 
-In addition to browsing and comparing airfoils, the Airfoil Tools website allows you to modify existing airfoils or even create your own. This feature is particularly useful for designers who have very specific performance goals and need to tweak an airfoil’s shape to meet those needs.
-
-You can import airfoil coordinates to test custom designs or modify the shape of existing airfoils directly through the site. Once you’ve made your changes, the website provides the same detailed performance analysis for your modified design, allowing you to compare it with standard airfoils. This gives you an idea of how your custom airfoil performs in the real world without needing to build and test physical prototypes right away.
-
-### Plotting and Printing Airfoils
-
-Another handy feature is the ability to generate full-size plots of the airfoil shapes. If you’re working on a project that requires you to physically build or model a wing, the ability to print accurate templates directly from the website can save a lot of time. You can choose to print these plots at various scales, depending on whether you’re making a small model or a full-scale wing for a prototype.
-
-### Practical Example of Using Airfoil Tools
-
-Imagine you are in the process of designing a glider, and your primary goal is to select an airfoil that will excel in slow-speed flight while still offering high efficiency for extended, energy-sustained flights. In this scenario, the Airfoil Tools website becomes an invaluable resource. To begin, you would explore the extensive airfoil database, focusing on airfoils that exhibit a high coefficient of lift at low Reynolds numbers. Low Reynolds numbers are typical for slow-moving airflows, and airfoils optimized for these conditions generally perform better at generating lift efficiently during slow flight, making them ideal candidates for glider designs.
-
-Once you have a shortlist of potential airfoils that meet these basic criteria, the next step would be to dive deeper into the comparison feature. Here, you could select two or three airfoils and compare them side by side, paying close attention to their lift-to-drag ratio (CL/CD) at various angles of attack. The CL/CD ratio is crucial because it tells you how efficiently an airfoil generates lift relative to the drag it produces. A high CL/CD ratio at low angles of attack is desirable for gliders, as it means the airfoil can maintain lift without creating excessive drag, allowing for longer, more energy-efficient flights.
-
-As you analyze the performance graphs, you would look for any significant variations in how the airfoils behave under different flight conditions. For instance, you would want to identify any sudden spikes in drag or signs of early stall behavior, as these could impact the glider's overall performance. Stall, which occurs when the airfoil can no longer generate enough lift, is particularly critical for gliders, as it affects stability and flight duration. Therefore, an airfoil with smooth lift characteristics and delayed stall onset would be preferable.
-
-After comparing the performance of several airfoils, you would likely identify the one that seems to best meet your requirements. However, the design process doesn’t stop there. You might find that while one airfoil performs well, it could still benefit from slight modifications to better suit your specific design objectives, such as improving stability or enhancing performance under particular flight conditions. Using the modify feature available on Airfoil Tools, you could tweak certain aspects of the airfoil's geometry, such as its camber or thickness distribution, to better match your glider's performance needs.
-
-### Comparison of Common Airfoils
-
-Here's a simple table comparing some common airfoils based on their general characteristics and typical applications. This should help in visualizing how different airfoils stack up against each other in terms of lift, drag, stall characteristics, and typical use cases.
-
-| **Airfoil** | **Type** | **Lift (CL)** | **Drag (CD)** | **Stall Characteristics** | **Typical Use Cases** | **Notes** |
-| --- | --- | --- | --- | --- | --- | --- |
-| NACA 2412 | Cambered | Moderate (balanced) | Moderate | Gradual stall | General aviation (e.g., Cessna 172) | Good all-rounder, balance between lift and drag for medium speeds. |
-| NACA 0012 | Symmetric | Low at zero AoA | Low at high speeds | Sharp stall | Aerobatics, helicopter rotors, tail surfaces | No lift at zero AoA; stable in both directions for inverted flight. |
-| NACA 4412 | Highly Cambered | High | Higher drag at low speeds | More gradual stall | Slow-flying aircraft, gliders | Great for high lift at slow speeds but suffers from increased drag. |
-| Clark Y | Flat-bottomed | High | Moderate to high | Moderate stall | Homebuilt aircraft, early aircraft | Popular due to simplicity and good lift generation at lower speeds. |
-| NACA 23012 | Cambered | Moderate to high | Moderate | Gradual stall | Light aircraft, gliders | Balances good low-speed lift and efficiency for cruising. |
-| Eppler 423 (E423) | Cambered (Glider) | High at low speeds | Low to moderate | Gradual stall | Gliders, sailplanes | Optimized for high lift-to-drag ratios, great for sustained gliding. |
-| NACA 63(3)-618 | Laminar flow | Moderate | Very low (laminar drag) | Moderate stall | High-speed gliders, sailplanes | Excellent for low drag at higher speeds, used in modern sailplanes. |
-
-### Related Scripts
-
-- [NACA 4-Digit Airfoil Profile](../../../../scripts/plots/airfoil_profile/): draws an annotated NACA 4-digit airfoil profile (NACA 4412 by default) from its four-digit designation, labelling the leading edge, trailing edge, chord line and mean camber line.
-
-### Exercises
-
-**Exercise 1.** Airfoil Tools lists polars at fixed Reynolds numbers (for example 50,000, 100,000, 200,000, 500,000 and 1,000,000). Which polar should you look at for (a) a full-size glider wing with a 0.9 m chord flying at 25 m/s, and (b) a model glider with a 0.2 m chord flying at 10 m/s? Use sea-level air: $\rho = 1.225$ kg/m³, $\mu = 1.81 \times 10^{-5}$ Pa·s.
+**Exercise 1.** Which of the site's polars should you look at for (a) a full-size glider wing with a 0.9 m chord flying at 25 m/s, and (b) a model glider with a 0.2 m chord flying at 10 m/s? Use sea-level air: $\rho = 1.225$ kg/m³, $\mu = 1.81 \times 10^{-5}$ Pa s.
 
 <details>
 <summary>Answer</summary>
 
-(a) $Re = 1.225 \times 25 \times 0.9/1.81 \times 10^{-5} = 1.52 \times 10^6$. Use the 1,000,000 polar, remembering that performance at the real Reynolds number will be slightly better.
+(a) $Re = 1.225 \times 25 \times 0.9/1.81 \times 10^{-5} = 1.52 \times 10^6$. Use the 1 000 000 polar, remembering that drag at the real Reynolds number will be somewhat lower and $c_{l,max}$ somewhat higher.
 
-(b) $Re = 1.225 \times 10 \times 0.2/1.81 \times 10^{-5} = 1.35 \times 10^5$. Use the 100,000 polar, and preferably 200,000 as well to bracket it. At these values airfoil behaviour changes quickly with $Re$, so interpolation is less reliable.
+(b) $Re = 1.225 \times 10 \times 0.2/1.81 \times 10^{-5} = 1.35 \times 10^5$. Look at both the 100 000 and 200 000 polars to bracket it. Section behaviour changes quickly with $Re$ in this range, so interpolation is less reliable.
 
 </details>
 
-**Exercise 2.** A section polar shows $c_l = 0.8$ with $c_d = 0.008$, i.e. $c_l/c_d = 100$. The section is used on a wing with $AR = 20$ and $e = 0.9$. Estimate the wing's lift-to-drag ratio, ignoring fuselage and tail drag. What does this say about reading section $c_l/c_d$ values such as 114.8 directly as aircraft performance?
+**Exercise 2.** A section polar shows $c_l = 0.8$ with $c_d = 0.008$, i.e. $c_l/c_d = 100$. The section is used on a wing with $AR = 20$ and $e = 0.9$. Estimate the wing's lift-to-drag ratio, ignoring fuselage and tail drag.
 
 <details>
 <summary>Answer</summary>
 
 ```math
-C_{D_i} = \frac{C_L^2}{\pi e\,AR} = \frac{0.64}{\pi \times 0.9 \times 20} = 0.0113
+C_{D_i} = \frac{C_L^2}{\pi e AR} = \frac{0.64}{\pi \times 0.9 \times 20} = 0.0113
 ```
 
 $C_D \approx 0.008 + 0.0113 = 0.0193$, so $L/D \approx 0.8/0.0193 = 41$.
 
-Section polars are two-dimensional and leave out induced drag, which here is larger than the profile drag. Section $c_l/c_d$ ranks airfoils but greatly overstates the lift-to-drag ratio of the whole aircraft.
+The induced drag is larger than the section drag even on this slender wing. Section $c_l/c_d$ ranks airfoils but greatly overstates the lift-to-drag ratio of the aircraft.
 
 </details>
 
@@ -134,25 +120,25 @@ Section polars are two-dimensional and leave out induced drag, which here is lar
 <details>
 <summary>Answer</summary>
 
-- NACA 0012: no camber, 12% thick
-- NACA 2412: 2% camber at 40% chord, 12% thick
-- NACA 4412: 4% camber at 40% chord, 12% thick
+- NACA 0012: no camber, 12% thick.
+- NACA 2412: 2% camber at 40% chord, 12% thick.
+- NACA 4412: 4% camber at 40% chord, 12% thick.
 
-At supersonic speed, wave drag grows roughly with the square of the thickness ratio, and a blunt, round leading edge produces a detached bow shock. Supersonic wings therefore use much thinner sections (a few percent thick) with sharp or small-radius leading edges. A 12% section with a round nose suits low-speed aerobatic aircraft, helicopter rotors and tail surfaces instead.
+At supersonic speed the wave drag of a thin section grows with the square of the thickness ratio, and a blunt, round leading edge produces a detached bow shock. Supersonic wings therefore use much thinner sections (a few percent thick) with sharp or small-radius leading edges. A 12% section with a round nose suits low-speed aerobatic aircraft, rotors and tail surfaces.
 
 </details>
 
-**Exercise 4.** In the comparison, both airfoils perform worse at $`Re = 50\,000`$ than at $`Re = 1\,000\,000`$. Explain the physical reason, and name two design responses for aircraft that must fly at low Reynolds numbers.
+**Exercise 4.** Comparing the 50 000 and 1 000 000 polars of almost any section shows much lower $c_l/c_d$ at the lower Reynolds number. Explain the physical reason, and name two design responses for aircraft that must fly at low Reynolds numbers.
 
 <details>
 <summary>Answer</summary>
 
-At low Reynolds numbers the boundary layer stays laminar over much of the surface. A laminar boundary layer separates easily in the adverse pressure gradient behind the suction peak and often forms a laminar separation bubble, which thickens the wake, raises drag and makes lift non-linear. Skin-friction coefficients are also higher at low $Re$.
+At low Reynolds numbers the boundary layer stays laminar over much of the surface. A laminar boundary layer separates easily in the adverse pressure gradient behind the suction peak and often forms a laminar separation bubble, which thickens the wake, raises drag and makes the lift curve non-linear. Skin-friction coefficients are also higher at low $Re$ ($c_f \propto Re^{-1/2}$ for laminar flow).
 
 Design responses:
 
-- Choose airfoils designed for low $Re$: thin, with carefully shaped pressure recovery (for example the Eppler and Selig families).
-- Trip the boundary layer to turbulence ahead of the separation point with turbulator tape or zig-zag strips.
+- Use sections designed for low $Re$, thin and with carefully shaped pressure recovery (Eppler and Selig families).
+- Trip the boundary layer to turbulence ahead of the laminar separation point with turbulator tape or zig-zag strips.
 
 </details>
 
@@ -161,15 +147,16 @@ Design responses:
 <details>
 <summary>Answer</summary>
 
-In a steady glide the glide ratio equals $L/D$, so the distance is $40 \times 1000 = 40$ km.
+In a steady glide the glide ratio equals $L/D$, so the distance is $40 \times 1000$ m = 40 km.
 
-Weight does not change the maximum $L/D$, only the speed at which it occurs, so a heavier sailplane glides the same distance but faster. That is why racing sailplanes carry water ballast.
+Weight does not change the maximum $L/D$, only the speed at which it occurs (which scales with $\sqrt{W}$), so a heavier sailplane glides the same distance but faster. That is why racing sailplanes carry water ballast on strong-thermal days.
 
 </details>
 
-### References
+## References
 
-- Abbott, I. H., and von Doenhoff, A. E., *Theory of Wing Sections: Including a Summary of Airfoil Data*, Dover, 1959.
-- Drela, M., "XFOIL: An analysis and design system for low Reynolds number airfoils", in Mueller, T. J. (ed.), *Low Reynolds Number Aerodynamics*, Lecture Notes in Engineering, vol. 54, Springer, 1989.
+- Drela, M., "XFOIL: An analysis and design system for low Reynolds number airfoils", in Mueller, T. J. (ed.), *Low Reynolds Number Aerodynamics*, Lecture Notes in Engineering, vol. 54, Springer, 1989, pp. 1–12.
+- Drela, M., and Youngren, H., *XFOIL 6.9 User Primer*, MIT Department of Aeronautics and Astronautics, 2001.
 - Selig, M. S., Guglielmo, J. J., Broeren, A. P., and Giguère, P., *Summary of Low-Speed Airfoil Data*, Vol. 1, SoarTech Publications, 1995.
+- Abbott, I. H., and von Doenhoff, A. E., *Theory of Wing Sections: Including a Summary of Airfoil Data*, Dover, 1959.
 - Anderson, J. D., Jr., *Fundamentals of Aerodynamics*, 6th ed., McGraw-Hill Education, 2017.

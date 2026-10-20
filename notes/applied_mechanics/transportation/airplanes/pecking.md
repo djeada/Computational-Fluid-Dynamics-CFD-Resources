@@ -1,113 +1,156 @@
-## Pecking and System Stability
+# Static and Dynamic Stability of Oscillating Systems
 
-Understanding how systems behave when they encounter disturbances is important in fields like engineering, aerodynamics, and mechanics. This comprehensive guide explores the concept of **pecking**, a term associated with repeated oscillations in dynamic systems, and delves into the broader topic of system stability. We'll break down these ideas with mathematical rigor, clear explanations, and illustrative diagrams to make these concepts accessible and engaging.
+After a disturbance, a system near equilibrium can return to it, oscillate about it, or move away from it. Two questions separate these outcomes: whether the first reaction is a restoring force (static stability), and whether the motion that follows dies out (dynamic stability). This note sets out both for the damped linear oscillator, classifies its five kinds of free response by their eigenvalues, and applies the classification to the pitching motion of an aircraft and to pilot-induced oscillations, where a pilot's own corrections drive the aircraft into a growing oscillation. The same classification applies to structures under flow-induced loads ([Flow-Induced Vibrations](../../fluid_loading/flow_induced_vibrations.md)) and to feedback control loops ([Stability Analysis](../../control_systems/stability_analysis.md)).
 
-### The Basics of System Stability
+The file name refers to "pecking", an informal description of a repeated nose-down bobbing of an aircraft. It is not a term of the stability or flight-dynamics literature, where such motions are described by their mode (short period, phugoid), as porpoising (a coupled pitch and heave oscillation of seaplane hulls and planing boats) or as a pilot-induced oscillation; this note uses the standard terms.
 
-At its core, system stability refers to how a system responds when it's pushed out of its normal operating condition. Think of a playground swing: when you give it a push, it swings back and forth. Depending on various factors, the swing might settle back to its resting position, continue swinging indefinitely, or swing with increasing amplitude. These different behaviors help us categorize the system's stability.
+## Problem Statement
 
-#### Static Stability: Immediate Response to Disturbance
-
-Static stability examines how a system responds right after a disturbance, without considering the passage of time. It's like nudging a resting object and observing whether it returns to its original position or moves away from it.
-
-In the **Stable Configuration**, the object stands on a broad base. If you push it, it wobbles slightly but returns to its original position, much like a pyramid resting on its base.
-
-In the **Unstable Configuration**, the object stands on a narrow point. A small push causes it to topple over, unable to return to its original position.
-
-![static_stability](https://github.com/user-attachments/assets/2d6d4d04-10bb-471f-bdc8-d52b4c2b3442)
-
-The top section of the provided visual depicts static stability through two different configurations:
-
-- In a **stable** configuration, a triangle rests on its broad base. When disturbed, the triangle wobbles but eventually returns to its original position. This behavior is similar to a ball in a shallow bowl, where disturbances cause the ball to roll but it settles back into place. Such systems exhibit positive stability, naturally correcting themselves after disturbances.
-- In an **unstable** configuration, a triangle balances on its tip, making it highly sensitive to disturbances. Even a slight nudge causes the triangle to topple and fail to return to its original position. This represents negative stability, where disturbances push the system away from equilibrium and it cannot recover on its own.
-
-#### Dynamic Stability: Behavior Over Time
-
-Dynamic stability takes into account how a system behaves as time progresses after a disturbance. It looks at whether the system's oscillations will dampen out, remain constant, or amplify over time.
-
-![dynamic_stability](https://github.com/user-attachments/assets/9d665289-cc0b-4fcf-89aa-70dd33f7cd97)
-
-- In a **high** stability system, the system oscillates briefly and returns to equilibrium. Effective damping mechanisms reduce oscillations quickly after a disturbance. This ensures that the system stabilizes rapidly without prolonged movement.
-- In a **neutral** stability system, oscillations continue indefinitely without damping. There is no net energy loss or gain, allowing oscillations to persist over time. The system remains in a state of constant motion without returning to equilibrium.
-- In an **unstable** system, oscillations grow larger over time, leading the system away from equilibrium. Insufficient damping allows disturbances to amplify, resulting in increasing oscillation amplitudes. This instability can cause the system to fail or behave unpredictably.
-
-Dynamic stability is important for understanding how systems behave in real-world situations, where disturbances happen over time. High stability means the system recovers quickly, while instability means things can spiral out of control.
-
-### Pecking: Repeated Oscillations in Dynamic Systems
-
-**Pecking** refers to the phenomenon where a system undergoes repeated, cyclical oscillations. Depending on the system's stability, these oscillations can behave differently:
-
-- In a **neutral pecking** system, the system continues to oscillate at a constant amplitude. This behavior occurs when there is no net energy loss or gain, allowing oscillations to persist indefinitely. Neutral pecking indicates a balance between damping forces and external energy inputs, maintaining steady-state oscillations.
-- In an **unstable pecking** system, the oscillations increase in amplitude over time. This instability arises when damping is insufficient to counteract energy inputs, leading to progressively larger oscillations. Unstable pecking can result in system failure or unpredictable behavior if not properly controlled.
-
-A note on terminology: "pecking" is not a standard term in the stability, vibration or flight-dynamics literature. The behaviour described here is normally called an oscillatory (dynamic) instability; a sustained constant-amplitude oscillation is a limit-cycle oscillation, and related aircraft pitch phenomena go by names such as porpoising, the phugoid and pilot-induced oscillation.
-
-Pecking is particularly relevant in aerodynamics, where structures like aircraft wings must withstand these oscillations to prevent fatigue or structural damage over time.
-
-#### Mathematical Representation of Pecking
-
-To describe pecking mathematically, we can use the equation of motion for a damped harmonic oscillator:
+Given a linear or linearized system with state $\mathbf{x}$ (displacements and velocities about an equilibrium), written either as a single degree of freedom
 
 $$
-m \frac{d^2x}{dt^2} + c \frac{dx}{dt} + kx = 0
+m\ddot x + c\dot x + kx = 0
 $$
 
-Where:
+with mass (or inertia) $m > 0$, damping coefficient $c$ and stiffness $k$, or in state-space form $\dot{\mathbf{x}} = A\mathbf{x}$, determine
 
-- $m$ is the mass of the system.
-- $c$ is the damping coefficient.
-- $k$ is the stiffness of the system.
-- $x$ is the displacement from equilibrium.
-- $t$ is time.
+- whether the equilibrium is statically stable, unstable or neutral;
+- the eigenvalues, natural frequency, damping ratio and type of free response, and whether it is dynamically stable;
+- how quickly a disturbance decays or grows (time to half or double amplitude, logarithmic decrement);
+- for an aircraft, how these properties follow from the stability derivatives, and how closing a loop through a pilot with a reaction delay changes them.
 
-The solution to this differential equation depends on the damping ratio $\zeta$:
+The analysis is linear: it describes small motions. Nonlinear effects (amplitude-dependent damping, actuator rate limits, separation) can bound a growing oscillation into a limit cycle or make a linearly stable system unstable at large amplitude.
+
+## Static Stability
+
+A conservative system with potential energy $V(x)$ is in equilibrium where $dV/dx = 0$. The force after a small displacement is $`F = -dV/dx \approx -k\,x`$ with $k = d^2V/dx^2$:
+
+| Stiffness | Potential | Force after a displacement | Static stability |
+| --- | --- | --- | --- |
+| $k > 0$ | minimum (bowl) | restoring, towards equilibrium | stable |
+| $k < 0$ | maximum (hill) | away from equilibrium | unstable |
+| $k = 0$ | flat | none | neutral |
+
+![Static stability: a ball in a bowl, on a hill and on a flat surface](../../../../scripts/plots/airplane_stability_classification/airplane_static_stability.png)
+
+Static stability describes only the initial tendency. It says nothing about whether the system overshoots, how many times it oscillates or whether the oscillation grows.
+
+## Dynamic Stability
+
+### Eigenvalues of the Damped Oscillator
+
+Substituting $x = e^{\lambda t}$ into $m\ddot x + c\dot x + kx = 0$ gives the characteristic equation $m\lambda^2 + c\lambda + k = 0$, with roots
 
 $$
-\zeta = \frac{c}{2\sqrt{mk}}
+\lambda_{1,2} = -\zeta\omega_n \pm \omega_n \sqrt{\zeta^2 - 1},
+\qquad \omega_n = \sqrt{\frac{k}{m}},
+\qquad \zeta = \frac{c}{2\sqrt{mk}}
 $$
 
-- In an **overdamped** system, the system returns to equilibrium without oscillating. The damping ratio ($\zeta$) is greater than one, which helps prevent oscillatory motion. Overdamped conditions ensure stability but may result in a slower response to disturbances.
-- In a **critically** damped system, the system achieves the fastest return to equilibrium without oscillating. When the damping ratio ($\zeta$) equals one, it balances responsiveness and stability effectively. Critical damping is often desirable in applications requiring quick stabilization.
-- In an **underdamped** system, the system oscillates with decreasing amplitude over time. The damping ratio ($\zeta$) is less than one, allowing for oscillatory behavior. Underdamped conditions are useful in scenarios where some oscillation is acceptable or necessary.
+for $k > 0$. The free response is a combination of $e^{\lambda_1 t}$ and $e^{\lambda_2 t}$. A complex pair $\lambda = \sigma \pm j\omega_d$ gives an oscillation at the damped frequency $\omega_d = \omega_n\sqrt{1 - \zeta^2}$ inside the envelope $e^{\sigma t}$. The system is dynamically stable if every eigenvalue has a negative real part, neutral if the largest real part is zero, and unstable if any real part is positive.
 
-Oscillation ("pecking") occurs only when $\zeta < 1$: it decays for $0 < \zeta < 1$, keeps a constant amplitude (neutral) for $\zeta = 0$, and grows (unstable) for $\zeta < 0$, which requires negative damping, i.e. energy fed into the motion. A critically damped system ($\zeta = 1$) does not oscillate.
+| Response | Eigenvalues | Parameters | Static | Dynamic |
+| --- | --- | --- | --- | --- |
+| Non-oscillatory convergence | two negative real roots | $k > 0$, $\zeta \ge 1$ | stable | stable |
+| Damped oscillation | complex pair, $\sigma < 0$ | $k > 0$, $0 < \zeta < 1$ | stable | stable |
+| Neutral oscillation | imaginary pair, $\sigma = 0$ | $k > 0$, $c = 0$ | stable | neutral |
+| Divergent oscillation | complex pair, $\sigma > 0$ | $k > 0$, $c < 0$ | stable | unstable |
+| Monotonic divergence | one positive real root | $k < 0$ | unstable | unstable |
 
-### Preventing Unstable Pecking
+![Five free responses of a second-order system and their eigenvalues](../../../../scripts/plots/airplane_stability_classification/airplane_dynamic_stability.png)
 
-To make sure systems remain stable and avoid destructive oscillations, engineers carry out various damping techniques. Increasing the damping coefficient $c$ can help reduce or eliminate pecking.
+The figure integrates the five cases from $x(0) = 1$, $\dot x(0) = 0$ and places their eigenvalues in the complex plane: the dynamic class depends only on which side of the imaginary axis the eigenvalues lie, and the response oscillates only if they leave the real axis.
 
-Consider the equation again:
+### Static Versus Dynamic Stability
+
+For the second-order system the two roots satisfy $\lambda_1\lambda_2 = k/m$ and $\lambda_1 + \lambda_2 = -c/m$, so both have negative real parts if and only if $c > 0$ and $k > 0$ (the Routh–Hurwitz condition of second order). Two consequences follow:
+
+1. Static stability is necessary for dynamic stability. If $k < 0$, the product of the roots is negative, so one root is real and positive whatever the damping; no passive damping can save a statically unstable system.
+2. Static stability is not sufficient. With $k > 0$ but $c < 0$, energy is fed into the motion every cycle and the oscillation grows although a restoring force exists. Negative damping arises from aerodynamic forces in phase with velocity: galloping of iced cables, wing flutter (where two structural modes couple through the airflow) and a pilot reacting late.
+
+### Measures of Decay and Growth
+
+For an underdamped system the ratio of successive peaks gives the logarithmic decrement
 
 $$
-\zeta = \frac{c}{2\sqrt{mk}}
+\delta = \ln \frac{x_n}{x_{n+1}} = \frac{2\pi\zeta}{\sqrt{1 - \zeta^2}}
 $$
 
-By increasing $c$, the damping ratio $\zeta$ increases, moving the system from underdamped towards critically damped or overdamped, thereby reducing oscillations.
+which is how $\zeta$ is measured from a recorded free decay. The time for the amplitude to halve (stable) or double (unstable) is
 
-### Real-World Applications of Pecking Analysis
+```math
+t_{1/2} = \frac{\ln 2}{|\sigma|},
+\qquad \sigma = \mathrm{Re}\,\lambda
+```
 
-Analyzing pecking and stability isn't just theoretical; it's applied in various real-world scenarios:
+Flight-test reports and flying-qualities specifications quote modes in exactly these terms: frequency, damping ratio and time to half or double amplitude.
 
-- **Aerospace Engineering** involves ensuring that aircraft wings and structures can withstand oscillations caused by turbulence. Engineers analyze aerodynamic properties to enhance performance and safety. They utilize advanced materials to reduce weight while maintaining structural integrity.
-- **Automotive Design** focuses on designing suspension systems that absorb shocks without causing excessive oscillations, providing a smooth ride. Designers integrate damping mechanisms to control vibrations and enhance vehicle stability. They test components under various conditions to ensure reliability and comfort.
-- **Civil Engineering** entails building structures that can withstand dynamic loads, such as wind or earthquakes, without entering unstable oscillations. Engineers apply principles of structural dynamics to design buildings, bridges, and other infrastructure. They employ seismic isolation techniques to mitigate the effects of natural forces.
-- **Mechanical Systems** require designing machinery parts that operate smoothly without resonant vibrations that could lead to wear or failure. Mechanical engineers use vibration analysis to identify potential issues and improve component longevity. They select appropriate materials and design tolerances to minimize operational disturbances.
+## Application to Aircraft Pitch
 
-### Exercises
+With speed held constant, the pitching motion of an aircraft (the short-period mode) reduces to a second-order system in the angle of attack,
 
-**Exercise 1.** A system has $m = 2$ kg, $k = 800$ N/m and $c = 8$ N·s/m. Find the natural frequency, the damping ratio and the damped frequency. Classify the response.
+```math
+\ddot\alpha - \left(M_q + M_{\dot\alpha} + \frac{Z_\alpha}{U}\right)\dot\alpha + \left(\frac{Z_\alpha M_q}{U} - M_\alpha\right)\alpha = 0
+```
+
+with the dimensional derivatives of [Airplane Stability](airplane_stability.md). The stiffness contains $`-M_\alpha \propto -C_{m_\alpha} = a\,SM`$, proportional to the static margin, plus the term $Z_\alpha M_q/U$; the damping comes from the pitch-rate derivatives $M_q$ and $M_{\dot\alpha}$, mostly generated by the tail. For the light aircraft of the [longitudinal-modes script](../../../../scripts/algorithms/airplane_longitudinal_modes/) at 55 m/s the stiffness is 31.3 s⁻² and the damping coefficient 8.14 s⁻¹, giving $\omega_n = 5.59$ rad/s and $\zeta = 0.73$, a damped oscillation.
+
+The full four-state longitudinal model shows the same classification as the static margin changes:
+
+| $C_{m_\alpha}$ (per rad) | Static margin | Longitudinal eigenvalues (1/s) | Behaviour |
+| --- | --- | --- | --- |
+| $-0.89$ | $0.19$ | $-4.07 \pm 3.83j$, $-0.015 \pm 0.210j$ | damped short period and phugoid |
+| $0$ | $0$ | $-6.74$, $-1.38$, $-0.061$, $0$ | oscillations gone; one neutral root |
+| $+0.10$ | $-0.022$ | $-7.16$, $-0.91$, $-0.21$, $+0.11$ | monotonic divergence, doubling in 6.2 s |
+
+Behind the neutral point one eigenvalue becomes real and positive: the aircraft diverges in pitch without oscillating, the "monotonic divergence" of the classification. A fly-by-wire aircraft designed with negative static margin flies only because its control system feeds back pitch rate and angle of attack to move that eigenvalue back into the left half-plane.
+
+## Pilot-Induced Oscillations
+
+A pilot-induced oscillation (PIO) is a sustained or growing oscillation that results from the pilot's efforts to control the aircraft. Its mechanism is a phase lag in the closed loop formed by the pilot and the aircraft. Model the pilot as a gain $K$ with a reaction delay $\tau$, so that the elevator command is $\delta_e = K(\theta(t - \tau) - \theta_c)$. The loop transfer function is $`L(j\omega) = -K\,G_{\theta\delta_e}(j\omega)\,e^{-j\omega\tau}`$; the delay adds a phase lag $\omega\tau$ that grows with frequency, and the loop becomes neutrally stable at the gain $K_{crit} = 1/|G_{\theta\delta_e}(j\omega_{180})|$ where the total phase reaches $-180^\circ$ ([Frequency Response](../../control_systems/frequency_response.md)).
+
+![Pilot tracking a pitch command with a 0.3 s delay at three gains](../../../../scripts/algorithms/airplane_longitudinal_modes/airplane_pilot_induced_oscillation.png)
+
+For the light aircraft with $\tau = 0.3$ s, $K_{crit} = 1.14$ rad of elevator per rad of pitch error and the critical frequency is 4.62 rad/s (period 1.36 s), close to the short-period frequency. At half the critical gain the aircraft follows the command smoothly; at the critical gain it oscillates with constant amplitude; 10% above it, the pilot's corrections arrive late enough to reinforce the motion and the oscillation grows. The aircraft is dynamically stable on its own in all three cases: the instability belongs to the closed loop.
+
+PIOs are usually grouped into three categories (National Research Council, 1997):
+
+| Category | Cause | Example |
+| --- | --- | --- |
+| I, linear | excessive phase lag from delays or high-order flight-control dynamics with high pilot gain | landing flare of Space Shuttle *Enterprise* on its last approach and landing test, 1977 |
+| II, quasi-linear | actuator rate or position limiting adds sudden extra phase lag at large amplitude | crashes of the Saab JAS 39 Gripen prototype (1989) and of the YF-22 (1992) |
+| III, nonlinear | mode switching or other transitions in the control laws | rare, hard to predict by analysis |
+
+The remedies follow from the loop analysis: reduce delays in the control system, avoid rate saturation, shape the aircraft response so that a high-gain pilot keeps phase margin, and train pilots to relax their gain (let go of the stick) when an oscillation starts.
+
+## Key Takeaways
+
+- Static stability is the sign of the stiffness, $k = d^2V/dx^2 > 0$; dynamic stability is the sign of the eigenvalues' real parts.
+- For $m\ddot x + c\dot x + kx = 0$, dynamic stability requires both $k > 0$ and $c > 0$; a statically unstable system always diverges, a statically stable one can still oscillate with growing amplitude if its damping is negative.
+- The five free responses are non-oscillatory convergence, damped oscillation, neutral oscillation, divergent oscillation and monotonic divergence.
+- In aircraft pitch, the static margin supplies the stiffness and the tail's pitch-rate derivatives the damping; behind the neutral point a real positive eigenvalue appears.
+- A pilot with a reaction delay closes a loop that can be unstable even when the aircraft is not; the critical gain follows from the $-180^\circ$ phase crossing.
+- "Pecking" is an informal word, not an established term; the motions it describes are the short period, the phugoid, porpoising or a PIO.
+
+## Related Scripts
+
+- [Static and Dynamic Stability Classification](../../../../scripts/plots/airplane_stability_classification/): draws the static picture of stability (a ball in a bowl, on a hill and on a flat surface) and the five free responses of a second-order system, from non-oscillatory convergence to monotonic divergence, together with their eigenvalues in the complex plane.
+- [Longitudinal Modes of a Light Aircraft](../../../../scripts/algorithms/airplane_longitudinal_modes/): finds the short-period and phugoid modes of a representative 1100 kg light aircraft from its linearized longitudinal equations, compares them with the classical two-mode approximations, and shows how a pilot with a reaction delay can turn the well-damped short period into a pilot-induced oscillation.
+
+## Exercises
+
+**Exercise 1.** A system has $m = 2$ kg, $k = 800$ N/m and $c = 8$ N s/m. Find the natural frequency, the damping ratio and the damped frequency, and classify the response.
 
 <details>
 <summary>Answer</summary>
 
 ```math
-\omega_n = \sqrt{k/m} = 20 \text{ rad/s}, \quad
+\omega_n = \sqrt{k/m} = 20 \text{ rad/s},
+\qquad
 \zeta = \frac{c}{2\sqrt{mk}} = \frac{8}{2\sqrt{1600}} = 0.10
 ```
 
-$\omega_d = \omega_n\sqrt{1 - \zeta^2} = 19.9$ rad/s.
-
-Since $0 < \zeta < 1$ the system is underdamped: it oscillates with decaying amplitude.
+$\omega_d = \omega_n\sqrt{1 - \zeta^2} = 19.9$ rad/s. Since $k > 0$ and $0 < \zeta < 1$ the system is statically stable and its free response is a damped oscillation.
 
 </details>
 
@@ -116,46 +159,49 @@ Since $0 < \zeta < 1$ the system is underdamped: it oscillates with decaying amp
 <details>
 <summary>Answer</summary>
 
-$c_{cr} = 2\sqrt{mk} = 2\sqrt{2 \times 800} = 80$ N·s/m. At $c = 160$ N·s/m, $\zeta = 2$: the system is overdamped. It returns to equilibrium without oscillating, but more slowly than the critically damped system.
+$c_{cr} = 2\sqrt{mk} = 2\sqrt{2 \times 800} = 80$ N s/m. At $c = 160$ N s/m, $\zeta = 2$ and the eigenvalues are $\lambda = -20(2 \pm \sqrt 3) = -5.36$ and $-74.6$ s⁻¹. The system is overdamped: it returns without oscillating, but the slow root makes it take longer than the critically damped system ($\lambda = -20$ s⁻¹, double).
 
 </details>
 
-**Exercise 3.** For $\zeta = 0.1$, find the logarithmic decrement $\delta = 2\pi\zeta/\sqrt{1 - \zeta^2}$, the ratio of successive peak amplitudes, and the number of cycles needed for the amplitude to halve.
+**Exercise 3.** For $\zeta = 0.1$, find the logarithmic decrement, the ratio of successive peak amplitudes, and the number of cycles for the amplitude to halve.
 
 <details>
 <summary>Answer</summary>
 
 $\delta = 2\pi(0.1)/\sqrt{0.99} = 0.631$, so successive peaks shrink by a factor $e^{0.631} = 1.88$.
 
-The amplitude halves after $\ln 2/\delta = 1.10$ cycles. Conversely, measuring the decay of successive peaks in a test is a standard way to find $\zeta$.
+The amplitude halves after $\ln 2/\delta = 1.10$ cycles.
 
 </details>
 
-**Exercise 4.** Suppose an energy source (for example aerodynamic forcing) makes the effective damping of the system in Exercise 1 negative, $c = -1$ N·s/m. Find $\zeta$, the exponential growth rate of the oscillation amplitude and the time for the amplitude to double.
+**Exercise 4.** An energy source (for example aerodynamic forcing) makes the effective damping of the system in Exercise 1 negative, $c = -1$ N s/m. Find $\zeta$, the growth rate of the oscillation amplitude and the time for it to double.
 
 <details>
 <summary>Answer</summary>
 
-$\zeta = -1/80 = -0.0125$. The amplitude varies as $e^{-\zeta\omega_n t} = e^{-(c/2m)t}$, so the growth rate is $-c/(2m) = 0.25$ s⁻¹ and the doubling time is $\ln 2/0.25 = 2.77$ s.
+$\zeta = -1/80 = -0.0125$. The amplitude varies as $e^{\sigma t}$ with $\sigma = -c/(2m) = 0.25$ s⁻¹, so the doubling time is $\ln 2/0.25 = 2.77$ s.
 
-Even a very small negative damping ratio gives an oscillation that grows without limit in a linear model. In reality nonlinearities usually cap it as a limit cycle, or the structure fails first. Flutter is the classic example.
+Even a very small negative damping ratio gives an oscillation that grows without limit in a linear model. In reality nonlinearities usually cap it as a limit cycle, or the structure fails first; flutter is the classic example.
 
 </details>
 
-**Exercise 5.** Explain, with an example, how a system can be statically stable but dynamically unstable. Can a statically unstable system be dynamically stable without active control?
+**Exercise 5.** A pilot with a reaction delay of 0.3 s closes a pitch-attitude loop at the short-period frequency of 4.6 rad/s. How much phase lag does the delay alone add at that frequency? If the pilot's delay rises to 0.5 s (fatigue, distraction), does the critical gain rise or fall, and why?
 
 <details>
 <summary>Answer</summary>
 
-Static stability only says that the initial tendency is to return, i.e. there is a restoring force. If energy is fed in faster than damping removes it (negative damping), the system overshoots by more each cycle. Examples are a wing in flutter, or an aircraft that is statically stable in pitch but has a divergent phugoid or Dutch roll mode: the restoring moment exists, yet the oscillation grows.
+The delay adds $\omega\tau = 4.6 \times 0.3 = 1.38$ rad $= 79^\circ$ of phase lag.
 
-A statically unstable system (negative stiffness) diverges monotonically, and no amount of passive damping can make it return, so it cannot be dynamically stable on its own. Relaxed-stability fighter aircraft fly only because a flight-control computer supplies the missing stiffness.
+A longer delay adds more lag at every frequency, so the $-180^\circ$ crossing moves to a lower frequency, where the aircraft's response $|G|$ is larger; the critical gain $1/|G(j\omega_{180})|$ therefore falls. For the light aircraft of the script it drops from 1.14 at 4.62 rad/s ($\tau = 0.3$ s) to 0.90 at 3.28 rad/s ($\tau = 0.5$ s). A slower pilot destabilizes the loop at a lower gain, which is why PIO tendencies are worse when the pilot is tense and tracking aggressively.
 
 </details>
 
-### References
+## References
 
-- Rao, S. S., *Mechanical Vibrations*, Pearson.
+- Rao, S. S., *Mechanical Vibrations*, 6th ed., Pearson, 2017.
 - Den Hartog, J. P., *Mechanical Vibrations*, 4th ed., McGraw-Hill, 1956.
-- Nelson, R. C., *Flight Stability and Automatic Control*, 2nd ed., McGraw-Hill, 1998.
 - Etkin, B., and Reid, L. D., *Dynamics of Flight: Stability and Control*, 3rd ed., Wiley, 1996.
+- Nelson, R. C., *Flight Stability and Automatic Control*, 2nd ed., McGraw-Hill, 1998.
+- National Research Council, *Aviation Safety and Pilot Control: Understanding and Preventing Unfavorable Pilot-Vehicle Interactions*, National Academy Press, 1997.
+- McRuer, D. T., *Pilot-Induced Oscillations and Human Dynamic Behavior*, NASA CR-4683, 1995.
+- Ogata, K., *Modern Control Engineering*, 5th ed., Prentice Hall, 2010.

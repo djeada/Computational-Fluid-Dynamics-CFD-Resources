@@ -81,4 +81,4 @@ Both curves fall from $C_P \approx 0.2$ at $x = -1$ m to a suction region near $
 - [Boundary Layers](../../../notes/fluid_mechanics/viscous_flow/boundary_layers.md)
 - [Turbulence Modeling](../../../notes/numerical/cfd/turbulence_modeling.md)
 - [Turbulence Modeling Approaches](../../../notes/fluid_mechanics/turbulence/modeling.md)
-- [Generating CFD Datasets](../../../notes/machine_learning/neural_networks/generating_cfd_datasets.md)
+- [Generating CFD Datasets](../../../notes/machine_learning/automotive_aerodynamics/generating_cfd_datasets.md)

@@ -1,280 +1,160 @@
-# Gappy POD in Hilbert Spaces
+# Gappy POD
 
-Gappy Proper Orthogonal Decomposition (Gappy POD) is a variant of the standard Proper Orthogonal Decomposition (POD) technique, designed to reconstruct and approximate functions or fields from incomplete or partial data. While traditional POD relies on a complete set of snapshots, Gappy POD gracefully handles scenarios where data are missing, sparse, or corrupted. This makes Gappy POD particularly attractive in real-world situations such as experimental fluid dynamics measurements, sensor-limited data acquisition, or database-driven parametric studies where full-field information is not readily available.
+Gappy POD estimates a complete field from incomplete data by fitting the coefficients of a POD basis to the values that are known. It was introduced by Everson and Sirovich (1995) to reconstruct images with missing pixels and to compute a POD basis from an ensemble in which every member has gaps. In fluid dynamics it fills holes in PIV fields (spurious vectors, regions hidden by a model or a reflection), reconstructs surface pressure or velocity fields from a few sensors, and is the estimation step behind sensor placement and the discrete empirical interpolation method used in hyper-reduction. The POD itself is described in [Proper Orthogonal Decomposition](pod_intro.md) and [POD for N Points](derivation_in_n_dim.md).
 
-## Background and Motivation
+## Problem Statement
 
-Classical POD identifies a set of orthonormal basis functions (modes) from a set of complete snapshots, typically collected from numerical simulations or experiments. The key step in POD involves projecting the system onto a reduced subspace that captures the most energetic or dominant structures. This approach enables the construction of reduced-order models (ROMs) that significantly reduce computational costs in simulations, while retaining essential dynamics.
-
-However, in many practical scenarios—such as when sensors fail, data become partially inaccessible, or only a few measurements are available—traditional POD cannot be directly applied. Gappy POD extends the concept to handle "gappy" data: data sets where only subsets of the spatial domain or certain snapshots are known. By cleverly leveraging an existing basis derived from a "complete" reference dataset (or a suitable approximation), Gappy POD can fill in missing information and reconstruct the full field.
-
-## Hilbert Space Setting
-
-Both POD and Gappy POD are naturally formulated in Hilbert spaces. Consider a function space $L^2(\Omega)$, where $\Omega \subseteq \mathbb{R}^d$ is the spatial domain. A function $y(x)$, with $x \in \Omega$, belongs to $L^2(\Omega)$ if the integral of $|y(x)|^2$ over $\Omega$ is finite. This ensures an inner product and norm can be defined:
+A POD basis $\boldsymbol{\Phi}_r = (\boldsymbol{\phi}_1 \cdots \boldsymbol{\phi}_r) \in \mathbb{R}^{N \times r}$ and the mean $\bar{\mathbf{u}}$ are available from complete training snapshots. A new snapshot $\mathbf{u} \in \mathbb{R}^N$ is known only at the $p$ points of a set $\mathcal{S}$: the gaps of a PIV field, or the locations of $p$ sensors. The problem is to estimate $\mathbf{u}$ at all $N$ points, assuming
 
 ```math
-\langle f, g \rangle_{L^2(\Omega)} = \int_\Omega f(x) g(x) \, dx, \quad \|
-y\|_{L^2(\Omega)} = \sqrt{\langle y, y \rangle_{L^2(\Omega)}}
+\mathbf{u} \approx \bar{\mathbf{u}} + \boldsymbol{\Phi}_r\mathbf{a}
 ```
 
-POD typically seeks a low-dimensional subspace $\mathcal{Y}^L \subseteq L^2(\Omega)$ spanned by the first $L$ POD modes $`\{\psi_j(x)\}_{j=1}^L`$. These modes form an orthonormal basis in that subspace. Any function $y \in \mathcal{Y}^L$ can be approximated as:
+with unknown coefficients $\mathbf{a} \in \mathbb{R}^r$. The estimate is well defined when the coefficients are uniquely determined by the known values, which requires $p \ge r$ and suitable points; it is good when the field is close to the span of the basis and the coefficient problem is well conditioned. The second problem, covered below, is to build the basis when every training snapshot has gaps.
 
-$$
-y(x) \approx \hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x)
-$$
+## Masked Least Squares
 
-where the coefficients $a_j^{(y)} = \langle y, \psi_j \rangle_{L^2(\Omega)}$ are determined by projecting $y$ onto each mode.
-
-## Gappy POD: Plain Database Method
-
-### Non-Gappy Function Approximation
-
-If we have a complete description of $y \in L^2(\Omega)$, the best $L^2$-approximation in the subspace spanned by $`\{\psi_j\}`$ is obtained by minimizing:
+Let $\mathbf{P} \in \mathbb{R}^{p \times N}$ select the known entries (each row is a row of the identity), and $\mathbf{D} = \mathbf{P}^T\mathbf{P}$ the diagonal mask with $D_{kk} = 1$ at known points and 0 elsewhere. Everson and Sirovich define the gappy norm $`\lVert \mathbf{f} \rVert_D^2 = \mathbf{f}^T\mathbf{D}\mathbf{f}`$, the norm computed only over the known points, and choose the coefficients that minimise the misfit there:
 
 ```math
-\min_{\{a_j^{(y)}\}} \frac{1}{2}\| y(x) - \sum_{j=1}^L
-a_j^{(y)}\psi_j(x)\|_{L^2(\Omega)}^2
+\hat{\mathbf{a}} = \arg\min_{\mathbf{a}} \lVert \mathbf{u} - \bar{\mathbf{u}} - \boldsymbol{\Phi}_r\mathbf{a} \rVert_D^2 \quad \Longrightarrow \quad \mathbf{G}\hat{\mathbf{a}} = \boldsymbol{\Phi}_r^T\mathbf{D}(\mathbf{u} - \bar{\mathbf{u}}), \qquad \mathbf{G} = \boldsymbol{\Phi}_r^T\mathbf{D}\boldsymbol{\Phi}_r
 ```
 
-The solution is straightforward:
-
-$$
-a_j^{(y)} = \langle y, \psi_j \rangle_{L^2(\Omega)}
-$$
-
-resulting in
-
-$$
-\hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x)
-$$
-
-This assumes we have full knowledge of $y(x)$. In practice, especially in experimental settings or databases built from simulations at parameter sets, we often have only a set of discrete measurements $`\{y(x^{(i)})\}_{i=1}^N`$.
-
-### Gappy Data Approximation
-
-In Gappy POD, instead of minimizing over the entire domain $\Omega$, we only have partial information at sample points $x^{(i)}$, $i=1,\ldots,N$:
+The masked Gram matrix $\mathbf{G}$ is the inner-product matrix of the modes restricted to the known points. With complete data $\mathbf{D} = \mathbf{I}$, $\mathbf{G} = \mathbf{I}$ and $\hat{\mathbf{a}} = \boldsymbol{\Phi}_r^T(\mathbf{u} - \bar{\mathbf{u}})$, the ordinary projection. With gaps the modes are no longer orthonormal over the known points, and $\mathbf{G}$ corrects for that. Writing $\boldsymbol{\Theta} = \mathbf{P}\boldsymbol{\Phi}_r$ (the rows of the basis at the known points) and $\mathbf{y} = \mathbf{P}\mathbf{u}$ (the known values),
 
 ```math
-\min_{\{a_j^{(y)}\}} \frac{1}{2} \sum_{i=1}^N
-(y(x^{(i)}) - \sum_{j=1}^L a_j^{(y)} \psi_j(x^{(i)}))^2
+\hat{\mathbf{a}} = \boldsymbol{\Theta}^{+}(\mathbf{y} - \mathbf{P}\bar{\mathbf{u}}), \qquad \hat{\mathbf{u}} = \bar{\mathbf{u}} + \boldsymbol{\Phi}_r\hat{\mathbf{a}}
 ```
 
-Define the "design matrix" $\Psi \in \mathbb{R}^{N \times L}$ as:
+where $`\boldsymbol{\Theta}^{+} = (\boldsymbol{\Theta}^T\boldsymbol{\Theta})^{-1}\boldsymbol{\Theta}^T`$ is the pseudo-inverse and $\boldsymbol{\Theta}^T\boldsymbol{\Theta} = \mathbf{G}$. In practice $\hat{\mathbf{a}}$ is computed with a QR-based least-squares solver from $\boldsymbol{\Theta}$, not from $\mathbf{G}$, which would square the condition number. To fill gaps in measured data, the known values are usually kept and only the missing entries are replaced by those of $\hat{\mathbf{u}}$. On a non-uniform mesh the mask is combined with the weights, $\mathbf{D} \to \mathbf{D}\mathbf{W}$. For point measurements of a continuous field, the rows of $\boldsymbol{\Theta}$ are the modes evaluated at the sensor positions, $\Theta_{ki} = \phi_i(\mathbf{x}_k)$.
 
-$$
-\Psi_{ij} = \psi_j(x^{(i)})
-$$
+## Exactness and Error
 
-We also have the vector $Y = [y(x^{(1)}), y(x^{(2)}), \ldots, y(x^{(N)})]^T \in \mathbb{R}^N$. The optimization problem becomes:
+Split the fluctuation of the true field into its part in the span of the basis and the remainder, $`\mathbf{u} - \bar{\mathbf{u}} = \boldsymbol{\Phi}_r\mathbf{a}^* + \mathbf{e}`$ with $\boldsymbol{\Phi}_r^T\mathbf{e} = \mathbf{0}$. Then
 
 ```math
-\min_{\Gamma_{a}^{(y)}} \frac{1}{2}\| Y - \Psi \Gamma_{a}^{(y)}\|_2^2
+\hat{\mathbf{a}} = \mathbf{a}^* + \boldsymbol{\Theta}^{+}\mathbf{P}\mathbf{e}, \qquad \lVert \hat{\mathbf{u}} - \mathbf{u} \rVert^2 = \lVert \mathbf{e} \rVert^2 + \lVert \boldsymbol{\Theta}^{+}\mathbf{P}\mathbf{e} \rVert^2 \le \lVert \mathbf{e} \rVert^2\left(1 + \frac{1}{\sigma_{\min}(\boldsymbol{\Theta})^2}\right)
 ```
 
-where $\Gamma_{a}^{(y)} = [a_1^{(y)}, \ldots, a_L^{(y)}]^T$. Provided $\text{rank}(\Psi)=L$, the least-squares solution is:
+using $\lVert \mathbf{P}\mathbf{e} \rVert \le \lVert \mathbf{e} \rVert$. Two conclusions follow.
 
-$$
-\Gamma_{a}^{(y)} = (\Psi^T \Psi)^{-1} \Psi^T Y
-$$
+1. If the field lies in the span ($\mathbf{e} = \mathbf{0}$) and $\boldsymbol{\Theta}$ has full column rank, the recovery is exact, whichever points are missing.
+2. Otherwise the error is the projection error $\lVert \mathbf{e} \rVert$, which no method using these $r$ modes can avoid, plus the part of $\mathbf{e}$ seen at the known points, aliased into the coefficients and amplified by up to $1/\sigma_{\min}(\boldsymbol{\Theta})$. Measurement noise enters the same way.
 
-Thus, even with incomplete data, we recover the coefficients that best fit the data to the chosen POD basis. The reconstructed approximation is then:
+Since $`\boldsymbol{\Phi}_r`$ has orthonormal columns, $`\sigma_{\min}(\boldsymbol{\Theta}) \le 1`$, with equality for complete data. A random half of the points gives $\sigma_{\min}$ close to $\sqrt{1/2} = 0.71$ (0.66 to 0.68 for the 10-mode wake basis of the example below) and costs almost nothing; a few badly placed sensors can make it tiny.
 
-$$
-\hat{y}(x) = \sum_{j=1}^L a_j^{(y)} \psi_j(x)
-$$
+## Building the Basis from Gappy Data
 
-### Avoiding Redundancy and Database Functions
+When no complete snapshots exist, for example when every PIV field has a few spurious vectors, Everson and Sirovich compute the basis iteratively:
 
-In many practical cases, the POD modes $\psi_j(x)$ come from a pre-computed database of solutions $`\{\phi_j(x)\}_{j=1}^M`$ that span a larger manifold $\mathcal{M} \subset L^2(\Omega)$. Using a singular value decomposition (SVD), we extract the dominant $L \le M$ modes to form a reduced basis $\psi_j(x)$. Then:
+1. Fill each missing entry with the mean of the known values at that point (over the snapshots in which it is known).
+2. Compute the POD of the filled snapshot matrix.
+3. For every snapshot, compute $\hat{\mathbf{a}}$ from its known entries with the current $r$ modes and replace its missing entries by those of $\bar{\mathbf{u}} + \boldsymbol{\Phi}_r\hat{\mathbf{a}}$.
+4. Repeat steps 2 and 3 until the filled values or the eigenvalues stop changing.
 
-$$
-\Psi = \Phi V_L W_L^{-1}
-$$
+A common refinement is to increase $r$ gradually during the iteration, which guards against fitting noise with modes that are not yet well determined. For data that are close to a rank-$`r`$ subspace and missing at random, the iteration recovers the missing entries; the script below checks this on exactly low-rank data and shows convergence in a few iterations for the wake.
 
-where $\Phi \in \mathbb{R}^{N \times M}$ contains evaluations of the original database functions $\phi_j(x)$. This decomposition ensures that the Gappy POD approximation can leverage a well-structured database.
+## Conditioning and Sensor Placement
 
-## Gappy POD: Aligned Database Method
+The coefficient problem is solvable only if $p \ge r$ and $\boldsymbol{\Theta}$ has full column rank: the known points must distinguish the modes. Two modes that take proportional values at every sensor cannot be separated (Exercise 2). Even with full rank, a small $\sigma_{\min}(\boldsymbol{\Theta})$ amplifies the out-of-basis content and the noise, so the sensors should be placed to make $\boldsymbol{\Theta}$ well conditioned. Common strategies:
 
-In more complex scenarios, we may have to deal with databases where the underlying parameterization or geometry is not consistent or "aligned." For example, consider a shape optimization problem: different snapshots correspond to different geometries. The "aligned database method" applies a transformation to the function or the domain to align datasets.
+- Random locations work well when $p$ is several times $r$, and poorly when $p \approx r$.
+- QR factorization with column pivoting of $\boldsymbol{\Phi}_r^T$ greedily picks the point whose row of $\boldsymbol{\Phi}_r$ has the largest component orthogonal to the rows already chosen, approximately maximising $|\det\boldsymbol{\Theta}|$ for $p = r$. It is the sensor-placement method of Manohar et al. (2018) and the Q-DEIM selection of Drmač and Gugercin (2016); the derivation and an example are in [Flow Feature Extraction](../../machine_learning/flow/feature_extraction.md#sparse-sensor-placement).
+- For $p > r$, further points can be added greedily to maximise $\det(\boldsymbol{\Theta}^T\boldsymbol{\Theta})$ or $\sigma_{\min}(\boldsymbol{\Theta})$; Peherstorfer, Drmač and Gugercin (2020) analyse such oversampling and its stability.
+- Willcox (2006) chooses sensors by minimising the condition number of $\mathbf{G}$ and uses gappy POD for unsteady flow sensing and estimation.
 
-I. **Transforming Database Elements**:
+The discrete empirical interpolation method (Chaturantabut and Sorensen, 2010) is the case $p = r$ with greedily chosen points, applied to the nonlinear term of a reduced-order model rather than to measured data.
 
-If each database element $\bar{\phi}(x)$ must be transformed according to some parameter $p$, we redefine:
+## A Worked Example
 
-$$
-\bar{\phi}(p): = \bar{\phi}(x(p))
-$$
+The [Gappy POD Reconstruction](../../../scripts/algorithms/gappy_pod_reconstruction/) script builds a 10-mode basis (95.6% of the energy) from 200 complete snapshots of a synthetic cylinder wake on a $120 \times 48$ grid, and reconstructs 20 snapshots taken later in time.
 
-where $x(p)$ encodes scaling, translation, or more general transformations (e.g., from a parametric mapping $x \mapsto x(1+p_1)+p_2$). This allows the database to be "aligned," ensuring that different snapshots represent comparable features at corresponding locations.
+![Gappy POD reconstruction of a wake from gaps and from sensors](../../../scripts/algorithms/gappy_pod_reconstruction/gappy_pod_reconstruction.png)
 
-II. **Approximation with Transformation**:
+- With 50% of the points removed at random (b, c), the test error is 0.240, identical to the projection of the complete fields: with 2880 known values for 10 unknowns, the gaps cost nothing.
+- With 20 sensors, the QR layout gives $\kappa(\boldsymbol{\Theta}) = 2.0$ and a smooth estimate with 33% error (e); the random layout shown has $\kappa = 29.9$ and overshoots, 46% error (f).
+- Against the number of sensors (g), QR placement is near its asymptote already at $p = r = 10$ (error 0.325), while the median random layout has error 4.4 at $p = 10$ and needs about 60 sensors to come within 5% of QR. At $p \ge 80$ random layouts become marginally better, because the error is then dominated by the energy outside the basis, which spread-out random sensors sample more evenly than the clustered QR sensors.
+- Against the number of modes (h), the error with 50% gaps follows the full-data projection; with 30 fixed sensors it decreases until $r = p$ and rises once $r > p$ makes the problem underdetermined.
+- Building the basis from training snapshots with 30% of the entries missing (i), the Everson–Sirovich iteration reduces the error of the filled entries from 1.006 (mean fill) to 0.225, and the resulting basis reconstructs the gappy test snapshots as well as the basis from complete data (0.242 against 0.240).
 
-After alignment, we write:
+## Pitfalls
 
-$$
-\bar{y}(\bar{\phi}(p), p, a^{(y)}) = \bar{\phi}(\bar{\phi}(p)) V_L W_L^{-1} a^{(y)} +
-p_5
-$$
+- The basis must represent the field being reconstructed. Gappy POD cannot recover structures absent from the training snapshots, and it silently returns the closest field in the span.
+- Gaps are not random in many applications. A region hidden by a model, or the boundary layer missing from PIV, removes exactly the points where some modes live, and $\boldsymbol{\Theta}$ becomes ill conditioned; check $\sigma_{\min}(\boldsymbol{\Theta})$ for the actual mask.
+- More modes are not always better. With few sensors, choose $r$ well below $p$ or regularise, for example with Tikhonov regularisation $\min \lVert \mathbf{y} - \mathbf{P}\bar{\mathbf{u}} - \boldsymbol{\Theta}\mathbf{a} \rVert^2 + \delta\lVert \boldsymbol{\Lambda}_r^{-1/2}\mathbf{a} \rVert^2$, which penalises coefficients large compared with their typical size $\sqrt{\lambda_i}$.
+- When the snapshots come from different geometries or flow conditions, features such as shocks or separation points move, and a fixed-grid basis is poor. The data have to be aligned (for example by mapping to a common reference geometry) before the POD is built.
 
-ensuring that the function reconstruction accounts for geometric changes or parameter shifts in the dataset.
+## Key Takeaways
 
-III. **Regularization**:
-
-In presence of transformations and incomplete data, a regularization term $\frac{\delta}{2} p^T p$ can be introduced to stabilize the solution. The optimization problem becomes:
-
-```math
-\min_{\Gamma_{a}^{(y)}, p} \left\{ \frac{1}{2}\sum_{i=1}^N
-(y(x^{(i)}) - \bar{y}(\bar{\phi}(p), p, a^{(y)}))^2 + \frac{\delta}{2} \| p\|_2^2
-\right\}
-```
-
-This ensures robustness against ill-conditioned problems and overfitting.
-
-## Differences from Traditional POD in ROM Applications
-
-### Purpose and Focus
-
-- **Traditional POD**:
-
-The classical POD approach aims at reducing computational complexity by extracting a low-dimensional subspace that captures the dominant flow features. It is commonly used for Reduced-Order Modeling (ROM) in CFD, structural dynamics, acoustics, and more. The primary goal is to replace expensive full-scale simulations with cheaper reduced models, enabling rapid simulations, optimization, and control.
-
-- **Gappy POD**:
-
-Gappy POD is not primarily about reducing computational costs in a fully known scenario. Instead, it focuses on reconstructing and identifying important underlying structures from incomplete or sparse data. While it can still facilitate model reduction (if a partial dataset is used to build or enhance a ROM), its defining characteristic is its ability to handle partial, gappy information.
-
-### Data Requirements and Approaches
-
-- **Traditional POD**:
-- Data Source: Typically full-field snapshots obtained from simulations or experiments at different time steps or parameters.
-- Complete Datasets: POD assumes data are complete, making computation of modes straightforward.
-- **Gappy POD**:
-- Data Source: Often partial or incomplete measurements—e.g., velocity data at a few sensor points, partial pressure distributions.
-- Handling Gaps: Gappy POD reconstructs the missing data by leveraging a known basis (from a database of related solutions or previously computed modes).
-
-### Applications
-
-- **Traditional POD**:
-- Used extensively in CFD to produce ROMs for fluid systems.
-- Ideal for parametric studies, iterative design processes, and control applications when full datasets are available.
-- **Gappy POD**:
-- Suitable for situations where sensors provide only partial flow information.
-- Can be used in data assimilation, where incomplete measurements (e.g., from sparse experimental probes) are combined with a known basis to recover full flow fields.
-- Helps integrate measurement data into simulation-based frameworks to enhance accuracy and to fill in missing pieces of the puzzle.
-
-## Example in CFD Context
-
-**Scenario**: Suppose you are studying the aerodynamic performance of an airfoil. Using a Reynolds-Averaged Navier-Stokes (RANS) solver, you build a database of pressure and velocity fields at various angles of attack and Mach numbers. Traditional POD on this database yields a set of modes capturing the dominant flow features (e.g., shock waves, boundary-layer thickness variations, vortex structures).
-
-Now, in an experimental wind tunnel test, you only have a handful of pressure sensors on the airfoil surface, missing the full field information. With Gappy POD, you use the modes derived from your complete CFD database and solve for the coefficients $a_j^{(y)}$ that best match the partial sensor readings. This approach reconstructs an estimate of the entire pressure field over the airfoil surface, enabling you to compare experiment with simulation and gain comprehensive insight.
-
-## Advantages and Limitations
-
-### Advantages of Gappy POD
-
-- **Data Recovery**: Enables reconstruction of full fields from sparse data.
-- **Flexibility**: Works with partial, incomplete, or noisy measurements, making it ideal in experimental or real-time sensing contexts.
-- **Leverages Existing Knowledge**: Builds upon a known POD basis (e.g., from a precomputed database), thus integrating prior knowledge with new, limited observations.
-
-### Limitations and Considerations
-
-- **Quality of Basis**: The accuracy of Gappy POD reconstruction depends heavily on the richness and representativeness of the underlying POD basis. If the basis does not capture the needed structures, reconstruction quality suffers.
-- **Conditioning and Stability**: The least-squares problem $`\min \|Y - \Psi \Gamma_{a}^{(y)}\|`$ can be ill-conditioned if the sampling points or available data are not chosen wisely. Regularization or sensor placement optimization may be needed.
-- **Nonlinearity and Complexity**: For highly nonlinear problems or complex transformations (aligned database method), additional steps, such as nonlinear manifold learning or kernel methods, might be required.
-
-## Future Directions and Research
-
-Gappy POD continues to evolve as more sophisticated data assimilation, machine learning, and reduced-order modeling techniques emerge. Some promising avenues include:
-
-I. **Integration with Machine Learning**:
-
-Using neural networks or Gaussian processes to map partial measurements to POD coefficients can improve robustness and handle nonlinearity better.
-
-II. **Adaptive Sampling and Sensor Placement**:
-
-Determining optimal sensor locations or measurement strategies to maximize the accuracy of Gappy POD reconstructions.
-
-III. **Nonlinear Extensions**:
-
-Extending Gappy POD to nonlinear manifolds or using kernel POD or autoencoder-based approaches for enhanced reconstruction fidelity.
-
-IV. **Data Assimilation in Complex Multiphysics Problems**:
-
-Combining Gappy POD with advanced data assimilation frameworks (e.g., Ensemble Kalman Filters) to merge incomplete experimental or field data with high-fidelity simulations, improving model predictions and uncertainty quantification.
-
-## Purpose in CFD
-
-In experiments and sensor-limited environments, full-field data are rarely available. Gappy POD reconstructs complete flow fields from sparse or incomplete measurements by leveraging a pre-computed POD basis. This is critical for data assimilation in CFD, where partial sensor readings (e.g., a few pressure taps on an airfoil) must be combined with simulation-derived modes to estimate the full pressure or velocity field.
-
-## Input / Output
-
-| Aspect | Details |
-| --- | --- |
-| **Inputs** | Partial measurements $Y = [y(x^{(1)}), \dots, y(x^{(N)})]^T$, POD modes $`\{\psi_j\}_{j=1}^L`$ (from a complete database), sample locations $x^{(i)}$ |
-| **Outputs** | Reconstructed coefficients $\Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T Y$, full-field approximation $\hat{y}(x) = \sum a_j \psi_j(x)$ |
+- Gappy POD solves a least-squares problem for the POD coefficients over the known points, $`\boldsymbol{\Phi}_r^T\mathbf{D}\boldsymbol{\Phi}_r\hat{\mathbf{a}} = \boldsymbol{\Phi}_r^T\mathbf{D}(\mathbf{u} - \bar{\mathbf{u}})`$, and reconstructs $\bar{\mathbf{u}} + \boldsymbol{\Phi}_r\hat{\mathbf{a}}$ everywhere.
+- The recovery is exact for fields in the span of the basis when the masked basis has full column rank; otherwise the out-of-basis content is amplified by up to $1/\sigma_{\min}(\mathbf{P}\boldsymbol{\Phi}_r)$.
+- Randomly scattered gaps are harmless; few sensors need careful placement, and QR pivoting on the basis is a cheap, effective choice.
+- The Everson–Sirovich iteration builds a basis from data in which every snapshot has gaps.
+- The number of modes must stay below the number of sensors, and preferably well below.
 
 ## Related Scripts
 
+- [Gappy POD Reconstruction](../../../scripts/algorithms/gappy_pod_reconstruction/): reconstructs complete flow fields from incomplete data with gappy POD: a POD basis built from complete snapshots of a synthetic cylinder wake is fitted by least squares to held-out snapshots of which only 50% of the points, or a few point sensors, are known.
 - [Proper Orthogonal Decomposition (POD)](../../../scripts/algorithms/pod/): performs Proper Orthogonal Decomposition on a synthetic spatio-temporal field by taking the singular value decomposition of the mean-subtracted snapshot matrix.
-- [Snapshot Proper Orthogonal Decomposition (Snapshot POD)](../../../scripts/algorithms/snapshot_pod/): computes POD modes of a synthetic spatio-temporal field with the snapshot method, which solves an eigenvalue problem for the $M \times M$ temporal correlation matrix instead of the much larger $N \times N$ spatial one.
+- [Flow Super-Resolution](../../../scripts/algorithms/flow_superresolution/): reconstructs a $128 \times 128$ velocity field from its $4\times$ block average with cubic-spline (bicubic) interpolation and with a learned linear patch model, then denoises noisy vortex-street snapshots by truncating their proper orthogonal decomposition (POD).
 
 ## Exercises
 
-The exercises use a discrete domain of four points with the Euclidean inner product and the two orthonormal modes $\psi_1 = (1, 1, 1, 1)/2$ and $\psi_2 = (1, 1, -1, -1)/2$. The full field is $y = (2, 2, 1, 1)$.
+The exercises use four points with the Euclidean inner product, the orthonormal modes $\boldsymbol{\phi}_1 = (1, 1, 1, 1)/2$ and $\boldsymbol{\phi}_2 = (1, 1, -1, -1)/2$, zero mean, and the field $\mathbf{u} = (2, 2, 1, 1)$.
 
-**Exercise 1.** Show that with complete data ($N = 4$ sample points) the gappy least-squares solution $\Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T Y$ reduces to the orthogonal projection $a_j^{(y)} = \langle y, \psi_j \rangle$, and compute the coefficients.
+**Exercise 1.** Show that with all four points known the gappy solution reduces to the orthogonal projection, and compute the coefficients.
 
 <details>
 <summary>Answer</summary>
 
-With all points sampled, the columns of $\Psi \in \mathbb{R}^{4 \times 2}$ are the orthonormal modes, so $\Psi^T\Psi = I_2$ and $\Gamma_a^{(y)} = \Psi^T Y$, i.e. $a_j^{(y)} = \langle y, \psi_j \rangle$. Numerically, $a_1 = (2 + 2 + 1 + 1)/2 = 3$ and $a_2 = (2 + 2 - 1 - 1)/2 = 1$, so $y = 3\psi_1 + \psi_2$ exactly.
+With $\mathbf{D} = \mathbf{I}$, $\mathbf{G} = \boldsymbol{\Phi}_2^T\boldsymbol{\Phi}_2 = \mathbf{I}$ and $\hat{\mathbf{a}} = \boldsymbol{\Phi}_2^T\mathbf{u}$. Numerically $\hat{a}_1 = (2 + 2 + 1 + 1)/2 = 3$ and $\hat{a}_2 = (2 + 2 - 1 - 1)/2 = 1$, so $\mathbf{u} = 3\boldsymbol{\phi}_1 + \boldsymbol{\phi}_2$ exactly.
 
 </details>
 
-**Exercise 2.** Only points 1 and 3 are measured, $Y = (2, 1)$. Build $\Psi$, solve for the coefficients and reconstruct the full field. Then repeat with points 1 and 2 measured, and explain what goes wrong.
+**Exercise 2.** Only points 1 and 3 are known, $\mathbf{y} = (2, 1)$. Build $\boldsymbol{\Theta}$, solve for the coefficients and reconstruct the field. Repeat with points 1 and 2, and explain what goes wrong.
 
 <details>
 <summary>Answer</summary>
 
-Points 1 and 3: $`\Psi = \begin{pmatrix} 1/2 & 1/2 \\ 1/2 & -1/2 \end{pmatrix}`$ is square and invertible. Solving $a_1 + a_2 = 4$ and $a_1 - a_2 = 2$ gives $a = (3, 1)$, and $\hat{y} = (2, 2, 1, 1)$ is recovered exactly.
+Points 1 and 3: $`\boldsymbol{\Theta} = \begin{pmatrix} 1/2 & 1/2 \\ 1/2 & -1/2 \end{pmatrix}`$ is invertible. Solving $a_1 + a_2 = 4$ and $a_1 - a_2 = 2$ gives $\hat{\mathbf{a}} = (3, 1)$ and $\hat{\mathbf{u}} = (2, 2, 1, 1)$, exact because $\mathbf{u}$ lies in the span.
 
-Points 1 and 2: both rows of $\Psi$ equal $(1/2, 1/2)$, so $\text{rank}(\Psi) = 1 < L = 2$ and $\Psi^T\Psi$ is singular. The two modes take identical values at these sensors, so the data cannot tell them apart: any $a$ with $a_1 + a_2 = 4$ fits. Sensor locations must make $\Psi$ have full column rank, and preferably be well conditioned.
+Points 1 and 2: both rows of $\boldsymbol{\Theta}$ are $(1/2, 1/2)$, so $`\mathrm{rank}\,\boldsymbol{\Theta} = 1 < r = 2`$ and $\mathbf{G}$ is singular. The two modes take identical values at these points, so any $\mathbf{a}$ with $a_1 + a_2 = 4$ fits the data. The known points must make $\boldsymbol{\Theta}$ full rank, and preferably well conditioned.
 
 </details>
 
-**Exercise 3.** Points 1, 2 and 3 are measured with noise: $Y = (2.1, 1.9, 1.0)$. Compute $\Psi^T\Psi$, $\Psi^T Y$, the least-squares coefficients, the reconstruction and the residual $Y - \Psi\Gamma_a^{(y)}$.
+**Exercise 3.** Points 1, 2 and 3 are measured with noise, $\mathbf{y} = (2.1, 1.9, 1.0)$. Compute $\mathbf{G}$, the right-hand side $\boldsymbol{\Theta}^T\mathbf{y}$, the coefficients, the reconstruction and the residual at the sensors.
 
 <details>
 <summary>Answer</summary>
 
-$\Psi$ has rows $(1/2, 1/2), (1/2, 1/2), (1/2, -1/2)$, so
+$\boldsymbol{\Theta}$ has rows $(1/2, 1/2)$, $(1/2, 1/2)$ and $(1/2, -1/2)$, so
 
 ```math
-\Psi^T\Psi = \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix}, \qquad \Psi^T Y = \begin{pmatrix} 2.5 \\ 1.5 \end{pmatrix}
+\mathbf{G} = \begin{pmatrix} 0.75 & 0.25 \\ 0.25 & 0.75 \end{pmatrix}, \qquad \boldsymbol{\Theta}^T\mathbf{y} = \begin{pmatrix} 2.5 \\ 1.5 \end{pmatrix}
 ```
 
-Solving gives $a = (3, 1)$, so $\hat{y} = (2, 2, 1, 1)$, equal to the noise-free field. The residual is $(0.1, -0.1, 0)$: the two redundant sensors at points 1 and 2 average out their opposite errors. With more sensors than modes, least squares filters measurement noise.
+Solving gives $\hat{\mathbf{a}} = (3, 1)$ and $\hat{\mathbf{u}} = (2, 2, 1, 1)$, the noise-free field. The residual at the sensors is $(0.1, -0.1, 0)$: the redundant sensors at points 1 and 2 average out their opposite errors. With more sensors than modes, least squares filters noise.
 
 </details>
 
-**Exercise 4.** In the mask formulation of Everson and Sirovich, a diagonal mask $M = \text{diag}(m_1, \ldots, m_n)$ has $m_i = 1$ at measured points and $0$ elsewhere. With $\Psi_{\text{full}}$ the modes evaluated at all points, show that the gappy normal equations $`(\Psi_{\text{full}}^T M \Psi_{\text{full}})\,a = \Psi_{\text{full}}^T M y`$ coincide with those of this note. Then show that if the true field lies exactly in the span of the $L$ modes and $\Psi$ has full column rank, gappy POD recovers the coefficients exactly, whichever points are missing.
+**Exercise 4.** Show that with $\mathbf{P}$ selecting the known points, the normal equations $`\mathbf{G}\hat{\mathbf{a}} = \boldsymbol{\Phi}_r^T\mathbf{D}\mathbf{u}`$ in mask form coincide with $`\boldsymbol{\Theta}^T\boldsymbol{\Theta}\hat{\mathbf{a}} = \boldsymbol{\Theta}^T\mathbf{y}`$, and compute $`\sigma_{\min}(\boldsymbol{\Theta})`$ for the sensor sets $`\{1, 3\}`$ and $`\{1, 2, 3\}`$ of Exercises 2 and 3. What does it imply for the amplification of an out-of-basis error?
 
 <details>
 <summary>Answer</summary>
 
-Let $S$ be the $N \times n$ matrix that selects the measured points, so that $\Psi = S\Psi_{\text{full}}$, $Y = Sy$ and $S^TS = M$. Then $\Psi^T\Psi = \Psi_{\text{full}}^T S^T S\Psi_{\text{full}} = \Psi_{\text{full}}^T M\Psi_{\text{full}}$ and $\Psi^T Y = \Psi_{\text{full}}^T M y$, so the two systems are identical.
+$`\boldsymbol{\Theta}^T\boldsymbol{\Theta} = \boldsymbol{\Phi}_r^T\mathbf{P}^T\mathbf{P}\boldsymbol{\Phi}_r = \boldsymbol{\Phi}_r^T\mathbf{D}\boldsymbol{\Phi}_r = \mathbf{G}`$ and $`\boldsymbol{\Theta}^T\mathbf{y} = \boldsymbol{\Phi}_r^T\mathbf{P}^T\mathbf{P}\mathbf{u} = \boldsymbol{\Phi}_r^T\mathbf{D}\mathbf{u}`$, so the systems are identical.
 
-If $`y = \Psi_{\text{full}}a^*`$, then $`Y = \Psi a^*`$ and
-
-```math
-\Gamma_a^{(y)} = (\Psi^T\Psi)^{-1}\Psi^T\Psi a^* = a^*
-```
-
-The reconstruction error of gappy POD therefore comes only from the part of $y$ outside the span of the basis (and from noise), amplified by the conditioning of $\Psi^T\Psi$.
+For $`\{1, 3\}`$, $\mathbf{G} = \boldsymbol{\Theta}^T\boldsymbol{\Theta} = \mathrm{diag}(0.5, 0.5)$, so $\sigma_{\min} = \sqrt{0.5} = 0.707$. For $`\{1, 2, 3\}`$, $\mathbf{G}$ has eigenvalues $0.75 \pm 0.25$, i.e. $1$ and $0.5$, so again $\sigma_{\min} = 0.707$, with $\sigma_{\max} = 1$. An out-of-basis error $\mathbf{e}$ therefore adds at most $`\lVert \mathbf{P}\mathbf{e} \rVert/0.707 = 1.41\lVert \mathbf{P}\mathbf{e} \rVert`$ to the coefficient error. For the singular set $`\{1, 2\}`$, $\sigma_{\min} = 0$ and the amplification is unbounded.
 
 </details>
 
 ## References
 
-- R. Everson and L. Sirovich, "Karhunen–Loève procedure for gappy data", *Journal of the Optical Society of America A* 12(8), 1995.
-- T. Bui-Thanh, M. Damodaran and K. Willcox, "Aerodynamic data reconstruction and inverse design using proper orthogonal decomposition", *AIAA Journal* 42(8), 2004.
-- K. Willcox, "Unsteady flow sensing and estimation via the gappy proper orthogonal decomposition", *Computers & Fluids* 35(2), 2006.
+- R. Everson and L. Sirovich, "Karhunen–Loève procedure for gappy data", *Journal of the Optical Society of America A* 12(8), 1995, pp. 1657–1664.
+- T. Bui-Thanh, M. Damodaran and K. Willcox, "Aerodynamic data reconstruction and inverse design using proper orthogonal decomposition", *AIAA Journal* 42(8), 2004, pp. 1505–1516.
+- K. Willcox, "Unsteady flow sensing and estimation via the gappy proper orthogonal decomposition", *Computers & Fluids* 35(2), 2006, pp. 208–226.
+- D. Venturi and G. E. Karniadakis, "Gappy data and reconstruction procedures for flow past a cylinder", *Journal of Fluid Mechanics* 519, 2004, pp. 315–336.
+- S. Chaturantabut and D. C. Sorensen, "Nonlinear model reduction via discrete empirical interpolation", *SIAM Journal on Scientific Computing* 32(5), 2010, pp. 2737–2764.
+- Z. Drmač and S. Gugercin, "A new selection operator for the discrete empirical interpolation method: improved a priori error bound and extensions", *SIAM Journal on Scientific Computing* 38(2), 2016, pp. A631–A648.
+- K. Manohar, B. W. Brunton, J. N. Kutz and S. L. Brunton, "Data-driven sparse sensor placement for reconstruction: Demonstrating the benefits of exploiting known patterns", *IEEE Control Systems Magazine* 38(3), 2018, pp. 63–86.
+- B. Peherstorfer, Z. Drmač and S. Gugercin, "Stability of discrete empirical interpolation and gappy proper orthogonal decomposition with randomized and deterministic sampling points", *SIAM Journal on Scientific Computing* 42(5), 2020, pp. A2837–A2864.

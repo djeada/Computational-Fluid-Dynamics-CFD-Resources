@@ -1,64 +1,51 @@
 # Longitudinal Velocity Fluctuations and Projections
 
-This script plots synthetic two-point velocity fluctuations as time traces, as a scatter cloud, and projected onto a unit vector, which are the first steps of the two-point POD example. All three figures use one seeded, correlated data set: 1000 samples of $u'_a$ and $u'_b$ over $0.9 \le t \le 1.1$ s. The third figure projects every sample onto $\boldsymbol{\Phi} = (2, 1)/\sqrt{5} \approx (0.894, 0.447)$ and reports the variance along that direction.
+This script plots synthetic two-point velocity fluctuations as time traces, as a scatter cloud, and projected onto a unit vector, which are the first steps of the two-point POD example. Each probe signal is the sum of a large-scale motion shared by both probes and a faster local motion, so the two signals are correlated. The third figure projects every sample onto the trial direction $\boldsymbol{\phi} = (2, 1)/\sqrt{5} \approx (0.894, 0.447)$ and reports the variance along it.
 
 ## Overview
 
-- Generates $u'_a \sim \mathcal{N}(0, 2^2)$ and $`u'_b = 0.5\,u'_a + \mathcal{N}(0, 2^2)`$ (m/s) and removes the sample means
-- Figure 1: time traces of $u'_a(t)$ and $u'_b(t)$
-- Figure 2: scatter plot of the $(u'_a, u'_b)$ pairs, whose elliptical shape shows the correlation
-- Figure 3: the cloud, the line along $\boldsymbol{\Phi}$, and each sample's projection $a_i\boldsymbol{\Phi}$ drawn as a red point on that line
-- Prints the covariance matrix, the correlation coefficient, and the variance along $\boldsymbol{\Phi}$
+- Generates $`M = 10\,000`$ samples at $\Delta t = 1$ ms of $u'_a = s + \ell_a$ and $u'_b = s + \ell_b$, where $s$, $\ell_a$ and $\ell_b$ are independent, seeded, stationary first-order autoregressive signals, and removes the sample means.
+- Stores the data as a $2 \times M$ matrix, points in rows and samples in columns, the convention of [the shared POD code](../../_numerics.py).
+- Figure 1: the first 0.25 s of $u'_a(t)$ and $u'_b(t)$.
+- Figure 2: scatter plot of the $(u'_a, u'_b)$ pairs, whose tilted elliptical shape shows the correlation.
+- Figure 3: the cloud, the line along $\boldsymbol{\phi}$, and each sample's projection $a_j\boldsymbol{\phi}$ drawn as a red point on that line.
+- Prints the covariance matrix, the correlation coefficient, the fluctuation energy $`\frac{1}{2}\mathrm{tr}\,\mathbf{C}`$ and the variance along $\boldsymbol{\phi}$.
 
 ## Mathematical Background
 
-### Reynolds Decomposition
+### Signal Model
 
-An instantaneous velocity is split into a time mean and a fluctuation:
-
-$$
-U = \overline{U} + u',
-\qquad \overline{u'} = 0
-$$
-
-Here the samples are generated directly as fluctuations, and their small sample mean is subtracted.
-
-### Covariance and Correlation
-
-With the $m \times 2$ fluctuation matrix $\mathbf{U}$:
+Each component is an AR(1) process with correlation time $\tau$ and variance $\sigma^2$,
 
 ```math
-\mathbf{C} = \frac{1}{m-1}\mathbf{U}^T\mathbf{U},
-\qquad \rho_{ab} = \frac{c_{12}}{\sqrt{c_{11}\,c_{22}}}
+x_{j+1} = r\,x_j + \sqrt{\sigma^2(1 - r^2)}\,\xi_j, \qquad r = e^{-\Delta t/\tau}, \qquad \xi_j \sim \mathcal{N}(0, 1)
 ```
 
-For the generator used here the exact values are $c_{11} = 4$, $c_{12} = 2$, $c_{22} = 5$, and $\rho_{ab} = 1/\sqrt{5} \approx 0.45$.
-
-### Projection onto a Unit Vector
-
-The scalar projection of sample $`\mathbf{u}'_i = (u'_{a,i}, u'_{b,i})`$ onto the unit vector $\boldsymbol{\Phi} = (\phi_1, \phi_2)$ and its position on the line are
+whose autocorrelation is $e^{-|t|/\tau}$. The shared motion $s$ has $\sigma_s^2 = 2.8$ m²/s² and $\tau_s = 10$ ms; the local motions have $\sigma_\ell^2 = 2.2$ m²/s² and $\tau_\ell = 2$ ms. Because $s$, $\ell_a$ and $\ell_b$ are independent, the exact covariance matrix is
 
 ```math
-a_i = \mathbf{u}'_i \cdot \boldsymbol{\Phi} = u'_{a,i}\phi_1 + u'_{b,i}\phi_2,
-\qquad \mathbf{p}_i = a_i\,\boldsymbol{\Phi}
+\mathbf{C} = \begin{bmatrix} \sigma_s^2 + \sigma_\ell^2 & \sigma_s^2 \\ \sigma_s^2 & \sigma_s^2 + \sigma_\ell^2 \end{bmatrix} = \begin{bmatrix} 5.0 & 2.8 \\ 2.8 & 5.0 \end{bmatrix}
 ```
 
-The variance along $\boldsymbol{\Phi}$ is
+with correlation coefficient $\rho_{ab} = 2.8/5.0 = 0.56$, eigenvalues $2\sigma_s^2 + \sigma_\ell^2 = 7.8$ and $\sigma_\ell^2 = 2.2$, and eigenvectors $(1, \pm 1)/\sqrt{2}$.
+
+### Covariance and Projection
+
+With the $2 \times M$ fluctuation matrix $\mathbf{U}$, whose column $j$ is $`\mathbf{u}'_j = (u'_{a,j}, u'_{b,j})^T`$,
 
 ```math
-\mathrm{var}_{\boldsymbol{\Phi}} = \frac{1}{m-1}\sum_{i=1}^m
-a_i^2 = \boldsymbol{\Phi}^T\mathbf{C}\,\boldsymbol{\Phi}
+\mathbf{C} = \frac{1}{M-1}\mathbf{U}\mathbf{U}^T, \qquad a_j = \boldsymbol{\phi}^T\mathbf{u}'_j, \qquad \mathrm{var}_{\boldsymbol{\phi}} = \frac{1}{M-1}\sum_{j=1}^M a_j^2 = \boldsymbol{\phi}^T\mathbf{C}\,\boldsymbol{\phi}
 ```
 
-### Link to POD
-
-POD looks for the direction that maximises $\boldsymbol{\Phi}^T\mathbf{C}\boldsymbol{\Phi}$ subject to $|\boldsymbol{\Phi}| = 1$. The solution is the leading eigenvector of $\mathbf{C}$, $\mathbf{C}\boldsymbol{\Phi} = \lambda_1\boldsymbol{\Phi}$. The fixed vector $(0.894, 0.447)$ used here is an arbitrary trial direction; its variance is larger than either $c_{11}$ or $c_{22}$ but smaller than $\lambda_1$. The companion script [eigenvector_projection](../eigenvector_projection/README.md) computes the optimal directions.
+POD looks for the unit vector that maximises $\boldsymbol{\phi}^T\mathbf{C}\boldsymbol{\phi}$; the solution is the leading eigenvector of $\mathbf{C}$. The trial vector $(0.894, 0.447)$ gives more variance than either axis but less than $\lambda_1$. The companion script [eigenvector_projection](../eigenvector_projection/README.md) computes the optimal directions from the same data.
 
 ## Implementation
 
-- `generate_fluctuations(n, sigma, coupling, seed)` returns the time array and the zero-mean `(n, 2)` data (`N_SAMPLES = 1000`, `SIGMA = 2`, `COUPLING = 0.5`, `SEED = 0`).
-- `project(data, phi)` returns the scalar projections $a_i$ and the projected points $a_i\boldsymbol{\Phi}$.
-- `plot_time_series(t, data)`, `plot_scatter(data)`, and `plot_projection(data, phi)` build the three figures; the two scatter figures use equal axis scaling.
+- `ar1_process(n, dt, tau, variance, rng)` generates one stationary AR(1) signal, starting from a sample of its stationary distribution.
+- `generate_fluctuations(n, dt, seed)` returns the time array and the zero-mean $2 \times n$ data (`N_SAMPLES`, `DT`, `TAU_SHARED`, `TAU_LOCAL`, `VAR_SHARED`, `VAR_LOCAL`, `SEED`).
+- `covariance(data)` returns $\mathbf{U}\mathbf{U}^T/(M-1)$.
+- `project(data, phi)` returns the scalar projections $a_j$ and the projected points $a_j\boldsymbol{\phi}$.
+- `plot_time_series`, `plot_scatter` and `plot_projection` build the three figures; the two scatter figures use equal axis scaling.
 - `main(argv=None)` prints the statistics and shows or saves the figures.
 
 ## Usage
@@ -78,10 +65,12 @@ python main.py --no-show --output out   # save the three PNGs into out/
 With the default seed the script prints
 
 ```math
-\mathbf{C} = \begin{bmatrix} 3.82 & 2.15 \\ 2.15 & 5.38 \end{bmatrix}, \qquad \rho_{ab} = 0.47, \qquad \mathrm{var}_{\boldsymbol{\Phi}} = 5.85\ \text{m}^2/\text{s}^2
+\mathbf{C} = \begin{bmatrix} 5.074 & 2.991 \\ 2.991 & 5.195 \end{bmatrix}\ \text{m}^2/\text{s}^2, \qquad \rho_{ab} = 0.583, \qquad \tfrac{1}{2}\mathrm{tr}\,\mathbf{C} = 5.134\ \text{m}^2/\text{s}^2, \qquad \mathrm{var}_{\boldsymbol{\phi}} = 7.491\ \text{m}^2/\text{s}^2
 ```
 
-Figure 1 shows the two noisy fluctuation signals.
+The sample values differ from the exact ones by a few percent because the shared motion is correlated over about ten samples, which reduces the effective number of independent samples.
+
+Figure 1 shows the two signals following each other on the slow time scale of the shared motion and departing from each other on the faster local scale.
 
 ![Velocity fluctuation time series](velocity_fluctuations_time_series.png)
 
@@ -89,13 +78,13 @@ Figure 2 shows the tilted elliptical cloud of $(u'_a, u'_b)$ pairs.
 
 ![Scatter of velocity fluctuations](velocity_fluctuations_scatter.png)
 
-Figure 3 shows the red projected points lying on the black line through the origin along $\boldsymbol{\Phi}$.
+Figure 3 shows the red projected points lying on the black line through the origin along $\boldsymbol{\phi}$.
 
 ![Projection onto a unit vector](velocity_fluctuations_projection.png)
 
 ## Related Notes
 
-- [POD Derivation in 2D](../../../notes/numerical/pod/derivation_in_2d.md)
-- [POD Derivation in N Dimensions](../../../notes/numerical/pod/derivation_in_n_dim.md)
+- [Two-Point POD: A Worked Example](../../../notes/numerical/pod/derivation_in_2d.md)
+- [POD for N Points](../../../notes/numerical/pod/derivation_in_n_dim.md)
 - [Reynolds Decomposition](../../../notes/fluid_mechanics/turbulence/reynolds_decomposition.md)
 - [Turbulence Statistics](../../../notes/fluid_mechanics/turbulence/statistics.md)

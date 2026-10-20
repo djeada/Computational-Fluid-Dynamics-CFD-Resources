@@ -1,356 +1,191 @@
-# Free Body Diagrams
+# Free-Body Diagrams
 
-Free body diagrams (FBDs) are the single most important tool in engineering mechanics. They provide a systematic graphical representation of all forces and moments acting on a body, enabling the correct application of equilibrium equations and the determination of unknown reactions, internal forces, and loading effects.
+A free-body diagram (FBD) is a sketch of a body, or part of one, cut free from everything it touches, with every external force and couple acting on it drawn in. It is the step between the physical problem and the equations: the equilibrium equations and the equations of motion are statements about the forces on a free-body diagram, so an error in the diagram makes every later step wrong however carefully it is done. This note gives the procedure, the reactions that standard supports and connections exert in 2D and 3D, two-force and three-force members, the counting of unknowns that decides whether a problem is statically determinate, and the cut that exposes internal forces.
 
-## Purpose and Importance
+## Problem Statement
 
-A free body diagram isolates a body (or portion of a body) from its surroundings and replaces all contacts, supports, and connections with the forces and moments they exert. The FBD serves as:
+Given a body or assembly with its geometry, applied loads (concentrated forces, distributed loads, couples, weight) and the supports and connections that hold it, construct a diagram that:
 
-- **A visual inventory** of every external influence on the body
-- **The starting point** for writing equilibrium equations
-- **A communication tool** that clearly conveys the analyst's assumptions
-- **An error-checking device** for verifying completeness and consistency
+1. isolates a chosen body or subsystem;
+2. shows every external force and couple acting on it, including unknown support reactions with assumed senses, and no internal forces of the chosen system;
+3. gives the dimensions, angles and coordinate axes needed to write $\sum\mathbf{F} = \mathbf{0}$ and $\sum\mathbf{M}_O = \mathbf{0}$ (or $\sum\mathbf{F} = m\mathbf{a}_G$ and $\sum\mathbf{M}_G = d\mathbf{H}_G/dt$ in dynamics).
 
-Without a correct FBD, the equilibrium equations will be incomplete or wrong, leading to incorrect results regardless of the mathematical skill applied.
+The bodies are rigid, joints are idealized (frictionless pins, rollers, perfectly fixed ends) unless friction is stated, and members are weightless unless their weight is given. From the diagram, count the unknowns $r$ and the independent equations $n$ (3 for a planar body, 6 in 3D) and decide whether the problem is determinate before solving it.
 
-## Steps for Constructing a Free Body Diagram
+## Procedure
 
-### Step 1: Select the Body to Isolate
+1. Decide which body or group of bodies to isolate. The choice decides which forces are external, and so which unknowns appear in the equations.
+2. Draw the outline of the body cut free from its supports and from every other body, with its essential dimensions.
+3. Draw the known loads where they act: point loads with magnitude and direction, distributed loads as given (replace them by resultants only when writing equations for the whole body), couples as curved arrows, and the weight at the centre of gravity.
+4. At every place where a support or another body was removed, draw the reactions that connection can exert, from the tables below. Give each unknown a symbol and an assumed sense.
+5. Add a coordinate system and the angles needed to resolve forces.
+6. Count unknowns and equations. Then write the equations, choosing moment centres where several unknowns act.
+7. Interpret signs: a negative result means the actual sense is opposite to the assumed one. Keep the same assumed sense when a force reappears on another diagram, reversed as required by Newton's third law.
 
-Choose the body or system of interest. This could be:
+## Supports and Connections in 2D
 
-- A single rigid body
-- A portion of a structure obtained by cutting through members
-- A system of connected bodies analyzed together
+A support exerts a force in each direction in which it prevents translation, and a couple if it prevents rotation. The chart shows the common planar supports and the reactions that replace them on a free-body diagram.
 
-### Step 2: Detach the Body from All Supports and Contacts
+![Eight standard 2D supports drawn next to the reactions they exert on the body](../../../scripts/plots/fundamentals_support_reactions/fundamentals_support_reactions.png)
 
-Mentally remove the body from its environment, including:
+| Support or connection | Reactions on the body | Unknowns |
+| --- | --- | --- |
+| Cable, rope, chain | Tension along the cable, away from the body | 1 |
+| Weightless link (two-force member) | Force along the link, either sense | 1 |
+| Roller, rocker, smooth surface | Force normal to the surface | 1 |
+| Pinned collar or slider on a smooth rod | Force normal to the rod | 1 |
+| Smooth pin or hinge | Two force components, $A_x$ and $A_y$ | 2 |
+| Fixed collar on a smooth rod | Force normal to the rod and a couple | 2 |
+| Rough surface (with friction) | Normal force and friction force | 2 |
+| Fixed (built-in) support | $A_x$, $A_y$ and a couple $M_A$ | 3 |
 
-- Supports (pins, rollers, fixed walls)
-- Connections to other bodies (cables, ropes, joints)
-- Contact surfaces (ground, adjacent members)
+The sense of every reaction except a cable tension is unknown in advance; draw it either way and let the sign of the result decide. A roller or smooth surface can only push; if the solution needs it to pull, the body lifts off and the assumed support condition is wrong.
 
-### Step 3: Draw the Isolated Body
+## Supports and Connections in 3D
 
-Sketch the outline of the body clearly, maintaining approximate proportions and geometry.
+In space a body has six degrees of freedom, and the supports are correspondingly richer.
 
-### Step 4: Apply All External Forces and Moments
+| Support | Reactions | Unknowns |
+| --- | --- | --- |
+| Cable | Tension along the cable | 1 |
+| Smooth surface or roller on a surface | Normal force | 1 |
+| Ball and socket | Three force components | 3 |
+| Single journal (radial) bearing | Two forces perpendicular to the shaft, two couples perpendicular to the shaft | 4 |
+| Single thrust bearing | Three forces, two couples perpendicular to the shaft | 5 |
+| Single smooth pin or hinge | Three forces, two couples perpendicular to the pin axis | 5 |
+| Fixed support | Three forces, three couples | 6 |
 
-Add every force and moment acting on the body:
+The couples listed for bearings, pins and hinges are developed only when that single connection must stop the body rotating about axes perpendicular to the shaft or pin. When a shaft or door is held by two or more properly aligned bearings or hinges, those rotations are prevented by pairs of force reactions instead, and the couples are omitted from the diagram; keeping them would make the problem appear indeterminate.
 
-- **Known forces**: Show with correct magnitude, direction, and point of application
-- **Unknown reactions**: Show with assumed directions (to be determined by equilibrium)
-- **Weight**: Applied at the center of gravity, directed downward
+## Two-Force and Three-Force Members
 
-### Step 5: Label All Forces and Establish a Coordinate System
+A body acted on by forces at only two points, with no couples, is a two-force member. Equilibrium of forces requires the two forces to be equal and opposite, and equilibrium of moments about one of the points requires the other force to pass through it. The forces are therefore collinear, along the line joining the two points, whatever the shape of the member. The members of a pin-jointed truss loaded only at its joints, links in mechanisms, and struts and hydraulic cylinders pinned at both ends are two-force members. Recognising one replaces two unknown components at each end by a single unknown magnitude along a known line.
 
-- Assign variable names to unknown forces and moments
-- Indicate dimensions and angles
-- Establish a clear sign convention and coordinate axes
+A body acted on by exactly three forces, with no couples, is a three-force member. Taking moments about the intersection of two of the lines of action shows that the third must pass through the same point: the three forces are concurrent, or else all parallel. This fixes the direction of an unknown pin reaction graphically.
 
-## Types of External Loads
+## Static Determinacy and Proper Constraint
 
-### Concentrated (Point) Forces
+For a planar rigid body, $n = 3$ independent equilibrium equations are available. With $r$ unknown reactions:
 
-A force applied at a single point on the body:
+| Count | Situation | Consequence |
+| --- | --- | --- |
+| $r < 3$ | Partially constrained | The body can move; equilibrium only under special loads |
+| $r = 3$, properly arranged | Statically determinate | Reactions follow from statics alone |
+| $r > 3$ | Statically indeterminate of degree $r - 3$ | Deformation and stiffness are needed ([Axial Loading](../strength_materials/axial_loading.md), [Bending of Beams](../strength_materials/beam_bending.md)) |
 
-$$
-\mathbf{F} = F_x\mathbf{i} + F_y\mathbf{j}
-$$
+The count is necessary but not sufficient. The constraints are improper if the reactions are all parallel (no resistance to motion perpendicular to them) or all concurrent at one point (no resistance to rotation about it), even when $r \ge 3$. A beam on three vertical rollers has $r = 3$ but cannot resist a horizontal load. For a structure of several bodies, apply the count to the whole assembly, with $n = 3$ per body and the internal pin forces counted as unknowns ([Trusses, Frames and Machines](../statics/trusses_frames.md)).
 
-Examples include: a cable pulling on a bracket, a wheel load on a bridge, or a weight hanging from a hook.
+## Internal Forces and the Method of Sections
 
-### Distributed Loads
+Internal forces become external when the body is cut. Cutting a beam at a section and drawing the free-body diagram of either part exposes, in 2D, a normal force $N$ along the axis, a shear force $V$ across it and a bending moment $M$; in 3D, three forces and three moments. The two faces of the cut carry equal and opposite internal actions by Newton's third law.
 
-Forces spread over a length, area, or volume:
+The usual beam sign convention takes $N$ positive in tension, $V$ positive when it acts downward on the right-hand face of the left segment (rotating the segment clockwise), and $M$ positive when it causes sagging (compression on top). The procedure is to find the support reactions from the FBD of the whole beam, cut at the section, and apply equilibrium to the part with fewer loads. Repeating the cut along the beam gives the shear and moment diagrams in [Shear Force and Bending Moment Diagrams](../strength_materials/shear_moment.md).
 
-**Uniform load** (constant intensity $w$, force per unit length):
+## Worked Example: A Pin-Roller Beam
 
-$$
-R = wL, \quad \text{acting at } \bar{x} = \frac{L}{2}
-$$
+An 8 m beam has a pin at $A$ ($x = 0$) and a roller at $B$ ($x = 8$ m). It carries a 20 kN load at $x = 3$ m inclined at $60^\circ$ below the horizontal and pointing to the right, and a uniform load of 5 kN/m from $x = 5$ m to $x = 8$ m. Find the reactions.
 
-**Linearly varying load** (triangular distribution from $0$ to $w_{\max}$):
+![Space diagram of the beam above its free-body diagram with the solved reactions](../../../scripts/plots/fundamentals_free_body_diagram/fundamentals_free_body_diagram.png)
 
-$$
-R = \frac{1}{2}w_{\max}L, \quad \text{acting at } \bar{x} = \frac{2L}{3}
-\text{ from the zero end}
-$$
-
-**General distributed load** $w(x)$:
+On the FBD (lower panel), the pin becomes $A_x$ and $A_y$, the roller becomes $B_y$, the inclined load becomes components $P_x = 20\cos 60^\circ = 10$ kN to the right and $P_y = 20\sin 60^\circ = 17.32$ kN down, and the uniform load becomes its resultant $5 \times 3 = 15$ kN at $x = 6.5$ m. There are three unknowns and three equations.
 
 ```math
-R = \int_0^L w(x)\, dx, \quad \bar{x} = \frac{\int_0^L x\,w(x)\,dx}{\int_0^L w(x)\,dx}
+\sum M_A = 0: \quad 8B_y - 17.32(3) - 15(6.5) = 0 \implies B_y = 18.68 \text{ kN}
 ```
-
-### Applied Moments (Couples)
-
-External torques or couples applied directly to the body:
 
 ```math
-\mathbf{M} = M\,\hat{\mathbf{k}}
+\sum F_y = 0: \quad A_y + B_y - 17.32 - 15 = 0 \implies A_y = 13.64 \text{ kN}
 ```
 
-These appear as curved arrows on the FBD and represent pure rotational effects without a net force.
+```math
+\sum F_x = 0: \quad A_x + 10 = 0 \implies A_x = -10 \text{ kN}
+```
 
-## Support Reactions
+The negative $A_x$ means the pin pulls the beam to the left, against the horizontal component of the load. Check with moments about $B$: $-8(13.64) + 5(17.32) + 1.5(15) = -109.1 + 86.6 + 22.5 = 0$.
 
-Each type of support provides specific reactions that must be included on the FBD.
+## Worked Example: A Fixed L-Frame
 
-### 2D Support Types
+An L-shaped frame is fixed at $A$. Member $AB$ is horizontal and 4 m long, member $BC$ vertical and 3 m long, and a horizontal force $F = 10$ kN acts at $C$ in the $+x$ direction. The fixed support exerts $A_x$, $A_y$ and $M_A$.
 
-**Roller Support**:
+```math
+\sum F_x = 0: \; A_x + 10 = 0 \implies A_x = -10 \text{ kN}, \qquad \sum F_y = 0: \; A_y = 0
+```
 
-- Allows translation along the surface and rotation
-- Provides one reaction: normal force perpendicular to the surface
-- Number of unknowns: 1
+$C$ is at $(4, 3)$ m relative to $A$, so the force has moment $xF_y - yF_x = -30$ kN·m about $A$ (clockwise), and
 
-**Pin (Hinge) Support**:
+```math
+\sum M_A = 0: \quad M_A - 30 = 0 \implies M_A = 30 \text{ kN·m (counterclockwise)}
+```
 
-- Allows rotation but prevents all translation
-- Provides two reaction components: $R_x$ and $R_y$
-- Number of unknowns: 2
+The 4 m horizontal length does not enter because the force is horizontal: only the 3 m height is its moment arm about $A$.
 
-**Fixed (Clamped) Support**:
+## Worked Example: A Truss Joint
 
-- Prevents all translation and rotation
-- Provides two force reactions and one moment reaction: $R_x$, $R_y$, $M$
-- Number of unknowns: 3
+At joint $C$ of a truss, member $CA$ runs up and to the left at $45^\circ$, member $CB$ runs horizontally to the right, and a 50 kN load hangs from the joint. Both members are two-force members, so each exerts a force along its own axis on the joint. Draw both as tensions, pulling away from the joint:
 
-**Cable or Rope**:
+```math
+\sum F_y = 0: \quad F_{CA}\sin 45^\circ - 50 = 0 \implies F_{CA} = 70.7 \text{ kN}
+```
 
-- Can only pull (tension only), always directed along the cable
-- Provides one reaction: tension $T$
-- Number of unknowns: 1
+```math
+\sum F_x = 0: \quad -F_{CA}\cos 45^\circ + F_{CB} = 0 \implies F_{CB} = 50.0 \text{ kN}
+```
 
-**Smooth Contact Surface**:
-
-- Reaction is normal to the contact surface
-- Number of unknowns: 1
-
-### 3D Support Types
-
-**Ball-and-Socket Joint**:
-
-- Prevents translation in all three directions
-- Reactions: $R_x$, $R_y$, $R_z$
-- Number of unknowns: 3
-
-**Journal Bearing**:
-
-- Prevents translation in two directions perpendicular to the shaft
-- Reactions: Two force components perpendicular to the shaft axis
-- Number of unknowns: 2
-
-**Fixed Support (3D)**:
-
-- Prevents all translation and rotation
-- Reactions: $R_x$, $R_y$, $R_z$, $M_x$, $M_y$, $M_z$
-- Number of unknowns: 6
-
-## Internal Forces and Method of Sections
-
-When analyzing internal forces, a cut is made through the structure to expose the internal actions at that section.
-
-### Internal Force Components
-
-At any cut section of a beam, the internal forces consist of:
-
-**Normal Force** $N$: Axial force perpendicular to the cut (along the member axis)
-
-**Shear Force** $V$: Force parallel to the cut face
-
-**Bending Moment** $M$: Couple acting in the plane of the cut
-
-The sign conventions for internal forces in beams are:
-
-- Positive $N$: tension (member being pulled apart)
-- Positive $V$: causes clockwise rotation of the isolated segment
-- Positive $M$: causes the beam to sag (concave upward)
-
-### Procedure for Internal Force Analysis
-
-1. Draw the FBD of the entire structure and solve for external reactions
-2. Cut the structure at the section of interest
-3. Draw the FBD of either segment, showing internal forces at the cut
-4. Apply equilibrium to the isolated segment to find $N$, $V$, and $M$
-
-## Example 1: Simply Supported Beam
-
-**Given**:
-
-- A beam of length $L = 8$ m with a pin at $A$ (left) and roller at $B$ (right)
-- A concentrated load $P = 20$ kN at $x = 3$ m from $A$
-- A uniform distributed load $w = 5$ kN/m from $x = 5$ m to $x = 8$ m
-
-**Find**: Support reactions at $A$ and $B$
-
-**Solution**:
-
-First, replace the distributed load with its resultant:
-
-$$
-R_w = w \times 3 = 5 \times 3 = 15 \text{ kN, acting at } x = 5 + 1.5 = 6.5
-\text{ m from } A
-$$
-
-The FBD shows: pin reactions $A_x$, $A_y$ at the left, roller reaction $B_y$ at the right, load $P$ downward at $x = 3$ m, and resultant $R_w$ downward at $x = 6.5$ m.
-
-Moment equilibrium about $A$:
-
-$$
-\sum M_A = 0: \quad - P(3) - R_w(6.5) + B_y(8) = 0
-$$
-
-$$
-B_y = \frac{20(3) + 15(6.5)}{8} = \frac{60 + 97.5}{8} = 19.69 \text{ kN}
-$$
-
-Vertical force equilibrium:
-
-$$
-\sum F_y = 0: \quad A_y + B_y - P - R_w = 0
-$$
-
-$$
-A_y = 20 + 15 - 19.69 = 15.31 \text{ kN}
-$$
-
-Horizontal force equilibrium:
-
-$$
-\sum F_x = 0: \quad A_x = 0
-$$
-
-## Example 2: Frame Structure
-
-**Given**:
-
-- An L-shaped frame with a fixed support at $A$ at the base
-- Horizontal member $AB$ of length $4$ m, vertical member $BC$ of length $3$ m
-- A horizontal force $F = 10$ kN applied at $C$
-
-**Find**: Reactions at the fixed support $A$
-
-**Solution**:
-
-The FBD of the entire frame at the fixed support $A$ has reactions $A_x$, $A_y$, and moment $M_A$.
-
-Force equilibrium:
-
-$$
-\sum F_x = 0: \quad A_x + F = 0 \implies A_x = -10 \text{ kN}
-$$
-
-$$
-\sum F_y = 0: \quad A_y = 0
-$$
-
-Moment equilibrium about $A$ (counterclockwise positive; $C$ is 3 m above $A$, so the force $F$ acting in the $+x$ direction has a clockwise moment $F \times 3$ about $A$):
-
-$$
-\sum M_A = 0: \quad M_A - F \times 3 = 0
-$$
-
-$$
-M_A = 10 \times 3 = 30 \text{ kN·m (counterclockwise)}
-$$
-
-## Example 3: Truss Joint Analysis
-
-**Given**:
-
-- A truss joint $C$ where two members meet
-- External load at joint $C$: $P = 50$ kN downward
-- Member $CA$ is inclined at $45^\circ$ to the horizontal (upward to the left)
-- Member $CB$ is horizontal (to the right)
-
-**Find**: Forces in members $CA$ and $CB$
-
-**Solution**:
-
-Isolate joint $C$ and draw its FBD showing all member forces as tensions (pulling away from the joint). Apply equilibrium:
-
-Vertical equilibrium:
-
-$$
-\sum F_y = 0: \quad F_{CA}\sin 45^\circ - P = 0
-$$
-
-$$
-F_{CA} = \frac{P}{\sin 45^\circ} = \frac{50}{0.707} = 70.71 \text{ kN (tension)}
-$$
-
-Horizontal equilibrium:
-
-$$
-\sum F_x = 0: \quad - F_{CA}\cos 45^\circ + F_{CB} = 0
-$$
-
-$$
-F_{CB} = F_{CA}\cos 45^\circ = 70.71 \times 0.707 = 50 \text{ kN (tension)}
-$$
-
-Both results are positive, confirming the assumed tension directions are correct. Member $CA$ carries a tension of $70.71$ kN and member $CB$ carries a tension of $50$ kN.
+Both results are positive, so both members are in tension. The same procedure applied joint by joint solves a whole truss ([Trusses, Frames and Machines](../statics/trusses_frames.md)).
 
 ## Common Mistakes
 
-### Critical Errors to Avoid
+| Mistake | Correct approach |
+| --- | --- |
+| Omitting the weight, or a load applied to a part of the body | List every load on the space diagram and tick it off on the FBD |
+| Giving a support more or fewer reactions than it can exert | Use the support tables; ask which motions the support prevents |
+| Drawing forces that act on a neighbouring body | Draw only forces exerted on the isolated body |
+| Showing internal forces of the isolated system | Internal forces cancel in pairs; they appear only when the system is cut |
+| Drawing both a load and its reaction on the same diagram | Each appears on the diagram of the body it acts on |
+| Using different senses for the same pin force on two connected bodies | Equal and opposite on the two bodies, with one symbol |
+| Treating a two-force member as having two unknown components at each end | Its force lies along the line joining its two pins |
+| Replacing a distributed load by its total resultant before cutting a section | Cut first, then replace the part of the load on each segment |
 
-1. **Missing forces**: Forgetting to include weight, internal reactions, or applied loads
-2. **Incorrect support reactions**: Showing too many or too few reaction components for a given support type
-3. **Drawing forces on the wrong body**: Including forces that act on adjacent bodies rather than the isolated body
-4. **Double-counting forces**: Including both the applied load and its reaction on the same FBD
-5. **Wrong direction of internal forces**: At a cut section, the internal forces on opposite faces must be equal and opposite
+## Key Takeaways
 
-### Sign Convention Pitfalls
+- A free-body diagram shows one isolated body with every external force and couple on it, and nothing else.
+- Each support exerts a force for every translation it prevents and a couple for every rotation it prevents.
+- Two-force members carry a force along the line joining their two points of load; three non-parallel forces in equilibrium are concurrent.
+- Count unknowns before solving: $r = 3$ properly arranged reactions make a planar body determinate; parallel or concurrent reactions are improper whatever their number.
+- Internal forces appear only when a body is cut; the two faces of a cut carry equal and opposite actions.
 
-- Inconsistent positive directions between different FBDs of the same system
-- Forgetting that a negative result simply means the assumed direction was wrong
-- Mixing up moment signs when summing about different points
+## Related Scripts
 
-## Best Practices
-
-1. **Always draw the FBD before writing equations**: Never skip this step, regardless of how simple the problem appears
-2. **Include all dimensions and angles** on the diagram for reference
-3. **Use consistent notation**: Label all forces clearly with unique variable names
-4. **Verify static determinacy**: Confirm that the number of unknowns equals the number of independent equilibrium equations
-5. **Check your results**: Sum moments about an alternative point to verify the solution
-6. **Show the coordinate system** with clear positive directions
-7. **Indicate assumed directions** for unknown forces; let the algebra determine the correct sign
-8. **Replace distributed loads** with their equivalent resultant forces for reaction calculations
-
-## Applications Across Engineering
-
-### Structural Analysis
-
-- Determining support reactions for buildings and bridges
-- Analyzing internal forces in beams, columns, and trusses
-- Evaluating load paths through complex frame structures
-
-### Machine Design
-
-- Gear and bearing force analysis
-- Shaft loading diagrams for deflection and stress calculations
-- Linkage mechanism force transmission
-
-### Biomechanics
-
-- Analyzing forces in human joints and muscles
-- Prosthetic device load analysis
-- Ergonomic assessment of tool usage
-
-Free body diagrams are indispensable at every level of mechanics, from introductory statics through advanced structural dynamics and finite element analysis. Developing the discipline to draw complete, accurate FBDs is the single most effective way to avoid errors in engineering analysis.
+- [Support Reactions in 2D](../../../scripts/plots/fundamentals_support_reactions/): draws the standard planar supports and connections next to the reactions they exert on a body, as a reference chart for drawing free-body diagrams.
+- [Free-Body Diagram of a Beam](../../../scripts/plots/fundamentals_free_body_diagram/): turns a loaded, supported beam into its free-body diagram and solves the three planar equilibrium equations for the support reactions.
 
 ## Exercises
 
-**Exercise 1.** A 6 m ladder weighing 200 N (acting at its midpoint) leans against a smooth vertical wall at $60^\circ$ to the rough floor. Draw the FBD, count the unknowns, and find all reactions and the minimum floor friction coefficient.
+**Exercise 1.** Classify each planar beam as statically determinate, statically indeterminate (give the degree) or improperly constrained: (a) pin at one end, roller at the other; (b) fixed at one end, roller at the other; (c) pins at both ends; (d) three vertical rollers; (e) a pin at one end and a link at the other whose line of action passes through the pin.
 
 <details>
 <summary>Answer</summary>
 
-Unknowns: the floor normal force $N_A$, the floor friction $F_A$, and the wall normal force $N_B$ (a smooth wall gives no friction). That is 3 unknowns for 3 equations, so the problem is determinate.
+A planar rigid body has 3 equilibrium equations.
+
+(a) 2 + 1 = 3 unknowns, not parallel or concurrent: determinate.
+
+(b) 3 + 1 = 4 unknowns: indeterminate to the first degree.
+
+(c) 2 + 2 = 4 unknowns: indeterminate to the first degree; statics cannot separate the two horizontal reactions.
+
+(d) 3 unknowns, but all parallel: improperly constrained, no resistance to horizontal load.
+
+(e) 3 unknowns, but all three lines of action pass through the pin: improperly constrained, no resistance to rotation about the pin.
+
+</details>
+
+**Exercise 2.** A 6 m ladder weighing 200 N (acting at its midpoint) leans against a smooth vertical wall at $60^\circ$ to a rough floor. Draw the FBD, count the unknowns, and find all reactions and the minimum floor friction coefficient.
+
+<details>
+<summary>Answer</summary>
+
+Unknowns: the floor normal force $N_A$, the floor friction $F_A$, and the wall normal force $N_B$ (a smooth wall gives no friction). Three unknowns, three equations: determinate.
 
 Moments about the foot $A$:
 
@@ -362,7 +197,7 @@ Horizontal: $F_A = N_B = 57.7$ N. Vertical: $N_A = 200$ N. Minimum friction coef
 
 </details>
 
-**Exercise 2.** A 4 m cantilever is fixed at its left end $A$. It carries a uniform load of 3 kN/m over its full length and a 5 kN point load at the free end. Find the reactions at $A$.
+**Exercise 3.** A 4 m cantilever is fixed at its left end $A$. It carries a uniform load of 3 kN/m over its full length and a 5 kN point load at the free end. Find the reactions at $A$.
 
 <details>
 <summary>Answer</summary>
@@ -375,42 +210,45 @@ Replace the distributed load by a 12 kN resultant at 2 m.
 
 </details>
 
-**Exercise 3.** For the beam of Example 1, cut the beam at $x = 4$ m and use the FBD of the left segment to find the internal shear force $V$ and bending moment $M$, using the sign conventions in this note.
+**Exercise 4.** For the pin-roller beam of the worked example, cut the beam at $x = 2$ m and at $x = 4$ m, and use the FBD of the left segment to find $N$, $V$ and $M$ at each section with the sign convention of this note.
 
 <details>
 <summary>Answer</summary>
 
-The left segment carries $A_y = 15.31$ kN up at $x = 0$ and $P = 20$ kN down at $x = 3$ m, plus $V$ and $M$ at the cut. Positive $V$ acts downward on the right face of a left segment.
+At $x = 2$ m the left segment carries only the pin reactions, $A_x = 10$ kN to the left and $A_y = 13.64$ kN up:
 
 ```math
-\sum F_y = 0: \quad 15.31 - 20 - V = 0 \implies V = -4.69 \text{ kN}
+N - 10 = 0 \implies N = 10 \text{ kN (tension)}, \qquad V = 13.64 \text{ kN}, \qquad M = 13.64(2) = 27.3 \text{ kN·m}
 ```
+
+At $x = 4$ m the segment also carries the inclined load, whose 10 kN horizontal component cancels $A_x$:
 
 ```math
-\sum M_{cut} = 0: \quad M - 15.31(4) + 20(1) = 0 \implies M = 41.25 \text{ kN·m}
+N = 0, \qquad 13.64 - 17.32 - V = 0 \implies V = -3.68 \text{ kN}, \qquad M = 13.64(4) - 17.32(1) = 37.2 \text{ kN·m}
 ```
 
-The negative $V$ means the shear acts opposite to the assumed direction. The positive $M$ means the beam sags at this section.
+The part of the beam between the pin and the load is in tension; beyond the load there is no axial force because the roller takes no horizontal force.
 
 </details>
 
-**Exercise 4.** A horizontal boom $AB$ of length 3 m is pinned to a wall at $A$ and held by a cable from $B$ to point $C$ on the wall 2 m directly above $A$. A 10 kN load hangs from $B$; neglect the boom weight. Find the cable tension and the pin reactions, and explain the result using the two-force member concept.
+**Exercise 5.** A horizontal boom $AB$ of length 3 m is pinned to a wall at $A$ and held by a cable from $B$ to point $C$ on the wall 2 m directly above $A$. A 10 kN load hangs from $B$; neglect the boom weight. Find the cable tension and the pin reactions, and explain the result using the two-force member concept.
 
 <details>
 <summary>Answer</summary>
 
-The cable makes angle $\theta = \arctan(2/3) = 33.7^\circ$ with the boom, so $\sin\theta = 0.555$.
+The cable makes angle $\theta = \tan^{-1}(2/3) = 33.7^\circ$ with the boom, so $\sin\theta = 0.555$.
 
 Moments about $A$: $T\sin\theta(3) = 10(3)$, so $T = 18.0$ kN.
 
 Horizontal: $A_x = T\cos\theta = 15.0$ kN (pushing the boom away from the wall). Vertical: $A_y = 10 - T\sin\theta = 0$.
 
-The boom carries loads only at its two pinned ends ($A$ and $B$), so it is a two-force member. The reaction at $A$ must act along the boom, which is why $A_y = 0$. The boom is in 15 kN compression.
+The cable and the load both act at $B$, so the boom is loaded only at its two ends: it is a two-force member, and the reaction at $A$ must act along the boom. That is why $A_y = 0$. The boom is in 15 kN compression.
 
 </details>
 
 ## References
 
-- R. C. Hibbeler, *Engineering Mechanics: Statics*, 14th ed., Pearson, 2016.
-- J. L. Meriam, L. G. Kraige, *Engineering Mechanics: Statics*, Wiley.
-- F. P. Beer, E. R. Johnston, D. F. Mazurek, *Vector Mechanics for Engineers: Statics*, McGraw-Hill.
+- Hibbeler, R. C., *Engineering Mechanics: Statics*, 14th ed., Pearson, 2016.
+- Beer, F. P., Johnston, E. R., Mazurek, D. F., & Eisenberg, E. R., *Vector Mechanics for Engineers: Statics and Dynamics*, 12th ed., McGraw-Hill, 2019.
+- Meriam, J. L., Kraige, L. G., & Bolton, J. N., *Engineering Mechanics: Statics*, 9th ed., Wiley, 2018.
+- Gere, J. M., & Goodno, B. J., *Mechanics of Materials*, 9th ed., Cengage Learning, 2018.
