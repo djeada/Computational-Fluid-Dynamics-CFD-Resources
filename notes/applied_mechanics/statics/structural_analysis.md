@@ -1,254 +1,189 @@
 # Structural Analysis
 
-Structural analysis is the systematic determination of the effects of loads on physical structures. It provides the analytical framework for predicting how structures respond to applied forces, enabling engineers to design safe and efficient load-bearing systems across civil, mechanical, and aerospace engineering.
+Structural analysis predicts the reactions, internal forces and displacements of a structure under its loads. It starts by idealizing the real structure as members, joints and supports, decides whether equilibrium alone can determine the forces, and, when it cannot, adds the compatibility of deformations through the force (flexibility) method or the stiffness (displacement) method. The direct stiffness method for trusses developed at the end of this note is the simplest finite element method, and leads directly to the [Finite Element Method](../../numerical/fem/intro.md) for continua.
 
-## Introduction to Structural Systems
+## Problem Statement
 
-A **structure** is an assembly of members connected together to support loads and transmit them safely to the ground or other supports. The primary goals of structural analysis are:
+A structure is defined by its geometry (member axes and joint coordinates, m), member properties (Young's modulus $E$ in Pa, area $A$ in m², second moment of area $I$ in m⁴), supports and loads (forces in N, distributed loads in N/m, imposed settlements or temperature changes). The unknowns are:
 
-- Determine support reactions
-- Find internal forces (axial, shear, bending moment) in each member
-- Assess deformations and displacements
-- Verify that stresses remain within allowable limits
+- the support reactions;
+- the internal forces in every member: axial force $N$, shear force $V$ and bending moment $M$;
+- the displacements and rotations of the joints.
 
-## Types of Structures
+The assumptions of linear static analysis are small displacements (equilibrium is written on the undeformed geometry), linear elastic material, and loads applied slowly enough that inertia is negligible. Under these assumptions the response is linear in the loads and superposition holds. The three sets of equations are
 
-### Beams
+```math
+\text{equilibrium: } \mathbf{A}\,\mathbf{s} = \mathbf{p},
+\qquad \text{compatibility: } \mathbf{e} = \mathbf{B}\,\mathbf{d},
+\qquad \text{constitutive law: } \mathbf{s} = \mathbf{k}\,\mathbf{e}
+```
 
-Beams are members subjected primarily to transverse loads and bending:
+where $\mathbf{s}$ are member forces, $\mathbf{p}$ joint loads, $\mathbf{e}$ member deformations and $\mathbf{d}$ joint displacements. For a pin-jointed truss, with tension and elongation both positive, $\mathbf{B} = \mathbf{A}^{\mathsf{T}}$, $\mathbf{k}$ is diagonal with entries $EA/L$, and the three combine into $\mathbf{K}\mathbf{d} = \mathbf{p}$ with $\mathbf{K} = \mathbf{A}\mathbf{k}\mathbf{A}^{\mathsf{T}}$.
 
-- **Simply supported beam**: Supported by a pin and a roller
-- **Cantilever beam**: Fixed at one end, free at the other
-- **Overhanging beam**: Extends beyond one or both supports
-- **Continuous beam**: Spans over more than two supports (statically indeterminate)
+## Structural Idealization
 
-### Trusses
+### Members
 
-Trusses consist of straight members connected at joints, loaded only at the joints:
+| Member | Carries | Idealized as | Examples |
+| --- | --- | --- | --- |
+| Bar, tie, strut | Axial force only | Two-force member between pins | Truss members, bracing, hangers |
+| Beam | Bending moment and shear, little axial force | Line with flexural stiffness $EI$ | Floor beams, girders, wing spars |
+| Frame member | Axial force, shear and moment | Beam-column with rigid or pinned ends | Portal frames, vehicle chassis rails |
+| Cable | Tension only, no bending stiffness | Flexible line taking the funicular shape of the load | Suspension bridges, guyed masts |
+| Arch | Mainly compression | Curved member, ideally shaped to the load | Bridges, vaults |
+| Plate, shell | In-plane and bending stresses | 2D surface | Slabs, fuselage skins, tanks |
 
-- Members carry purely axial forces (tension or compression)
-- Connections are idealized as frictionless pins
-- Self-weight of members is typically neglected or applied at the joints
+### Joints, Supports and Loads
 
-### Frames
+Joints are modelled as pinned (no moment transferred) or rigid (all members rotate together). Real connections are in between, and the choice affects the moments greatly; a bolted angle cleat is normally treated as pinned, a fully welded end plate as rigid. Supports are pins, rollers or fixed, as in [Rigid Body Equilibrium](./rigid_body_equilibrium.md).
 
-Frames are structures with at least one multi-force member:
+Loads are classified by origin. Dead loads (self-weight, finishes) are permanent; live loads (occupants, traffic, stored goods) vary in position and magnitude; environmental loads include wind, snow, waves and earthquakes; temperature changes and support settlements load indeterminate structures by restraining their deformation. Design codes combine them with load factors. Wind and wave loads, which come from the surrounding flow, are covered in [Wind Loading](../fluid_loading/wind_loading.md) and [Wave Loading](../fluid_loading/wave_loading.md).
 
-- Members can carry axial force, shear, and bending moment simultaneously
-- Connections may be rigid or pinned
-- Common in buildings, bridges, and machinery
+### Load Paths and Tributary Areas
 
-### Arches
+Every load must have a continuous path to the foundations: slab to beams, beams to girders, girders to columns, columns to foundations. A first estimate of the load on a member uses its tributary area, the part of the floor closer to it than to any neighbour. Floor beams spanning 6 m at 3 m spacing under a 5 kPa floor load each carry $w = 5 \times 3 = 15$ kN/m, giving end reactions of $wL/2 = 45$ kN on the girders and a maximum moment of $wL^2/8 = 67.5$ kN m.
 
-Arches are curved structures that transfer loads primarily through compression:
+## Determinacy and Stability
 
-- **Three-hinged arch**: Statically determinate with pins at supports and crown
-- **Two-hinged arch**: One degree of indeterminacy
-- **Fixed arch**: Three degrees of indeterminacy
+A structure is statically determinate when equilibrium alone fixes all reactions and internal forces. Counting unknowns against independent equations gives the degree of indeterminacy $i$:
 
-The horizontal thrust $H$ in a three-hinged parabolic arch under uniform load $w$ is:
+| Structure | Unknowns | Equations | Degree $i$ |
+| --- | --- | --- | --- |
+| Plane truss | $m + r$ | $2j$ | $m + r - 2j$ |
+| Space truss | $m + r$ | $3j$ | $m + r - 3j$ |
+| Plane beam | $r$ | $3 + c$ | $r - 3 - c$ |
+| Plane rigid frame | $3m + r$ | $3j + c$ | $3m + r - 3j - c$ |
 
-$$
-H = \frac{wL^2}{8h}
-$$
+Here $m$ is the number of members, $r$ the reaction components, $j$ the joints and $c$ the number of equations of condition from internal releases: an internal hinge that joins two members adds one equation ($M = 0$ there). A negative $i$ means a mechanism. A non-negative $i$ is necessary for stability but not sufficient, because supports or members can still be arranged improperly (parallel or concurrent reactions, a non-triangulated panel). The rank of the equilibrium matrix decides.
 
-where $L$ is the span and $h$ is the rise.
+Determinate structures are insensitive to support settlement, temperature change and fabrication errors, since they can accommodate them by rigid-body motion without stress. Indeterminate structures develop stresses from all three, but they are stiffer, have lower peak moments, and can redistribute load if one member yields or fails.
 
-### Cables
+## Cables and Arches
 
-Cables are flexible members that carry loads in pure tension:
-
-- Under a uniform load along the horizontal, a cable takes a **parabolic** shape
-- Under its own weight (catenary loading), the shape is a **catenary curve**
-
-The equation of a parabolic cable with sag $h$ and span $L$ is:
-
-$$
-y = \frac{4h}{L^2}x^2
-$$
-
-The maximum tension occurs at the supports and the minimum tension at the lowest point.
-
-## Method of Analysis Overview
-
-### Equilibrium Method (Statics)
-
-For statically determinate structures, equilibrium equations alone suffice:
+A cable has no bending stiffness, so it takes the shape along which the load is carried by tension alone. For a uniform load $w$ (N/m) per horizontal length, horizontal equilibrium makes the horizontal tension component $H$ constant, and vertical equilibrium of an element gives $`H\,y'' = w`$. With the origin at the lowest point of a cable spanning $L$ between supports at equal height with sag $h$:
 
 $$
-\sum F_x = 0, \quad \sum F_y = 0, \quad \sum M = 0
+y = \frac{4h}{L^2}x^2,
+\qquad H = \frac{wL^2}{8h},
+\qquad T_{\max} = \sqrt{H^2 + (wL/2)^2}
 $$
 
-This is the foundation for analyzing determinate beams, trusses, and frames.
+The minimum tension $H$ is at the lowest point and the maximum at the supports. A cable hanging under its own weight per unit length of cable takes the shape of a catenary, $y = (H/w)[\cosh(wx/H) - 1]$, which is close to the parabola when the sag is small.
 
-### Compatibility and Force Methods
-
-For statically indeterminate structures, additional equations based on geometric compatibility of deformations are required:
-
-$$
-\delta_{total} = \delta_{load} + R \cdot \delta_{redundant} = 0
-$$
-
-where $R$ is the redundant reaction and $\delta$ represents displacements.
-
-### Stiffness Method
-
-The stiffness (displacement) method relates forces to displacements through the stiffness matrix:
-
-$$
-\mathbf{F} = \mathbf{K}\mathbf{d}
-$$
-
-where $\mathbf{K}$ is the global stiffness matrix and $\mathbf{d}$ is the displacement vector. This method is the basis for modern finite element analysis.
-
-## Idealization and Modeling
-
-### Modeling Assumptions
-
-Real structures are idealized through simplifying assumptions:
-
-- **Supports**: Classified as pins, rollers, or fixed based on the degree of restraint
-- **Connections**: Treated as perfectly rigid or perfectly pinned
-- **Members**: Assumed to be straight, prismatic (uniform cross-section), and made of linearly elastic material
-- **Loading**: Concentrated forces, distributed loads, or moments applied at specific locations
-
-### Load Types
-
-| Load Type | Description | Example |
-| --- | --- | --- |
-| Dead load | Permanent, self-weight | Weight of beams, slabs |
-| Live load | Variable, occupancy-related | People, furniture |
-| Wind load | Lateral pressure from wind | Pressure on building facades |
-| Seismic load | Inertia forces from ground motion | Earthquake-induced forces |
-| Thermal load | Forces from temperature changes | Expansion of bridge decks |
-
-## Load Paths and Load Transfer
-
-### Concept of Load Paths
-
-A **load path** is the route through which an applied force travels from the point of application to the final support (foundation). Every load must have a continuous and complete path to the ground.
-
-### Tributary Area Method
-
-For distributed systems such as floor slabs, the load carried by each beam is estimated using the tributary area:
-
-$$
-P_{beam} = w \times A_{tributary}
-$$
-
-where $w$ is the load per unit area and $A_{tributary}$ is the area of floor supported by that beam.
-
-### Hierarchical Load Transfer
-
-In a typical building structure, loads transfer through the following hierarchy:
-
-1. **Slab** → carries floor loads
-2. **Beams** → receive loads from the slab
-3. **Girders** → receive loads from beams
-4. **Columns** → receive loads from girders
-5. **Foundations** → transfer column loads to the soil
+An arch inverts the cable: a parabolic arch under uniform horizontal load carries it in pure compression with no bending. A three-hinged arch (pins at both supports and at the crown) is determinate. Moments about the crown hinge for one half give $Hh = (wL/2)(L/2) - (wL/2)(L/4)$, so the horizontal thrust is the same as the cable tension, $H = wL^2/(8h)$. A two-hinged arch is indeterminate to degree 1 and a fixed arch to degree 3.
 
 ## Influence Lines
 
-### Concept
-
-An **influence line** is a graph showing how a particular response (reaction, shear, or moment) at a specific point varies as a unit load moves across the structure.
-
-### Construction for a Simply Supported Beam
-
-For a simply supported beam of length $L$, the influence line for the reaction at A is:
-
-$$
-R_A(x) = 1 - \frac{x}{L}
-$$
-
-where $x$ is the position of the unit load measured from A.
-
-The influence line for the bending moment at a section located at distance $a$ from A is:
+An influence line gives the value of one response quantity (a reaction, shear or moment at a fixed section) as a unit load moves across the structure. For a simply supported beam of span $L$ with the unit load at $x$, the reaction at A and the moment at a section a distance $a$ from A are
 
 ```math
-M(x) = \begin{cases} \frac{(L - a)}{L}x & \text{for } 0 \le x \le a \\ \frac{a}{L}(L - x) & \text{for } a \le x \le L \end{cases}
+R_A(x) = 1 - \frac{x}{L}, \qquad
+M_a(x) = \begin{cases} \dfrac{(L - a)\,x}{L} & 0 \leq x \leq a \\[2mm] \dfrac{a\,(L - x)}{L} & a \leq x \leq L \end{cases}
 ```
 
-### Using Influence Lines
+A moving point load $P$ gives the largest response when it sits at the peak ordinate, and a distributed load $w(x)$ gives $`\int w(x)\,\eta(x)\,dx`$, where $\eta$ is the influence-line ordinate. By the Müller-Breslau principle, which follows from [virtual work](./virtual_work.md), the influence line of a force quantity has the shape of the structure's deflected form when the corresponding restraint is removed and a unit displacement is imposed in its place. For determinate structures the shapes are straight-line segments, as above.
 
-To find the effect of a distributed load $w(x)$ on a response quantity, integrate the product of the load and the influence line ordinate:
+## Force (Flexibility) Method
+
+The force method makes an indeterminate structure determinate by removing $i$ redundant restraints, then restores them by requiring the deformations to be compatible.
+
+1. Choose $i$ redundants $X_1, \dots, X_i$ (reactions or internal forces) whose removal leaves a stable determinate primary structure.
+2. Compute the displacement $\Delta_{k0}$ of the primary structure under the loads at the location and in the direction of each redundant.
+3. Compute the flexibility coefficients $f_{kl}$: the displacement at $k$ due to a unit value of redundant $l$.
+4. Solve the compatibility equations $\Delta_{k0} + \sum_l f_{kl} X_l = \Delta_k$, where $\Delta_k$ is the prescribed displacement (zero for a rigid support, the settlement otherwise).
+5. Superpose: any response equals its value on the primary structure plus $\sum_l X_l$ times its value under the unit redundant.
+
+The displacements come from the unit-load method, which is the principle of virtual work with a virtual unit load:
 
 ```math
-R = \int w(x) \cdot \eta(x) \, dx
+\Delta = \sum_{\mathrm{members}} \frac{N\,n\,L}{EA} \;\; \text{(trusses)},
+\qquad \Delta = \int \frac{M\,m}{EI}\, dx \;\; \text{(beams and frames)}
 ```
 
-where $\eta(x)$ is the influence line ordinate.
+where $N$, $M$ are the internal forces under the real loads and $n$, $m$ those under a unit load at the point and in the direction of the displacement sought. Maxwell's reciprocal theorem gives $f_{kl} = f_{lk}$.
 
-## Worked Example: Beam Internal Forces
+### Worked Example: Propped Cantilever
 
-Determine the shear force and bending moment at the midpoint of a 10 m simply supported beam carrying a 20 kN point load at 3 m from the left support A.
-
-**Given:**
-
-- Beam length: $L = 10$ m
-- Point load: $P = 20$ kN at $x = 3$ m from A
-- Section of interest: midpoint $x = 5$ m
-
-**Find:** Shear force $V$ and bending moment $M$ at the midpoint.
-
-**Solution:**
-
-First, determine support reactions:
+A beam of length $L = 6$ m and constant $EI$ is fixed at A and rests on a roller at B, under a uniform load $w = 10$ kN/m. It is indeterminate to degree 1; take the roller reaction $R_B$ as the redundant. The primary structure is a cantilever, whose tip deflection under the load is $wL^4/(8EI)$ downward, and under an upward tip force $R_B$ is $R_B L^3/(3EI)$ upward. Compatibility at the roller requires zero net deflection:
 
 $$
-\sum M_A = 0: \quad B_y(10) - 20(3) = 0 \implies B_y = 6 \text{ kN}
+\frac{wL^4}{8EI} = \frac{R_B L^3}{3EI} \implies R_B = \frac{3wL}{8} = 22.5 \text{ kN}
 $$
 
-$$
-\sum F_y = 0: \quad A_y + 6 - 20 = 0 \implies A_y = 14 \text{ kN}
-$$
+Equilibrium then gives $A_y = 60 - 22.5 = 37.5$ kN and $M_A = wL^2/2 - R_B L = 180 - 135 = 45$ kN m, which equals $wL^2/8$. Note that $EI$ cancels: in an indeterminate structure the forces depend on the relative stiffness of the members, not on their absolute stiffness.
 
-Cut the beam at the midpoint ($x = 5$ m) and consider the left segment:
+## Stiffness (Displacement) Method
 
-Shear force at midpoint:
+The stiffness method takes the joint displacements as unknowns. Compatibility is then automatic, and equilibrium at the joints gives as many equations as there are free degrees of freedom, whether the structure is determinate or not. Because the procedure is the same for every structure, it is the basis of all general-purpose structural and finite element programs.
 
-$$
-V = A_y - P = 14 - 20 = -6 \text{ kN}
-$$
+### Bar Element
 
-Bending moment at midpoint:
+A bar from joint $i$ to joint $j$ with length $L$, axial rigidity $EA$ and unit vector $\mathbf{c} = (c_x, c_y)$ from $i$ to $j$ elongates by $e = \mathbf{c}\cdot(\mathbf{d}_j - \mathbf{d}_i)$ when its ends move by $\mathbf{d}_i$ and $\mathbf{d}_j$. Its axial force is $`N = (EA/L)\,e`$, and it pushes on its end joints with $-N\mathbf{c}$ at $i$ and $+N\mathbf{c}$ at $j$. In terms of the four end displacements,
 
-$$
-M = A_y(5) - P(5 - 3) = 14(5) - 20(2) = 70 - 40 = 30 \text{ kN}\cdot \text{m}
-$$
+```math
+\begin{bmatrix} \mathbf{f}_i \\ \mathbf{f}_j \end{bmatrix}
+= \frac{EA}{L}
+\begin{bmatrix} \mathbf{c}\mathbf{c}^{\mathsf{T}} & -\mathbf{c}\mathbf{c}^{\mathsf{T}} \\ -\mathbf{c}\mathbf{c}^{\mathsf{T}} & \mathbf{c}\mathbf{c}^{\mathsf{T}} \end{bmatrix}
+\begin{bmatrix} \mathbf{d}_i \\ \mathbf{d}_j \end{bmatrix},
+\qquad
+\mathbf{c}\mathbf{c}^{\mathsf{T}} = \begin{bmatrix} c_x^2 & c_x c_y \\ c_x c_y & c_y^2 \end{bmatrix}
+```
 
-**Results:** $V = -6$ kN and $M = 30$ kN·m at the midpoint.
+The $4 \times 4$ matrix is the element stiffness matrix $\mathbf{k}_e$ in global coordinates. It is symmetric and singular: a rigid translation of the bar, or a rotation about either end, produces no force.
 
-## Applications
+### Direct Stiffness Procedure
 
-### Civil Engineering
+1. Number the degrees of freedom: $2j$ for a plane truss ($3j$ in space).
+2. For each member, compute $L$, $\mathbf{c}$ and $\mathbf{k}_e$, and add its entries into the global matrix $\mathbf{K}$ at the rows and columns of its two joints.
+3. Partition the degrees of freedom into free (f) and restrained (r). Before supports are applied, $\mathbf{K}$ is singular with three rigid-body modes in 2D (six in 3D).
+4. Solve $`\mathbf{K}_{ff}\,\mathbf{d}_f = \mathbf{p}_f`$ for the free displacements, with the restrained ones zero (or equal to prescribed settlements).
+5. Recover each member force from $`N = (EA/L)\,\mathbf{c}\cdot(\mathbf{d}_j - \mathbf{d}_i)`$ and the reactions from $`\mathbf{R} = \mathbf{K}_{rf}\,\mathbf{d}_f - \mathbf{p}_r`$.
 
-- **Building design**: Analyzing frames and shear walls for gravity and lateral loads
-- **Bridge engineering**: Designing girders, decks, and cable systems
-- **Foundation design**: Transferring superstructure loads to the soil
+$`\mathbf{K}_{ff}`$ is symmetric and positive definite when the supports prevent all rigid-body motion, and sparse, because each joint connects only to its neighbours. A singular $`\mathbf{K}_{ff}`$ signals a mechanism.
 
-### Mechanical Engineering
+### Worked Example: Pratt Truss
 
-- **Machine frames**: Analyzing housings, brackets, and support structures
-- **Pressure vessels**: Evaluating shell and nozzle stresses
-- **Automotive chassis**: Predicting structural response under road loads
+The six-panel Pratt truss of [Trusses, Frames and Machines](./trusses_frames.md) (3 m panels, 3 m deep, 20 kN at each interior bottom joint) has 14 joints, 25 members and 3 reactions, so the global matrix is $28 \times 28$ and $\mathbf{K}_{ff}$ is $25 \times 25$. With $E = 200$ GPa and $A = 2000$ mm² for every member, the stiffness method reproduces the member forces of the method of joints to within $4 \times 10^{-10}$ N and gives a midspan deflection of 7.76 mm. The unit-load method with the member forces from statics, $\sum N n L/(EA)$, gives the same 7.759 mm, which checks both.
 
-### Aerospace Engineering
+![Pratt truss member forces, its deflected shape from the stiffness method, and a cross-braced indeterminate version](../../../scripts/algorithms/statics_truss_solver/statics_truss_solver.png)
 
-- **Aircraft fuselage**: Analyzing semi-monocoque structures
-- **Wing spars**: Evaluating bending and shear under aerodynamic loads
-- **Launch vehicle structures**: Designing for thrust, pressure, and inertia loads
+Panel (b) shows the deflected shape magnified 46 times: the chords curve like a beam, the bottom chord lengthens and the top chord shortens, and the roller at the right end moves outward. Panel (c) adds the second diagonal in every panel. The truss is then six times indeterminate, the method of joints no longer applies, and the stiffness method solves it unchanged: each panel's shear is shared between two diagonals, the largest diagonal force falls from 70.7 kN to 37.9 kN, and the midspan deflection falls from 7.76 mm to 5.90 mm.
 
-## Practical Tips
+### From Trusses to Finite Elements
 
-- Always start with a clear free body diagram showing all external loads and reactions
-- Verify equilibrium by checking that the sum of forces and moments equals zero
-- Use symmetry whenever possible to reduce the number of unknowns
-- For complex structures, break the problem into simpler sub-structures
-- Check results against physical intuition: reactions should oppose applied loads
+The finite element method applies the same steps to continua. The body is divided into elements, the displacement inside each element is interpolated from its nodal values, the element stiffness matrix comes from the strain energy (or the weak form of the equilibrium equations), and the global matrix is assembled and solved exactly as above. For a 1D bar with linear shape functions, the finite element stiffness matrix is identical to the truss element, and for beams it reproduces the classical slope-deflection relations. See [The Finite Element Method](../../numerical/fem/intro.md) and [Weak Formulation of PDEs](../../numerical/fem/weak_formulation_pde.md).
 
-Structural analysis provides the essential toolkit for understanding how forces flow through engineered systems. The principles covered here form the basis for more advanced topics including finite element analysis, dynamic structural response, and nonlinear structural behavior.
+## Comparison of Methods
+
+|  | Force (flexibility) method | Stiffness (displacement) method |
+| --- | --- | --- |
+| Primary unknowns | Redundant forces | Joint displacements |
+| Number of equations | Degree of indeterminacy $i$ | Number of free degrees of freedom |
+| Equations enforce | Compatibility | Equilibrium |
+| Choice required | Redundants and primary structure | None; the procedure is fixed |
+| Suited to | Hand calculation with few redundants | Computers, any structure |
+| Determinate structures | No equations (statics) | Still needs the solve |
+
+## Common Mistakes
+
+- Choosing redundants whose removal leaves a mechanism.
+- Mixing units in $EA/L$ (mm² with m) so that displacements are off by $10^6$.
+- Forgetting the support conditions before solving, which leaves $\mathbf{K}$ singular.
+- Reading displacements from a linear analysis when they are large enough to change the geometry; a cable or a shallow arch then needs a geometrically nonlinear analysis.
+- Treating a rigid joint as pinned (or the reverse) without checking how the actual connection behaves.
+
+## Key Takeaways
+
+- Idealization (members, joints, supports, loads) decides the answer as much as the method of solution.
+- The degree of indeterminacy counts unknowns minus equilibrium equations; the rank of the equilibrium matrix decides stability.
+- Indeterminate structures need compatibility: the force method writes it for the redundants, the stiffness method satisfies it automatically.
+- The unit-load method, a form of virtual work, gives displacements and flexibility coefficients.
+- The direct stiffness method assembles $`\mathbf{K} = \sum \mathbf{k}_e`$, solves $`\mathbf{K}_{ff}\mathbf{d}_f = \mathbf{p}_f`$ and recovers forces; it is the finite element method for bars.
+
+## Related Scripts
+
+- [Plane Truss Solver](../../../scripts/algorithms/statics_truss_solver/): solves a plane pin-jointed truss by the method of joints and by the direct stiffness method.
+- [Support Reactions and Constraint](../../../scripts/plots/statics_support_reactions/): solves the reactions of a simply supported beam from the $3 \times 3$ equilibrium system and classifies support layouts as determinate, indeterminate or improper from the rank of the reaction matrix.
 
 ## Exercises
 
@@ -261,9 +196,7 @@ Structural analysis provides the essential toolkit for understanding how forces 
 H = \frac{wL^2}{8h} = \frac{20 \times 40^2}{8 \times 8} = 500 \text{ kN}
 ```
 
-$V = wL/2 = 400$ kN at each support, and the resultant is $\sqrt{500^2 + 400^2} = 640$ kN.
-
-For a parabolic arch under this load the internal bending moment is zero everywhere: the arch carries the load in pure compression.
+$V = wL/2 = 400$ kN at each support, and the resultant is $\sqrt{500^2 + 400^2} = 640$ kN. For a parabolic arch under this load the bending moment is zero everywhere: the arch carries the load in pure compression.
 
 </details>
 
@@ -274,11 +207,9 @@ For a parabolic arch under this load the internal bending moment is zero everywh
 
 The peak ordinate, at $x = a$, is $a(L - a)/L = 4 \times 6/10 = 2.4$ m.
 
-(a) $M = 50 \times 2.4 = 120$ kN·m, with the load placed at the section.
+(a) $M = 50 \times 2.4 = 120$ kN m, with the load at the section.
 
-(b) Area under the influence line: $\tfrac{1}{2} \times 10 \times 2.4 = 12$ m², so $M = 5 \times 12 = 60$ kN·m.
-
-Direct check: $M(4) = \dfrac{wL}{2}(4) - \dfrac{w(4)^2}{2} = 100 - 40 = 60$ kN·m.
+(b) The area under the influence line is $\tfrac{1}{2} \times 10 \times 2.4 = 12$ m², so $M = 5 \times 12 = 60$ kN m. Directly, $M(4) = (wL/2)(4) - w(4)^2/2 = 100 - 40 = 60$ kN m.
 
 </details>
 
@@ -287,42 +218,52 @@ Direct check: $M(4) = \dfrac{wL}{2}(4) - \dfrac{w(4)^2}{2} = 100 - 40 = 60$ kN·
 <details>
 <summary>Answer</summary>
 
-Moment equilibrium of half the cable about its lowest point gives $H = wL^2/(8h)$:
-
 ```math
-H = \frac{2 \times 100^2}{8 \times 10} = 250 \text{ kN}
+H = \frac{wL^2}{8h} = \frac{2 \times 100^2}{8 \times 10} = 250 \text{ kN}
 ```
 
-At a support the vertical component is $wL/2 = 100$ kN, so $T_{max} = \sqrt{250^2 + 100^2} = 269$ kN. $T_{min} = H = 250$ kN at mid-span.
+At a support the vertical component is $wL/2 = 100$ kN, so $T_{\max} = \sqrt{250^2 + 100^2} = 269$ kN, and $T_{\min} = H = 250$ kN at midspan.
 
 </details>
 
-**Exercise 4.** A propped cantilever (fixed at A, roller at B) of length $L = 6$ m and constant $EI$ carries $w = 10$ kN/m. Use the compatibility (force) method with the roller reaction as the redundant to find all reactions.
+**Exercise 4.** A continuous beam of constant $EI$ has two equal spans $L = 5$ m on three supports and carries $w = 12$ kN/m over its full length. Use the force method with the middle reaction as the redundant to find all three reactions.
 
 <details>
 <summary>Answer</summary>
 
-Remove the roller. The tip deflection of the cantilever under the load is $wL^4/(8EI)$ downward. A tip force $R_B$ deflects it by $R_B L^3/(3EI)$ upward. Compatibility requires zero deflection at B:
+The primary structure is a simply supported beam of span $2L$. Its midspan deflection under the load is $5w(2L)^4/(384EI)$, and under a point load $R$ at midspan $R(2L)^3/(48EI)$. Compatibility:
 
 ```math
-\frac{wL^4}{8EI} = \frac{R_B L^3}{3EI} \implies R_B = \frac{3wL}{8} = 22.5 \text{ kN}
+\frac{5w(2L)^4}{384EI} = \frac{R(2L)^3}{48EI} \implies R = \frac{5}{8}w(2L) = 1.25\,wL = 75 \text{ kN}
 ```
 
-Then $A_y = 60 - 22.5 = 37.5$ kN and $M_A = wL^2/2 - R_B L = 180 - 135 = 45$ kN·m, which equals $wL^2/8$.
+The end reactions are $(2wL - R)/2 = (120 - 75)/2 = 22.5$ kN each, that is $3wL/8$, the same as the propped cantilever: by symmetry the slope over the middle support is zero, so each span behaves as if fixed there.
 
 </details>
 
-**Exercise 5.** Floor beams spanning 6 m are spaced 3 m apart and support a floor load of 5 kPa (dead plus live). Using tributary areas, find the line load on an interior beam, its end reactions and its maximum moment.
+**Exercise 5.** Two bars meet at a free joint $C(4, 3)$ m. Bar AC comes from a pin at $A(0, 0)$ and bar BC from a pin at $B(4, 0)$. Both have $EA = 2 \times 10^8$ N. A 10 kN horizontal load acts at C in the $+x$ direction. Assemble the $2 \times 2$ stiffness matrix of joint C, find its displacement and the member forces, and check them by the method of joints.
 
 <details>
 <summary>Answer</summary>
 
-The tributary width is 3 m, so $w = 5 \times 3 = 15$ kN/m. Reactions: $wL/2 = 45$ kN each; this load passes on to the girders. Maximum moment: $M_{max} = wL^2/8 = 15 \times 36/8 = 67.5$ kN·m at mid-span.
+Bar AC: $L = 5$ m, $\mathbf{c} = (0.8, 0.6)$, $EA/L = 4 \times 10^7$ N/m. Bar BC: $L = 3$ m, $\mathbf{c} = (0, 1)$, $EA/L = 6.67 \times 10^7$ N/m. Only the $\mathbf{d}_j\mathbf{d}_j$ block of each element contributes:
+
+```math
+\mathbf{K} = 4 \times 10^7 \begin{bmatrix} 0.64 & 0.48 \\ 0.48 & 0.36 \end{bmatrix}
++ 6.67 \times 10^7 \begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}
+= \begin{bmatrix} 2.56 & 1.92 \\ 1.92 & 8.107 \end{bmatrix} \times 10^7 \text{ N/m}
+```
+
+Solving $\mathbf{K}\mathbf{d} = (10^4, 0)$ gives $\mathbf{d} = (0.475, -0.1125)$ mm. Then $N_{AC} = 4 \times 10^7 (0.8 \times 0.475 - 0.6 \times 0.1125) \times 10^{-3} = 12.5$ kN and $N_{BC} = 6.67 \times 10^7 \times (-0.1125 \times 10^{-3}) = -7.5$ kN.
+
+Method of joints at C: $\sum F_x = 10 - 0.8N_{AC} = 0$ gives $N_{AC} = 12.5$ kN tension, and $\sum F_y = -0.6N_{AC} - N_{BC} = 0$ gives $N_{BC} = -7.5$ kN compression. The two methods agree because the truss is determinate.
 
 </details>
 
 ## References
 
-- Hibbeler, R. C., *Structural Analysis*, Pearson.
-- Kassimali, A., *Structural Analysis*, Cengage Learning.
+- Hibbeler, R. C., *Structural Analysis*, 10th ed., Pearson, 2018.
+- Kassimali, A., *Matrix Analysis of Structures*, 2nd ed., Cengage Learning, 2012.
+- McGuire, W., Gallagher, R. H., and Ziemian, R. D., *Matrix Structural Analysis*, 2nd ed., Wiley, 2000.
 - Timoshenko, S. P., and Young, D. H., *Theory of Structures*, 2nd ed., McGraw-Hill, 1965.
+- Gere, J. M., and Goodno, B. J., *Mechanics of Materials*, 9th ed., Cengage Learning, 2018.

@@ -51,7 +51,7 @@ The numerical wrappers use [the shared POD implementation](../../_numerics.py). 
 - Constants: `N_X, N_Y, N_T = 50, 30, 100`, `X_RANGE = (1700, 2000)` mm, `Y_RANGE = (0, 100)` mm, `T_END = 4.0` s, `STRUCTURES` (amplitude, x and y wavenumbers, time function), `NOISE_STD = 0.02`, `SEED = 42` and `N_MODES = 3`.
 - `generate_field(noise_std, seed)` returns `x`, `y`, `t` and the field with shape `(N_X, N_Y, N_T)`.
 - `pod(field, n_modes)` reshapes, removes the mean, runs `numpy.linalg.svd`, and returns the reshaped modes, the scaled temporal coefficients and the energy fractions.
-- `plot_modes(x, y, t, modes, time_coeffs, energy_fraction)` delegates the 3 × 2 layout to the shared `plot_pod_mode_pairs` helper, using `contourf` with the `jet` colormap and 50 levels.
+- `plot_modes(x, y, t, modes, time_coeffs, energy_fraction)` delegates the 3 × 2 layout to the shared `plot_pod_mode_pairs` helper, using `contourf` with 41 levels of the diverging `RdBu_r` colormap, centred on zero because the modes are signed.
 - `main(argv)` handles the flags.
 
 ## Usage
@@ -78,7 +78,7 @@ The sign of each mode and its coefficient is arbitrary: flipping both leaves the
 
 ## Related Notes
 
-- [Derivation of POD for N Dimensions](../../../notes/numerical/pod/derivation_in_n_dim.md): snapshot matrix, contour plots of modes, and time coefficients $\mathbf{A} = \mathbf{U}\boldsymbol{\Phi}$.
+- [POD for N Points](../../../notes/numerical/pod/derivation_in_n_dim.md): snapshot matrix, modes reshaped to fields, and time coefficients $`\mathbf{A} = \boldsymbol{\Phi}^T\mathbf{U}'`$.
 - [Proper Orthogonal Decomposition in CFD](../../../notes/numerical/pod/pod_intro.md): formulation and interpretation of POD modes.
 - [The Snapshot POD](../../../notes/numerical/pod/snapshot_pod.md): the method of snapshots for the case with many more spatial points than snapshots, as here.
 - [The SVD and POD](../../../notes/numerical/pod/pod_vs_svd.md): the relationship between the SVD factors and POD modes.

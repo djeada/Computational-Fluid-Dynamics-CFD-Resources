@@ -8,7 +8,7 @@ This script performs Proper Orthogonal Decomposition on a synthetic spatio-tempo
 - Reshapes the data into a $1500 \times 100$ snapshot matrix and subtracts the temporal mean at every point.
 - Computes the thin SVD with `numpy.linalg.svd(..., full_matrices=False)`.
 - Prints the energy fraction $\sigma_i^2 / \sum_j \sigma_j^2$ of the first three modes.
-- Plots the first three spatial modes as filled contours next to their temporal coefficients.
+- Plots the first three spatial modes as filled contours (diverging `RdBu_r` map centred on zero) next to their temporal coefficients.
 
 ## Mathematical Background
 
@@ -66,9 +66,9 @@ python main.py --no-show --output .     # save the figure as a PNG in the curren
 
 The script prints the energy fractions: mode 1 holds 49.14 %, mode 2 holds 39.16 % and mode 3 holds 11.70 %. The three modes recover the three structures in the data:
 
-- **Mode 1** is the $\cos(0.04x)\sin(0.1y)$ structure with the $\cos(2t)$ time signal.
-- **Mode 2** is the $\sin(0.02x)\cos(0.05y)$ structure. It has the largest amplitude, but its $\sin(0.5t)$ signal covers less than half a period, so it has less variance about its mean than mode 1.
-- **Mode 3** is the $\sin(0.06x)\cos(0.15y)$ structure with the $\sin(4t)$ time signal.
+- Mode 1 is the $\cos(0.04x)\sin(0.1y)$ structure with the $\cos(2t)$ time signal.
+- Mode 2 is the $\sin(0.02x)\cos(0.05y)$ structure. It has the largest amplitude, but its $\sin(0.5t)$ signal covers less than half a period, so it has less variance about its mean than mode 1.
+- Mode 3 is the $\sin(0.06x)\cos(0.15y)$ structure with the $\sin(4t)$ time signal.
 
 The sign of each mode and its coefficient is arbitrary: flipping both leaves the product unchanged.
 

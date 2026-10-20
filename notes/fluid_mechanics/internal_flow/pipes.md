@@ -168,6 +168,7 @@ V. **Sanitary Piping (Food/Pharmaceutical)**
 - [Flow Rate Through a Circular Pipe](../../../scripts/plots/flow_rate_pipe/): computes the volumetric flow rate $Q = \pi r^2 v$ of a circular pipe and draws a labelled side view of the pipe with flow arrows.
 - [Laminar vs Turbulent Pipe Flow](../../../scripts/plots/laminar_vs_turbulent_pipe/): plots laminar and turbulent radial velocity profiles of pipe flow in side-by-side panels to show how much flatter the turbulent profile is.
 - [Wall Shear in Pipe Cross-Section](../../../scripts/plots/wall_shear_pipe_cross_section/): sketches fully developed laminar (Hagen-Poiseuille) flow in a circular pipe, with velocity arrows whose lengths follow the parabolic profile $u(r) = u_{max}(1 - (r/R)^2)$.
+- [Pump and System Curves](../../../scripts/plots/hydraulics_pump_system_curve/): plots the head–flow curves of a centrifugal pump at four speeds from the affinity laws, the curve of the pipe system it feeds, and the operating points where they meet.
 
 ### Exercises
 

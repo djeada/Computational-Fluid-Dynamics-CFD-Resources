@@ -1,450 +1,126 @@
-# Introduction to Control Theory
+# Introduction to Control Systems
 
-Control theory is the mathematical framework for analyzing and designing systems that maintain desired behavior in the presence of disturbances and uncertainties. In applied mechanics, control systems are essential for stabilizing structures, guiding vehicles, regulating machines, and automating processes across all engineering disciplines.
+A control system makes a physical quantity, such as a speed, a level, a temperature or an attitude angle, follow a desired value despite disturbances and imperfect knowledge of the machine. This note defines the parts of a control loop, compares open-loop and closed-loop operation, lists the specifications a design must meet, states the linear time-invariant assumption behind the classical methods, and maps the other notes of this section. The examples used throughout are a car cruise control, a pump-fed tank level loop and the pitch attitude of an aircraft.
 
-## What is a Control System?
+## Problem Statement
 
-A **control system** is an interconnected set of components that manages, commands, directs, or regulates the behavior of other systems. Control systems are designed to:
+Given a plant (the machine or process) with a measurable output $y(t)$, an input $u(t)$ that an actuator can adjust, and disturbances $d(t)$ that cannot be adjusted, find a control law that produces $u$ from the reference $r(t)$ and the measurement $y_m(t)$ so that:
 
-- **Regulate**: Maintain system output at a desired value
-- **Track**: Follow a time-varying reference signal
-- **Stabilize**: Ensure system remains stable under disturbances
-- **Optimize**: Achieve best performance within constraints
+1. the closed loop is stable;
+2. $y$ follows $r$ with a specified speed and damping (rise time, overshoot, settling time) and a bounded or zero steady-state error;
+3. the effect of $d$ and of sensor noise $n$ on $y$ is small;
+4. the requirements hold when the plant parameters differ from their nominal values, and $u$ stays within the actuator limits.
 
-### Basic Control System Components
-
-1. **Plant**: The system being controlled
-2. **Sensor**: Measures system output
-3. **Controller**: Processes error and generates control signal
-4. **Actuator**: Applies control action to the plant
-5. **Reference**: Desired system behavior
-
-## Open-Loop vs. Closed-Loop Control
-
-### Open-Loop Control
-
-- **No feedback**: Controller doesn't use output information
-- **Simple**: Easy to design and implement
-- **Limitations**: No correction for disturbances or model errors
-
-**Example**: Microwave oven timer (time-based, no temperature feedback)
-
-### Closed-Loop Control (Feedback Control)
-
-- **Uses feedback**: Controller uses output measurement
-- **Self-correcting**: Automatically compensates for disturbances
-- **Complex**: Requires stability analysis and tuning
-
-**Example**: Thermostat (temperature feedback controls heating/cooling)
-
-### Mathematical Representation
-
-**Open-loop transfer function**:
+The classical methods of this section assume a linear time-invariant (LTI) plant described by a transfer function $G(s)$, or a set of state equations, obtained from the physics and linearized about an operating point. The general model is a set of ordinary differential equations
 
 $$
-Y(s) = G(s)U(s)
+\dot{\mathbf{x}} = \mathbf{f}(\mathbf{x}, u, d),
+\qquad y = h(\mathbf{x})
 $$
 
-**Closed-loop transfer function**:
+and the controller is itself a dynamic system, written $C(s)$ in the linear case.
+
+## Elements of a Control Loop
+
+![Block diagram of a single feedback loop with reference, controller, actuator, disturbance, plant, sensor and noise](../../../scripts/plots/control_block_diagram/control_block_diagram.png)
+
+The figure shows the standard single-loop structure. The error $e = r - y_m$ is formed at the left summing junction; the disturbance enters at the plant input, and the noise corrupts the measurement. Each element corresponds to hardware:
+
+| Element | Role | Cruise control | Tank level | Aircraft pitch attitude |
+| --- | --- | --- | --- | --- |
+| Reference $r$ | Desired value of the output | Set speed | Set level | Commanded pitch angle |
+| Controller $C(s)$ | Computes the command from the error | Engine control unit | PLC running a PI law | Flight control computer |
+| Actuator | Converts the command into a physical input, within limits | Throttle and engine (drive force) | Pump and motor (inflow) | Elevator servo (elevator angle) |
+| Plant $G(s)$ | The dynamics being controlled | Car mass, aerodynamic and rolling drag | Tank volume and outflow | Short-period and phugoid dynamics |
+| Disturbance $d$ | Unwanted input acting on the plant | Road grade, headwind | Change in draw-off flow | Gust |
+| Sensor $H(s)$ | Measures the output, with lag and noise $n$ | Wheel-speed sensor | Pressure or ultrasonic level sensor | Attitude and rate gyros |
+
+The longitudinal dynamics of the aircraft example, including the short-period mode that a pitch controller acts on, are treated in [Airplane Stability](../transportation/airplanes/airplane_stability.md).
+
+## Open-Loop and Closed-Loop Control
+
+An open-loop controller computes $u$ from $r$ alone, using a model of the plant; a microwave timer and a fixed throttle setting are examples. It cannot react to a disturbance or to a model error, because it never sees the output. A closed-loop (feedback) controller computes $u$ from the error between $r$ and the measured output.
+
+For the loop in the figure, with $C(s)$, $G(s)$ and $H(s)$ in the paths shown, the output is
 
 $$
-\frac{Y(s)}{R(s)} = \frac{G(s)}{1 + G(s)H(s)}
+Y(s) = \frac{C G}{1 + C G H} R(s) + \frac{G}{1 + C G H} D(s) - \frac{C G}{1 + C G H}
+N(s)
 $$
 
-where:
+The product $L(s) = C(s)G(s)H(s)$ is the loop transfer function. Where $|L(j\omega)|$ is large, the output follows $R/H$ and the disturbance is divided by roughly $|L|$; but the noise passes almost unattenuated, and a large loop gain can make the loop unstable. These three effects, worked out in [Feedback Control](./feedback_control.md), are the trade-off at the centre of every design.
 
-- $G(s)$ = plant transfer function
-- $H(s)$ = sensor transfer function
-- $R(s)$ = reference input
-- $Y(s)$ = system output
-- $U(s)$ = control signal
+### Example: Cruise Control on a Grade
 
-## System Modeling
-
-### Transfer Functions
-
-For linear time-invariant (LTI) systems, the transfer function relates output to input in the Laplace domain:
+A car of mass $m = 1200$ kg travels at $v_0 = 25$ m/s. Linearizing the aerodynamic drag $\tfrac{1}{2}\rho C_d A v^2$ about $v_0$ with $\rho = 1.2$ kg/m³ and $C_d A = 0.66$ m² gives a damping coefficient $b = \rho C_d A v_0 = 19.8$ N s/m. The speed deviation $v$ obeys
 
 $$
-G(s) = \frac{Y(s)}{U(s)} = \frac{b_m s^m + b_{m-1} s^{m-1} + ... + b_1 s + b_0}{a_n s^n + a_{n-1} s^{n-1} + ... + a_1 s + a_0}
+m \dot{v} + b v = F + d
 $$
 
-### State-Space Representation
+where $F$ is the change in drive force and $d$ the change in external force. A 2% grade adds $d = -m g \times 0.02 = -235$ N.
 
-For systems with multiple inputs/outputs:
+With a fixed throttle (open loop, $F = 0$) the car slows by $d/b = -11.9$ m/s, with a time constant $m/b = 61$ s. With proportional feedback $F = -K_p v$ and $K_p = 600$ N/(m/s), the steady speed loss is $d/(b + K_p) = -0.38$ m/s and the time constant drops to $m/(b + K_p) = 1.9$ s. Feedback makes the response 31 times faster and the error 31 times smaller, but does not remove it; adding integral action does, as shown in [PID Controllers](./pid_controllers.md).
 
-$$
-\dot{\mathbf{x}} = \mathbf{A}\mathbf{x} + \mathbf{B}\mathbf{u}
-$$
+## Performance Specifications
 
-$$
-\mathbf{y} = \mathbf{C}\mathbf{x} + \mathbf{D}\mathbf{u}
-$$
+Specifications are stated for a step in the reference, because a step contains all frequencies and is easy to apply in a test.
 
-where:
+| Specification | Definition | Typical requirement |
+| --- | --- | --- |
+| Rise time $t_r$ | Time from 10% to 90% of the final value | Set by the required speed |
+| Peak time $t_p$ | Time of the first maximum |  |
+| Overshoot $M_p$ | $(y_{\max} - y_\infty)/y_\infty$, in percent | 5–20% for servos, 0% for many processes |
+| Settling time $t_s$ | Time after which $\lvert y - y_\infty\rvert$ stays within 2% (sometimes 5%) of $y_\infty$ |  |
+| Steady-state error $e_{ss}$ | $\lim_{t\to\infty}(r - y)$ for a step, ramp or parabola | Zero for a step in most loops |
+| Disturbance rejection | Peak and integrated error after a step disturbance |  |
+| Gain and phase margins | Distance from instability in the frequency domain | $GM \geq 6$ dB, $PM \geq 45^\circ$ |
+| Bandwidth $\omega_{BW}$ | Frequency at which the closed-loop gain falls 3 dB below its DC value | Below the sensor noise and unmodelled resonances |
 
-- $\mathbf{x}$ = state vector
-- $\mathbf{u}$ = input vector
-- $\mathbf{y}$ = output vector
-- $\mathbf{A}, \mathbf{B}, \mathbf{C}, \mathbf{D}$ = system matrices
-
-### Example 1: Mass-Spring-Damper System
-
-A mass $m$ connected to a spring (stiffness $k$) and damper (coefficient $c$):
-
-**Equation of motion**:
+For the standard second-order system with natural frequency $\omega_n$ and damping ratio $\zeta$, the time-domain specifications have closed forms derived in [System Modeling](./system_modeling.md):
 
 $$
-m\ddot{x} + c\dot{x} + kx = F
+M_p = e^{-\pi\zeta/\sqrt{1-\zeta^2}},
+\qquad t_p = \frac{\pi}{\omega_n\sqrt{1-\zeta^2}},
+\qquad t_s \approx \frac{4}{\zeta\omega_n}
 $$
 
-**Transfer function**:
+![Step responses for six damping ratios with rise time, overshoot and settling time marked, the overshoot formula against simulation, and the pole locations in the s-plane](../../../scripts/algorithms/control_second_order_response/control_second_order_response.png)
 
-$$
-G(s) = \frac{X(s)}{F(s)} = \frac{1}{ms^2 + cs + k}
-$$
+Panel (a) shows how the overshoot grows and the oscillation lasts longer as $\zeta$ falls; panel (b) confirms the overshoot formula against the simulated responses; panel (d) shows that a specification on $M_p$ is a ray of constant $\zeta$ in the $s$-plane and a specification on $t_s$ a vertical line $\mathrm{Re}(s) = -4/t_s$. Higher-order loops are designed by placing a pair of dominant poles where these formulas give the required response, keeping the other poles at least five times farther from the imaginary axis.
 
-**State-space form**:
-Let $x_1 = x$, $x_2 = \dot{x}$:
+## The Linear Time-Invariant Assumption
 
-```math
-\begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \end{bmatrix} = \begin{bmatrix} 0 & 1 \\ -k/m & -c/m \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + \begin{bmatrix} 0 \\ 1/m \end{bmatrix} F
-```
+Transfer functions, poles, root loci, Bode plots and the Nyquist criterion all rest on two properties of the plant and controller. Linearity means superposition holds: the response to $a u_1 + b u_2$ is $a y_1 + b y_2$, so the response to any input follows from the response to an impulse or a sinusoid. Time invariance means the coefficients do not change, so a delay in the input delays the output by the same amount.
 
-```math
-y = \begin{bmatrix} 1 & 0 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
-```
+Real machines satisfy these only approximately:
 
-## System Response Analysis
+1. Nonlinear physics (aerodynamic drag $\propto v^2$, outflow $\propto \sqrt{h}$) is linearized about an operating point. The linear model holds for small deviations, and its parameters change with the operating point, which is why an autopilot schedules its gains with speed and altitude.
+2. Actuators saturate, have rate limits, dead zones and backlash. Saturation is the most common cause of a well-tuned linear design misbehaving, through integrator windup.
+3. Transport delay $e^{-sT}$ is linear and time-invariant but not a rational function; it is handled exactly in the frequency domain ([Frequency Response](./frequency_response.md)).
+4. Digital controllers sample the signals; the continuous-time analysis holds when the sampling frequency is well above the closed-loop bandwidth.
 
-### Time Domain Analysis
+## Map of the Notes
 
-#### Step Response
+1. [System Modeling](./system_modeling.md): differential equations of mechanical, electrical, fluid and thermal systems, transfer functions, first- and second-order responses, state-space form, linearization and block-diagram algebra.
+2. [Stability Analysis](./stability_analysis.md): BIBO and internal stability, pole locations, the Routh–Hurwitz criterion and the root locus.
+3. [Frequency Response](./frequency_response.md): Bode plots, the Nyquist criterion, gain and phase margins, bandwidth, time delay and loop shaping.
+4. [Feedback Control](./feedback_control.md): closed-loop transfer functions, sensitivity and complementary sensitivity, disturbance and noise, steady-state error and system type, lead and lag compensation.
+5. [PID Controllers](./pid_controllers.md): the P, I and D actions, controller forms, derivative filtering, windup, tuning rules and discrete implementation.
 
-Response to unit step input reveals:
+State feedback (pole placement, LQR), observers, robust and model predictive control are not covered; Franklin, Powell and Emami-Naeini and Åström and Murray treat them.
 
-- **Rise time**: Time to reach 90% of final value
-- **Settling time**: Time to stay within 2% of final value
-- **Overshoot**: Maximum percentage overshoot
-- **Steady-state error**: Final tracking error
+## Key Takeaways
 
-#### Impulse Response
+- A loop consists of a reference, controller, actuator, plant, sensor, and the disturbance and noise that act on it; the loop transfer function $L = CGH$ governs its behaviour.
+- Feedback reduces the effect of disturbances and plant variations by the factor $1 + L$, at the price of a stability question and of passing sensor noise to the output.
+- Specifications are set on the step response ($t_r$, $M_p$, $t_s$, $e_{ss}$) or in the frequency domain (margins, bandwidth); for a dominant second-order pair they map to $\zeta$ and $\omega_n$.
+- The classical tools assume an LTI model, valid near an operating point and within the actuator limits.
 
-Response to Dirac delta function:
+## Related Scripts
 
-```math
-g(t) = \mathcal{L}^{-1}\{ G(s)\}
-```
-
-For second-order systems:
-
-$$
-G(s) = \frac{\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}
-$$
-
-**Step response**:
-
-- **Underdamped** ($\zeta < 1$): Oscillatory response
-- **Critically damped** ($\zeta = 1$): Fastest response without overshoot
-- **Overdamped** ($\zeta > 1$): Slow, non-oscillatory response
-
-### Frequency Domain Analysis
-
-#### Bode Plots
-
-Magnitude and phase plots vs. frequency:
-
-- **Magnitude**: $|G(j\omega)|$ in dB
-- **Phase**: $\angle G(j\omega)$ in degrees
-
-**Benefits**:
-
-- Easy to sketch by hand
-- Clear indication of stability margins
-- Straightforward controller design
-
-#### Nyquist Plot
-
-Complex plane plot of $G(j\omega)$ as $\omega$ varies from 0 to $\infty$.
-
-**Nyquist Stability Criterion**: System is stable if Nyquist plot encircles $-1$ point $P$ times counterclockwise, where $P$ = number of open-loop RHP poles.
-
-## Stability Analysis
-
-### Routh-Hurwitz Criterion
-
-For characteristic equation $a_n s^n + a_{n-1} s^{n-1} + ... + a_1 s + a_0 = 0$:
-
-System is stable if all coefficients are positive and all elements in first column of Routh array are positive.
-
-**Routh array construction**:
-
-$$
-\begin{array}{c|cccc}
-s^n & a_n & a_{n-2} & a_{n-4} & ... \\
-s^{n-1} & a_{n-1} & a_{n-3} & a_{n-5} & ... \\
-s^{n-2} & b_1 & b_2 & b_3 & ... \\
-s^{n-3} & c_1 & c_2 & c_3 & ... \\
-\vdots & \vdots & \vdots & \vdots & \ddots
-\end{array}
-$$
-
-where $b_1 = \frac{a_{n-1}a_{n-2} - a_n a_{n-3}}{a_{n-1}}$
-
-### Root Locus Method
-
-Graphical method showing how closed-loop poles move as controller gain varies.
-
-**Rules for sketching**:
-
-1. Number of branches = number of open-loop poles
-2. Branches start at open-loop poles, end at zeros or infinity
-3. Real axis segments between odd number of poles/zeros
-4. Asymptotes for large gains
-
-### Gain and Phase Margins
-
-**Gain margin**: Additional gain before instability
-
-$$
-GM = \frac{1}{|G(j\omega_{pc})|} \text{ where } \angle G(j\omega_{pc}) = -180^\circ
-$$
-
-**Phase margin**: Additional phase lag before instability
-
-$$
-PM = 180^\circ + \angle G(j\omega_{gc}) \text{ where } |G(j\omega_{gc})| = 1
-$$
-
-**Design guidelines**:
-
-- $GM > 6$ dB (factor of 2)
-- $PM > 45^\circ$
-
-### Example 2: Stability Analysis
-
-For unity feedback system with $G(s) = \frac{K}{s(s+2)(s+5)}$:
-
-**Characteristic equation**: $s^3 + 7s^2 + 10s + K = 0$
-
-**Routh array**:
-
-$$
-\begin{array}{c|cc}
-s^3 & 1 & 10 \\
-s^2 & 7 & K \\
-s^1 & \frac{70-K}{7} & 0 \\
-s^0 & K &
-\end{array}
-$$
-
-**Stability condition**: $0 < K < 70$
-
-## Control System Design
-
-### Performance Specifications
-
-#### Time Domain Specs
-
-- **Settling time**: $t_s \leq t_{s,spec}$
-- **Overshoot**: $M_p \leq M_{p,spec}$
-- **Steady-state error**: $e_{ss} \leq e_{ss,spec}$
-
-#### Frequency Domain Specs
-
-- **Bandwidth**: Frequency range of good tracking
-- **Disturbance rejection**: Attenuation of low-frequency disturbances
-- **Noise rejection**: Attenuation of high-frequency noise
-
-### Controller Types
-
-#### Proportional (P) Control
-
-$$
-u(t) = K_p e(t)
-$$
-
-$$
-C(s) = K_p
-$$
-
-**Effects**:
-
-- Reduces steady-state error
-- May cause instability for high gains
-- No improvement in transient response
-
-#### Proportional-Integral (PI) Control
-
-$$
-u(t) = K_p e(t) + K_i \int_0^t e(\tau) d\tau
-$$
-
-$$
-C(s) = K_p + \frac{K_i}{s}
-$$
-
-**Effects**:
-
-- Eliminates steady-state error for step inputs
-- Slower response due to integral action
-- Reduces stability margins
-
-#### Proportional-Integral-Derivative (PID) Control
-
-$$
-u(t) = K_p e(t) + K_i \int_0^t e(\tau) d\tau + K_d \frac{de(t)}{dt}
-$$
-
-$$
-C(s) = K_p + \frac{K_i}{s} + K_d s
-$$
-
-**Effects**:
-
-- Derivative action improves transient response
-- Amplifies high-frequency noise
-- Most common industrial controller
-
-### Controller Tuning Methods
-
-#### Ziegler-Nichols Method
-
-**Step 1**: Find ultimate gain $K_u$ and period $T_u$ at stability limit
-
-**Step 2**: Apply tuning rules:
-
-- P control: $K_p = 0.5 K_u$
-- PI control: $K_p = 0.45 K_u$, $K_i = 0.54 K_u / T_u$
-- PID control: $K_p = 0.6 K_u$, $K_i = 1.2 K_u / T_u$, $K_d = 0.075 K_u T_u$
-
-#### Cohen-Coon Method
-
-Based on process reaction curve from step test.
-
-#### Model-Based Methods
-
-- **Pole placement**: Place closed-loop poles at desired locations
-- **LQR (Linear Quadratic Regulator)**: Optimize quadratic cost function
-- **$H_\infty$ control**: Robust control design
-
-### Example 3: PID Controller Design
-
-Design PID controller for plant $G(s) = \frac{1}{s(s+1)(s+2)}$ with specifications:
-
-- Settling time $< 4$ seconds
-- Overshoot $`< 20\%`$
-- Zero steady-state error for step input
-
-**Solution**:
-
-**Step 1**: Determine desired closed-loop pole locations
-For 2nd-order dominant behavior: overshoot below 20% requires $\zeta > 0.46$, and $t_s \approx 4/(\zeta\omega_n) < 4$ s requires $\zeta\omega_n > 1$ rad/s (for example $\zeta = 0.5$, $\omega_n \geq 2.5$ rad/s).
-
-**Step 2**: Design controller
-The closed-loop characteristic polynomial is $s^4 + 3s^3 + (2 + K_d)s^2 + K_p s + K_i$. Its $s^3$ coefficient is fixed at 3, so the gains cannot place all four poles freely. A numerical search over the gains (checking stability and simulating the step response) gives, for example:
-$K_p = 4$, $K_i = 0.25$, $K_d = 10$
-
-The dominant poles are $s \approx -1.32 \pm 3.05j$; the two slow real poles ($s \approx -0.27$ and $s \approx -0.08$) lie close to the controller zeros, so they add only a small, slow tail.
-
-**Step 3**: Verify performance
-The simulated step response has about 16% overshoot and a 2% settling time of about 2.8 s, meeting both specifications.
-
-## Advanced Control Topics
-
-### State Feedback Control
-
-$$
-\mathbf{u} = -\mathbf{K}\mathbf{x} + \mathbf{N}r
-$$
-
-**Pole placement**: Choose $\mathbf{K}$ to place poles at desired locations
-**LQR**: Minimize cost function $J = \int_0^\infty (\mathbf{x}^T\mathbf{Q}\mathbf{x} + \mathbf{u}^T\mathbf{R}\mathbf{u}) dt$
-
-### Observer Design
-
-Estimate unmeasured states:
-
-$$
-\dot{\hat{\mathbf{x}}} = \mathbf{A}\hat{\mathbf{x}} + \mathbf{B}\mathbf{u} +
-\mathbf{L}(\mathbf{y} - \mathbf{C}\hat{\mathbf{x}})
-$$
-
-**Separation principle**: Controller and observer can be designed independently
-
-### Robust Control
-
-Design controllers that maintain performance despite:
-
-- Model uncertainties
-- Parameter variations
-- External disturbances
-
-**Methods**: $H_\infty$ control, $\mu$-synthesis, sliding mode control
-
-### Adaptive Control
-
-Controllers that adjust parameters online:
-
-- **Model Reference Adaptive Control (MRAC)**
-- **Self-Tuning Regulators**
-- **Neural network controllers**
-
-## Applications in Applied Mechanics
-
-### Structural Control
-
-- **Active vibration control**: Buildings, bridges
-- **Seismic isolation**: Earthquake protection
-- **Wind turbine control**: Power regulation, load alleviation
-
-### Vehicle Control
-
-- **Cruise control**: Speed regulation
-- **Electronic stability control**: Vehicle handling
-- **Active suspension**: Ride comfort and handling
-
-### Manufacturing Control
-
-- **Robot control**: Position and force control
-- **Machine tool control**: Precision machining
-- **Process control**: Temperature, pressure, flow
-
-### Aerospace Control
-
-- **Flight control**: Aircraft stability and handling
-- **Spacecraft attitude control**: Orientation control
-- **Engine control**: Thrust and efficiency optimization
-
-## Modern Control System Tools
-
-### Software Packages
-
-- **MATLAB/Simulink**: Industry standard for control design
-- **Python**: Control library, growing popularity
-- **LabVIEW**: Real-time control applications
-
-### Hardware Platforms
-
-- **Microcontrollers**: Arduino, Raspberry Pi
-- **Real-time systems**: CompactRIO, dSPACE
-- **Industrial PLCs**: Allen-Bradley, Siemens
-
-### Implementation Considerations
-
-- **Sampling rate**: Digital control system timing
-- **Quantization effects**: A/D and D/A conversion
-- **Computational delays**: Processing time limitations
-- **Actuator saturation**: Physical limits on control action
-
-Understanding control theory is essential for:
-
-- System stability and performance
-- Automated operation and safety
-- Optimization of dynamic systems
-- Integration of mechanical and electrical systems
-
-Control systems form the "nervous system" of modern mechanical devices, enabling autonomous operation, precise regulation, and optimal performance across all engineering applications.
+- [Control Loop Block Diagram](../../../scripts/plots/control_block_diagram/): draws the standard single-loop feedback structure with reference, controller, actuator, input disturbance, plant, sensor and measurement noise, and names the matching parts of a car cruise control.
+- [Second-Order Step Response](../../../scripts/algorithms/control_second_order_response/): simulates the step response of the standard second-order system for six damping ratios, measures rise time, peak time, overshoot and settling time, and compares them with the closed-form formulas and the pole locations.
 
 ## Exercises
 
@@ -457,88 +133,53 @@ Control systems form the "nervous system" of modern mechanical devices, enabling
 
 (b) Closed loop: $T(0) = \frac{10}{1 + 10} = 0.909$, which falls to $\frac{8}{1+8} = 0.889$, a change of $`-2.2\%`$.
 
-Feedback makes the output about $1 + G(0) \approx 11$ times less sensitive to plant variation. The price is that the closed-loop DC gain is not exactly 1 (a 9% steady-state error for a step), which integral action would remove.
+Feedback makes the output about $1 + G(0) = 11$ times less sensitive to plant variation. The price is that the closed-loop DC gain is not exactly 1 (a 9% steady-state error for a step), which integral action would remove.
 
 </details>
 
-**Exercise 2.** A mass-spring-damper has $m = 2$ kg, $c = 8$ N·s/m and $k = 50$ N/m. Find $\omega_n$, $\zeta$, the poles, the percentage overshoot of the step response, and the 2% settling time. Write the state matrices $\mathbf{A}$ and $\mathbf{B}$ for the state $[x, \dot{x}]^T$.
+**Exercise 2.** A mass-spring-damper has $m = 2$ kg, $c = 8$ N s/m and $k = 50$ N/m. Find $\omega_n$, $\zeta$, the poles, the percentage overshoot of the step response and the 2% settling time.
 
 <details>
 <summary>Answer</summary>
 
-$\omega_n = \sqrt{k/m} = 5$ rad/s and $\zeta = \frac{c}{2\sqrt{km}} = \frac{8}{20} = 0.4$ (underdamped). The poles are the roots of $2s^2 + 8s + 50 = 0$: $s = -2 \pm 4.58j$.
+$\omega_n = \sqrt{k/m} = 5$ rad/s and $\zeta = \frac{c}{2\sqrt{km}} = \frac{8}{20} = 0.4$. The poles are the roots of $2s^2 + 8s + 50 = 0$: $s = -2 \pm 4.58j$.
 
 Overshoot: $M_p = e^{-\pi\zeta/\sqrt{1-\zeta^2}} = e^{-1.371} = 0.254$, i.e. 25.4%. Settling time: $t_s \approx \frac{4}{\zeta\omega_n} = 2.0$ s.
 
-```math
-\mathbf{A} = \begin{bmatrix} 0 & 1 \\ -25 & -4 \end{bmatrix}, \quad \mathbf{B} = \begin{bmatrix} 0 \\ 0.5 \end{bmatrix}
-```
-
 </details>
 
-**Exercise 3.** For unity feedback with $G(s) = \frac{K}{s(s+1)(s+3)}$, use the Routh array to find the range of $K$ for stability, the ultimate gain $K_u$ and the ultimate period $T_u$. Then apply the Ziegler-Nichols PID rules.
+**Exercise 3.** In the cruise-control example, what proportional gain keeps the speed loss on the 2% grade below 0.1 m/s? What happens to the drive force demanded when the car meets the grade, and why might the actuator not deliver it?
 
 <details>
 <summary>Answer</summary>
 
-Characteristic equation: $s^3 + 4s^2 + 3s + K = 0$.
+The steady speed loss is $\lvert d\rvert/(b + K_p) = 235/(19.8 + K_p) < 0.1$, so $K_p > 2335$ N/(m/s).
 
-```math
-\begin{array}{c|cc}
-s^3 & 1 & 3 \\
-s^2 & 4 & K \\
-s^1 & \frac{12 - K}{4} & 0 \\
-s^0 & K &
-\end{array}
-```
-
-Stability requires $0 < K < 12$, so $K_u = 12$. At $K = 12$ the auxiliary equation $4s^2 + 12 = 0$ gives $s = \pm j\sqrt{3}$, so $\omega_u = 1.732$ rad/s and $T_u = 2\pi/\omega_u = 3.63$ s.
-
-Ziegler-Nichols PID: $K_p = 0.6K_u = 7.2$, $`K_i = 1.2K_u/T_u = 3.97\;\text{s}^{-1}`$, $K_d = 0.075K_uT_u = 3.26$ s.
+At steady state the controller must supply $F = -d = 235$ N extra drive force whatever the gain; what the gain changes is how fast the force builds up. Immediately after a speed error appears, the demanded force change is $K_p v$, which for $K_p = 2335$ N/(m/s) and a 1 m/s error is 2.3 kN. An engine near full throttle cannot deliver that, so the actuator saturates and the loop no longer behaves linearly.
 
 </details>
 
-**Exercise 4.** Find the gain crossover frequency, phase margin and gain margin of $G(s) = \frac{10}{s(s+1)}$. Does it meet the design guidelines?
+**Exercise 4.** A specification asks for at most 10% overshoot and a 2% settling time of at most 2 s. Translate it into a region of the $s$-plane for a dominant pole pair, and give the slowest pair that meets both.
 
 <details>
 <summary>Answer</summary>
 
-$|G(j\omega)| = \frac{10}{\omega\sqrt{\omega^2+1}} = 1$ gives $\omega^4 + \omega^2 - 100 = 0$, so $\omega^2 = 9.51$ and $\omega_{gc} = 3.08$ rad/s.
+Inverting $M_p = e^{-\pi\zeta/\sqrt{1-\zeta^2}}$ gives
 
 ```math
-PM = 180^\circ - 90^\circ - \arctan(3.08) = 18.0^\circ
+\zeta = \frac{-\ln M_p}{\sqrt{\pi^2 + \ln^2 M_p}} = \frac{2.303}{\sqrt{9.870 + 5.302}} = 0.591
 ```
 
-The phase only approaches $-180^\circ$ as $\omega \to \infty$, so there is no phase crossover and the gain margin is infinite. The phase margin is well below the $45^\circ$ guideline, so the step response will be very oscillatory.
+so the poles must lie inside the sector $\lvert\arg(-s)\rvert \leq \arccos 0.591 = 53.8^\circ$ about the negative real axis. The settling time requires $\zeta\omega_n \geq 4/2 = 2$ s⁻¹, so they must lie to the left of $\mathrm{Re}(s) = -2$.
 
-</details>
-
-**Exercise 5.** For the plant of Example 3, $G(s) = \frac{1}{s(s+1)(s+2)}$, use the Routh array to show that the gains $K_p = 12$, $K_i = 8$, $K_d = 3$ give an unstable closed loop. Explain why the $s^3$ coefficient of the closed-loop polynomial limits what any PID controller can achieve here.
-
-<details>
-<summary>Answer</summary>
-
-The closed-loop polynomial is $s^4 + 3s^3 + (2 + K_d)s^2 + K_p s + K_i = s^4 + 3s^3 + 5s^2 + 12s + 8$.
-
-```math
-\begin{array}{c|ccc}
-s^4 & 1 & 5 & 8 \\
-s^3 & 3 & 12 & \\
-s^2 & 1 & 8 & \\
-s^1 & -12 & & \\
-s^0 & 8 & &
-\end{array}
-```
-
-The first column changes sign twice ($1 \to -12 \to 8$), so there are two right-half-plane poles (they are $s \approx 0.14 \pm 1.95j$).
-
-The $s^3$ coefficient equals minus the sum of the closed-loop poles and does not depend on the gains, so the four poles always sum to $-3$. Pushing the dominant pair far to the left forces the remaining poles toward the right, which is why a numerical search with a stability check is needed.
+The slowest pair is at the corner: $\zeta\omega_n = 2$, $\omega_n = 2/0.591 = 3.38$ rad/s, $\omega_d = \omega_n\sqrt{1-\zeta^2} = 2.73$ rad/s, so $s = -2 \pm 2.73j$.
 
 </details>
 
 ## References
 
 - K. Ogata, *Modern Control Engineering*, 5th ed., Prentice Hall, 2010.
-- N. S. Nise, *Control Systems Engineering*, 7th ed., Wiley, 2015.
-- G. F. Franklin, J. D. Powell, A. Emami-Naeini, *Feedback Control of Dynamic Systems*, Pearson.
+- N. S. Nise, *Control Systems Engineering*, 8th ed., Wiley, 2019.
+- G. F. Franklin, J. D. Powell, A. Emami-Naeini, *Feedback Control of Dynamic Systems*, 8th ed., Pearson, 2019.
 - K. J. Åström, R. M. Murray, *Feedback Systems: An Introduction for Scientists and Engineers*, Princeton University Press, 2008.
+- T. D. Gillespie, *Fundamentals of Vehicle Dynamics*, SAE International, 1992.

@@ -1,247 +1,185 @@
-## Machine Learning on Meshes
+# Machine Learning for Mesh Generation and Adaptation
 
-Generating high-quality computational meshes for CFD simulations has traditionally required deep domain expertise and iterative manual refinement, making it one of the most time-consuming steps in the simulation pipeline. Goal-oriented adaptive refinement methods like the dual weighted residual approach produce excellent meshes but require solving expensive adjoint problems for every new geometry. ML offers a way to learn the mapping from geometric features to optimal mesh density distributions, enabling rapid mesh generation for new cases without repeated adjoint solves.
+The mesh decides both the cost and the accuracy of a CFD result, and producing a good one for a new geometry still takes expert time or several cycles of solve, estimate and refine. Goal-oriented adaptation methods produce excellent meshes for a chosen output such as drag, but each new case needs repeated primal and adjoint solves. Machine learning is used here to predict the result of that process, a mesh-size or metric field, directly from the geometry and the flow conditions, so that a near-optimal mesh is available before the first solve. This note reviews the error-estimation background that defines what an optimal mesh is, the main ML formulations, how the training data is generated, and how the results should be evaluated.
 
-Integrating machine learning (ML) into computational fluid dynamics (CFD) opens new avenues for optimizing mesh generation—cutting down on both time and the specialized expertise traditionally required to achieve high simulation accuracy.
+## Problem Statement
 
-Historically, crafting an optimal computational mesh has depended on expert intuition, iterative trial-and-error, and significant computational resources. Engineers manually adjust and refine meshes based on experience and iterative validation, often using complex goal-oriented adaptive refinement techniques that are computationally expensive and challenging to implement in routine industrial workflows.
+Let $G$ be a geometry in a computational domain $\Omega$ and $\boldsymbol\mu$ the flow conditions (Reynolds number, Mach number, angle of attack). A mesh generator produces a mesh $\mathcal{T}$ from a size field $h(\mathbf{x})$ or, for anisotropic meshes, from a metric tensor field $\mathcal{M}(\mathbf{x})$. Let $J$ be an output functional (drag, lift, a heat flux), $u$ the exact solution and $u_{\mathcal{T}}$ the discrete solution on $\mathcal{T}$. The optimal mesh for a given cost solves
 
-By contrast, an ML-driven approach leverages a curated database of high-quality meshes to train models that can predict optimal mesh densities directly from geometric features. Once trained, these models can provide accurate starting points for new simulations, thereby reducing manual intervention and accelerating the setup process. This not only makes high-fidelity simulations more accessible in environments where domain expertise is limited but also ensures consistency and reproducibility. Statistical learning from large datasets minimizes human error and subjective decision-making, leading to robust and reliable mesh configurations.
-
-Below is a schematic comparing the traditional manual process with the ML-driven approach:
-
-```
-Traditional Process (Manual Mesh Generation)
-  ┌────────────────────┐      ┌────────────────────┐      ┌────────────────────┐
-  │  Expert Knowledge  │─────►│   Trial & Error    │─────►│    Refine Mesh     │
-  └────────────────────┘      └────────────────────┘      └────────────────────┘
-                                                    │
-                                                    ▼
-                                            ┌────────────────────┐
-                                            │     Validate       │
-                                            └────────────────────┘
-                                                    │
-                                                    ▼
-                                            ┌────────────────────┐
-                                            │      Repeat        │
-                                            └────────────────────┘
-
----------------------------------------------------------
-
-ML-Driven Approach (Mesh Generation with Machine Learning)
-  ┌─────────────────────────────┐      ┌─────────────────────────────┐
-  │ Precomputed Optimal Meshes  │─────►│     Train ML Model          │
-  └─────────────────────────────┘      └─────────────────────────────┘
-                                                    │
-                                                    ▼
-                                          ┌─────────────────────────────┐
-                                          │    Predict Mesh Density     │
-                                          └─────────────────────────────┘
-                                                    │
-                                                    ▼
-                                          ┌─────────────────────────────┐
-                                          │   Direct Use in CFD         │
-                                          └─────────────────────────────┘
+```math
+\min_{\mathcal{M}} \; \big|J(u) - J(u_{\mathcal{T}(\mathcal{M})})\big| \quad
+\text{subject to} \quad \mathcal{C}(\mathcal{M}) = \int_\Omega
+\sqrt{\det\mathcal{M}(\mathbf{x})}\, d\mathbf{x} = N
 ```
 
-In this framework, ML serves as a surrogate for the traditionally expensive, iterative mesh refinement process. By automatically generating high-quality mesh predictions based on learned geometric patterns, ML streamlines CFD workflows—enabling rapid, reproducible, and accurate simulations across a range of industrial applications.
+where the complexity $\mathcal{C}$ is proportional to the number of mesh vertices. Adjoint-based adaptation approximates the solution of this problem iteratively for one case at a time.
 
-## State of the Art
-
-CFD simulations are inherently computationally expensive, with costs rising steeply as mesh resolution increases. Adaptive mesh refinement techniques can optimize computational resources by concentrating effort only where needed, yet they typically require expert tuning and the solution of additional, often complicated, adjoint equations.
-
-Recent advances in ML have shown promise in various aspects of CFD, such as surrogate modeling for flow predictions and reduced-order modeling for turbulence closures. However, applying ML directly to predict the optimal mesh configuration remains a nascent area of research. The idea is to use ML not to replace the underlying physics-based solvers but to intelligently guide them by providing high-quality initial meshes that reduce the overall computational burden.
-
-This integration of ML into the CFD pipeline represents a model shift: rather than iteratively refining meshes using computationally expensive error estimators, engineers can use a pre-trained model to obtain an excellent approximation of the mesh density distribution. Such models, when trained on a rich dataset of optimal meshes, are well-equipped to generalize to new geometries and flow conditions.
-
-### Adaptive Grid Refinement
-
-Classical adaptive refinement techniques rely on goal-oriented error estimators to determine where the mesh requires further resolution. One prominent method is the dual weighted residual (DWR) approach. In DWR, both the primal (original) and the adjoint (sensitivity) problems are solved. The error in a specific quantity of interest (like drag or lift) is then estimated, and the mesh is refined in regions that contribute most to that error.
-
-While DWR provides a systematic way to achieve an optimal mesh, it is computationally intensive because it necessitates solving the adjoint problem—a challenge in complicated industrial applications. By coupling DWR-derived data with ML, it becomes possible to capture the necessary mapping from flow features to mesh density without having to solve the adjoint problem for every new case.
-
-```
-ASCII Diagram: Adaptive Refinement with DWR
-
-    Initial Mesh
-      |
-      v
-  Primal Solve -> Adjoint Solve -> Compute DWR-based Error
-      |                                   |
-      v                                   v
-  Identify Regions Requiring Refinement -> Refine Mesh Iteratively
-```
-
-The idea is to use the DWR process offline to generate high-quality meshes and then train an ML model on these examples. Once trained, the ML model can rapidly predict where mesh refinement is needed, effectively bypassing the repeated cost of the adjoint solve during the simulation workflow.
-
-### Machine Learning in CFD
-
-ML has been increasingly applied to various steps in the CFD process. Some methods use ML to entirely replace parts of the solver for specific flow regimes, while others enhance existing numerical techniques, such as turbulence modeling or pressure-velocity coupling. The success of these applications heavily relies on high-quality training data and rigorous validation protocols.
-
-In the context of mesh generation, ML models excel at interpolating within the bounds of their training data. They can rapidly produce approximations that, while not perfect, are often sufficiently accurate to serve as the starting point for further, more precise refinements. However, caution is required when applying these models to novel geometries or flow conditions that deviate significantly from the training set, as ML models may struggle with extrapolation.
-
-The strength of ML in CFD lies in its ability to learn complicated patterns from data. In mesh generation, these patterns relate geometric features and flow characteristics to the optimal distribution of mesh cells. This data-driven insight can lead to more efficient simulations, reducing both the time and cost associated with high-fidelity CFD analyses.
-
-## Data Generation Pipeline
-
-A strong training dataset is necessary for developing an ML model capable of predicting mesh densities accurately. The authors devised a comprehensive pipeline that begins with random geometry generation, followed by CFD simulations (primal solves), adjoint solves, and iterative mesh refinement. The output is a set of optimal meshes that serve as ground truth for training the ML model.
-
-```
-ASCII Diagram: Data Generation Pipeline
-
-       Random Geometries
-             |
-      Primal CFD Solves  ->  Adjoint Solves  ->  Mesh Refinement
-             |                                  ^
-             v                                  |
-          Optimal Meshes (Ground Truth) <---------
-```
-
-This pipeline is designed to cover a wide variety of geometrical configurations and flow scenarios, making sure that the ML model is exposed to diverse situations. By systematically generating and refining these meshes, the pipeline creates a rich dataset that captures the nuances of optimal mesh distribution for different types of geometries.
-
-#### Random Geometry Generation
-
-The pipeline begins with the creation of random 2D geometries, such as polygons and splined shapes, which are then placed within a wind-tunnel-like domain. By blending and transforming simple geometric primitives, the process produces a diverse range of configurations. This diversity is important for training a strong ML model, as it makes sure that the model does not overfit to a narrow class of shapes but rather learns to generalize to a broad spectrum of geometries.
-
-#### Primal and Adjoint Solves
-
-For each randomly generated geometry, a high-fidelity CFD simulation (the primal solve) is performed until convergence. Once the flow field is obtained, an adjoint solve is conducted to assess the sensitivity of the mesh with respect to key performance metrics (e.g., drag or lift). The adjoint solution reveals how errors in different regions of the mesh propagate to the quantity of interest. This information is then used to pinpoint areas where mesh refinement will have the most significant impact on simulation accuracy.
-
-#### Mesh Refinement
-
-Using the error indicators derived from the adjoint solve, the mesh is iteratively refined. Cells that contribute substantially to the error in the target quantity are subdivided, while regions with minimal impact are left coarser. After several iterations, the mesh reaches an optimal state for that particular geometry. These refined meshes, now containing a spatially varying density that reflects the underlying physics, are used as ground truth data for ML training.
-
-## Neural Network Training Pipeline
-
-Predicting mesh densities directly from complicated and irregular CFD meshes is challenging. To address this, the problem is reformulated as predicting a spatial distribution of mesh cell sizes on a regular grid—essentially converting the mesh data into an image. In this representation, each pixel value corresponds to the local mesh size, allowing the use of convolutional neural networks (CNNs), which are well-suited for image processing tasks.
-
-```
-ASCII Diagram: From Mesh to Image for ML
-
-   Irregular CFD Mesh          Regular Grid (Image)
-        +----+           ->   2D array representing local
-        |    |                mesh size as grayscale values
-   +----+----+----+
-   |    |    |    |
-   +----+----+----+
-   
-After blurring and downsampling:
-  A smooth image where pixel intensity
-  indicates desired local mesh size.
-```
-
-This transformation enables the application of state-of-the-art computer vision techniques to CFD mesh generation. By converting the irregular mesh into a regular grid (an image), the model can use powerful CNN architectures to learn spatial patterns and relationships that dictate optimal mesh density.
-
-#### Neural Network Architecture
-
-The chosen network architecture is based on the UNet model, which is highly effective for image-to-image translation tasks. UNet uses an encoder–decoder structure with skip connections that allow fine details from the early layers to be preserved and combined with high-level features from deeper layers. The “staircase” modification—adding extra convolutional steps at each depth level—enhances the network’s capacity to reconstruct detailed spatial information, which is important for accurately predicting the local mesh sizes.
-
-This architecture is particularly advantageous because it balances the need for capturing global context (the overall geometry) with the need to reproduce local detail (specific areas requiring refinement). The combination of these capabilities makes UNet a natural choice for converting complicated CFD mesh data into a predictive map of mesh densities.
-
-#### Data Pre-Processing
-
-Before training, the original mesh data is transformed into a format suitable for CNNs. High-resolution images are generated from the mesh data, where pixel intensities encode the local cell size. To manage noise and reduce data dimensionality, the images are subjected to Gaussian blurring and downsampling, resulting in standardized 128×128 images.
-
-An important aspect of the pre-processing step is the use of masking. Regions corresponding to the interior of the geometry (e.g., solid bodies) and specialized regions such as prism layers near boundaries are masked out. This makes sure that the network focuses solely on the fluid domain, where mesh density critically influences simulation accuracy.
-
-#### Training
-
-The training phase involves thousands of mesh-image pairs, allowing the network to learn the complicated relationship between geometric features and optimal mesh density distributions. A masked loss function is used during training to make sure that errors in regions outside the fluid domain do not adversely affect the learning process. Formally, the masked mean squared error is defined as:
+The learning problem is to approximate the map from case to optimal field. Given a dataset $`\mathcal{D} = \{(G_i, \boldsymbol\mu_i, h_i)\}_{i=1}^{N_c}`$ of $N_c$ cases with adapted size fields $h_i$, find $f_{\boldsymbol\theta}$ minimising
 
 $$
-\mathcal{L} = \frac{1}{\sum_{i} m_i} \sum_{i} m_i \bigl(\hat{d}_i - d_i\bigr)^2
+\mathcal{L}(\boldsymbol\theta) = \frac{1}{N_c}\sum_{i=1}^{N_c}
+\frac{1}{|\Omega_i|}\int_{\Omega_i}
+\Big(\log f_{\boldsymbol\theta}(G_i, \boldsymbol\mu_i, \mathbf{x}) - \log
+h_i(\mathbf{x})\Big)^2 d\mathbf{x}
 $$
 
-where $`\hat{d}_i`$ is the predicted mesh density at pixel $`i`$, $`d_i`$ is the ground-truth density from the adjoint-refined mesh, and $`m_i \in \{0,1\}`$ is the binary mask that is 1 for fluid-domain pixels and 0 for solid interior or prism-layer regions. The denominator $`\sum_{i} m_i`$ equals the number of fluid-domain pixels, ensuring the loss is averaged only over the physically meaningful region. This formulation ensures the network only receives gradients from physically meaningful regions.
+or the analogous loss on the components of $\log\mathcal{M}$. The logarithm makes the loss measure relative errors, which is what matters for sizes that span several orders of magnitude. An alternative is to learn a refinement policy that decides, element by element, whether to refine.
 
-A variety of hyperparameters are carefully tuned—ranging from the choice of optimizer (such as the Adam optimizer) to the configuration of skip connections and learning rates. Extensive experimentation shows that networks capable of capturing both large-scale patterns and minute details tend to perform best. The resulting model demonstrates high prediction accuracy, providing a reliable starting point for CFD simulations and, if necessary, further refinement using traditional methods.
+The difficulty is that the quantity that matters, the error in $J$ on the resulting mesh, is not the training loss. The target is expensive (each training case needs a full adaptation loop), not unique (different meshes give almost the same error), defined on domains that change from case to case, and the trained model has to generalise to geometries and flow regimes outside its training data, where a poor mesh may be worse than a conservative uniform one.
 
-### Further Reading
+## Error Estimation Background
 
-- **Machine Learning‑Based Optimal Mesh Generation in Computational Fluid Dynamics**\
-  *Keefe Huang, Moritz Krügener, Alistair Brown, Friedrich Menhorn, Hans‑Joachim Bungartz, Dirk Hartmann (2021)*\
-  Introduces a machine learning approach using convolutional neural networks to predict optimal mesh densities for efficient CFD simulations.\
-  [arXiv:2102.12923](https://arxiv.org/abs/2102.12923)
+### A Posteriori Error Indicators
 
-- **MeshDQN: A Deep Reinforcement Learning Framework for Improving Meshes in Computational Fluid Dynamics**\
-  *Cooper Lorsung, Amir Barati Farimani (2023)*\
-  Proposes a reinforcement learning framework that iteratively coarsens meshes while maintaining accuracy in key CFD quantities such as lift and drag.\
-  [DOI:10.1063/5.0138039](https://doi.org/10.1063/5.0138039)
+An a posteriori error estimator computes a local indicator $\eta_K$ for every element $K$ from the discrete solution. Residual-based indicators measure how badly $u_{\mathcal{T}}$ satisfies the PDE inside elements and across faces. Recovery-based indicators compare the discrete gradient with a smoothed reconstruction of it. Feature-based indicators, such as normalised gradients of velocity or Mach number, are simpler and widely used but carry no guarantee about any particular output. All of these target a global norm of the error. A cell with a large residual far from the body may not affect the drag at all.
 
-- **MeshingNet: A New Mesh Generation Method based on Deep Learning**\
-  *Zheyan Zhang, Yongxing Wang, Peter K. Jimack, He Wang (2020)*\
-  Describes a novel deep learning–guided strategy that predicts local mesh density to drive automatic finite element mesh generation for various PDEs.\
-  [arXiv:2004.07016](https://arxiv.org/abs/2004.07016)
+### Goal-Oriented Adaptation and the Dual-Weighted Residual
 
-- **SpaceMesh: A Continuous Representation for Learning Manifold Surface Meshes**\
-  *Tianchang Shen, Zhaoshuo Li, Marc Law, Matan Atzmon, Sanja Fidler, James Lucas, Jun Gao, Nicholas Sharp (2024)*\
-  Presents an innovative neural network framework that directly generates manifold polygonal meshes through a continuous latent connectivity space, useful for mesh repair and other geometry processing tasks.\
-  [arXiv:2409.20562](https://arxiv.org/abs/2409.20562)
+Goal-oriented methods weight the local residuals by their influence on $J$. For a discrete residual $\mathbf{R}(\mathbf{u}) = 0$ the discrete adjoint $\boldsymbol\psi$ solves
 
-- **Mesh Generation for Flow Analysis by Using Deep Reinforcement Learning**\
-  *Keunoh Lim, Sanga Lee, Kyungjae Lee, Kwanjung Yee (2024)*\
-  Demonstrates an approach in which a reinforcement learning agent optimally propagates surface mesh points, ensuring high-quality mesh generation for CFD analysis.\
-  [AIAA 2024-0382](https://doi.org/10.2514/6.2024-0382)
+$$
+\left(\frac{\partial \mathbf{R}}{\partial \mathbf{u}}\right)^T
+\boldsymbol\psi = \left(\frac{\partial J}{\partial \mathbf{u}}\right)^T
+$$
 
-- **A Survey of Deep Learning‑Based Mesh Processing**\
-  *He Wang & Juyong Zhang (2022)*\
-  Provides a comprehensive review of geometric deep learning methods applied to mesh processing, covering both graph‑based and structure‑based techniques.\
-  [Springer Link](https://link.springer.com/article/10.1007/s40304-021-00246-7)
+If $\mathbf{u}_H$ is the coarse solution prolonged to a finer space $h$, linearisation gives the adjoint-weighted residual estimate (Venditti and Darmofal, 2000)
 
-- **Autonomous Geometry Processing Using Machine Learning and Forge**\
-  *Autodesk University Article (2024)*\
-  Explores how machine learning techniques can be applied to extract, segment, and process mesh data from CAD models, with implications for reverse engineering and automated design.\
-  [Autodesk University](https://www.autodesk.com/autodesk-university/article/Autonomous-Geometry-Processing-Using-Machine-Learning-and-Forge)
+$$
+J_h(\mathbf{u}_h) - J_h(\mathbf{u}_H^h) \approx - \left(\boldsymbol\psi_h\right)^T
+\mathbf{R}_h(\mathbf{u}_H^h)
+$$
 
-## Setting Up the Problem
+so the error in the output is the residual of the coarse solution on the fine space, weighted by the adjoint. In the finite-element setting the dual-weighted residual (DWR) method of Becker and Rannacher (2001) writes the same idea as
 
-1. **Generate training geometries.** Create a diverse set of random 2D geometries (e.g., blended polygons and spline shapes) placed in a wind-tunnel domain.
-2. **Run primal and adjoint CFD solves.** For each geometry, run a primal CFD solve to convergence, then perform an adjoint solve targeting a quantity of interest such as drag.
-3. **Produce ground-truth meshes.** Use the adjoint-based error indicators to iteratively refine the mesh until it reaches an optimal state—these refined meshes serve as ground truth.
-4. **Convert meshes to images.** Transform each optimal mesh into a regular-grid image (e.g., 128×128) where pixel intensity encodes local cell size, applying Gaussian blurring and downsampling to smooth out noise.
-5. **Create masks.** Build a corresponding binary mask that excludes solid interior regions and prism layers so the network trains only on the fluid domain.
-6. **Choose an architecture.** Use a UNet-based encoder–decoder with skip connections, which balances global context with local detail for image-to-image translation.
-7. **Normalize inputs and outputs** (e.g., min–max or log scaling of cell sizes) to stabilize training.
-8. **Train with a masked loss function** (e.g., masked MSE) so that errors inside masked regions do not influence gradient updates. Use the Adam optimizer and monitor validation loss for early stopping.
-9. **Validate predictions.** Evaluate predicted mesh density images against adjoint-refined references using metrics such as mean absolute error within the fluid domain.
-10. **End-to-end verification.** Optionally, feed the predicted density map back into a mesh generator and run a CFD solve to confirm that simulation accuracy is preserved.
+```math
+J(u) - J(u_h) \approx \sum_{K} \eta_K,
+\qquad \eta_K = \rho_K(u_h)\, \omega_K(z)
+```
+
+where $\rho_K$ is the local residual and $\omega_K$ a local weight built from the adjoint (dual) solution $z$, approximated by a higher-order reconstruction. The adjoint is large where perturbations of the flow change $J$ strongly, typically upstream of the body, in the boundary layer and along the stagnation streamline, and small in the wake far downstream for a drag functional. Elements are then marked for refinement, for instance with Dörfler marking: choose the smallest set of elements whose indicators sum to at least a fraction $\theta$ of the total (Dörfler, 1996).
+
+### Metric-Based Anisotropic Adaptation
+
+Boundary layers, shocks and wakes need cells that are small in one direction and long in the others. A Riemannian metric field $\mathcal{M}(\mathbf{x})$, a symmetric positive-definite matrix at every point, prescribes this. Its eigendecomposition gives the requested sizes along the principal directions,
+
+```math
+\mathcal{M} = R\,\mathrm{diag}\left(h_1^{-2}, \dots, h_n^{-2}\right) R^T
+```
+
+and the length of an edge $\mathbf{e}$ measured in the metric is $`\ell_{\mathcal{M}}(\mathbf{e}) = \sqrt{\mathbf{e}^T\mathcal{M}\,\mathbf{e}}`$. The mesh generator builds a unit mesh, one whose edges all have metric length close to one. In the continuous-mesh framework of Loseille and Alauzet (2011) the metric that minimises the $L^p$ norm of the linear interpolation error of a field $u$ with Hessian $H_u$, for a given complexity $N$ in $n$ dimensions, is
+
+$$
+\mathcal{M}_{L^p} = N^{2/n}
+\left(\int_\Omega \big(\det|H_u|\big)^{\frac{p}{2p+n}} d\mathbf{x} \right)^{-2/n}
+\big(\det|H_u|\big)^{-\frac{1}{2p+n}} |H_u|
+$$
+
+where $|H_u|$ is the Hessian with its eigenvalues replaced by their absolute values. In one dimension this reduces to a node density $\rho = 1/h \propto |u''|^{p/(2p+1)}$, which for $p = 2$ is $|u''|^{2/5}$. Goal-oriented versions replace $|H_u|$ by a sum of Hessians weighted with adjoint gradients. Metric fields are the natural target for learning anisotropic meshes because they are smooth, independent of any particular mesh, and accepted directly by anisotropic mesh generators.
+
+## Machine-Learning Formulations
+
+| Approach | What is learned | Input | Training target | Examples |
+| --- | --- | --- | --- | --- |
+| Size-field regression on images | $\log h$ on a Cartesian grid | Rasterised geometry, flow conditions | Size fields of adjoint-adapted meshes | Huang et al. (2021) |
+| Size-field regression on a mesh | $h$ or $\mathcal{M}$ per element or vertex | Coarse mesh with geometry and flow features | Adapted or a posteriori sizes | MeshingNet (Zhang et al., 2020) |
+| Learned error estimation | Output-error indicator $\eta_K$ | Coarse primal solution, local features | Adjoint-weighted residuals | Chen and Fidkowski (2020) |
+| Refinement policy | Refine or coarsen decision per element | Local error estimate, depth, neighbourhood | Reward: error reduction minus cost | Yang et al. (2023), MeshDQN |
+| Graph networks with remeshing | Sizing tensor on the simulation mesh | Current mesh and state | Sizes from a reference remesher | Pfaff et al. (2021) |
+
+### Learning Size Fields
+
+The most direct formulation treats the size field as an image. Huang et al. (2021) generate random two-dimensional bodies in a wind-tunnel domain, adapt a mesh for each with an adjoint-based method, rasterise the resulting cell sizes on a regular grid, smooth and downsample them to $128 \times 128$ pixels, and train a U-Net to map an image of the geometry to the size image. Pixels inside the solid and in the prism-layer region are masked out, so the loss is a masked mean squared error,
+
+$$
+\mathcal{L} = \frac{1}{\sum_i m_i} \sum_i m_i \big(\hat{d}_i - d_i\big)^2
+$$
+
+where $\hat{d}_i$ is the predicted and $d_i$ the reference value (preferably of $\log h$) at pixel $i$, and $`m_i \in \{0, 1\}`$ is one in the fluid. The denominator counts the fluid pixels, so the loss is an average over the region where the mesh matters. The prism layers are left to the mesher's boundary-layer settings, which is sensible because near-wall spacing is set by the target $y^+$ rather than by the outer flow (see [Boundary Layers](../../../practice/mesh_generation/boundary_layers.md)).
+
+MeshingNet (Zhang et al., 2020) works on unstructured meshes: an MLP predicts the desired local element area from the coordinates of a point, the geometry parameters and the PDE parameters, and the prediction drives a standard triangle mesh generator. The training targets come from a posteriori error estimates on a fine reference solution.
+
+Chen and Fidkowski (2020) learn the error estimate rather than the size: a CNN predicts the adjoint-weighted output error indicator from the primal solution on a coarse mesh, which then drives the usual output-based anisotropic adaptation step. This keeps the physics-based adaptation loop but removes the adjoint solve, which for complex flows is the most expensive and least robust part of the loop.
+
+### Refinement as a Learned Policy
+
+Adaptive refinement is a sequence of decisions, so it can be posed as a Markov decision process. Yang et al. (2023) define the state from local features of each element (its error estimate, refinement depth and neighbourhood), the action as the refinement of selected elements, and the reward as the reduction of the global error minus a penalty on the number of degrees of freedom. Because the policy acts element by element on local features, a policy trained on small problems can be applied to larger meshes than those seen in training. MeshDQN (Lorsung and Barati Farimani, 2023) applies deep Q-learning to coarsen an existing mesh while keeping lift and drag within a tolerance. Policies avoid the need for "optimal" target meshes, but they still need a solver in the training loop and a reward that reflects the output error.
+
+### Graph Networks
+
+When the mesh itself is the data structure, graph neural networks are the natural model ([Graph Neural Networks](../neural_networks/graph_neural_networks.md)). MeshGraphNets (Pfaff et al., 2021) predicts, alongside the next state of the simulation, a sizing tensor at each vertex that a remesher uses to refine and coarsen the mesh as the solution evolves. Graph networks are also used to predict mesh quality metrics or to flag elements that will cause solver problems, using element shape measures (skewness, aspect ratio, non-orthogonality) as features; see [Mesh Quality](../../../practice/mesh_generation/mesh_quality.md).
+
+## Generating Training Data
+
+The training set is produced offline by running the expensive adaptation loop on many cases.
+
+1. Generate geometries that cover the intended use, for example random polygons and spline bodies in two dimensions or morphed variants of a baseline in three ([Deformation Parameters](../automotive_aerodynamics/deformation_parameters.md)). Vary the flow conditions as well, since the optimal mesh depends on them.
+2. Solve the primal problem on an initial mesh to a tight convergence tolerance; an unconverged primal residual contaminates the error estimate.
+3. Solve the adjoint problem for the chosen output.
+4. Compute the local indicators or the goal-oriented metric and generate a new mesh at the prescribed complexity.
+5. Repeat steps 2 to 4 until the output and the mesh stop changing (typically 5 to 10 cycles), optionally at several complexities.
+6. Store the final size or metric field as the target, interpolated to the learning representation (pixels, a background mesh or the vertices of a coarse mesh), together with masks for solid regions.
+
+The cost of one training case is several primal and adjoint solves, so datasets are usually limited to hundreds or a few thousand two-dimensional cases. The output functional must be fixed in advance: a mesh optimal for drag is not optimal for, say, the pressure on a sensor.
+
+## A One-Dimensional Example
+
+The script [Adaptive Mesh Sizing](../../../scripts/algorithms/adaptive_mesh_sizing/) shows the whole chain on a problem small enough to run in a second. The steady convection-diffusion equation $-\varepsilon u'' + u' = 0$ on $[0, 1]$ with $\varepsilon = 1/\mathrm{Pe}$ has a boundary layer of width $\varepsilon$ at the outflow. For seven training Peclet numbers between 10 and 1000 the optimal $L^2$ node density $\hat\rho \propto (1 + |u''|/\alpha)^{2/5}$ is computed from the exact solution, and a ridge regression on the features $\log_{10}\mathrm{Pe}$ and $\log_{10}(1 + (1 - x)\mathrm{Pe})$, the wall distance in layer units, learns $\log_{10}\hat\rho$. For unseen Peclet numbers the predicted density is turned into nodes by equidistribution, $`\int_{x_{j-1}}^{x_j}\hat\rho\,dx = 1/N`$, and the Galerkin finite-element problem is solved.
+
+![Learned size fields and error vs number of elements for uniform, adapted and learned meshes](../../../scripts/algorithms/adaptive_mesh_sizing/adaptive_mesh_sizing.png)
+
+Three observations carry over to real applications. First, uniform meshes are not merely inaccurate here but wrong: with 20 elements at $\mathrm{Pe} = 300$ the mesh Peclet number in the layer exceeds one and the solution oscillates over the whole domain. Second, inside the training range the learned meshes are within 30% of the optimal error for $N \geq 14$, more than two orders of magnitude below uniform meshes of the same size. Third, at $\mathrm{Pe} = 3000$, outside the training range, the learned meshes are still far better than uniform ones but up to 8.6 times worse than optimal at small $N$. The choice of input feature matters: expressing the wall distance in layer units collapses the cases onto one curve, and without it the same regression cannot represent layers of different widths.
+
+## Evaluating Learned Meshes
+
+Regression error on the size field is a poor measure of success, because large relative errors in regions that do not affect $J$ are harmless while small ones near the body may not be. The evaluation that matters is end-to-end:
+
+1. Generate a mesh from the predicted field for each test case at several complexities.
+2. Solve the flow and evaluate $J$; obtain a reference $J$ from a highly refined adapted solution or from extrapolation.
+3. Plot the output error against the number of degrees of freedom for uniform or expert meshes, adjoint-adapted meshes and ML meshes. The adapted curve is the target, and the gap between the ML curve and the adapted curve at equal cost is the quantity to report.
+4. Report the mesh-generation and solve times, including the time saved by skipping adaptation cycles.
+
+Mesh quality (minimum angles, aspect ratios, growth rates) must also be checked, because a predicted field can be rough enough to produce poor elements. For error estimators the standard check is the effectivity index $\eta/(J(u) - J(u_h))$, which should be close to one. A practical safeguard is to use the ML mesh as the initial mesh of a conventional adaptation loop: if the prediction is good the loop converges in one or two cycles, and if it is poor the loop still reaches the correct answer.
 
 ## Key Takeaways
 
-- ML can replace the expensive adjoint solve at inference time by learning the mapping from geometry to optimal mesh density, reducing mesh generation from hours to seconds.
-- A diverse training dataset of randomly generated geometries and their adjoint-refined meshes is essential for the model to generalize beyond a narrow class of shapes.
-- Converting irregular CFD meshes into regular-grid images enables the use of proven CNN architectures like UNet for spatial prediction tasks.
-- Masking solid regions and prism layers during both preprocessing and loss computation ensures the network focuses on the fluid domain where mesh quality matters most.
-- Predicted mesh densities should be validated end-to-end by running CFD solves on the generated meshes and comparing quantities of interest against adjoint-refined references.
-- While ML models interpolate well within training data, caution is needed for geometries or flow conditions that differ significantly from the training distribution.
+- An optimal mesh is defined only relative to an output functional and a cost; goal-oriented adaptation with adjoint-weighted residuals or metric-based methods computes it for one case at a time.
+- ML replaces the expensive adaptation loop by predicting a size or metric field from geometry and flow conditions, learned from adapted meshes generated offline.
+- Predict $\log h$ or $\log\mathcal{M}$, mask solid and prism-layer regions, and use features that make cases comparable, such as wall distance in boundary-layer units.
+- Alternatives are learning the error estimate (keeping the adaptation machinery) and learning a refinement policy with reinforcement learning.
+- Evaluate with output-error versus degrees-of-freedom curves on unseen cases, not by the regression loss alone, and expect degraded performance outside the training range.
+
+## Related Scripts
+
+- [Adaptive Mesh Sizing](../../../scripts/algorithms/adaptive_mesh_sizing/): learns a mesh-size field for a one-dimensional convection-diffusion boundary layer from optimally adapted training cases and uses it to mesh Peclet numbers it has not seen.
+- [GNN Message Passing on a Cylinder Mesh](../../../scripts/plots/gnn_message_passing/): shows how far information travels through a graph neural network on an unstructured CFD mesh, and that a linear message-passing layer with the right weights is a finite-volume diffusion scheme.
 
 ## Exercises
 
-**Exercise 1.** On a $3 \times 3$ image the predicted densities are $`\hat{d} = \begin{bmatrix} 0.2 & 0.4 & 0.5 \\ 0.3 & 0.9 & 0.6 \\ 0.1 & 0.2 & 0.3 \end{bmatrix}`$ and the references are $`d = \begin{bmatrix} 0.25 & 0.4 & 0.45 \\ 0.3 & 0.1 & 0.7 \\ 0.1 & 0.3 & 0.3 \end{bmatrix}`$. The centre pixel lies inside the solid body ($m = 0$); all others have $m = 1$. Compute the masked MSE and the unmasked MSE.
+**Exercise 1.** A DWR estimate gives five elements local residuals $\rho_K = (0.8, 0.1, 0.5, 0.05, 0.3)$ and adjoint weights $\omega_K = (0.1, 2.0, 0.4, 1.0, 0.05)$. Compute the indicators $\eta_K = \rho_K\omega_K$ and their sum. With Dörfler marking and $\theta = 0.6$, which elements are refined? Comment on element 1.
 
 <details>
 <summary>Answer</summary>
 
-The squared errors on the fluid pixels are $0.0025, 0, 0.0025, 0, 0.01, 0, 0.01, 0$, which sum to 0.025. The masked MSE is $0.025/8 = 3.125 \times 10^{-3}$.
+$\eta = (0.08, 0.2, 0.2, 0.05, 0.015)$, which sums to 0.545. The target is $0.6 \times 0.545 = 0.327$.
 
-The centre pixel adds $(0.9 - 0.1)^2 = 0.64$, so the unmasked MSE is $0.665/9 \approx 7.39 \times 10^{-2}$.
+Sorted from the largest, elements 2 and 3 (0.2 each) already give $0.4 \ge 0.327$, so elements 2 and 3 are refined.
 
-The single meaningless solid pixel inflates the loss about 24-fold. Without the mask, training would waste effort fitting values that are never used.
+Element 1 has the largest residual but a small adjoint weight: its error hardly affects the output, so goal-oriented refinement leaves it alone, while a residual-based indicator would refine it first. This importance weighting is what a model trained on adjoint-adapted meshes has to reproduce without solving the adjoint.
 
 </details>
 
-**Exercise 2.** The wind-tunnel domain is 4 m × 4 m and is rasterized at $1024 \times 1024$, then blurred and downsampled to $128 \times 128$. Compute the pixel size before and after downsampling. Can the network represent a 5 mm refinement zone around a sharp trailing edge?
+**Exercise 2.** On a $3 \times 3$ image the predicted values are $`\hat{d} = \begin{bmatrix} 0.2 & 0.4 & 0.5 \\ 0.3 & 0.9 & 0.6 \\ 0.1 & 0.2 & 0.3 \end{bmatrix}`$ and the references are $`d = \begin{bmatrix} 0.25 & 0.4 & 0.45 \\ 0.3 & 0.1 & 0.7 \\ 0.1 & 0.3 & 0.3 \end{bmatrix}`$. The centre pixel lies inside the solid body ($m = 0$); all others have $m = 1$. Compute the masked and the unmasked MSE.
 
 <details>
 <summary>Answer</summary>
 
-Before: $4/1024 \approx 3.9$ mm. After: $4/128 = 3.125$ cm, a downsampling factor of 8.
+The squared errors on the eight fluid pixels are $0.0025, 0, 0.0025, 0, 0.01, 0, 0.01, 0$, which sum to 0.025. The masked MSE is $0.025/8 = 3.125 \times 10^{-3}$.
 
-A 5 mm zone is about one-sixth of an output pixel, so it cannot be resolved as a distinct feature. The network predicts a smooth, averaged size field, and the mesh generator must enforce minimum sizes near sharp features separately (for example, through boundary sizing or prism layers, which the note masks out).
+The centre pixel adds $(0.9 - 0.1)^2 = 0.64$, so the unmasked MSE is $0.665/9 \approx 7.39 \times 10^{-2}$, about 24 times larger. Without the mask, training would spend most of its effort fitting a value that is never used.
 
 </details>
 
-**Exercise 3.** Cell sizes in the dataset range from $10^{-4}$ m to $10^{-1}$ m. Map the sizes $10^{-3}$ m and $10^{-2}$ m to $[0, 1]$ using (a) linear min–max scaling and (b) min–max scaling of $\log_{10}$ of the size. Which choice suits an MSE loss?
+**Exercise 3.** Cell sizes in a dataset range from $10^{-4}$ m to $10^{-1}$ m. Map $10^{-3}$ m and $10^{-2}$ m to $[0, 1]$ with (a) linear min-max scaling and (b) min-max scaling of $\log_{10} h$. Which choice suits an MSE loss?
 
 <details>
 <summary>Answer</summary>
@@ -250,40 +188,43 @@ A 5 mm zone is about one-sixth of an output pixel, so it cannot be resolved as a
 
 (b) Logarithmic: $10^{-3} \to (-3 + 4)/3 \approx 0.333$ and $10^{-2} \to 0.667$.
 
-With linear scaling, every size below 1 cm is squeezed into the bottom tenth of the range. The MSE hardly notices a factor-of-10 error in the finest cells, which are the ones that matter most. In 2D the cell count scales as $1/h^2$, so relative errors matter, and the log scale handles them correctly.
+With linear scaling every size below 1 cm is squeezed into the bottom tenth of the range, so the MSE hardly notices a factor-of-ten error in the finest cells, which are the ones that matter. The number of cells scales as $h^{-n}$ in $n$ dimensions, so relative size errors are what count, and the log scale measures exactly those.
 
 </details>
 
-**Exercise 4.** In a U-Net, a $3 \times 3$ convolution maps 64 channels to 128. How many parameters does it have? Starting from a $128 \times 128$ input with $2 \times 2$ pooling at each level, what is the spatial size after 4 poolings, and how many poolings are possible before reaching $1 \times 1$?
+**Exercise 4.** In a two-dimensional region of size $1 \times 0.5$ m the metric is constant with $R = I$, $h_1 = 0.01$ m along $x$ and $h_2 = 0.1$ m along $y$. Compute the metric length of the edge $\mathbf{e} = (0.01, 0.05)$ m and the complexity $`\mathcal{C} = \int\sqrt{\det\mathcal{M}}\,d\mathbf{x}`$. Estimate the number of triangles in a unit mesh, using the fact that an equilateral triangle with unit sides has area $\sqrt{3}/4$.
 
 <details>
 <summary>Answer</summary>
 
-$3 \times 3 \times 64 \times 128 + 128 = 73{,}856$ parameters.
+$\mathcal{M} = \mathrm{diag}(10^4, 10^2)\ \mathrm{m}^{-2}$, so $\ell_{\mathcal{M}} = \sqrt{10^4 \times 0.01^2 + 10^2 \times 0.05^2} = \sqrt{1 + 0.25} \approx 1.118$. The edge is slightly too long for a unit mesh.
 
-After 4 poolings: $128/2^4 = 8$, so $8 \times 8$.
+$\sqrt{\det\mathcal{M}} = 1/(h_1 h_2) = 1000\ \mathrm{m}^{-2}$, so $\mathcal{C} = 1000 \times 0.5 = 500$.
 
-Since $128 = 2^7$, seven poolings reach $1 \times 1$. At the $8 \times 8$ bottleneck each feature summarizes a large part of the domain (the global context), while the skip connections supply local detail. This is the balance the note describes.
+$\mathcal{C}$ is the area of the region measured in the metric. Dividing by the metric area of one unit triangle gives about $500/(\sqrt{3}/4) \approx 1155$ triangles, all of them stretched ten to one along $y$.
 
 </details>
 
-**Exercise 5.** A DWR estimate gives five cells local residuals $\rho_K = (0.8, 0.1, 0.5, 0.05, 0.3)$ and adjoint weights $\omega_K = (0.1, 2.0, 0.4, 1.0, 0.05)$. Compute the indicators $\eta_K = \rho_K \omega_K$ and their sum. Using Dörfler marking with $\theta = 0.6$, find the smallest set of cells (largest indicators first) whose indicators sum to at least $\theta \sum_K \eta_K$. Comment on cell 1.
+**Exercise 5.** In the one-dimensional example at $\mathrm{Pe} = 300$, a uniform mesh with 320 elements gives an $L^2$ error of $2.44 \times 10^{-3}$, while an adapted mesh with 80 elements gives $1.73 \times 10^{-5}$. Assuming the uniform mesh converges at second order from 320 elements on, how many uniform elements reach $1.73 \times 10^{-5}$? How would the ratio change in three dimensions if the error still scales as $h^2$ and the adapted mesh concentrates cells in a thin layer?
 
 <details>
 <summary>Answer</summary>
 
-$\eta = (0.08, 0.2, 0.2, 0.05, 0.015)$, which sums to 0.545. The target is $0.6 \times 0.545 = 0.327$.
+With error $\propto N^{-2}$, $N = 320\sqrt{2.44 \times 10^{-3}/1.73 \times 10^{-5}} \approx 320 \times 11.9 \approx 3800$ elements, about 48 times more than the adapted mesh.
 
-Sorted indicators: cells 2 and 3 (0.2 each) already give $0.4 \ge 0.327$, so cells 2 and 3 are refined.
-
-Cell 1 has the largest residual but a small adjoint weight. Its error hardly affects the quantity of interest (for example, drag), so goal-oriented refinement leaves it alone. This geometry-to-importance mapping is what the ML model is trained to reproduce without solving the adjoint problem.
+In three dimensions a uniform mesh needs $h$ to shrink in all three directions, so the cell count grows as $h^{-3}$, while an anisotropic adapted mesh refines mainly in the wall-normal direction of the layer. The same reduction of $h$ in the layer therefore costs a factor $h^{-1}$ for the adapted mesh but $h^{-3}$ for the uniform one, and the cost ratio grows by orders of magnitude. This is why near-wall anisotropy is standard practice and why the prediction of anisotropic metrics is the relevant target in three dimensions.
 
 </details>
 
 ## References
 
-- Becker, R., & Rannacher, R., "An optimal control approach to a posteriori error estimation in finite element methods", *Acta Numerica* 10, 2001.
-- Dörfler, W., "A Convergent Adaptive Algorithm for Poisson's Equation", *SIAM Journal on Numerical Analysis* 33(3), 1996.
-- Ronneberger, O., Fischer, P., & Brox, T., "U-Net: Convolutional Networks for Biomedical Image Segmentation", Medical Image Computing and Computer-Assisted Intervention (MICCAI), 2015.
-- Kingma, D. P., & Ba, J., "Adam: A Method for Stochastic Optimization", International Conference on Learning Representations (ICLR), 2015.
+- Becker, R., & Rannacher, R., "An optimal control approach to a posteriori error estimation in finite element methods", *Acta Numerica* 10, 1–102, 2001.
+- Venditti, D. A., & Darmofal, D. L., "Adjoint error estimation and grid adaptation for functional outputs: application to quasi-one-dimensional flow", *Journal of Computational Physics* 164(1), 204–227, 2000.
+- Dörfler, W., "A Convergent Adaptive Algorithm for Poisson's Equation", *SIAM Journal on Numerical Analysis* 33(3), 1106–1124, 1996.
+- Loseille, A., & Alauzet, F., "Continuous mesh framework part I: well-posed continuous interpolation error", *SIAM Journal on Numerical Analysis* 49(1), 38–60, 2011.
+- Zhang, Z., Wang, Y., Jimack, P. K., & Wang, H., "MeshingNet: A New Mesh Generation Method Based on Deep Learning", International Conference on Computational Science (ICCS), Lecture Notes in Computer Science 12139, Springer, 2020.
+- Chen, G., & Fidkowski, K. J., "Output-based error estimation and mesh adaptation using convolutional neural networks: application to a scalar advection-diffusion problem", AIAA SciTech 2020 Forum, 2020.
+- Huang, K., Krügener, M., Brown, A., Menhorn, F., Bungartz, H.-J., & Hartmann, D., "Machine Learning-Based Optimal Mesh Generation in Computational Fluid Dynamics", arXiv:2102.12923, 2021.
+- Yang, J., Dzanic, T., Petersen, B., Kudo, J., Mittal, K., Tomov, V., Camier, J.-S., Zhao, T., Zha, H., Kolev, T., Anderson, R., & Faissol, D., "Reinforcement Learning for Adaptive Mesh Refinement", International Conference on Artificial Intelligence and Statistics (AISTATS), 2023.
+- Lorsung, C., & Barati Farimani, A., "MeshDQN: A deep reinforcement learning framework for improving meshes in computational fluid dynamics", *AIP Advances*, 2023, doi:10.1063/5.0138039.
 - Pfaff, T., Fortunato, M., Sanchez-Gonzalez, A., & Battaglia, P. W., "Learning Mesh-Based Simulation with Graph Networks", International Conference on Learning Representations (ICLR), 2021.

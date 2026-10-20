@@ -1,14 +1,14 @@
 # Airfoil Angle of Attack
 
-This script draws a NACA 2412 airfoil pitched nose-up about its leading edge to several angles of attack, $10^\circ$ and $60^\circ$ by default, relative to a free stream flowing left to right. The geometry comes from the NACA 4-digit camber line and thickness distribution, and dashed arrows mark each chord line and the free-stream direction.
+This script draws a NACA 2412 airfoil pitched nose-up about its leading edge to several angles of attack, $0^\circ$, $8^\circ$ and $16^\circ$ by default, relative to a free stream flowing left to right. Each angle gets its own panel with the extended chord line, the angle-of-attack arc and the thin-airfoil lift coefficient $c_l = 2\pi(\alpha - \alpha_{L0})$.
 
 ## Overview
 
-- Builds the NACA 4-digit geometry with $m = 0.02$, $p = 0.4$ and $t = 0.12$ (NACA 2412), chord $c = 2$ and 200 stations per surface.
+- Builds the NACA 4-digit geometry with $m = 0.02$, $p = 0.4$ and $t = 0.12$ (NACA 2412) on a unit chord with 200 stations per surface.
 - Offsets the upper and lower surfaces perpendicular to the camber line.
 - Rotates the airfoil clockwise about the leading edge by each angle of attack, so the trailing edge drops below the leading edge.
-- Draws each airfoil in its own colour, with a dashed chord-line arrow from leading edge to trailing edge.
-- Draws a dashed free-stream arrow along $+x$.
+- Draws the free-stream direction, the chord line extended ahead of the nose and an arc between the two marking $\alpha$.
+- Prints the thin-airfoil lift coefficient in each panel title, with $\alpha_{L0} = -2.08^\circ$ for NACA 2412.
 - Accepts other angles with `--angles`.
 
 ## Mathematical Background
@@ -47,30 +47,30 @@ The free stream flows in the $+x$ direction. A positive angle of attack $\alpha$
 
 This moves the trailing edge to $`(c\cos\alpha,\, -c\sin\alpha)`$.
 
-### Context
+### Lift Estimate
 
-The script draws geometry only and computes no forces. For reference, thin-airfoil theory gives $C_L = 2\pi(\alpha - \alpha_{L=0})$ for small angles. Real airfoils of this type stall at roughly $15^\circ$, so $10^\circ$ is normally attached flow and $60^\circ$ is far beyond stall.
+Thin-airfoil theory gives $c_l = 2\pi(\alpha - \alpha_{L0})$ with $\alpha$ in radians; the zero-lift angle of NACA 2412 is $-2.08^\circ$ (computed in [Thin-Airfoil Theory, Panel Method and Drag Polar](../../algorithms/airplane_thin_airfoil_and_polar/)). The theory has no viscosity and does not predict stall: a real NACA 2412 at Reynolds numbers of a few million stalls at about $16^\circ$ with $c_{l,max}$ near 1.6–1.7, so the value printed at $16^\circ$ is an upper bound.
 
 ## Implementation
 
 - `naca4_airfoil(m, p, t, c, n)` returns the upper and lower surface coordinates.
 - `pitch_airfoil(x, y, angle_of_attack)` applies the clockwise rotation above.
-- `plot_multiple_airfoils(angles_of_attack)` draws the airfoils, chord arrows and free-stream arrow with equal axis scaling.
-- `MAX_CAMBER`, `CAMBER_POSITION`, `THICKNESS`, `CHORD`, `N_POINTS` and `DEFAULT_ANGLES` hold the parameters.
+- `plot_multiple_airfoils(angles_of_attack)` draws one panel per angle with the airfoil, free-stream arrows, extended chord line, angle arc and lift estimate.
+- `MAX_CAMBER`, `CAMBER_POSITION`, `THICKNESS`, `CHORD`, `N_POINTS`, `DEFAULT_ANGLES` and `ALPHA_ZERO_LIFT` hold the parameters.
 
 ## Usage
 
 ```bash
-python main.py                            # 10 and 60 degrees
-python main.py --angles 0 5 15            # any list of angles in degrees
+python main.py                            # 0, 8 and 16 degrees
+python main.py --angles 2 5 10 15         # any list of angles in degrees
 python main.py --no-show --output .       # save the figure as a PNG in the current directory
 ```
 
 ## Output
 
-![NACA 2412 at 10 and 60 degrees angle of attack](airfoil_angle_attack.png)
+![NACA 2412 at 0, 8 and 16 degrees angle of attack](airfoil_angle_attack.png)
 
-The blue outline is the airfoil at $10^\circ$ and the orange outline at $60^\circ$. Both are pitched nose-up relative to the free-stream arrow above them, and the dashed arrows inside each outline are the chord lines.
+The angle of attack is measured between the free stream and the chord line, not the camber line, which is why the cambered section already has $c_l = 0.23$ at $\alpha = 0^\circ$. The thin-airfoil values rise to 1.11 at $8^\circ$ and 1.98 at $16^\circ$.
 
 ## Related Notes
 

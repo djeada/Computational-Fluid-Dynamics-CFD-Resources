@@ -1,309 +1,204 @@
 # Pressure Forces on Structures
 
-Pressure forces arising from static and slowly varying fluid loads are fundamental to the design of hydraulic structures, retaining walls, dams, gates, and submerged bodies. This chapter covers hydrostatic force analysis, center of pressure calculations, curved surface loading, buoyancy, and floating body stability.
+A fluid acts on a structure through the pressure and the shear stress on its wetted surface, and every fluid load in this section is an integral of those two quantities. This note treats the cases that can be integrated by hand, hydrostatic pressure on plane and curved surfaces with their centres of pressure, buoyancy and the stability of floating bodies, and then the general case of a flowing fluid: the pressure coefficient, and the integration of a surface field computed by CFD into forces and moments. The same face sum is what a CFD code evaluates when it reports a drag coefficient, so the second half of the note is where structural loading and [CFD post-processing](../../numerical/cfd/cfd_process.md) meet.
 
-## Hydrostatic Pressure Distribution
+## Problem Statement
 
-The pressure at any point in a static, incompressible fluid increases linearly with depth:
+Given a rigid surface $S$ in contact with a fluid, with outward unit normal $\mathbf{n}$ (pointing from the body into the fluid), and the pressure $p$ and wall shear stress $\boldsymbol{\tau}_w$ on it, find the resultant force, the resultant moment about a chosen point, and the line of action of the resultant. The fluid is either at rest, in which case $p$ follows from hydrostatics, or moving, in which case $p$ and $\boldsymbol{\tau}_w$ come from potential-flow theory, measurement or a CFD solution. The governing relations are
 
-$$
-p = p_0 + \rho g h
-$$
+```math
+\mathbf{F} = \int_S \left(-p\,\mathbf{n} + \boldsymbol{\tau}_w\right) dA,
+\qquad \mathbf{M}_O = \int_S \mathbf{r} \times
+\left(-p\,\mathbf{n} + \boldsymbol{\tau}_w\right) dA
+```
 
-where:
+where $\mathbf{r}$ is the position relative to $O$. In a fluid at rest $\boldsymbol{\tau}_w = \mathbf{0}$ and
 
-- $p_0$ = surface pressure (atmospheric if open to air)
-- $\rho$ = fluid density (kg/m³)
-- $g$ = gravitational acceleration (9.81 m/s²)
-- $h$ = depth below the free surface (m)
+```math
+\nabla p = \rho\,\mathbf{g} \quad\Longrightarrow\quad p = p_0 + \rho g h
+```
 
-### Gauge vs. Absolute Pressure
+with $p_0$ the pressure at the free surface and $h$ the depth below it. The structure is assumed rigid for the purpose of computing the load; if its deformation changes the pressure, the problem becomes a coupled one ([Fluid–Structure Interaction: Coupling Methods](./fluid_structure_interaction.md)).
 
-In most structural applications the atmospheric pressure acts on both sides of a surface and cancels out. The **gauge pressure** used for force calculations is:
+## Hydrostatic Pressure
 
-$$
-p_g = \rho g h
-$$
+When the atmosphere acts on both sides of a wall, $p_0$ cancels and only the gauge pressure $p = \rho g h$ produces a net load. The pressure increases linearly with depth, at $\rho g = 9.81$ kPa per metre in fresh water and $10.06$ kPa per metre in seawater ($\rho = 1025$ kg/m³). A constant pressure acting on all of a closed surface produces no net force, because $`\oint_S \mathbf{n}\,dA = \mathbf{0}`$; this is why gauge pressure is enough for submerged bodies and for CFD force integration, but not for a plate or shell loaded on one side only, where the reference pressure on the dry side must be stated. The [hydrostatics note](../../fluid_mechanics/fluid_statics/hydrostatics.md) derives the pressure distribution and treats manometry.
 
-## Force on Plane Surfaces
+## Plane Surfaces
 
 ### Resultant Force
 
-The total hydrostatic force on a plane surface of area $A$ is:
+Take a plane surface of area $A$ inclined at angle $\theta$ to the free surface. Measure $y$ along the plane from the line where the plane meets the free surface, so that a point at distance $y$ is at depth $h = y\sin\theta$. The force on an element is $`dF = \rho g y\sin\theta\,dA`$, and integrating gives
 
 ```math
-F = \bar{p} \, A = \rho g \bar{h} \, A
+F = \rho g\sin\theta\int_A y\, dA = \rho g\sin\theta\,\bar{y}A = \rho g\bar{h}A
 ```
 
-where $\bar{h}$ is the depth of the centroid of the surface below the free surface.
+where $\bar{y}$ is the distance of the centroid along the plane and $\bar{h} = \bar{y}\sin\theta$ its depth. The resultant equals the pressure at the centroid times the area, whatever the shape.
 
-### Center of Pressure
+### Centre of Pressure
 
-The point through which the resultant force acts is located below the centroid. For a surface inclined at angle $\theta$ to the horizontal, the distance from the free surface to the center of pressure measured along the incline is:
+The resultant does not act at the centroid, because the pressure is larger on the deeper part of the surface. Equating the moment of the resultant about the free-surface line with the moment of the distributed pressure,
 
 ```math
-y_{cp} = \bar{y} + \frac{I_{xc}}{\bar{y} \, A}
+F y_{cp} = \rho g\sin\theta\int_A y^2\, dA = \rho g\sin\theta\, I_{x}
 ```
 
-where:
+and using the parallel-axis theorem $I_x = I_{xc} + A\bar{y}^2$,
 
-- $\bar{y}$ = distance from the surface to the centroid along the incline ($\bar{y} = \bar{h}/\sin\theta$)
-- $I_{xc}$ = second moment of area about the centroidal axis parallel to the surface
+$$
+y_{cp} = \bar{y} + \frac{I_{xc}}{\bar{y}A}
+$$
 
-### Common Second Moments of Area
+where $I_{xc}$ is the second moment of area of the surface about its centroidal axis parallel to the free-surface line. The centre of pressure is always below the centroid, and the offset $I_{xc}/(\bar{y}A)$ shrinks as the surface is submerged deeper. For a surface without a vertical axis of symmetry the lateral position is $x_{cp} = \bar{x} + I_{xyc}/(\bar{y}A)$, with $I_{xyc}$ the centroidal product of area.
 
-| Shape | $I_{xc}$ |
-| --- | --- |
-| Rectangle ($b \times d$) | $\dfrac{bd^3}{12}$ |
-| Circle (diameter $D$) | $\dfrac{\pi D^4}{64}$ |
-| Triangle (base $b$, height $d$) | $\dfrac{bd^3}{36}$ |
+| Shape | Area $A$ | $I_{xc}$ |
+| --- | --- | --- |
+| Rectangle, width $b$, height $d$ | $bd$ | $bd^3/12$ |
+| Circle, diameter $D$ | $\pi D^2/4$ | $\pi D^4/64$ |
+| Triangle, base $b$, height $d$ (axis parallel to base) | $bd/2$ | $bd^3/36$ |
+| Semicircle, radius $R$ (axis parallel to diameter) | $\pi R^2/2$ | $0.1098R^4$ |
 
-## Force on Curved Surfaces
+The formula assumes gauge pressure is zero at the free surface. If the surface of the liquid is pressurised (a closed tank), replace the actual free surface by an imaginary one at height $p_0/(\rho g)$ above it.
 
-For a curved submerged surface the resultant force is resolved into horizontal and vertical components.
+### Worked Example: Dam Wall
 
-### Horizontal Component
+A vertical rectangular gate 30 m wide and 12 m high retains fresh water to its top. With $\bar{h} = 6$ m and $A = 360$ m²,
 
-The horizontal component equals the hydrostatic force on the **vertical projection** of the curved surface:
+$$
+F = 1000 \times 9.81 \times 6 \times 360 = 21.19 \text{ MN}
+$$
+
+and with $I_{xc} = 30 \times 12^3/12 = 4320$ m⁴,
+
+$$
+y_{cp} = 6 + \frac{4320}{6 \times 360} = 8 \text{ m}
+$$
+
+below the surface, that is 4 m above the base. This is the general result for a rectangle that reaches the surface: the triangular pressure distribution acts at two thirds of the depth.
+
+### Worked Example: Circular Gate
+
+A vertical circular gate of diameter 2 m is hinged along its top edge, with its centre 5 m below the surface. Then $A = \pi$ m², $I_{xc} = \pi/4$ m⁴ and
+
+$$
+F = 1000 \times 9.81 \times 5 \times \pi = 154.1 \text{ kN},
+\qquad y_{cp} = 5 + \frac{\pi/4}{5\pi} = 5.05 \text{ m}
+$$
+
+The hinge is at 4 m depth, so the moment the gate actuator must resist is $154.1 \times 1.05 = 161.8$ kN·m. Using the centroid instead of the centre of pressure would give 154.1 kN·m, 5% low; for a gate near the surface the error is much larger.
+
+## Curved Surfaces
+
+On a curved surface the pressure acts in a different direction on every element, so the components are found separately from equilibrium of a block of fluid.
+
+1. The horizontal component $F_H$ equals the force on the vertical projection of the surface onto a plane normal to that component, $`F_H = \rho g\bar{h}_{vp}A_{vp}`$, and acts through the centre of pressure of the projection.
+2. The vertical component $F_V$ equals the weight of the fluid between the surface and the free surface (real or imaginary), $F_V = \rho g\mathcal{V}$, and acts through the centroid of that volume. If the fluid is below the surface, $F_V$ points upward and equals the weight of the fluid that would fill the space up to the free surface.
+3. The resultant is $F_R = \sqrt{F_H^2 + F_V^2}$ at $\alpha = \arctan(F_V/F_H)$ to the horizontal. For a circular-arc surface every elementary force passes through the centre of the arc, so the resultant does too.
+
+Tainter (radial) gates are shaped this way on purpose: the water load passes through the trunnion, so it produces no moment about the pivot and the hoist only lifts the weight of the gate and overcomes friction.
+
+## Buoyancy and Floating Stability
+
+Applying the curved-surface rule to a closed submerged body gives Archimedes' principle: the horizontal components cancel and the net vertical force is the weight of the displaced fluid, $F_B = \rho_f g\mathcal{V}_{\mathrm{disp}}$, acting through the centroid $B$ of the displaced volume. A floating body settles at the draft where $F_B$ equals its weight.
+
+For small heel angles $\phi$ the centre of buoyancy moves sideways, and the line of action of the buoyant force crosses the centreline at the metacentre $M$, a height
+
+$$
+BM = \frac{I_{wp}}{\mathcal{V}_{\mathrm{disp}}}
+$$
+
+above $B$, where $I_{wp}$ is the second moment of the waterplane area about the heel axis. The restoring moment is $W\cdot GM\sin\phi$ with metacentric height $GM = KB + BM - KG$, measured from the keel $K$. The body is stable when $GM > 0$, neutral when $GM = 0$ and capsizes from the upright position when $GM < 0$. $GM$ also sets the roll stiffness $W\cdot GM$ that, with the roll inertia including added mass, fixes the roll natural period ([Hydroelastic Applications](./hydroelastic_applications.md)).
+
+### Worked Example: Barge
+
+A rectangular barge 20 m long and 8 m wide has mass 200 t with its centre of gravity 1.8 m above the keel, in seawater. The draft is $`T = m/(\rho LB) = 200\,000/(1025 \times 20 \times 8) = 1.22`$ m, so $KB = 0.61$ m. The waterplane gives $I_{wp} = LB^3/12 = 853.3$ m⁴ and $\mathcal{V}_{\mathrm{disp}} = 195.1$ m³, hence $BM = 4.37$ m and
+
+$$
+GM = 0.61 + 4.37 - 1.80 = 3.18 \text{ m}
+$$
+
+The barge is stable. Because $BM \propto B^2/T$, a wide, shallow hull is very stiff in roll, and stacking deck cargo high (raising $KG$) is what erodes the margin.
+
+## Pressure in a Moving Fluid
+
+In steady, incompressible flow without losses, Bernoulli's equation along a streamline relates the local pressure to the local speed $V$:
+
+$$
+p + \tfrac12\rho V^2 = p_\infty + \tfrac12\rho U^2
+$$
+
+where $p_\infty$ and $U$ are the free-stream values ([Bernoulli's Equation](../../fluid_mechanics/inviscid_flow/bernoulli.md)). The dynamic pressure $q = \tfrac12\rho U^2$ is the natural pressure scale, and the pressure coefficient
+
+$$
+C_p = \frac{p - p_\infty}{\tfrac12\rho U^2} = 1 - \left(\frac{V}{U}\right)^2
+$$
+
+is $+1$ at a stagnation point, $0$ where the local speed equals the free stream and negative where the flow accelerates. The second equality holds only where Bernoulli applies; in a separated wake $C_p$ is set by the separated flow, not by the local speed. For potential flow past a circular cylinder the surface speed is $2U\sin\theta$ ([Potential Flow Theory](../../fluid_mechanics/inviscid_flow/potential_flow.md)), so $C_p = 1 - 4\sin^2\theta$, with $\theta$ measured from the front stagnation point, and the minimum $C_p = -3$ occurs at the shoulders. Wind and wave loads are written in terms of $q$ and coefficients: $p = C_p q$ on a surface, $F = C_D q A$ for a whole body.
+
+## Integrating a Surface Field into Forces and Moments
+
+A CFD solution provides $p$ and $\boldsymbol{\tau}_w$ at the centres of the boundary faces $f$, each with area $A_f$, outward unit normal $\mathbf{n}_f$ and centroid $\mathbf{r}_f$. The integrals of the problem statement become sums:
 
 ```math
-F_H = \rho g \bar{h}_{vp} \, A_{vp}
+\mathbf{F} = \sum_f \left(-p_f\,\mathbf{n}_f + \boldsymbol{\tau}_{w,f}\right) A_f,
+\qquad \mathbf{M}_O = \sum_f \left(\mathbf{r}_f - \mathbf{r}_O\right) \times
+\left(-p_f\,\mathbf{n}_f + \boldsymbol{\tau}_{w,f}\right) A_f
 ```
 
-where $`\bar{h}_{vp}`$ and $`A_{vp}`$ are the centroid depth and area of the vertical projection.
+The first term is the pressure (form) force and the second the friction force. Projected on the free-stream direction they give pressure drag and friction drag; their ratio separates streamlined bodies, where friction dominates, from bluff bodies, where pressure drag dominates ([Understanding Drag](../../fluid_mechanics/viscous_flow/drag.md)). The coefficients are
 
-### Vertical Component
+$$
+C_D = \frac{F_x}{qA_{\mathrm{ref}}},
+\qquad C_L = \frac{F_y}{qA_{\mathrm{ref}}},
+\qquad C_M = \frac{M_z}{qA_{\mathrm{ref}}L_{\mathrm{ref}}}
+$$
 
-The vertical component equals the **weight of the fluid** directly above (or that would be above) the curved surface up to the free surface:
+with a reference area $A_{\mathrm{ref}}$ (frontal area for bluff bodies, plan area for wings, diameter times length for cylinders) and reference length $L_{\mathrm{ref}}$ that must be reported with every coefficient.
+
+The figure applies the face sum to a cylinder of radius 0.5 m on an inscribed polygon of $N$ faces, with three pressure fields. Potential flow gives zero drag on every mesh, d'Alembert's paradox, and potential flow with circulation gives the Kutta–Joukowski lift $\rho U|\Gamma|$ to 0.0006% on 512 faces. The third field is an illustrative separated flow: the potential-flow $C_p$ is followed until it falls to a base pressure $C_{pb} = -1.2$ and stays there over the rear. The front–rear pressure imbalance gives $C_d = 1.088$, close to measured values at subcritical Reynolds numbers.
+
+![Surface pressure distributions, face tractions on a 36-face cylinder and convergence of the integrated loads with the number of faces](../../../scripts/algorithms/fluid_loading_surface_force_integration/fluid_loading_surface_force_integration.png)
+
+In panel (b), pressure pushes on the front faces while suction pulls on the sides and the rear. Panel (c) shows that the face sum converges at second order: for a linear (hydrostatic) field it is exact on the polygon, so the whole error in the buoyancy comes from approximating the circle by flat faces.
+
+### Worked Example: Drag from a Pressure Distribution
+
+For the separated-flow model the pressure is $C_p = 1 - 4\sin^2\theta$ for $\theta < \theta_s$ and $C_p = C_{pb}$ beyond, with $\sin^2\theta_s = (1 - C_{pb})/4$. On a cylinder of diameter $2a$, the drag per unit length is $`\int_0^{2\pi} p\cos\theta\,a\,d\theta`$ (the outward normal has a component $-\cos\theta$ along the stream), so
 
 ```math
-F_V = \rho g \, \mathcal{V}
+C_d = \frac{1}{2}\int_0^{2\pi} C_p\cos\theta\,
+d\theta = \left[s - \frac{4}{3}s^3\right] - C_{pb}\, s,
+\qquad s = \sin\theta_s
 ```
 
-where $\mathcal{V}$ is the volume of fluid above the surface.
-
-### Resultant Force
-
-$$
-F_R = \sqrt{F_H^2 + F_V^2}
-$$
-
-acting at angle $\alpha = \arctan(F_V / F_H)$ to the horizontal.
-
-## Buoyancy and Archimedes' Principle
-
-A body immersed in a fluid experiences an upward buoyant force equal to the weight of the displaced fluid:
-
-```math
-F_B = \rho_f g \, \mathcal{V}_{disp}
-```
-
-### Equilibrium of Floating Bodies
-
-For a floating body in static equilibrium:
-
-$$
-W = F_B \implies \rho_s \mathcal{V}_s = \rho_f \mathcal{V}_{disp}
-$$
-
-The **draft** of a vessel is set by the displaced volume needed to balance its weight.
-
-## Stability of Floating Bodies
-
-### Metacentric Height
-
-The stability of a floating body depends on the position of the **metacentre** $M$ relative to the centre of gravity $G$. The metacentric height is:
-
-$$
-GM = BM - BG
-$$
-
-where:
-
-$$
-BM = \frac{I_{wp}}{\mathcal{V}_{disp}}
-$$
-
-- $I_{wp}$ = second moment of area of the waterplane about the longitudinal axis
-- $BG$ = distance from the centre of buoyancy $B$ to the centre of gravity $G$
-
-### Stability Criterion
-
-| Condition | Result |
-| --- | --- |
-| $GM > 0$ | Stable — restoring moment returns body upright |
-| $GM = 0$ | Neutral — body remains at displaced angle |
-| $GM < 0$ | Unstable — overturning moment capsizes body |
-
-The restoring moment for a small heel angle $\phi$ is:
-
-$$
-M_{rest} = W \cdot GM \cdot \sin\phi
-$$
-
-## Worked Example 1: Hydrostatic Force on a Dam
-
-**Given:**
-
-- Vertical rectangular dam wall, width $w = 30$ m, height $H = 12$ m
-- Water on one side to full depth, $\rho = 1000$ kg/m³
-
-**Find:** Resultant force and its line of action.
-
-**Solution:**
-
-Centroid depth: $\bar{h} = H/2 = 6$ m
-
-Resultant force:
-
-```math
-F = \rho g \bar{h} \, A = 1000 \times 9.81 \times 6 \times
-(12 \times 30) = 21{,}189{,}600 \text{ N} \approx 21.2 \text{ MN}
-```
-
-Center of pressure below the surface:
-
-$$
-y_{cp} = \bar{y} + \frac{I_{xc}}{\bar{y} A} = 6 +
-\frac{30 \times 12^3/12}{6 \times 360} = 6 + 2 = 8 \text{ m}
-$$
-
-The force acts **8 m below the surface** (4 m above the base).
-
-## Worked Example 2: Submerged Circular Gate
-
-**Given:**
-
-- Circular gate, diameter $D = 2$ m, hinged at the top
-- Centre of gate is 5 m below the water surface
-- Gate is vertical
-
-**Find:** Force on the gate and the moment about the hinge.
-
-**Solution:**
-
-Area: $A = \pi D^2/4 = \pi$ m²
-
-Resultant force:
-
-$$
-F = \rho g \bar{h} A = 1000 \times 9.81 \times 5 \times \pi = 154{,}095 \text{ N}
-\approx 154.1 \text{ kN}
-$$
-
-Second moment of area: $I_{xc} = \pi D^4/64 = \pi/4$ m⁴
-
-Center of pressure below surface:
-
-$$
-y_{cp} = 5 + \frac{\pi/4}{5 \times \pi} = 5 + 0.05 = 5.05 \text{ m}
-$$
-
-Distance from hinge (top of gate at 4 m depth) to center of pressure:
-
-$$
-d = 5.05 - 4.0 = 1.05 \text{ m}
-$$
-
-Moment about the hinge:
-
-$$
-M = F \times d = 154.1 \times 1.05 \approx 161.8 \text{ kN·m}
-$$
-
-## Worked Example 3: Stability of a Floating Barge
-
-**Given:**
-
-- Rectangular barge: length $L = 20$ m, beam $B = 8$ m, depth $D = 3$ m
-- Barge mass $m = 200{,}000$ kg (centre of gravity 1.8 m above keel)
-- Seawater density $\rho = 1025$ kg/m³
-
-**Find:** Draft and metacentric height.
-
-**Solution:**
-
-Draft $T$ from equilibrium:
-
-$$
-\rho g L B T = mg \implies
-T = \frac{m}{\rho L B} = \frac{200{,}000}{1025 \times 20 \times 8} = 1.22 \text{ m}
-$$
-
-Centre of buoyancy above keel: $KB = T/2 = 0.61$ m
-
-Second moment of waterplane area:
-
-$$
-I_{wp} = \frac{L B^3}{12} = \frac{20 \times 8^3}{12} = 853.3 \text{ m}^4
-$$
-
-Displaced volume: $\mathcal{V}_{disp} = L B T = 195.1$ m³
-
-$$
-BM = \frac{I_{wp}}{\mathcal{V}_{disp}} = \frac{853.3}{195.1} = 4.37 \text{ m}
-$$
-
-$$
-KM = KB + BM = 0.61 + 4.37 = 4.98 \text{ m}
-$$
-
-$$
-GM = KM - KG = 4.98 - 1.80 = 3.18 \text{ m}
-$$
-
-Since $GM > 0$, the barge is **stable** with a comfortable margin.
-
-## Applications
-
-### Dams and Retaining Walls
-
-- Gravity dam design relies on the overturning moment from hydrostatic force
-- Sliding and overturning safety factors are checked against resultant forces
-- Uplift pressure beneath the dam is included in stability analysis
-
-### Lock Gates and Sluice Gates
-
-- Force on lock gates determines hinge reactions and gate thickness
-- Sluice gates require knowledge of the center of pressure for actuator sizing
-
-### Submerged Pipelines and Tunnels
-
-- Net buoyancy or downward force depends on pipe weight versus displaced water
-- Ballast or anchoring is sized using Archimedes' principle
-
-### Ship and Offshore Platform Design
-
-- Hull form is shaped to achieve the required displaced volume at design draft
-- Metacentric height governs intact and damaged stability criteria
-- Classification society rules specify minimum $GM$ values
-
-## Design Considerations
-
-### Load Combinations
-
-- Hydrostatic load is combined with seismic, thermal, and operational loads
-- Partial safety factors are applied to water level and density
-
-### Factors of Safety
-
-- Overturning: $`\text{FOS}_{OT} = M_{restoring} / M_{overturning} \geq 1.5`$ (typical)
-- Sliding: $\text{FOS}_{SL} = \mu W / F_H \geq 1.5$
-
-### Pressure Testing
-
-- Tanks and pressure vessels are hydrostatically tested to 1.25–1.5 times design pressure
-- Proof testing confirms structural adequacy before service
-
-Understanding hydrostatic pressure forces is a prerequisite for more advanced fluid loading topics such as wave loading and dynamic flow forces on structures.
+With $C_{pb} = -1.2$, $s = \sqrt{0.55} = 0.742$, $\theta_s = 47.9^\circ$ and $C_d = 0.742 - 0.544 + 0.890 = 1.088$, which is the value the face sum converges to. The base pressure contributes 0.89 of it: drag on a bluff body is mostly the suction on its rear, and anything that raises the base pressure (a splitter plate, base bleed, a tapered tail) lowers the drag.
+
+## Common Mistakes
+
+- Using the centroid instead of the centre of pressure for moments about a hinge or base.
+- Mixing absolute and gauge pressure on a one-sided surface, or forgetting a pressurised gas cushion above a liquid.
+- Integrating CFD pressure with inward-pointing normals, which flips the sign of every force component. A quick check is the force on the body in a uniform-pressure field, which must be zero.
+- Leaving out the friction term for a streamlined body, or comparing coefficients built on different reference areas.
+- Reporting the moment about an unstated point. Moments transfer between points as $`\mathbf{M}_{O'} = \mathbf{M}_O + (\mathbf{r}_O - \mathbf{r}_{O'}) \times \mathbf{F}`$.
+- Averaging $C_D$ over an unconverged or too short unsteady record, when vortex shedding makes the instantaneous force oscillate.
+
+## Key Takeaways
+
+- The hydrostatic force on a plane surface is the centroid pressure times the area; it acts at $y_{cp} = \bar{y} + I_{xc}/(\bar{y}A)$, below the centroid.
+- Curved surfaces are handled by components: the force on the vertical projection and the weight of the fluid above.
+- In moving fluids, loads scale with $q = \tfrac12\rho U^2$ and are expressed by $C_p$, $C_D$, $C_L$ and $C_M$ with stated reference area and length.
+- Every fluid load is the surface integral of $`-p\,\mathbf{n} + \boldsymbol{\tau}_w`$; a CFD code evaluates it as a face sum, which converges at second order with surface resolution.
+- On bluff bodies the drag is mostly base suction, which potential flow cannot predict.
 
 ## Related Scripts
 
+- [Surface Force Integration over Boundary Faces](../../../scripts/algorithms/fluid_loading_surface_force_integration/): integrates a surface pressure and wall-shear field over the flat faces of a body into a force and a moment, the same face sum a CFD code uses to report drag, lift and moment coefficients.
 - [Pressure Variation with Depth](../../../scripts/plots/pressure_variation_with_depth/): plots how hydrostatic pressure increases linearly with depth below the free surface of a fluid at rest.
 
 ## Exercises
 
-**Exercise 1.** A vertical rectangular gate 2 m wide and 3 m tall has its top edge 1.5 m below the free surface of fresh water. Find the resultant force and the depth of the center of pressure.
+**Exercise 1.** A vertical rectangular gate 2 m wide and 3 m tall has its top edge 1.5 m below the free surface of fresh water. Find the resultant force and the depth of the centre of pressure.
 
 <details>
 <summary>Answer</summary>
@@ -315,29 +210,27 @@ F = \rho g\bar{h}A = 1000 \times 9.81 \times 3 \times 6 = 176.6 \text{ kN}
 ```
 
 ```math
-y_{cp} = \bar{y} + \frac{I_{xc}}{\bar{y}A} = 3 +
-\frac{2 \times 3^3/12}{3 \times 6} = 3 + 0.25 = 3.25 \text{ m}
+y_{cp} = \bar{y} + \frac{I_{xc}}{\bar{y}A} = 3 + \frac{2 \times 3^3/12}{3 \times 6} = 3 + 0.25 = 3.25 \text{ m}
 ```
 
 </details>
 
-**Exercise 2.** A rectangular plate 1.5 m wide and 2 m long (measured along its slope) lies in a plane inclined at $30^\circ$ to the horizontal, with its top edge 1 m below the surface of fresh water. Find the resultant force and the position of the center of pressure along the incline.
+**Exercise 2.** A rectangular plate 1.5 m wide and 2 m long, measured along its slope, lies in a plane inclined at $30^\circ$ to the horizontal, with its top edge 1 m below the surface of fresh water. Find the resultant force and the position of the centre of pressure along the incline.
 
 <details>
 <summary>Answer</summary>
 
-Along the incline the top edge is $1/\sin 30^\circ = 2$ m from the surface, so $\bar{y} = 3$ m and $\bar{h} = 3\sin 30^\circ = 1.5$ m. The area is $A = 3$ m².
+Along the incline the top edge is $1/\sin 30^\circ = 2$ m from the surface line, so $\bar{y} = 3$ m and $\bar{h} = 3\sin 30^\circ = 1.5$ m. The area is $A = 3$ m².
 
 ```math
 F = 1000 \times 9.81 \times 1.5 \times 3 = 44.1 \text{ kN}
 ```
 
 ```math
-I_{xc} = \frac{1.5 \times 2^3}{12} = 1.0 \text{ m}^4, \quad y_{cp} = 3 +
-\frac{1.0}{3 \times 3} = 3.11 \text{ m}
+I_{xc} = \frac{1.5 \times 2^3}{12} = 1.0 \text{ m}^4, \qquad y_{cp} = 3 + \frac{1.0}{3 \times 3} = 3.11 \text{ m}
 ```
 
-The center of pressure is 3.11 m from the surface along the incline, i.e. 1.11 m below the top edge.
+The centre of pressure is 3.11 m from the surface line along the incline, 1.11 m below the top edge.
 
 </details>
 
@@ -346,7 +239,7 @@ The center of pressure is 3.11 m from the surface along the incline, i.e. 1.11 m
 <details>
 <summary>Answer</summary>
 
-The vertical projection is 2 m high × 4 m wide, with centroid at 1 m depth:
+The vertical projection is 2 m high and 4 m wide, with centroid at 1 m depth:
 
 ```math
 F_H = 1000 \times 9.81 \times 1 \times 8 = 78.5 \text{ kN}
@@ -359,48 +252,52 @@ F_V = \rho g\mathcal{V} = 9810 \times 4\pi = 123.3 \text{ kN}
 ```
 
 ```math
-F_R = \sqrt{78.5^2 + 123.3^2} = 146.1 \text{ kN}, \quad \alpha = \arctan
-\frac{123.3}{78.5} = 57.5^\circ
+F_R = \sqrt{78.5^2 + 123.3^2} = 146.1 \text{ kN}, \qquad \alpha = \arctan\frac{123.3}{78.5} = 57.5^\circ
 ```
 
-For a circular surface the resultant passes through the centre of the circle.
+The resultant passes through the centre of the circle.
 
 </details>
 
-**Exercise 4.** A solid wooden cube (side 0.5 m, density 600 kg/m³) floats in fresh water with one face horizontal. Find its draft and metacentric height. Is this orientation stable?
+**Exercise 4.** A solid wooden cube of side 0.5 m and density 600 kg/m³ floats in fresh water with one face horizontal. Find its draft and metacentric height. Is this orientation stable?
 
 <details>
 <summary>Answer</summary>
 
-Draft: $T = 0.5 \times 600/1000 = 0.3$ m, so $KB = 0.15$ m and $KG = 0.25$ m.
+The draft is $T = 0.5 \times 600/1000 = 0.3$ m, so $KB = 0.15$ m and $KG = 0.25$ m.
 
 ```math
-BM = \frac{I_{wp}}{\mathcal{V}_{disp}} = \frac{0.5^4/12}{0.5 \times 0.5 \times 0.3} = \frac{0.005208}{0.075} = 0.069 \text{ m}
+BM = \frac{I_{wp}}{\mathcal{V}_{\mathrm{disp}}} = \frac{0.5^4/12}{0.5 \times 0.5 \times 0.3} = \frac{0.005208}{0.075} = 0.069 \text{ m}
 ```
 
 ```math
 GM = KB + BM - KG = 0.15 + 0.069 - 0.25 = -0.031 \text{ m}
 ```
 
-$GM < 0$, so this upright orientation is unstable and the cube will heel over to a tilted equilibrium.
+$GM < 0$, so the upright orientation is unstable and the cube heels over to a tilted equilibrium.
 
 </details>
 
-**Exercise 5.** An empty steel pipeline (outer diameter 0.6 m, wall thickness 20 mm, $\rho_s = 7850$ kg/m³) is laid in seawater ($\rho = 1025$ kg/m³). Find the net vertical force per metre and state whether it needs additional weight.
+**Exercise 5.** A CFD solution of flow past a cylinder gives a pressure distribution that is well approximated by the separated-flow model of this note, but with a base pressure $C_{pb} = -0.9$. Find the separation angle of the model and its pressure drag coefficient. A colleague integrates the absolute pressure $p_\infty + qC_p$ instead of the gauge pressure; does that change the result?
 
 <details>
 <summary>Answer</summary>
 
-Steel area: $\frac{\pi}{4}(0.6^2 - 0.56^2) = 0.03644$ m², giving a mass of 286.1 kg/m.
+$s^2 = \sin^2\theta_s = (1 + 0.9)/4 = 0.475$, so $s = 0.689$ and $\theta_s = 43.6^\circ$.
 
-Displaced water: $\frac{\pi}{4}(0.6^2) \times 1025 = 289.8$ kg/m.
+```math
+C_d = s - \frac{4}{3}s^3 - C_{pb}\,s = 0.689 - 0.436 + 0.620 = 0.873
+```
 
-The net force is $(289.8 - 286.1) \times 9.81 = 36.7$ N/m upward, so the empty pipe floats. A concrete weight coating or anchoring is required for on-bottom stability.
+The less negative base pressure lowers the drag by 20% compared with $C_{pb} = -1.2$. Adding a constant $p_\infty$ changes nothing, because $`\oint\mathbf{n}\,dA = \mathbf{0}`$ on the closed surface of the cylinder. It would matter for a surface open to a different pressure on its other side, such as a cladding panel with internal pressure behind it.
 
 </details>
 
 ## References
 
-- F. M. White, *Fluid Mechanics*, 7th ed., McGraw-Hill, 2011.
-- B. R. Munson, D. F. Young, T. H. Okiishi, W. W. Huebsch, *Fundamentals of Fluid Mechanics*, Wiley.
-- K. J. Rawson, E. C. Tupper, *Basic Ship Theory*, 5th ed., Butterworth-Heinemann, 2001.
+- White, F. M., *Fluid Mechanics*, 7th ed., McGraw-Hill, 2011.
+- Munson, B. R., Rothmayer, A. P., Okiishi, T. H., & Huebsch, W. W., *Fundamentals of Fluid Mechanics*, 7th ed., Wiley, 2013.
+- Rawson, K. J., & Tupper, E. C., *Basic Ship Theory*, 5th ed., Butterworth-Heinemann, 2001.
+- Anderson, J. D., *Fundamentals of Aerodynamics*, 6th ed., McGraw-Hill, 2017.
+- Ferziger, J. H., Perić, M., & Street, R. L., *Computational Methods for Fluid Dynamics*, 4th ed., Springer, 2020.
+- Zdravkovich, M. M., *Flow Around Circular Cylinders, Volume 1: Fundamentals*, Oxford University Press, 1997.

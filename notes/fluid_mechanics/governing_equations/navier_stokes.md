@@ -411,6 +411,7 @@ Understanding the Navier-Stokes equations is fundamental to all of fluid mechani
 - [Wall Shear in Pipe Cross-Section](../../../scripts/plots/wall_shear_pipe_cross_section/): sketches fully developed laminar (Hagen-Poiseuille) flow in a circular pipe, with velocity arrows whose lengths follow the parabolic profile $u(r) = u_{max}(1 - (r/R)^2)$.
 - [Rayleigh-Taylor Instability](../../../scripts/simulations/rayleigh_taylor_instability/): simulates the Rayleigh-Taylor instability of heavy fluid resting on light fluid in a tall 2D box and animates how a rippled interface grows into rising bubbles and falling mushroom-shaped spikes.
 - [SPH Dam Break](../../../scripts/simulations/sph_dam_break/): simulates the collapse of a water column in a closed tank, the classic dam-break problem, with weakly compressible smoothed particle hydrodynamics (SPH), and animates the water particles coloured by their speed.
+- [Journal Bearing Reynolds Equation](../../../scripts/algorithms/bearings_journal_reynolds/): solves the Reynolds equation of a hydrodynamic journal bearing by finite differences and reproduces the classical load-capacity results: the closed-form full-Sommerfeld solution of the long bearing, the effect of film rupture under the Reynolds cavitation condition, and the Raimondi–Boyd design table for a bearing with $L/D = 1$.
 
 ## Exercises
 

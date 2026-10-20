@@ -1,319 +1,233 @@
 # Feedback Control
 
-Feedback control uses measured output information to correct the control action and drive the system toward desired behavior. This note covers closed-loop performance analysis, steady-state error theory, sensitivity, disturbance rejection, and frequency-domain compensator design.
+Feedback compares the measured output with the reference and acts on the difference. This note derives the closed-loop transfer functions of a single loop with disturbances and sensor noise, defines the sensitivity and complementary sensitivity functions that express what feedback can and cannot do, computes steady-state errors from the system type and error constants, shows how feedback reduces sensitivity to plant variations, and designs lead and lag compensators that reshape the loop when a pure gain is not enough. The tools for checking stability are in [Stability Analysis](./stability_analysis.md) and [Frequency Response](./frequency_response.md).
 
-## Unity and Non-Unity Feedback Systems
+## Problem Statement
 
-### Unity Feedback
+Given a plant $G(s)$, a sensor $H(s)$, and the signals that act on the loop (a reference $r$, a disturbance $d$ at the plant input and sensor noise $n$, each with a known character such as a step, a ramp or a frequency band), choose a controller $C(s)$ such that:
 
-The sensor transfer function is $H(s) = 1$. The closed-loop transfer function is:
+1. the closed loop is internally stable;
+2. the steady-state error to the specified reference and disturbance inputs is zero or below a bound;
+3. disturbances in the low-frequency band are attenuated and noise in the high-frequency band is not amplified;
+4. the transient response meets the specifications on damping and speed, which in the frequency domain are a phase margin and a crossover frequency;
+5. these properties survive the expected variation of the plant parameters.
 
-$$
-T(s) = \frac{G(s)}{1 + G(s)}
-$$
+The plant is assumed LTI near its operating point; unless stated otherwise the sensor is ideal, $H = 1$, and the measurement is $y_m = y + n$.
 
-and the error transfer function is:
+## Closed-Loop Transfer Functions
 
-$$
-E(s) = \frac{R(s)}{1 + G(s)}
-$$
+With the controller acting on the error, $u = C(r - y_m)$, and the plant output $y = G(u + d)$, eliminating $u$ gives the output, the error $e = r - y$ and the control signal:
 
-### Non-Unity Feedback
+```math
+Y = T\, R + GS\, D - T\, N
+```
 
-When $H(s) \neq 1$, the closed-loop transfer function becomes:
+```math
+E = S\, R - GS\, D + T\, N
+```
 
-$$
-T(s) = \frac{G(s)}{1 + G(s)H(s)}
-$$
+```math
+U = CS\,(R - N) - T\, D
+```
 
-The error measured at the output differs from the error at the plant input. To analyze steady-state error, it is often convenient to convert to an equivalent unity-feedback form.
-
-## Steady-State Error Analysis
-
-The steady-state error for a unity-feedback system with open-loop transfer function $G(s)$ is:
-
-$$
-e_{ss} = \lim_{s \to 0} \frac{sR(s)}{1 + G(s)}
-$$
-
-### System Type
-
-The **system type** is the number of free integrators in the open-loop transfer function:
+where the loop transfer function, the sensitivity function and the complementary sensitivity function are
 
 $$
-G(s) = \frac{K \prod(s + z_i)}{s^N \prod(s + p_j)}
+L = CG,
+\qquad S = \frac{1}{1 + L},
+\qquad T = \frac{L}{1 + L}
 $$
 
-$N$ is the system type.
+With a sensor $H \neq 1$ in the feedback path, $L = CGH$, the reference response is $Y/R = CG/(1 + CGH)$, and the output tracks $R/H$ at frequencies where the loop gain is high; the sensor calibration therefore sets the accuracy of the loop. All closed-loop transfer functions share the denominator $1 + L$, whose roots are the closed-loop poles.
 
-### Error Constants and Steady-State Errors
+## Sensitivity and Complementary Sensitivity
 
-| Input | Error Constant | Formula | Type 0 | Type 1 | Type 2 |
-| --- | --- | --- | --- | --- | --- |
-| Step $R/s$ | Position $K_p$ | $\lim_{s\to 0} G(s)$ | $\frac{R}{1+K_p}$ | 0 | 0 |
-| Ramp $R/s^2$ | Velocity $K_v$ | $\lim_{s\to 0} sG(s)$ | $\infty$ | $R/K_v$ | 0 |
-| Parabola $R/s^3$ | Acceleration $K_a$ | $\lim_{s\to 0} s^2G(s)$ | $\infty$ | $\infty$ | $R/K_a$ |
-
-**Key insight**: Increasing system type reduces steady-state error for polynomial inputs, but each added integrator reduces phase margin and makes stabilization harder.
-
-## Sensitivity to Parameter Variations
-
-A major advantage of feedback is reduced sensitivity to plant parameter changes. The **sensitivity function** of the closed-loop transfer function $T$ with respect to the plant $G$ is:
+The two functions always add to one,
 
 $$
-S_G^T = \frac{\partial T / T}{\partial G / G} = \frac{1}{1 + G(s)H(s)}
+S(s) + T(s) = 1
 $$
 
-For large loop gain $|G(s)H(s)| \gg 1$:
+and each describes a different job. $S$ is the transfer function from reference to error and, multiplied by $G$, from disturbance to output: it should be small where references and disturbances have their energy. $T$ is the transfer function from noise to output (with a minus sign) and from reference to output: it should be close to 1 where references must be tracked and small where noise lies. Because they add to one, both cannot be small at the same frequency. A loop is therefore designed with $\lvert L\rvert \gg 1$ (so $S \approx 1/L$ small) at low frequency and $\lvert L\rvert \ll 1$ (so $T \approx L$ small) at high frequency, with the crossover in between; the [frequency-response note](./frequency_response.md) plots both functions for a tank level loop.
+
+### Sensitivity to Plant Variations
+
+The name of $S$ comes from its second meaning. If the plant changes by $dG$, the relative change of the closed-loop transfer function $T = CG/(1 + CG)$ is
 
 $$
-S_G^T \approx \frac{1}{G(s)H(s)} \approx 0
+\frac{dT/T}{dG/G} = \frac{G}{T} \frac{dT}{dG} = \frac{1}{1 + CG} = S
 $$
 
-This means that at frequencies where the loop gain is high, the closed-loop transfer function is **insensitive** to changes in the plant.
+A 10% change in the plant changes the closed-loop response by $`10\% \times \lvert S\rvert`$, so at frequencies where the loop gain is high the closed loop depends almost only on the controller and the sensor. For $G = 10/(s + 1)$ in unity feedback with $C = 1$, the DC sensitivity is $1/11$: a 10% rise of the plant gain changes the closed-loop DC gain by about 0.9% (exactly 0.83%, from $10/11$ to $11/12$). The sensitivity to the sensor is $-T$, close to $-1$: feedback cannot correct errors of its own measurement.
 
-### Complementary Sensitivity
+## Disturbance Rejection and Noise
 
-$$
-T(s) + S(s) = 1
-$$
+### Example: Proportional Control and a Step Disturbance
 
-where $T(s) = \frac{G(s)H(s)}{1 + G(s)H(s)}$ is the complementary sensitivity function. This constraint implies a fundamental trade-off: you cannot achieve both perfect tracking ($|T| = 1$) and perfect disturbance/noise rejection ($|S| = 0$) at the same frequency.
-
-## Disturbance Rejection
-
-For a system with disturbance $D(s)$ entering at the plant input:
+For a plant $G(s) = 1/(s + 1)$ under proportional control $C = K$, a unit step disturbance $D(s) = 1/s$ at the plant input produces the output
 
 $$
-Y(s) = \frac{G(s)}{1 + G(s)C(s)} D(s) + \frac{G(s)C(s)}{1 + G(s)C(s)} R(s)
+Y_d(s) = \frac{G}{1 + KG}D(s) = \frac{1}{s(s + 1 + K)},
+\qquad y_d(\infty) = \lim_{s\to 0} sY_d(s) = \frac{1}{1 + K}
 $$
 
-The transfer function from disturbance to output is:
+The steady-state effect falls as $1/(1 + K)$ but never vanishes: $K = 99$ leaves 1% of it. Exercise 4 shows that integral action in the controller removes it entirely.
+
+### Where the Integrator Must Be
+
+For a step disturbance at the plant input, what matters is an integrator in the controller, not in the plant. For the pump-fed tank, whose level $h$ integrates the flow imbalance, a proportional controller $u = K_c(r - h)$ driving a pump of gain $k_q$ gives the disturbance-to-level transfer function
 
 $$
-\frac{Y(s)}{D(s)} = \frac{G(s)}{1 + G(s)C(s)} = G(s) S(s)
+\frac{H(s)}{Q_d(s)} = \frac{1/(As)}{1 + K_c k_q/(As)} = \frac{1}{As + K_c k_q}
 $$
 
-High loop gain at the disturbance frequency makes $|S(j\omega)|$ small, thereby rejecting the disturbance. This is the fundamental mechanism of feedback control.
+for an increase $q_d$ in the draw-off flow (entering with a minus sign). A step increase of $0.005$ m³/s with $K_c k_q = 0.5$ m²/s leaves a steady level error of $0.005/0.5 = 0.01$ m, although the plant contains an integrator: at steady state the pump must deliver the extra flow, which a proportional controller only does if an error persists. The integrator in the plant removes the steady-state error to reference steps, not to input disturbances.
 
-## Lead Compensator
+### Noise and Control Effort
 
-A lead compensator adds phase lead near the gain crossover frequency to improve phase margin and transient response.
+Noise reaches the output through $T$ and the actuator through $CS$. At high frequency $\lvert CS\rvert \approx \lvert C\rvert$, so a controller with large high-frequency gain (an unfiltered derivative, a lead network with small $\alpha$) passes the full sensor noise, multiplied by that gain, to the actuator. This wears valves and motors and can saturate them even when the output looks clean.
 
-$$
-C_{lead}(s) = K_c \frac{s + z}{s + p}, \quad p > z > 0
-$$
+## Steady-State Error and System Type
 
-or equivalently:
+For a unity-feedback loop, the final value theorem applied to $E = SR$ gives
 
 $$
-C_{lead}(s) = K_c \frac{T s + 1}{\alpha T s + 1}, \quad 0 < \alpha < 1
+e_{ss} = \lim_{s\to 0} \frac{sR(s)}{1 + L(s)}
 $$
 
-**Maximum phase lead**: $\phi_{max} = \sin^{-1}\frac{1 - \alpha}{1 + \alpha}$ at frequency $\omega_m = \frac{1}{T\sqrt{\alpha}}$
+provided the closed loop is stable. Writing $L(s) = K\prod(\tau_i s + 1)/[s^N\prod(\tau_j s + 1)]$, the number $N$ of free integrators in the loop is the system type. The error constants and the resulting errors are:
 
-### Design Procedure (Bode Method)
+| Input | Error constant | Type 0 | Type 1 | Type 2 |
+| --- | --- | --- | --- | --- |
+| Step $R/s$ | Position $K_p = \lim_{s\to 0}L(s)$ | $R/(1 + K_p)$ | 0 | 0 |
+| Ramp $R/s^2$ | Velocity $K_v = \lim_{s\to 0}sL(s)$ | $\infty$ | $R/K_v$ | 0 |
+| Parabola $R/s^3$ | Acceleration $K_a = \lim_{s\to 0}s^2L(s)$ | $\infty$ | $\infty$ | $R/K_a$ |
 
-1. Set the gain $K_c$ to meet the steady-state error requirement
-2. Evaluate the uncompensated phase margin
-3. Determine the required additional phase lead: $\phi_{max} = PM_{desired} - PM_{current} + \text{safety margin}$
-4. Compute $\alpha = \frac{1 - \sin\phi_{max}}{1 + \sin\phi_{max}}$
-5. Place $\omega_m$ at the new gain crossover frequency: $T = \frac{1}{\omega_m \sqrt{\alpha}}$
-6. Verify gain and phase margins
+Each integrator adds $-90^\circ$ of phase at all frequencies, so a higher type makes the loop harder to stabilize: a type-2 loop needs phase lead near crossover, and a type-3 loop is rarely used.
 
-## Lag Compensator
+### Example: Ramp Error of a Type-1 Servo
 
-A lag compensator improves steady-state accuracy by boosting low-frequency gain without significantly affecting the phase margin.
+For $L(s) = \frac{50}{s(s + 5)}$ tracking $r(t) = 3t$ (a ramp of 3 units per second), $K_v = \lim_{s\to 0} sL(s) = 50/5 = 10$ s⁻¹, so the output follows the ramp with a constant lag $e_{ss} = 3/K_v = 0.3$ units.
 
-$$
-C_{lag}(s) = K_c \frac{s + z}{s + p}, \quad z > p > 0
-$$
+## Lead and Lag Compensation
 
-or equivalently:
+When adjusting a gain cannot satisfy both the steady-state and the transient specifications, a compensator adds poles and zeros that reshape the loop.
 
-$$
-C_{lag}(s) = K_c \frac{T s + 1}{\beta T s + 1}, \quad \beta > 1
-$$
-
-### Design Procedure (Bode Method)
-
-1. Set gain $K_c$ to meet transient response (phase margin) at the desired crossover frequency
-2. Determine the low-frequency gain boost needed: $\beta = \frac{K_{required}}{K_c}$
-3. Place the zero $z = 1/T$ at a frequency one decade below the gain crossover: $\omega_z = \omega_{gc}/10$
-4. Place the pole at $p = z/\beta$
-5. Verify that the phase margin is not degraded
-
-## Lead-Lag Compensator
-
-When both transient response improvement and steady-state accuracy are needed, a **lead-lag** compensator combines both:
+### Lead Compensator
 
 $$
-C(s) = K_c \frac{(s + z_1)(s + z_2)}{(s + p_1)(s + p_2)}
+C_{lead}(s) = K_c \frac{Ts + 1}{\alpha Ts + 1},
+\qquad 0 < \alpha < 1
 $$
 
-where the lead section ($z_1, p_1$ with $p_1 > z_1$) improves phase margin and the lag section ($z_2, p_2$ with $z_2 > p_2$) boosts low-frequency gain.
-
-## Root Locus Design
-
-Compensators can also be designed using the root locus:
-
-- **Adding a zero** (PD-like action) pulls the locus toward the left, improving stability
-- **Adding a pole** (integral action) pushes the locus toward the right
-- **Lead compensator**: Adds a pole-zero pair to reshape the locus so it passes through the desired closed-loop pole location
-- **Lag compensator**: Adds a tightly spaced pole-zero pair near the origin to increase static gain without moving the dominant poles significantly
-
-### Angle Condition for Compensator Design
-
-The compensator zero and pole must contribute the correct angle at the desired pole location $s_d$:
+The zero at $1/T$ comes before the pole at $1/(\alpha T)$, so the network adds positive phase between them, with a maximum
 
 $$
-\angle C(s_d) = \angle(s_d + z) - \angle(s_d + p) = \theta_{required}
+\phi_{\max} = \arcsin \frac{1 - \alpha}{1 + \alpha}
+\qquad \text{at}
+\qquad \omega_m = \frac{1}{T\sqrt{\alpha}}
 $$
 
-where $\theta_{required} = 180^\circ - \angle G(s_d)H(s_d)$.
+where its gain is $K_c/\sqrt{\alpha}$. Its high-frequency gain is $K_c/\alpha$, so a small $\alpha$ amplifies noise; $\alpha \geq 0.05$ to 0.1 (a lead of at most $55^\circ$–$`65^\circ`$ per stage) is usual. The Bode design procedure is:
 
-## Worked Examples
+1. Choose $K_c$ to meet the steady-state error constant.
+2. Find the phase margin of $K_c G$.
+3. Set $\phi_{\max}$ to the missing phase plus 5–12° for the crossover shift.
+4. Compute $\alpha = (1 - \sin\phi_{\max})/(1 + \sin\phi_{\max})$.
+5. Place $\omega_m$ at the new crossover, the frequency where $\lvert K_c G\rvert = \sqrt{\alpha}$, and compute $T = 1/(\omega_m\sqrt{\alpha})$.
+6. Check the margins and simulate the step response.
 
-### Example 1: Steady-State Error Calculation
+#### Example: Lead Design for a Servo
 
-**Given**: Unity feedback system with $G(s) = \frac{50}{s(s+5)}$, input $r(t) = 3t$ (ramp).
+The plant is $G(s) = \frac{4}{s(s + 2)}$; the specification asks for $K_v \geq 20$ s⁻¹ and a phase margin of at least $45^\circ$.
 
-**Find**: Steady-state error.
+1. $K_v = \lim_{s\to 0} s K_c G(s) = 2K_c$, so $K_c = 10$.
+2. For $K_cG = 40/[s(s + 2)]$, $\omega\sqrt{\omega^2 + 4} = 40$ gives $\omega_{gc} = 6.17$ rad/s and $PM = 90^\circ - \arctan(6.17/2) = 18.0^\circ$.
+3. $\phi_{\max} = 45^\circ - 18^\circ + 12^\circ = 39^\circ$.
+4. $\alpha = (1 - \sin 39^\circ)/(1 + \sin 39^\circ) = 0.371/1.629 = 0.228$.
+5. $40/(\omega\sqrt{\omega^2 + 4}) = \sqrt{0.228} = 0.477$ gives $\omega_m = 9.05$ rad/s, and $T = 1/(9.05 \times 0.477) = 0.232$ s.
 
-**Solution**:
+The compensator is
 
-System type = 1 (one free integrator).
+```math
+C(s) = 10\, \frac{0.232s + 1}{0.0527s + 1} = 44.0\, \frac{s + 4.31}{s + 19.0}
+```
 
-Velocity error constant:
+The compensated loop crosses over at 9.05 rad/s with a phase margin of $51.5^\circ$, meeting the specification while keeping $K_v = 20$ s⁻¹. The crossover has moved up from 6.2 to 9.1 rad/s, so the loop is also faster.
 
-$$
-K_v = \lim_{s \to 0} sG(s) = \lim_{s \to 0} \frac{50s}{s(s+5)} = \frac{50}{5} = 10
-$$
-
-Steady-state error for a ramp of magnitude 3:
-
-$$
-e_{ss} = \frac{3}{K_v} = \frac{3}{10} = 0.3
-$$
-
-### Example 2: Lead Compensator Design
-
-**Given**: Plant $G(s) = \frac{4}{s(s+2)}$ in unity feedback. Desired phase margin $\geq 45^\circ$ with $`K_v \geq 20\;\text{s}^{-1}`$.
-
-**Find**: Lead compensator parameters.
-
-**Solution**:
-
-**Step 1** — Set gain for steady-state requirement. Use the form $C(s) = K_c \frac{Ts+1}{\alpha Ts+1}$, whose DC gain is $K_c$:
+### Lag Compensator
 
 $$
-K_v = \lim_{s\to 0} s \cdot K_c \frac{Ts+1}{\alpha Ts+1} \cdot \frac{4}{s(s+2)} = 2K_c
+C_{lag}(s) = \frac{Ts + 1}{\beta Ts + 1},
+\qquad \beta > 1
 $$
 
-so $K_c = 10$ gives $`K_v = 20\;\text{s}^{-1}`$. (In the pole-zero form $K_c' \frac{s+z}{s+p}$ the DC gain is $K_c' z/p$, so the gain must be raised to $K_c' = K_c/\alpha$.)
+has unit DC gain and a high-frequency gain $1/\beta$. Used together with a loop gain set for the steady-state requirement, it lowers the gain near crossover by the factor $\beta$ without adding much phase lag there, which is equivalent to raising the low-frequency gain by $\beta$ relative to the crossover. The procedure:
 
-**Step 2** — Evaluate uncompensated system $10 \cdot \frac{4}{s(s+2)} = \frac{40}{s(s+2)}$.
+1. Set the loop gain $K$ to meet the error constant.
+2. Find the frequency $\omega_{gc}'$ where the phase of $KG$ equals $-180^\circ + PM_{\mathrm{desired}} + 5^\circ$ (the $5^\circ$ allows for the lag that the network still adds there).
+3. Choose $\beta = \lvert KG(j\omega_{gc}')\rvert$, so that the compensated loop crosses over at $\omega_{gc}'$.
+4. Place the zero a decade below the new crossover, $1/T = \omega_{gc}'/10$, and the pole at $1/(\beta T)$.
 
-At the gain crossover $|G(j\omega)| = 1$: solving $\omega\sqrt{\omega^2 + 4} = 40$ gives $\omega_{gc} \approx 6.2$ rad/s, with $PM = 90^\circ - \arctan(6.17/2) \approx 18^\circ$.
+Lag compensation improves steady-state accuracy and phase margin at the cost of a lower crossover frequency (a slower response) and a slow closed-loop pole near the lag zero, which leaves a long, small-amplitude tail in the step response.
 
-**Step 3** — Required phase lead: $\phi_{max} = 45^\circ - 18^\circ + 12^\circ = 39^\circ$ (12° safety margin).
+### Lead-Lag and the Root Locus View
 
-**Step 4** — Compute $\alpha$:
+A lead-lag compensator $K_c(s + z_1)(s + z_2)/[(s + p_1)(s + p_2)]$ combines a lead section ($p_1 > z_1$) for speed and margin with a lag section ($z_2 > p_2$, both close to the origin) for accuracy. A PID controller is a lead-lag compensator with the lag pole at the origin and the lead pole at the derivative filter.
 
-$$
-\alpha = \frac{1 - \sin 39^\circ}{1 + \sin 39^\circ} = \frac{1 - 0.629}{1 + 0.629} = \frac{0.371}{1.629} \approx 0.228
-$$
+On the root locus a lead network is designed by the angle condition: to make the locus pass through a desired closed-loop pole $s_d$, the compensator must supply the angle missing from $\angle G(s_d) + \angle C(s_d) = -180^\circ$, and its zero and pole are placed so that $\angle(s_d + z) - \angle(s_d + p)$ equals that deficit. Adding a zero pulls the locus to the left (more stable); adding a pole pushes it to the right. A lag pair close to the origin changes the locus near the dominant poles very little while multiplying the error constant by $z/p$.
 
-**Step 5** — Place maximum phase at the new crossover. The lead compensator adds a gain of $1/\sqrt{\alpha}$ at $\omega_m$, so the new crossover is where the uncompensated magnitude equals $\sqrt{\alpha}$: $\frac{40}{\omega_m\sqrt{\omega_m^2 + 4}} = \sqrt{0.228} = 0.477$, giving $\omega_m \approx 9.05$ rad/s. Then $T = \frac{1}{9.05\sqrt{0.228}} \approx 0.232$ s.
+## Key Takeaways
 
-Zero: $z = 1/T \approx 4.3$, Pole: $p = 1/(\alpha T) \approx 19.0$.
+- All closed-loop transfer functions follow from $L = CG$: $S = 1/(1+L)$ governs tracking errors, disturbances and sensitivity to the plant; $T = L/(1+L)$ governs tracking and noise; and $S + T = 1$.
+- Feedback reduces the effect of plant variations by the factor $\lvert S\rvert$ but cannot correct sensor errors.
+- The system type (integrators in $L$) sets the steady-state error to reference polynomials; a step disturbance at the plant input requires an integrator in the controller.
+- Lead compensation adds phase at crossover (more margin, more speed, more noise); lag compensation adds low-frequency gain (more accuracy, lower crossover).
 
-$$
-C(s) = 10 \cdot \frac{0.232s + 1}{0.0527s + 1} = 44.0 \cdot \frac{s + 4.3}{s + 19.0}
-$$
+## Related Scripts
 
-Check: the compensated loop crosses over at about 9.05 rad/s with $PM \approx 51^\circ$, meeting the specification.
-
-### Example 3: Disturbance Rejection
-
-**Given**: Plant $G(s) = \frac{1}{s+1}$, controller $C(s) = K$, unity feedback. A step disturbance $D(s) = 1/s$ enters at the plant input.
-
-**Find**: Steady-state output due to the disturbance.
-
-**Solution**:
-
-$$
-Y_d(s) = \frac{G(s)}{1 + C(s)G(s)} D(s) = \frac{1/(s+1)}{1 + K/(s+1)} \cdot
-\frac{1}{s} = \frac{1}{s(s + 1 + K)}
-$$
-
-By the final value theorem:
-
-$$
-y_{d,ss} = \lim_{s\to 0} s \cdot \frac{1}{s(s+1+K)} = \frac{1}{1+K}
-$$
-
-Increasing $K$ reduces the disturbance effect. For $K = 99$, $y_{d,ss} = 0.01$.
-
-## Applications
-
-- **Flight control**: Lead-lag compensators for pitch and roll autopilots
-- **Disk drive servo**: Track-following with disturbance rejection from vibration
-- **Temperature control**: Lag compensation for zero steady-state error in HVAC systems
-- **Motion control**: Lead compensation for fast, well-damped positioning in CNC machines
-- **Power electronics**: Feedback regulation of voltage converters under varying loads
-
-## Practical Tips
-
-- Increasing system type eliminates steady-state error but always **costs phase margin** — compensate accordingly
-- Lead compensation improves speed and stability but amplifies high-frequency noise
-- Lag compensation is low-risk but cannot improve transient response — it only improves steady-state accuracy
-- Always verify the final design with a **time-domain simulation** (step response, ramp response) to confirm that the Bode-domain specifications translate correctly
-- In practice, sensor dynamics and actuator saturation often limit achievable bandwidth more than the compensator design
+- [Bode and Nyquist Margins](../../../scripts/algorithms/control_bode_nyquist/): computes the Bode magnitude and phase with straight-line asymptotes, the gain, phase and delay margins, the Nyquist plot and its encirclements of $-1$, the sensitivity functions and the closed-loop step response of a tank level loop with and without a transport delay.
+- [Root Locus and Routh–Hurwitz](../../../scripts/algorithms/control_root_locus/): computes the root locus of a third-order position servo by sweeping the gain, marks the asymptotes, breakaway point and damping-ratio design point, and checks that the gain where the locus crosses the imaginary axis equals the Routh–Hurwitz critical gain.
+- [PID Tuning and Windup](../../../scripts/algorithms/control_pid_tuning/): tunes a PID controller for a first-order-plus-dead-time process with the Ziegler–Nichols and SIMC rules, compares the set-point and load responses and the stability margins, and shows integrator windup under actuator saturation with and without back-calculation.
 
 ## Exercises
 
-**Exercise 1.** A unity-feedback system has $G(s) = \frac{20}{(s+2)(s+5)}$. Determine the system type, the position error constant $K_p$, and the steady-state errors for a unit step and a unit ramp input.
+**Exercise 1.** A unity-feedback system has $L(s) = \frac{20}{(s+2)(s+5)}$. Determine the system type, the position error constant and the steady-state errors for a unit step and a unit ramp.
 
 <details>
 <summary>Answer</summary>
 
-There is no free integrator, so the system is Type 0. The position error constant is $K_p = \lim_{s \to 0} G(s) = 20/10 = 2$.
+There is no free integrator, so the system is type 0, with $K_p = \lim_{s \to 0} L(s) = 20/10 = 2$.
 
-- Unit step: $e_{ss} = \frac{1}{1 + K_p} = \frac{1}{3} \approx 0.333$.
-- Unit ramp: $K_v = \lim_{s \to 0} sG(s) = 0$, so $e_{ss} = \infty$ (the output falls further and further behind the ramp).
+For a unit step, $e_{ss} = \frac{1}{1 + K_p} = \frac{1}{3} = 0.333$. For a unit ramp, $K_v = \lim_{s \to 0} sL(s) = 0$, so $e_{ss} = \infty$: the output falls further and further behind the ramp.
 
 </details>
 
-**Exercise 2.** A plant $G(s) = \frac{10}{s+1}$ is placed in a unity-feedback loop. Use the sensitivity function to estimate the percentage change in the closed-loop DC gain when the plant gain rises by 10%, and compare the estimate with the exact change.
+**Exercise 2.** A plant $G(s) = \frac{10}{s+1}$ is placed in a unity-feedback loop with $C = 1$. Use the sensitivity function to estimate the percentage change in the closed-loop DC gain when the plant gain rises by 10%, and compare the estimate with the exact change.
 
 <details>
 <summary>Answer</summary>
 
-At DC the sensitivity is $S_G^T = \frac{1}{1 + G(0)} = \frac{1}{11} = 0.0909$, so a 10% change in $G$ gives roughly $`0.0909 \times 10\% \approx 0.91\%`$ change in $T$.
+At DC, $S = \frac{1}{1 + G(0)} = \frac{1}{11} = 0.0909$, so a 10% change in $G$ gives about $`0.0909 \times 10\% = 0.91\%`$ change in $T$.
 
-Exact: $T(0) = 10/11 = 0.9091$ before and $11/12 = 0.9167$ after, a change of $`0.83\%`$. The small difference arises because the sensitivity is a first-order (small-change) result. Without feedback the DC gain would change by the full 10%.
+Exactly, $T(0) = 10/11 = 0.9091$ before and $11/12 = 0.9167$ after, a change of 0.83%. The difference arises because the sensitivity is a first-order (small-change) result. Without feedback the DC gain would change by the full 10%.
 
 </details>
 
-**Exercise 3.** A lead compensator $C(s) = \frac{Ts + 1}{\alpha T s + 1}$ has $\alpha = 0.1$ and $T = 0.5$ s. Find the maximum phase lead, the frequency at which it occurs, and the compensator gain in dB at that frequency. What is the high-frequency gain, and why does it matter?
+**Exercise 3.** A lead compensator $C(s) = \frac{Ts + 1}{\alpha T s + 1}$ has $\alpha = 0.1$ and $T = 0.5$ s. Find the maximum phase lead, the frequency at which it occurs and the compensator gain in dB at that frequency. What is the high-frequency gain, and why does it matter?
 
 <details>
 <summary>Answer</summary>
 
 ```math
-\phi_{max} = \sin^{-1} \frac{1 - 0.1}{1 + 0.1} = \sin^{-1}(0.818) = 54.9^\circ
+\phi_{\max} = \arcsin \frac{1 - 0.1}{1 + 0.1} = \arcsin(0.818) = 54.9^\circ, \qquad \omega_m = \frac{1}{T\sqrt{\alpha}} = \frac{1}{0.5\sqrt{0.1}} = 6.32 \text{ rad/s}
 ```
 
-```math
-\omega_m = \frac{1}{T\sqrt{\alpha}} = \frac{1}{0.5\sqrt{0.1}} = 6.32 \text{ rad/s}
-```
-
-At $\omega_m$ the gain is $1/\sqrt{\alpha} = 3.16$, i.e. 10 dB. At high frequency the gain tends to $1/\alpha = 10$ (20 dB), so sensor noise above the crossover is amplified tenfold. This is why lead compensation is usually limited to $\alpha \gtrsim 0.05$–$`0.1`$.
+At $\omega_m$ the gain is $1/\sqrt{\alpha} = 3.16$, i.e. 10 dB. At high frequency the gain tends to $1/\alpha = 10$ (20 dB), so sensor noise above the crossover reaches the actuator amplified tenfold, which is why $\alpha$ is seldom chosen below about 0.05–0.1.
 
 </details>
 
-**Exercise 4.** In Example 3 (plant $G(s) = \frac{1}{s+1}$ with a step disturbance at the plant input), replace the proportional controller by a PI controller $C(s) = K + K_i/s$. Show that the steady-state output caused by the disturbance is zero, and state the conditions on $K$ and $K_i$ required for this result.
+**Exercise 4.** For the plant $G(s) = \frac{1}{s+1}$ with a unit step disturbance at the plant input, replace the proportional controller by a PI controller $C(s) = K + K_i/s$. Show that the steady-state output caused by the disturbance is zero, and state the conditions on $K$ and $K_i$ required for this result.
 
 <details>
 <summary>Answer</summary>
@@ -328,36 +242,29 @@ With $D(s) = 1/s$, the final value theorem gives
 y_{d,ss} = \lim_{s \to 0} s \cdot \frac{s}{s^2 + (1+K)s + K_i} \cdot \frac{1}{s} = 0
 ```
 
-The integrator in the controller makes the loop gain infinite at DC, so a constant disturbance is fully rejected. The final value theorem only applies if the closed loop is stable, which for this second-order polynomial requires $1 + K > 0$ and $K_i > 0$.
+The integrator in the controller makes the loop gain infinite at DC, so a constant disturbance is fully rejected. The final value theorem applies only if the closed loop is stable, which for this second-order polynomial requires $1 + K > 0$ and $K_i > 0$.
 
 </details>
 
-**Exercise 5.** A lag network $C_{lag}(s) = \frac{Ts + 1}{\beta T s + 1}$ uses $\beta = 10$, with its zero placed one decade below the gain crossover frequency $\omega_{gc} = 0.5$ rad/s. Find $T$, the pole location, and the phase and magnitude that the network contributes at $\omega_{gc}$. Use the result to explain the safety margin in the lag design procedure.
+**Exercise 5.** A lag network $C_{lag}(s) = \frac{Ts + 1}{\beta T s + 1}$ uses $\beta = 10$, with its zero placed one decade below the gain crossover frequency $\omega_{gc} = 0.5$ rad/s. Find $T$, the pole location, and the phase and magnitude that the network contributes at $\omega_{gc}$. Use the result to explain the extra $5^\circ$ in the lag design procedure.
 
 <details>
 <summary>Answer</summary>
 
-The zero is at $z = \omega_{gc}/10 = 0.05$ rad/s, so $T = 1/z = 20$ s. The pole is at $p = 1/(\beta T) = 0.005$ rad/s.
-
-At $\omega = 0.5$ rad/s:
+The zero is at $\omega_{gc}/10 = 0.05$ rad/s, so $T = 20$ s, and the pole is at $1/(\beta T) = 0.005$ rad/s. At $\omega = 0.5$ rad/s:
 
 ```math
-\angle C_{lag} = \arctan(0.5 \times 20) - \arctan(0.5 \times 200) = 84.29^\circ -
-89.43^\circ = -5.1^\circ
+\angle C_{lag} = \arctan(0.5 \times 20) - \arctan(0.5 \times 200) = 84.29^\circ - 89.43^\circ = -5.1^\circ, \qquad \lvert C_{lag}\rvert = \frac{\sqrt{1 + 10^2}}{\sqrt{1 + 100^2}} = 0.1005
 ```
 
-```math
-|C_{lag}| = \frac{\sqrt{1 + 10^2}}{\sqrt{1 + 100^2}} = 0.1005 \approx 1/\beta
-```
-
-At crossover the network gain has already dropped to about $1/\beta$ of its DC value, so the low-frequency loop gain is $\beta = 10$ times (20 dB) larger relative to crossover, which improves the error constants. The network still costs about $5^\circ$ of phase at crossover, so the phase margin target in the design is increased by a few degrees to compensate.
+At crossover the network has already reduced the gain to almost exactly $1/\beta$, so the low-frequency loop gain is 10 times (20 dB) higher relative to the crossover, which multiplies the error constant by 10. It still costs about $5^\circ$ of phase at crossover, which is why the procedure targets a phase margin $5^\circ$ larger than required.
 
 </details>
 
 ## References
 
 - K. Ogata, *Modern Control Engineering*, 5th ed., Prentice Hall, 2010.
-- G. F. Franklin, J. D. Powell, A. Emami-Naeini, *Feedback Control of Dynamic Systems*, Pearson.
-- N. S. Nise, *Control Systems Engineering*, 7th ed., Wiley, 2015.
+- G. F. Franklin, J. D. Powell, A. Emami-Naeini, *Feedback Control of Dynamic Systems*, 8th ed., Pearson, 2019.
+- N. S. Nise, *Control Systems Engineering*, 8th ed., Wiley, 2019.
 - K. J. Åström, R. M. Murray, *Feedback Systems: An Introduction for Scientists and Engineers*, Princeton University Press, 2008.
 - S. Skogestad, I. Postlethwaite, *Multivariable Feedback Control: Analysis and Design*, 2nd ed., Wiley, 2005.

@@ -76,10 +76,10 @@ class RunnerTests(unittest.TestCase):
             self.assertEqual(error.exception.code, 2)
 
     def test_discovery_uses_repository_relative_names(self):
-        self.assertEqual(len(run_scripts.discover([])), 67)
-        matches = run_scripts.discover(["algorithms/pod"])
+        self.assertEqual(len(run_scripts.discover([])), 170)
+        matches = run_scripts.discover(["algorithms/snapshot_pod"])
         self.assertEqual(len(matches), 1)
-        self.assertEqual(matches[0].parent.name, "pod")
+        self.assertEqual(matches[0].parent.name, "snapshot_pod")
 
     def test_png_validation_rejects_missing_or_corrupt_outputs(self):
         with tempfile.TemporaryDirectory() as directory:

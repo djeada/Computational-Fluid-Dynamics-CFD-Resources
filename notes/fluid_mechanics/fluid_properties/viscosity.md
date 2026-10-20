@@ -132,6 +132,7 @@ III. The shape/thickness of this boundary layer has a big impact on drag and hea
 
 - [Velocity Layers and Viscosity](../../../scripts/plots/velocity_layers_viscosity/): draws a schematic of three stacked fluid layers moving at different speeds to illustrate Newton's law of viscosity, $`\tau = \mu\, du/dy`$.
 - [Wall Shear in Pipe Cross-Section](../../../scripts/plots/wall_shear_pipe_cross_section/): sketches fully developed laminar (Hagen-Poiseuille) flow in a circular pipe, with velocity arrows whose lengths follow the parabolic profile $u(r) = u_{max}(1 - (r/R)^2)$.
+- [Journal Bearing Reynolds Equation](../../../scripts/algorithms/bearings_journal_reynolds/): solves the Reynolds equation of a hydrodynamic journal bearing by finite differences and reproduces the classical load-capacity results: the closed-form full-Sommerfeld solution of the long bearing, the effect of film rupture under the Reynolds cavitation condition, and the Raimondi–Boyd design table for a bearing with $L/D = 1$.
 
 ### Exercises
 

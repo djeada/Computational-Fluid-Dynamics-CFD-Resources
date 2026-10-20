@@ -1,464 +1,260 @@
 # Hydroelastic Applications
 
-Hydroelasticity is the study of the mutual interaction between deformable structures and surrounding fluid, where neither the fluid loading nor the structural response can be determined independently. This chapter covers the fundamental concepts of added mass, fluid-structure coupling, and practical applications in marine, offshore, and subsea engineering.
+Hydroelasticity is the part of fluid loading in which the deformation of a structure changes the fluid load enough that the two must be solved together. In water the effect is strong because the fluid is dense: the water that moves with a vibrating structure can weigh as much as, or more than, the structure itself. This note develops the added mass of submerged bodies and its effect on natural frequencies, and then treats the main applications: ship hull springing and whipping, propeller blades, flexible risers and pipes conveying fluid, and sloshing in tanks. It ends with the modelling approaches, from added-mass corrections to coupled CFD and finite-element analysis.
 
-## Hydroelasticity Fundamentals
+## Problem Statement
 
-### Definition
+Given an elastic structure (a beam, plate, shell or hull) fully or partly immersed in, or containing, a liquid of density $\rho$, with known structural mass, stiffness and damping, find its wet natural frequencies and mode shapes and its response to wave, flow, impact or machinery excitation. The structure is linear elastic with small deflections, and the fluid is usually taken as inviscid and incompressible, with irrotational motion and linearised free-surface conditions. After discretisation the coupled equations take the form
 
-In a hydroelastic problem the structural deformation modifies the fluid flow, and the modified flow in turn changes the loading on the structure. This two-way coupling distinguishes hydroelasticity from simpler load-then-analyse approaches.
+$$
+\left[\mathbf{M}_s + \mathbf{A}(\omega)\right]\ddot{\mathbf{x}} +
+\left[\mathbf{C}_s + \mathbf{B}(\omega)\right]\dot{\mathbf{x}} +
+\left[\mathbf{K}_s + \mathbf{K}_h\right]\mathbf{x} = \mathbf{F}_{\mathrm{exc}}(t)
+$$
 
-### Classification
+where $\mathbf{M}_s$, $\mathbf{C}_s$ and $\mathbf{K}_s$ are the structural matrices, $\mathbf{A}(\omega)$ the hydrodynamic added mass, $\mathbf{B}(\omega)$ the radiation damping (energy carried away by the waves the structure makes), $`\mathbf{K}_h`$ the hydrostatic restoring stiffness and $`\mathbf{F}_{\mathrm{exc}}`$ the excitation by incident waves, flow or impacts. The three fluid terms are proportional to acceleration, velocity and displacement respectively. In a frequency-domain analysis they are evaluated at each frequency; in the time domain their frequency dependence becomes a convolution (memory) integral.
 
-| Type | Description | Examples |
+## Added Mass
+
+### Potential-Flow Derivation for a Circular Cylinder
+
+A circular cylinder of radius $a$ moving with velocity $U(t)$ through fluid at rest is, in the frame of the fluid, a doublet of strength $Ua^2$ with velocity potential
+
+$$
+\phi = -\frac{Ua^2\cos\theta}{r}
+$$
+
+which satisfies $\partial\phi/\partial r = U\cos\theta$ on $r = a$ and decays far away ([Potential Flow Theory](../../fluid_mechanics/inviscid_flow/potential_flow.md)). The kinetic energy of the fluid per unit length is
+
+```math
+T = \frac{\rho}{2}\int\left|\nabla\phi\right|^2dA = \frac{\rho}{2}\int_a^\infty\int_0^{2\pi} \frac{U^2a^4}{r^4}\, r\, d\theta\, dr = \frac12\left(\rho\pi a^2\right)U^2
+```
+
+The work done to accelerate the cylinder must supply this energy as well as the cylinder's own, so the fluid opposes the acceleration with a force $-m_a\dot{U}$, with added mass per unit length
+
+$$
+m_a = \rho\pi a^2 = \rho \frac{\pi D^2}{4}
+$$
+
+exactly the mass of the displaced fluid, so $C_a = m_a/(\rho\pi D^2/4) = 1$. The added mass is not a particular lump of water that moves with the body; it is the inertia of the whole disturbed flow field, expressed per unit acceleration of the body.
+
+| Body and motion | Added mass | Reference |
 | --- | --- | --- |
-| **Hydrostatic** | Fluid loads depend on static displacement only | Buoyancy restoring forces, static heel |
-| **Hydrokinetic** | Loads depend on structural velocity | Radiation damping, flutter |
-| **Hydroinertial** | Loads depend on structural acceleration | Added mass, whipping |
+| Circular cylinder, any transverse direction | $\rho\pi D^2/4$ per unit length ($C_a = 1$) | Displaced fluid |
+| Sphere, any direction | $\tfrac12\rho\frac{4}{3}\pi a^3$ ($C_a = 0.5$) | Displaced fluid |
+| Flat plate of width $b$, normal to itself | $\rho\pi b^2/4$ per unit length | Circle of diameter $b$ |
+| Cylinder of radius $a$ concentric in a rigid tube of radius $b$ | $`\rho\pi a^2\,(b^2 + a^2)/(b^2 - a^2)`$ per unit length | Displaced fluid |
+| Any body moving along its own thin plane | approximately 0 |  |
 
-### Governing Equation
+Confinement raises the added mass sharply: a cylinder in a tube with $b/a = 1.4$ has $C_a = 3.1$. A free surface or a nearby wall also changes it, and for floating bodies the added mass depends on the oscillation frequency because the body radiates waves. Values for general shapes come from boundary-element (panel) computations or from tabulations such as Blevins (1979).
 
-The coupled equation of motion for a structure in fluid is:
+### Effect on Natural Frequencies
 
-$$
-[M_s + M_a]\ddot{x} + [C_s + C_f]\dot{x} + [K_s + K_f]x = F_{ext}(t)
-$$
-
-where:
-
-- $M_s$, $C_s$, $K_s$ = structural mass, damping, and stiffness matrices
-- $M_a$ = **added mass** (hydrodynamic) matrix
-- $C_f$ = **radiation damping** matrix (energy radiated as waves)
-- $K_f$ = **hydrostatic restoring stiffness** matrix
-- $F_{ext}$ = external excitation (waves, current, impact)
-
-## Added Mass Concept
-
-### Physical Interpretation
-
-When a body accelerates through a fluid, it must also accelerate a volume of surrounding fluid. The force required for this additional acceleration appears as an **added mass** (or virtual mass):
+For a single-degree-of-freedom structure of mass $m_s$ and stiffness $k$,
 
 $$
-F_{added} = -m_a \ddot{x}
-$$
-
-The added mass is not a fixed quantity of fluid but a mathematical representation of the fluid's inertial reaction.
-
-### Added Mass Coefficient
-
-The added mass coefficient relates the added mass to the displaced fluid mass:
-
-$$
-C_a = \frac{m_a}{\rho \mathcal{V}_{ref}}
-$$
-
-where $\mathcal{V}_{ref}$ is a reference volume (typically the displaced volume).
-
-### Analytical Values for Simple Shapes
-
-| Shape | Motion | $C_a$ |
-| --- | --- | --- |
-| Circular cylinder (2-D) | Transverse | 1.0 |
-| Sphere | Any direction | 0.5 |
-| Thin flat plate (width $b$) | Normal to plate | 1.0, referred to $\rho \pi b^2/4$ per unit length |
-| Ellipsoid (semi-axes $a,b$) | Along $a$-axis | Depends on $a/b$ ratio |
-
-For a **circular cylinder** of diameter $D$ oscillating transversely in an unbounded fluid:
-
-$$
-m_a = C_a \rho \frac{\pi D^2}{4} \quad \text{per unit length}
-$$
-
-with $C_a = 1.0$ in potential flow.
-
-### Effect on Natural Frequency
-
-The added mass reduces the natural frequency of a submerged structure:
-
-$$
-f_{n,fluid} = \frac{1}{2\pi} \sqrt{\frac{k}{m_s + m_a}} = f_{n,vacuum}
+f_{\mathrm{wet}} = \frac{1}{2\pi} \sqrt{\frac{k}{m_s + m_a}} = f_{\mathrm{dry}}
 \sqrt{\frac{m_s}{m_s + m_a}}
 $$
 
-For structures in water, the frequency reduction can be 30–60% compared to the in-air value.
+For a continuous structure each mode has its own modal added mass, and higher modes, with shorter wavelengths, disturb the fluid less and have smaller added mass. The figure shows this for a 10 mm steel membrane on a 0.2 m layer of water, a model problem from the partitioned-coupling script: the first mode keeps only 35% of its dry frequency, because its added mass is 7.3 times the plate mass, while the tenth mode keeps 84%. In air the change is below 1%.
 
-## Fluid-Structure Coupling Methods
+![Sub-iteration residuals, growth of explicit coupling, stability map and wet-to-dry frequency ratios for a membrane on a fluid layer](../../../scripts/algorithms/fluid_loading_partitioned_fsi/fluid_loading_partitioned_fsi.png)
 
-### Partitioned (Staggered) Approach
+Panel (d) compares the coupled eigenvalue solution with $\sqrt{m_s/(m_s + m_{a,j})}$, mode by mode. The other three panels concern the numerical coupling of the two solvers and are discussed in [Fluid–Structure Interaction: Coupling Methods](./fluid_structure_interaction.md): the same ratio $m_a/m_s$ that lowers the frequencies also makes loosely coupled simulations unstable.
 
-The fluid and structural solvers run separately and exchange information at the interface:
+### Worked Example: Subsea Module on a Crane Wire
 
-1. Solve the fluid equations for pressure on the current structural configuration
-2. Transfer pressure loads to the structural solver
-3. Solve the structural equations for the new displacement
-4. Update the fluid domain mesh to match the new structural shape
-5. Repeat until convergence within each time step
-
-**Advantages:** Existing fluid and structural codes can be reused.
-**Disadvantages:** May require sub-iterations for stability; added mass instability can arise when $m_a \gg m_s$.
-
-### Monolithic Approach
-
-The fluid and structural equations are assembled into a single system and solved simultaneously:
+A subsea module of $3 \times 3 \times 2$ m with mass 15 000 kg is lowered on a crane wire of stiffness $k = 500$ kN/m. A panel computation gives a heave added-mass coefficient $C_a = 0.68$ based on the displaced volume of 18 m³ of seawater:
 
 ```math
-\begin{bmatrix} A_{ff} & A_{fs} \\ A_{sf} & A_{ss} \end{bmatrix} \begin{bmatrix} u_f \\ u_s \end{bmatrix} = \begin{bmatrix} b_f \\ b_s \end{bmatrix}
+m_a = 0.68 \times 1025 \times 18 = 12\,546 \text{ kg},
+\qquad T_n = 2\pi \sqrt{\frac{15\,000 + 12\,546}{500\,000}} = 1.47 \text{ s}
 ```
 
-**Advantages:** Unconditionally stable; handles strong coupling.
-**Disadvantages:** Requires a unified solver; larger system to solve.
+In air the period would be 1.09 s. The added mass nearly doubles the inertia and moves the heave resonance towards the periods of vessel motion, so lifting analyses through the splash zone and heave-compensator settings must use wet properties.
 
-### Modal Superposition
+## Ship Hull Hydroelasticity
 
-For linear problems the structural response is expanded in terms of dry (in-vacuo) modes $\phi_i$:
+A ship's hull girder is a free–free beam floating in water, and large, slender ships have low vertical bending frequencies. Treating the two-node vertical bending mode of a uniform hull of length $L$, flexural rigidity $EI$, mass per unit length $m$ and added mass per unit length $m_a$ as that of a free–free beam,
+
+$$
+f_{2} = \frac{4.730^2}{2\pi L^2} \sqrt{\frac{EI}{m + m_a}}
+$$
+
+For a 300 m container ship with $EI = 8 \times 10^{13}$ N·m², $m = 333$ t/m and a strip-theory added mass of 450 t/m, the dry frequency is 0.61 Hz and the wet frequency 0.40 Hz. Two kinds of hydroelastic response follow.
+
+Springing is the steady resonant vibration of the hull girder by wave components at the two-node frequency, through linear excitation by short waves at high encounter frequency or by nonlinear (sum-frequency) wave forces. In head seas the encounter frequency is $\omega_e = \omega + \omega^2U/g$: at 12 m/s a 6 s wave is encountered at 0.38 Hz, close to the wet two-node frequency of the example. Springing adds many small stress cycles and can contribute a large part of the fatigue damage of large ships.
+
+Whipping is the transient vibration of the hull girder after an impulsive load: bow-flare and bottom slamming, stern slamming, and green water on deck. It decays over a few tens of cycles but adds to the wave bending moment of the same wave, and for large container ships whipping can raise the extreme vertical bending moment by tens of per cent. Slam pressures are short and local and depend on the deadrise angle of the impacting section; their prediction is a free-surface CFD problem, and the hull response requires coupling the slam load with a hull girder model.
+
+Analysis methods for ship hydroelasticity, in increasing order of cost:
+
+1. Two-dimensional strip theory for the hydrodynamic coefficients with a Timoshenko beam for the hull, in the frequency domain.
+2. Three-dimensional linear potential flow (panel methods) coupled with the wet modes of a finite-element hull model, the hydroelasticity theory of Bishop and Price (1979).
+3. Nonlinear time-domain potential flow with slamming models.
+4. Free-surface CFD (volume of fluid) coupled two-way with a finite-element or modal hull model, for slamming and green water.
+
+## Propeller and Turbine Blades
+
+Marine propeller and tidal-turbine blades are thin, and their wet natural frequencies are much lower than their dry ones because the added mass of a thin lifting surface in bending is of the order of $\rho\pi c^2/4$ per unit span for chord $c$. Their excitation comes from the non-uniform wake behind the hull, at the blade-passing frequency and its harmonics, and from vortex shedding at the trailing edge, which can lock onto a blade mode and produce a tonal noise ("singing"); a modified trailing-edge bevel breaks the coherence of the shedding. Composite and flexible blades are designed to bend and twist under load, so their hydrodynamic performance must be computed on the deformed shape, a two-way coupled problem.
+
+## Flexible Risers and Pipes Conveying Fluid
+
+Risers and flowlines combine external flow-induced vibration ([Flow-Induced Vibrations](./flow_induced_vibrations.md)) with the effect of the internal flow. For a pipe of flexural rigidity $EI$ and mass $m_s$ per unit length conveying fluid of mass $m_f = \rho_fA_i$ per unit length at speed $U$, the transverse motion obeys
 
 ```math
-x(\mathbf{r},t) = \sum_{i=1}^{N} q_i(t) \, \phi_i(\mathbf{r})
+EI \frac{\partial^4y}{\partial x^4} + m_fU^2 \frac{\partial^2y}{\partial x^2} + 2m_fU
+\frac{\partial^2y}{\partial x\,\partial t} + (m_s + m_f)
+\frac{\partial^2y}{\partial t^2} = 0
 ```
 
-Substituting into the coupled equation yields a set of ordinary differential equations in the generalised coordinates $q_i$, with frequency-dependent added mass and damping from the hydrodynamic analysis:
-
-$$
-(m_i + a_{ii}(\omega))\ddot{q}_i + (c_i + b_{ii}(\omega))\dot{q}_i + k_i q_i = f_i(t)
-$$
-
-where $a_{ii}$ and $b_{ii}$ are the diagonal terms of the generalised added mass and radiation damping matrices.
-
-## Ship Hydroelasticity
-
-### Why It Matters
-
-Modern ships are larger, more flexible, and operate in severe seas. The traditional rigid-body seakeeping assumption breaks down when structural deformation is comparable to the rigid-body motions.
-
-### Springing
-
-**Springing** is the resonant excitation of the lowest flexural modes of a ship hull by higher-order (nonlinear) wave forces. The excitation frequency is:
-
-$$
-f_{exc} = n f_e \quad (n = 2, 3, \ldots)
-$$
-
-where $f_e$ is the encounter frequency. Springing causes continuous low-amplitude fatigue loading.
-
-### Whipping
-
-**Whipping** is the transient vibration of the hull girder caused by impulsive loads:
-
-- **Bow slamming**: Impact of the bow on the water surface after emerging from a wave
-- **Green water**: Solid water on deck creating sudden loads
-- **Stern slamming**: Impact on flat stern sections
-
-The whipping response adds to the wave-induced bending moment. For ultra-large container ships the whipping contribution can be **30–50%** of the rigid-body wave bending moment.
-
-### Analysis Methods
-
-1. **2-D strip theory + beam model**: The hull is modelled as a Timoshenko beam; each strip provides hydrodynamic coefficients
-2. **3-D panel method + FE model**: Full 3-D diffraction/radiation analysis coupled with a finite element structural model
-3. **CFD + FE**: Viscous flow solvers coupled with structural FE for slamming and green water events
-
-## Underwater Vehicle Dynamics
-
-### Equations of Motion
-
-For a submerged vehicle the 6-DOF equations include added mass in all modes:
-
-$$
-[M_s + M_a]\dot{V} + \text{(Coriolis and centripetal terms)} = F_{hydro} + F_{control}
-$$
-
-The added mass matrix $M_a$ is a $6 \times 6$ symmetric matrix. For a body with three planes of symmetry, off-diagonal terms vanish and the matrix becomes diagonal.
-
-### Manoeuvring Coefficients
-
-The hydrodynamic forces on a manoeuvring submarine are expressed using stability derivatives:
-
-$$
-Y = Y_v v + Y_{\dot{v}} \dot{v} + Y_r r + Y_{\dot{r}} \dot{r} + \cdots
-$$
-
-where $Y_{\dot{v}}$ and $Y_{\dot{r}}$ are added mass derivatives (sway and yaw coupling).
-
-### Depth Control and Stability
-
-- **Static stability**: Requires the centre of buoyancy above the centre of gravity ($BG > 0$)
-- **Dynamic stability**: Routh stability criteria applied to the linearised equations with hydrodynamic derivatives
-- Added mass strongly affects the pitch and heave natural frequencies, which govern depth-keeping performance
-
-## Pipe Flow Vibrations
-
-### Internal Flow in Flexible Pipes
-
-A flexible pipe conveying fluid of density $\rho_f$ at velocity $U$ is governed by:
-
-$$
-EI \frac{\partial^4 y}{\partial x^4} + (m_f U^2) \frac{\partial^2 y}{\partial x^2} +
-2m_f U \frac{\partial^2 y}{\partial x \partial t} + (m_s + m_f)
-\frac{\partial^2 y}{\partial t^2} = 0
-$$
-
-where:
-
-- $EI$ = flexural rigidity
-- $m_s$ = pipe mass per unit length
-- $m_f = \rho_f A_i$ = fluid mass per unit length ($A_i$ = internal cross-section area)
-- The $m_f U^2$ term acts as a compressive follower force
-- The $2m_f U$ term is a Coriolis/gyroscopic term
-
-### Critical Flow Velocity
-
-For a simply supported pipe the critical velocity for divergence (buckling) is:
+The $m_fU^2$ term acts like a compressive axial force from the centrifugal effect of the fluid following the curved pipe, and the $2m_fU$ term is a Coriolis (gyroscopic) term. For a pipe supported at both ends the fluid force lowers the natural frequencies until, at
 
 $$
 U_{cr} = \frac{\pi}{L} \sqrt{\frac{EI}{m_f}}
 $$
 
-For a cantilevered pipe the instability is **flutter** (oscillatory), occurring at a higher velocity than divergence.
+the first frequency reaches zero and the pipe buckles (divergence). A cantilevered pipe, such as a hose discharging freely, loses stability by flutter instead, because the gyroscopic term does work on the oscillation. Pressure and internal flow also enter the effective tension, which controls the global configuration and natural frequencies of a riser.
 
-### Practical Implications
+### Worked Example: Divergence of a Steel Pipe
 
-- Offshore flexible risers and flowlines carry high-velocity hydrocarbons
-- Nuclear power plant piping must resist flow-induced vibration from coolant
-- Hydraulic hose assemblies can vibrate at resonant frequencies set by flow velocity
-
-## Worked Example 1: Added Mass Effect on Subsea Module
-
-**Given:**
-
-- Subsea module approximated as a rectangular box: $3 \times 3 \times 2$ m
-- Module mass in air: $m_s = 15{,}000$ kg
-- Added mass coefficient for heave: $C_a = 0.68$ (from panel method)
-- Displaced volume: $\mathcal{V} = 18$ m³, seawater $\rho = 1025$ kg/m³
-
-**Find:** Effective mass during lift through the splash zone and the period of heave oscillation if suspended on a crane wire of stiffness $k = 500$ kN/m.
-
-**Solution:**
-
-Added mass:
+A simply supported steel pipe 6 m long with outer diameter 0.15 m and wall thickness 10 mm carries water. Then $A_i = \pi(0.13)^2/4 = 0.01327$ m², $I = \pi(0.15^4 - 0.13^4)/64 = 1.083 \times 10^{-5}$ m⁴, $EI = 2.274 \times 10^6$ N·m², $m_f = 13.27$ kg/m and
 
 $$
-m_a = C_a \rho \mathcal{V} = 0.68 \times 1025 \times 18 = 12{,}546 \text{ kg}
+U_{cr} = \frac{\pi}{6} \sqrt{\frac{2.274 \times 10^6}{13.27}} = 0.524 \times 414 = 217
+\text{ m/s}
 $$
 
-Effective mass:
+far above any pipeline velocity. Divergence becomes a practical concern only for soft hoses and very long unsupported spans.
+
+## Sloshing
+
+A liquid with a free surface in a partly filled tank has its own natural modes. For a rectangular tank of length $L_t$ filled to depth $h$, linear potential theory gives the longitudinal sloshing frequencies
 
 $$
-m_{eff} = m_s + m_a = 15{,}000 + 12{,}546 = 27{,}546 \text{ kg}
+\omega_n^2 = g \frac{n\pi}{L_t}\tanh\left(\frac{n\pi h}{L_t}\right),
+\qquad n = 1, 2, \dots
 $$
 
-Natural period of heave oscillation:
+A cargo tank 40 m long filled to 10 m has a first sloshing period of 8.8 s, within the range of ship roll and pitch periods. Resonant sloshing produces impact pressures on the tank walls and roof, which are short, very high and statistically scattered, and the liquid's motion couples with the ship's roll through the shift of its centre of mass. Membrane LNG carriers therefore restrict the fill levels at which they may sail, and tanks are fitted with baffles that change the sloshing frequencies and add damping. Sloshing in fuel tanks of aircraft and launch vehicles couples with the attitude control system in the same way. Impact pressures are computed with free-surface CFD and calibrated against model tests (Faltinsen and Timokha 2009).
 
-$$
-T_n = 2\pi \sqrt{\frac{m_{eff}}{k}} = 2\pi \sqrt{\frac{27{,}546}{500{,}000}} = 1.47
-\text{ s}
-$$
+## Modelling Approaches
 
-The added mass nearly **doubles** the effective inertia, significantly increasing the oscillation period compared to the in-air case ($T_{air} = 1.09$ s).
+| Approach | Fluid model | Suits | Limitations |
+| --- | --- | --- | --- |
+| Added-mass correction | Potential-flow or tabulated $C_a$ | Natural frequencies of submerged members, first estimates | No damping, no excitation, constant $C_a$ |
+| Acoustic or potential fluid elements in FE | Linear, incompressible or acoustic fluid meshed around the structure | Wet modes of tanks, hulls, dams under earthquake | Linear, no flow, no free-surface waves in the simplest form |
+| Strip theory or panel method with modal structure | Linear potential flow with free surface | Ship and offshore hydroelasticity in waves | Small motions, no slamming or breaking |
+| Partitioned CFD with FE | Navier–Stokes with free surface (VOF) | Slamming, green water, sloshing impacts, flexible blades | Expensive; added-mass instability of loosely coupled schemes |
 
-## Worked Example 2: Whipping Bending Moment
+The first two rows are one-way corrections built into the structural model; the last two are two-way coupled analyses whose numerical treatment is the subject of [Fluid–Structure Interaction: Coupling Methods](./fluid_structure_interaction.md). The [FSI theory note](../../fluid_mechanics/specialized_topics/fluid_structure_interaction.md) gives the general field equations and interface conditions.
 
-**Given:**
+## Key Takeaways
 
-- Container ship: $L = 350$ m, first flexural natural frequency $f_1 = 0.45$ Hz (wet)
-- Rigid-body wave bending moment: $M_{wave} = 8{,}000$ MN·m (sagging)
-- Bow slam impulse excites the first mode with an initial velocity $\dot{q}_1(0)$
-- Modal mass $m_1 = 50{,}000$ tonnes, damping ratio $\zeta = 0.015$
+- Added mass is the inertia of the disturbed fluid; for a circular cylinder it equals the displaced mass, $\rho\pi D^2/4$ per unit length.
+- Wet natural frequencies are $f_{\mathrm{dry}}\sqrt{m_s/(m_s + m_a)}$ mode by mode; low modes and thin, light structures in water are affected most.
+- Large ships have two-node frequencies low enough to be excited by waves (springing) and by slamming (whipping).
+- Internal flow softens a pipe and can make it diverge or flutter; external flow causes VIV.
+- Sloshing frequencies of partly filled tanks can coincide with vessel motions and produce impact loads.
 
-**Find:** Whipping bending moment if the slam impulse $I = 5{,}000$ kN·s.
+## Related Scripts
 
-**Solution:**
-
-Initial modal velocity:
-
-$$
-\dot{q}_1(0) = \frac{I}{m_1} = \frac{5 \times 10^6}{5 \times 10^7} = 0.10 \text{ m/s}
-$$
-
-Peak modal displacement (free vibration decay envelope):
-
-$$
-q_{1,max} = \frac{\dot{q}_1(0)}{\omega_1} = \frac{0.10}{2\pi \times 0.45} = 0.0354
-\text{ m}
-$$
-
-The product of modal stiffness and modal displacement is the peak modal restoring **force**, not a bending moment:
-
-$$
-k_1 q_{1,max} = \omega_1^2 m_1 q_{1,max} = (2.83)^2 \times 5 \times 10^7 \times 0.0354
-\approx 1.41 \times 10^7 \text{ N}
-$$
-
-Converting this to a hull-girder bending moment requires the modal bending-moment distribution, $`M_{whip}(x) = EI(x)\,\phi_1''(x)\,q_{1,max}`$, which depends on the mode shape and its normalisation and is not given here. For large container ships the whipping contribution is typically 30–50% of the wave bending moment, i.e. about 2,400–4,000 MN·m for this ship. Real slam loads are also spread in time and space rather than being a single ideal impulse, which reduces the modal response. The example illustrates why **whipping cannot be ignored** in modern hull girder design.
-
-## Worked Example 3: Critical Velocity for a Fluid-Conveying Pipe
-
-**Given:**
-
-- Simply supported pipe: $L = 6$ m, outer diameter $D_o = 0.15$ m, wall thickness $t = 0.01$ m
-- Steel: $E = 210$ GPa, $\rho_s = 7850$ kg/m³
-- Internal fluid: water, $\rho_f = 1000$ kg/m³
-
-**Find:** Critical flow velocity for divergence.
-
-**Solution:**
-
-Internal area: $A_i = \pi(D_o - 2t)^2/4 = \pi(0.13)^2/4 = 0.01327$ m²
-
-Moment of inertia: $I = \pi(D_o^4 - D_i^4)/64 = \pi(0.15^4 - 0.13^4)/64 = 1.083 \times 10^{-5}$ m⁴
-
-Flexural rigidity: $EI = 210 \times 10^9 \times 1.083 \times 10^{-5} = 2.274 \times 10^6$ N·m²
-
-Fluid mass per unit length: $m_f = \rho_f A_i = 1000 \times 0.01327 = 13.27$ kg/m
-
-Critical velocity:
-
-$$
-U_{cr} = \frac{\pi}{L} \sqrt{\frac{EI}{m_f}} = \frac{\pi}{6}
-\sqrt{\frac{2.274 \times 10^6}{13.27}} = 0.524 \times 414.0 = 217 \text{ m/s}
-$$
-
-This is well above typical pipeline flow velocities ($< 10$ m/s), so divergence instability is not a concern for this configuration. However, for longer, more flexible pipes (e.g., elastomeric hoses) the critical velocity can be much lower.
-
-## Applications in Marine and Offshore Engineering
-
-### Ship Design
-
-- Hull girder strength must account for hydroelastic (springing and whipping) loads
-- Classification rules (IACS, DNV, Lloyd's) now include hydroelastic load components
-- Fatigue damage from springing can contribute 30% or more of the total midships fatigue
-
-### Offshore Platform Installation
-
-- Heavy lifts through the splash zone require added mass in dynamic analysis
-- Lowering operations use heave compensators tuned to the wet natural frequency
-- Hydrodynamic slam loads on flat-bottomed modules can govern lifting sling design
-
-### Flexible Risers and Umbilicals
-
-- Internal flow effects are included in global riser analysis
-- VIV interaction with hydroelastic response determines fatigue life
-- Cross-section deformation (ovalisation) under pressure is a hydroelastic problem
-
-### Underwater Vehicles and Submarines
-
-- Added mass dominates the inertial properties, especially in pitch and yaw
-- Manoeuvring simulation requires frequency-dependent hydrodynamic coefficients
-- Torpedo launch transients involve impulsive hydroelastic loading
-
-### Tidal and Wave Energy Devices
-
-- Flexible turbine blades interact with unsteady tidal flow
-- Wave energy converters rely on radiation damping for power extraction
-- Optimising the power capture requires tuning of hydroelastic parameters:
-
-$$
-P_{max} = \frac{|F_{exc}|^2}{8 b_{rad}}
-$$
-
-where $b_{rad}$ is the radiation damping coefficient at resonance.
-
-## Design Considerations
-
-### Modelling Fidelity
-
-- Simple beam + strip theory models are fast and suitable for preliminary design
-- Full 3-D panel method + FE coupling is needed for detailed design
-- CFD coupling is required for impact and highly nonlinear events
-
-### Frequency Dependence
-
-- Added mass and radiation damping are functions of oscillation frequency
-- Low-frequency modes see higher added mass than high-frequency modes
-- Frequency-domain analysis handles this naturally; time-domain requires convolution integrals or state-space approximations
-
-### Validation
-
-- Model basin tests with flexible models (segmented or continuous backbone) validate hydroelastic predictions
-- Full-scale monitoring (strain gauges, accelerometers) on ships and platforms provides validation data
-- Benchmark cases (e.g., ISSC comparative studies) are used to verify numerical tools
-
-Hydroelasticity extends classical structural analysis into the fluid domain, revealing phenomena that rigid-body assumptions cannot capture. For modern marine and offshore structures, hydroelastic analysis is increasingly a design requirement rather than an academic exercise.
+- [Partitioned Fluid–Structure Coupling and the Added-Mass Instability](../../../scripts/algorithms/fluid_loading_partitioned_fsi/): couples a structure solver and a fluid solver through their interface in the Dirichlet–Neumann way used by partitioned FSI codes, and shows that explicit coupling becomes unstable once the added mass of the fluid exceeds the structural mass, whatever the time step, while implicit coupling with Aitken relaxation converges to the monolithic solution.
+- [Ship Hull in Water](../../../scripts/plots/ship_hull_in_water/): draws a side-view sketch of a ship hull sitting in a sinusoidal free-surface wave and annotates it with the Froude number $Fr = U/\sqrt{gL}$.
 
 ## Exercises
 
-**Exercise 1.** A steel pipe of outer diameter 0.5 m has structural mass 150 kg/m (empty, ends sealed) and oscillates transversely in seawater ($\rho = 1025$ kg/m³). Using $C_a = 1.0$, find the added mass per unit length and the percentage reduction of the natural frequency compared with the in-air value.
+**Exercise 1.** A steel pipe of outer diameter 0.5 m with sealed ends has structural mass 150 kg/m and vibrates transversely in seawater ($\rho = 1025$ kg/m³). With $C_a = 1$, find the added mass per unit length and the reduction of the natural frequency compared with air.
 
 <details>
 <summary>Answer</summary>
 
 ```math
-m_a = C_a\rho \frac{\pi D^2}{4} = 1025 \times \frac{\pi \times 0.25}{4} = 201
-\text{ kg/m}
+m_a = C_a\rho\frac{\pi D^2}{4} = 1025 \times \frac{\pi \times 0.25}{4} = 201 \text{ kg/m}
 ```
 
 ```math
-\frac{f_{n,fluid}}{f_{n,vacuum}} = \sqrt{\frac{150}{150 + 201}} = 0.653
+\frac{f_{\mathrm{wet}}}{f_{\mathrm{dry}}} = \sqrt{\frac{150}{150 + 201}} = 0.653
 ```
 
-The natural frequency drops by about 35%.
+The natural frequency drops by 35%.
 
 </details>
 
-**Exercise 2.** Classify each effect as hydrostatic, hydrokinetic or hydroinertial: (a) the change in buoyancy as a floating module heaves; (b) the energy radiated away as waves by a heaving buoy; (c) the added mass that resists a hull during a slam. Then explain why a partitioned FSI scheme can become unstable when $m_a > m_s$.
+**Exercise 2.** A rectangular cargo tank is 40 m long. Find the first sloshing period at fill depths of 10 m and 20 m. If the ship's pitch period is about 8 s, which filling is more critical?
 
 <details>
 <summary>Answer</summary>
 
-(a) Hydrostatic (depends on displacement). (b) Hydrokinetic (radiation damping depends on velocity). (c) Hydroinertial (depends on acceleration).
+With $k = \pi/40 = 0.0785$ rad/m:
 
-In a staggered scheme the fluid force is computed from the previous structural acceleration: $m_s\ddot{x}^{(i+1)} = F - m_a\ddot{x}^{(i)}$. An error in the acceleration therefore evolves as $`e^{(i+1)} = -(m_a/m_s)\,e^{(i)}`$. It grows, with alternating sign, whenever $m_a/m_s > 1$, which is typical of light structures in water and of blood-vessel models. Relaxation, strong coupling or monolithic schemes are needed in that case.
+```math
+h = 10 \text{ m}: \quad \omega_1 = \sqrt{9.81 \times 0.0785 \tanh(0.785)} = 0.711 \text{ rad/s}, \quad T_1 = 8.8 \text{ s}
+```
+
+```math
+h = 20 \text{ m}: \quad \omega_1 = \sqrt{9.81 \times 0.0785 \tanh(1.571)} = 0.841 \text{ rad/s}, \quad T_1 = 7.5 \text{ s}
+```
+
+Both are close to 8 s, so both fillings are critical: 8 s lies between the two periods. Partial fills in this range are what fill-level restrictions forbid.
 
 </details>
 
-**Exercise 3.** For the pipe of Example 3, how long would a simply supported span have to be for the divergence velocity to drop to 10 m/s? Comment on the result.
+**Exercise 3.** For the pipe of the divergence example, how long would a simply supported span have to be for the divergence velocity to fall to 10 m/s?
 
 <details>
 <summary>Answer</summary>
 
 ```math
-L = \frac{\pi}{U_{cr}} \sqrt{\frac{EI}{m_f}} = \frac{\pi}{10} \times 414.0 = 130
-\text{ m}
+L = \frac{\pi}{U_{cr}}\sqrt{\frac{EI}{m_f}} = \frac{\pi}{10} \times 414 = 130 \text{ m}
 ```
 
-A 130 m unsupported steel span is unrealistic, so divergence is not a practical concern for stiff steel piping at normal flow speeds. It becomes relevant for soft hoses, where $EI$ is orders of magnitude smaller.
+An unsupported 130 m steel span is unrealistic, so divergence does not govern stiff steel piping. It governs soft hoses, where $EI$ is orders of magnitude smaller.
 
 </details>
 
-**Exercise 4.** A heaving wave energy converter at resonance is driven by an excitation force of amplitude $|F_{exc}|$ and has radiation damping $b_{rad}$. A power take-off adds linear damping $b_{pto}$. Show that the absorbed power is maximized when $b_{pto} = b_{rad}$ and that $P_{max} = |F_{exc}|^2/(8b_{rad})$. Evaluate it for $|F_{exc}| = 500$ kN and $b_{rad} = 200$ kN·s/m.
+**Exercise 4.** A heaving wave-energy converter at resonance is driven by an excitation force of amplitude $|F_{\mathrm{exc}}|$ and has radiation damping $b_r$. A power take-off adds linear damping $b_p$. Show that the mean absorbed power is largest when $b_p = b_r$ and equals $|F_{\mathrm{exc}}|^2/(8b_r)$. Evaluate it for $|F_{\mathrm{exc}}| = 500$ kN and $b_r = 200$ kN·s/m.
 
 <details>
 <summary>Answer</summary>
 
-At resonance the inertia and stiffness terms cancel, so the velocity amplitude is $V = |F_{exc}|/(b_{rad} + b_{pto})$. The mean absorbed power is
+At resonance the inertia and stiffness terms cancel, so the velocity amplitude is $V = |F_{\mathrm{exc}}|/(b_r + b_p)$ and the mean absorbed power is
 
 ```math
-P = \frac{1}{2}b_{pto}V^2 = \frac{1}{2} \frac{b_{pto}|F_{exc}|^2}{(b_{rad} + b_{pto})^2}
+P = \frac12 b_pV^2 = \frac12\frac{b_p|F_{\mathrm{exc}}|^2}{(b_r + b_p)^2}
 ```
 
-Setting $dP/db_{pto} = 0$ gives $b_{pto} = b_{rad}$, and then $P_{max} = \frac{|F_{exc}|^2}{8b_{rad}}$.
+Setting $dP/db_p = 0$ gives $(b_r + b_p) - 2b_p = 0$, so $b_p = b_r$, and then $P_{\max} = |F_{\mathrm{exc}}|^2/(8b_r)$:
 
 ```math
-P_{max} = \frac{(5 \times 10^5)^2}{8 \times 2 \times 10^5} = 156 \text{ kW}
+P_{\max} = \frac{(5 \times 10^5)^2}{8 \times 2 \times 10^5} = 156 \text{ kW}
 ```
+
+Radiation damping is a hydroelastic quantity in its own right: a body that absorbs wave energy well must also radiate waves well.
 
 </details>
 
-**Exercise 5.** For the subsea module of Example 1 ($`m_{eff} = 27\,546`$ kg in water), what crane-wire stiffness would keep the heave natural period below 1.0 s? Why is it important to use the wet effective mass rather than the dry mass in this check?
+**Exercise 5.** For the subsea module of the worked example (effective mass 27 546 kg in water), what crane-wire stiffness keeps the heave natural period below 1.0 s? What period would the submerged system have if the wire had been sized using the dry mass?
 
 <details>
 <summary>Answer</summary>
 
 ```math
-k \geq \frac{4\pi^2 m_{eff}}{T_n^2} = 39.48 \times 27\,546 = 1.09 \text{ MN/m}
+k \ge \frac{4\pi^2m_{\mathrm{eff}}}{T_n^2} = 39.48 \times 27\,546 = 1.09 \text{ MN/m}
 ```
 
-Using only the dry mass (15 000 kg) would suggest that 0.59 MN/m is enough. With that stiffness the real submerged system would have a period of about 1.36 s, closer to the range excited by vessel motion and waves. Added mass nearly doubles the inertia, so resonance checks, heave-compensator tuning and snap-load assessments must use wet properties.
+The dry mass of 15 000 kg would suggest $k = 0.59$ MN/m. With that wire the submerged module would have a period of $`2\pi\sqrt{27\,546/592\,000} = 1.36`$ s, 36% longer than intended.
 
 </details>
 
 ## References
 
-- R. E. D. Bishop, W. G. Price, *Hydroelasticity of Ships*, Cambridge University Press, 1979.
-- J. N. Newman, *Marine Hydrodynamics*, MIT Press, 1977.
-- O. M. Faltinsen, *Sea Loads on Ships and Offshore Structures*, Cambridge University Press, 1990.
-- M. P. Païdoussis, *Fluid-Structure Interactions: Slender Structures and Axial Flow*, Vol. 1, Academic Press, 1998.
-- T. I. Fossen, *Handbook of Marine Craft Hydrodynamics and Motion Control*, Wiley, 2011.
+- Bishop, R. E. D., & Price, W. G., *Hydroelasticity of Ships*, Cambridge University Press, 1979.
+- Newman, J. N., *Marine Hydrodynamics*, MIT Press, 1977.
+- Faltinsen, O. M., *Sea Loads on Ships and Offshore Structures*, Cambridge University Press, 1990.
+- Faltinsen, O. M., & Timokha, A. N., *Sloshing*, Cambridge University Press, 2009.
+- Païdoussis, M. P., *Fluid-Structure Interactions: Slender Structures and Axial Flow*, Vol. 1, Academic Press, 1998.
+- Blevins, R. D., *Formulas for Natural Frequency and Mode Shape*, Van Nostrand Reinhold, 1979.
+- Sumer, B. M., & Fredsøe, J., *Hydrodynamics Around Cylindrical Structures*, revised ed., World Scientific, 2006.
+- Rao, S. S., *Mechanical Vibrations*, 6th ed., Pearson, 2017.

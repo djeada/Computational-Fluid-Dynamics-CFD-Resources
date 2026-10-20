@@ -1,329 +1,196 @@
 # Rigid Body Kinetics
 
-Rigid body kinetics extends Newton's laws from particles to bodies with finite size and shape. Both translational and rotational equations of motion must be considered, introducing the mass moment of inertia as the rotational analog of mass.
+Rigid body kinetics relates the forces and moments on a body of finite size to its translation and rotation. Two equations do this: the mass centre accelerates as a particle under the resultant force, and the moment about the mass centre equals the rate of change of angular momentum, which for plane motion is $I_G\alpha$. This note covers mass moments of inertia and the parallel-axis theorem, the three equations of plane motion and their special cases, rolling with and without slip, and, briefly, Euler's equations for rotation in three dimensions with the stability of spin about principal axes and gyroscopic moments. Kinematics of the same bodies is in [Rigid Body Kinematics](rigid_body_kinematics.md); integrated forms are in [Work and Energy Methods](work_energy.md) and [Impulse and Momentum](impulse_momentum.md).
+
+## Problem Statement
+
+A rigid body of mass $m$ (kg) with known geometry and mass distribution, alone or connected to other bodies by pins, cords and contacts, moves under known applied forces and couples, gravity and support reactions. Given the forces, find the linear acceleration of the mass centre $\mathbf{a}_G$ and the angular acceleration $\alpha$; or, given the motion, find the reactions, cord tensions, friction forces and driving torques needed to produce it. The body does not deform, and for plane motion it is symmetric about the plane of motion (or that plane is a plane of mass symmetry), so the angular momentum is parallel to $\boldsymbol{\omega}$. The governing equations of plane motion are
+
+$$
+\sum F_x = m(a_G)_x,
+\qquad \sum F_y = m(a_G)_y,
+\qquad \sum M_G = I_G\alpha
+$$
+
+and in three dimensions $\sum\mathbf{F} = m\mathbf{a}_G$ and $\sum\mathbf{M}_G = \dot{\mathbf{H}}_G$, which in principal axes are Euler's equations. Forces are in N, moments in N·m and moments of inertia in kg·m².
 
 ## Mass Moment of Inertia
 
-The **mass moment of inertia** quantifies a body's resistance to angular acceleration about a given axis:
+The moment of inertia about an axis is
 
 ```math
-I = \int_m r^2 \, dm
+I = \int_m r^2\, dm
 ```
 
-where $r$ is the perpendicular distance from the axis to the element $dm$.
+where $r$ is the perpendicular distance of the element $dm$ from the axis. It measures resistance to angular acceleration about that axis, as mass measures resistance to linear acceleration, and it depends on the axis chosen. The radius of gyration $k = \sqrt{I/m}$ is the distance at which the whole mass would have the same moment of inertia.
 
-### Common Shapes
-
-| Shape | Axis | Moment of Inertia |
+| Body | Axis | $I$ |
 | --- | --- | --- |
-| Slender rod (length $L$) | Through center, perpendicular | $\frac{1}{12}mL^2$ |
-| Slender rod (length $L$) | Through end, perpendicular | $\frac{1}{3}mL^2$ |
-| Thin disk/cylinder (radius $R$) | Through center, perpendicular to face | $\frac{1}{2}mR^2$ |
-| Solid sphere (radius $R$) | Through center | $\frac{2}{5}mR^2$ |
-| Thin-walled hollow sphere (radius $R$) | Through center | $\frac{2}{3}mR^2$ |
-| Rectangular plate ($a \times b$) | Through center, perpendicular to plate | $\frac{1}{12}m(a^2 + b^2)$ |
+| slender rod, length $L$ | through centre, perpendicular to rod | $\tfrac{1}{12}mL^2$ |
+| slender rod, length $L$ | through one end, perpendicular to rod | $\tfrac{1}{3}mL^2$ |
+| thin ring or hoop, radius $R$ | central axis | $mR^2$ |
+| solid disk or cylinder, radius $R$ | central axis | $\tfrac{1}{2}mR^2$ |
+| solid cylinder, radius $R$, length $L$ | through centre, perpendicular to axis | $\tfrac{1}{12}m(3R^2 + L^2)$ |
+| solid sphere, radius $R$ | diameter | $\tfrac{2}{5}mR^2$ |
+| thin spherical shell, radius $R$ | diameter | $\tfrac{2}{3}mR^2$ |
+| rectangular plate or box, sides $a$, $b$ | through centre, perpendicular to $a$ and $b$ | $\tfrac{1}{12}m(a^2 + b^2)$ |
 
 ### Parallel-Axis Theorem
 
-If $I_G$ is the moment of inertia about an axis through the mass center $G$, then the moment about a parallel axis at distance $d$ is:
+If $I_G$ is the moment of inertia about an axis through the mass centre, the moment about a parallel axis at distance $d$ is
 
 $$
 I = I_G + md^2
 $$
 
-### Radius of Gyration
+The cross term $`2d\int x\,dm`$ vanishes because $x$ is measured from the mass centre. $I_G$ is therefore the smallest moment of inertia among all parallel axes. For a thin plate, the perpendicular-axis theorem $I_z = I_x + I_y$ also holds, with $z$ normal to the plate.
 
-The radius of gyration $k$ satisfies $I = mk^2$:
+### Composite Bodies
 
-$$
-k = \sqrt{\frac{I}{m}}
-$$
-
-## Equations of Motion for Rigid Bodies
-
-For a rigid body in plane motion, three independent scalar equations govern the dynamics:
-
-$$
-\sum F_x = m(a_G)_x
-$$
-
-$$
-\sum F_y = m(a_G)_y
-$$
-
-$$
-\sum M_G = I_G \alpha
-$$
-
-where $G$ is the mass center, $a_G$ is the acceleration of the mass center, and $\alpha$ is the angular acceleration. Alternatively, moments can be summed about any point $P$:
-
-$$
-\sum M_P = I_G \alpha + m \mathbf{r}_{G/P} \times \mathbf{a}_G
-$$
-
-## Special Cases of Plane Motion
-
-### Pure Translation ($\alpha = 0$, $\omega = 0$)
-
-All points have the same acceleration. The moment equation simplifies to:
-
-$$
-\sum M_G = 0 \quad \text{(if no angular acceleration)}
-$$
-
-Forces may still produce a net moment about points other than $G$.
-
-### Rotation About a Fixed Axis
-
-For rotation about a fixed point $O$:
-
-$$
-\sum M_O = I_O \alpha
-$$
-
-where $I_O = I_G + md^2$ and $d$ is the distance from $O$ to $G$. The mass center has both tangential and normal acceleration:
+The moment of inertia of a body made of simple parts is the sum of the parts' moments about the same axis, each moved there with the parallel-axis theorem; holes count as negative mass. A pendulum made of a uniform 2 kg rod of length 1 m pivoted at one end, with a 1 kg disk of radius 0.1 m centred at the other end, has
 
 ```math
-(\mathbf{a}_G)_t = \alpha \, d, \quad (\mathbf{a}_G)_n = \omega^2 d
+I_O = \tfrac{1}{3}(2)(1)^2 + \left[\tfrac{1}{2}(1)(0.1)^2 + (1)(1)^2\right] = 0.667 + 1.005 = 1.672 \text{ kg·m}^2
 ```
 
-### General Plane Motion
+and its mass centre is $d = (2 \times 0.5 + 1 \times 1)/3 = 0.667$ m below the pivot.
 
-All three equations are needed simultaneously. The mass center translates while the body rotates:
+## Equations of Plane Motion
 
-$$
-\sum F_x = m(a_G)_x, \quad \sum F_y = m(a_G)_y, \quad \sum M_G = I_G \alpha
-$$
-
-Kinematic constraints (e.g., rolling without slipping: $a_G = \alpha R$) provide additional relationships.
-
-## D'Alembert's Principle for Rigid Bodies
-
-D'Alembert's principle introduces an **inertia force** $-m\mathbf{a}_G$ at the mass center and an **inertia couple** $-I_G\alpha$:
+For a slab in plane motion the angular momentum about the mass centre is $H_G = I_G\omega$, and the moment equation $\sum M_G = \dot{H}_G$ becomes $\sum M_G = I_G\alpha$. Combined with the motion of the mass centre, this gives three scalar equations. Moments may be taken about any point $P$ instead, provided the moment of $m\mathbf{a}_G$ is included:
 
 $$
-\sum \mathbf{F} + (-m\mathbf{a}_G) = \mathbf{0}
+\sum M_P = I_G\alpha + \left(\mathbf{r}_{G/P} \times m\mathbf{a}_G\right)\cdot\mathbf{k}
 $$
 
-$$
-\sum M_G + (-I_G \alpha) = 0
-$$
+This is the statement that the moments of the external forces about $P$ equal the moments of the kinetic diagram ($m\mathbf{a}_G$ at $G$ plus the couple $I_G\alpha$) about $P$. Choosing $P$ at an unknown reaction removes that reaction from the equation.
 
-This converts the dynamic problem into a pseudo-static equilibrium, allowing the use of static equilibrium techniques.
+### Procedure
+
+1. Draw the free-body diagram with all external forces and couples, and the kinetic diagram with $m(a_G)_x$, $m(a_G)_y$ at $G$ and $I_G\alpha$.
+2. Write the three equations, taking moments about $G$ or about a point that eliminates unknowns.
+3. Relate $\mathbf{a}_G$ and $\alpha$ by kinematics: a fixed pivot, rolling without slipping, or a cord that does not stretch.
+4. Solve, then check assumed conditions: friction below $\mu_sN$, cords in tension, normal forces positive.
+
+### Special Cases
+
+| Motion | Equations |
+| --- | --- |
+| translation, $\omega = \alpha = 0$ | $\sum\mathbf{F} = m\mathbf{a}_G$, $\sum M_G = 0$; moments about other points are not zero |
+| rotation about a fixed axis through $O$ | $\sum M_O = I_O\alpha$ with $I_O = I_G + md^2$; $(a_G)_t = \alpha d$, $(a_G)_n = \omega^2d$ give the pin reactions |
+| rolling without slipping on a flat surface | $a_G = \alpha R$; friction is unknown and must satisfy $F \le \mu_sN$ |
+| rolling with slipping | $a_G$ and $\alpha$ independent; $F = \mu_kN$ opposing the slip velocity of the contact point |
+
+For a body rolling without slipping, moments about the contact point $C$ give $\sum M_C = I_C\alpha$ only if $G$ is at the centre of a round body rolling on a flat surface, because then $\mathbf{a}_C$ points through $G$; in general the full expression above is needed.
 
 ## Worked Examples
 
-### Example 1: Rolling Cylinder on an Incline
+### Rolling Cylinder on an Incline
 
-A solid cylinder of mass 8 kg and radius 0.2 m rolls without slipping down a 25° incline.
-
-**Given:**
-
-- $m = 8$ kg, $R = 0.2$ m, $\theta = 25^\circ$
-- Rolling without slipping: $a_G = \alpha R$
-- $I_G = \frac{1}{2}mR^2 = \frac{1}{2}(8)(0.04) = 0.16$ kg·m²
-
-**Find:** Acceleration of the center and the friction force.
-
-**Solution:**
-
-**Force equation along the incline** (positive down the slope):
+A solid cylinder ($m = 8$ kg, $R = 0.2$ m, $I_G = \tfrac{1}{2}mR^2 = 0.16$ kg·m²) rolls without slipping down a $25^\circ$ incline. Along the slope, $mg\sin 25^\circ - F = ma_G$, and about $G$, $FR = I_G\alpha = I_Ga_G/R$, so $F = 4a_G$. Then
 
 $$
-mg\sin\theta - f = ma_G
+33.17 - 4a_G = 8a_G \quad\Rightarrow\quad a_G = 2.76 \text{ m/s}^2 = \tfrac{2}{3}g\sin
+25^\circ,
+\qquad F = 11.06 \text{ N}
 $$
 
-$$
-8(9.81)\sin 25^\circ - f = 8a_G
-$$
+The normal force is $N = mg\cos 25^\circ = 71.1$ N, so rolling without slipping requires $\mu_s \ge 11.06/71.1 = 0.155$. A block sliding without friction would accelerate at $g\sin 25^\circ = 4.15$ m/s²; the cylinder is slower because part of the work of gravity goes into rotation.
+
+### Rod Released from Horizontal
+
+A uniform rod ($m = 3$ kg, $L = 1.2$ m) pivoted at one end has $I_O = \tfrac{1}{3}mL^2 = 1.44$ kg·m². Released from rest in the horizontal position, $\sum M_O = mgL/2 = I_O\alpha$ gives $\alpha = 17.66/1.44 = 12.26$ rad/s², or $3g/(2L)$. The mass centre accelerates downward at $\alpha L/2 = \tfrac{3}{4}g$, so the pin carries only $\tfrac{1}{4}mg$ at that instant (Exercise 3). When the rod reaches the vertical, energy conservation gives $mgL/2 = \tfrac{1}{2}I_O\omega^2$, so $\omega = 4.95$ rad/s.
+
+### Pulley with Two Masses
+
+A solid disk pulley ($m_p = 4$ kg, $R = 0.15$ m, $I_p = 0.045$ kg·m²) carries $m_1 = 6$ kg and $m_2 = 4$ kg on a cord that does not slip. With $a$ the downward acceleration of $m_1$ and $\alpha = a/R$:
 
 $$
-33.17 - f = 8a_G \quad \text{...(1)}
+m_1g - T_1 = m_1a,
+\qquad T_2 - m_2g = m_2a,
+\qquad (T_1 - T_2)R = I_p \frac{a}{R}
 $$
 
-**Moment equation about $G$:**
+Adding the three equations, with $I_p/R^2 = 2$ kg,
 
 $$
-fR = I_G \alpha = I_G \frac{a_G}{R}
+a = \frac{(m_1 - m_2)g}{m_1 + m_2 + I_p/R^2} = \frac{19.62}{12} = 1.635 \text{ m/s}^2
 $$
 
-$$
-f(0.2) = 0.16 \frac{a_G}{0.2}
-$$
+and $T_1 = 49.05$ N, $T_2 = 45.78$ N. The tensions differ because the cord must accelerate the pulley's rotation; with a massless pulley they would be equal.
 
-$$
-f = 4a_G \quad \text{...(2)}
-$$
+## Three-Dimensional Rotation
 
-Substituting (2) into (1):
+### Angular Momentum and the Inertia Tensor
 
-$$
-33.17 - 4a_G = 8a_G
-$$
+For a body rotating with $\boldsymbol{\omega}$, the angular momentum about the mass centre is
 
-$$
-a_G = \frac{33.17}{12} = 2.76 \text{ m/s}^2
-$$
+```math
+\mathbf{H}_G = \mathbf{I}_G\,\boldsymbol{\omega},
+\qquad
+\mathbf{I}_G = \begin{bmatrix} I_{xx} & -I_{xy} & -I_{xz} \\ -I_{xy} & I_{yy} & -I_{yz} \\ -I_{xz} & -I_{yz} & I_{zz} \end{bmatrix}
+```
 
-$$
-f = 4(2.764) = 11.06 \text{ N}
-$$
+with $`I_{xx} = \int(y^2 + z^2)\,dm`$ and products of inertia $`I_{xy} = \int xy\,dm`$. In general $\mathbf{H}_G$ is not parallel to $\boldsymbol{\omega}$. The tensor is symmetric, so there are three orthogonal principal axes in which the products vanish; their moments $I_1$, $I_2$, $I_3$ are the eigenvalues of $\mathbf{I}_G$. A shaft whose rotation axis is not a principal axis is dynamically unbalanced: $\mathbf{H}_G$ rotates with it and the bearings must supply a rotating moment even at constant speed (see [Rotating Machinery](../mechanical_systems/rotating_machinery.md)).
 
-Note: The acceleration is $\frac{2}{3}g\sin\theta$, less than that of a sliding block ($g\sin\theta$), because energy goes into rotation.
+### Euler's Equations
 
-### Example 2: Simple Pendulum (Compound)
+Writing $\mathbf{H}_G$ in axes fixed in the body, which rotate with $\boldsymbol{\omega}$, the rotating-frame derivative of [Rigid Body Kinematics](rigid_body_kinematics.md#rotating-reference-frames) gives $`\sum\mathbf{M}_G = (\dot{\mathbf{H}}_G)_{\mathrm{body}} + \boldsymbol{\omega} \times \mathbf{H}_G`$. In principal axes this is
 
-A uniform rod of mass 3 kg and length 1.2 m is pivoted at one end and released from a horizontal position.
+```math
+\begin{aligned}
+  \sum M_1 &= I_1\dot{\omega}_1 - (I_2 - I_3)\,\omega_2\omega_3 \\
+  \sum M_2 &= I_2\dot{\omega}_2 - (I_3 - I_1)\,\omega_3\omega_1 \\
+  \sum M_3 &= I_3\dot{\omega}_3 - (I_1 - I_2)\,\omega_1\omega_2
+\end{aligned}
+```
 
-**Given:**
+The equations are nonlinear and coupled even with no applied moment. For a plane slab rotating about axis 3 with $\omega_1 = \omega_2 = 0$ the first two give zero moment and the third reduces to $\sum M_G = I_G\alpha$.
 
-- $m = 3$ kg, $L = 1.2$ m
-- $I_O = \frac{1}{3}mL^2 = \frac{1}{3}(3)(1.44) = 1.44$ kg·m²
-- Released from horizontal ($\theta = 0$)
+### Stability of Spin About a Principal Axis
 
-**Find:** Angular acceleration immediately after release and angular velocity at the vertical position.
+With $\sum\mathbf{M}_G = \mathbf{0}$, a steady spin $\Omega$ about any principal axis is a solution. Perturbing a spin about axis 1 and linearizing gives
 
-**Solution:**
+```math
+\ddot{\omega}_2 = \Omega^2\, \frac{(I_3 - I_1)(I_1 - I_2)}{I_2I_3}\,\omega_2
+```
 
-**At $\theta = 0$ (horizontal):**
+The coefficient is negative, giving a bounded wobble, when $I_1$ is the largest or the smallest moment, and positive, giving exponential growth, when it is the intermediate one.
 
-Taking moments about pivot $O$:
+![Torque-free rotation of a box about its three principal axes](../../../scripts/algorithms/dynamics_torque_free_rigid_body/dynamics_torque_free_rigid_body.png)
 
-$$
-mg \frac{L}{2} = I_O \alpha
-$$
+The figure integrates Euler's equations for a 0.5 kg box of 200 × 100 × 30 mm spun at 10 rad/s with a 1% disturbance. About the axes of smallest and largest inertia (panels a and c) the disturbance wobbles at 7.6 and 8.9 rad/s. About the intermediate axis (panel b) it grows at 7.1 s⁻¹ and the spin reverses about every 1.8 s, the motion seen when a book or a tennis racket is tossed spinning about its middle axis. Kinetic energy and $|\mathbf{H}_G|$ stay constant throughout; a body that slowly loses energy while keeping its angular momentum, as a satellite with flexible appendages does, drifts to spin about its axis of largest inertia.
 
-$$
-3(9.81)(0.6) = 1.44\alpha
-$$
+### Gyroscopic Moment
 
-$$
-\alpha = \frac{17.66}{1.44} = 12.26 \text{ rad/s}^2
-$$
+A rotor spinning at $\omega_s$ about its axis with moment of inertia $I_s$, whose axis is turned at a rate $\Omega_p$ perpendicular to it, has an angular momentum vector $I_s\omega_s$ that changes direction at the rate $\Omega_p$. Steady precession therefore needs a moment
 
-**Angular velocity at vertical ($\theta = 90^\circ$):**
+```math
+M = I_s\,\omega_s\,\Omega_p
+```
 
-Using energy methods (gravity does work as the center of mass drops $L/2$):
+about the axis perpendicular to both the spin and the precession. A jet-engine rotor with $I_s = 20$ kg·m² at $\omega_s = 1000$ rad/s in an aircraft pitching at 0.5 rad/s exerts a yawing moment of 10 kN·m on its mounts.
 
-$$
-mg \frac{L}{2} = \frac{1}{2}I_O \omega^2
-$$
+## Common Mistakes
 
-$$
-3(9.81)(0.6) = \frac{1}{2}(1.44)\omega^2
-$$
+1. Using $I_G$ in $\sum M_O = I\alpha$ for a fixed-axis rotation about $O \neq G$.
+2. Summing moments about an accelerating point without including the moment of $m\mathbf{a}_G$.
+3. Assuming the friction force at a rolling contact equals $\mu_sN$, or forgetting to check it against $\mu_sN$.
+4. Taking the two tensions on either side of a pulley with inertia as equal.
+5. Using $\sum\mathbf{M}_G = \mathbf{I}_G\dot{\boldsymbol{\omega}}$ in 3D without the term $\boldsymbol{\omega} \times \mathbf{H}_G$.
 
-$$
-\omega = \sqrt{\frac{2(17.66)}{1.44}} = 4.95 \text{ rad/s}
-$$
+## Key Takeaways
 
-### Example 3: Pulley with Hanging Masses
+- The resultant force accelerates the mass centre; the moment about the mass centre changes the angular momentum, $I_G\alpha$ in plane motion.
+- Moments about any other point must include the moment of $m\mathbf{a}_G$; about a fixed pivot they reduce to $I_O\alpha$.
+- $I = I_G + md^2$ moves a moment of inertia between parallel axes; composite bodies add part by part.
+- Rolling without slipping links $a_G = \alpha R$ and requires the friction force to stay within $\mu_sN$.
+- Euler's equations in principal axes govern 3D rotation; spin about the intermediate axis is unstable, and turning a spinning rotor needs a gyroscopic moment $I_s\omega_s\Omega_p$.
 
-A solid disk pulley of mass 4 kg and radius 0.15 m supports two masses: $m_1 = 6$ kg and $m_2 = 4$ kg connected by a cord.
+## Related Scripts
 
-**Given:**
-
-- Pulley: $m_p = 4$ kg, $R = 0.15$ m, $I_p = \frac{1}{2}m_p R^2 = 0.045$ kg·m²
-- $m_1 = 6$ kg, $m_2 = 4$ kg
-
-**Find:** Acceleration of the masses and tension in each cord segment.
-
-**Solution:**
-
-Let $a$ be the downward acceleration of $m_1$ (upward for $m_2$), and $\alpha = a/R$.
-
-**Mass 1** (moving down): $m_1 g - T_1 = m_1 a$
-
-$$
-6(9.81) - T_1 = 6a \quad \text{...(1)}
-$$
-
-**Mass 2** (moving up): $T_2 - m_2 g = m_2 a$
-
-$$
-T_2 - 4(9.81) = 4a \quad \text{...(2)}
-$$
-
-**Pulley** (rotation): $T_1 R - T_2 R = I_p \alpha = I_p \frac{a}{R}$
-
-$$
-T_1 - T_2 = \frac{I_p a}{R^2} = \frac{0.045a}{0.0225} = 2a \quad \text{...(3)}
-$$
-
-Adding equations (1), (2), (3):
-
-$$
-(6)(9.81) - (4)(9.81) = (6 + 4 + 2)a
-$$
-
-$$
-19.62 = 12a
-$$
-
-$$
-a = 1.635 \text{ m/s}^2
-$$
-
-From (1): $T_1 = 58.86 - 6(1.635) = 49.05$ N
-From (2): $T_2 = 39.24 + 4(1.635) = 45.78$ N
-
-## Applications
-
-### Automotive Engineering
-
-- Wheel dynamics during braking and acceleration
-- Drivetrain torque analysis
-- Vehicle rollover stability
-
-### Industrial Machinery
-
-- Flywheel energy storage and speed regulation
-- Gear train torque and speed calculations
-- Conveyor system motor sizing
-
-### Structural Engineering
-
-- Wind load response of tall structures
-- Seismic analysis of buildings
-- Crane boom dynamics during lifting operations
-
-### Aerospace
-
-- Satellite attitude control and spin stabilization
-- Helicopter rotor dynamics
-- Control surface effectiveness
-
-## Practical Problem-Solving Tips
-
-### 1. Always Draw a Free-Body Diagram and Kinetic Diagram
-
-- The FBD shows all external forces and couples
-- The kinetic diagram shows $m\mathbf{a}_G$ and $I_G\alpha$
-- These two diagrams together embody the equations of motion
-
-### 2. Choose the Moment Center Wisely
-
-- Summing moments about a fixed pivot eliminates unknown reactions
-- Summing about the mass center separates translation from rotation
-- Summing about the contact point of a rolling body can simplify algebra
-
-### 3. Apply Kinematic Constraints
-
-- Rolling without slipping: $a_G = \alpha R$
-- Cord wrapped around pulley: $a = \alpha R$
-- Connected bodies share acceleration at their connection points
-
-### 4. Check the Friction Assumption
-
-- For rolling without slipping, verify $f \leq \mu_s N$
-- If violated, the body slips and $f = \mu_k N$ with $a_G \neq \alpha R$
-
-### 5. Use Energy or Momentum for Efficiency
-
-- If only final velocities are needed, work-energy methods avoid solving for accelerations
-- For impacts, impulse-momentum methods are more direct
-
-Rigid body kinetics provides the tools for analyzing real-world mechanical systems, from simple pendulums to complex machinery, and forms the basis for multibody dynamics and finite element analysis.
+- [Torque-Free Rigid Body Rotation](../../../scripts/algorithms/dynamics_torque_free_rigid_body/): integrates Euler's equations for a rigid box spinning with no applied moment and shows that rotation about the axis of intermediate moment of inertia is unstable.
+- [Slider-Crank Kinematics](../../../scripts/algorithms/dynamics_slider_crank_kinematics/): solves the velocity and acceleration of a slider-crank mechanism with the rigid-body relative-motion equations and checks the results against finite differences of the exact slider position.
 
 ## Exercises
 
@@ -333,74 +200,77 @@ Rigid body kinetics provides the tools for analyzing real-world mechanical syste
 <summary>Answer</summary>
 
 ```math
-I = \frac{1}{12}mL^2 + md^2 = \frac{1}{12}(2)(2.25) + 2(0.25)^2 = 0.375 + 0.125 = 0.5
-\text{ kg·m}^2
+I = \tfrac{1}{12}mL^2 + md^2 = \tfrac{1}{12}(2)(2.25) + 2(0.25)^2 = 0.375 + 0.125 = 0.5 \text{ kg·m}^2
 ```
+
+and $k = \sqrt{I/m} = \sqrt{0.25} = 0.5$ m.
+
+</details>
+
+**Exercise 2.** Show that a round body with radius of gyration $k_G$ rolling without slipping down an incline has $a_G = g\sin\theta/(1 + k_G^2/R^2)$. Evaluate $a_G$ on a $25^\circ$ incline for a thin hoop, a solid cylinder and a solid sphere, and find the minimum $\mu_s$ for the cylinder.
+
+<details>
+<summary>Answer</summary>
+
+Along the slope $mg\sin\theta - F = ma_G$, and about $G$, $FR = mk_G^2a_G/R$, so $F = mk_G^2a_G/R^2$. Substituting gives the stated result.
+
+- Hoop, $k_G^2/R^2 = 1$: $a_G = 2.07$ m/s².
+- Solid cylinder, $1/2$: $a_G = 2.76$ m/s², as in the worked example.
+- Solid sphere, $2/5$: $a_G = 2.96$ m/s².
+
+For the cylinder $F = \tfrac{1}{3}mg\sin\theta$ and $N = mg\cos\theta$, so rolling requires $\mu_s \ge \tfrac{1}{3}\tan 25^\circ = 0.155$.
+
+</details>
+
+**Exercise 3.** For the rod released from horizontal in the worked example, find the pin reaction immediately after release.
+
+<details>
+<summary>Answer</summary>
+
+Just after release $\omega = 0$, so the mass centre has only its tangential, vertical acceleration, $a_G = \alpha L/2 = 12.26 \times 0.6 = 7.36$ m/s² $= \tfrac{3}{4}g$ downward.
+
+Vertically, $mg - R_y = ma_G$, so $R_y = \tfrac{1}{4}mg = 7.36$ N upward. With $\omega = 0$ there is no normal acceleration, so the horizontal reaction is zero.
+
+</details>
+
+**Exercise 4.** A 5 kg mass hangs from a cord wrapped around a solid disk pulley (10 kg, radius 0.2 m) on a frictionless fixed axle. Find the acceleration of the mass and the cord tension. Then find the small-oscillation period of the composite pendulum of the section on composite bodies.
+
+<details>
+<summary>Answer</summary>
+
+Mass: $mg - T = ma$. Pulley: $TR = \tfrac{1}{2}MR^2(a/R)$, so $T = \tfrac{1}{2}Ma$. Combining,
 
 ```math
-k = \sqrt{I/m} = \sqrt{0.25} = 0.5 \text{ m}
+a = \frac{mg}{m + M/2} = \frac{5 \times 9.81}{10} = 4.91 \text{ m/s}^2,
+\qquad
+T = \tfrac{1}{2}(10)(4.905) = 24.5 \text{ N}
 ```
 
+For the pendulum, $\sum M_O = -m_{\mathrm{tot}}gd\sin\theta = I_O\ddot{\theta}$, so for small angles $\omega_n = \sqrt{m_{\mathrm{tot}}gd/I_O} = \sqrt{3 \times 9.81 \times 0.667/1.672} = 3.43$ rad/s and the period is $2\pi/\omega_n = 1.83$ s.
+
 </details>
 
-**Exercise 2.** Show that a body with radius of gyration $k_G$ rolling without slipping down an incline has $a_G = \frac{g\sin\theta}{1 + k_G^2/R^2}$. Evaluate $a_G$ on a $25^\circ$ incline for a thin hoop, a solid cylinder and a solid sphere, and find the minimum $\mu_s$ for the cylinder to roll without slipping.
+**Exercise 5.** A uniform crate 2 m tall and 1 m deep in the direction of travel sits on a truck bed with enough friction to prevent sliding. Find the truck acceleration at which the crate starts to tip.
 
 <details>
 <summary>Answer</summary>
 
-Along the slope: $mg\sin\theta - f = ma_G$. About $G$: $`fR = mk_G^2\,a_G/R`$, so $f = mk_G^2a_G/R^2$. Substituting gives the stated result.
-
-- Hoop ($k_G^2/R^2 = 1$): $a_G = 2.07$ m/s².
-- Solid cylinder ($1/2$): $a_G = 2.76$ m/s² (matches Example 1).
-- Solid sphere ($2/5$): $a_G = 2.96$ m/s².
-
-For the cylinder $f = \frac{1}{3}mg\sin\theta$ and $N = mg\cos\theta$, so no slipping requires $\mu_s \geq \frac{1}{3}\tan 25^\circ = 0.155$.
-
-</details>
-
-**Exercise 3.** For the rod of Example 2 (3 kg, 1.2 m, pivoted at one end and released from horizontal), find the pin reaction immediately after release.
-
-<details>
-<summary>Answer</summary>
-
-Just after release $\omega = 0$, so the mass centre has only tangential (vertical) acceleration: $a_G = \alpha L/2 = 12.26 \times 0.6 = 7.36$ m/s² $= \frac{3}{4}g$ downward.
-
-Vertical: $mg - R_y = ma_G$, so $R_y = m(g - \frac{3}{4}g) = \frac{1}{4}mg = 7.36$ N upward. With $\omega = 0$ there is no normal acceleration, so the horizontal reaction is zero.
-
-</details>
-
-**Exercise 4.** A 5 kg mass hangs from a cord wrapped around a solid disk pulley (mass 10 kg, radius 0.2 m) on a frictionless fixed axle. Find the acceleration of the mass and the cord tension.
-
-<details>
-<summary>Answer</summary>
-
-Mass: $mg - T = ma$. Pulley: $TR = \frac{1}{2}MR^2(a/R)$, so $T = \frac{1}{2}Ma$. Combining:
+On the point of tipping the normal force and friction act at the rear bottom edge, and the crate translates with the truck. Taking moments about that edge, the weight acts at $b/2 = 0.5$ m in front of it and $m\mathbf{a}_G$ acts forward at height $h/2 = 1$ m:
 
 ```math
-a = \frac{mg}{m + M/2} = \frac{5 \times 9.81}{5 + 5} = 4.91 \text{ m/s}^2, \quad
-T = \frac{1}{2}(10)(4.905) = 24.5 \text{ N}
+mg\frac{b}{2} = ma\frac{h}{2}
+\quad\Rightarrow\quad
+a = g\frac{b}{h} = 9.81 \times \frac{1}{2} = 4.91 \text{ m/s}^2
 ```
 
-</details>
-
-**Exercise 5.** A uniform crate 2 m tall and 1 m deep (in the direction of travel) sits on a truck bed with enough friction to prevent sliding. Using D'Alembert's principle, find the truck acceleration at which the crate starts to tip.
-
-<details>
-<summary>Answer</summary>
-
-On the crate's FBD the inertia force $ma$ acts backward through $G$, at height $h/2 = 1$ m. At the point of tipping the normal force and friction act at the rear bottom edge. Summing moments about that edge:
-
-```math
-ma \frac{h}{2} = mg \frac{b}{2} \implies a = g \frac{b}{h} = 9.81 \times
-\frac{1}{2} = 4.91 \text{ m/s}^2
-```
-
-Above this acceleration the crate tips backward, provided the friction coefficient exceeds $a/g = 0.5$ so that it does not slide first.
+Above this acceleration the crate tips backward, provided $\mu_s > a/g = 0.5$ so that it does not slide first.
 
 </details>
 
 ## References
 
 - R. C. Hibbeler, *Engineering Mechanics: Dynamics*, 14th ed., Pearson, 2016.
-- J. L. Meriam, L. G. Kraige, *Engineering Mechanics: Dynamics*, Wiley.
-- F. P. Beer, E. R. Johnston, P. J. Cornwell, *Vector Mechanics for Engineers: Dynamics*, McGraw-Hill.
+- J. L. Meriam, L. G. Kraige and J. N. Bolton, *Engineering Mechanics: Dynamics*, 9th ed., Wiley, 2018.
+- F. P. Beer, E. R. Johnston, P. J. Cornwell and B. P. Self, *Vector Mechanics for Engineers: Dynamics*, 12th ed., McGraw-Hill, 2019.
+- D. T. Greenwood, *Principles of Dynamics*, 2nd ed., Prentice Hall, 1988.
+- L. D. Landau and E. M. Lifshitz, *Mechanics*, 3rd ed., Butterworth-Heinemann, 1976.

@@ -1,51 +1,50 @@
 # Radial Basis Functions
 
-This script fits a multiquadric radial basis function (RBF) interpolant through 11 data points on $[0, 1]$ using SciPy's `Rbf` class and plots it on a fine grid. RBF interpolation needs no mesh, which is why it is used for scattered-data interpolation, mesh deformation and surrogate modelling in CFD.
+This script interpolates eight samples of the Forrester function $y(x) = (6x-2)^2 \sin(12x-4)$ with six radial basis function (RBF) kernels, written directly in numpy, and plots the interpolants and their pointwise errors. RBF interpolation needs no mesh, which is why it is used for scattered-data interpolation, mesh deformation and surrogate modelling in CFD, and the comparison shows how much the choice of kernel matters for the same data.
 
 ## Overview
 
-- Uses 11 fixed data points at $x = 0, 0.1, \dots, 1$, digitised from a reference plot. They are not generated from a formula.
-- Builds a multiquadric interpolant with `scipy.interpolate.Rbf` and SciPy's default shape parameter, and prints that parameter.
-- Evaluates the interpolant at 100 points in $[0, 1]$.
-- Plots the data points and the interpolant.
+- Samples the test function at eight equally spaced points on $[0, 1]$ (spacing $1/7$).
+- Interpolates with four kernels without a polynomial tail (Gaussian, multiquadric and inverse multiquadric with shape parameter $\varepsilon = 5$, Wendland $C^2$ with support radius 0.4) and two kernels with a linear tail (thin-plate spline and cubic).
+- Evaluates every interpolant at 1001 points and prints its RMS and maximum error.
+- Plots the interpolants with the samples, and the absolute errors on a log scale.
 
 ## Mathematical Background
 
-### RBF Interpolant
-
-For centres $x_1, \dots, x_n$ with values $y_1, \dots, y_n$:
+### Interpolant
 
 ```math
-\tilde{y}(x) = \sum_{i=1}^{n} w_i\, \phi\bigl(|x - x_i|\bigr)
+s(x) = \sum_{j=1}^{N} w_j\,\varphi(|x - x_j|) + \sum_{k=0}^{m} c_k x^k
 ```
 
-### Multiquadric Basis in SciPy
-
-SciPy's `Rbf` defines the multiquadric as
-
-$$
-\phi(r) = \sqrt{\left(\frac{r}{\varepsilon}\right)^2 + 1}
-$$
-
-so a larger $\varepsilon$ gives a flatter basis function. By default $\varepsilon$ is the average node spacing, estimated from the bounding box of the nodes. In one dimension that is $(x_{\max} - x_{\min})/n = 1/11 \approx 0.0909$ here.
-
-### Weights
-
-Requiring $\tilde{y}(x_j) = y_j$ gives the symmetric system
+The interpolation conditions $s(x_i) = y_i$ and, when a tail of degree $m$ is present, the side conditions $\sum_j w_j x_j^k = 0$ for $k = 0, \dots, m$ give
 
 ```math
-\Phi\,\mathbf{w} = \mathbf{y},
-\qquad \Phi_{ij} = \phi\bigl(|x_i - x_j|\bigr)
+\begin{pmatrix} A & P \\ P^T & 0 \end{pmatrix}\begin{pmatrix} \mathbf{w} \\ \mathbf{c} \end{pmatrix} = \begin{pmatrix} \mathbf{y} \\ \mathbf{0} \end{pmatrix},
+\qquad A_{ij} = \varphi(|x_i - x_j|),
+\qquad P_{ik} = x_i^k
 ```
 
-`Rbf` solves this system directly, with no polynomial term and the default `smooth=0`. For distinct centres the multiquadric matrix is non-singular (Micchelli, 1986).
+Without a tail the system is $A\mathbf{w} = \mathbf{y}$.
+
+### Kernels
+
+| Kernel | $\varphi(r)$ | Type | Tail used |
+| --- | --- | --- | --- |
+| Gaussian | $e^{-(\varepsilon r)^2}$ | positive definite | none |
+| Multiquadric | $\sqrt{1 + (\varepsilon r)^2}$ | $-\varphi$ conditionally positive definite of order 1 | none (nonsingular by Micchelli's theorem) |
+| Inverse multiquadric | $1/\sqrt{1 + (\varepsilon r)^2}$ | positive definite | none |
+| Wendland $C^2$ | $(1 - r/\rho)_+^4 (4r/\rho + 1)$ | positive definite in up to 3 dimensions, compact support $\rho$ | none |
+| Thin-plate spline | $r^2 \ln r$ | conditionally positive definite of order 2 | linear |
+| Cubic | $r^3$ | conditionally positive definite of order 2 | linear |
 
 ## Implementation
 
-- `X_DATA` and `Y_DATA` hold the 11 data points, and `N_PREDICT` sets the number of evaluation points.
-- `fit_rbf(x, y, function="multiquadric")` returns the `scipy.interpolate.Rbf` object, which assembles and solves $\Phi\mathbf{w} = \mathbf{y}$.
-- `plot_interpolation(x, y, x_new, y_new)` plots the points and the interpolant.
-- `main` prints `rbf.epsilon`, evaluates the interpolant and saves or shows the figure.
+- `test_function(x)` evaluates the Forrester function.
+- `KERNELS` maps each name to the pair (function $\varphi(r)$, tail degree), with $-1$ meaning no tail. `thin_plate(r)` handles $\varphi(0) = 0$.
+- `fit_rbf(x, y, phi, degree)` assembles and solves the (augmented) system with `numpy.linalg.solve`, and `evaluate_rbf(...)` evaluates $s(x)$.
+- `interpolate_all(x, y, x_new)` runs every kernel, and `plot_interpolants(...)` draws the figure.
+- `N_SAMPLES`, `N_PREDICT`, `EPSILON` and `WENDLAND_SUPPORT` set the experiment.
 
 ## Usage
 
@@ -56,11 +55,20 @@ python main.py --no-show --output .     # save the figure as a PNG in the curren
 
 ## Output
 
-![Multiquadric RBF interpolation of 11 points](radial_basis_functions.png)
+![Six RBF interpolants of the Forrester function and their pointwise errors](radial_basis_functions.png)
 
-The interpolant passes exactly through all 11 points. It follows the small oscillation between $x = 0$ and $x = 0.4$ and the steep rise from $y = 4$ to $y = 20$ over $x \in [0.8, 1]$ without large overshoots between the points.
+| Kernel | RMS error | Max error |
+| --- | --- | --- |
+| Gaussian | 0.299 | 0.852 |
+| Multiquadric | 0.634 | 2.145 |
+| Inverse multiquadric | 0.444 | 1.185 |
+| Wendland $C^2$ | 0.367 | 0.988 |
+| Thin-plate spline + linear | 0.751 | 2.128 |
+| Cubic + linear | 0.797 | 2.619 |
+
+All six interpolants pass through the samples, where the error drops to zero, and they look alike at the scale of the left panel. The right panel shows that their errors differ by a factor of almost three, with the largest errors in the last interval, where the function rises from 0 to 15.8. The ranking depends on $\varepsilon$ and $\rho$; the [RBF Shape Parameter Trade-Off](../../plots/rbf_shape_parameter_tradeoff/) script shows how to choose $\varepsilon$.
 
 ## Related Notes
 
 - [Radial Basis Functions](../../../notes/numerical/surrogates/radial_basis_functions.md)
-- [Surrogate Modelling Introduction](../../../notes/numerical/surrogates/intro.md)
+- [Surrogate Models in CFD](../../../notes/numerical/surrogates/intro.md)

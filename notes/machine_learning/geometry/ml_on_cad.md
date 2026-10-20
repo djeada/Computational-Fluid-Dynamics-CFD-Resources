@@ -1,242 +1,266 @@
-# Machine Learning on CAD
+# Machine Learning on CAD Geometry
 
-Creating and modifying CAD models for engineering applications is traditionally a manual, time-intensive process requiring specialized expertise. As design spaces grow larger and more complex, manually exploring geometric variations becomes impractical. Machine learning offers the ability to automate CAD generation, create compressed representations of shapes, and even generate new geometries from textual descriptions, dramatically accelerating the early stages of the design pipeline.
+A CFD surrogate is only as useful as its description of the geometry. Before a network can predict drag for a new car or airfoil, the shape has to be turned into numbers, and if the network is used to propose shapes, those numbers have to be turned back into a closed, meshable surface. This note covers the representations used for that purpose, from classical parametric models to learned latent spaces and networks that operate directly on CAD boundary representations, and the validity checks a generated shape must pass before it can be meshed.
 
-Interacting with **Computer-Aided Design (CAD)** models through machine learning can open doors to faster, more flexible design workflows. While direct simulation remains computationally costly, machine learning models can create **compressed representations** of CAD objects, speeding up tasks like shape classification, similarity searches, and even geometry generation. Achieving this, however, demands extensive training data, often requiring simulation software and large-scale data processing to ensure models capture the full complexity of engineered shapes.
+## Problem Statement
 
-```
-Traditional CAD Workflow
-        ┌─────────────┐      ┌────────────────┐
-        │   Design    │─────►│  Manual Edits  │
-        └─────────────┘      └────────────────┘
-                                   │
-                                   ▼
-                            ┌────────────────┐
-                            │  Simulation    │
-                            └────────────────┘
-                                   │
-                                   ▼
-                            ┌────────────────┐
-                            │    Refine      │
-                            └────────────────┘
-                                   │
-                                   ▼
-                            ┌────────────────┐
-                            │  Final Model   │
-                            └────────────────┘
+Let $`\mathcal{S} = \{S_1, \dots, S_N\}`$ be a collection of solid shapes (CAD models, surface meshes or scans) and, optionally, $y_i$ a simulated quantity for each, such as $C_d$. Two related tasks arise.
 
-------------------------------------------------
+The representation task is to find an encoder $E$ and a decoder $D$ with a low-dimensional code $\mathbf{z} = E(S) \in \mathbb{R}^{d}$ such that the decoded shape is close to the original,
 
-ML-Augmented CAD Workflow
-        ┌─────────────────────┐      ┌──────────────┐
-        │ Text / Parameters   │─────►│   ML Model   │
-        └─────────────────────┘      └──────────────┘
-                                      │
-                                      ▼
-                         ┌────────────────────────────┐
-                         │ Suggested CAD Geometry     │
-                         └────────────────────────────┘
-                                      │
-                                      ▼
-                         ┌────────────────────────────┐
-                         │ Validate / Refine Model    │
-                         └────────────────────────────┘
-
+```math
+\min_{E, D} \; \frac{1}{N}\sum_{i=1}^{N} d\big(S_i, D(E(S_i))\big) + \mathcal{R}(E, D)
 ```
 
-## Practical Application: CAD Data Generation from Text
+where $d$ is a shape distance (for example the Chamfer distance between sampled surface points) and $\mathcal{R}$ a regulariser. A good code also makes the downstream map $\mathbf{z} \mapsto y$ smooth enough to be learned from few CFD runs.
 
-Bridging the gap between textual descriptions and CAD geometries offers enormous potential. Imagine specifying "a car-like shape with a streamlined body and four wheels" and receiving a coarse CAD model ready for refinement. Realizing this vision involves integrating **natural language processing (NLP)** with **3D geometry processing** and **generative models** for shape creation.
+The generation task is to produce new codes $\mathbf{z}$ (by sampling, interpolation or optimisation of a predicted $y$) whose decoded shapes $D(\mathbf{z})$ are valid: watertight, free of self-intersections, within packaging constraints, and smooth enough for boundary-layer meshing.
 
-### CAD Data Generation Pipeline
+Several things make this hard. Shapes are not vectors: they have different numbers of faces, different topology and no natural point-to-point correspondence. The choice of $d$ decides which errors are penalised, and a small Chamfer distance does not guarantee a valid surface. CAD datasets with matching CFD results are small, typically $10^2$ to $10^4$ designs. Finally, the downstream solver needs an exact, closed geometry, while most learned decoders produce approximate point sets or implicit fields.
 
-1. **Data Mining and Labeling**:\
-   Start by collecting a rich database of CAD models representing a variety of shapes, from simple boxes to complex automotive bodies. Each model should come with metadata describing geometric features such as edges, faces, and the **center of gravity (COG)**. Manually annotating these models with relevant **keywords** (e.g., "car," "box," "wing") helps create a training set linking text to geometry.
+## Shape Representations
 
-2. **Feature Extraction**:\
-   Once data is annotated, extract **geometric properties** (like volume, surface area), **topological properties** (edge-face connectivity), and possibly **physical properties** (mass distribution) if available. These features, along with any known parameters (e.g., shape complexity), form the input space for ML.
+| Representation | Stored data | Strengths | Weaknesses for CFD | Typical networks |
+| --- | --- | --- | --- | --- |
+| Boundary representation (B-rep, STEP/IGES) | Trimmed NURBS faces, edges, vertices and their adjacency | Exact geometry, native to CAD, features (fillets, holes) explicit | Irregular graph of faces, variable size, hard to generate validly | UV-Net, BRepNet |
+| Parametric model (NURBS, CST, FFD) | A fixed vector of control points or coefficients | Fixed length, smooth, always valid within bounds | Covers only the family it was built for | Any regressor, PCA |
+| Triangle surface mesh (STL) | Vertices and triangles | Universal exchange format, close to what the mesher needs | Connectivity differs between shapes, faceting | Graph networks, MeshCNN |
+| Point cloud | Unordered surface points, optionally normals | Easy to sample from any format | No connectivity, no inside or outside | PointNet, point transformers |
+| Voxel grid | Occupancy on an $n^3$ grid | Regular, works with 3D CNNs | Memory grows as $n^3$, staircase surfaces | 3D CNN |
+| Signed distance function (SDF) | $\phi(\mathbf{x})$ on a grid or as a network | Closed surface by construction, smooth, resolution-free | Needs surface extraction, sharp edges are rounded | DeepSDF, occupancy networks |
 
-3. **Text-to-Geometry Mapping**:\
-   Develop algorithms that translate textual descriptions into geometric constraints. NLP converts text into embeddings, capturing the meaning of phrases like "boxy structure" or "car body." The ML model then maps these embeddings to geometric features, effectively learning a function from language to shape descriptors.
+### Parametric Curves and Surfaces
 
-4. **Generative Modeling**:\
-   With text embeddings guiding the generation, use **generative models** such as **Generative Adversarial Networks (GANs)** or **Variational Autoencoders (VAEs)** to create new CAD geometries. Over time, the model refines its internal representation, producing shapes that closely align with textual inputs.
+CAD systems represent faces as non-uniform rational B-spline (NURBS) surfaces. A NURBS curve of degree $p$ with control points $`\mathbf{P}_i`$, weights $`w_i`$ and B-spline basis functions $`N_{i,p}(u)`$ on a knot vector is
 
-```
-ASCII Diagram: From Text to CAD Model
-
-  Text Input: "A car-like object with a rounded top and four support points"
-       |
-       v
-   NLP Embedding (Word2Vec, BERT)
-       |
-       v
-   ML Model Maps Embedding -> Geometric Feature Space
-       |
-       v
-   Generative Model (GAN/VAE) produces CAD Shape
-       |
-       v
-  Result: Coarse CAD geometry consistent with description
+```math
+\mathbf{C}(u) = \frac{\sum_{i=0}^{n} N_{i,p}(u)\, w_i \mathbf{P}_i}{\sum_{i=0}^{n} N_{i,p}(u)\, w_i}
 ```
 
-## Detailed Steps for Implementation
+and a surface uses the tensor product $N_{i,p}(u)N_{j,q}(v)$. The control points of a fixed-topology model form a fixed-length vector, which is the simplest possible ML input. A B-rep adds topology: which faces bound the solid, which edges they share, and how each face is trimmed in its $(u, v)$ parameter domain.
 
-**Data Collection and Labeling** involves gathering a large, diverse set of CAD models. Each model might be stored in a standard format (e.g., STEP, IGES) and accompanied by metadata. Annotating them with keywords ensures the model learns meaningful correlations (e.g., "car" often correlates with wheels and curved surfaces).
+### Signed Distance Functions
 
-**Feature Extraction** translates raw CAD files into mathematically digestible formats. This may involve computing **geometric descriptors** (lengths, angles), **topological descriptors** (how faces connect), and even **physical properties** (center of gravity if defined). These features bridge the gap between raw polygon data and the structured input ML models require.
+A signed distance function returns the distance to the surface $\partial\Omega$ with a sign that marks inside and outside,
 
-**Training the Model** requires a careful setup. Start by using supervised learning to correlate given text descriptions with known CAD features. Over time, the model learns patterns: words like "rounded" might correlate with a set of curvature descriptors, while "boxy" might correlate with rectangular volumes or sharp edges. Validation with hold-out sets ensures the model can generalize to unseen descriptions and shapes.
-
-**Generating Geometry from Text** uses the trained model to produce new CAD concepts from scratch. Embedding textual input, such as a design brief, into a latent space lets the generative model produce a mesh or a parametric description of geometry that matches the requested characteristics. Additional post-processing might convert a rough initial shape into a fully parametric CAD model.
-
-```
-ASCII Diagram: Training and Inference Stages
-
-   Training Phase:
-     Annotated CAD & Text -> Extract Features & Embeddings -> Train ML Model -> Validate Accuracy
-       (Large datasets, long training times)
-
-   Inference (Usage) Phase:
-     New Text Input -> NLP Embedding -> ML Model predicts geometry features -> Generate CAD Model
-       (Fast runtime, user-friendly interface)
+```math
+\phi(\mathbf{x}) = \begin{cases} -\mathrm{dist}(\mathbf{x}, \partial\Omega), & \mathbf{x} \in \Omega, \\ +\mathrm{dist}(\mathbf{x}, \partial\Omega), & \mathbf{x} \notin \Omega, \end{cases} \qquad |\nabla\phi| = 1 \text{ almost everywhere}
 ```
 
-## Recommended Algorithms and Techniques
+The surface is the zero level set $\phi = 0$. Any continuous field has a closed zero level set, which is why implicit representations are attractive for generation. The surface is recovered as a triangle mesh with marching cubes on a sampled grid (Lorensen and Cline, 1987). SDFs on a grid are also common inputs for CNN surrogates of flow fields, because the distance to the wall is a physically meaningful feature everywhere in the domain.
 
-**Natural Language Processing (NLP)**:\
-For handling text, models like **Word2Vec** or **BERT** create vector embeddings capturing semantic meaning. Descriptions like "aerodynamic body" or "sturdy base" become numerical vectors that the model can map to geometric features.
+## Parametric Shape Models
 
-**Neural Networks for Geometry**:\
-Convolutional Neural Networks (CNNs) excel at analyzing images or voxelized shapes. For CAD, 3D CNNs or graph-based neural networks might process polygon meshes or point clouds. Some approaches convert CAD models into multi-view images, letting 2D CNNs extract features from multiple rendered viewpoints.
+Parametric models describe a family of shapes by a few numbers. They are the standard input for CFD surrogates because every parameter vector maps to a valid shape and the parameters have engineering meaning.
 
-**Generative Models**:\
-GANs pit a generator (producing shapes) against a discriminator (judging plausibility), refining geometry iteratively. Variational Autoencoders (VAEs) map shapes to a latent space, enabling smooth interpolation between geometric concepts. Conditional versions of these models use textual embeddings as constraints, steering the generated geometry towards desired characteristics.
+### Class-Shape Transformation
 
-**Supervised Learning**:\
-Initial mapping from text descriptions to geometric descriptors often involves supervised learning, where models learn from pairs of (text, known geometry). Regression or classification techniques can predict continuous shape parameters (e.g., dimensions) or discrete labels (e.g., presence of certain features).
+The class-shape transformation (CST) of Kulfan (2008) writes an airfoil surface as a class function times a shape function, with $\psi = x/c$:
 
-### Further Reading
+```math
+\frac{y(\psi)}{c} = C(\psi)\, S(\psi) + \psi\, \frac{\Delta z_{TE}}{c},
+\qquad C(\psi) = \psi^{N_1}(1 - \psi)^{N_2},
+\qquad S(\psi) = \sum_{i=0}^{n} A_i \binom{n}{i}\psi^i(1 - \psi)^{n-i}
+```
 
-Deepen your understanding of how machine learning transforms CAD and geometric modeling through a range of foundational texts, seminal papers, and practical resources:
+The exponents $N_1 = 0.5$, $N_2 = 1$ give a round nose and a sharp trailing edge. The shape function is a Bernstein polynomial whose coefficients $A_i$ are the design variables, with $A_0$ fixing the leading-edge radius ($R_{LE}/c = A_0^2/2$) and $A_n$ the trailing-edge angle. A few coefficients per surface (Bernstein orders of about 4 to 8) reproduce most practical airfoils closely.
 
-**Books**
+### Free-Form Deformation
 
-- **Deep Learning** by Ian Goodfellow, Yoshua Bengio, and Aaron Courville\
-  A comprehensive introduction covering neural network fundamentals and deep learning architectures, forming the theoretical backbone for ML applications in CAD.
-- **Pattern Recognition and Machine Learning** by Christopher Bishop\
-  An essential resource for statistical methods and machine learning techniques that underpin many modern approaches to shape analysis and 3D modeling.
+Free-form deformation (FFD), introduced by Sederberg and Parry (1986), embeds the geometry in a lattice of control points $\mathbf{P}_{ijk}$ and moves every embedded point with the lattice. A point with local lattice coordinates $(s, t, u) \in [0, 1]^3$ is mapped to
 
-**Research Papers**
+```math
+\mathbf{X}(s, t, u) = \sum_{i=0}^{l}\sum_{j=0}^{m}\sum_{k=0}^{n} B_i^{l}(s)\,
+B_j^{m}(t)\, B_k^{n}(u)\, \mathbf{P}_{ijk}
+```
 
-- **MeshCNN: A Network with an Edge** by Hanocka et al. (2019)\
-  Explores novel architectures for learning directly on mesh data, which is crucial for processing and optimizing CAD models.
-- **Pixel2Mesh: Generating 3D Mesh Models from Single RGB Images** by Wang et al. (2018)\
-  Demonstrates how deep learning can reconstruct 3D CAD models from 2D images, bridging computer vision with CAD model generation.
-- **Deep Learning for Geometric Shape Understanding** by Han et al.\
-  Provides a thorough survey of deep learning techniques applied to the interpretation and processing of geometric data, offering valuable insights into state-of-the-art methods for CAD applications.
+with Bernstein polynomials $B_i^{l}(s) = \binom{l}{i}s^i(1-s)^{l-i}$. With the undeformed lattice the map is the identity. The displacement of every surface point is linear in the control-point displacements, so FFD gives a smooth, mesh-independent parameterisation in which the design variables are a selection of control-point moves. Large moves can fold the lattice; the deformation stays locally invertible only while the Jacobian determinant of $\mathbf{X}(s, t, u)$ stays positive. FFD and the related radial-basis-function morphing are the standard tools for automotive design studies; see [Deformation Parameters](../automotive_aerodynamics/deformation_parameters.md).
 
-## Setting Up the Problem
+### Linear Shape Spaces by PCA
 
-Building a text-to-CAD pipeline requires careful preparation at each stage:
+If all shapes are sampled at corresponding points, each becomes a vector $\mathbf{s}_i \in \mathbb{R}^{3n}$ and principal component analysis gives a data-driven parameterisation:
 
-1. **Collect and annotate CAD models**: Assemble a diverse library spanning simple primitives to complex assemblies. Store models in standard formats (STEP, IGES) and tag each with descriptive keywords, intended application, and geometric metadata.
+$$
+\mathbf{s} \approx \bar{\mathbf{s}} + \sum_{k=1}^{K} a_k \boldsymbol\phi_k,
+\qquad a_k = \boldsymbol\phi_k^T(\mathbf{s} - \bar{\mathbf{s}})
+$$
 
-2. **Extract geometric and topological features**: Compute surface area, volume, curvature distributions, and edge-face connectivity graphs. Normalize features so models of different scales are comparable.
+where $\bar{\mathbf{s}}$ is the mean shape and $\boldsymbol\phi_k$ are the leading left singular vectors of the centred data matrix, with variances $\lambda_k = \sigma_k^2/(N-1)$. This is the same computation as [proper orthogonal decomposition](../../numerical/pod/pod_intro.md) applied to coordinates instead of flow fields. Two conditions matter. The shapes must be in correspondence (the $j$-th entry of every vector refers to the same material point), which morphing a common baseline mesh provides automatically and which otherwise requires a common parameterisation or registration. They must also be aligned, usually by removing translation, rotation and, if appropriate, scale with a Procrustes fit, so that the modes describe shape changes rather than rigid motions.
 
-3. **Choose NLP models for text-to-geometry mapping**: Use pretrained embeddings (Word2Vec, BERT) to encode design descriptions. Fine-tune on domain-specific vocabulary (e.g., "fillet," "chamfer," "draft angle") to improve semantic alignment.
+![PCA of 200 random NACA 4-digit airfoils](../../../scripts/algorithms/airfoil_shape_pca/airfoil_shape_pca.png)
 
-4. **Select a generative architecture**: GANs produce sharp, realistic geometries but can be unstable to train. VAEs offer smoother latent spaces and easier interpolation between shapes. Evaluate both on your dataset before committing.
+The figure shows PCA of 200 NACA 4-digit airfoils with random camber, camber position and thickness. Three modes hold 99.9% of the variance. The first is almost pure thickness, because the thickness distribution is linear in $t$, and the next two describe the amount and position of camber. The reconstruction error of 100 unseen airfoils falls from $1.5 \times 10^{-2}c$ with the mean shape to $4.4 \times 10^{-4}c$ with three modes. A family generated by three physical parameters is thus captured by three linear modes, which is typical when the parameters enter the geometry almost linearly. Strongly nonlinear families, such as shapes with moving features or changing topology, need many more linear modes, which is the motivation for nonlinear autoencoders.
 
-5. **Set up training pipelines**: Define loss functions that combine reconstruction accuracy (Chamfer distance, Earth Mover's distance) with text-alignment terms. Use learning rate schedules, gradient clipping, and checkpoint saving to stabilize long training runs. The Chamfer distance between two point sets $S_1$ and $S_2$ is defined as:
+## Learned Representations
 
-   ```math
-   d_{\text{CD}}(S_1, S_2) = \frac{1}{|S_1|}\sum_{x \in S_1} \min_{y \in S_2} \| x -
-   y\|^2 + \frac{1}{|S_2|}\sum_{y \in S_2} \min_{x \in S_1} \| y - x\|^2
-   ```
+### Autoencoders and Variational Autoencoders
 
-   This bidirectional metric penalizes both missing geometry and spurious additions, making it well suited for evaluating generated CAD shapes against reference models.
+An autoencoder replaces the linear maps of PCA by neural networks $E_{\boldsymbol\theta}$ and $D_{\boldsymbol\theta}$ trained to minimise a reconstruction loss. For point clouds the usual loss is the Chamfer distance between the input set $S_1$ and the decoded set $S_2$,
 
-6. **Validate generated geometries**: Check outputs against engineering constraints such as watertight meshes, minimum wall thickness, and manufacturability rules. Automate validation with scripted checks before passing models downstream.
+```math
+d_{\mathrm{CD}}(S_1, S_2) = \frac{1}{|S_1|}\sum_{\mathbf{x} \in S_1} \min_{\mathbf{y} \in S_2} \|\mathbf{x} - \mathbf{y}\|^2 + \frac{1}{|S_2|}\sum_{\mathbf{y} \in S_2} \min_{\mathbf{x} \in S_1} \|\mathbf{y} - \mathbf{x}\|^2 .
+```
+
+The first term penalises missing geometry, the second spurious geometry. Neither says anything about whether the decoded points describe a closed surface.
+
+A variational autoencoder (Kingma and Welling, 2014) makes the encoder output a Gaussian $`q(\mathbf{z} \mid S) = \mathcal{N}(\boldsymbol\mu, \mathrm{diag}\,\boldsymbol\sigma^2)`$ and adds a Kullback-Leibler term that pulls it towards the prior $\mathcal{N}(\mathbf{0}, I)$:
+
+$$
+\mathcal{L} = \mathbb{E}_{q}\left[d\big(S, D(\mathbf{z})\big)\right] + \beta
+\sum_{j=1}^{d} \frac{1}{2}\left(\mu_j^2 + \sigma_j^2 - 1 - \ln\sigma_j^2\right)
+$$
+
+The KL term keeps the latent space compact and continuous, so that points between two encoded shapes decode to plausible shapes and new shapes can be sampled from the prior. The weight $\beta$ trades reconstruction accuracy against that regularity. For design optimisation the latent code then plays the role of the design vector, but unlike CAD parameters its directions have no direct engineering meaning, and constraints such as a fixed wheelbase have to be imposed by penalty or by conditioning the decoder.
+
+### Implicit Neural Representations
+
+DeepSDF (Park et al., 2019) represents a family of shapes by one network $f_{\boldsymbol\theta}(\mathbf{z}_i, \mathbf{x}) \approx \phi_i(\mathbf{x})$ that takes a latent code and a query point and returns the signed distance. It is trained as an auto-decoder: there is no encoder, and the codes $\mathbf{z}_i$ are optimised together with $\boldsymbol\theta$,
+
+```math
+\min_{\boldsymbol\theta, \{\mathbf{z}_i\}} \sum_{i=1}^{N}\sum_{j} \left|
+\mathrm{clamp}\big(f_{\boldsymbol\theta}(\mathbf{z}_i, \mathbf{x}_j), \delta\big) -
+\mathrm{clamp}\big(\phi_i(\mathbf{x}_j), \delta\big) \right| +
+\frac{1}{\sigma^2}\sum_{i=1}^{N}\|\mathbf{z}_i\|^2
+```
+
+where $\mathrm{clamp}(\phi, \delta) = \min(\delta, \max(-\delta, \phi))$ concentrates the fit near the surface and the last term is a Gaussian prior on the codes. A new shape is encoded by optimising $\mathbf{z}$ alone against its sampled distances. Occupancy networks are the same idea with an inside/outside probability instead of a distance. Because the output is a continuous field, the extracted zero level set is always closed, which addresses the watertightness problem of point-cloud decoders. The trade-offs are rounded sharp edges, the cost of marching cubes, and fields that can still contain small spurious components away from the main body.
+
+### Networks on Points and Meshes
+
+PointNet (Qi et al., 2017) applies the same small network to every point and aggregates with a symmetric function (a max over points), which makes the output independent of point order. It and its successors are used to encode car surfaces for drag prediction. Graph neural networks operate on the vertices and edges of the surface mesh and can predict fields such as $C_p$ on the same mesh; they are covered in [Graph Neural Networks](../neural_networks/graph_neural_networks.md).
+
+### Learning Directly on B-reps
+
+B-reps carry information that is lost when a model is tessellated: which faces are planes, cylinders or freeform patches, where edges are sharp, and how faces are connected. Two architectures from 2021 learn directly from it. UV-Net (Jayaraman et al., 2021) samples each face on a regular grid in its $(u, v)$ parameter domain (points, normals and a trimming mask) and each edge along its curve parameter, encodes these grids with small CNNs, and passes messages over the face-adjacency graph with a graph network. BRepNet (Lambourne et al., 2021) defines convolutions on oriented coedges, the half-edges of the B-rep topology, so that the kernel follows the faces and edges around each entity in a fixed topological pattern. Both are used for classification and face segmentation (for example, recognising machining features), not yet for flow prediction, but they show that the CAD structure itself can be the input.
+
+Generating B-reps is harder because the output must satisfy topological consistency. DeepCAD (Wu et al., 2021) avoids generating the B-rep directly: it represents a model as the sequence of sketch and extrude commands that builds it, learns a transformer autoencoder on such sequences, and lets a CAD kernel execute the decoded sequence to produce an exact solid. The approach is restricted to the operations in its command vocabulary (lines, arcs, circles, extrusions) and therefore to prismatic parts, but its output is a proper parametric CAD model.
+
+### Text and Sketch to CAD
+
+Language and vision models can now emit CAD command sequences or scripts for programmatic CAD tools from a text prompt or a hand sketch. In practice the results are simple prismatic parts, and a substantial share of generated programs fail to execute or produce a different part than intended, so each output still has to be checked. Freeform aerodynamic surfaces such as car bodies or wings are far from what these methods produce reliably. For CFD the practical value today lies in setting up parametric templates and in retrieving similar models from a library, not in creating simulation-ready aerodynamic geometry from a description.
+
+## From Generated Geometry to a Simulation-Ready Model
+
+A mesher needs a closed, consistently oriented, non-self-intersecting surface with features larger than the target cell size. A shape that looks right on screen can fail any of these. The following checks are cheap and should run automatically on every generated or morphed shape before meshing.
+
+| Check | Test on a triangle mesh | Typical fix |
+| --- | --- | --- |
+| Watertight | Every edge is shared by exactly two triangles | Hole filling, re-extraction from an SDF |
+| Manifold | Every vertex has a single fan of triangles around it | Splitting non-manifold vertices, remeshing |
+| Consistent orientation | Adjacent triangles traverse their common edge in opposite directions; signed volume is positive | Flipping inconsistent faces |
+| Topology | Euler characteristic $\chi = V - E + F = 2 - 2g$ matches the expected genus $g$ | Removing small handles or spurious components |
+| No self-intersections | No pair of non-adjacent triangles intersects | Limiting morph amplitude, smoothing |
+| Feature size | Minimum gap and wall thickness exceed a few target cell sizes | Constraining the design space |
+| Smoothness | Normals vary smoothly except at intended sharp edges | Smoothing the decoder output, remeshing |
+
+The signed volume of a closed triangle mesh follows from the divergence theorem,
+
+$$
+V = \frac{1}{6}\sum_{\text{triangles}} \mathbf{v}_1 \cdot
+(\mathbf{v}_2 \times \mathbf{v}_3)
+$$
+
+where $\mathbf{v}_1, \mathbf{v}_2, \mathbf{v}_3$ are the vertices of each triangle in its stored order. A negative value means the normals point inwards, and a value that changes when the origin is moved means the mesh is not closed.
+
+The route from a representation to a solver-ready surface differs by type. Parametric models and DeepCAD-style command sequences produce exact CAD through a geometry kernel. Implicit fields go through marching cubes, then remeshing and feature recovery. Point clouds need surface reconstruction, for example Poisson reconstruction, which is the least robust route. Mesh-based decoders that deform a template mesh inherit its topology and correspondence, which is why morphing a baseline remains the most common choice in industrial aerodynamic studies.
+
+## Choosing a Representation
+
+| Situation | Recommended representation |
+| --- | --- |
+| Design study around one baseline with a few engineering parameters | Morphing parameters (FFD, RBF) as the input vector |
+| Many variants of one family, shapes available as corresponding meshes | PCA of coordinates, then a regressor on the coefficients |
+| Heterogeneous shapes from different sources, prediction of a scalar | Point cloud or graph network on sampled surfaces |
+| Prediction of surface fields such as $C_p$ | Graph network on the surface mesh |
+| Shape generation that must stay watertight | Implicit (SDF) decoder, or deformation of a template mesh |
+| Learning from CAD features (holes, fillets, face types) | B-rep networks (UV-Net, BRepNet) |
 
 ## Key Takeaways
 
-- Machine learning can dramatically reduce the time required to go from a design concept to an initial CAD geometry.
-- High-quality, well-annotated training data is the single most important factor for model performance.
-- Combining NLP embeddings with generative models (GANs, VAEs) enables text-driven CAD generation.
-- Feature extraction must capture both geometric properties (volume, curvature) and topological relationships (face connectivity).
-- Loss functions should balance geometric fidelity with adherence to textual intent and engineering constraints.
-- Automated validation against manufacturability rules is essential before generated models enter production workflows.
+- The representation decides what an ML model can learn and what it can generate; fixed-length parametric vectors are the simplest and are always valid within their bounds.
+- CST and FFD give smooth, low-dimensional, engineering-meaningful parameterisations; PCA of corresponding shapes gives a data-driven one that is optimal among linear models.
+- Autoencoders and VAEs extend PCA to nonlinear shape families, at the cost of latent directions without physical meaning.
+- Implicit representations such as DeepSDF produce closed surfaces by construction, which point-cloud decoders do not.
+- B-rep networks and command-sequence models work with the CAD structure itself, but current methods are limited to classification, segmentation and simple prismatic parts.
+- Every generated shape must pass automatic validity checks (watertight, manifold, oriented, no self-intersections, sufficient feature size) before meshing.
+
+## Related Scripts
+
+- [Airfoil Shape PCA](../../../scripts/algorithms/airfoil_shape_pca/): builds a linear shape space for NACA 4-digit airfoils by principal component analysis (PCA) of their surface coordinates and shows how few modes are needed to describe the family.
+- [Surrogate Input Representations](../../../scripts/plots/surrogate_input_representations/): draws one NACA 2412 airfoil in the four forms a neural-network surrogate can take as input: a parameter vector, a signed distance field on a Cartesian grid, a surface point cloud, and a mesh graph.
 
 ## Exercises
 
-**Exercise 1.** A generated 2D shape is sampled as $`S_2 = \{(0, 0.1), (1, 0), (2, 0)\}`$ and the reference as $`S_1 = \{(0, 0), (1, 0)\}`$. Compute the Chamfer distance $d_{\text{CD}}(S_1, S_2)$ as defined in the note, and each one-sided term. Which term detects the spurious point?
+**Exercise 1.** A generated 2D shape is sampled as $`S_2 = \{(0, 0.1), (1, 0), (2, 0)\}`$ and the reference as $`S_1 = \{(0, 0), (1, 0)\}`$. Compute the Chamfer distance $d_{\mathrm{CD}}(S_1, S_2)$ defined above and its two one-sided terms. Which term detects the spurious point?
 
 <details>
 <summary>Answer</summary>
 
-$S_1 \to S_2$: $(0,0)$ is nearest to $(0, 0.1)$ with squared distance 0.01, and $(1,0)$ matches exactly. The mean is 0.005.
+From $S_1$ to $S_2$: $(0, 0)$ is nearest to $(0, 0.1)$ with squared distance 0.01, and $(1, 0)$ matches exactly. The mean is 0.005.
 
-$S_2 \to S_1$: $(0, 0.1)$ gives 0.01, $(1, 0)$ gives 0, and $(2, 0)$ is nearest to $(1, 0)$ with squared distance 1. The mean is $1.01/3 \approx 0.337$.
+From $S_2$ to $S_1$: $(0, 0.1)$ gives 0.01, $(1, 0)$ gives 0, and $(2, 0)$ is nearest to $(1, 0)$ with squared distance 1. The mean is $1.01/3 \approx 0.337$.
 
-$d_{\text{CD}} \approx 0.342$.
-
-The $S_2 \to S_1$ term penalizes the extra geometry. The one-sided $S_1 \to S_2$ term alone (0.005) would rate the shape as nearly perfect.
+The total is $d_{\mathrm{CD}} \approx 0.342$. The second term penalises the extra point. The first term alone (0.005) would rate the shape as nearly perfect, which is why one-sided distances are not used as reconstruction losses.
 
 </details>
 
-**Exercise 2.** Shapes are voxelized as float32 occupancy grids for a 3D CNN. Compute the memory per shape and for a library of 10,000 shapes at $256^3$ and at $64^3$. For a 5 m long car, what is the voxel size in each case?
+**Exercise 2.** Two decoded car surfaces are closed triangle meshes in which every edge is shared by exactly two triangles. Mesh A has $F = 20{,}000$ triangles and $V = 10{,}002$ vertices; mesh B has $F = 20{,}000$ and $V = 10{,}000$. Find the number of edges and the genus of each. Which one should be rejected before meshing a car body?
 
 <details>
 <summary>Answer</summary>
 
-$256^3 \times 4$ bytes $\approx 67.1$ MB (64 MiB) per shape, or about 671 GB for 10,000 shapes. The voxel size is $5/256 \approx 1.95$ cm.
+Each triangle has three edges and each edge belongs to two triangles, so $E = 3F/2 = 30{,}000$ for both meshes.
 
-$64^3 \times 4$ bytes $\approx 1.05$ MB per shape, or about 10.5 GB in total. The voxel size is $5/64 \approx 7.8$ cm.
+Mesh A: $\chi = V - E + F = 10{,}002 - 30{,}000 + 20{,}000 = 2$, so $g = 0$, a sphere-like closed surface, as expected for a car body without through-holes.
 
-The coarse grid is affordable but cannot resolve mirrors, spoiler edges or gaps. The memory cost is a strong reason to use point clouds, meshes or graph representations instead.
+Mesh B: $\chi = 0$, so $g = 1$. The surface has a handle, for example a thin tunnel the decoder has opened through the body or two parts fused at one spot. Unless the design really has a through-flow duct, mesh B should be rejected or repaired. The test costs one count of vertices and faces.
 
 </details>
 
-**Exercise 3.** A CAD model has a bounding-box diagonal of 5 m, a volume of 2.4 m³ and a surface area of 30 m². It is scaled to a unit diagonal before feature extraction. Compute the scaled volume and area, and show that $V/A^{3/2}$ is unchanged.
+**Exercise 3.** A symmetric CST airfoil uses $N_1 = 0.5$, $N_2 = 1$, zero trailing-edge thickness and a constant shape function $S(\psi) = A_0$ on each surface. Find the chordwise position of maximum thickness and the value of $A_0$ that gives a thickness of 12% of chord. What leading-edge radius results?
 
 <details>
 <summary>Answer</summary>
 
-The scale factor is $s = 0.2$. Volume scales as $s^3$ and area as $s^2$: $V = 2.4 \times 0.008 = 0.0192$ and $A = 30 \times 0.04 = 1.2$.
+The half-thickness is $`y/c = A_0\,\psi^{1/2}(1 - \psi)`$. Setting the derivative to zero, $\tfrac{1}{2}\psi^{-1/2}(1 - \psi) - \psi^{1/2} = 0$, gives $1 - \psi = 2\psi$, so $\psi = 1/3$.
 
-$V/A^{3/2}$ is $2.4/30^{1.5} \approx 0.0146$ before scaling and $0.0192/1.2^{1.5} \approx 0.0146$ after.
+At $\psi = 1/3$ the class function is $(1/3)^{1/2}(2/3) \approx 0.385$. A 12% thick airfoil has half-thickness 0.06, so $A_0 = 0.06/0.385 \approx 0.156$.
 
-Dimensionless descriptors like this carry shape information that does not depend on size. Size itself can be supplied as a separate feature if it matters (for example, through the Reynolds number).
+The leading-edge radius is $R_{LE}/c = A_0^2/2 \approx 0.0122$. A single coefficient fixes thickness, its position and nose radius together, which is why practical CST models use several Bernstein coefficients per surface.
 
 </details>
 
-**Exercise 4.** A VAE encoder outputs a Gaussian with mean $\mu = 0.5$ and standard deviation $\sigma = 0.8$ for one latent dimension. Compute the KL divergence to the standard normal prior, $\tfrac{1}{2}(\mu^2 + \sigma^2 - 1 - \ln\sigma^2)$. What is the total for a 32-dimensional latent space with identical values in each dimension, and what happens to interpolation if this term is weighted too weakly?
+**Exercise 4.** In the airfoil PCA figure the cumulative explained variance is 0.531 for one mode, 0.970 for two, 0.99894 for three and 0.99992 for four. How many modes are needed to explain 99.9% of the variance? Explain why one mode suffices for all thickness variation in this family, and why camber needs more than one.
 
 <details>
 <summary>Answer</summary>
 
-$\tfrac{1}{2}(0.25 + 0.64 - 1 - \ln 0.64) = \tfrac{1}{2}(-0.11 + 0.446) \approx 0.168$ nats per dimension, or $32 \times 0.168 \approx 5.38$ nats in total.
+Three modes give 0.99894, just below 0.999, so four modes are needed for 99.9%.
 
-If the KL term is weighted too weakly, the encoder places shapes in isolated, spread-out regions of latent space. Points between two encoded shapes then decode to geometry the decoder has never learned, and the smooth interpolation the note attributes to VAEs is lost.
+The shape vector is $`[y_c + y_t; \; y_c - y_t]`$ and $`y_t(x) = t\,g(x)`$ with a fixed function $g$. Every change in $t$ therefore moves the vector along the single direction $[g; -g]$, so thickness spans exactly one dimension. The camber line is $m$ times a function that depends nonlinearly on $p$: changing the position of maximum camber changes the shape of the camber line, not just its amplitude, and a nonlinear one-parameter family of curves needs several linear modes to be represented accurately.
 
 </details>
 
-**Exercise 5.** A library has 5,000 CAD models made up of 200 design families with 25 minor variants each. Why is a random 80/10/10 split of models inappropriate, and how would you split?
+**Exercise 5.** A VAE encoder returns $\mu = 0.5$ and $\sigma = 0.8$ in each of 32 latent dimensions for one shape. Compute the KL term per dimension and in total. What happens to interpolation between shapes if $\beta$ is set much too small?
 
 <details>
 <summary>Answer</summary>
 
-Variants within a family are near-duplicates. A random split puts siblings of each test model into the training set, so test accuracy measures recognition of known families rather than generalization to new designs.
+Per dimension, $\tfrac{1}{2}(0.25 + 0.64 - 1 - \ln 0.64) = \tfrac{1}{2}(-0.11 + 0.446) \approx 0.168$ nats, so $32 \times 0.168 \approx 5.38$ nats in total.
 
-Split by family: 160 families (4,000 models) for training, and 20 families (500 models) each for validation and testing. Also remove exact or near-exact duplicates (for example, the same part exported as both STEP and IGES), for instance by thresholding the Chamfer distance between normalized shapes.
+With a very small $\beta$ the model behaves like a plain autoencoder. The encoder places shapes in isolated regions of latent space with tiny variances, and points between two encoded shapes decode to geometry the decoder never learned, often with holes or spurious fragments. Smooth interpolation and sampling from the prior are what the KL term buys.
 
 </details>
 
 ## References
 
+- Piegl, L., & Tiller, W., *The NURBS Book*, 2nd ed., Springer, 1997.
+- Kulfan, B. M., "Universal Parametric Geometry Representation Method", *Journal of Aircraft* 45(1), 142–158, 2008.
+- Sederberg, T. W., & Parry, S. R., "Free-Form Deformation of Solid Geometric Models", *Computer Graphics (Proceedings of SIGGRAPH '86)* 20(4), 151–160, 1986.
+- Lorensen, W. E., & Cline, H. E., "Marching Cubes: A High Resolution 3D Surface Construction Algorithm", *Computer Graphics (Proceedings of SIGGRAPH '87)* 21(4), 163–169, 1987.
 - Kingma, D. P., & Welling, M., "Auto-Encoding Variational Bayes", International Conference on Learning Representations (ICLR), 2014.
-- Goodfellow, I., et al., "Generative Adversarial Nets", *Advances in Neural Information Processing Systems* 27, 2014.
-- Fan, H., Su, H., & Guibas, L., "A Point Set Generation Network for 3D Object Reconstruction from a Single Image", IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017.
 - Qi, C. R., Su, H., Mo, K., & Guibas, L. J., "PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation", IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017.
-- Koch, S., et al., "ABC: A Big CAD Model Dataset for Geometric Deep Learning", IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2019.
+- Park, J. J., Florence, P., Straub, J., Newcombe, R., & Lovegrove, S., "DeepSDF: Learning Continuous Signed Distance Functions for Shape Representation", IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2019.
+- Jayaraman, P. K., Sanghi, A., Lambourne, J. G., Willis, K. D. D., Davies, T., Shayani, H., & Morris, N., "UV-Net: Learning from Boundary Representations", IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021.
+- Lambourne, J. G., Willis, K. D. D., Jayaraman, P. K., Sanghi, A., Meltzer, P., & Shayani, H., "BRepNet: A Topological Message Passing System for Solid Models", IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021.
+- Wu, R., Xiao, C., & Zheng, C., "DeepCAD: A Deep Generative Network for Computer-Aided Design Models", IEEE/CVF International Conference on Computer Vision (ICCV), 2021.

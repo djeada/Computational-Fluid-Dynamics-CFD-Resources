@@ -1,346 +1,178 @@
 # The Strategy of CFD
 
-The primary strategy of Computational Fluid Dynamics (CFD) is to transform a continuous problem domain into a discrete domain using a grid. This discretization process allows the continuous equations governing fluid flow to be solved numerically.
+Every CFD calculation, from a textbook exercise to a 100-million-cell car simulation, follows the same strategy: the continuous domain is replaced by a mesh, the differential equations by algebraic equations for values on that mesh, and the algebraic system is solved and interpreted. This note describes the four stages of that workflow (pre-processing, discretization, solution of the algebraic system and post-processing) and then carries a one-dimensional problem through all of them, including the refinement study that tells whether the answer can be trusted. Why the continuous problem cannot be solved directly is explained in [Why CFD](./intro.md).
 
-## Continuous Domain
+## Problem Statement
 
-- **Definition**: Flow variables (e.g., pressure $p$) are defined at every point within the domain.
-- **Example**: In a 1D continuous domain, pressure is a function of position $x$:
-
-$$
-p = p(x), \quad 0 < x < 1
-$$
-
-- **Governing Equations**: Typically partial differential equations (PDEs) with boundary conditions describe the flow behavior throughout the domain.
-
-### Visualization
-
-- **Continuous Domain**: The variable $x$ ranges continuously from 0 to 1.
-
-```
-|_____________| 
-```
-
-## Discrete Domain
-
-- **Definition**: Flow variables are defined only at specific grid points.
-- **Grid Creation**: The continuous domain is divided into a finite number of points.
-- **Example**: Pressure in a discrete 1D domain is defined at $N$ grid points:
+Given a partial differential equation on a domain $\Omega$ with boundary and initial conditions, CFD produces a finite set of numbers $\phi_1, \dots, \phi_N$ that approximate the solution $\phi(\mathbf{x}, t)$ at chosen locations, together with an estimate of how far they are from it. The model problem used throughout this note is
 
 $$
-p_i = p(x_i), \quad i = 1, 2, \ldots, N
+\frac{du}{dx} + u = 0,
+\qquad 0 < x \le 1,
+\qquad u(0) = 1
 $$
 
-- **Governing Equations**: Continuous PDEs and boundary conditions are transformed into coupled algebraic equations, relating flow variable values at discrete points.
+with the exact solution $u = e^{-x}$. It is a first-order equation with a single condition at the inflow end $x = 0$: information travels in the $+x$ direction, as it does along a streamline in a convection-dominated flow.
 
-### Visualization
+A discrete solution is accepted when two conditions hold. The algebraic equations are satisfied to a tolerance far below the discretization error (iterative convergence), and the discretization error itself has been estimated by refining the grid and found acceptable for the purpose (grid convergence). The difficulty in real problems is that $N$ is $10^6$ to $10^9$, the equations are nonlinear and coupled, and the exact solution is unknown.
 
-- **Discrete Domain**: The domain is divided into $N$ discrete points, such as $x_1, x_2, \ldots, x_N$.
+## Continuous and Discrete Domains
 
-```
-|---|---|---|---|---|
-```
+In the continuous domain a flow variable such as the pressure is a function defined at every point, for example $p = p(x)$ for $0 \le x \le 1$, and the governing equations are PDEs that hold at every point. In the discrete domain the variable is stored only at $N$ grid points,
 
-## What CFD Expects a Programming Language to Do
+$$
+p_i \approx p(x_i),
+\qquad i = 1, 2, \dots, N
+$$
 
-Before delving into the numerical computations, it's essential to understand the typical steps involved in a CFD simulation. The process usually follows four major steps based on the Eulerian method.
+and the PDEs are replaced by $N$ coupled algebraic equations that relate each $p_i$ to the values at neighbouring points. Values between grid points are not computed; if needed, they are interpolated afterwards.
 
-```
-+----------------------------------+
-| Pre-processing: Flow field       |
-| initialization                   |
-+----------------------------------+
-              |
-              v
-+----------------------------------+
-| Solve the discretized N-S        |
-| equations                        |<---------|
-+----------------------------------+          |
-              |                               |
-              v                               |
-+--------------------+        No              |
-|      Converged?    |------------------------|
-+--------+-----------+
-         | 
-         | Yes
-         v
-+-----------------------------+
-| Post-processing: Flow field |
-| visualization               |
-+-----------------------------+
-```
+![Continuous field, discrete values, and convergence of the discrete solution](../../../scripts/plots/continuous_vs_discrete_domain/continuous_vs_discrete_domain.png)
 
-This flowchart summarizes the CFD simulation process, highlighting the iterative nature of solving the discretized equations and checking for convergence before moving on to visualization and analysis of the results.
+The top panel shows the same field described both ways, with the four stored values of the worked example below. The lower panels anticipate the result of the worked example: the discrete solutions approach the exact one as the grid is refined, and the error at $x = 1$ falls in proportion to $\Delta x$.
 
-### Step 1: Pre-Processing
+In two and three dimensions the grid becomes a mesh of cells. Structured meshes have an implicit $(i, j, k)$ ordering, so the neighbours of a cell follow from its indices; unstructured meshes of tetrahedra, prisms, hexahedra or polyhedra store the connectivity explicitly and fit complex geometries. The unknowns can be stored at the vertices (vertex-centred) or at the cell centres (cell-centred, the usual choice in finite-volume codes). For incompressible flow the velocity components may also be stored on the faces, a staggered arrangement that avoids spurious pressure oscillations (see [Pressure–Velocity Coupling](../fvm/pressure_velocity_coupling.md)).
 
-In the pre-processing phase, several key tasks must be completed to set up the CFD simulation:
+## The Workflow
 
-1. **Define Data Structures**:
+1. Pre-processing: define the geometry and the computational domain, generate the mesh, choose the physical models, set boundary and initial conditions.
+2. Discretization: convert the PDEs on the mesh into algebraic equations.
+3. Solution: solve the algebraic system, iterating over linearizations and coupled equations until the residuals and the monitored quantities have converged. If they have not, the iteration continues; if it diverges, the time step, under-relaxation, mesh or initial field is changed and the solver restarted.
+4. Post-processing: extract and visualize the quantities of interest and check them.
+5. Verification of the result: repeat steps 1 to 4 on systematically refined meshes and estimate the discretization error.
 
-   - **Purpose**: Organize the physical parameters of the flow field.
-   - **Method**: Typically use 2D or 3D arrays to store parameters like velocity components ($U$ and $V$), pressure ($P$), and density. These arrays represent the computational grid where each cell or node holds values of the physical parameters.
+Steps 2 and 3 are usually hidden inside a solver, but the user's choices in step 1 decide whether they succeed.
 
-2. **Set Initial Values**:
+### Pre-Processing
 
-   - **Purpose**: Provide starting points for the simulation.
-   - **Method**: Initialize flow variables with appropriate initial values. For example, set the initial velocity, pressure, and density throughout the computational domain based on estimated or known conditions.
+The geometry is taken from CAD and cleaned: small gaps, sliver faces and details below the mesh resolution are removed. The computational domain must extend far enough that the artificial outer boundaries do not influence the result; for external aerodynamics, inlets are typically placed several body lengths upstream and outlets five to ten body lengths downstream.
 
-```
-  Staggered-Grid                     Field Data
-+------------------+          +------------------+
-| .  .  .  .  .  . |          |   P              |
-| .  .  .  .  .  . |          | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |          | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |          | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |          | ...  ...  ... ...|
-| .  .  .  .  .  . |          +------------------+
-| .  .  .  .  .  . |
-| .  .  .  .  .  . |          +------------------+
-| .  .  .  .  .  . |          |   U              |
-| .  .  .  .  .  . |          | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |  =====>  | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |          | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |          | ...  ...  ... ...|
-| .  .  .  .  .  . |          +------------------+
-| .  .  .  .  .  . |
-| .  .  .  .  .  . |          +------------------+
-| .  .  .  .  .  . |          |   V              |
-| .  .  .  .  .  . |          | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |          | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |          | 0.0  0.0  0.0 ...|
-| .  .  .  .  .  . |          | ...  ...  ... ...|
-+------------------+          +------------------+
+The mesh determines both accuracy and cost. Cells must be small where gradients are large (boundary layers, shear layers, wakes, shocks) and may be large elsewhere. Wall-resolved turbulence models need the first cell centre at $y^+ \approx 1$ with prism layers growing away from the wall; wall functions accept $30 \lesssim y^+ \lesssim 300$. Skewness, non-orthogonality and abrupt changes in cell size increase the discretization error and can prevent convergence. Practical meshing is covered in [Boundary Layer Meshing Guide](../../../practice/mesh_generation/boundary_layers.md) and [Mesh Quality Assessment Guide](../../../practice/mesh_generation/mesh_quality.md).
+
+The physical models are chosen next: compressible or incompressible, laminar or turbulent and with which turbulence model, heat transfer, multiphase or reacting flow. Boundary conditions close the problem and are a frequent source of error; their mathematical types and implementation are the subject of [Boundary Conditions](./boundary_conditions.md). Finally the arrays that hold the unknowns (velocity components, pressure, temperature, turbulence quantities) are allocated and filled with an initial field. For a steady problem the initial field affects only the convergence path, as long as the iteration converges to the same solution; for an unsteady problem it is part of the problem definition.
+
+### Discretization
+
+Discretization replaces each derivative or integral by an algebraic approximation. For example, the five-point approximation of the Laplacian on a uniform grid with $\Delta x = \Delta y = h$ is
+
+$$
+\nabla^2\phi\big|_{i,j} \approx
+\frac{\phi_{i+1,j} + \phi_{i-1,j} + \phi_{i,j+1} + \phi_{i,j-1} - 4\phi_{i,j}}{h^2}
+$$
+
+with a truncation error $\tfrac{h^2}{12}(\partial_x^4\phi + \partial_y^4\phi) + O(h^4)$, so it is second order. Finite differences derive such formulas from Taylor series ([Finite Difference Method](../fdm/intro.md)); finite volumes integrate the conservation law over each cell and approximate the face fluxes ([The Finite Volume Method](../fvm/intro.md)); finite elements multiply by test functions and integrate ([Finite Element Method](../fem/intro.md)). Time derivatives are discretized separately, by explicit or implicit time-stepping schemes ([Time Integration](./time_integration.md)).
+
+Each discrete equation links an unknown to a few neighbours, so the matrix of the algebraic system is sparse: the five-point stencil gives at most five nonzeros per row however large the mesh.
+
+### Solving the Algebraic System
+
+For a linear problem the result is a system $A\boldsymbol{\phi} = \mathbf{b}$. Direct solvers (Gaussian elimination, LU or Cholesky factorization) give the solution in a fixed number of operations but fill in the sparse matrix, so their memory and work grow quickly with $N$. Large CFD systems are solved by iterative methods (Gauss–Seidel, conjugate gradient, GMRES, BiCGSTAB, multigrid) that need only matrix–vector products and are preconditioned to converge in few iterations ([Direct and Iterative Solvers](./direct_and_iterative_solvers.md)).
+
+The Navier–Stokes equations are nonlinear and couple velocity and pressure, so the linear solver sits inside an outer iteration: the equations are linearized about the current estimate (Picard or Newton linearization, [Dealing with Nonlinearity](./dealing_with_nonlinearity.md)) and the momentum and pressure equations are solved in turn by an algorithm such as SIMPLE or PISO ([Pressure–Velocity Coupling](../fvm/pressure_velocity_coupling.md)). Convergence is monitored through the residuals and through the quantities of interest ([Iterative Convergence](./iterative_convergence.md)).
+
+On parallel computers the mesh is split into subdomains, one per processor core. Each core assembles and solves the equations of its cells and exchanges values in a layer of halo cells with its neighbours after each iteration, so the cost per core stays roughly constant as mesh and core count grow together.
+
+### Post-Processing
+
+Post-processing extracts what the calculation was for: integrated quantities (forces, moments, pressure drop, heat transfer rates), profiles along lines, surface distributions of pressure and skin friction, and contour, vector and streamline plots that reveal separation and recirculation. It is also where the result is checked. The global mass and energy imbalance should be small, the $y^+$ of the first cells should match the wall treatment, the flow at the outlet should leave the domain everywhere, and the quantities of interest should be compared on at least two meshes.
+
+## Worked Example: A First-Order Equation End to End
+
+The model problem $du/dx + u = 0$, $u(0) = 1$ is carried through the whole workflow.
+
+### Grid
+
+The domain $[0, 1]$ is divided by $N$ equally spaced points $x_i = (i - 1)\Delta x$, $i = 1, \dots, N$, with $\Delta x = 1/(N - 1)$. The first run uses $N = 4$, so $\Delta x = 1/3$.
+
+### Discretization
+
+At each point $i \ge 2$ the derivative is replaced by the backward difference
+
+$$
+\left. \frac{du}{dx}\right|_{x_i} \approx \frac{u_i - u_{i-1}}{\Delta x}
+$$
+
+A Taylor expansion of $u_{i-1}$ about $x_i$ gives $(u_i - u_{i-1})/\Delta x = u'(x_i) - \tfrac{\Delta x}{2}u''(x_i) + O(\Delta x^2)$, so the truncation error is first order. The backward difference uses the upstream neighbour, consistent with the direction in which information travels. The discrete equation is
+
+```math
+\frac{u_i - u_{i-1}}{\Delta x} + u_i = 0 \quad\Longleftrightarrow\quad - u_{i-1} +
+(1 + \Delta x)\, u_i = 0,
+\qquad i = 2, \dots, N
 ```
 
-### Step 2: Discretization
+### Boundary Condition and Assembly
 
-The most time-consuming part of a CFD simulation is finding the solution to the discretized Navier-Stokes equations. These equations are partial differential equations (PDEs) that describe the flow of incompressible fluids. Discretization involves approximating the solutions to these PDEs using algebraic polynomials of discrete values.
+The first point has no upstream neighbour, and its equation is replaced by the boundary condition $u_1 = 1$. A first-order equation needs exactly one condition, at the inflow end. A central difference $(u_{i+1} - u_{i-1})/(2\Delta x)$ would reach past $x = 1$ at the last point and would need an extra numerical condition there that the continuous problem does not supply. Combining the boundary row with the three discrete equations gives
 
-For example, the Laplace operator of a scalar function can be represented using a five-point discrete scheme:
-
-$$
-\nabla^2 f \approx \frac{1}{\Delta x^2}
-\left(-4 f_{i,j} + f_{i-1,j} + f_{i+1,j} + f_{i,j-1} + f_{i,j+1}\right)
-$$
-
-```
-    PDE                        Discretized Form
-    ∇²f    ----------------->  +--------------------+
-                               | f[i-1, j]          |
-                               |        |           |
-                               |        v           |
-                        f[i, j-1] -> f[i,j] <- f[i, j+1]
-                               |        ^           |
-                               |        |           |
-                               | f[i+1, j]          |
-                               +--------------------+
-```
-
-#### Discretizing the Navier-Stokes Equations
-
-1. **Equations**:
-
-   - The Navier-Stokes equations describe fluid motion using PDEs, including terms for momentum, continuity, and energy.
-   - For incompressible fluids, these equations can be complex and require simplification and approximation through discretization.
-
-2. **Discretization Techniques**:
-
-   - **Finite Difference Method (FDM)**: Approximates derivatives by differences between adjacent grid points.
-   - **Finite Volume Method (FVM)**: Integrates the governing equations over control volumes around each grid point, ensuring conservation laws.
-   - **Finite Element Method (FEM)**: Uses variational methods to approximate solutions, often employed for complex geometries.
-
-3. **Example**: Discretizing a Simple PDE
-
-   - Consider a simple PDE:
-
-$$
-\frac{\partial u}{\partial x} + u = 0
-$$
-
-- Using FDM, approximate the derivative as:
-
-$$
-\frac{u_i - u_{i-1}}{\Delta x} + u_i = 0
-$$
-
-- Rearrange to get a discrete equation:
-
-$$
--u_{i-1} + (1 + \Delta x)u_i = 0
-$$
-
-#### Assembly of Discrete System and Application of Boundary Conditions
-
-1. **Application to Grid Points**:
-   - Apply the discrete equation to each grid point. For a 1D grid with $N$ points:
-
-$$
--u_{i-1} + (1 + \Delta x)u_i = 0 \quad \text{for} \ i = 2, 3, \ldots, N - 1
-$$
-
-- Special treatment is required at boundaries where not all neighboring points exist.
-
-2. **Boundary Conditions**:
-   - Define conditions at the boundaries to close the system of equations.
-   - **Example**: At the left boundary ($i = 1$), a Dirichlet boundary condition might be applied:
-
-$$
-u_1 = 1
-$$
-
-- This boundary condition is used to replace the discrete equation at $i = 1$.
-
-3. **System of Equations**:
-   - Combine all discrete equations and boundary conditions into a matrix system. For a simple 4-point grid:
-
-$$
+```math
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
 -1 & 1 + \Delta x & 0 & 0 \\
 0 & -1 & 1 + \Delta x & 0 \\
 0 & 0 & -1 & 1 + \Delta x
 \end{bmatrix}
-\begin{bmatrix}
-u_1 \\
-u_2 \\
-u_3 \\
-u_4
-\end{bmatrix} =
-\begin{bmatrix}
-1 \\
-0 \\
-0 \\
-0
-\end{bmatrix}
-$$
+\begin{bmatrix} u_1 \\ u_2 \\ u_3 \\ u_4 \end{bmatrix}
+=
+\begin{bmatrix} 1 \\ 0 \\ 0 \\ 0 \end{bmatrix}
+```
 
-- This system represents the discrete approximation of the continuous problem.
+In general, interior points carry the discretized PDE, and points on or next to the boundary carry the boundary condition or a modified equation that includes it.
 
-4. **General Application**:
+### Solution
 
-   - For more complex problems, apply the discrete equations to interior grid points and a combination of discrete equations and boundary conditions to points near boundaries.
-   - This results in a larger system of simultaneous algebraic equations, solved using numerical methods.
-
-5. **Boundary Conditions in CFD Codes**:
-
-   - Commercial CFD codes like FLUENT provide various boundary condition options such as velocity inlet, pressure inlet, and pressure outlet.
-   - Proper specification of boundary conditions is crucial. Incorrect conditions can lead to inaccurate or unstable results.
-   - Thoroughly read the documentation for each boundary condition option to understand its application and impact on the simulation.
-
-### Step 3: Solving the Linear System
-
-Once the equations are discretized, the next step is to solve the resulting linear system $Ax = b$. The choice of solver depends on the size and sparsity of matrix $A$:
-
-1. **Direct Solver**:
-
-   - **Suitable for**: Smaller systems where computational resources are sufficient.
-   - **Method**: Uses techniques like Gaussian elimination or LU decomposition to find the solution in a finite number of steps.
-
-2. **Iterative Solver**:
-
-   - **Preferred for**: Larger, sparse systems due to efficiency.
-   - **Method**: Uses iterative techniques such as Conjugate Gradient or GMRES (Generalized Minimal Residual) to approximate the solution.
-
-#### Parallelization
-
-Parallelization is critical in modern CFD simulations to speed up both the discretization and solution phases by distributing computations across multiple processors:
-
-- **Discretization**: Each processor can handle different parts of the domain, reducing the overall time required.
-- **Solving the Linear System**: Parallel solvers distribute the matrix operations, significantly accelerating the solution process for large systems.
-
-#### Solution of Discrete System
-
-The discrete system (Equation 10) for a simple 1D example can be solved to obtain unknown values at the grid points. For $\Delta x = \frac{1}{3}$, the solutions are:
+The matrix is lower bidiagonal, so forward substitution solves it exactly: $u_i = u_{i-1}/(1 + \Delta x)$. With $\Delta x = 1/3$,
 
 $$
-u_1 = 1, \quad u_2 = \frac{3}{4}, \quad u_3 = \frac{9}{16}, \quad u_4 = \frac{27}{64}
+u_1 = 1,
+\qquad u_2 = \frac{3}{4},
+\qquad u_3 = \frac{9}{16},
+\qquad u_4 = \frac{27}{64} \approx 0.4219
 $$
 
-##### Exact Solution
+A real CFD system is not triangular, and the same step is done by an iterative solver.
 
-The exact solution for this 1D example is:
+### Comparison with the Exact Solution
 
-$$
-u_{exact} = \exp(-x)
-$$
+![Four-point numerical solution against the exact solution, with the pointwise error](../../../scripts/plots/numerical_vs_exact_solution/numerical_vs_exact_solution.png)
 
-##### Comparison of Solutions
+The discrete solution lies above $e^{-x}$, and the error accumulates along the march: at $x = 1$ the discrete value 0.4219 exceeds $e^{-1} = 0.3679$ by 14.7%.
 
-The figure below compares the discrete solution obtained on the four-point grid with the exact solution, showing that the error is largest at the right boundary (approximately 14.7%).
+### Grid Refinement
 
-![Graph comparing numerical and exact solutions](../../../scripts/plots/numerical_vs_exact_solution/numerical_vs_exact_solution.png)
+In a real problem the exact solution is unknown, so accuracy is judged from a sequence of grids. Repeating the calculation with more points gives the errors at $x = 1$ below, computed by the [Continuous vs Discrete Domain](../../../scripts/plots/continuous_vs_discrete_domain/) script.
 
-##### Practical Considerations
+| Points $N$ | $\Delta x$ | $u_N$ | Error at $x = 1$ | Observed order $p$ |
+| --- | --- | --- | --- | --- |
+| 4 | 0.3333 | 0.42188 | 0.05400 (14.7%) |  |
+| 8 | 0.1429 | 0.39270 | 0.02482 (6.75%) | 0.92 |
+| 16 | 0.0667 | 0.37981 | 0.01193 (3.24%) | 0.96 |
+| 32 | 0.0323 | 0.37373 | 0.00586 (1.59%) | 0.98 |
+| 64 | 0.0159 | 0.37078 | 0.00290 (0.79%) | 0.99 |
+| 256 | 0.0039 | 0.36860 | 0.00072 (0.20%) | 1.00 |
 
-In practical CFD applications, the discrete system may have thousands to millions of unknowns. Efficiently solving such large systems requires optimization techniques:
+The observed order $p = \ln(e_k/e_{k+1})/\ln(\Delta x_k/\Delta x_{k+1})$ approaches the formal order 1 of the backward difference. When the solutions on successive grids agree to within a tolerance chosen for the purpose, the solution is called grid converged. Agreement between two grids alone can be misleading if they are too coarse to be in the asymptotic range, where the error behaves as $C\Delta x^p$; a third grid confirms the observed order. Richardson extrapolation and the grid convergence index turn such a sequence into an error estimate without knowing the exact solution, as described in [Verification and Validation](./verification_and_validation.md).
 
-1. **Naive Gaussian Elimination**:
+## Key Takeaways
 
-   - **Problem**: Computationally expensive for large systems and impractical for large-scale problems.
-
-2. **Optimized Matrix Inversion**:
-
-   - **Iterative Solvers**: Conjugate Gradient, GMRES are efficient for large, sparse systems.
-   - **Preconditioning**: Techniques to improve the convergence rate of iterative solvers.
-   - **Parallel Computing**: Distributing computations across multiple processors to accelerate the solution process.
-
-By optimizing the matrix inversion and leveraging advanced computational techniques, modern CFD codes can solve complex problems efficiently.
-
-#### Grid Convergence
-
-Grid convergence ensures that as the number of grid points $N$ increases and $\Delta x$ decreases, the numerical solution's error decreases, improving the agreement between numerical and exact solutions.
-
-##### Effect of Increasing Grid Points
-
-Increasing the number of grid points $N$ and decreasing $\Delta x$ should reduce numerical errors. For example, solving the same 1D problem with $N = 8$ and $N = 16$:
-
-![Graph comparing grid convergence](https://github.com/djeada/Computational-Fluid-Dynamics-CFD-Resources/assets/37275728/c86df1dd-ad03-4d61-908a-79c646821cab)
-
-##### Grid Converged Solutions
-
-When numerical solutions obtained on different grids agree within a user-specified level of tolerance, they are referred to as "grid converged" solutions. This ensures that the numerical solution is independent of the grid size, reflecting the true behavior of the physical system being modeled.
-
-#### Importance of Grid Convergence
-
-Grid convergence applies to both finite-difference and finite-volume approaches. Ensuring the solution is grid converged to an acceptable level of tolerance is vital for every CFD problem to guarantee accuracy.
-
-### Step 4: Post-Processing
-
-In the post-processing stage, we visualize the flow field data obtained from the simulation. Common visualization techniques include:
-
-1. **Vector Plots**:
-
-   - **Purpose**: Represent the direction and magnitude of flow.
-
-2. **Contour Plots**:
-
-   - **Purpose**: Show levels of specific flow variables such as pressure or velocity, providing insight into the flow behavior.
-
-Effective post-processing helps in interpreting and analyzing the simulation results, facilitating better understanding and decision-making.
-
-## Purpose in CFD
-
-This note details the four-step CFD workflow: pre-processing (data structures, initial conditions), discretization (converting PDEs to algebraic equations), solving the linear system ($Ax = b$), and post-processing (visualization). It provides a practical roadmap for implementing any CFD solver and explains the concepts of grid convergence and solution accuracy.
-
-## Input / Output
-
-| Aspect | Details |
-| --- | --- |
-| **Inputs** | Domain geometry, grid spacing $\Delta x$, boundary conditions (Dirichlet, Neumann), fluid properties, initial field values (velocity $U$, $V$, pressure $P$) |
-| **Outputs** | Discrete solution arrays ($u_1, u_2, \dots, u_N$), residual history, converged velocity and pressure fields, contour and vector plots |
+- CFD replaces a field defined at every point by values stored on a mesh, and the PDEs by a sparse system of algebraic equations.
+- The workflow is pre-processing, discretization, solution and post-processing, followed by a refinement study; the user's choices of domain, mesh, models and boundary conditions decide most of the outcome.
+- Boundary conditions replace or modify the discrete equations at boundary points, and the number of conditions must match the mathematical character of the equation.
+- Large systems are solved iteratively inside an outer nonlinear iteration and in parallel by domain decomposition.
+- One solution says nothing about its own accuracy; a sequence of refined grids gives the observed order and the discretization error.
 
 ## Related Scripts
 
-- [Backward-Facing Step Flow (SIMPLE Algorithm)](../../../scripts/simulations/backward_facing_step_simple/): solves steady 2D laminar incompressible flow over a backward-facing step with the finite volume method and the SIMPLE pressure–velocity coupling algorithm.
-- [Grid Convergence Comparison](../../../scripts/plots/comparing_grid_convergence/): illustrates grid convergence by plotting the model numerical solutions $u_N(x) = e^{-x(1 + x/N)}$ for $N = 4, 8, 16$ against the exact solution $u(x) = e^{-x}$ on $[0, 1]$.
-- [Lid-Driven Cavity Flow Simulation](../../../scripts/simulations/lid_driven_cavity/): solves the 2D incompressible Navier-Stokes equations for flow in a square cavity driven by a moving lid at a Reynolds number of 100 and animates the velocity field.
-- [Mean Velocity Magnitude: Experiment vs CFD Comparison](../../../scripts/plots/mean_velocity_magnitude/): plots a mock experimental profile and a mock CFD scale-resolving simulation (SRS) profile of the normalised mean velocity magnitude $|U|/U_0$ along an under-body centreline.
+- [Continuous vs Discrete Domain](../../../scripts/plots/continuous_vs_discrete_domain/): illustrates the central step of CFD, replacing a field defined at every point of a continuous domain by values stored at a finite set of grid points, and measures the error this introduces for the model problem $du/dx + u = 0$, $u(0) = 1$.
 - [Numerical vs. Exact Solution Comparison](../../../scripts/plots/numerical_vs_exact_solution/): solves $du/dx + u = 0$ with $u(0) = 1$ by a first-order finite-difference scheme and compares the result with the exact solution $u(x) = e^{-x}$, plotting the pointwise error.
+- [Grid Convergence Index](../../../scripts/algorithms/grid_convergence_index/): estimates discretization error from three meshes with Richardson extrapolation and the grid convergence index (GCI), following the procedure of Celik et al. (2008).
+- [Backward-Facing Step Flow (SIMPLE Algorithm)](../../../scripts/simulations/backward_facing_step_simple/): solves steady 2D laminar incompressible flow over a backward-facing step with the finite volume method and the SIMPLE pressure–velocity coupling algorithm.
+- [Lid-Driven Cavity Flow Simulation](../../../scripts/simulations/lid_driven_cavity/): solves the 2D incompressible Navier-Stokes equations for flow in a square cavity driven by a moving lid at a Reynolds number of 100 and animates the velocity field.
+- [Grid Convergence Comparison](../../../scripts/plots/comparing_grid_convergence/): illustrates grid convergence by plotting the model numerical solutions $u_N(x) = e^{-x(1 + x/N)}$ for $N = 4, 8, 16$ against the exact solution $u(x) = e^{-x}$ on $[0, 1]$.
+- [Mean Velocity Magnitude: Experiment vs CFD Comparison](../../../scripts/plots/mean_velocity_magnitude/): plots a mock experimental profile and a mock CFD scale-resolving simulation (SRS) profile of the normalised mean velocity magnitude $|U|/U_0$ along an under-body centreline.
 
 ## Exercises
 
-**Exercise 1.** Repeat the example $\frac{\partial u}{\partial x} + u = 0$, $u_1 = 1$, with the same backward difference on a 5-point grid ($\Delta x = 1/4$). Give all nodal values and the percentage error at $x = 1$.
+**Exercise 1.** Repeat the worked example with the same backward difference on a 5-point grid ($\Delta x = 1/4$). Give all nodal values and the percentage error at $x = 1$.
 
 <details>
 <summary>Answer</summary>
@@ -386,7 +218,7 @@ With $p = 1$: $f_{\text{ext}} = 2f_1 - f_2 \approx 0.36843$, an error of $+0.000
 
 </details>
 
-**Exercise 4.** Apply the five-point Laplacian with $\Delta x = \Delta y = h = 0.1$ to (a) $f = x^2 + y^2$ and (b) $f = x^4$ at the point $(1, 0)$. Compare with the exact values and explain the error in (b).
+**Exercise 4.** Apply the five-point Laplacian with $h = 0.1$ to (a) $f = x^2 + y^2$ and (b) $f = x^4$ at the point $(1, 0)$. Compare with the exact values and explain the error in (b).
 
 <details>
 <summary>Answer</summary>
@@ -408,7 +240,7 @@ Dense: $10^{12}$ entries $\times$ 8 bytes $= 8$ TB.
 
 CSR: about $5 \times 10^6$ nonzeros, so $5 \times 10^6 \times (8 + 4)$ bytes for values and column indices plus $(10^6 + 1) \times 4$ bytes for row pointers, about 64 MB in total.
 
-Only sparse storage is feasible. Direct factorization creates fill-in that destroys sparsity, so large CFD systems are solved with iterative methods (CG, GMRES, multigrid) that only need matrix–vector products, as described in Step 3.
+Only sparse storage is feasible. Direct factorization creates fill-in that destroys sparsity, so large CFD systems are solved with iterative methods (CG, GMRES, multigrid) that only need matrix–vector products.
 
 </details>
 
@@ -417,5 +249,6 @@ Only sparse storage is feasible. Direct factorization creates fill-in that destr
 - Anderson, J. D., *Computational Fluid Dynamics: The Basics with Applications*, McGraw-Hill, 1995.
 - Versteeg, H. K., & Malalasekera, W., *An Introduction to Computational Fluid Dynamics: The Finite Volume Method*, 2nd ed., Pearson Education, 2007.
 - Ferziger, J. H., Perić, M., & Street, R. L., *Computational Methods for Fluid Dynamics*, 4th ed., Springer, 2020.
+- Patankar, S. V., *Numerical Heat Transfer and Fluid Flow*, Hemisphere, 1980.
 - Roache, P. J., *Verification and Validation in Computational Science and Engineering*, Hermosa Publishers, 1998.
 - Saad, Y., *Iterative Methods for Sparse Linear Systems*, 2nd ed., SIAM, 2003.

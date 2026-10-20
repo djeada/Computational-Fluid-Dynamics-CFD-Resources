@@ -1,516 +1,190 @@
 # Kinematics of Particles
 
-Kinematics is the branch of mechanics that describes motion without considering the forces that cause it. For particles, we focus on position, velocity, and acceleration as functions of time, providing the foundation for understanding how objects move through space.
+Kinematics describes motion without asking what causes it: given how a point moves, find its position, velocity and acceleration, or the reverse. A body can be treated as a particle when its rotation does not matter for the question asked, as for a vehicle on a route, a projectile, a satellite or a fluid particle followed along a pathline. This note covers rectilinear motion, curvilinear motion in Cartesian, normal–tangential and polar coordinates, and relative motion between translating frames. Rotating frames, which bring in the Coriolis acceleration, are treated with rigid bodies in [Rigid Body Kinematics](rigid_body_kinematics.md), and the forces that produce the accelerations in [Kinetics of Particles](kinetics_particles.md).
 
-## Basic Definitions
+## Problem Statement
 
-### Position
+A particle $P$ moves relative to a reference frame that is taken as fixed. Given one of
 
-The **position vector** $\mathbf{r}(t)$ describes the location of a particle relative to a fixed coordinate system:
+- the position as a function of time, $\mathbf{r}(t)$, or a path $y = f(x)$ with the speed along it;
+- the acceleration as a function of time, velocity or position, with initial conditions $\mathbf{r}(0) = \mathbf{r}_0$ and $\mathbf{v}(0) = \mathbf{v}_0$;
+- the motion of another point and the motion of $P$ relative to it,
 
-$$
-\mathbf{r}(t) = x(t)\mathbf{i} + y(t)\mathbf{j} + z(t)\mathbf{k}
-$$
-
-The **magnitude** of position (distance from origin):
-
-$$
-r = |\mathbf{r}| = \sqrt{x^2 + y^2 + z^2}
-$$
-
-### Displacement
-
-**Displacement** is the change in position over a time interval:
-
-$$
-\Delta \mathbf{r} = \mathbf{r}(t_2) - \mathbf{r}(t_1)
-$$
-
-Note: Displacement is different from distance traveled—displacement is a vector representing the straight-line change in position.
-
-### Velocity
-
-**Average velocity** over a time interval:
-
-$$
-\mathbf{v}_{avg} = \frac{\Delta \mathbf{r}}{\Delta t} = \frac{\mathbf{r}(t_2) - \mathbf{r}(t_1)}{t_2 - t_1}
-$$
-
-**Instantaneous velocity** (first derivative of position):
-
-$$
-\mathbf{v}(t) = \frac{d\mathbf{r}}{dt} = \dot{x}\mathbf{i} + \dot{y}\mathbf{j} +
-\dot{z}\mathbf{k}
-$$
-
-**Speed** is the magnitude of velocity:
-
-$$
-v = |\mathbf{v}| = \sqrt{\dot{x}^2 + \dot{y}^2 + \dot{z}^2}
-$$
-
-### Acceleration
-
-**Average acceleration** over a time interval:
-
-$$
-\mathbf{a}_{avg} = \frac{\Delta \mathbf{v}}{\Delta t} = \frac{\mathbf{v}(t_2) - \mathbf{v}(t_1)}{t_2 - t_1}
-$$
-
-**Instantaneous acceleration** (first derivative of velocity, second derivative of position):
-
-$$
-\mathbf{a}(t) = \frac{d\mathbf{v}}{dt} = \frac{d^2\mathbf{r}}{dt^2} = \ddot{x}\mathbf{i} + \ddot{y}\mathbf{j} + \ddot{z}\mathbf{k}
-$$
-
-## One-Dimensional Motion
-
-For motion along a straight line (say, the x-axis):
-
-### Position, Velocity, and Acceleration
-
-- Position: $x(t)$
-- Velocity: $v(t) = \frac{dx}{dt}$
-- Acceleration: $a(t) = \frac{dv}{dt} = \frac{d^2x}{dt^2}$
-
-### Kinematic Equations for Constant Acceleration
-
-When acceleration is constant ($a = \text{constant}$), we have:
-
-1. **Velocity as function of time:**
-
-   ```math
-   v(t) = v_0 + at
-   ```
-
-2. **Position as function of time:**
-
-   ```math
-   x(t) = x_0 + v_0 t + \frac{1}{2}at^2
-   ```
-
-3. **Velocity-position relationship:**
-
-   ```math
-   v^2 = v_0^2 + 2a(x - x_0)
-   ```
-
-4. **Average velocity:**
-
-   ```math
-   v_{avg} = \frac{v_0 + v}{2}
-   ```
-
-### Example 1: Projectile Motion (Vertical)
-
-A ball is thrown vertically upward with initial velocity $v_0 = 20$ m/s.
-
-**Given:**
-
-- Initial velocity: $v_0 = 20$ m/s (upward)
-- Acceleration: $a = -g = -9.81$ m/s² (downward)
-- Initial position: $y_0 = 0$
-
-**Find:** Maximum height and time to return to ground.
-
-**Solution:**
-
-**Maximum height** occurs when $v = 0$:
-
-$$
-0 = 20 - 9.81t_{max}
-$$
-
-$$
-t_{max} = \frac{20}{9.81} = 2.04 \text{ s}
-$$
-
-$$
-y_{max} = 0 + 20(2.04) + \frac{1}{2}(-9.81)(2.04)^2 = 20.4 \text{ m}
-$$
-
-**Time to return to ground** ($y = 0$):
-
-$$
-0 = 0 + 20t - \frac{1}{2}(9.81)t^2
-$$
-
-$$
-t(20 - 4.905t) = 0
-$$
-
-$$
-t = 0 \text{ or } t = \frac{20}{4.905} = 4.08 \text{ s}
-$$
-
-## Two-Dimensional Motion
-
-### Projectile Motion
-
-For a projectile launched at angle $\theta_0$ with initial speed $v_0$:
-
-**Initial conditions:**
-
-- $x_0 = 0, y_0 = 0$
-- $v_{0x} = v_0\cos\theta_0, v_{0y} = v_0\sin\theta_0$
-- $a_x = 0, a_y = -g$
-
-**Kinematic equations:**
-
-$$
-x(t) = v_0\cos\theta_0 \cdot t
-$$
-
-$$
-y(t) = v_0\sin\theta_0 \cdot t - \frac{1}{2}gt^2
-$$
-
-$$
-v_x(t) = v_0\cos\theta_0
-$$
-
-$$
-v_y(t) = v_0\sin\theta_0 - gt
-$$
-
-**Trajectory equation** (eliminating time):
-
-$$
-y = x\tan\theta_0 - \frac{gx^2}{2v_0^2\cos^2\theta_0}
-$$
-
-**Key results:**
-
-- **Range**: $R = \frac{v_0^2\sin(2\theta_0)}{g}$
-- **Maximum height**: $H = \frac{v_0^2\sin^2\theta_0}{2g}$
-- **Time of flight**: $T = \frac{2v_0\sin\theta_0}{g}$
+find the velocity $\mathbf{v} = d\mathbf{r}/dt$, the acceleration $\mathbf{a} = d\mathbf{v}/dt$, the path, and derived quantities such as range, stopping distance, time of flight or radius of curvature. The particle has no extent, and the reference frame is not rotating unless stated. The governing relations are the definitions
 
-### Example 2: Projectile Motion
-
-A cannon fires a projectile at 45° with initial speed 100 m/s.
-
-**Given:**
-
-- $v_0 = 100$ m/s, $\theta_0 = 45^\circ$
-- $g = 9.81$ m/s²
-
-**Solution:**
-
-**Range:**
-
-$$
-R = \frac{(100)^2\sin(2 \times 45^\circ)}{9.81} = \frac{10000 \times 1}{9.81} = 1019
-\text{ m}
-$$
-
-**Maximum height:**
-
-$$
-H = \frac{(100)^2\sin^2(45^\circ)}{2 \times 9.81} = \frac{10000 \times 0.5}{19.62} = 255
-\text{ m}
-$$
-
-**Time of flight:**
-
-$$
-T = \frac{2 \times 100 \times \sin(45^\circ)}{9.81} = \frac{200 \times 0.707}{9.81} = 14.4 \text{ s}
-$$
-
-## Curvilinear Motion
-
-### Path-Dependent Description
-
-For motion along a curved path, we use:
-
-#### Tangential-Normal Coordinate System
-
-- **Tangent direction** ($\mathbf{e}_t$): Along the path, in direction of motion
-- **Normal direction** ($\mathbf{e}_n$): Perpendicular to path, toward center of curvature
-
-**Velocity:**
-
-$$
-\mathbf{v} = v\mathbf{e}_t
 $$
-
-where $v$ is the speed (scalar).
-
-**Acceleration:**
-
-$$
-\mathbf{a} = a_t\mathbf{e}_t + a_n\mathbf{e}_n
-$$
-
-where:
-
-- **Tangential acceleration**: $a_t = \frac{dv}{dt}$ (changes speed)
-- **Normal acceleration**: $a_n = \frac{v^2}{\rho}$ (changes direction)
-- $\rho$ is the **radius of curvature**
-
-### Circular Motion
-
-For motion in a circle of radius $R$:
-
-#### Uniform Circular Motion
-
-- **Angular velocity**: $\omega = \frac{v}{R}$ (constant)
-- **Centripetal acceleration**: $a_c = \frac{v^2}{R} = \omega^2 R$
-- **Period**: $T = \frac{2\pi R}{v} = \frac{2\pi}{\omega}$
-
-#### Non-uniform Circular Motion
-
-- **Angular acceleration**: $\alpha = \frac{d\omega}{dt}$
-- **Tangential acceleration**: $a_t = \alpha R$
-- **Normal acceleration**: $a_n = \omega^2 R$
-- **Total acceleration**: $a = \sqrt{a_t^2 + a_n^2}$
-
-### Example 3: Circular Motion
-
-A car travels around a circular track of radius 200 m. Its speed increases from 20 m/s to 30 m/s in 10 seconds.
-
-**Given:**
-
-- $R = 200$ m
-- $v_1 = 20$ m/s, $v_2 = 30$ m/s
-- $\Delta t = 10$ s
-
-**Solution:**
-
-**Tangential acceleration:**
-
-$$
-a_t = \frac{v_2 - v_1}{\Delta t} = \frac{30 - 20}{10} = 1 \text{ m/s}^2
+\mathbf{v} = \frac{d\mathbf{r}}{dt},
+\qquad \mathbf{a} = \frac{d\mathbf{v}}{dt} = \frac{d^2\mathbf{r}}{dt^2}
 $$
 
-**Normal acceleration at $t = 0$:**
+written in whichever set of unit vectors suits the problem. Lengths are in m, times in s, velocities in m/s and accelerations in m/s².
 
-$$
-a_{n1} = \frac{v_1^2}{R} = \frac{20^2}{200} = 2 \text{ m/s}^2
-$$
+## Position, Velocity and Acceleration
 
-**Normal acceleration at $t = 10$ s:**
-
-$$
-a_{n2} = \frac{v_2^2}{R} = \frac{30^2}{200} = 4.5 \text{ m/s}^2
-$$
+The position vector from a fixed origin $O$ is $\mathbf{r}(t) = x\mathbf{i} + y\mathbf{j} + z\mathbf{k}$. Over an interval $\Delta t$ the displacement is $\Delta\mathbf{r} = \mathbf{r}(t + \Delta t) - \mathbf{r}(t)$, which differs from the distance travelled along the path, $\Delta s$, unless the motion is straight and in one direction. The velocity is tangent to the path and its magnitude is the speed, $v = |\mathbf{v}| = ds/dt$. The acceleration is in general not tangent to the path: it has a component along the path that changes the speed and a component normal to it that changes the direction.
 
-**Total acceleration at $t = 10$ s:**
+Because $\mathbf{i}$, $\mathbf{j}$, $\mathbf{k}$ are constant, Cartesian components differentiate term by term:
 
 $$
-a = \sqrt{a_t^2 + a_{n2}^2} = \sqrt{1^2 + 4.5^2} = 4.61 \text{ m/s}^2
+\mathbf{v} = \dot{x}\mathbf{i} + \dot{y}\mathbf{j} + \dot{z}\mathbf{k},
+\qquad \mathbf{a} = \ddot{x}\mathbf{i} + \ddot{y}\mathbf{j} + \ddot{z}\mathbf{k}
 $$
 
-## Relative Motion
+In the other coordinate systems below the unit vectors move with the particle, and their time derivatives produce the extra acceleration terms.
 
-### Relative Velocity
+## Rectilinear Motion
 
-If particle A moves with velocity $\mathbf{v}_A$ and particle B with velocity $\mathbf{v}_B$, then:
+For motion along a straight line with coordinate $s$, $v = \dot{s}$ and $a = \dot{v} = \ddot{s}$. Eliminating $dt$ between them gives a third relation that is used whenever the acceleration depends on position:
 
-**Velocity of A relative to B:**
+```math
+a\, ds = v\, dv
+```
 
-$$
-\mathbf{v}_{A/B} = \mathbf{v}_A - \mathbf{v}_B
-$$
+### Constant Acceleration
 
-**Velocity of B relative to A:**
+Integrating $a = \text{const}$ from $s_0$, $v_0$ at $t = 0$ gives
 
 $$
-\mathbf{v}_{B/A} = \mathbf{v}_B - \mathbf{v}_A = -\mathbf{v}_{A/B}
+v = v_0 + at,
+\qquad s = s_0 + v_0t + \tfrac{1}{2}at^2,
+\qquad v^2 = v_0^2 + 2a(s - s_0)
 $$
 
-### Relative Acceleration
+These hold only for constant acceleration. Free fall near the Earth's surface with negligible air resistance is the standard case, with $a = -g = -9.81$ m/s² for $s$ measured upward.
 
-$$
-\mathbf{a}_{A/B} = \mathbf{a}_A - \mathbf{a}_B
-$$
+A ball thrown upward at $v_0 = 20$ m/s from $s_0 = 0$ stops at the top, $v = 0$, after $t = v_0/g = 2.04$ s, at height $s = v_0^2/(2g) = 20.4$ m. It returns to $s = 0$ when $t(v_0 - gt/2) = 0$, at $t = 2v_0/g = 4.08$ s.
 
-### Example 4: River Crossing
+### Acceleration Given as a Function
 
-A boat can travel at 5 m/s in still water. It needs to cross a river that is 100 m wide with a current of 3 m/s.
+When $a$ is not constant, the kinematic relations are integrated with the variable that $a$ depends on:
 
-**Case 1: Boat aims directly across**
+| Given | Integrate | Result |
+| --- | --- | --- |
+| $a(t)$ | $`dv = a\,dt`$, then $`ds = v\,dt`$ | $v(t)$, then $s(t)$ |
+| $a(v)$ | $dt = dv/a(v)$, or $`ds = v\,dv/a(v)`$ | $t(v)$ or $s(v)$ |
+| $a(s)$ | $`v\,dv = a(s)\,ds`$ | $`v^2 = v_0^2 + 2\int_{s_0}^{s}a\,ds`$ |
 
-- Boat velocity relative to water: $\mathbf{v}_{boat/water} = 5\mathbf{j}$ m/s
-- Water velocity: $\mathbf{v}_{water} = 3\mathbf{i}$ m/s
-- Boat velocity relative to ground: $\mathbf{v}_{boat} = 3\mathbf{i} + 5\mathbf{j}$ m/s
+For example, a particle starting from rest at the origin with $a = 2 + 3t$ m/s² has $v = 2t + 1.5t^2$ and $s = t^2 + 0.5t^3$, so at $t = 4$ s it moves at 32 m/s and has travelled 48 m. A resisting acceleration $a = -kv$ (linear drag) is of the second type, and a spring acceleration $a = -\omega^2s$ is of the third.
 
-**Time to cross:**
+## Curvilinear Motion in Cartesian Coordinates
 
-$$
-t = \frac{100 \text{ m}}{5 \text{ m/s}} = 20 \text{ s}
-$$
+When the components of the acceleration are independent, as for a projectile in uniform gravity without drag, each Cartesian component is a rectilinear problem. A projectile launched from the origin with speed $v_0$ at angle $\theta_0$ above the horizontal has $a_x = 0$ and $a_y = -g$, so
 
-**Downstream drift:**
+```math
+x = v_0\cos\theta_0\, t,
+\qquad y = v_0\sin\theta_0\, t - \tfrac{1}{2}gt^2
+```
 
-$$
-x = 3 \times 20 = 60 \text{ m}
-$$
+Eliminating $t$ gives the parabolic path
 
-**Case 2: Boat aims to go straight across**
-The boat must aim upstream at angle $\theta$:
+```math
+y = x\tan\theta_0 - \frac{g\,x^2}{2v_0^2\cos^2\theta_0}
+```
 
-$$
-\sin\theta = \frac{3}{5}
-$$
+On level ground the time of flight, maximum height and range are
 
 $$
-\theta = 36.87^\circ
+T = \frac{2v_0\sin\theta_0}{g},
+\qquad H = \frac{v_0^2\sin^2\theta_0}{2g},
+\qquad R = \frac{v_0^2\sin 2\theta_0}{g}
 $$
-
-Effective velocity across river: $v_{across} = 5\cos\theta = 4$ m/s
-Time to cross: $t = \frac{100}{4} = 25$ s
 
-## Variable Acceleration
+so the range is greatest at $\theta_0 = 45^\circ$ and is the same for complementary angles. For $v_0 = 100$ m/s at $45^\circ$: $R = 1019$ m, $H = 255$ m and $T = 14.4$ s. These results ignore air resistance, which for most real projectiles is far from negligible: a baseball launched at 40 m/s travels about 97 m instead of 163 m, and its best launch angle is about $41^\circ$ (see [Kinetics of Particles](kinetics_particles.md#projectile-with-air-drag)).
 
-When acceleration is not constant, integration is required:
+## Normal and Tangential Coordinates
 
-### Given $a(t)$:
+When the path is known, the natural unit vectors are $\mathbf{e}_t$, tangent to the path in the direction of motion, and $\mathbf{e}_n$, normal to it and pointing toward the centre of curvature. The velocity is $`\mathbf{v} = v\,\mathbf{e}_t`$. As the particle moves a distance $ds$, the tangent turns through $d\phi = ds/\rho$, where $\rho$ is the radius of curvature, so $`d\mathbf{e}_t/dt = (v/\rho)\,\mathbf{e}_n`$. Differentiating $\mathbf{v}$ then gives
 
-$$
-v(t) = v_0 + \int_0^t a(\tau) d\tau
-$$
-
-$$
-x(t) = x_0 + \int_0^t v(\tau) d\tau
-$$
-
-### Given $a(v)$:
+```math
+\mathbf{a} = \dot{v}\,\mathbf{e}_t + \frac{v^2}{\rho}\,\mathbf{e}_n
+```
 
-Using $a = v\frac{dv}{dx}$:
+The tangential component $`a_t = \dot{v} = v\,dv/ds`$ changes the speed, and the normal component $a_n = v^2/\rho$ changes the direction and always points toward the centre of curvature. A particle moving at constant speed on a curve accelerates; a particle moving on a straight line ($\rho \to \infty$) has no normal acceleration.
 
-$$
-v dv = a dx
-$$
+For a plane path $y = f(x)$,
 
 $$
-\int_{v_0}^v v' dv' = \int_{x_0}^x a dx'
+\rho = \frac{\left[1 + (dy/dx)^2\right]^{3/2}}{\left|d^2y/dx^2\right|}
 $$
-
-### Given $a(x)$:
 
-$$
-v^2 = v_0^2 + 2\int_{x_0}^x a dx'
-$$
+and for a motion known in Cartesian form, $\rho = v^3/|\mathbf{v} \times \mathbf{a}|$.
 
-### Example 5: Variable Acceleration
+For a circle of radius $R$ traversed at angular rate $\omega = \dot{\theta}$, $v = R\omega$, $a_t = R\alpha$ with $\alpha = \dot{\omega}$, and $a_n = v^2/R = R\omega^2$. A car on a circular track of radius 200 m that speeds up uniformly from 20 to 30 m/s in 10 s has $a_t = 1$ m/s²; its normal acceleration rises from $20^2/200 = 2$ m/s² to $30^2/200 = 4.5$ m/s², so at the end of the interval $|\mathbf{a}| = \sqrt{1^2 + 4.5^2} = 4.61$ m/s².
 
-A particle starts from rest and has acceleration $a(t) = 2 + 3t$ m/s².
+## Polar and Cylindrical Coordinates
 
-**Find:** Velocity and position after 4 seconds.
+When the motion is described by a distance $r$ from a fixed point and an angle $\theta$, as for a rotating arm, a radar track or an orbit, the unit vectors are $`\mathbf{e}_r`$ along the radius and $`\mathbf{e}_\theta`$ perpendicular to it in the direction of increasing $\theta$. Both turn with the radius:
 
-**Solution:**
+```math
+\dot{\mathbf{e}}_r = \dot{\theta}\,\mathbf{e}_\theta,
+\qquad \dot{\mathbf{e}}_\theta = -\dot{\theta}\,\mathbf{e}_r
+```
 
-**Velocity:**
+Differentiating $`\mathbf{r} = r\,\mathbf{e}_r`$ twice gives
 
-$$
-v(t) = 0 + \int_0^t (2 + 3\tau) d\tau = [2\tau + \frac{3\tau^2}{2}]_0^t = 2t + 1.5t^2
-$$
+```math
+\mathbf{v} = \dot{r}\,\mathbf{e}_r + r\dot{\theta}\,\mathbf{e}_\theta,
+\qquad \mathbf{a} = (\ddot{r} - r\dot{\theta}^2)\,\mathbf{e}_r +
+(r\ddot{\theta} + 2\dot{r}\dot{\theta})\,\mathbf{e}_\theta
+```
 
-At $t = 4$ s: $v(4) = 2(4) + 1.5(4)^2 = 8 + 24 = 32$ m/s
+The term $-r\dot{\theta}^2$ is the centripetal acceleration of the rotation, and $2\dot{r}\dot{\theta}$ is the Coriolis acceleration that appears when the radius changes while the line rotates. Cylindrical coordinates add $z\mathbf{k}$ to the position, $\dot{z}\mathbf{k}$ to the velocity and $\ddot{z}\mathbf{k}$ to the acceleration.
 
-**Position:**
+A collar slides outward along an arm that rotates at a constant $\dot{\theta} = 2$ rad/s. At the instant when $r = 0.6$ m, $\dot{r} = 0.5$ m/s and $\ddot{r} = 0$:
 
 $$
-x(t) = 0 + \int_0^t (2\tau + 1.5\tau^2) d\tau = [\tau^2 + 0.5\tau^3]_0^t = t^2 + 0.5t^3
+a_r = 0 - 0.6 \times 2^2 = -2.4 \text{ m/s}^2,
+\qquad a_\theta = 0 + 2 \times 0.5 \times 2 = 2.0 \text{ m/s}^2
 $$
 
-At $t = 4$ s: $x(4) = (4)^2 + 0.5(4)^3 = 16 + 32 = 48$ m
+so $|\mathbf{a}| = 3.12$ m/s². The collar accelerates toward the axis even though it is moving away from it, and the arm must push it sideways with a force $m a_\theta$.
 
-## Parametric Equations
+![Acceleration of a projectile in normal-tangential components, of a bead on a rotating rod in polar components, and of a puck seen from a rotating turntable](../../../scripts/plots/dynamics_path_coordinates/dynamics_path_coordinates.png)
 
-Sometimes motion is described parametrically:
+Panel (a) shows the drag-free projectile: gravity splits into $a_t$, which opposes the velocity on the way up and vanishes at the apex, and $a_n$, which points into the curve; the osculating circle at the first marked point has $\rho = 93$ m. Panel (b) shows a bead on a frictionless rod rotating at 3 rad/s, $r = r_0\cosh\omega t$, for which $\ddot{r} = r\dot{\theta}^2$, so the radial acceleration vanishes and the whole acceleration is the transverse Coriolis term. Panel (c) is discussed in [Rigid Body Kinematics](rigid_body_kinematics.md#rotating-reference-frames).
 
-$$
-x = x(t), \quad y = y(t), \quad z = z(t)
-$$
-
-**Velocity components:**
-
-$$
-v_x = \frac{dx}{dt}, \quad v_y = \frac{dy}{dt}, \quad v_z = \frac{dz}{dt}
-$$
+### Choosing Coordinates
 
-**Speed:**
+| Description of the motion | Coordinates | Typical problems |
+| --- | --- | --- |
+| Components independent, fixed directions | Cartesian | projectiles, motion on straight guides |
+| Path known, speed along it known | normal–tangential | vehicles on curves, roller coasters, cams |
+| Distance and angle from a fixed point | polar or cylindrical | rotating arms, radar tracking, orbits, robot joints |
+| Motion relative to a moving body | relative motion | boats in a current, aircraft in wind, docking |
 
-$$
-v = \sqrt{v_x^2 + v_y^2 + v_z^2}
-$$
+## Relative Motion with Translating Axes
 
-**Acceleration components:**
+Let $\mathbf{r}_A$ and $`\mathbf{r}_B`$ be the positions of two particles in a fixed frame, and attach to $`A`$ a set of axes that translate with it but do not rotate. The position of $`B`$ relative to $`A`$ is $`\mathbf{r}_{B/A} = \mathbf{r}_B - \mathbf{r}_A`$, and since the axes do not rotate,
 
 $$
-a_x = \frac{dv_x}{dt}, \quad a_y = \frac{dv_y}{dt}, \quad a_z = \frac{dv_z}{dt}
+\mathbf{v}_B = \mathbf{v}_A + \mathbf{v}_{B/A},
+\qquad \mathbf{a}_B = \mathbf{a}_A + \mathbf{a}_{B/A}
 $$
-
-## Applications in Engineering
-
-### Vehicle Dynamics
-
-- Braking distance calculations
-- Cornering analysis
-- Acceleration performance
-
-### Robotics
-
-- Path planning for robotic manipulators
-- Trajectory optimization
-- Motion control systems
-
-### Aerospace
-
-- Satellite orbit calculations
-- Aircraft flight path analysis
-- Rocket trajectory design
-
-### Manufacturing
-
-- Machining tool path generation
-- Conveyor system design
-- Automated assembly line motion
-
-## Practical Problem-Solving Tips
-
-### 1. Choose Appropriate Coordinate System
-
-- Align axes with motion when possible
-- Use tangential-normal for curved paths
-- Consider symmetry in the problem
-
-### 2. Identify Motion Type
-
-- Constant acceleration: Use kinematic equations
-- Circular motion: Use angular quantities
-- General motion: Use calculus methods
-
-### 3. Set Up Initial Conditions
-
-- Clearly define $t = 0$ reference
-- Establish position and velocity at $t = 0$
-- Be consistent with sign conventions
-
-### 4. Work with Components
 
-- Break vectors into components
-- Solve each direction independently
-- Combine results for final answer
+A boat that moves at 5 m/s relative to the water crosses a river 100 m wide with a current of 3 m/s. Aimed straight across, its velocity relative to the bank is $3\mathbf{i} + 5\mathbf{j}$ m/s: it crosses in $100/5 = 20$ s and lands $3 \times 20 = 60$ m downstream. To land directly opposite, it must head upstream at $\theta$ with $5\sin\theta = 3$, or $\theta = 36.9^\circ$ from the crossing line; its speed across is then $5\cos\theta = 4$ m/s and the crossing takes 25 s.
 
-### 5. Check Units and Reasonableness
+When the moving axes also rotate, as for a point on a turbine blade observed from the rotor or a fluid particle observed in a rotating machine, the relations acquire Coriolis and centripetal terms. They are derived in [Rigid Body Kinematics](rigid_body_kinematics.md#rotating-reference-frames).
 
-- Verify dimensional consistency
-- Check if results make physical sense
-- Compare with known benchmarks
+## Common Mistakes
 
-Understanding particle kinematics is essential for:
+1. Using the constant-acceleration formulas when $a$ varies with time, speed or position.
+2. Confusing distance travelled with displacement, for instance after a reversal of direction.
+3. Dropping the normal acceleration of a particle moving at constant speed on a curve.
+4. Differentiating polar components as if $`\mathbf{e}_r`$ and $`\mathbf{e}_\theta`$ were constant, which loses $-r\dot{\theta}^2$ and $2\dot{r}\dot{\theta}$.
+5. Adding relative velocities from a rotating frame with the translating-frame formula.
 
-- Dynamics analysis (adding force considerations)
-- Mechanism design and analysis
-- Control system development
-- Safety and performance optimization
+## Key Takeaways
 
-This foundation in describing motion prepares for the next step: understanding why objects move as they do through the study of kinetics, where forces and motion are related.
+- Velocity is tangent to the path; acceleration has a tangential part $\dot{v}$ and a normal part $v^2/\rho$ toward the centre of curvature.
+- $`a\,ds = v\,dv`$ is the relation to integrate when the acceleration depends on position.
+- In polar coordinates the moving unit vectors produce the centripetal term $-r\dot{\theta}^2$ and the Coriolis term $2\dot{r}\dot{\theta}$.
+- Projectile formulas hold only without air resistance; with drag the motion has to be integrated numerically.
+- Relative velocities and accelerations add as vectors only for translating, non-rotating axes.
 
 ## Related Scripts
 
+- [Path, Polar and Rotating-Frame Coordinates](../../../scripts/plots/dynamics_path_coordinates/): draws the acceleration of three moving particles resolved in the coordinate system that suits each of them: normal–tangential components along a projectile path, radial–transverse components for a bead on a rotating rod, and Coriolis and centrifugal terms for a puck seen from a rotating turntable.
+- [Projectile with Quadratic Drag](../../../scripts/algorithms/dynamics_projectile_drag/): integrates Newton's second law for a projectile with quadratic air drag and compares it with the drag-free parabola.
 - [Charged Particle Dynamics in a Magnetic Field](../../../scripts/simulations/charged_particle_dynamics_in_a_magnetic_field_using_runge_kutta_methods/): integrates the motion of a charged particle in a uniform magnetic field with the classical fourth-order Runge–Kutta (RK4) method and animates the resulting helical trajectory in 3D.
 
 ## Exercises
@@ -520,10 +194,10 @@ This foundation in describing motion prepares for the next step: understanding w
 <details>
 <summary>Answer</summary>
 
-$t = \frac{v_0}{a} = \frac{25}{6} = 4.17$ s. From $v^2 = v_0^2 + 2a(x - x_0)$ with $v = 0$:
+$t = v_0/|a| = 25/6 = 4.17$ s. From $v^2 = v_0^2 + 2a(s - s_0)$ with $v = 0$:
 
 ```math
-x - x_0 = \frac{25^2}{2 \times 6} = 52.1 \text{ m}
+s - s_0 = \frac{25^2}{2 \times 6} = 52.1 \text{ m}
 ```
 
 </details>
@@ -539,27 +213,27 @@ At impact $v_x = 15$ m/s and $v_y = gt = 29.7$ m/s downward, so $v = \sqrt{15^2 
 
 </details>
 
-**Exercise 3.** Using $R = v_0^2\sin(2\theta_0)/g$, show that the range on level ground is maximized at $\theta_0 = 45^\circ$ and that complementary angles give the same range. Evaluate $R$ and $H$ for $v_0 = 50$ m/s at $30^\circ$ and at $60^\circ$.
+**Exercise 3.** Show that the range on level ground, $R = v_0^2\sin 2\theta_0/g$, is greatest at $\theta_0 = 45^\circ$ and that complementary angles give the same range. Evaluate $R$ and $H$ for $v_0 = 50$ m/s at $30^\circ$ and at $60^\circ$.
 
 <details>
 <summary>Answer</summary>
 
-$\sin(2\theta_0)$ has its maximum value 1 at $2\theta_0 = 90^\circ$. Also $\sin(2(90^\circ - \theta_0)) = \sin(180^\circ - 2\theta_0) = \sin(2\theta_0)$, so $\theta_0$ and $90^\circ - \theta_0$ give the same range.
+$\sin 2\theta_0$ has its maximum value 1 at $2\theta_0 = 90^\circ$. Also $\sin(2(90^\circ - \theta_0)) = \sin(180^\circ - 2\theta_0) = \sin 2\theta_0$, so $\theta_0$ and $90^\circ - \theta_0$ give the same range.
 
-For both angles $R = 2500 \times 0.866/9.81 = 220.7$ m. The heights differ: $H_{30} = \frac{(50\sin 30^\circ)^2}{2g} = 31.9$ m and $H_{60} = \frac{(50\sin 60^\circ)^2}{2g} = 95.6$ m.
+For both angles $R = 2500 \times 0.866/9.81 = 220.7$ m. The heights differ: $H_{30} = (50\sin 30^\circ)^2/(2g) = 31.9$ m and $H_{60} = (50\sin 60^\circ)^2/(2g) = 95.6$ m.
 
 </details>
 
-**Exercise 4.** A particle moving in a straight line experiences a resisting acceleration $a = -kv$ with $`k = 0.5\;\text{s}^{-1}`$ and $v_0 = 20$ m/s at $x = 0$. Find $v(t)$, $v(x)$ and the total distance travelled.
+**Exercise 4.** A particle moving in a straight line has a resisting acceleration $a = -kv$ with $k = 0.5$ s⁻¹, and $v_0 = 20$ m/s at $s = 0$. Find $v(t)$, $v(s)$ and the total distance travelled.
 
 <details>
 <summary>Answer</summary>
 
-From $dv/dt = -kv$: $v(t) = v_0 e^{-kt} = 20e^{-0.5t}$ m/s.
+From $dv/dt = -kv$: $v(t) = v_0e^{-kt} = 20e^{-0.5t}$ m/s.
 
-Using $`a = v\,dv/dx = -kv`$ gives $dv/dx = -k$, so $v(x) = v_0 - kx$.
+Using $`a = v\,dv/ds = -kv`$ gives $dv/ds = -k$, so $v(s) = v_0 - ks$.
 
-The particle stops ($v = 0$) at $x = v_0/k = 40$ m. It approaches this distance only as $t \to \infty$, because the speed decays exponentially.
+The particle stops at $s = v_0/k = 40$ m. It approaches this distance only as $t \to \infty$, because the speed decays exponentially.
 
 </details>
 
@@ -568,20 +242,19 @@ The particle stops ($v = 0$) at $x = v_0/k = 40$ m. It approaches this distance 
 <details>
 <summary>Answer</summary>
 
-```math
-\rho = \frac{\left[1 + (dy/dx)^2\right]^{3/2}}{|d^2y/dx^2|} = \frac{(1 + 0)^{3/2}}{1/100} = 100 \text{ m}
-```
-
-$a_n = v^2/\rho = 400/100 = 4$ m/s², directed upward toward the centre of curvature. With $a_t = 2$ m/s²:
+At $x = 0$, $dy/dx = 0$ and $d^2y/dx^2 = 1/100$ m⁻¹, so
 
 ```math
-a = \sqrt{2^2 + 4^2} = 4.47 \text{ m/s}^2
+\rho = \frac{\left[1 + (dy/dx)^2\right]^{3/2}}{|d^2y/dx^2|} = \frac{1}{1/100} = 100 \text{ m}
 ```
+
+$a_n = v^2/\rho = 400/100 = 4$ m/s², directed upward toward the centre of curvature. With $a_t = 2$ m/s², $|\mathbf{a}| = \sqrt{2^2 + 4^2} = 4.47$ m/s².
 
 </details>
 
 ## References
 
 - R. C. Hibbeler, *Engineering Mechanics: Dynamics*, 14th ed., Pearson, 2016.
-- J. L. Meriam, L. G. Kraige, *Engineering Mechanics: Dynamics*, Wiley.
-- F. P. Beer, E. R. Johnston, P. J. Cornwell, *Vector Mechanics for Engineers: Dynamics*, McGraw-Hill.
+- J. L. Meriam, L. G. Kraige and J. N. Bolton, *Engineering Mechanics: Dynamics*, 9th ed., Wiley, 2018.
+- F. P. Beer, E. R. Johnston, P. J. Cornwell and B. P. Self, *Vector Mechanics for Engineers: Dynamics*, 12th ed., McGraw-Hill, 2019.
+- J. H. Ginsberg, *Engineering Dynamics*, Cambridge University Press, 2008.

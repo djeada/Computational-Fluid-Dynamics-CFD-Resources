@@ -1,348 +1,224 @@
 # Wave Loading on Offshore Structures
 
-Wave loading is the primary environmental action on offshore structures such as fixed platforms, floating production systems, subsea pipelines, and wind turbine foundations. This chapter covers the fundamental wave theories, force calculation methods, and design approaches used in offshore engineering practice.
+Surface waves are the dominant environmental load on fixed and floating offshore structures, offshore wind turbine foundations, piers, breakwaters and subsea pipelines. A wave load calculation has three parts: a wave theory that gives the water particle velocity and acceleration, a force model that turns those kinematics into a load on the structure (the Morison equation for slender members, diffraction theory for large bodies), and a statistical description of the sea, through a wave spectrum, that says which waves to use. This note develops linear (Airy) wave theory, the Morison equation and its regimes, the MacCamy–Fuchs diffraction correction and the standard spectra, with a worked monopile example.
 
-## Linear Wave Theory (Airy Theory)
+## Problem Statement
 
-### Surface Elevation
+Given a structure of characteristic member diameter $D$ in water of depth $h$, with drag and inertia coefficients $C_d$ and $C_m$ for its members, and a sea state described either by a regular design wave (height $H$, period $T$) or by a spectrum (significant height $H_s$, peak period $T_p$), find the distributed load on each member, the total base shear and overturning moment over a wave cycle, and their maxima, or their statistics in an irregular sea.
 
-The simplest description of ocean surface waves uses **Airy (linear) theory**. For a regular wave travelling in the positive $x$-direction:
+The fluid is inviscid and incompressible with irrotational wave motion, the wave steepness $H/L$ and the relative height $H/h$ are small (linear theory), and the seabed is flat. The kinematics follow from a velocity potential $\phi$ with
 
 $$
-\eta(x,t) = \frac{H}{2}\cos(kx - \omega t)
+\nabla^2\phi = 0 \quad (-h < z < 0),
+\qquad \frac{\partial\phi}{\partial z} = 0 \quad (z = -h)
 $$
 
-where:
+and the linearised free-surface conditions at $z = 0$,
 
-- $H$ = wave height (crest-to-trough)
-- $k = 2\pi/\lambda$ = wave number
-- $\omega = 2\pi/T$ = angular frequency
-- $\lambda$ = wavelength, $T$ = wave period
+$$
+\frac{\partial\eta}{\partial t} = \frac{\partial\phi}{\partial z},
+\qquad \frac{\partial\phi}{\partial t} + g\eta = 0
+$$
+
+where $\eta(x, t)$ is the surface elevation and $z$ is measured upward from the still-water level. The load on a slender fixed member then follows from the Morison equation,
+
+```math
+f = \tfrac12\rho C_dD\,|u|\, u + \rho C_m \frac{\pi D^2}{4}\,\dot{u}
+```
+
+per unit length, with $u$ and $\dot{u}$ the undisturbed horizontal particle velocity and acceleration at the member axis.
+
+## Linear Wave Theory
 
 ### Dispersion Relation
 
-The relationship between wave frequency and wave number in water of depth $d$ is:
+A progressive wave $\eta = a\cos(kx - \omega t)$ with amplitude $a = H/2$, wave number $k = 2\pi/L$ and angular frequency $\omega = 2\pi/T$ satisfies the boundary conditions with $\phi \propto \cosh k(z + h)\sin(kx - \omega t)$ only if
 
 $$
-\omega^2 = gk\tanh(kd)
+\omega^2 = gk\tanh(kh)
 $$
 
-Limiting cases:
+For a given period this is an implicit equation for $k$. Newton's method on $f(k) = gk\tanh(kh) - \omega^2$ converges in three or four steps from the starting value $k_0/\sqrt{\tanh(k_0h)}$ with $k_0 = \omega^2/g$, which is within a few per cent of the root at any depth. The phase speed is $c = \omega/k$ and the energy travels at the group velocity $c_g = nc$, with $n = \tfrac12[1 + 2kh/\sinh(2kh)]$.
 
-- **Deep water** ($d/\lambda > 0.5$): $\omega^2 \approx gk$, $\lambda_0 = gT^2/(2\pi)$
-- **Shallow water** ($d/\lambda < 0.05$): $\omega^2 \approx gk^2 d$, $c = \sqrt{gd}$
+| Regime | Condition | Dispersion | Phase speed | Group velocity |
+| --- | --- | --- | --- | --- |
+| Deep water | $h/L > 0.5$ ($kh > \pi$) | $\omega^2 = gk$, $L_0 = gT^2/(2\pi)$ | $gT/(2\pi)$ | $c/2$ |
+| Intermediate | $0.05 < h/L < 0.5$ | full relation | $\sqrt{(g/k)\tanh kh}$ | $nc$ |
+| Shallow water | $h/L < 0.05$ ($kh < \pi/10$) | $\omega = k\sqrt{gh}$ | $\sqrt{gh}$ | $c$ |
 
-## Wave Kinematics
+Deep-water waves are dispersive (long waves travel faster), while shallow-water waves all travel at $\sqrt{gh}$, which is the speed seen in the [shallow-water ripples simulation](../../../scripts/simulations/shallow_water_ripples/).
 
-### Horizontal Velocity
+### Particle Kinematics and Pressure
 
-$$
-u = \frac{\pi H}{T} \frac{\cosh k(z+d)}{\sinh kd} \cos(kx - \omega t)
-$$
-
-### Vertical Velocity
-
-$$
-w = \frac{\pi H}{T} \frac{\sinh k(z+d)}{\sinh kd} \sin(kx - \omega t)
-$$
-
-### Horizontal Acceleration
+Under the wave $\eta = a\cos(kx - \omega t)$ the horizontal and vertical velocities, the horizontal acceleration and the dynamic pressure are
 
 $$
-\dot{u} = \frac{2\pi^2 H}{T^2} \frac{\cosh k(z+d)}{\sinh kd} \sin(kx - \omega t)
+u = a\omega \frac{\cosh k(z + h)}{\sinh kh}\cos(kx - \omega t),
+\qquad w = a\omega \frac{\sinh k(z + h)}{\sinh kh}\sin(kx - \omega t)
 $$
 
-### Dynamic Pressure
+$$
+\dot{u} = a\omega^2 \frac{\cosh k(z + h)}{\sinh kh}\sin(kx - \omega t),
+\qquad p_d = \rho ga \frac{\cosh k(z + h)}{\cosh kh}\cos(kx - \omega t)
+$$
+
+Particles move on ellipses that shrink with depth; in deep water they are circles of radius $ae^{kz}$, so the motion has almost died out half a wavelength down. The horizontal velocity peaks under the crest and trough, and the acceleration a quarter period earlier and later, at the zero crossings of the surface. Linear theory gives kinematics only up to $z = 0$; to load the part of a member between the still-water level and the crest, stretching methods (Wheeler stretching, for example) map the profile onto the instantaneous water column. Steep waves need nonlinear theories, Stokes fifth order in deep and intermediate water, cnoidal theory in shallow water and stream-function theory in general, which give higher, sharper crests and larger crest velocities.
+
+## Force Regimes
+
+Three dimensionless groups decide which force model applies.
+
+| Group | Definition | What it controls |
+| --- | --- | --- |
+| Diffraction parameter | $D/L$ (or $ka = \pi D/L$) | Whether the body disturbs the incident wave; Morison is valid for $D/L < 0.2$ |
+| Keulegan–Carpenter number | $\mathrm{KC} = u_mT/D$ | Orbit size relative to the diameter, $\mathrm{KC} = 2\pi\times$ orbit amplitude $/D$; flow separation and the drag share |
+| Reynolds number | $Re = u_mD/\nu$ | Boundary-layer state and $C_d$, often combined as $\beta = Re/\mathrm{KC} = D^2/(\nu T)$ |
+
+Large-volume bodies (gravity-base structures, caissons, ship hulls) have small KC and large $D/L$: the flow does not separate, drag is negligible and the load is inertia corrected for diffraction. Slender members (jacket braces, risers, piles) have $D/L < 0.2$ and KC from a few to over 100: Morison applies, with a drag share that grows with KC.
+
+## The Morison Equation
+
+### Origin of the Two Terms
+
+For a fixed cylinder in an oscillating flow, the inertia term has two parts. The pressure gradient that accelerates the undisturbed fluid, $-\partial p/\partial x = \rho\dot{u}$, acting on the cylinder volume gives the Froude–Krylov force $\rho(\pi D^2/4)\dot{u}$. The disturbance of the flow by the body adds a force $C_a\rho(\pi D^2/4)\dot{u}$, with $C_a$ the added-mass coefficient, 1 for a circular cylinder in potential flow ([Hydroelastic Applications](./hydroelastic_applications.md)). Hence
 
 $$
-p_d = \rho g \frac{H}{2} \frac{\cosh k(z+d)}{\cosh kd} \cos(kx - \omega t)
+C_m = 1 + C_a
 $$
 
-The kinematics decay with depth; in deep water the decay factor is $e^{kz}$ (with $z$ measured upward from the still water level, negative downward).
-
-## Morison Equation
-
-For **slender cylindrical members** where the member diameter $D$ is small compared with the wavelength ($D/\lambda < 0.2$), wave forces are calculated using the Morison equation:
+which is 2 in potential flow. The drag term is the steady drag law written with the instantaneous velocity, $|u|u$ keeping the sign of the force with the flow. For a member that moves with velocity $\dot{x}$, the drag and added-mass parts act on the relative motion while the Froude–Krylov part does not:
 
 ```math
-dF = \underbrace{\rho \frac{\pi D^2}{4} C_M \dot{u}}_{\text{inertia}} \; dz +
-\underbrace{\frac{1}{2}\rho D C_D |u| u}_{\text{drag}} \; dz
+f = \rho \frac{\pi D^2}{4}\dot{u} + C_a\rho
+\frac{\pi D^2}{4}\left(\dot{u} - \ddot{x}\right) + \tfrac12\rho C_dD\,|u -
+\dot{x}|\left(u - \dot{x}\right)
 ```
 
-where:
+The $-C_a\rho(\pi D^2/4)\ddot{x}$ term is the added mass of the structure, and the relative-velocity drag gives hydrodynamic damping. For a moving member the load depends on the motion, which is the simplest form of two-way coupling.
 
-- $C_M$ = inertia coefficient (typically 1.6–2.0 for smooth cylinders)
-- $C_D$ = drag coefficient (typically 0.6–1.2 depending on roughness and Reynolds number)
-- $\dot{u}$ = horizontal fluid acceleration
-- $u$ = horizontal fluid velocity
+### Coefficients
 
-### Total Force and Overturning Moment
+$C_d$ and $C_m$ are empirical functions of KC, $\beta$ (or $Re$) and the relative roughness $k_s/D$, measured in oscillating-flow tunnels and U-tubes (Sarpkaya and Isaacson 1981). For design, smooth cylinders at high Reynolds numbers are usually given $C_d$ of about 0.6–0.7 and rough, marine-fouled cylinders about 1.0–1.1, with $C_m$ between about 1.2 and 2.0. Marine growth also increases the diameter used in both terms. The coefficients are not universal constants, and a Morison calculation is only as good as the coefficients chosen for its KC and Reynolds number.
 
-The total horizontal force on a vertical pile from the seabed ($z = -d$) to the surface ($z = 0$) is:
+### Drag and Inertia Shares
 
-$$
-F = \int_{-d}^{0} dF
-$$
-
-The overturning moment about the seabed is:
+Per unit length, with amplitudes $f_D = \tfrac12\rho C_dDu_m^2$ and $f_I = \rho C_m(\pi D^2/4)\omega u_m$, the force over a cycle is
 
 ```math
-M = \int_{-d}^{0} (z + d) \, dF
+f(\phi) = f_D|\cos\phi|\cos\phi - f_I\sin\phi,
+\qquad \frac{f_D}{f_I} = \frac{C_d\,\mathrm{KC}}{\pi^2C_m}
 ```
 
-### Inertia- vs. Drag-Dominated Regimes
-
-The Keulegan–Carpenter number classifies the relative importance:
-
-$$
-KC = \frac{u_{max} T}{D}
-$$
-
-- $KC < 10$: inertia-dominated (large-diameter members, small waves)
-- $KC > 25$: drag-dominated (slender members, large waves)
-
-## Diffraction Theory for Large Structures
-
-When $D/\lambda > 0.2$, the structure significantly modifies the incident wave field and **diffraction effects** must be included. The total force is found by integrating the pressure from the combined incident and scattered wave fields over the structure surface:
+with $\phi = \omega t$. Setting $df/d\phi = 0$ on the branch $\cos\phi > 0$ gives $\sin\phi = -f_I/(2f_D)$, which exists only when $f_D \ge f_I/2$. The peak is therefore
 
 ```math
-F = \iint_S p \, \hat{n} \, dS
+f_{\max} = \begin{cases} f_I & f_D \le f_I/2 \\ f_D + \dfrac{f_I^2}{4f_D} & f_D > f_I/2 \end{cases}
 ```
 
-### MacCamy–Fuchs Solution
+With $C_d = 1$ and $C_m = 2$, drag starts to raise the peak at $\mathrm{KC} = \pi^2C_m/(2C_d) = 9.9$, and the drag amplitude exceeds the inertia amplitude above $\mathrm{KC} = 19.7$. This is the origin of the usual rule that members with KC below about 10 are inertia-dominated and members with KC above about 25 are drag-dominated.
 
-For a vertical circular cylinder of radius $a$ in linear waves, the analytical solution gives the inertia coefficient correction:
+### Depth-Integrated Load on a Pile
 
-$$
-C_M = \frac{4}{\pi (ka)^2} \left| \frac{1}{H_1'^{(1)}(ka)}\right|
-$$
-
-where $H_1'^{(1)}$ is the derivative of the Hankel function of the first kind. As $ka \to 0$ the result recovers the Morison inertia limit.
-
-### Numerical Diffraction Analysis
-
-For arbitrary geometries, boundary element methods (panel methods) solve the potential flow problem:
-
-- Structure surface is discretised into panels
-- Green's function satisfies the free surface, seabed, and radiation conditions
-- Output includes wave forces, added mass, radiation damping, and wave run-up
-
-Common software: WAMIT, ANSYS AQWA, OrcaFlex, NEMOH (open-source).
-
-## Design Wave Approach
-
-### Deterministic Method
-
-A single **design wave** with specified height $H_d$ and period $T_d$ is used to calculate the maximum force. The design wave height is typically the 100-year return period individual wave:
+For a vertical pile from the seabed to the still-water level the depth profiles integrate in closed form, $`\int_{-h}^0\cosh k(z+h)\,dz = \sinh(kh)/k`$ and $`\int_{-h}^0\cosh^2 k(z+h)\,dz = \sinh(2kh)/(4k) + h/2`$, so the base-shear amplitudes are
 
 ```math
-H_{100} \approx 1.86 \, H_{s,100}
+F_I = \rho C_m \frac{\pi D^2}{4} \frac{a\omega^2}{k},
+\qquad F_D = \tfrac12\rho C_dD\,(a\omega)^2 \frac{\sinh(2kh)/(4k) + h/2}{\sinh^2 kh}
 ```
 
-where $H_{s,100}$ is the 100-year significant wave height (Rayleigh distribution assumption).
+and the peak follows from the same formula as per unit length.
 
-### Load Cases
+### Worked Example: Monopile
 
-For jacket-type platforms, critical load cases include:
+A monopile of diameter $D = 2$ m stands in $h = 20$ m of seawater ($\rho = 1025$ kg/m³) under a regular wave with $H = 6$ m and $T = 10$ s, with $C_d = 1$ and $C_m = 2$.
 
-1. Maximum base shear — wave crest at the structure
-2. Maximum overturning moment — wave crest at the structure
-3. Maximum member force — wave position varied to find worst case per member
+1. With $\omega = 0.628$ rad/s, Newton's method gives $k = 0.0518$ rad/m, $L = 121.2$ m and $kh = 1.04$: intermediate depth. $D/L = 0.017$, so Morison applies.
+2. At the surface, $u_m = a\omega/\tanh kh = 2.43$ m/s and $\dot{u}_m = a\omega^2/\tanh kh = 1.53$ m/s², so $\mathrm{KC} = 2.43 \times 10/2 = 12.1$.
+3. The depth integrals give $F_I = 147.2$ kN and $F_D = 69.2$ kN.
+4. $F_D < F_I/2$, so the peak base shear is $F_I = 147.2$ kN, a quarter period before the crest passes. The peak overturning moment about the seabed is 1.59 MN·m.
 
-### Higher-Order Wave Theories
+![Morison force amplitudes over the depth, base shear over one period, and drag and inertia shares against KC](../../../scripts/algorithms/fluid_loading_morison_wave_force/fluid_loading_morison_wave_force.png)
 
-For steep waves in shallow water, linear theory is insufficient. Design practice uses:
+Panel (a) shows that drag decays faster with depth than inertia, because it varies as $\cosh^2$. At the surface the local KC of 12.1 is above the threshold of 9.9 in panel (c), yet the depth-integrated force is inertia-dominated, because most of the pile sits deeper, where KC is smaller.
 
-- **Stokes 5th-order theory** for deep and intermediate water
-- **Stream function theory** for general applicability
-- **Cnoidal theory** for very shallow water
+## Diffraction: The MacCamy–Fuchs Solution
 
-## Spectral Methods
+When $D/L$ exceeds about 0.2 the scattered wave changes the pressure on the body, and the undisturbed kinematics no longer give the load. For a vertical circular cylinder of radius $a$ in linear waves, the incident and scattered potentials can be written as series of Bessel functions, and the force per unit length (MacCamy and Fuchs 1954) can be put into Morison inertia form with an effective coefficient
 
-### Wave Energy Spectrum
+```math
+C_m^{\mathrm{eff}} = \frac{4}{\pi(ka)^2\,|H_1^{(1)\prime}(ka)|},
+\qquad |H_1^{(1)\prime}|^2 = J_1'^2 + Y_1'^2
+```
 
-Real sea states are irregular and described statistically using a wave spectrum $S(\omega)$. Common spectral models:
+together with a phase lead. As $ka \to 0$, $|H_1^{(1)\prime}(ka)| \to 2/(\pi(ka)^2)$ and $C_m^{\mathrm{eff}} \to 2$, the potential-flow value.
 
-**JONSWAP spectrum** (fetch-limited seas):
+| $ka$ | 0.1 | 0.25 | 0.5 | 0.75 | 1.0 | 1.5 | 2.0 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| $C_m^{\mathrm{eff}}$ | 2.02 | 2.06 | 2.01 | 1.73 | 1.37 | 0.84 | 0.56 |
 
-$$
-S(\omega) = \alpha g^2 \omega^{-5}
-\exp\left[-\frac{5}{4}\left(\frac{\omega_p}{\omega}\right)^4\right]
-\gamma^{\exp\left[-\frac{(\omega - \omega_p)^2}{2\sigma^2\omega_p^2}\right]}
-$$
+Beyond $ka \approx 0.5$ the effective inertia coefficient falls quickly, so using $C_m = 2$ for a large body overestimates the load. Bodies of arbitrary shape are analysed with boundary-element (panel) methods that solve the same linear potential problem with a free-surface Green's function and also give the added mass and radiation damping needed for floating-body motions.
 
-where $\omega_p = 2\pi/T_p$ is the peak frequency and $\gamma \approx 3.3$ is the peak enhancement factor.
+## Irregular Seas and Wave Spectra
 
-**Pierson–Moskowitz spectrum** (fully developed seas): same form with $\gamma = 1$.
+A real sea is a superposition of components of many frequencies and directions, described by a spectrum $S(\omega)$ whose moments $`m_n = \int_0^\infty\omega^nS\,d\omega`$ give the significant wave height $H_s = 4\sqrt{m_0}$ and the mean zero-crossing period $T_z = 2\pi\sqrt{m_0/m_2}$. For a fully developed sea the Pierson–Moskowitz spectrum, written with $H_s$ and the peak frequency $\omega_p = 2\pi/T_p$, is
+
+```math
+S_{PM}(\omega) = \frac{5}{16}H_s^2\omega_p^4\,\omega^{-5}\exp\left[-\frac54\left(\frac{\omega_p}{\omega}\right)^4\right]
+```
+
+and the JONSWAP spectrum of a fetch-limited, growing sea sharpens its peak:
+
+```math
+S_J(\omega) = A_\gamma\,
+S_{PM}(\omega)\,\gamma^{\exp\left[-(\omega - \omega_p)^2/(2\sigma^2\omega_p^2)\right]}
+```
+
+with peak-enhancement factor $\gamma$ (3.3 on average in the JONSWAP measurements), $\sigma = 0.07$ for $\omega \le \omega_p$ and 0.09 above, and $A_\gamma \approx 1 - 0.287\ln\gamma$ keeping $H_s$ fixed.
+
+![Pierson-Moskowitz and JONSWAP spectra with equal significant height, and a random-phase JONSWAP surface elevation record](../../../scripts/plots/fluid_loading_wave_spectra/fluid_loading_wave_spectra.png)
+
+At equal $H_s = 4$ m and $T_p = 9$ s the peak density doubles from 2.05 to 4.44 m² s between $\gamma = 1$ and 3.3, and $T_z$ rises from 6.39 to 7.00 s. The random-phase record in panel (b) is a sample of the $\gamma = 3.3$ sea; its $4\sigma_\eta$ is 4.006 m.
+
+Wave heights in a narrow-band sea follow a Rayleigh distribution, and the most probable largest of $N$ waves is $H_s\sqrt{\ln N/2}$, which for $N = 1000$ waves (about three hours) is $1.86H_s$. This is the basis of the deterministic design-wave method, in which a single regular wave of height $1.86H_s$ for the design storm, with an associated period, is stepped past the structure to find the maximum load.
 
 ### Spectral Force Calculation
 
-The response spectrum of force (or moment) is obtained by transferring the wave spectrum through the force transfer function $|H_F(\omega)|^2$:
+When the load is linear in the wave amplitude (inertia-dominated members, or drag linearised about the expected velocity), each spectral component produces a force through a transfer function $H_F(\omega)$, and
 
 ```math
-S_F(\omega) = |H_F(\omega)|^2 \, S(\omega)
+S_F(\omega) = |H_F(\omega)|^2S(\omega),
+\qquad \sigma_F^2 = \int_0^\infty S_F\, d\omega
 ```
 
-The standard deviation of the force is:
+The most probable maximum in a storm of duration $T_{st}$ is approximately $\sigma_F\sqrt{2\ln(f_0T_{st})}$, where $f_0 = \sqrt{m_{2F}/m_{0F}}/(2\pi)$ is the mean zero-crossing frequency of the force. For the monopile of the worked example, the inertia transfer function $H_F = \rho C_m(\pi D^2/4)\omega^2/k(\omega)$ in the JONSWAP sea of the figure gives $\sigma_F = 55.2$ kN and $f_0 = 0.150$ Hz. In three hours that is 1620 force cycles, and the most probable maximum is $55.2\sqrt{2\ln 1620} = 212$ kN.
 
-```math
-\sigma_F = \sqrt{\int_0^\infty S_F(\omega) \, d\omega}
-```
+## Wave Loads from CFD
 
-The most probable maximum force in a sea state of duration $D_{st}$ is:
+Morison and potential-flow methods are fast enough to run thousands of sea states for fatigue. CFD with a free-surface method (volume of fluid or level set) is used where they fail: breaking-wave slamming on monopiles and decks, green water, run-up, steep nonlinear waves and wave-in-deck loads. It needs a numerical wave tank that generates the target waves at the inlet and absorbs reflections at the outlet (relaxation zones or active absorption), enough cells per wave height and wavelength to keep numerical damping of the wave small, and a check that the undisturbed wave at the structure location matches the target before the structure is added ([Verification and Validation](../../numerical/cfd/verification_and_validation.md)).
 
-$$
-F_{max} \approx \sigma_F \sqrt{2\ln(f_0 D_{st})}
-$$
+## Common Mistakes
 
-where $f_0$ is the mean zero-crossing frequency of the force process.
+- Applying deep- or shallow-water formulas at intermediate depth; the error in wavelength is 20% at $h/L = 0.18$.
+- Adding the drag and inertia maxima, which occur a quarter period apart.
+- Using $C_m = 2$ for a body with $ka > 0.5$, or Morison for $D/L > 0.2$.
+- Leaving out the part of the member between the still-water level and the crest, or extrapolating Airy kinematics above $z = 0$ without stretching.
+- Using drag coefficients from steady flow at the wrong Reynolds number, or ignoring marine growth.
 
-## Worked Example 1: Morison Force on a Monopile
+## Key Takeaways
 
-**Given:**
-
-- Vertical steel monopile: $D = 2$ m, water depth $d = 20$ m
-- Design wave: $H = 6$ m, $T = 10$ s (Airy theory)
-- $C_M = 2.0$, $C_D = 1.0$, seawater $\rho = 1025$ kg/m³
-
-**Find:** Maximum total horizontal force.
-
-**Solution:**
-
-Wave number from dispersion relation (iterative): $k \approx 0.0518$ m⁻¹, $\lambda \approx 121$ m ($kd \approx 1.04$, intermediate depth).
-
-Check slenderness: $D/\lambda = 2/121 = 0.017 < 0.2$ — Morison equation applies.
-
-Maximum velocity at $z = 0$:
-
-$$
-u_{max} = \frac{\pi H}{T} \frac{1}{\tanh kd} = \frac{\pi \times 6}{10} \times
-\frac{1}{\tanh(1.04)} = 1.885 \times 1.288 = 2.43 \text{ m/s}
-$$
-
-Maximum acceleration at $z = 0$:
-
-$$
-\dot{u}_{max} = \frac{2\pi^2 H}{T^2} \frac{1}{\tanh kd} = \frac{2\pi^2 \times 6}{100}
-\times 1.288 = 1.53 \text{ m/s}^2
-$$
-
-Inertia force (integrated over depth; the $\cosh k(z+d)$ profile integrates to a factor $`\tanh(kd)/(kd)`$):
-
-$$
-F_I = \rho \frac{\pi D^2}{4} C_M \dot{u}_{max} \frac{\tanh kd}{kd} d \approx 1025 \times
-3.14 \times 2.0 \times 1.53 \times 0.749 \times 20 \approx 147 \text{ kN}
-$$
-
-Drag force (integrated, simplified):
-
-$$
-F_D \approx \frac{1}{2}\rho D C_D u_{max}^2 \frac{d}{2} \approx 0.5 \times 1025 \times 2
-\times 1.0 \times 5.89 \times 10 \approx 60 \text{ kN}
-$$
-
-(Integrating the $\cosh^2 k(z+d)$ profile exactly gives $F_D \approx 69$ kN.)
-
-Maximum inertia and maximum drag do not occur simultaneously (90° phase difference). Writing $F(\phi) = F_I \sin\phi + F_D |\cos\phi| \cos\phi$, the peak equals $F_I$ whenever $F_D \leq F_I/2$, which holds here (inertia-dominated, $KC \approx 12.1$):
-
-$$
-F_{max} \approx 147 \text{ kN}
-$$
-
-## Worked Example 2: Diffraction Check
-
-**Given:**
-
-- Concrete gravity base structure: $D = 30$ m, $\lambda = 150$ m
-
-**Find:** Whether diffraction analysis is required.
-
-**Solution:**
-
-$$
-\frac{D}{\lambda} = \frac{30}{150} = 0.20
-$$
-
-At the threshold $D/\lambda = 0.2$, diffraction effects become significant. A **diffraction analysis** (e.g., panel method) should be used instead of the Morison equation for the base structure.
-
-## Worked Example 3: Spectral Force Estimate
-
-**Given:**
-
-- Sea state: $H_s = 4$ m, $T_p = 9$ s (JONSWAP, $\gamma = 3.3$)
-- Monopile $D = 2$ m, $d = 20$ m (inertia-dominated)
-- Storm duration: 3 hours
-
-**Find:** Most probable maximum horizontal force.
-
-**Solution:**
-
-The force transfer function for an inertia-dominated monopile is approximately:
-
-$$
-|H_F(\omega)|^2 \propto \left(\rho \frac{\pi D^2}{4} C_M \omega \frac{\tanh kd}{kd} d\right)^2
-$$
-
-Numerical integration of $S_F(\omega) = |H_F(\omega)|^2 S(\omega)$ over frequency gives $\sigma_F \approx 55$ kN.
-
-Mean zero-crossing frequency: $f_0 \approx 0.11$ Hz (close to the spectral peak).
-
-$$
-F_{max} \approx 55 \sqrt{2\ln(0.11 \times 10800)} = 55 \times 3.76 \approx 207
-\text{ kN}
-$$
-
-## Applications in Offshore Engineering
-
-### Fixed Platforms (Jackets)
-
-- Morison equation applied member-by-member
-- Combined wave, current, and wind loading
-- Fatigue design uses long-term wave scatter diagrams
-
-### Floating Production Systems (FPSO, Semi-submersible)
-
-- Diffraction/radiation analysis for hull motions
-- Mooring line tensions derived from motion response
-- Riser design depends on vessel offsets and motions
-
-### Offshore Wind Turbines
-
-- Monopile foundations: Morison equation with higher-order wave theories
-- Jacket foundations: member-level Morison loading
-- Combined wind and wave loading requires aero-hydro-elastic simulation
-
-### Subsea Pipelines
-
-- On-bottom stability against wave- and current-induced forces
-- Hydrodynamic lift, drag, and inertia on near-seabed pipes
-- Burial or rock-dumping for protection in shallow water
-
-## Design Considerations
-
-### Load Combinations
-
-- 100-year wave combined with 10-year current and 10-year wind (or other code-specified combinations)
-- Collinear and non-collinear cases examined
-
-### Marine Growth
-
-- Biofouling increases effective diameter and roughness
-- Drag coefficient increases from $C_D \approx 0.65$ (smooth) to $C_D \approx 1.05$ (rough)
-- Marine growth thickness of 50–150 mm is typical in design
-
-### Current Superposition
-
-- Steady current velocity is added vectorially to wave particle velocity in the Morison equation
-- Current stretching methods (e.g., Hedges, Wheeler) extend kinematics to the instantaneous surface
-
-Wave loading analysis is the cornerstone of offshore structural design, connecting oceanographic data to engineering forces that drive member sizing, foundation design, and fatigue life prediction.
+- Solve $\omega^2 = gk\tanh kh$ for the wave number; deep and shallow formulas only hold in their limits.
+- The Morison equation adds a drag term in $|u|u$ and an inertia term with $C_m = 1 + C_a$; the two peak a quarter period apart.
+- KC sets the drag share: $f_D/f_I = C_d\mathrm{KC}/(\pi^2C_m)$, so drag matters above KC of about 10.
+- Large bodies need diffraction theory; MacCamy–Fuchs gives an effective $C_m$ that falls below 2 for $ka > 0.5$.
+- Irregular seas are described by spectra with $H_s = 4\sqrt{m_0}$; extremes follow from Rayleigh statistics or spectral force analysis.
 
 ## Related Scripts
 
-- [Froude Number vs. Flow Velocity](../../../scripts/plots/froude_number/): plots the length-based Froude number $Fr = U/\sqrt{gL}$ against speed for hulls of 5, 10, 15, and 20 m, with reference lines at hull speed and at the approximate start of planing.
-- [Ship Hull in Water](../../../scripts/plots/ship_hull_in_water/): draws a side-view sketch of a ship hull sitting in a sinusoidal free-surface wave and annotates it with the Froude number $Fr = U/\sqrt{gL}$.
+- [Morison Wave Force on a Vertical Pile](../../../scripts/algorithms/fluid_loading_morison_wave_force/): computes the wave force on a vertical pile by integrating the Morison equation over the depth with linear (Airy) wave kinematics.
+- [Pierson–Moskowitz and JONSWAP Wave Spectra](../../../scripts/plots/fluid_loading_wave_spectra/): plots the Pierson–Moskowitz and JONSWAP spectra of an irregular sea with the same significant wave height and peak period, and synthesises a random-phase time series of the surface elevation from the JONSWAP spectrum.
 - [Raindrops on a Pond: Shallow-Water Ripples](../../../scripts/simulations/shallow_water_ripples/): simulates raindrops falling on a square basin of still water by solving the 2D shallow-water equations with a conservative finite-volume scheme, and animates the free surface as shaded relief.
+- [Ship Hull in Water](../../../scripts/plots/ship_hull_in_water/): draws a side-view sketch of a ship hull sitting in a sinusoidal free-surface wave and annotates it with the Froude number $Fr = U/\sqrt{gL}$.
+- [Froude Number vs. Flow Velocity](../../../scripts/plots/froude_number/): plots the length-based Froude number $Fr = U/\sqrt{gL}$ against speed for hulls of 5, 10, 15, and 20 m, with reference lines at hull speed and at the approximate start of planing.
 
 ## Exercises
 
@@ -352,78 +228,75 @@ Wave loading analysis is the cornerstone of offshore structural design, connecti
 <summary>Answer</summary>
 
 ```math
-\lambda_0 = \frac{gT^2}{2\pi} = \frac{9.81 \times 64}{2\pi} = 99.9 \text{ m}, \quad
-c = \frac{\lambda_0}{T} = 12.5 \text{ m/s}
+L_0 = \frac{gT^2}{2\pi} = \frac{9.81 \times 64}{2\pi} = 99.9 \text{ m}, \qquad c = \frac{L_0}{T} = 12.5 \text{ m/s}
 ```
 
-$d/\lambda_0 = 60/99.9 = 0.60 > 0.5$, so the deep-water approximation is valid.
+$h/L_0 = 60/99.9 = 0.60 > 0.5$, so the deep-water approximation holds.
 
 </details>
 
-**Exercise 2.** The same 8 s wave travels into water 15 m deep. Solve the dispersion relation for $k$ and $\lambda$, classify the depth, and compare with the deep-water and shallow-water estimates.
+**Exercise 2.** The same 8 s wave travels into water 15 m deep. Solve the dispersion relation for $k$ and $L$, classify the depth, and compare with the deep-water and shallow-water estimates.
 
 <details>
 <summary>Answer</summary>
 
-Solving $\omega^2 = gk\tanh(kd)$ with $\omega = 0.785$ rad/s and $d = 15$ m numerically (Newton or fixed-point iteration) gives $k = 0.0768$ m⁻¹ and $\lambda = 81.8$ m.
-
-$d/\lambda = 0.18$ lies between 0.05 and 0.5, so this is intermediate depth. The deep-water value (99.9 m) and the shallow-water value $T\sqrt{gd} = 97.0$ m both overestimate the wavelength by about 20%, so the full relation is needed.
+With $\omega = 0.785$ rad/s and $h = 15$ m, Newton's method gives $k = 0.0768$ rad/m and $L = 81.8$ m. Then $h/L = 0.18$, between 0.05 and 0.5, so the depth is intermediate. The deep-water value (99.9 m) and the shallow-water value $T\sqrt{gh} = 97.0$ m overestimate the wavelength by 22% and 19%.
 
 </details>
 
-**Exercise 3.** A deep-water wave has $H = 4$ m and $T = 8$ s. Find the surface particle velocity amplitude and the Keulegan-Carpenter number for a 1 m diameter leg and a 0.3 m diameter brace. Which force component dominates on each?
+**Exercise 3.** A deep-water wave has $H = 4$ m and $T = 8$ s. Find the surface particle velocity amplitude and the Keulegan–Carpenter number for a 1 m diameter leg and a 0.3 m diameter brace. Which force component dominates on each, for $C_d = 1$ and $C_m = 2$?
 
 <details>
 <summary>Answer</summary>
 
-In deep water the factor $\cosh k(z+d)/\sinh kd \to 1$ at the surface, so $u_{max} = \pi H/T = 1.57$ m/s.
+In deep water $\cosh k(z+h)/\sinh kh \to 1$ at the surface, so $u_m = \pi H/T = 1.57$ m/s.
 
-- Leg: $KC = u_{max}T/D = 1.57 \times 8/1 = 12.6$. This lies between the regimes, so both inertia and drag matter.
-- Brace: $KC = 12.57/0.3 = 41.9 > 25$, so the brace is drag-dominated.
+The leg has $\mathrm{KC} = 1.57 \times 8/1 = 12.6$, just above the value 9.9 at which drag starts to add to the peak, so both terms matter. The brace has $\mathrm{KC} = 41.9$, with $f_D/f_I = 41.9/19.7 = 2.1$, so it is drag-dominated.
 
 </details>
 
-**Exercise 4.** For the 1 m leg of Exercise 3 at the still-water level ($C_M = 2$, $C_D = 1$, $\rho = 1025$ kg/m³), find the inertia and drag force amplitudes per unit length. Show that when $F_D \geq F_I/2$ the peak of $F_I\sin\phi + F_D|\cos\phi|\cos\phi$ is $F_D + F_I^2/(4F_D)$, and evaluate it.
+**Exercise 4.** For the 1 m leg of Exercise 3 at the still-water level ($C_m = 2$, $C_d = 1$, $\rho = 1025$ kg/m³), find the inertia and drag amplitudes per unit length and the peak Morison force, and the phase at which it occurs.
 
 <details>
 <summary>Answer</summary>
 
-$\dot{u}_{max} = 2\pi^2H/T^2 = 1.234$ m/s², so
+$\dot{u}_m = 2\pi^2H/T^2 = 1.234$ m/s², so
 
 ```math
-F_I = 1025 \times \frac{\pi}{4} \times 2 \times 1.234 = 1986 \text{ N/m}, \quad
-F_D = 0.5 \times 1025 \times 1 \times 1.571^2 = 1265 \text{ N/m}
+f_I = 1025 \times \frac{\pi}{4} \times 2 \times 1.234 = 1986 \text{ N/m}, \qquad f_D = 0.5 \times 1025 \times 1 \times 1.571^2 = 1265 \text{ N/m}
 ```
 
-For $\cos\phi > 0$, $`dF/d\phi = \cos\phi\,(F_I - 2F_D\sin\phi) = 0`$ gives $\sin\phi = F_I/(2F_D)$, which is only possible if $F_D \geq F_I/2$. Substituting back:
+Since $f_D > f_I/2$,
 
 ```math
-F_{max} = \frac{F_I^2}{2F_D} + F_D\left(1 - \frac{F_I^2}{4F_D^2}\right) = F_D +
-\frac{F_I^2}{4F_D} = 1265 + 780 = 2045 \text{ N/m}
+f_{\max} = f_D + \frac{f_I^2}{4f_D} = 1265 + 780 = 2045 \text{ N/m}
 ```
 
-This occurs at $\phi = 51.8^\circ$. If $F_D < F_I/2$, the peak is simply $F_I$.
+at $|\sin\phi| = f_I/(2f_D) = 0.785$, that is $51.8^\circ$ from the instant of maximum velocity towards the instant of maximum acceleration. The peak is only 3% above the inertia amplitude.
 
 </details>
 
-**Exercise 5.** A spectral analysis gives a force standard deviation $\sigma_F = 40$ kN with mean zero-crossing frequency $f_0 = 0.15$ Hz. Estimate the most probable maximum force in a 3-hour storm. For comparison, what individual design wave height corresponds to $H_s = 6$ m?
+**Exercise 5.** A spectral analysis gives a force standard deviation $\sigma_F = 40$ kN with mean zero-crossing frequency $f_0 = 0.15$ Hz. Estimate the most probable maximum force in a 3-hour storm. What deterministic design wave height corresponds to $H_s = 6$ m?
 
 <details>
 <summary>Answer</summary>
 
 ```math
-F_{max} \approx 40 \sqrt{2\ln(0.15 \times 10\,800)} = 40 \sqrt{2 \times 7.39} = 40
-\times 3.84 = 154 \text{ kN}
+F_{\max} \approx 40\sqrt{2\ln(0.15 \times 10\,800)} = 40\sqrt{2 \times 7.39} = 40 \times 3.84 = 154 \text{ kN}
 ```
 
-The deterministic design wave is $H_{max} \approx 1.86H_s = 11.2$ m.
+The design wave is $H_{\max} \approx 1.86H_s = 11.2$ m.
 
 </details>
 
 ## References
 
-- T. Sarpkaya, M. Isaacson, *Mechanics of Wave Forces on Offshore Structures*, Van Nostrand Reinhold, 1981.
-- R. G. Dean, R. A. Dalrymple, *Water Wave Mechanics for Engineers and Scientists*, World Scientific, 1991.
-- O. M. Faltinsen, *Sea Loads on Ships and Offshore Structures*, Cambridge University Press, 1990.
-- S. K. Chakrabarti, *Hydrodynamics of Offshore Structures*, Computational Mechanics Publications, 1987.
-- J. R. Morison, M. P. O'Brien, J. W. Johnson, S. A. Schaaf, "The force exerted by surface waves on piles", *Petroleum Transactions, AIME* 189, 1950.
+- Sarpkaya, T., & Isaacson, M., *Mechanics of Wave Forces on Offshore Structures*, Van Nostrand Reinhold, 1981.
+- Chakrabarti, S. K., *Hydrodynamics of Offshore Structures*, Computational Mechanics Publications, 1987.
+- Dean, R. G., & Dalrymple, R. A., *Water Wave Mechanics for Engineers and Scientists*, World Scientific, 1991.
+- Faltinsen, O. M., *Sea Loads on Ships and Offshore Structures*, Cambridge University Press, 1990.
+- Sumer, B. M., & Fredsøe, J., *Hydrodynamics Around Cylindrical Structures*, revised ed., World Scientific, 2006.
+- Morison, J. R., O'Brien, M. P., Johnson, J. W., & Schaaf, S. A., "The force exerted by surface waves on piles," *Petroleum Transactions, AIME*, 189, 149–154, 1950.
+- MacCamy, R. C., & Fuchs, R. A., "Wave forces on piles: a diffraction theory," Technical Memorandum No. 69, Beach Erosion Board, U.S. Army Corps of Engineers, 1954.
+- Pierson, W. J., & Moskowitz, L., "A proposed spectral form for fully developed wind seas based on the similarity theory of S. A. Kitaigorodskii," *Journal of Geophysical Research*, 69(24), 5181–5190, 1964.
+- Hasselmann, K., et al., "Measurements of wind-wave growth and swell decay during the Joint North Sea Wave Project (JONSWAP)," *Ergänzungsheft zur Deutschen Hydrographischen Zeitschrift*, Reihe A, Nr. 12, 1973.
